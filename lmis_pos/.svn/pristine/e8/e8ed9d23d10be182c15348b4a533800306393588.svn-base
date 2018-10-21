@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.accReport.dao.PosPlanWareAnalyMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject"
+		id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="PosPlanWareAnalyAreaMap"  type="com.lmis.pos.accReport.model.PosPlanWareAnalyAreaScale"  extends="PersistentObjectMap">
+	 <!-- 子字段类型 -->
+	    <result column="crd" property="crd" jdbcType="DATE" />
+	    <result column="qty" property="qty" jdbcType="INTEGER" />
+	    <result column="whs_name" property="whsName" jdbcType="VARCHAR" />
+	</resultMap>
+    <sql id="Base_Column_List">
+	    pwa.crd crd,
+        sum(pwa.qty) qty,
+        pw.whs_name whs_name
+    </sql>
+    <!-- 查询仓库 -->
+    <resultMap id="PosWhsallocateMap"  type="com.lmis.pos.accReport.model.PosPlanWareAnalyAreaScale"  extends="PersistentObjectMap">
+	 <!-- 子字段类型 -->
+	    <result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+	    <result column="whs_name" property="whsName" jdbcType="VARCHAR" />
+	</resultMap>
+    <sql id="Base_Whsallocate_List">
+	    pwa.whs_code whs_code,
+        pw.whs_name whs_name
+    </sql>
+    
+    <select id="selectPosPlanWareAnalyAreaScale" parameterType="com.lmis.pos.accReport.model.PosPlanWareAnalyAreaScale" resultMap="PosPlanWareAnalyAreaMap">
+	  SELECT <include refid="Base_Column_List" /> FROM pos_whs_allocate pwa LEFT JOIN pos_whs pw on pwa.whs_code = pw.whs_code
+	  <trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="beginDateTime != null and beginDateTime != '' ">
+	             and pwa.crd <![CDATA[>=]]> #{beginDateTime}
+	        </if>
+	        <if test="endDateTime != null and endDateTime != '' ">
+	            and pwa.crd <![CDATA[<=]]> #{endDateTime}
+	        </if>
+	        <if test="bu != null and bu != '' ">
+	            and pwa.bu = #{bu}
+	        </if>
+	        <if test="whsName != null and whsName != '' ">
+	            and pw.whs_name = #{whsName}
+	        </if>
+	        AND pwa.is_deleted = 0
+            AND pwa.is_disabled = 0
+	    </trim>
+	    GROUP BY pwa.crd,pw.whs_name
+	    ORDER BY pwa.crd,pw.whs_name
+	</select>
+	
+	<select id="selectWhsallocate" parameterType="com.lmis.pos.accReport.model.PosPlanWareAnalyAreaScale" resultMap="PosWhsallocateMap">
+	  SELECT <include refid="Base_Whsallocate_List" /> FROM pos_whs pw LEFT JOIN pos_whs_allocate pwa on pwa.whs_code = pw.whs_code
+	  <trim prefix="WHERE" prefixOverrides="AND|OR">
+	      and  pwa.is_whs_allocate = 1
+	  </trim>
+	  GROUP BY pwa.whs_code,pwa.is_whs_allocate
+	</select>
+	
+	
+	<select id="exportPosPlanWareAnalyAreaScale" parameterType="com.lmis.pos.accReport.model.PosPlanWareAnalyAreaScale" resultMap="PosPlanWareAnalyAreaMap">
+	  SELECT <include refid="Base_Column_List" /> FROM pos_whs pw LEFT JOIN pos_whs_allocate pwa on pwa.whs_code = pw.whs_code
+	  <trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="beginDateTime != null and beginDateTime != '' ">
+	             and pwa.crd <![CDATA[>=]]> #{beginDateTime}
+	        </if>
+	        <if test="endDateTime != null and endDateTime != '' ">
+	            and pwa.crd <![CDATA[<=]]> #{endDateTime}
+	        </if>
+	        <if test="bu != null and bu != '' ">
+	            and pwa.bu = #{bu}
+	        </if>
+	        <if test="whsName != null and whsName != '' ">
+	            and pw.whs_name = #{whsName}
+	        </if>
+	    </trim>
+	    ORDER BY pwa.crd,pw.whs_name
+	    limit 10000
+	</select>
+	
+	<select id="retrieveAsMap" parameterType="com.lmis.pos.accReport.model.PosPlanWareAnalyAreaScale" resultType="java.util.Map">
+	   select * from(
+	   	SELECT <include refid="Base_Column_List" /> FROM pos_whs pw LEFT JOIN pos_whs_allocate pwa on pwa.whs_code = pw.whs_code
+	  <trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="beginDateTime != null and beginDateTime != '' ">
+	             and pwa.crd <![CDATA[>=]]> #{beginDateTime}
+	        </if>
+	        <if test="endDateTime != null and endDateTime != '' ">
+	            and pwa.crd <![CDATA[<=]]> #{endDateTime}
+	        </if>
+	        <if test="bu != null and bu != '' ">
+	            and pwa.bu = #{bu}
+	        </if>
+	        <if test="whsName != null and whsName != '' ">
+	            and pw.whs_name = #{whsName}
+	        </if>
+	        AND pwa.is_deleted = 0
+            AND pwa.is_disabled = 0
+	    </trim>
+	    GROUP BY pwa.crd,pw.whs_name
+	    ORDER BY pwa.crd,pw.whs_name
+	    limit 10000
+	   ) zz
+    </select>
+</mapper>

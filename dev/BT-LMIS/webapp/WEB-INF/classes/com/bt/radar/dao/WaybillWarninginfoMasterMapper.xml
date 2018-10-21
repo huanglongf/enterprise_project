@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.WaybillWarninginfoMasterMapper" >
+	<update id="updateWaybillWarninginfoMaster" parameterType="com.bt.radar.model.WaybillWarninginfoMaster">
+		update er_waybill_warninginfo_master
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="warning_time != null and warning_time != ''">
+				warning_time = #{warning_time },
+			</if>
+			<if test="warningtype_code != null and warningtype_code != ''">
+				warningtype_code = #{warningtype_code },
+			</if>
+			<if test="warning_level != null and warning_level != ''">
+				warning_level = #{warning_level },
+			</if>
+			<if test="warining_status != null and warining_status != ''">
+				warining_status = #{warining_status },
+			</if>
+			<if test="waybill != null and waybill != ''">
+				waybill = #{waybill },
+			</if>
+		</trim>
+		where id = #{id } 
+	</update>
+	<update id="update" parameterType="com.bt.radar.model.WaybillWarninginfoMaster">
+		update er_waybill_warninginfo_master
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="warning_time != null and warning_time != ''">
+				warning_time = #{warning_time },
+			</if>
+			<if test="warningtype_code != null and warningtype_code != ''">
+				warningtype_code = #{warningtype_code },
+			</if>
+			<if test="warning_level != null and warning_level != ''">
+				warning_level = #{warning_level },
+			</if>
+			<if test="warining_status != null and warining_status != ''">
+				warining_status = #{warining_status },
+			</if>
+			<if test="waybill != null and waybill != ''">
+				waybill = #{waybill },
+			</if>
+		</trim>
+		where id = #{id } 
+	</update>
+	<insert id="insertWaybillWarninginfoMaster" parameterType="com.bt.radar.model.WaybillWarninginfoMaster">
+		insert into er_waybill_warninginfo_master
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			warining_status,
+			waybill,
+			warning_time
+		) values (
+			#{id },
+			#{create_time},
+			#{create_user },
+			now(),
+			#{create_user },
+			#{warining_status },
+			#{waybill },
+			#{warning_time}
+		)
+	</insert>
+	
+	<insert id='insert'  parameterType="com.bt.radar.model.WaybillWarninginfoMaster">
+	insert into er_waybill_warninginfo_master
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			warning_time,
+			warningtype_code,
+			warning_level,
+			warining_status,
+			waybill
+		) values (
+			#{id },
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{warning_time },
+			#{warningtype_code },
+			#{warning_level },
+			#{warining_status },
+			#{waybill }
+		)
+	</insert>
+	<select id="findRecords" parameterType="com.bt.radar.model.WaybillWarninginfoMaster" resultType="com.bt.radar.model.WaybillWarninginfoMaster">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			warining_status,
+			waybill
+		from
+			er_waybill_warninginfo_master
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id != null and id != ''">
+				AND id = #{id }
+			</if>
+			<if test="warning_time != null and warning_time != ''">
+				AND warning_time = #{warning_time }
+			</if>
+			<if test="warningtype_code != null and warningtype_code != ''">
+				AND warningtype_code = #{warningtype_code }
+			</if>
+			<if test="warning_level != null and warning_level != ''">
+				AND warning_level = #{warning_level }
+			</if>
+			<if test="warining_status != null and warining_status != ''">
+				AND warining_status = #{warining_status }
+			</if>
+			<if test="waybill != null and waybill != ''">
+				AND waybill = #{waybill }
+			</if>
+    	</trim>
+	</select>
+	<select  id='findAlarmDetails' parameterType='java.util.HashMap' resultType='com.bt.radar.model.WaybillWarninginfoDetail'>
+        SELECT 
+    a.*,b.warningtype_name
+FROM
+    er_waybill_warninginfo_detail a,
+    er_warninginfo_maintain_master b
+WHERE
+    a.warningtype_code = b.warningtype_code
+     <if test="del_flag != null" >
+     and a.del_flag=#{del_flag}
+    </if>
+    <if test="id != null and id != ''" >
+     and a.id=#{id}
+    </if>
+    <if test="waybill != null and waybill != ''">
+    and waybill=#{waybill}
+    </if>
+</select>
+	<update id="updateMaster" parameterType="java.util.HashMap">
+	update er_waybill_warninginfo_master set warining_status = 1 where id=#{id}
+	</update>
+</mapper>   

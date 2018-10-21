@@ -1,0 +1,154 @@
+package com.lmis.basis.grade.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import com.lmis.basis.currency.dao.BasisCurrencyMapper;
+import com.lmis.basis.currency.model.BasisCurrency;
+import com.lmis.setup.constant.dao.SetupConstantMapper;
+import com.lmis.setup.constant.model.SetupConstant;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.basis.grade.dao.BasisGradeMapper;
+import com.lmis.basis.grade.model.BasisGrade;
+import com.lmis.basis.grade.service.BasisGradeServiceInterface;
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.common.dynamicSql.service.DynamicSqlServiceInterface;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+
+/** 
+ * @ClassName: BasisGradeServiceImpl
+ * @Description: TODO(职级业务层实现类)
+ * @author codeGenerator
+ * @date 2018-01-19 16:11:26
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class BasisGradeServiceImpl<T extends BasisGrade> implements BasisGradeServiceInterface<T> {
+	
+	@Resource(name="dynamicSqlServiceImpl")
+	DynamicSqlServiceInterface<BasisGrade> dynamicSqlService;
+	@Autowired
+	private BasisGradeMapper<T> basisGradeMapper;
+
+	@Autowired
+	private SetupConstantMapper<SetupConstant> setupConstantMapper;
+
+	@Autowired
+	private BasisCurrencyMapper<BasisCurrency> basisCurrencyMapper;
+
+
+	@Autowired
+	private HttpSession session;
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		return dynamicSqlService.executeSelect(dynamicSqlParam, pageObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		LmisResult<?> _lmisResult = dynamicSqlService.executeSelect(dynamicSqlParam);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(_lmisResult.getCode())) return _lmisResult;
+		List<Map<String, Object>> result =  (List<Map<String, Object>>) _lmisResult.getData();
+		if(ObjectUtils.isNull(result)) throw new Exception("查无记录，数据异常");
+		if(result.size() != 1) throw new Exception("记录存在多条，数据异常");
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, result.get(0));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		//唯一校验
+		BasisGrade grade = dynamicSqlService.generateTableModel((DynamicSqlParam<BasisGrade>) dynamicSqlParam, new BasisGrade()).getTableModel();
+		
+		if(ObjectUtils.isNull(grade.getGradeCode())) throw new Exception("职级编码不可为空");
+		BasisGrade checkGrade=new BasisGrade();
+		checkGrade.setIsDeleted(false);
+		checkGrade.setGradeCode(grade.getGradeCode());
+		if(basisGradeMapper.retrieve((T) checkGrade).size()>0) throw new Exception("当前职级编码已存在");
+		SetupConstant setupConstant = new SetupConstant();
+		setupConstant.setIsDisabled(false);
+		setupConstant.setIsDeleted(false);
+		if(ObjectUtils.isNull(grade.getRemuneration())) throw new Exception("待遇级别不能为空");
+		setupConstant.setConstantCode(grade.getRemuneration());
+		if(setupConstantMapper.retrieve(setupConstant).size()!=1) throw new Exception("待遇级别不存在");
+		BasisCurrency basisCurrency = new BasisCurrency();
+		basisCurrency.setIsDisabled(false);
+		basisCurrency.setIsDeleted(false);
+		if(ObjectUtils.isNull(grade.getCurrency())) throw new Exception("货币编码不能为空");
+		basisCurrency.setCurrencyCode(grade.getCurrency());
+		if(basisCurrencyMapper.retrieve(basisCurrency).size()!=1) throw new Exception("当前货币不存在");
+		//创建人
+		dynamicSqlParam.setCreateBy(session.getAttribute("lmisUserId").toString());
+		//更新人
+		dynamicSqlParam.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		//所属机构
+		dynamicSqlParam.setPwrOrg(session.getAttribute("lmisUserOrg").toString());
+		// 插入操作
+		return dynamicSqlService.executeInsert(dynamicSqlParam);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+			
+		// TODO(业务校验)
+		
+		
+		//存在校验
+		BasisGrade grade = dynamicSqlService.generateTableModel((DynamicSqlParam<BasisGrade>) dynamicSqlParam, new BasisGrade()).getTableModel();
+		BasisGrade checkGrade=new BasisGrade();
+		checkGrade.setIsDeleted(false);
+		checkGrade.setGradeCode(grade.getGradeCode());
+		if(basisGradeMapper.retrieve((T) checkGrade).size()==0) throw new Exception("当前职级编码不存在");
+		//更新人
+		dynamicSqlParam.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		// 更新操作
+		return dynamicSqlService.executeUpdate(dynamicSqlParam);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> deleteBasisGrade(T t) throws Exception {
+			
+		// TODO(业务校验)
+		BasisGrade checkGrade=new BasisGrade();
+		checkGrade.setIsDeleted(false);
+		checkGrade.setGradeCode(t.getGradeCode());
+		if(basisGradeMapper.retrieve((T) checkGrade).size()==0) throw new Exception("当前职级编码不存在");
+		// 删除操作
+		
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, basisGradeMapper.logicalDelete(t));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> switchBasisGrade(T t) throws Exception {
+		
+		BasisGrade checkGrade=new BasisGrade();
+		checkGrade.setIsDeleted(false);
+		checkGrade.setGradeCode(t.getGradeCode());
+		if(basisGradeMapper.retrieve((T) checkGrade).size()==0) throw new Exception("当前职级编码不存在");
+		
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, basisGradeMapper.shiftValidity(t));
+	}
+
+}

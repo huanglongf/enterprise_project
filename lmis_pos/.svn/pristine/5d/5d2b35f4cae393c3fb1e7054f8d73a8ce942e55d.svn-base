@@ -1,0 +1,185 @@
+package com.lmis.pos.poSplitCollect.service.impl;
+
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.pos.common.model.PosPurchaseOrderMain;
+import com.lmis.pos.common.model.PosWhsAllocate;
+import com.lmis.pos.poSplitCollect.dao.PoSplitCollectOrderMainMapper;
+import com.lmis.pos.poSplitCollect.dao.PoSplitCollectWhsAllocateMapper;
+import com.lmis.pos.poSplitCollect.model.PosSplitAllocateTableOne;
+import com.lmis.pos.poSplitCollect.model.ViewPosSplitAllocateTableFour;
+import com.lmis.pos.poSplitCollect.model.ViewPosSplitAllocateTableThree;
+import com.lmis.pos.poSplitCollect.model.ViewPosSplitAllocateTableTwo;
+import com.lmis.pos.poSplitCollect.service.PoSplitCollectServiceInterface;
+
+
+/**
+ * @ClassName: PosCrdOutServiceImpl
+ * @Description: TODO(PO-soldto业务层实现类)
+ * @author codeGenerator
+ * @date 2018-06-22 17:09:27
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor = Exception.class)
+@Service
+public class PoSplitCollectServiceImpl implements PoSplitCollectServiceInterface{
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private PoSplitCollectOrderMainMapper<PosPurchaseOrderMain> poSplitCollectOrderMainMapper;
+
+    @Autowired
+    private PoSplitCollectWhsAllocateMapper<PosWhsAllocate> poSplitCollectWhsAllocateMapper;
+
+//    @Autowired
+//    private BaseUtils baseUtils;
+
+    @Override
+    public LmisResult<?> selectPoSplitCollectData(PosPurchaseOrderMain posPurchaseOrderMain) throws Exception{
+        LmisResult<?> result = new LmisResult<>(LmisConstant.RESULT_CODE_ERROR, "");
+
+        if(!judgementDate(posPurchaseOrderMain.getCreateTimeStart(),posPurchaseOrderMain.getCreateTimeEnd())){
+            throw new Exception("文件导入结束时间与开始时间间隔不能超过30天");
+        }
+        try{
+            Map< String , Object > jsonMap = new HashMap< String , Object>();
+            PosSplitAllocateTableOne posSplitAllocateTableOne = poSplitCollectOrderMainMapper.selectPoOrderMainCollect(posPurchaseOrderMain); //表格1数据
+            jsonMap.put("table1", posSplitAllocateTableOne);
+            
+            ViewPosSplitAllocateTableTwo posSplitAllocateTableTwo = poSplitCollectWhsAllocateMapper.getTableTwoData(posPurchaseOrderMain); //查询表格2的数据
+            List<ViewPosSplitAllocateTableThree> listThrees = poSplitCollectWhsAllocateMapper.getTableThreeData(posPurchaseOrderMain); //查询表格3数据
+            List<ViewPosSplitAllocateTableFour> listFours = poSplitCollectWhsAllocateMapper.getTableFourData(posPurchaseOrderMain); //查询表格4数据
+            //处理数据方法
+            jsonMap = dealTableData(jsonMap, posSplitAllocateTableTwo, listThrees, listFours);
+            result.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+            result.setData(jsonMap);
+        }catch (Exception e){
+            logger.error("查询PO拆分汇总数据方法selectPoSplitCollectData()失败：" + e.getMessage());
+            throw new Exception("查询或处理表格数据方法出错，请检查！");
+        }
+        return result;
+    }
+
+    /**
+     * 处理表格数据方法
+     * 
+     * @param jsonObject
+     *            json对象
+     * @param listTwos
+     *            表格2数据集合
+     * @param listThrees
+     *            表格3数据集合
+     * @param listFours
+     *            表格4数据集合
+     * @return json对象
+     * @throws Exception
+     */
+    private Map< String , Object > dealTableData(Map< String , Object > jsonMap,ViewPosSplitAllocateTableTwo posSplitAllocateTableTwo,List<ViewPosSplitAllocateTableThree> listThrees,List<ViewPosSplitAllocateTableFour> listFours) throws Exception{
+        BigDecimal bignumTotal = new BigDecimal(1);
+        //处理表格2数据
+        if (posSplitAllocateTableTwo != null){
+            if (posSplitAllocateTableTwo.getBzRatio() != null){
+                posSplitAllocateTableTwo.setOtherRatio(bignumTotal.subtract(posSplitAllocateTableTwo.getBzRatio())); //执行占比减法操作
+            }else{
+                posSplitAllocateTableTwo.setOtherRatio(bignumTotal.subtract(new BigDecimal(0))); //执行占比减法操作
+            }
+            jsonMap.put("table2", posSplitAllocateTableTwo); //表格2数据
+        }else{
+            jsonMap.put("table2", posSplitAllocateTableTwo); //集合为空就设值为空
+        }
+
+        //处理表格3数据
+        if (!CollectionUtils.isEmpty(listThrees)){
+            BigDecimal totalAmount = new BigDecimal(0);
+            for (ViewPosSplitAllocateTableThree listThree : listThrees){
+                if (listThree.getPlanNumRatio() != null){
+                    totalAmount = totalAmount.add(listThree.getPlanNumRatio()); //各数据计划入库占比相加
+                }else{
+                    totalAmount = totalAmount.add(new BigDecimal(0));
+                }
+            }
+            ViewPosSplitAllocateTableThree lastInstance = listThrees.get(listThrees.size() - 1); //取得集合最后一个元素对象
+            listThrees.remove(listThrees.size() - 1);//删除list集合最后元素
+            if (lastInstance.getPlanNum().compareTo(BigDecimal.ZERO) != 0){
+                BigDecimal newLastRatio = bignumTotal.subtract(totalAmount.subtract(lastInstance.getPlanNumRatio() == null ? new BigDecimal(0) : lastInstance.getPlanNumRatio())); //得到最后元素新的计划占比
+                lastInstance.setPlanNumRatio(newLastRatio);
+            }else{
+                lastInstance.setPlanNumRatio(new BigDecimal(0.0000));
+            }
+            listThrees.add(lastInstance);
+            jsonMap.put("table3", listThrees); //处理后的表格3数据
+        }else{
+            jsonMap.put("table3", listThrees); //集合为空就设值为空
+        }
+
+        //处理表格4数据
+        if (!CollectionUtils.isEmpty(listFours)){
+            BigDecimal totalAmount1 = new BigDecimal(0);
+            for (ViewPosSplitAllocateTableFour listFour : listFours){
+                if (listFour.getJoinSplitRatio() != null){
+                    totalAmount1 = totalAmount1.add(listFour.getJoinSplitRatio()); //各数据参与拆分商品计划入库占比相加
+                }else{
+                    totalAmount1 = totalAmount1.add(new BigDecimal(0));
+                }
+            }
+            ViewPosSplitAllocateTableFour lastInstance = listFours.get(listFours.size() - 1); //取得集合最后一个元素对象
+            listFours.remove(listFours.size() - 1);//删除list集合最后元素
+            if (lastInstance.getJoinSplitNum().compareTo(BigDecimal.ZERO) != 0){
+                BigDecimal newLastRatio = bignumTotal.subtract(totalAmount1.subtract(lastInstance.getJoinSplitRatio() == null ? new BigDecimal(0) : lastInstance.getJoinSplitRatio())); //得到最后元素新的计划入库占比
+                lastInstance.setJoinSplitRatio(newLastRatio);
+            }else{
+                lastInstance.setJoinSplitRatio(new BigDecimal(0.0000));
+            }
+            listFours.add(lastInstance);
+            jsonMap.put("table4", listFours); //处理后的表格4数据
+        }else{
+            jsonMap.put("table4", listFours); //集合为空就设值为空
+        }
+
+        return jsonMap;
+
+    }
+    
+    
+    
+    /**
+     * //判断文件导入开始与结束日期的比较
+     * @param beginDateTime 文件开始导入时间
+     * @param endDateTime 文件
+     * @return
+     * @throws Exception
+     */
+    private Boolean judgementDate(String beginDateTime, String endDateTime) throws Exception {
+        boolean flag = true;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        long m = 0;
+        if((null != beginDateTime && !"".equals(beginDateTime)) && ( null != endDateTime && !"".equals(endDateTime)) ) {
+             Date beginDate = df.parse(beginDateTime);
+             Date endDate = df.parse(endDateTime);
+             long diff = (endDate.getTime() - beginDate.getTime())/(1000 * 60 * 60 * 24);
+             if((diff - 30) > m) {
+                 flag = false;
+             }
+             
+        }
+        return flag;
+    }
+
+}

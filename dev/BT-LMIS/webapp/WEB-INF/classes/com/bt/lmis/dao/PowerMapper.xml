@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.PowerMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.Power" >
+	<result column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="menuid" property="menuid"/>
+</resultMap>
+       
+<!-- s_employee table all fields -->
+<sql id="Base_Column_List" >
+	 id,name,url,remarks,pid,icon,flag,status,sort
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+ 		<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	 	<if test="name != null and name != ''" >
+	    and name =  #{name}
+	</if>
+	 	<if test="menuid != null and menuid != ''" >
+	    and menuid =  #{menuid}
+	</if>
+</trim>
+</sql>
+   
+<!-- 查询条件 -->
+<sql id="where_Clause_like">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	 	<if test="name != null and name != ''" >
+	    and name like CONCAT('%', #{name}, '%')
+	</if>
+	 	<if test="menuid != null and menuid != ''" >
+	    and menuid like CONCAT('%', #{menuid}, '%')
+	</if>
+</trim>
+
+</sql>
+
+<insert id="insert" parameterType="com.bt.lmis.model.Menu" >
+  insert into s_menu(name,pid,create_date,create_person,remark)values(#{name},#{pid},now(),#{create_person},#{remark})
+</insert>
+
+<update id="update" parameterType="com.bt.lmis.model.Menu" >
+ update s_menu set name=#{name},remark=#{remark},pid=#{pid} where id=#{id}
+</update>
+
+<!-- 删除运维人员 -->
+<update id="delete" parameterType="Object">
+	delete s_menu s_power where id = #{id}
+</update>
+
+<!-- 批量删除运维人员 -->
+<delete id="batchDelete" parameterType="Object">
+	delete from s_menu where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+
+  	
+<!-- 依据主键查找运维人员 -->
+<select id="findPowerById" resultType="java.util.HashMap" parameterType="Object" >
+	select <include refid="Base_Column_List" /> 
+	 from s_menu where id = #{id}
+</select>
+  	
+<!-- 根据用户名和密码查找 -->
+<!-- <select id="loginCheck" parameterType="com.bt.lmis.model.Employee" resultMap="BaseResultMap"> -->
+<!-- 	select <include refid="Base_Column_List" /> from s_employee where username=#{username} and password=#{password} -->
+<!-- </select> -->
+
+
+
+	<select id="getPowerList" resultType="java.util.HashMap" parameterType="com.bt.lmis.model.Menu">
+		select 
+		 id,
+		 name menu_name,
+		 url,
+		 remarks 
+		 from s_menu t
+		 where 1=1
+		 and flag=1
+		 <if test="name != null  and name != '' ">
+			and t.name like CONCAT('%', #{name}, '%')
+		</if>
+	</select>
+
+	<select id="selectCount" resultType="java.lang.Long" parameterType="java.util.HashMap">
+	   select count(1) 
+	   	 from s_power t
+		 where 1=1
+		 <if test="name != null  and name != '' ">
+			and t.name like CONCAT('%', #{name}, '%')
+		</if>
+		<if test="menu_name != null  and menu_name != '' ">
+			and  t.menuid in ( select id from s_menu m where m.name like CONCAT('%', #{menu_name}, '%'))
+		</if>
+	</select>
+
+
+
+</mapper>   

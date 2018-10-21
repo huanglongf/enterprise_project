@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.RecoverSettlementDataMapper">
+	<select id="ensureRecoverProcess" resultType="java.util.Map">
+		SELECT
+			DATE_FORMAT(a.create_time, '%Y-%m-%d-%T') AS create_time,
+			b.name AS create_by,
+			CASE a.status
+			WHEN 0 THEN "新建"
+			WHEN 1 THEN "进行中"
+			WHEN 2 THEN "已完成"
+			WHEN -1 THEN "异常"
+			ELSE "" END AS status,
+			CASE a.move
+			WHEN 0 THEN "异常还原"
+			WHEN 1 THEN "全部还原"
+			ELSE "" END AS move,
+			c.contract_name AS contract,
+			recover_start_date,
+			recover_end_date,
+			log
+		FROM bal_recover_process a
+		LEFT JOIN s_employee b
+		ON a.create_by = b.id
+		LEFT JOIN tb_contract_basicinfo c
+		ON a.con_id = c.id
+		ORDER BY a.id DESC
+	</select>
+	<insert id="addRecoverTask" parameterType="com.bt.lmis.balance.model.RecoverProcess">
+		INSERT INTO bal_recover_process (
+			create_time,
+			create_by,
+			move,
+			con_id,
+			recover_start_date,
+			recover_end_date
+			
+		) VALUES 
+		<foreach collection="list" item="obj" index="index" separator=",">
+		(
+			now(),
+			#{obj.createBy },
+			#{obj.move },
+			#{obj.conId },
+			#{obj.recoverStartDate },
+			#{obj.recoverEndDate }
+			
+		)
+		</foreach>
+	</insert>
+	<select id="existProcessing" resultType="int">
+		SELECT COUNT(id) FROM bal_recover_process WHERE status=1
+	</select>
+	<select id="ensureNextProcessing" resultType="com.bt.lmis.balance.model.RecoverProcess">
+		SELECT
+			id,
+			create_time AS  createTime,
+			create_by AS createBy,
+			status AS status,
+			move,
+			con_id AS conId,
+			recover_start_date AS recoverStartDate,
+			recover_end_date AS recoverEndDate
+		FROM bal_recover_process
+		WHERE status=0
+		ORDER BY id
+		LIMIT 1
+	</select>
+	<update id="updateProcess" parameterType="int">
+		UPDATE bal_recover_process
+		SET status=#{status },log=#{log }
+		WHERE id=#{id }
+	</update>
+	<select id="ensureContractType" parameterType="int" resultType="int">
+		SELECT contract_type FROM tb_contract_basicinfo WHERE id=#{conId }
+	</select>
+	<delete id="deleteErrorDetail" parameterType="Object">
+		DELETE FROM tb_settle_error_result
+		WHERE 
+		subject_code IN (
+			SELECT
+				express_number
+			FROM
+				tb_warehouse_express_data
+			WHERE
+				TO_DAYS(transport_time) &gt;= TO_DAYS(#{recoverStartDate })
+				AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{recoverEndDate })
+				<if test="errorType == 1">
+					AND transport_code = (
+						SELECT
+							contract_owner
+						FROM
+							tb_contract_basicinfo
+						WHERE
+							id = #{conId }
+							
+					)
+					AND settle_flag = 2
+				</if>
+				<if test="errorType == 4">
+					AND store_code IN (
+						SELECT
+							store_code
+						FROM
+							tb_store
+						WHERE
+							client_id IN (
+								SELECT
+									id
+								FROM
+									tb_client
+								WHERE
+									client_code = (
+										SELECT
+											contract_owner
+										FROM
+											tb_contract_basicinfo
+										WHERE
+											id = #{conId }
+									)
+							)
+					)
+					AND settle_client_flag = 2
+				</if>
+				
+		)
+		AND contract_id = #{conId }
+	</delete>
+	<delete id="deleteSettlementDetail" parameterType="Object">
+		DELETE FROM ${settlementDetailTable }
+		WHERE contract_id = #{conId }
+		AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{recoverStartDate })
+		AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{recoverEndDate })
+	</delete>
+	<update id="recoverSettleFlag" parameterType="com.bt.lmis.balance.model.RecoverProcess">
+		UPDATE tb_warehouse_express_data
+		SET settle_flag=0
+		WHERE
+			transport_code = (
+				SELECT
+					contract_owner
+				FROM
+					tb_contract_basicinfo
+				WHERE
+					id = #{conId }
+					
+			)
+			AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{recoverStartDate })
+			AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{recoverEndDate })
+		<if test="move == 0">
+			AND settle_flag = 2
+		</if>
+		<if test="move == 1">
+			AND settle_flag IN (1,2)
+		</if>
+	</update>
+	<update id="recoverSettleClientFlag" parameterType="com.bt.lmis.balance.model.RecoverProcess">
+		UPDATE tb_warehouse_express_data
+		SET settle_client_flag=0
+		WHERE
+			store_code IN (
+				SELECT
+					store_code
+				FROM
+					tb_store
+				WHERE
+					client_id IN (
+						SELECT
+							id
+						FROM
+							tb_client
+						WHERE
+							client_code = (
+								SELECT
+									contract_owner
+								FROM
+									tb_contract_basicinfo
+								WHERE
+									id = #{conId }
+							)
+					)
+			)
+			AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{recoverStartDate })
+			AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{recoverEndDate })
+		<if test="move == 0">
+			AND settle_client_flag = 2
+		</if>
+		<if test="move == 1">
+			AND settle_client_flag IN (1,2)
+		</if>
+	</update>
+	<delete id="cleanRecover">
+		TRUNCATE bal_recover_process;
+	</delete>
+</mapper>

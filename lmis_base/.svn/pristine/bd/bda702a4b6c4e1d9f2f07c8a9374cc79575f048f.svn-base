@@ -1,0 +1,104 @@
+package com.lmis.setup.page.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.common.dynamicSql.service.DynamicSqlServiceInterface;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.setup.page.dao.SetupPageMapper;
+import com.lmis.setup.page.model.SetupPage;
+import com.lmis.setup.page.service.SetupPageServiceInterface;
+import com.lmis.setup.pageElement.dao.SetupPageElementMapper;
+import com.lmis.setup.pageElement.model.SetupPageElement;
+
+/** 
+ * @ClassName: SetupPageServiceImpl
+ * @Description: TODO(配置页面业务实现类)
+ * @author Ian.Huang
+ * @date 2017年12月28日 下午4:06:32 
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class SetupPageServiceImpl<T extends SetupPage> implements SetupPageServiceInterface<T> {
+
+	@Resource(name="dynamicSqlServiceImpl")
+	DynamicSqlServiceInterface<SetupPage> dynamicSqlService;
+	@Autowired
+	private SetupPageMapper<T> setupPageMapper;
+	@Autowired
+	private SetupPageElementMapper<SetupPageElement> setupPageElementMapper;
+
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		return dynamicSqlService.executeSelect(dynamicSqlParam, pageObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		LmisResult<?> _lmisResult = dynamicSqlService.executeSelect(dynamicSqlParam);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(_lmisResult.getCode())) return _lmisResult;
+		List<Map<String, Object>> result =  (List<Map<String, Object>>) _lmisResult.getData();
+		if(ObjectUtils.isNull(result)) throw new Exception("查无记录，数据异常");
+		if(result.size() != 1) throw new Exception("记录存在多条，数据异常");
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, result.get(0));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		SetupPageElement param = new SetupPageElement();
+		param.setIsDeleted(false);
+		param.setLayoutId(dynamicSqlParam.getLayoutId());
+		param.setTableId("setup_page");
+		param.setColumnId("page_id");
+		List<SetupPageElement> tmp = setupPageElementMapper.retrieve(param);
+		if(ObjectUtils.isNull(tmp)) throw new Exception("无字段page_id对应记录，数据异常");
+		if(tmp.size() != 1) throw new Exception("字段page_id存在多条记录，数据异常");
+		
+		// 唯一校验
+		if(!ObjectUtils.isNull(setupPageMapper.retrieve((T) new SetupPage(null, false, dynamicSqlParam.getElementValue(tmp.get(0).getElementId()))))) throw new Exception("页面ID已经存在，不能新增");
+		return dynamicSqlService.executeInsert(dynamicSqlParam);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		SetupPageElement param = new SetupPageElement();
+		param.setIsDeleted(false);
+		param.setLayoutId(dynamicSqlParam.getLayoutId());
+		param.setTableId("setup_page");
+		param.setColumnId("page_id");
+		List<SetupPageElement> tmp = setupPageElementMapper.retrieve(param);
+		if(ObjectUtils.isNull(tmp)) throw new Exception("无字段page_id对应记录，数据异常");
+		if(tmp.size() != 1) throw new Exception("字段page_id存在多条记录，数据异常");
+		
+		// 存在校验
+		if(ObjectUtils.isNull(setupPageMapper.retrieve((T) new SetupPage(null, false, dynamicSqlParam.getElementValue(tmp.get(0).getElementId()))))) throw new Exception("页面ID不存在，不能更新");
+		return dynamicSqlService.executeUpdate(dynamicSqlParam);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> deleteSetupPage(T t) throws Exception {
+			
+		// 存在校验
+		if(ObjectUtils.isNull(setupPageMapper.retrieve((T) new SetupPage(null, false, t.getPageId())))) throw new Exception("页面ID不存在，不能删除");
+		
+		// 删除操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, setupPageMapper.logicalDelete(t));
+	}
+
+}

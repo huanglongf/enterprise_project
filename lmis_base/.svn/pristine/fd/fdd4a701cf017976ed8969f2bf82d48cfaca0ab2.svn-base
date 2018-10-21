@@ -1,0 +1,129 @@
+package com.lmis.basis.costCenterOrg.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.basis.costCenterOrg.dao.BasisCostCenterOrgMapper;
+import com.lmis.basis.costCenterOrg.model.BasisCostCenterOrg;
+import com.lmis.basis.costCenterOrg.service.BasisCostCenterOrgServiceInterface;
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.common.dynamicSql.service.DynamicSqlServiceInterface;
+import com.lmis.constant.LBASEConstant;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+
+/** 
+ * @ClassName: BasisCostCenterOrgServiceImpl
+ * @Description: TODO(成本中心与组织机构关系业务层实现类)
+ * @author codeGenerator
+ * @date 2018-02-09 11:07:28
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class BasisCostCenterOrgServiceImpl<T extends BasisCostCenterOrg> implements BasisCostCenterOrgServiceInterface<T> {
+	
+	@Resource(name="dynamicSqlServiceImpl")
+	DynamicSqlServiceInterface<BasisCostCenterOrg> dynamicSqlService;
+	@Autowired
+	private BasisCostCenterOrgMapper<T> basisCostCenterOrgMapper;
+	
+	@Autowired
+	private HttpSession session;
+
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		return dynamicSqlService.executeSelect(dynamicSqlParam, pageObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		LmisResult<?> _lmisResult = dynamicSqlService.executeSelect(dynamicSqlParam);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(_lmisResult.getCode())) return _lmisResult;
+		List<Map<String, Object>> result =  (List<Map<String, Object>>) _lmisResult.getData();
+		if(ObjectUtils.isNull(result)) throw new Exception(LBASEConstant.EBASE000007);
+		if(result.size() != 1) throw new Exception(LBASEConstant.EBASE000008);
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, result.get(0));
+	}
+
+	@Override
+	public LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+			
+		// TODO(业务校验)
+		
+		// 插入操作
+		return dynamicSqlService.executeInsert(dynamicSqlParam);
+	}
+
+	@Override
+	public LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+			
+		// TODO(业务校验)
+		
+		// 更新操作
+		return dynamicSqlService.executeUpdate(dynamicSqlParam);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> deleteBasisCostCenterOrg(T t) throws Exception {
+		
+		BasisCostCenterOrg costCenterOrg = new BasisCostCenterOrg();
+		costCenterOrg.setCostCenterId(t.getCostCenterId());
+		costCenterOrg.setIsDeleted(false);
+		
+		List<T> costCenterOrgList = basisCostCenterOrgMapper.retrieve((T) costCenterOrg);
+		if(costCenterOrgList.size()==0) throw new Exception(LBASEConstant.EBASE000032);
+			
+		for (T updateT : costCenterOrgList) {
+			updateT.setUpdateBy(session.getAttribute("lmisUserId").toString());
+			basisCostCenterOrgMapper.logicalDelete(updateT);
+		}
+		// 删除操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, "");
+		
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public void addBasisCostCenterOrg(T t) throws Exception {
+		BasisCostCenterOrg checkCCO=new BasisCostCenterOrg();
+		checkCCO.setOrgId(t.getOrgId());
+		checkCCO.setIsDeleted(false);
+		checkCCO.setCostCenterId(t.getCostCenterId());
+		if(basisCostCenterOrgMapper.retrieve((T) checkCCO).size()>0) throw new Exception(LBASEConstant.EBASE000033);
+		//创建人
+		t.setCreateBy(session.getAttribute("lmisUserId").toString());
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		//所属机构
+		t.setPwrOrg(session.getAttribute("lmisUserOrg").toString());	
+		basisCostCenterOrgMapper.create(t);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void updateBasisCostCenterOrg(T t) throws Exception {
+		BasisCostCenterOrg costCenterOrg = new BasisCostCenterOrg();
+		costCenterOrg.setCostCenterId(t.getCostCenterId());
+		costCenterOrg.setIsDeleted(false);
+		
+		List<T> costCenterOrgList = basisCostCenterOrgMapper.retrieve((T) costCenterOrg);
+		if(costCenterOrgList.size()!=1)throw new Exception(LBASEConstant.EBASE000001);
+		t.setVersion(costCenterOrgList.get(0).getVersion());
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());//更新人
+		t.setId(costCenterOrgList.get(0).getId());
+		basisCostCenterOrgMapper.update(t);
+	}
+
+}

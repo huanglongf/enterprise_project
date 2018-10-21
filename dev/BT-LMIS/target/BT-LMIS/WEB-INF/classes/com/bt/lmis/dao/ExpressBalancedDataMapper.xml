@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.lmis.dao.ExpressBalancedDataMapper" > 
+	<select id= "findDetail" parameterType= "com.bt.lmis.controller.form.ExpressBalanceDetialQueryParam" resultType= "java.util.HashMap" >
+		SELECT
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse,
+			transport_code,
+			transport_name,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			express_number,
+			case transport_direction when '0' then '正向运输' else '逆向运输' end as transport_direction,
+			itemtype_code,
+			itemtype_name,
+			date_format(transport_time, '%Y-%m-%d-%T') as transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			weight,
+			length,
+			width,
+			higth,
+			volumn,
+			delivery_address,
+			province,
+			city,
+			state,
+			street,
+			case insurance_flag when true then '是' else '否' end as insurance_flag,
+			case cod_flag when true then '是' else '否' end as cod_flag,
+			balance_subject,
+			jp_num,
+			volumn_weight,
+			jf_weight,
+			charged_weight,
+			first_weight,
+			first_weight_price,
+			added_weight,
+			added_weight_price,
+			standard_freight,
+			discount,
+			afterdiscount_freight,
+			insurance_fee,
+			cod,
+			delegated_pickup,
+			extend_prop1,
+			extend_prop2,
+			total_fee,
+			remark,
+			data_id,
+			contract_id,
+			dFlag,
+			park_code,
+			park_name,
+			park_cost_center,
+			province_origin,
+			city_origin,
+			state_origin
+		FROM tb_warehouse_express_data_settlement
+		WHERE dFlag= 0
+		AND contract_id= #{con_id }
+		AND transport_name= #{express_name }
+		AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{balance_start_date })
+		AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{balance_end_date })
+		ORDER BY create_time DESC
+	</select>
+	<select id= "countAllBalancedData" resultType= "Integer" parameterType= "com.bt.lmis.controller.form.ExpressBalanceDetialQueryParam" >
+		SELECT COUNT(1)
+		FROM tb_warehouse_express_data_settlement
+		WHERE dFlag= 0
+		AND contract_id= #{con_id }
+		AND transport_name= #{express_name }
+		AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{balance_start_date })
+		AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{balance_end_date })
+	</select>
+	<select id="getExpressSettlementDetail" resultType="java.util.Map" parameterType= "com.bt.lmis.controller.form.ExpressBalanceDetialQueryParam">
+		SELECT
+			store_name,
+			warehouse,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			express_number,
+			case transport_direction when '0' then '正向运输' else '逆向运输' end as transport_direction,
+			itemtype_name,
+			date_format(transport_time, '%Y-%m-%d-%T') as transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			weight,
+			length,
+			width,
+			higth,
+			volumn,
+			delivery_address,
+			province,
+			city,
+			state,
+			case insurance_flag when true then '是' else '否' end as insurance_flag,
+			case cod_flag when true then '是' else '否' end as cod_flag,
+			first_weight_price,
+			added_weight_price,
+			standard_freight,
+			discount,
+			afterdiscount_freight,
+			insurance_fee,
+			total_fee,
+			park_code,
+			park_name,
+			park_cost_center,
+			province_origin,
+			city_origin,
+			state_origin
+		FROM tb_warehouse_express_data_settlement
+		WHERE dFlag= 0
+		AND contract_id= #{con_id }
+		AND transport_name= #{express_name }
+		AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{balance_start_date })
+		AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{balance_end_date })
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id= "selectAllBalancedData" resultType= "java.util.HashMap" parameterType= "com.bt.lmis.controller.form.ExpressBalanceDetialQueryParam" >
+		SELECT
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse,
+			transport_code,
+			transport_name,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			express_number,
+			case transport_direction when '0' then '正向运输' else '逆向运输' end as transport_direction,
+			itemtype_code,
+			itemtype_name,
+			date_format(transport_time, '%Y-%m-%d-%T') as transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			weight,
+			length,
+			width,
+			higth,
+			volumn,
+			delivery_address,
+			province,
+			city,
+			state,
+			street,
+			case insurance_flag when true then '是' else '否' end as insurance_flag,
+			case cod_flag when true then '是' else '否' end as cod_flag,
+			balance_subject,
+			jp_num,
+			volumn_weight,
+			jf_weight,
+			charged_weight,
+			first_weight,
+			first_weight_price,
+			added_weight,
+			added_weight_price,
+			standard_freight,
+			discount,
+			afterdiscount_freight,
+			insurance_fee,
+			cod,
+			delegated_pickup,
+			extend_prop1,
+			extend_prop2,
+			total_fee,
+			remark,
+			data_id,
+			contract_id,
+			dFlag,
+			park_code,
+			park_name,
+			park_cost_center,
+			province_origin,
+			city_origin,
+			state_origin
+		FROM tb_warehouse_express_data_settlement
+		WHERE dFlag= 0
+		AND contract_id= #{con_id }
+		AND transport_name= #{express_name }
+		AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{balance_start_date })
+		AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{balance_end_date })
+		ORDER BY create_time DESC
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id= "getSummary" resultType= "java.util.Map" parameterType= "Object" >
+		SELECT
+			cost_center,
+			store_code, 
+			store_name,
+			warehouse as warehouse_name,
+			count(1) AS order_num,
+			itemtype_code as product_type_code,
+			itemtype_name as product_type_name,
+			sum(standard_freight) AS product_type_freight,
+			sum(standard_freight- afterdiscount_freight) AS product_type_discount,
+			sum(insurance_fee) AS insurance,
+			sum(total_fee) AS total_fee
+		FROM tb_warehouse_express_data_settlement
+		WHERE dFlag = 0
+		AND transport_name = #{transport_name }
+		AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{balance_start_date })
+		AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{balance_end_date })
+		GROUP BY 
+			cost_center,
+			store_code, 
+			store_name,
+			warehouse,
+			itemtype_code,
+			itemtype_name
+	</select>
+	<update id= "updateBatch" parameterType= "Object">
+		update
+			tb_warehouse_express_data_settlement
+		set
+			discount= #{discount } * 100,
+			afterdiscount_freight= standard_freight* (1- #{discount }),
+			total_fee= total_fee- standard_freight* #{discount },
+			update_user= 'SYSTEM', 
+			update_time= now()
+		where
+			dFlag= 0
+		and 
+			transport_name= #{transport_name }
+		<if test="product_code != null or product_code != ''" >
+		and 
+			itemtype_code in (select product_type from tb_product_type_discount where code = #{product_code})
+		</if>
+		and
+			TO_DAYS(transport_time) &gt;= TO_DAYS(#{balance_start_date })
+		and
+			TO_DAYS(transport_time) &lt;= TO_DAYS(#{balance_end_date })	
+	</update>
+	<insert id= "insertBatch" parameterType= "java.util.List" >
+		insert into tb_warehouse_express_data_settlement
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse,
+			transport_code,
+			transport_name,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			express_number,
+			transport_direction,
+			itemtype_code,
+			itemtype_name,
+			transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			weight,
+			account_weight,
+			length,
+			width,
+			higth,
+			volumn,
+			delivery_address,
+			province,
+			city,
+			state,
+			street,
+			insurance_flag,
+			cod_flag,
+			balance_subject,
+			jp_num,
+			volumn_weight,
+			volumn_account_weight,
+			jf_weight,
+			charged_weight,
+			first_weight,
+			first_weight_price,
+			added_weight,
+			added_weight_price,
+			standard_freight,
+			discount,
+			afterdiscount_freight,
+			insurance_fee,
+			cod,
+			delegated_pickup,
+			extend_prop1,
+			extend_prop2,
+			total_fee,
+			remark,
+			data_id,
+			contract_id,
+			park_code,
+			park_name,
+			park_cost_center,
+			province_origin,
+			city_origin,
+			state_origin
+		) values
+		<foreach collection= "list" item= "obj" index= "index" separator= "," >
+		(
+			#{obj.id },
+			now(),
+			'SYSTEM',
+			now(),
+			'SYSTEM',
+			#{obj.cost_center },
+			#{obj.store_code },
+			#{obj.store_name },
+			#{obj.warehouse },
+			#{obj.transport_code },
+			#{obj.transport_name },
+			#{obj.delivery_order },
+			#{obj.epistatic_order },
+			#{obj.order_type },
+			#{obj.express_number },
+			#{obj.transport_direction },
+			#{obj.itemtype_code },
+			#{obj.itemtype_name },
+			#{obj.transport_time },
+			#{obj.collection_on_delivery },
+			#{obj.order_amount },
+			#{obj.sku_number },
+			#{obj.weight },
+			#{obj.account_weight },
+			#{obj.length },
+			#{obj.width },
+			#{obj.higth },
+			#{obj.volumn },
+			#{obj.delivery_address },
+			#{obj.province },
+			#{obj.city },
+			#{obj.state },
+			#{obj.street },
+			#{obj.insurance_flag },
+			#{obj.cod_flag },
+			#{obj.balance_subject },
+			#{obj.jp_num },
+			#{obj.volumn_weight },
+			#{obj.volumn_account_weight },
+			#{obj.jf_weight },
+			#{obj.charged_weight },
+			#{obj.first_weight },
+			#{obj.first_weight_price },
+			#{obj.added_weight },
+			#{obj.added_weight_price },
+			#{obj.standard_freight },
+			#{obj.discount },
+			#{obj.afterdiscount_freight },
+			#{obj.insurance_fee },
+			#{obj.cod },
+			#{obj.delegated_pickup },
+			#{obj.extend_prop1 },
+			#{obj.extend_prop2 },
+			#{obj.total_fee },
+			#{obj.remark },
+			#{obj.data_id },
+			#{obj.contract_id },
+			#{obj.park_code },
+			#{obj.park_name },
+			#{obj.park_cost_center },
+			#{obj.province_origin},
+			#{obj.city_origin},
+			#{obj.state_origin}
+		)
+		</foreach>
+	</insert>
+</mapper>   

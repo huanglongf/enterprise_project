@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TransPoolDetailMapper">
+	<!-- Result Map -->
+ <!-- Result Map -->
+	<select id="findAllData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	 select
+	    t.`id`,
+        t.`contract_id`,
+        t.`create_time`,
+        t.`create_user`,
+        t.`update_time`,
+        t.`update_user`,
+        t.`transport_code`,
+        t.`transport_name`,
+        t.`transport_type`,
+        t.`bookbus_time`,
+        t.`transport_time`,
+        t.`expressno`,
+        t.`cost_center`,
+        t.`store_code`,
+        t.`store_name`,
+        t.`orderno`,
+        t.`originating_place`,
+        t.`warehouse`,
+        t.`privince_name`,
+        t.`city_name`,
+        t.`delivery_address`,
+        t.`delivery_number`,
+        t.`box_number`,
+        t.`real_weight`,
+        t.`volumn_cubic`,
+        t.`remark`,
+        t.`volumn_weight`,
+        t.`realweight_price`,
+        t.`volumn_price`,
+        t.`realweight_cost`,
+        t.`volumnweight_cost`,
+        t.`insurance_fee`,
+        t.`delevery_charges`,
+        t.`loading_charges`,
+        t.`pickup_charges`,
+        t.`other_charges`,
+        t.`extend_prop1`,
+        t.`extend_prop2`,
+        t.`discount`,
+        t.`total_cost`,
+        t.`manager_cost`,
+        t.`is_settle_ok`,
+        t.lower_price,
+        t.trans_cost,
+        t.insurance_goods_price,
+        t.transport_direction
+	  from view_settle_detail t
+	  where 1=1 
+	    and t.contract_id=#{contractId}
+	    and date_format(t.transport_time,'%Y%m%d')>=date_format(date_sub(#{createDate},interval 1 month),'%Y%m%d')
+        and date_format(t.transport_time, '%Y%m%d') &lt;date_format(#{createDate},'%Y%m%d')
+		<if test="startPlace != null  and startPlace != '' ">
+	    and t.originating_place=#{startPlace}
+		</if>	     		
+		<if test="transportNum != null  and transportNum != '' ">
+	    and t.expressno=#{transportNum}
+		</if>
+		<if test="orderNum != null  and orderNum != '' ">
+	    and t.orderno=#{orderNum}
+		</if>	
+<!-- 		<if test="storeName != null  and storeName != '' and  storeName !='null' "> -->
+<!-- 	    and t.store_name=#{storeName} -->
+<!-- 		</if>			 -->
+	   <if test="startPlace != null  and startPlace != '' ">
+	     and t.originating_place like concat('%',#{startPlace},'%')
+		</if>
+		<if test="transportCode != null  and transportCode != '' ">
+	    and transport_code=#{transportCode}
+		</if>	
+		<if test="endPlace != null  and endPlace != '' ">
+	     and concat(t.privince_name,t.city_name,t.delivery_address) like concat('%',#{endPlace},'%')
+		</if>
+		
+		<if test="startOrederTime != null  and startOrederTime != '' ">
+	    and date_format(t.bookbus_time,'%Y%m%d') &gt;=date_format(#{startOrederTime},'%Y%m%d')
+		</if>	
+		
+		<if test="endOrederTime != null  and endOrederTime != '' ">
+	    and date_format(t.bookbus_time,'%Y%m%d') &lt;=date_format(#{endOrederTime},'%Y%m%d')
+		</if>	
+
+
+		<if test="startTransportTime != null  and startTransportTime != '' ">
+	    and date_format(t.transport_time,'%Y%m%d') &gt;=date_format(#{startTransportTime},'%Y%m%d')
+		</if>	
+		
+		<if test="endTransportTime != null  and endTransportTime != '' ">
+	    and date_format(t.transport_time,'%Y%m%d') &lt;=date_format(#{endTransportTime},'%Y%m%d')
+		</if>	   
+			LIMIT #{firstResult}, #{maxResult}
+	  </select>	
+	
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="com.bt.lmis.controller.form.TransPoolQueryParam">
+	  select count(1) from view_settle_detail t
+	  where 1=1
+	    and t.contract_id=#{contractId}
+	    and date_format(t.transport_time,'%Y%m%d')>=date_format(date_sub(#{createDate},interval 1 month),'%Y%m%d')
+        and date_format(t.transport_time, '%Y%m%d') &lt;date_format(#{createDate},'%Y%m%d')
+		<if test="cost_center != null  and cost_center != '' ">
+	    and t.cost_center=#{cost_center}
+		</if>	     
+		<if test="startPlace != null  and startPlace != '' ">
+	    and t.originating_place=#{startPlace}
+		</if>	     		
+		<if test="transportNum != null  and transportNum != '' ">
+	    and t.expressno=#{transportNum}
+		</if>
+		<if test="orderNum != null  and orderNum != '' ">
+	    and t.orderno=#{orderNum}
+		</if>	
+<!-- 		<if test="storeName != null  and storeName != ''  and  storeName !='null' "> -->
+<!-- 	     and t.store_name=#{storeName} -->
+<!-- 		</if>			 -->
+	   <if test="startPlace != null  and startPlace != '' ">
+	     and t.originating_place like concat('%',#{startPlace},'%')
+		</if>
+		
+		<if test="endPlace != null  and endPlace != '' ">
+	     and concat(t.privince_name,t.city_name,t.delivery_address) like concat('%',#{endPlace},'%')
+		</if>
+		
+		<if test="startOrederTime != null  and startOrederTime != '' ">
+	    and date_format(t.bookbus_time,'%Y%m%d') &gt;=date_format(#{startOrederTime},'%Y%m%d')
+		</if>	
+		<if test="transportCode != null  and transportCode != '' ">
+	    and transport_code=#{transportCode}
+		</if>			
+		<if test="endOrederTime != null  and endOrederTime != '' ">
+	    and date_format(t.bookbus_time,'%Y%m%d') &lt;=date_format(#{endOrederTime},'%Y%m%d')
+		</if>	
+
+
+		<if test="startTransportTime != null  and startTransportTime != '' ">
+	    and date_format(t.transport_time,'%Y%m%d') &gt;=date_format(#{startTransportTime},'%Y%m%d')
+		</if>	
+		
+		<if test="endTransportTime != null  and endTransportTime != '' ">
+	    and date_format(t.transport_time,'%Y%m%d') &lt;=date_format(#{endTransportTime},'%Y%m%d')
+		</if>	   
+	</select>
+	
+	
+	<select id="findAllDataByGt" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	      id,
+		  contract_id,
+		  bill_id,
+		  transport_type,
+		  transport_direction,
+		  bill_create_date,
+		  transport_time,
+		  transport_code,
+		  store_name,
+		  order_code,
+		  start_place,
+		  end_province,
+		  end_city,
+		  end_detail_plcae,
+		  if_transfer,
+		  send_type,
+		  box_num,
+		  send_piece_num,
+		  real_weight,
+		  volume,
+		  global_weight,
+		  if_send,
+		  cost_center,
+		  service_type,
+		  settle_target,
+		  settle_flag_trans,
+		  trans_total_price,
+		  insurance_total_price,
+		  upstairs_total_price,
+		  delivery_total_price,
+		  transfer_total_price,
+		  take_total_price,
+		  discount_total_price,
+		  total_price
+		  from tb_wl_order_settlt_result t
+		  where 
+		  1=1
+	      and t.contract_id=#{contractId}
+	      and t.start_place=#{startPlace}
+	      and date_format(t.create_time,'%Y%m%d') &gt; date_format(date_sub(#{createDate},interval 1 month),'%Y%m%d')
+          and date_format(t.create_time,'%Y%m%d') &lt;= date_format(#{createDate},'%Y%m%d')
+ 		<if test="firstResult != null  and firstResult != '' ">
+			LIMIT #{firstResult}, #{maxResult}
+		</if>	          
+	</select>
+	
+		<select id="selectCountByGt" resultType="java.lang.Integer" parameterType="com.bt.lmis.controller.form.TransPoolQueryParam">
+		  select count(1) from tb_wl_order_settlt_result t
+		  where 
+		  1=1
+	      and t.contract_id=#{contractId}
+	      and t.start_place=#{startPlace}
+	      and date_format(t.create_time,'%Y%m%d') &gt; date_format(date_sub(#{createDate},interval 1 month),'%Y%m%d')
+          and date_format(t.create_time,'%Y%m%d') &lt;= date_format(#{createDate},'%Y%m%d')
+		</select>
+		
+<select id="getExclData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+ select
+	   t.`id`,
+       t.`contract_id`,
+       t.`start_place`,
+       t.`cost_center`,
+	   t.`shop_name`,
+	   t.warehouse,
+	   t.`bill_num`,
+	   t.`carload_price`,
+	   t.`Lingdan_price`,
+	   t.`insurance_price`,
+	   t.`upstairs_price`,
+	   t.`unloading_price`,
+	   t.`send_price`,
+	   t.`take_price`,
+	   t.`other_price`,
+	   t.`discount_price`,
+	   t.`total_price`,
+	   t.`update_date`,
+	   t.`manager_price`,
+	   t.`dispatch_price`,
+	   t.`every_discount`,
+	   t.`bat_id`,
+	   t.create_date_day,
+	   t.create_date,
+	   t.contract_name,
+	   t.contract_version,
+	   t.contract_no
+	  from view_trans_pool_result t
+	  where 1=1 
+	    and contract_id=#{contractId}
+	   <if test="createDate != null  and createDate != '' ">
+	       and date_format(t.create_date_day,'%Y%m')=date_format(#{createDate},'%Y%m')
+	   </if>
+       or (t.contract_type='sum' and contract_id=#{contractId})
+	</select>
+	<!-- 错误数据导出 -->
+	<select id="getExclInvitation" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+ select
+	   t.`store_name`,
+	   t.`inbound_no`,
+	   t.`barcode`,
+	   t.`bz_number`,
+	   t.`item_no`,
+	   t.`item_name`,
+	   t.`inbound_qty`,
+	   t.purchase_price,
+	   t.inbound_money,
+	   t.`pro_flag`,
+	   t.`pro_remark`,
+	   count(1) as error_count
+	  from jk_settle_invitation t
+	  where 1=1 
+	    and pro_flag='2'  GROUP BY  pro_remark
+	</select>
+	
+	<!-- 错误数据导出(jk_settle_operator) -->
+	<select id="getExeclOperator" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+     select
+	   t.`store_name`,
+	   t.`job_orderno`,
+	   t.`job_type`,
+	   t.`storaggelocation_code`,
+	   t.`out_num`,
+	   t.`item_number`,
+	   t.`art_no`,
+	   t.`operator`,
+	   t.`pro_flag`,
+	   t.`pro_remark`,
+	   count(1) as error_count
+	  from jk_settle_operator t
+	  where 1=1 
+	    and pro_flag='2' GROUP BY  pro_remark
+	</select>
+	<!-- 查询错误数据(jk_settle_order) -->
+	<select id="getExeclOrder" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+     select
+	   t.`store_code`,
+	   t.`store_name`,
+	   t.`warehouse_code`,
+	   t.`warehouse_name`,
+	   t.`transport_code`,
+	   t.`transport_name`,
+	   t.`delivery_order`,
+	   t.`epistatic_order`,
+	   t.`express_number`,
+	   t.`weight`,
+	   t.`length`,
+	   t.`width`,
+	   t.`higth`,
+	   t.`volumn`,
+	   t.`delivery_address`,
+	   t.`province`,
+	   t.`city`,
+	   t.`state`,
+	   t.`shiptoname`,
+	   t.`address`,
+	   t.`pro_remark`,
+	   count(1) as error_count
+	  from jk_settle_order t
+	  where 1=1 
+	    and pro_flag='2' GROUP BY  pro_remark
+	</select>
+	
+	<!-- 查询错误数据(jk_settle_order_detail) -->
+	<select id="getExeclOrderDetail" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+     select
+	   t.`express_number`,
+	   t.`sku_number`,
+	   t.`barcode`,
+	   t.`item_name`,
+	   t.`extend_pro`,
+	   t.`pro_remark`,
+	   count(1) as error_count
+	  from jk_settle_order_detail t
+	  where 1=1 
+	    and pro_flag='2'  GROUP BY  pro_remark
+	</select>
+	
+	<!-- 查询错误数据(jk_settle_storage) -->
+	<select id="getExeclStorage" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+     select
+	   t.`store_code`,
+	   t.`store_name`,
+	   t.`warehouse_code`,
+	   t.`warehouse_name`,
+	   t.`system_warehouse`,
+	   t.`item_type`,
+	   t.`pro_remark`,
+	   count(1) as error_count
+	  from jk_settle_storage t
+	  where 1=1 
+	    and pro_flag='2'  GROUP BY  pro_remark
+	</select>
+	<!-- 查询错误数据(jk_settle_use) -->
+	<select id="getDetailUse" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+     select
+	   t.`store_code`,
+	   t.`store_name`,
+	   t.`sku_code`,
+	   t.`sku_name`,
+	   t.`pro_remark`,
+	   count(1) as error_count
+	  from jk_settle_use t
+	  where 1=1 
+	    and pro_flag='2'  GROUP BY  pro_remark
+	</select>
+	<select id="getDetailData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	 select
+	    t.`id`,
+        t.`contract_id`,
+        t.`create_time`,
+        t.`create_user`,
+        t.`update_time`,
+        t.`update_user`,
+        t.`transport_code`,
+        t.`transport_name`,
+        t.`transport_type`,
+        t.`bookbus_time`,
+        t.`transport_time`,
+        t.`expressno`,
+        t.`cost_center`,
+        t.`store_code`,
+        t.`store_name`,
+        t.`orderno`,
+        t.`originating_place`,
+        t.`warehouse`,
+        t.`privince_name`,
+        t.`city_name`,
+        t.`delivery_address`,
+        t.`delivery_number`,
+        t.`box_number`,
+        t.`real_weight`,
+        t.`volumn_cubic`,
+        t.`remark`,
+        t.`volumn_weight`,
+        t.`realweight_price`,
+        t.`volumn_price`,
+        t.`realweight_cost`,
+        t.`volumnweight_cost`,
+        t.`insurance_fee`,
+        t.`delevery_charges`,
+        t.`loading_charges`,
+        t.`pickup_charges`,
+        t.`other_charges`,
+        t.`extend_prop1`,
+        t.`extend_prop2`,
+        t.`discount`,
+        t.`total_cost`,
+        t.`manager_cost`,
+        t.`is_settle_ok`,
+        t.lower_price,
+        t.trans_cost,
+        t.insurance_goods_price,
+        t.transport_direction
+	  from view_settle_detail t
+	  where 1=1 
+	    and t.contract_id=#{contractId}
+	    and date_format(t.transport_time,'%Y%m%d')>=date_format(date_sub(#{createDate},interval 1 month),'%Y%m%d')
+        and date_format(t.transport_time, '%Y%m%d') &lt;date_format(#{createDate},'%Y%m%d')
+
+		<if test="startPlace != null  and startPlace != '' ">
+	    and t.originating_place=#{startPlace}
+		</if>	     		
+		<if test="transportNum != null  and transportNum != '' ">
+	    and t.expressno=#{transportNum}
+		</if>
+		<if test="orderNum != null  and orderNum != '' ">
+	    and t.orderno=#{orderNum}
+		</if>	
+	   <if test="startPlace != null  and startPlace != '' ">
+	     and t.originating_place like concat('%',#{startPlace},'%')
+		</if>
+		<if test="endPlace != null  and endPlace != '' ">
+	     and concat(t.privince_name,t.city_name,t.delivery_address) like concat('%',#{endPlace},'%')
+		</if>
+		
+		<if test="startOrederTime != null  and startOrederTime != '' ">
+	    and date_format(t.bookbus_time,'%Y%m%d') &gt;=date_format(#{startOrederTime},'%Y%m%d')
+		</if>	
+		
+		<if test="endOrederTime != null  and endOrederTime != '' ">
+	    and date_format(t.bookbus_time,'%Y%m%d') &lt;=date_format(#{endOrederTime},'%Y%m%d')
+		</if>	
+
+
+		<if test="startTransportTime != null  and startTransportTime != '' ">
+	    and date_format(t.transport_time,'%Y%m%d') &gt;=date_format(#{startTransportTime},'%Y%m%d')
+		</if>	
+		
+		<if test="endTransportTime != null  and endTransportTime != '' ">
+	    and date_format(t.transport_time,'%Y%m%d') &lt;=date_format(#{endTransportTime},'%Y%m%d')
+		</if>	   
+	  </select>	
+</mapper>   
+

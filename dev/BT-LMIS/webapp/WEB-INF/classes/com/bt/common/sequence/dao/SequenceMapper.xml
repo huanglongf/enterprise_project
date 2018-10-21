@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bt.common.sequence.dao.SequenceMapper">
+	<insert id="createKey" parameterType="java.lang.String">
+		INSERT INTO s_sequence
+		(
+			`id`,
+			`seq_id`
+		)
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			#{seqId, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	
+	
+	<select id="currval" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT currval(#{seqId, jdbcType=VARCHAR});
+	</select>
+	
+	<select id="nextval" parameterType="java.lang.String" resultType="java.lang.Long">
+		SELECT nextval(#{seqId, jdbcType=VARCHAR});
+	</select>
+	
+</mapper>

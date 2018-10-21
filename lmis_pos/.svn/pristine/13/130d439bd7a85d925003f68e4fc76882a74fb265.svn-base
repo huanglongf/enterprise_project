@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.whsRateLoadin.dao.PosWhsRateLoadinMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadin" id="PosWhsRateLoadinMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="sku_ggg" property="skuGgg" jdbcType="VARCHAR" />
+		<result column="sku_category" property="skuCategory" jdbcType="VARCHAR" />
+		<result column="gndr_age_desc" property="gndrAgeDesc" jdbcType="VARCHAR" />
+		<result column="gbl_cat_sum_desc" property="gblCatSumDesc" jdbcType="VARCHAR" />
+		<result column="gbl_cat_core_focs_desc" property="gblCatCoreFocsDesc" jdbcType="VARCHAR" />
+		<result column="size" property="size" jdbcType="VARCHAR" />
+		<result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+		<result column="rate" property="rate" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		sku_ggg,
+		sku_category,
+		gndr_age_desc,
+		gbl_cat_sum_desc,
+		gbl_cat_core_focs_desc,
+		size,
+		whs_code,
+		rate
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			sku_ggg,
+			sku_category,
+			gndr_age_desc,
+			gbl_cat_sum_desc,
+			gbl_cat_core_focs_desc,
+			size,
+			whs_code,
+			rate
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadin">
+		INSERT INTO pos_whs_rate_loadin
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{skuGgg, jdbcType=VARCHAR},
+			#{skuCategory, jdbcType=VARCHAR},
+			#{gndrAgeDesc, jdbcType=VARCHAR},
+			#{gblCatSumDesc, jdbcType=VARCHAR},
+			#{gblCatCoreFocsDesc, jdbcType=VARCHAR},
+			#{size, jdbcType=VARCHAR},
+			#{whsCode, jdbcType=VARCHAR},
+			#{rate, jdbcType=DECIMAL},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_whs_rate_loadin
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.skuGgg, jdbcType=VARCHAR},
+				#{obj.skuCategory, jdbcType=VARCHAR},
+				#{obj.gndrAgeDesc, jdbcType=VARCHAR},
+				#{obj.gblCatSumDesc, jdbcType=VARCHAR},
+				#{obj.gblCatCoreFocsDesc, jdbcType=VARCHAR},
+				#{obj.size, jdbcType=VARCHAR},
+				#{obj.whsCode, jdbcType=VARCHAR},
+				#{obj.rate, jdbcType=DECIMAL},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadin" resultMap="PosWhsRateLoadinMap">
+		SELECT <include refid="Base_Column_List" /> FROM pos_whs_rate_loadin
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="skuGgg!=null and skuGgg!=''">
+	            AND sku_ggg = #{skuGgg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="skuCategory!=null and skuCategory!=''">
+	            AND sku_category = #{skuCategory, jdbcType=VARCHAR}
+	        </if>
+	        <if test="gndrAgeDesc!=null and gndrAgeDesc!=''">
+	            AND gndr_age_desc = #{gndrAgeDesc, jdbcType=VARCHAR}
+	        </if>
+	        <if test="gblCatSumDesc!=null and gblCatSumDesc!=''">
+	            AND gbl_cat_sum_desc = #{gblCatSumDesc, jdbcType=VARCHAR}
+	        </if>
+	        <if test="gblCatCoreFocsDesc!=null and gblCatCoreFocsDesc!=''">
+	            AND gbl_cat_core_focs_desc = #{gblCatCoreFocsDesc, jdbcType=VARCHAR}
+	        </if>
+	        <if test="size!=null and size!=''">
+	            AND size = #{size, jdbcType=VARCHAR}
+	        </if>
+	        <if test="whsCode!=null and whsCode!=''">
+	            AND whs_code = #{whsCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="rate!=null">
+	            AND rate = #{rate, jdbcType=DECIMAL}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadin">
+		UPDATE pos_whs_rate_loadin
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="skuGgg!=null and skuGgg!=''">
+	            sku_ggg = #{skuGgg, jdbcType=VARCHAR},
+	        </if>
+	        <if test="skuCategory!=null and skuCategory!=''">
+	            sku_category = #{skuCategory, jdbcType=VARCHAR},
+	        </if>
+	        <if test="gndrAgeDesc!=null and gndrAgeDesc!=''">
+	            gndr_age_desc = #{gndrAgeDesc, jdbcType=VARCHAR},
+	        </if>
+	        <if test="gblCatSumDesc!=null and gblCatSumDesc!=''">
+	            gbl_cat_sum_desc = #{gblCatSumDesc, jdbcType=VARCHAR},
+	        </if>
+	        <if test="gblCatCoreFocsDesc!=null and gblCatCoreFocsDesc!=''">
+	            gbl_cat_core_focs_desc = #{gblCatCoreFocsDesc, jdbcType=VARCHAR},
+	        </if>
+	        <if test="size!=null and size!=''">
+	            size = #{size, jdbcType=VARCHAR},
+	        </if>
+	        <if test="whsCode!=null and whsCode!=''">
+	            whs_code = #{whsCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="rate!=null">
+	            rate = #{rate, jdbcType=DECIMAL},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadin">
+		UPDATE pos_whs_rate_loadin
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	sku_ggg = #{skuGgg, jdbcType=VARCHAR},
+        	sku_category = #{skuCategory, jdbcType=VARCHAR},
+        	gndr_age_desc = #{gndrAgeDesc, jdbcType=VARCHAR},
+        	gbl_cat_sum_desc = #{gblCatSumDesc, jdbcType=VARCHAR},
+        	gbl_cat_core_focs_desc = #{gblCatCoreFocsDesc, jdbcType=VARCHAR},
+        	size = #{size, jdbcType=VARCHAR},
+        	whs_code = #{whsCode, jdbcType=VARCHAR},
+        	rate = #{rate, jdbcType=DECIMAL},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadin">
+		UPDATE pos_whs_rate_loadin
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadin">
+		UPDATE pos_whs_rate_loadin
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadin">
+		DELETE FROM pos_whs_rate_loadin
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+	
+	 <select id="listPosWhsRateLoadin" resultType="com.lmis.pos.whsAllocate.model.PosWhsAllocateRate">
+		SELECT
+			whs_code AS whsCode,
+			rate
+		FROM pos_whs_rate_loadin
+		WHERE is_deleted = 0
+		AND is_disabled = 0
+		AND sku_ggg = #{vnumber}
+		AND size = #{size}
+		AND whs_code IN
+		<foreach collection="posWhs" item="whs" index="index" open="(" separator="," close=")">
+			#{whs.whsCode, jdbcType=VARCHAR}
+		</foreach>
+	</select> 
+	
+	<!-- 仓库推荐比例分析查询 -->
+	<select id="selectPosWhsRateLoadinProportion"  parameterType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadinProportion"  resultType="com.lmis.pos.whsRateLoadin.model.PosWhsRateLoadinProportion">
+		SELECT 
+		    a.sku_category  as skuCategory,
+		    (
+				SELECT
+					NAME
+				FROM
+					pos_whs_butype
+				WHERE
+					CODE = a.sku_category
+			) AS skuCategoryDisplay,
+			a. sku_ggg AS skuGgg,
+		    a.gndr_age_desc AS gndrAgeDesc,
+		    a.gbl_cat_sum_desc AS gblCatSumDesc,
+		    a.gbl_cat_core_focs_desc AS gblCatCoreFocsDesc,
+		    a.size AS size,
+		    SUM(a.SHWH206) AS shwh206,
+		    SUM(a.SHWH244) AS shwh244,
+		    SUM(a.SHWH305) AS shwh305,
+		    SUM(a.SHWH254) AS shwh254
+		FROM
+		    (SELECT 
+		        sku_category,
+		        sku_ggg,
+	            gndr_age_desc,
+	            gbl_cat_sum_desc,
+	            gbl_cat_core_focs_desc,
+	            size,
+	            whs_code,
+	            rate,
+	            IF(whs_code = 'SHWH206', rate, 0) AS 'SHWH206',
+	            IF(whs_code = 'SHWH244', rate, 0) AS 'SHWH244',
+	            IF(whs_code = 'SHWH305', rate, 0) AS 'SHWH305',
+	            IF(whs_code = 'SHWH254', rate, 0) AS 'SHWH254'
+		    FROM
+		        pos_whs_rate_loadin) a 
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="skuCategory!=null and skuCategory!=''">
+	            a.sku_category = #{skuCategory}
+	        </if>
+	        <if test="skuGgg!=null and skuGgg!=''">
+	            AND a.sku_ggg = #{skuGgg}
+	        </if>
+	    </trim>
+		GROUP BY a.sku_category , a.gndr_age_desc , a.gbl_cat_sum_desc , a.gbl_cat_core_focs_desc , a.size
+		ORDER BY a.whs_code , a.sku_category , a.gbl_cat_sum_desc
+	</select> 
+</mapper>

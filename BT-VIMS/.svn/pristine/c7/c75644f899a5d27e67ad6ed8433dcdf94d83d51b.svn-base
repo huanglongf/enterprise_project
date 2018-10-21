@@ -1,0 +1,146 @@
+package com.bt.vims.utils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.imageio.stream.FileImageInputStream;
+import javax.imageio.stream.FileImageOutputStream;
+
+import org.springframework.util.StringUtils;
+
+import com.bt.vims.model.VimsData;
+
+import common.Contents;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+public class ParseJsonUtil {
+
+	/**
+	 * 转换json数据方法并存入对象集合中
+	 * 
+	 * @param jsonData（JSON字符串）
+	 * @return 访客信息实体集合（List<VimsData>）
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<VimsData> parseJsonData(String jsonData) throws RuntimeException {
+		List<VimsData> vimsDataLists = new ArrayList<>(); // 存放解析后的访客数据集合
+
+		JSONArray jsonArray = JSONArray.fromObject(jsonData);
+		for (int j = 0; j < jsonArray.size(); j++) {
+			VimsData vimsData = new VimsData();
+			JSONObject jsonObject = jsonArray.getJSONObject(j);
+			JSONObject bodyObj = (JSONObject) jsonObject.get("body");
+			if (bodyObj != null) { // bodyObj不为空时在执行下面操作
+				Set<Entry<String, String>> bodyObjEntry = bodyObj.entrySet();
+				Iterator<Entry<String, String>> iterator = bodyObjEntry.iterator();
+				while (iterator.hasNext()) {
+					Entry<String, String> elem = iterator.next();
+					if ("content".equals(elem.getKey())) { // 访问事由
+						vimsData.setContent(elem.getValue());
+					} else if ("check_in_plcae".equals(elem.getKey())) { // 签入地址
+						vimsData.setCheckInPlcae(elem.getValue());
+					} else if ("visitor_phone".equals(elem.getKey())) { // 拜访人电话
+						vimsData.setVisitorPhone(elem.getValue());
+					} else if ("check_in_user".equals(elem.getKey())) { // 签入人
+						vimsData.setCheckInUser(elem.getValue());
+					} else if ("license_plate_number".equals(elem.getKey())) { // 车牌号
+						vimsData.setLicensePlateNumber(elem.getValue());
+					} else if ("host".equals(elem.getKey())) { // 被拜访人
+						vimsData.setHost(elem.getValue());
+					} else if ("remark".equals(elem.getKey())) { // 备注
+						vimsData.setRemark(elem.getValue());
+					} else if ("apply_for".equals(elem.getKey())) { // 应聘职位
+						vimsData.setApplyFor(elem.getValue());
+					} else if ("visitor_company_name".equals(elem.getKey())) { // 工作单位名称
+						vimsData.setVisitorCompanyName(elem.getValue());
+					} else if ("visitor_name".equals(elem.getKey())) { // 拜访人姓名
+						vimsData.setVisitorName(elem.getValue());
+					} else if ("check_in_time".equals(elem.getKey())) { // 签入时间
+						vimsData.setCheckInTime(DateUtil.convertFromString(elem.getValue(), DateUtil.YMD_FULL));
+					} else if ("photo".equals(elem.getKey())) { // 照片
+						String decPhoto = parsePhoto(elem.getValue(), Contents.file_path); // 解析后图片路径
+						vimsData.setPhoto(decPhoto);
+					} else if ("visitor_type".equals(elem.getKey())) { // 访客类型
+						vimsData.setVisitorType(elem.getValue());
+					} else {
+						if(!StringUtils.isEmpty(elem.getValue())){
+							vimsData.setVisitorNum(Integer.parseInt(elem.getValue().trim())); // 访客人数
+						}else{
+							vimsData.setVisitorNum(null);
+						}
+					}
+				}
+				vimsData.setCreateTime(new Date());
+				vimsData.setUpdateTime(new Date());
+				vimsDataLists.add(vimsData);
+			}
+		}
+		return vimsDataLists;
+	}
+
+	/**
+	 * photo字节数据解码解析存入本地并且返回存放路径
+	 * 
+	 * @param photoValue
+	 * @return
+	 */
+	public static String parsePhoto(String photoValue, String path) {
+		String uuid = UUID.randomUUID().toString();
+		String newPath = path + uuid + ".jpg";
+		byte[] photoByte = BASE64UtilStrong.decode(photoValue);
+		if (photoByte.length < 3 || (photoByte == null && photoByte.length == 0)) {
+			return null;
+		}
+		try {
+			FileImageOutputStream imageOutput = new FileImageOutputStream(new File(newPath));
+			imageOutput.write(photoByte, 0, photoByte.length);
+			imageOutput.close();
+			System.out.println("Make Picture success,Please find image in " + path);
+		} catch (Exception ex) {
+			System.out.println("Exception: " + ex);
+			ex.printStackTrace();
+		}
+		return newPath;
+	}
+
+	/**
+	 * 解析路径下图片
+	 * 
+	 * @param path
+	 *            路径下的图片
+	 * @return 图片字节数组
+	 */
+	public static byte[] produceBytePhoto(String path) {
+		byte[] data = null;
+		if (!StringUtils.isEmpty(path)) {
+			FileImageInputStream input = null;
+			try {
+				input = new FileImageInputStream(new File(path));
+				ByteArrayOutputStream output = new ByteArrayOutputStream();
+				byte[] buf = new byte[1024];
+				int numBytesRead = 0;
+				while ((numBytesRead = input.read(buf)) != -1) {
+					output.write(buf, 0, numBytesRead);
+				}
+				data = output.toByteArray();
+				output.close();
+				input.close();
+			} catch (FileNotFoundException ex1) {
+				ex1.printStackTrace();
+			} catch (IOException ex1) {
+				ex1.printStackTrace();
+			}
+		}
+		return data;
+	}
+}

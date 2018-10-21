@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.ExpressFreightEstimateMapper">
+	<resultMap type="com.bt.lmis.balance.model.ConsumerCarrier" id="ConsumerCarrierMap">
+		<result property="id" column="id" />
+		<result property="createTime" column="" />
+		<result property="createBy" column="" />
+		<result property="updateTime" column="" />
+		<result property="updateBy" column="" />
+		<result property="dFlag" column="" />
+		<result property="contractId" column="con_id" />
+		<result property="carrierType" column="carrier_type" />
+		<result property="carrierCode" column="carrier" />
+		<result property="carrierName" column="transport_name" />
+	</resultMap>
+	<select id="ensureConsumerExpress" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="ConsumerCarrierMap">
+		SELECT
+			ssc_carrier.id,
+			ssc_carrier.create_time,
+			ssc_carrier.create_by,
+			ssc_carrier.update_time,
+			ssc_carrier.update_by,
+			ssc_carrier.dFlag,
+			con_id,
+			carrier_type,
+			carrier,
+			tb_transport_vendor.transport_name
+		FROM ssc_carrier
+		LEFT JOIN tb_transport_vendor
+		ON tb_transport_vendor.transport_code=ssc_carrier.carrier
+		WHERE dFlag= 0
+		AND carrier_type= 1
+		AND con_id = #{contract.id }
+	</select>
+	<insert id="expressFreightEstimateSummary" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		INSERT INTO bal_estimate_express_freight (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			batch_number,
+			contract_id,
+			balance_subject,
+			subject_type,
+			express,
+			product_type_code,
+			product_type_name,
+			order_num,
+			total_freight,
+			total_insurance,
+			total_cod,
+			total_fee
+		)
+		SELECT
+			UUID() AS id,
+			now() AS create_time,
+			'ESTIMATE-SYSTEM' AS create_by,
+			now() AS update_time,
+			'ESTIMATE-SYSTEM' AS update_by,
+			#{batchNumber } AS batch_number,
+			#{contract.id } AS contract_id,
+			#{contract.contractOwner } AS balance_subject,
+			#{contract.contractType } AS subject_type,
+			#{param.express } AS express,
+			itemtype_code as product_type_code,
+			itemtype_name as product_type_name,
+			count(1) AS order_num,
+			sum(afterdiscount_freight) AS total_freight,
+			sum(insurance_fee) AS total_insurance,
+			sum(cod) AS total_cod,
+			sum(afterdiscount_freight + insurance_fee) AS total_fee
+		FROM tb_warehouse_express_data_store_settlement a
+		WHERE dFlag = 0
+		AND a.contract_id= #{contract.id }
+		AND a.transport_code = #{param.express }
+		AND TO_DAYS(a.transport_time) &gt;= TO_DAYS(#{fromDate })
+		AND TO_DAYS(a.transport_time) &lt;= TO_DAYS(#{toDate })
+		GROUP BY a.itemtype_code, a.itemtype_name
+	</insert>
+</mapper>

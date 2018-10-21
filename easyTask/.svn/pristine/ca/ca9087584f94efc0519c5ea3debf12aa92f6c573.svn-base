@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baozun.easytask.mapper.SkxMapper">
+
+<!-- 	<select id="job1" resultType="java.util.HashMap" parameterType="Object">   -->
+<!-- 		select * from view_ins_waybill  where transport_code='YTO' and order_source='SKX' and warehouse_name='上海' -->
+<!-- 		<![CDATA[  and logistics_createTime>=#{varStra} and logistics_createTime<=#{varStrb} ]]> -->
+<!-- 	</select> -->
+
+	<select id="job1" resultType="java.util.HashMap" parameterType="Object">  
+		select * from view_ins_skx where 1=1
+		<![CDATA[  and logistics_createTime>=#{varStra} and logistics_createTime<=#{varStrb} ]]>
+	</select>
+	
+	
+	<select id="job2" resultType="java.util.HashMap" parameterType="Object">  
+		select * from view_ins_waybill  where transport_code='YTO' and order_source='SKX'  and warehouse_name='上海'
+		<![CDATA[  and logistics_createTime>=#{varStra} and logistics_createTime<=#{varStrb} ]]>
+	</select>
+	
+	<select id="job3" resultType="java.util.HashMap" parameterType="Object">  
+		select * from view_ins_waybill  where transport_code='YTO' and order_source='SKX'  and warehouse_name='上海'
+		<![CDATA[  and logistics_createTime>=#{varStra} and logistics_createTime<=#{varStrb} ]]>
+	</select>
+	
+	
+	<select id="job4" resultType="java.util.HashMap" parameterType="Object">  
+		select * from view_ins_waybill  where transport_code='STO' and order_source='SKX' and warehouse_name='上海'
+		<![CDATA[  and logistics_createTime>=#{varStra} and logistics_createTime<=#{varStrb} ]]>
+	</select>
+	
+	<select id="job5" resultType="java.util.HashMap" parameterType="Object">  
+		select * from view_ins_waybill  where transport_code='STO' and order_source='SKX'  and warehouse_name='上海'
+		<![CDATA[  and logistics_createTime>=#{varStra} and logistics_createTime<=#{varStrb} ]]>
+	</select>
+	
+	<select id="job6" resultType="java.util.HashMap" parameterType="Object">  
+		select * from view_ins_waybill  where transport_code='STO' and order_source='SKX'  and warehouse_name='上海'
+		<![CDATA[  and logistics_createTime>=#{varStra} and logistics_createTime<=#{varStrb} ]]>
+	</select>
+	
+	<select id="job7" resultType="java.util.HashMap">  
+		select 
+		<include refid="skq_view_sheet_01_list"></include> 
+		from skq_view_sheet_01
+	</select>
+	<sql id="skq_view_sheet_01_list">
+		start_province,
+		warehouse_name,
+		store_name,
+		transport_code,
+		order_count,
+		embrance_count
+	</sql>
+	
+	
+	<select id="job8" resultType="java.util.HashMap" >  
+		select 
+		<include refid="skq_view_sheet_02_list"></include> 
+		from skq_view_sheet_02 
+	</select>
+	<sql id="skq_view_sheet_02_list">
+		start_province,
+		warehouse_name,
+		store_name,
+		transport_code,
+		province,
+		city,
+		order_count,
+		receive_count
+	</sql>
+	
+	
+	<select id="job9" resultType="java.util.HashMap" >  
+		select 
+		<include refid="skq_view_sheet_03_list"></include> 
+		from skq_view_sheet_03
+	</select>
+	<sql id="skq_view_sheet_03_list">
+		 transport_time,
+		 transport_hour,
+		 start_province,
+		 warehouse_name,
+		 store_name,
+		 transport_code,
+		 order_count
+	</sql>
+</mapper>	

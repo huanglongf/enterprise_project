@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.JbpcExMapper" > 
+	<resultMap type= "com.bt.lmis.model.JbpcRedisBean" id= "jbpcRedisBean" >
+		<result column= "redis_key" property= "key" />
+		<collection column= "redis_key" select= "get" property= "value" javaType= "ArrayList" ofType= "com.bt.lmis.model.JibanpaoConditionEx" />
+	</resultMap>
+	<select id= "get" parameterType= "String" resultType= "com.bt.lmis.model.JibanpaoConditionEx" >
+		SELECT
+			attr,
+			compare_mark,
+			con,
+			uom
+		FROM
+			ex_con_jibanpao_condition
+		WHERE
+			dFlag= 0
+		AND
+			CONCAT("JBPC", con_id, belong_to)= #{redis_key }
+	</select>
+	<select id= "loadJBPC" resultMap= "jbpcRedisBean" >
+		SELECT
+			DISTINCT CONCAT("JBPC", con_id, belong_to) as redis_key
+		FROM
+			ex_con_jibanpao_condition
+		WHERE
+			dFlag= 0
+	</select>
+	<select id= "judgeUnique" parameterType= "com.bt.lmis.model.JibanpaoConditionEx" resultType= "Integer" >
+		select
+			count(1)
+		from 
+			ex_con_jibanpao_condition
+		where
+			dFlag= 0 
+		and	
+			con_id= #{con_id }
+		and
+			belong_to= #{belong_to }
+		and 
+			attr= #{attr }
+	</select>
+	<select id= "findAllJBPCondition" parameterType= "Object" resultType= "com.bt.lmis.model.JibanpaoConditionEx" >
+		select
+			id,
+			con_id,
+			belong_to,
+			attr,
+			compare_mark,
+			con,
+			uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ex_con_jibanpao_condition
+		where 
+			dFlag = 0 
+		and
+			con_id = #{con_id } 
+		and
+			belong_to = #{belong_to }
+	</select>
+	<insert id= "addJBPConditon" parameterType= "com.bt.lmis.model.JibanpaoConditionEx" >
+		insert into ex_con_jibanpao_condition
+		(
+			con_id,
+			belong_to,
+			attr,
+			compare_mark,
+			con,
+			uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		)values(
+			#{con_id},
+			#{belong_to},
+			#{attr},
+			#{compare_mark},
+			#{con},
+			#{uom},
+			#{create_by},
+			now(),
+			#{create_by},
+			now()
+		)
+	</insert>
+	<update id= "delJBPConditon" parameterType= "Object" >
+		update ex_con_jibanpao_condition set dFlag= 1 where id= #{id }
+	</update>
+	<delete id= "delJBPC" parameterType= "Object">
+		delete from ex_con_jibanpao_condition where con_id= #{con_id } and belong_to= #{belong_to }
+	</delete>
+</mapper>   

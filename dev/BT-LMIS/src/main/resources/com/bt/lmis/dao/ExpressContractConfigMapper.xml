@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpressContractConfigMapper" >
+	<delete id="delConfig" parameterType="Object">
+		delete from ex_con_config where con_id = #{con_id } and belong_to = #{belong_to }
+	</delete>
+	<select id = "findECC" parameterType = "Object" resultType="com.bt.lmis.model.ExpressContractConfig">
+		select
+			id,
+			belong_to,
+			weight_method,
+			percent,
+			percent_uom,
+			waybill_discount,
+			total_freight_discount,
+			insurance,
+			cod,
+			delegated_pickup
+		from
+			ex_con_config
+		where 
+			1 = 1
+		and 
+			dFlag = true
+		and 
+			con_id = #{con_id}
+		and
+			belong_to = #{belong_to} 
+	</select>
+	<update id="updateExpressContractConfig" parameterType="com.bt.lmis.model.ExpressContractConfig">
+		update ex_con_config
+		<set>
+			<if test="weight_method != null and weight_method != ''">weight_method = #{weight_method },</if>
+			<if test="percent != null or weight_method == 1">percent = #{percent },</if>
+			<if test="percent_uom != null or weight_method == 1">percent_uom = #{percent_uom },</if>
+			<if test="waybill_discount != null">waybill_discount = #{waybill_discount },</if>
+			<if test="total_freight_discount != null">total_freight_discount = #{total_freight_discount },</if>
+			<if test="insurance != null">insurance = #{insurance },</if>
+			<if test="cod != null">cod = #{cod },</if>
+			<if test="delegated_pickup != null">delegated_pickup = #{delegated_pickup },</if>
+			<if test="dFlag != null">dFlag = #{dFlag },</if>
+			update_by = #{update_by},
+			update_time = now()
+		</set>
+		where id = #{id}
+	</update>
+	<insert id = "initializeExpressContractConfig" parameterType = "com.bt.lmis.model.ExpressContractConfig">
+		insert into ex_con_config
+		(
+			con_id,
+			belong_to,
+			weight_method,
+			waybill_discount,
+			total_freight_discount,
+			insurance,
+			cod,
+			delegated_pickup,
+			dFlag,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		)values(
+			#{con_id },
+			#{belong_to },
+			0,
+			false,
+			false,
+			false,
+			false,
+			false,
+			true,
+			#{create_by },
+			now(),
+			#{create_by },
+			now()
+		)	
+	</insert>
+</mapper>   

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TransportProductTypeMapper" > 
+	<!-- Result Map-->
+	<resultMap id= "BaseResultMap" type= "com.bt.lmis.model.TransportProductType" >
+		<result column= "id" property="id"/>
+		<result column= "create_time" property= "create_time" />
+		<result column= "create_by" property= "create_by" />
+		<result column= "update_time" property= "update_time" />
+		<result column= "update_by" property= "update_by" />
+		<result column= "vendor_code" property= "vendor_code" />
+		<result column= "product_type_code" property= "product_type_code" />
+		<result column= "product_type_name" property= "product_type_name" />
+		<result column= "status" property= "status" />
+	</resultMap>
+       
+	<sql id= "Base_Column_List" >
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		vendor_code,
+		product_type_code,
+		product_type_name,
+		status
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id= "where_Clause" >
+		where 1= 1
+		<trim suffixOverrides= "," >
+			<if test= "id != null" >
+			    and id= #{id }
+			</if>
+			<if test= "create_time != null" >
+			    and create_time= #{create_time }
+			</if>
+			<if test= "create_by != null and create_by != ''" >
+			    and create_by= #{create_by }
+			</if>
+			<if test= "update_time != null" >
+			    and update_time= #{update_time }
+			</if>
+			<if test= "update_by != null and update_by != ''" >
+			    and update_by= #{update_by }
+			</if>
+			<if test= "vendor_code != null and vendor_code != ''" >
+			    and vendor_code= #{vendor_code }
+			</if>
+			<if test= "product_type_code != null and product_type_code != ''" >
+				and product_type_code= #{product_type_code }
+			</if>
+			<if test= "product_type_name != null and product_type_name != ''" >
+				and product_type_name like concat("%", #{product_type_name }, "%")
+			</if>
+			<if test= "status != null and status != -1" >
+			    and status= #{status }
+			</if>
+		</trim>
+	</sql>
+
+	<select id= "judgeProductTypeExistOrNot" parameterType= "Object" resultType= "Integer" >
+		SELECT count(0) FROM tb_transport_product_type 
+		WHERE 1= 1
+		<if test= "status != null" >
+			AND status= #{status }
+		</if>
+			AND vendor_code= #{vendor_code }
+	</select>
+	
+	<select id= "getItemName" parameterType= "java.util.HashMap" resultType= "java.util.HashMap" >
+		SELECT
+			product_type_name
+		FROM
+			tb_transport_product_type
+		WHERE
+			1=1
+			<if test= "itemtype_code != null" >
+				AND product_type_code = #{itemtype_code}
+			</if>
+			<if test= "vendor_code != null" >
+				AND vendor_code = #{vendor_code}
+			</if>
+	</select>
+
+	<select id= "findByTransportVendor" parameterType= "Object" resultMap= "BaseResultMap" >
+		SELECT <include refid= "Base_Column_List" /> FROM tb_transport_product_type 
+		WHERE 1= 1
+		<if test= "status != null" >
+			AND status= #{status }
+		</if>
+			AND vendor_code= #{vendor_code }
+		ORDER BY update_time DESC
+	</select>
+
+	<insert id= "addTransportProductType" parameterType= "com.bt.lmis.model.TransportProductType" >
+		insert into tb_transport_product_type (
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			vendor_code,
+			product_type_code,
+			product_type_name,
+			status
+		
+		) values (
+			now(),
+			#{create_by },
+			now(),
+			#{create_by },
+			#{vendor_code },
+			#{product_type_code },
+			#{product_type_name },
+			#{status }
+			
+		)
+	</insert>
+	
+	<update id= "updateTransportProductType" parameterType= "com.bt.lmis.model.TransportProductType" >
+		update tb_transport_product_type
+		<trim prefix="SET"  suffixOverrides= "," >
+			update_time= now(),
+			<if test= "update_by != null and update_by != ''" >
+				update_by= #{update_by },
+			</if>
+			<if test= "vendor_code != null and vendor_code != ''" >
+				vendor_code= #{vendor_code },
+			</if>
+			<if test= "product_type_code != null and product_type_code != ''" >
+				product_type_code= #{product_type_code },
+			</if>
+			<if test= "product_type_name != null and product_type_name != ''" >
+				product_type_name= #{product_type_name },
+			</if>
+			<if test= "status != null" >
+				status= #{status },
+			</if>
+		</trim>
+		where id= #{id }
+	</update>
+ 
+	<select id= "findByCode" parameterType= "Object" resultMap= "BaseResultMap" >
+		select
+			<include refid= "Base_Column_List" />
+		from
+			tb_transport_product_type 
+		where 1= 1
+		<if test= "status != null" >
+			and status= #{status }
+		</if>
+			and product_type_code= #{product_type_code }
+	</select>
+	
+	<select id= "selectById" resultMap= "BaseResultMap" >
+		select <include refid= "Base_Column_List" /> from tb_transport_product_type where id= #{id }
+	</select>
+	
+	<delete id= "delTransportProductTypes" parameterType= "Object" >
+		delete from tb_transport_product_type where id in 
+		<foreach collection= "array" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	       	#{item }
+	   	</foreach>
+	</delete>
+	
+	<select id= "count" resultType= "java.lang.Integer"  parameterType= "com.bt.lmis.controller.form.TransportProductTypeQueryParam" >
+		select count(1) cnt from tb_transport_product_type <include refid= "where_Clause" />
+	</select>
+	
+	<select id= "query" resultType= "java.util.Map"  parameterType= "com.bt.lmis.controller.form.TransportProductTypeQueryParam" >
+		SELECT 
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			product_type_code,
+			product_type_name,
+			case status
+			when 0 then "停用"
+			when 1 then "启用"
+			else "" end as status
+		FROM
+			tb_transport_product_type
+		<include refid= "where_Clause" />
+		ORDER BY update_time DESC
+		LIMIT #{firstResult }, #{maxResult }  
+	</select>
+	
+	<delete id= "delByTransportVendor" parameterType= "Object" >
+		DELETE tb_transport_product_type FROM tb_transport_product_type
+		LEFT JOIN tb_transport_vendor ON tb_transport_product_type.vendor_code = tb_transport_vendor.transport_code
+		WHERE tb_transport_vendor.id IN
+		<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	       	#{item }
+	   	</foreach>
+	</delete>
+	
+	<select id= "selectByNameAndExpressCode" resultMap= "BaseResultMap"  parameterType= "java.lang.String" >
+		SELECT 
+			<include refid= "Base_Column_List" />
+		FROM
+			tb_transport_product_type where product_type_name=#{productTypeName} and vendor_code=#{transportCode}
+	</select>
+</mapper>   

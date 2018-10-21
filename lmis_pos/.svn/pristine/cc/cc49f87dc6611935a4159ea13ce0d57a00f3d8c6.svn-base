@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.demo.dao.DemoMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+		<result column="is_disabled" property="isDisabled" jdbcType="TINYINT" />
+	</resultMap>
+	<resultMap type="com.lmis.demo.model.Demo" id="DemoMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			<if test="createBy!=null and createBy!=''">
+				create_by,
+			</if>
+			update_time,
+			<if test="createBy!=null and createBy!=''">
+				update_by,
+			</if>
+			is_deleted,
+			is_disabled
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.demo.model.Demo">
+		INSERT INTO demo
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			<if test="createBy!=null and createBy!=''">
+				#{createBy, jdbcType=VARCHAR},
+			</if>
+			NOW(),
+			<if test="createBy!=null and createBy!=''">
+				#{createBy, jdbcType=VARCHAR},
+			</if>
+			false,
+			false
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO demo
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				<if test="obj.createBy!=null and obj.createBy!=''">
+					#{obj.createBy, jdbcType=VARCHAR},
+				</if>
+				NOW(),
+				<if test="obj.createBy!=null and obj.createBy!=''">
+					#{obj.createBy, jdbcType=VARCHAR},
+				</if>
+				false,
+				false
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.demo.model.Demo" resultMap="DemoMap">
+		SELECT <include refid="Base_Column_List" /> FROM demo
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=TINYINT}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=TINYINT}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.demo.model.Demo">
+		UPDATE demo
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        <if test="updateBy!=null and updateBy!=''">  
+	            update_by = #{updateBy, jdbcType=VARCHAR},
+	        </if>
+	        <if test="isDeleted!=null">
+	        	is_deleted = #{isDeleted, jdbcType=TINYINT},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=TINYINT},
+	        </if>
+	    </trim>
+	    WHERE id = #{id, jdbcType=VARCHAR}
+	</update>
+	<delete id="delete" parameterType="com.lmis.demo.model.Demo">
+		DELETE FROM demo WHERE id = #{id, jdbcType=VARCHAR}
+	</delete>
+</mapper>  

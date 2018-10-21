@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.jbasis.warePark.dao.JbasisWareParkMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.warePark.model.JbasisWarePark" id="JbasisWareParkMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="park_code" property="parkCode" jdbcType="VARCHAR" />
+		<result column="park_name" property="parkName" jdbcType="VARCHAR" />
+		<result column="park_cost_center" property="parkCostCenter" jdbcType="VARCHAR" />
+		<result column="show_st_re_flag" property="showStReFlag" jdbcType="VARCHAR" />
+		<result column="show_by_cp_flag" property="showByCpFlag" jdbcType="VARCHAR" />
+		<result column="ware_flag" property="wareFlag" jdbcType="VARCHAR" />
+		<result column="dis_flag" property="disFlag" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		park_code,
+		park_name,
+		park_cost_center,
+		show_st_re_flag,
+		show_by_cp_flag,
+		ware_flag,
+		dis_flag,
+		remark
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			park_code,
+			park_name,
+			park_cost_center,
+			show_st_re_flag,
+			show_by_cp_flag,
+			ware_flag,
+			dis_flag,
+			remark
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.jbasis.warePark.model.JbasisWarePark">
+		INSERT INTO jbasis_ware_park
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{parkCode, jdbcType=VARCHAR},
+			#{parkName, jdbcType=VARCHAR},
+			#{parkCostCenter, jdbcType=VARCHAR},
+			#{showStReFlag, jdbcType=VARCHAR},
+			#{showByCpFlag, jdbcType=VARCHAR},
+			#{wareFlag, jdbcType=VARCHAR},
+			#{disFlag, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO jbasis_ware_park
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.parkCode, jdbcType=VARCHAR},
+				#{obj.parkName, jdbcType=VARCHAR},
+				#{obj.parkCostCenter, jdbcType=VARCHAR},
+				#{obj.showStReFlag, jdbcType=VARCHAR},
+				#{obj.showByCpFlag, jdbcType=VARCHAR},
+				#{obj.wareFlag, jdbcType=VARCHAR},
+				#{obj.disFlag, jdbcType=VARCHAR},
+				#{obj.remark, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.jbasis.warePark.model.JbasisWarePark" resultMap="JbasisWareParkMap">
+		SELECT <include refid="Base_Column_List" /> FROM jbasis_ware_park
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="parkCode!=null and parkCode!=''">
+	            AND park_code = #{parkCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="parkName!=null and parkName!=''">
+	            AND park_name = #{parkName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="parkCostCenter!=null and parkCostCenter!=''">
+	            AND park_cost_center = #{parkCostCenter, jdbcType=VARCHAR}
+	        </if>
+	        <if test="showStReFlag!=null and showStReFlag!=''">
+	            AND show_st_re_flag = #{showStReFlag, jdbcType=VARCHAR}
+	        </if>
+	        <if test="showByCpFlag!=null and showByCpFlag!=''">
+	            AND show_by_cp_flag = #{showByCpFlag, jdbcType=VARCHAR}
+	        </if>
+	        <if test="wareFlag!=null and wareFlag!=''">
+	            AND ware_flag = #{wareFlag, jdbcType=VARCHAR}
+	        </if>
+	        <if test="disFlag!=null and disFlag!=''">
+	            AND dis_flag = #{disFlag, jdbcType=VARCHAR}
+	        </if>
+	        <if test="remark!=null and remark!=''">
+	            AND remark = #{remark, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.jbasis.warePark.model.JbasisWarePark">
+		UPDATE jbasis_ware_park
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="parkCode!=null and parkCode!=''">
+	            park_code = #{parkCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="parkName!=null and parkName!=''">
+	            park_name = #{parkName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="parkCostCenter!=null and parkCostCenter!=''">
+	            park_cost_center = #{parkCostCenter, jdbcType=VARCHAR},
+	        </if>
+	        <if test="showStReFlag!=null and showStReFlag!=''">
+	            show_st_re_flag = #{showStReFlag, jdbcType=VARCHAR},
+	        </if>
+	        <if test="showByCpFlag!=null and showByCpFlag!=''">
+	            show_by_cp_flag = #{showByCpFlag, jdbcType=VARCHAR},
+	        </if>
+	        <if test="wareFlag!=null and wareFlag!=''">
+	            ware_flag = #{wareFlag, jdbcType=VARCHAR},
+	        </if>
+	        <if test="disFlag!=null and disFlag!=''">
+	            dis_flag = #{disFlag, jdbcType=VARCHAR},
+	        </if>
+	        <if test="remark!=null and remark!=''">
+	            remark = #{remark, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="parkCode!=null and parkCode!=''">
+	        	AND park_code = #{parkCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.jbasis.warePark.model.JbasisWarePark">
+		UPDATE jbasis_ware_park
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	park_code = #{parkCode, jdbcType=VARCHAR},
+        	park_name = #{parkName, jdbcType=VARCHAR},
+        	park_cost_center = #{parkCostCenter, jdbcType=VARCHAR},
+        	show_st_re_flag = #{showStReFlag, jdbcType=VARCHAR},
+        	show_by_cp_flag = #{showByCpFlag, jdbcType=VARCHAR},
+        	ware_flag = #{wareFlag, jdbcType=VARCHAR},
+        	dis_flag = #{disFlag, jdbcType=VARCHAR},
+        	remark = #{remark, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="parkCode!=null and parkCode!=''">
+	        	AND park_code = #{parkCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.jbasis.warePark.model.JbasisWarePark">
+		UPDATE jbasis_ware_park
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="parkCode!=null and parkCode!=''">
+	        	AND park_code = #{parkCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.jbasis.warePark.model.JbasisWarePark">
+		UPDATE jbasis_ware_park
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="parkCode!=null and parkCode!=''">
+	        	AND park_code = #{parkCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.jbasis.warePark.model.JbasisWarePark">
+		DELETE FROM jbasis_ware_park
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="parkCode!=null and parkCode!=''">
+	        	AND park_code = #{parkCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+</mapper>

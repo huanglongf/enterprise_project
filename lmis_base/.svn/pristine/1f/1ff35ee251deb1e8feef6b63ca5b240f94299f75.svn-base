@@ -1,0 +1,953 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.basis.fixedAssetsAmt.dao.BasisFixedAssetsAmtMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt" id="BasisFixedAssetsAmtMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="assets_code" property="assetsCode" jdbcType="VARCHAR" />
+		<result column="org_id" property="orgId" jdbcType="VARCHAR" />
+		<result column="year_code" property="yearCode" jdbcType="VARCHAR" />
+		<result column="time_code" property="timeCode" jdbcType="VARCHAR" />
+		<result column="time_value" property="timeValue" jdbcType="INTEGER" />
+		<result column="time_type" property="timeType" jdbcType="VARCHAR" />
+		<result column="currency" property="currency" jdbcType="VARCHAR" />
+		<result column="value" property="value" jdbcType="VARCHAR" />
+		<result column="field1_str" property="field1Str" jdbcType="VARCHAR" />
+		<result column="field2_str" property="field2Str" jdbcType="VARCHAR" />
+		<result column="field3_str" property="field3Str" jdbcType="VARCHAR" />
+		<result column="field4_str" property="field4Str" jdbcType="VARCHAR" />
+		<result column="field5_str" property="field5Str" jdbcType="VARCHAR" />
+		<result column="field6_str" property="field6Str" jdbcType="VARCHAR" />
+		<result column="field7_str" property="field7Str" jdbcType="VARCHAR" />
+		<result column="field8_str" property="field8Str" jdbcType="VARCHAR" />
+		<result column="field9_str" property="field9Str" jdbcType="VARCHAR" />
+		<result column="field10_str" property="field10Str" jdbcType="VARCHAR" />
+		<result column="field11_dat" property="field11Dat" jdbcType="TIMESTAMP" />
+		<result column="field12_dat" property="field12Dat" jdbcType="TIMESTAMP" />
+		<result column="field13_dat" property="field13Dat" jdbcType="TIMESTAMP" />
+		<result column="field14_dat" property="field14Dat" jdbcType="TIMESTAMP" />
+		<result column="field15_dat" property="field15Dat" jdbcType="TIMESTAMP" />
+		<result column="field16_dat" property="field16Dat" jdbcType="TIMESTAMP" />
+		<result column="field17_dat" property="field17Dat" jdbcType="TIMESTAMP" />
+		<result column="field18_dat" property="field18Dat" jdbcType="TIMESTAMP" />
+		<result column="field19_dat" property="field19Dat" jdbcType="TIMESTAMP" />
+		<result column="field20_dat" property="field20Dat" jdbcType="TIMESTAMP" />
+		<result column="field21_num" property="field21Num" jdbcType="VARCHAR" />
+		<result column="field22_num" property="field22Num" jdbcType="VARCHAR" />
+		<result column="field23_num" property="field23Num" jdbcType="VARCHAR" />
+		<result column="field24_num" property="field24Num" jdbcType="VARCHAR" />
+		<result column="field25_num" property="field25Num" jdbcType="VARCHAR" />
+		<result column="field26_num" property="field26Num" jdbcType="VARCHAR" />
+		<result column="field27_num" property="field27Num" jdbcType="VARCHAR" />
+		<result column="field28_num" property="field28Num" jdbcType="VARCHAR" />
+		<result column="field29_num" property="field29Num" jdbcType="VARCHAR" />
+		<result column="field30_num" property="field30Num" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.basis.fixedAssetsAmt.model.ViewBasisFixedAssetsAmt" id="ViewBasisFixedAssetsAmtMap">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+		<result column="assets_code" property="assetsCode" jdbcType="VARCHAR" />
+		<result column="org_id" property="orgId" jdbcType="VARCHAR" />
+		<result column="year_code" property="yearCode" jdbcType="VARCHAR" />
+		<result column="year_display" property="yearDisplay" jdbcType="VARCHAR" />
+		<result column="time_code" property="timeCode" jdbcType="VARCHAR" />
+		<result column="time_value" property="timeValue" jdbcType="INTEGER" />
+		<result column="time_type" property="timeType" jdbcType="VARCHAR" />
+		<result column="time_type_display" property="timeTypeDisplay" jdbcType="VARCHAR" />
+		<result column="time_display" property="timeDisplay" jdbcType="VARCHAR" />
+		<result column="currency" property="currency" jdbcType="VARCHAR" />
+		<result column="value" property="value" jdbcType="VARCHAR" />
+		<result column="field1_str" property="field1Str" jdbcType="VARCHAR" />
+		<result column="field2_str" property="field2Str" jdbcType="VARCHAR" />
+		<result column="field3_str" property="field3Str" jdbcType="VARCHAR" />
+		<result column="field4_str" property="field4Str" jdbcType="VARCHAR" />
+		<result column="field5_str" property="field5Str" jdbcType="VARCHAR" />
+		<result column="field6_str" property="field6Str" jdbcType="VARCHAR" />
+		<result column="field7_str" property="field7Str" jdbcType="VARCHAR" />
+		<result column="field8_str" property="field8Str" jdbcType="VARCHAR" />
+		<result column="field9_str" property="field9Str" jdbcType="VARCHAR" />
+		<result column="field10_str" property="field10Str" jdbcType="VARCHAR" />
+		<result column="field11_dat" property="field11Dat" jdbcType="TIMESTAMP" />
+		<result column="field12_dat" property="field12Dat" jdbcType="TIMESTAMP" />
+		<result column="field13_dat" property="field13Dat" jdbcType="TIMESTAMP" />
+		<result column="field14_dat" property="field14Dat" jdbcType="TIMESTAMP" />
+		<result column="field15_dat" property="field15Dat" jdbcType="TIMESTAMP" />
+		<result column="field16_dat" property="field16Dat" jdbcType="TIMESTAMP" />
+		<result column="field17_dat" property="field17Dat" jdbcType="TIMESTAMP" />
+		<result column="field18_dat" property="field18Dat" jdbcType="TIMESTAMP" />
+		<result column="field19_dat" property="field19Dat" jdbcType="TIMESTAMP" />
+		<result column="field20_dat" property="field20Dat" jdbcType="TIMESTAMP" />
+		<result column="field21_num" property="field21Num" jdbcType="VARCHAR" />
+		<result column="field22_num" property="field22Num" jdbcType="VARCHAR" />
+		<result column="field23_num" property="field23Num" jdbcType="VARCHAR" />
+		<result column="field24_num" property="field24Num" jdbcType="VARCHAR" />
+		<result column="field25_num" property="field25Num" jdbcType="VARCHAR" />
+		<result column="field26_num" property="field26Num" jdbcType="VARCHAR" />
+		<result column="field27_num" property="field27Num" jdbcType="VARCHAR" />
+		<result column="field28_num" property="field28Num" jdbcType="VARCHAR" />
+		<result column="field29_num" property="field29Num" jdbcType="VARCHAR" />
+		<result column="field30_num" property="field30Num" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		assets_code,
+		org_id,
+		year_code,
+		time_code,
+		time_value,
+		time_type,
+		currency,
+		value,
+		field1_str,
+		field2_str,
+		field3_str,
+		field4_str,
+		field5_str,
+		field6_str,
+		field7_str,
+		field8_str,
+		field9_str,
+		field10_str,
+		field11_dat,
+		field12_dat,
+		field13_dat,
+		field14_dat,
+		field15_dat,
+		field16_dat,
+		field17_dat,
+		field18_dat,
+		field19_dat,
+		field20_dat,
+		field21_num,
+		field22_num,
+		field23_num,
+		field24_num,
+		field25_num,
+		field26_num,
+		field27_num,
+		field28_num,
+		field29_num,
+		field30_num
+	</sql>
+	<sql id="ViewBasisFixedAssetsAmt_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		assets_code,
+		org_id,
+		year_code,
+		year_display,
+		time_code,
+		time_value,
+		time_type,
+		time_type_display,
+		time_display,
+		currency,
+		value,
+		field1_str,
+		field2_str,
+		field3_str,
+		field4_str,
+		field5_str,
+		field6_str,
+		field7_str,
+		field8_str,
+		field9_str,
+		field10_str,
+		field11_dat,
+		field12_dat,
+		field13_dat,
+		field14_dat,
+		field15_dat,
+		field16_dat,
+		field17_dat,
+		field18_dat,
+		field19_dat,
+		field20_dat,
+		field21_num,
+		field22_num,
+		field23_num,
+		field24_num,
+		field25_num,
+		field26_num,
+		field27_num,
+		field28_num,
+		field29_num,
+		field30_num
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			assets_code,
+			org_id,
+			year_code,
+			time_code,
+			time_value,
+			time_type,
+			currency,
+			value,
+			field1_str,
+			field2_str,
+			field3_str,
+			field4_str,
+			field5_str,
+			field6_str,
+			field7_str,
+			field8_str,
+			field9_str,
+			field10_str,
+			field11_dat,
+			field12_dat,
+			field13_dat,
+			field14_dat,
+			field15_dat,
+			field16_dat,
+			field17_dat,
+			field18_dat,
+			field19_dat,
+			field20_dat,
+			field21_num,
+			field22_num,
+			field23_num,
+			field24_num,
+			field25_num,
+			field26_num,
+			field27_num,
+			field28_num,
+			field29_num,
+			field30_num
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt">
+		INSERT INTO basis_fixed_assets_amt
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{assetsCode, jdbcType=VARCHAR},
+			#{orgId, jdbcType=VARCHAR},
+			#{yearCode, jdbcType=VARCHAR},
+			#{timeCode, jdbcType=VARCHAR},
+			#{timeValue, jdbcType=INTEGER},
+			#{timeType, jdbcType=VARCHAR},
+			#{currency, jdbcType=VARCHAR},
+			#{value, jdbcType=VARCHAR},
+			#{field1Str, jdbcType=VARCHAR},
+			#{field2Str, jdbcType=VARCHAR},
+			#{field3Str, jdbcType=VARCHAR},
+			#{field4Str, jdbcType=VARCHAR},
+			#{field5Str, jdbcType=VARCHAR},
+			#{field6Str, jdbcType=VARCHAR},
+			#{field7Str, jdbcType=VARCHAR},
+			#{field8Str, jdbcType=VARCHAR},
+			#{field9Str, jdbcType=VARCHAR},
+			#{field10Str, jdbcType=VARCHAR},
+			#{field11Dat, jdbcType=TIMESTAMP},
+			#{field12Dat, jdbcType=TIMESTAMP},
+			#{field13Dat, jdbcType=TIMESTAMP},
+			#{field14Dat, jdbcType=TIMESTAMP},
+			#{field15Dat, jdbcType=TIMESTAMP},
+			#{field16Dat, jdbcType=TIMESTAMP},
+			#{field17Dat, jdbcType=TIMESTAMP},
+			#{field18Dat, jdbcType=TIMESTAMP},
+			#{field19Dat, jdbcType=TIMESTAMP},
+			#{field20Dat, jdbcType=TIMESTAMP},
+			#{field21Num, jdbcType=VARCHAR},
+			#{field22Num, jdbcType=VARCHAR},
+			#{field23Num, jdbcType=VARCHAR},
+			#{field24Num, jdbcType=VARCHAR},
+			#{field25Num, jdbcType=VARCHAR},
+			#{field26Num, jdbcType=VARCHAR},
+			#{field27Num, jdbcType=VARCHAR},
+			#{field28Num, jdbcType=VARCHAR},
+			#{field29Num, jdbcType=VARCHAR},
+			#{field30Num, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO basis_fixed_assets_amt
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.assetsCode, jdbcType=VARCHAR},
+				#{obj.orgId, jdbcType=VARCHAR},
+				#{obj.yearCode, jdbcType=VARCHAR},
+				#{obj.timeCode, jdbcType=VARCHAR},
+				#{obj.timeValue, jdbcType=INTEGER},
+				#{obj.timeType, jdbcType=VARCHAR},
+				#{obj.currency, jdbcType=VARCHAR},
+				#{obj.value, jdbcType=VARCHAR},
+				#{obj.field1Str, jdbcType=VARCHAR},
+				#{obj.field2Str, jdbcType=VARCHAR},
+				#{obj.field3Str, jdbcType=VARCHAR},
+				#{obj.field4Str, jdbcType=VARCHAR},
+				#{obj.field5Str, jdbcType=VARCHAR},
+				#{obj.field6Str, jdbcType=VARCHAR},
+				#{obj.field7Str, jdbcType=VARCHAR},
+				#{obj.field8Str, jdbcType=VARCHAR},
+				#{obj.field9Str, jdbcType=VARCHAR},
+				#{obj.field10Str, jdbcType=VARCHAR},
+				#{obj.field11Dat, jdbcType=TIMESTAMP},
+				#{obj.field12Dat, jdbcType=TIMESTAMP},
+				#{obj.field13Dat, jdbcType=TIMESTAMP},
+				#{obj.field14Dat, jdbcType=TIMESTAMP},
+				#{obj.field15Dat, jdbcType=TIMESTAMP},
+				#{obj.field16Dat, jdbcType=TIMESTAMP},
+				#{obj.field17Dat, jdbcType=TIMESTAMP},
+				#{obj.field18Dat, jdbcType=TIMESTAMP},
+				#{obj.field19Dat, jdbcType=TIMESTAMP},
+				#{obj.field20Dat, jdbcType=TIMESTAMP},
+				#{obj.field21Num, jdbcType=VARCHAR},
+				#{obj.field22Num, jdbcType=VARCHAR},
+				#{obj.field23Num, jdbcType=VARCHAR},
+				#{obj.field24Num, jdbcType=VARCHAR},
+				#{obj.field25Num, jdbcType=VARCHAR},
+				#{obj.field26Num, jdbcType=VARCHAR},
+				#{obj.field27Num, jdbcType=VARCHAR},
+				#{obj.field28Num, jdbcType=VARCHAR},
+				#{obj.field29Num, jdbcType=VARCHAR},
+				#{obj.field30Num, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt" resultMap="BasisFixedAssetsAmtMap">
+		SELECT <include refid="Base_Column_List" /> FROM basis_fixed_assets_amt
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="assetsCode!=null and assetsCode!=''">
+	            AND assets_code = #{assetsCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="orgId!=null and orgId!=''">
+	            AND org_id = #{orgId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="yearCode!=null and yearCode!=''">
+	            AND year_code = #{yearCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="timeCode!=null and timeCode!=''">
+	            AND time_code = #{timeCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="timeValue!=null">
+	            AND time_value = #{timeValue, jdbcType=INTEGER}
+	        </if>
+	        <if test="timeType!=null and timeType!=''">
+	            AND time_type = #{timeType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="currency!=null and currency!=''">
+	            AND currency = #{currency, jdbcType=VARCHAR}
+	        </if>
+	        <if test="value!=null and value!=''">
+	            AND value = #{value, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field1Str!=null and field1Str!=''">
+	            AND field1_str = #{field1Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field2Str!=null and field2Str!=''">
+	            AND field2_str = #{field2Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field3Str!=null and field3Str!=''">
+	            AND field3_str = #{field3Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field4Str!=null and field4Str!=''">
+	            AND field4_str = #{field4Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field5Str!=null and field5Str!=''">
+	            AND field5_str = #{field5Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field6Str!=null and field6Str!=''">
+	            AND field6_str = #{field6Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field7Str!=null and field7Str!=''">
+	            AND field7_str = #{field7Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field8Str!=null and field8Str!=''">
+	            AND field8_str = #{field8Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field9Str!=null and field9Str!=''">
+	            AND field9_str = #{field9Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field10Str!=null and field10Str!=''">
+	            AND field10_str = #{field10Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field11Dat!=null">
+	            AND field11_dat = #{field11Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field12Dat!=null">
+	            AND field12_dat = #{field12Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field13Dat!=null">
+	            AND field13_dat = #{field13Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field14Dat!=null">
+	            AND field14_dat = #{field14Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field15Dat!=null">
+	            AND field15_dat = #{field15Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field16Dat!=null">
+	            AND field16_dat = #{field16Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field17Dat!=null">
+	            AND field17_dat = #{field17Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field18Dat!=null">
+	            AND field18_dat = #{field18Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field19Dat!=null">
+	            AND field19_dat = #{field19Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field20Dat!=null">
+	            AND field20_dat = #{field20Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field21Num!=null and field21Num!=''">
+	            AND field21_num = #{field21Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field22Num!=null and field22Num!=''">
+	            AND field22_num = #{field22Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field23Num!=null and field23Num!=''">
+	            AND field23_num = #{field23Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field24Num!=null and field24Num!=''">
+	            AND field24_num = #{field24Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field25Num!=null and field25Num!=''">
+	            AND field25_num = #{field25Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field26Num!=null and field26Num!=''">
+	            AND field26_num = #{field26Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field27Num!=null and field27Num!=''">
+	            AND field27_num = #{field27Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field28Num!=null and field28Num!=''">
+	            AND field28_num = #{field28Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field29Num!=null and field29Num!=''">
+	            AND field29_num = #{field29Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field30Num!=null and field30Num!=''">
+	            AND field30_num = #{field30Num, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<select id="retrieveViewBasisFixedAssetsAmt" parameterType="com.lmis.basis.fixedAssetsAmt.model.ViewBasisFixedAssetsAmt" resultMap="ViewBasisFixedAssetsAmtMap">
+		SELECT <include refid="ViewBasisFixedAssetsAmt_Column_List" /> FROM view_basis_fixed_assets_amt
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="assetsCode!=null and assetsCode!=''">
+	            AND assets_code = #{assetsCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="orgId!=null and orgId!=''">
+	            AND org_id = #{orgId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="yearCode!=null and yearCode!=''">
+	            AND year_code = #{yearCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="yearDisplay!=null and yearDisplay!=''">
+	            AND year_display = #{yearDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="timeCode!=null and timeCode!=''">
+	            AND time_code = #{timeCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="timeValue!=null">
+	            AND time_value = #{timeValue, jdbcType=INTEGER}
+	        </if>
+	        <if test="timeType!=null and timeType!=''">
+	            AND time_type = #{timeType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="timeTypeDisplay!=null and timeTypeDisplay!=''">
+	            AND time_type_display = #{timeTypeDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="timeDisplay!=null and timeDisplay!=''">
+	            AND time_display = #{timeDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="currency!=null and currency!=''">
+	            AND currency = #{currency, jdbcType=VARCHAR}
+	        </if>
+	        <if test="value!=null and value!=''">
+	            AND value = #{value, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field1Str!=null and field1Str!=''">
+	            AND field1_str = #{field1Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field2Str!=null and field2Str!=''">
+	            AND field2_str = #{field2Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field3Str!=null and field3Str!=''">
+	            AND field3_str = #{field3Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field4Str!=null and field4Str!=''">
+	            AND field4_str = #{field4Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field5Str!=null and field5Str!=''">
+	            AND field5_str = #{field5Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field6Str!=null and field6Str!=''">
+	            AND field6_str = #{field6Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field7Str!=null and field7Str!=''">
+	            AND field7_str = #{field7Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field8Str!=null and field8Str!=''">
+	            AND field8_str = #{field8Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field9Str!=null and field9Str!=''">
+	            AND field9_str = #{field9Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field10Str!=null and field10Str!=''">
+	            AND field10_str = #{field10Str, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field11Dat!=null">
+	            AND field11_dat = #{field11Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field12Dat!=null">
+	            AND field12_dat = #{field12Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field13Dat!=null">
+	            AND field13_dat = #{field13Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field14Dat!=null">
+	            AND field14_dat = #{field14Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field15Dat!=null">
+	            AND field15_dat = #{field15Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field16Dat!=null">
+	            AND field16_dat = #{field16Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field17Dat!=null">
+	            AND field17_dat = #{field17Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field18Dat!=null">
+	            AND field18_dat = #{field18Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field19Dat!=null">
+	            AND field19_dat = #{field19Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field20Dat!=null">
+	            AND field20_dat = #{field20Dat, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="field21Num!=null and field21Num!=''">
+	            AND field21_num = #{field21Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field22Num!=null and field22Num!=''">
+	            AND field22_num = #{field22Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field23Num!=null and field23Num!=''">
+	            AND field23_num = #{field23Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field24Num!=null and field24Num!=''">
+	            AND field24_num = #{field24Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field25Num!=null and field25Num!=''">
+	            AND field25_num = #{field25Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field26Num!=null and field26Num!=''">
+	            AND field26_num = #{field26Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field27Num!=null and field27Num!=''">
+	            AND field27_num = #{field27Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field28Num!=null and field28Num!=''">
+	            AND field28_num = #{field28Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field29Num!=null and field29Num!=''">
+	            AND field29_num = #{field29Num, jdbcType=VARCHAR}
+	        </if>
+	        <if test="field30Num!=null and field30Num!=''">
+	            AND field30_num = #{field30Num, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt">
+		UPDATE basis_fixed_assets_amt
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="assetsCode!=null and assetsCode!=''">
+	            assets_code = #{assetsCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="orgId!=null and orgId!=''">
+	            org_id = #{orgId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="yearCode!=null and yearCode!=''">
+	            year_code = #{yearCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="timeCode!=null and timeCode!=''">
+	            time_code = #{timeCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="timeValue!=null">
+	            time_value = #{timeValue, jdbcType=INTEGER},
+	        </if>
+	        <if test="timeType!=null and timeType!=''">
+	            time_type = #{timeType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="currency!=null and currency!=''">
+	            currency = #{currency, jdbcType=VARCHAR},
+	        </if>
+	        <if test="value!=null and value!=''">
+	            value = #{value, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field1Str!=null and field1Str!=''">
+	            field1_str = #{field1Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field2Str!=null and field2Str!=''">
+	            field2_str = #{field2Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field3Str!=null and field3Str!=''">
+	            field3_str = #{field3Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field4Str!=null and field4Str!=''">
+	            field4_str = #{field4Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field5Str!=null and field5Str!=''">
+	            field5_str = #{field5Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field6Str!=null and field6Str!=''">
+	            field6_str = #{field6Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field7Str!=null and field7Str!=''">
+	            field7_str = #{field7Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field8Str!=null and field8Str!=''">
+	            field8_str = #{field8Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field9Str!=null and field9Str!=''">
+	            field9_str = #{field9Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field10Str!=null and field10Str!=''">
+	            field10_str = #{field10Str, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field11Dat!=null">
+	            field11_dat = #{field11Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field12Dat!=null">
+	            field12_dat = #{field12Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field13Dat!=null">
+	            field13_dat = #{field13Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field14Dat!=null">
+	            field14_dat = #{field14Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field15Dat!=null">
+	            field15_dat = #{field15Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field16Dat!=null">
+	            field16_dat = #{field16Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field17Dat!=null">
+	            field17_dat = #{field17Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field18Dat!=null">
+	            field18_dat = #{field18Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field19Dat!=null">
+	            field19_dat = #{field19Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field20Dat!=null">
+	            field20_dat = #{field20Dat, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="field21Num!=null and field21Num!=''">
+	            field21_num = #{field21Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field22Num!=null and field22Num!=''">
+	            field22_num = #{field22Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field23Num!=null and field23Num!=''">
+	            field23_num = #{field23Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field24Num!=null and field24Num!=''">
+	            field24_num = #{field24Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field25Num!=null and field25Num!=''">
+	            field25_num = #{field25Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field26Num!=null and field26Num!=''">
+	            field26_num = #{field26Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field27Num!=null and field27Num!=''">
+	            field27_num = #{field27Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field28Num!=null and field28Num!=''">
+	            field28_num = #{field28Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field29Num!=null and field29Num!=''">
+	            field29_num = #{field29Num, jdbcType=VARCHAR},
+	        </if>
+	        <if test="field30Num!=null and field30Num!=''">
+	            field30_num = #{field30Num, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="assetsCode!=null and assetsCode!=''">
+	        	AND assets_code = #{assetsCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt">
+		UPDATE basis_fixed_assets_amt
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	assets_code = #{assetsCode, jdbcType=VARCHAR},
+        	org_id = #{orgId, jdbcType=VARCHAR},
+        	year_code = #{yearCode, jdbcType=VARCHAR},
+        	time_code = #{timeCode, jdbcType=VARCHAR},
+        	time_value = #{timeValue, jdbcType=INTEGER},
+        	time_type = #{timeType, jdbcType=VARCHAR},
+        	currency = #{currency, jdbcType=VARCHAR},
+        	value = #{value, jdbcType=VARCHAR},
+        	field1_str = #{field1Str, jdbcType=VARCHAR},
+        	field2_str = #{field2Str, jdbcType=VARCHAR},
+        	field3_str = #{field3Str, jdbcType=VARCHAR},
+        	field4_str = #{field4Str, jdbcType=VARCHAR},
+        	field5_str = #{field5Str, jdbcType=VARCHAR},
+        	field6_str = #{field6Str, jdbcType=VARCHAR},
+        	field7_str = #{field7Str, jdbcType=VARCHAR},
+        	field8_str = #{field8Str, jdbcType=VARCHAR},
+        	field9_str = #{field9Str, jdbcType=VARCHAR},
+        	field10_str = #{field10Str, jdbcType=VARCHAR},
+        	field11_dat = #{field11Dat, jdbcType=TIMESTAMP},
+        	field12_dat = #{field12Dat, jdbcType=TIMESTAMP},
+        	field13_dat = #{field13Dat, jdbcType=TIMESTAMP},
+        	field14_dat = #{field14Dat, jdbcType=TIMESTAMP},
+        	field15_dat = #{field15Dat, jdbcType=TIMESTAMP},
+        	field16_dat = #{field16Dat, jdbcType=TIMESTAMP},
+        	field17_dat = #{field17Dat, jdbcType=TIMESTAMP},
+        	field18_dat = #{field18Dat, jdbcType=TIMESTAMP},
+        	field19_dat = #{field19Dat, jdbcType=TIMESTAMP},
+        	field20_dat = #{field20Dat, jdbcType=TIMESTAMP},
+        	field21_num = #{field21Num, jdbcType=VARCHAR},
+        	field22_num = #{field22Num, jdbcType=VARCHAR},
+        	field23_num = #{field23Num, jdbcType=VARCHAR},
+        	field24_num = #{field24Num, jdbcType=VARCHAR},
+        	field25_num = #{field25Num, jdbcType=VARCHAR},
+        	field26_num = #{field26Num, jdbcType=VARCHAR},
+        	field27_num = #{field27Num, jdbcType=VARCHAR},
+        	field28_num = #{field28Num, jdbcType=VARCHAR},
+        	field29_num = #{field29Num, jdbcType=VARCHAR},
+        	field30_num = #{field30Num, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="assetsCode!=null and assetsCode!=''">
+	        	AND assets_code = #{assetsCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt">
+		UPDATE basis_fixed_assets_amt
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="assetsCode!=null and assetsCode!=''">
+	        	AND assets_code = #{assetsCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt">
+		UPDATE basis_fixed_assets_amt
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="assetsCode!=null and assetsCode!=''">
+	        	AND assets_code = #{assetsCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt">
+		DELETE FROM basis_fixed_assets_amt
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="assetsCode!=null and assetsCode!=''">
+	        	AND assets_code = #{assetsCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+	
+	<update id="updateByAssetsCode" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt" >
+		UPDATE  basis_fixed_assets_amt set  is_deleted = '1' where assets_code=#{assetsCode,jdbcType=VARCHAR} AND  is_deleted='0'
+	</update>
+
+<select id="selectByTimeValue" parameterType="com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt" resultMap="BasisFixedAssetsAmtMap">
+	SELECT  <include refid="Base_Column_List"  /> FROM  basis_fixed_assets_amt
+	WHERE
+    year_code = #{yearCode, jdbcType=VARCHAR}
+	AND assets_code = #{assetsCode, jdbcType=VARCHAR}
+	<if test="timeValue!=null">
+		AND  time_value &gt;= #{timeValue, jdbcType=INTEGER}
+	</if>
+</select>
+
+	<select id="findAllAmtOrg" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			DISTINCT org_id,org_name
+		FROM
+			view_basis_fixed_assets_amt
+		WHERE assets_code = #{assetsCode}
+		ORDER BY org_name
+	</select>
+
+</mapper>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.AddservicefeeBilldataEstimateMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.AddservicefeeBilldataEstimate" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="batch_number" property="batch_number"/>
+	<result column="contract_id" property="contract_id"/>
+	<result column="addservice_name" property="addservice_name"/>
+	<result column="qty" property="qty"/>
+	<result column="qty_unit" property="qty_unit"/>
+	<result column="amount" property="amount"/>
+	<result column="amountunit_id" property="amountunit_id"/>
+</resultMap>
+       
+<!-- bal_addservicefee_billdata_estimate table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,batch_number,contract_id,addservice_name,qty,qty_unit,amount,amountunit_id
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="batch_number != null and batch_number != ''" >
+	    and batch_number =  #{batch_number}
+	</if>
+	 	<if test="contract_id != null and contract_id != ''" >
+	    and contract_id =  #{contract_id}
+	</if>
+	 	<if test="addservice_name != null and addservice_name != ''" >
+	    and addservice_name =  #{addservice_name}
+	</if>
+	<if test="qty != null" >
+	    and qty =  #{qty}
+	</if>
+	 	<if test="qty_unit != null and qty_unit != ''" >
+	    and qty_unit =  #{qty_unit}
+	</if>
+	<if test="amount != null" >
+	    and amount =  #{amount}
+	</if>
+	 	<if test="amountunit_id != null and amountunit_id != ''" >
+	    and amountunit_id =  #{amountunit_id}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入增值服务费预估数据 -->
+<insert id="insert" parameterType="com.bt.lmis.balance.model.AddservicefeeBilldataEstimate" >
+  insert into bal_addservicefee_billdata_estimate(id,create_time,create_user,update_time,update_user,batch_number,contract_id,addservice_name,qty,qty_unit,amount,amountunit_id)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{batch_number},#{contract_id},#{addservice_name},#{qty},#{qty_unit},#{amount},#{amountunit_id})
+</insert>
+
+<!-- 修改增值服务费预估数据-->  
+ <update id="update" parameterType="com.bt.lmis.balance.model.AddservicefeeBilldataEstimate" >
+  update bal_addservicefee_billdata_estimate set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},batch_number=#{batch_number},contract_id=#{contract_id},addservice_name=#{addservice_name},qty=#{qty},qty_unit=#{qty_unit},amount=#{amount},amountunit_id=#{amountunit_id} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改增值服务费预估数据-->
+<update id="updateBySelective" parameterType="com.bt.lmis.balance.model.AddservicefeeBilldataEstimate" >
+	update bal_addservicefee_billdata_estimate set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="batch_number != null  and batch_number != '' ">
+		batch_number=#{batch_number},
+	</if>
+	<if test="contract_id != null  and contract_id != '' ">
+		contract_id=#{contract_id},
+	</if>
+	<if test="addservice_name != null  and addservice_name != '' ">
+		addservice_name=#{addservice_name},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="qty_unit != null  and qty_unit != '' ">
+		qty_unit=#{qty_unit},
+	</if>
+	<if test="amount != null  ">
+		amount=#{amount},
+	</if>
+	<if test="amountunit_id != null  and amountunit_id != '' ">
+		amountunit_id=#{amountunit_id},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除增值服务费预估数据 -->
+<update id="delete" parameterType="Object">
+	delete 	 from bal_addservicefee_billdata_estimate where id = #{id}
+</update>
+<!-- 批量删除增值服务费预估数据 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from bal_addservicefee_billdata_estimate where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找增值服务费预估数据 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from bal_addservicefee_billdata_estimate where id = #{id}
+</select>
+  	
+<!-- 增值服务费预估数据 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.balance.controller.form.AddservicefeeBilldataEstimateQueryParam">
+	select count(1) from bal_addservicefee_billdata_estimate 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的增值服务费预估数据集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.controller.form.AddservicefeeBilldataEstimateQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from bal_addservicefee_billdata_estimate 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 增值服务费预估数据总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.balance.controller.form.AddservicefeeBilldataEstimateQueryParam">
+	select count(1) from bal_addservicefee_billdata_estimate 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的增值服务费预估数据集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.controller.form.AddservicefeeBilldataEstimateQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from bal_addservicefee_billdata_estimate 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+<select id="findByList" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.model.AddservicefeeBilldataEstimate">
+	select 
+	<include refid="Base_Column_List"/>
+	from bal_addservicefee_billdata_estimate 
+	<include refid="where_Clause"/>
+</select>
+</mapper>   

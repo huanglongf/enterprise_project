@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.common.dao.PosPoImportLogMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.common.model.PosPoImportLog" id="PosPoImportLogMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="file_no" property="fileNo" jdbcType="VARCHAR" />
+		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="total_qty" property="totalQty" jdbcType="INTEGER" />
+		<result column="po_qty" property="poQty" jdbcType="INTEGER" />
+		<result column="no_split_po_main_qty" property="noSplitPoMainQty" jdbcType="INTEGER" />
+		<result column="is_split_po_main_qty" property="isSplitPoMainQty" jdbcType="INTEGER" />
+		<result column="is_split_po_main_is_split_totle_qty" property="isSplitPoMainIsSplitTotleQty" jdbcType="INTEGER" />
+		<result column="create_by_user_name" property="createByUserName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ppil.id,
+		ppil.create_time,
+		ppil.create_by,
+		ppil.update_time,
+		ppil.update_by,
+		ppil.is_deleted,
+		ppil.is_disabled,
+		ppil.version,
+		ppil.pwr_org,
+		ppil.file_no,
+		ppil.file_name,
+		ppil.totle_qty,
+		ppil.po_qty
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			file_no,
+			file_name,
+			totle_qty,
+			po_qty
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.pos.common.model.PosPoImportLog">
+		INSERT INTO pos_po_import_log
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{fileNo, jdbcType=VARCHAR},
+			#{fileName, jdbcType=VARCHAR},
+			#{totalQty, jdbcType=INTEGER},
+			#{poQty, jdbcType=INTEGER},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_po_import_log
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.fileNo, jdbcType=VARCHAR},
+				#{obj.fileName, jdbcType=VARCHAR},
+				#{obj.totalQty, jdbcType=INTEGER},
+				#{obj.poQty, jdbcType=INTEGER},
+			</trim>
+		</foreach>
+	</insert>
+	<sql id="retrieve_sql_where">
+		WHERE 1=1
+	        <if test="id!=null and id!=''">
+	            AND ppil.id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND ppil.create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND ppil.create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND ppil.update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND ppil.update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND ppil.is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND ppil.is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND ppil.version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND ppil.pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileNo!=null and fileNo!=''">
+	            AND ppil.file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileName!=null and fileName!=''">
+	            AND ppil.file_name = #{fileName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="totalQty!=null">
+	            AND ppil.totle_qty = #{totalQty, jdbcType=INTEGER}
+	        </if>
+	        <if test="poQty!=null">
+	            AND ppil.po_qty = #{poQty, jdbcType=INTEGER}
+	        </if>
+	        <if test="createTimeStart != null and createTimeStart != ''">
+	        	AND ppil.create_time >= #{createTimeStart, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTimeEnd != null and createTimeEnd != ''">
+	        	AND ppil.create_time &lt;= #{createTimeEnd, jdbcType=VARCHAR}
+	        </if>
+	    </sql>
+	<select id="retrieve" parameterType="com.lmis.pos.common.model.PosPoImportLog" resultMap="PosPoImportLogMap">
+		SELECT <include refid="Base_Column_List" /> FROM pos_po_import_log ppil
+		<include refid="retrieve_sql_where"/>
+		ORDER BY ppil.create_time desc
+	</select>
+	<select id="retrieveByGroupFileNo" parameterType="com.lmis.pos.common.model.PosPoImportLog" resultMap="PosPoImportLogMap">
+		SELECT 
+			ppil.id,
+			ppil.create_time,
+			ppil.create_by,
+			ppil.update_time,
+			ppil.update_by,
+			ppil.is_deleted,
+			ppil.is_disabled,
+			ppil.version,
+			ppil.pwr_org,
+			ppil.file_no,
+			ppil.file_name,
+			ppil.total_qty,
+			ppil.po_qty,
+			SUM(if(ppom.po_flag != 1,1,0)) no_split_po_main_qty,
+			SUM(if(ppom.po_flag=1,1,0)) is_split_po_main_qty,
+			SUM(if(ppom.po_flag=1,ppom.is_split_totle_qty,0)) is_split_po_main_is_split_totle_qty,
+			su.user_name create_by_user_name
+	 	FROM pos_po_import_log ppil
+		LEFT JOIN pos_purchase_order_main ppom ON ppil.file_no = ppom.file_no
+		LEFT JOIN sys_user su ON (su.user_code = ppil.create_by AND su.is_deleted = false)
+		<include refid="retrieve_sql_where"/>
+		GROUP BY ppil.file_no
+		ORDER BY ppil.create_time desc
+	</select>
+	<select id="retrieveAsMap" parameterType="com.lmis.pos.common.model.PosPoImportLog" resultType="java.util.Map">
+		SELECT <include refid="Base_Column_List" /> FROM pos_po_import_log ppil
+		LEFT JOIN pos_purchase_order_main ppom ON ppil.file_no = ppom.file_no
+		<include refid="retrieve_sql_where"/>
+		ORDER BY ppil.create_time desc
+	</select>
+	<update id="update" parameterType="com.lmis.pos.common.model.PosPoImportLog">
+		UPDATE pos_po_import_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="fileNo!=null and fileNo!=''">
+	            file_no = #{fileNo, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fileName!=null and fileName!=''">
+	            file_name = #{fileName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="totalQty!=null">
+	            total_qty = #{totalQty, jdbcType=INTEGER},
+	        </if>
+	        <if test="poQty!=null">
+	            po_qty = #{poQty, jdbcType=INTEGER},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.common.model.PosPoImportLog">
+		UPDATE pos_po_import_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	file_no = #{fileNo, jdbcType=VARCHAR},
+        	file_name = #{fileName, jdbcType=VARCHAR},
+        	total_qty = #{totalQty, jdbcType=INTEGER},
+        	po_qty = #{poQty, jdbcType=INTEGER},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.common.model.PosPoImportLog">
+		UPDATE pos_po_import_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.common.model.PosPoImportLog">
+		UPDATE pos_po_import_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.common.model.PosPoImportLog">
+		DELETE FROM pos_po_import_log
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+	<select id="retrieveByIds" resultMap="PosPoImportLogMap">
+		SELECT 
+			ppil.id,
+			ppil.create_time,
+			ppil.create_by,
+			ppil.update_time,
+			ppil.update_by,
+			ppil.is_deleted,
+			ppil.is_disabled,
+			ppil.version,
+			ppil.pwr_org,
+			ppil.file_no,
+			ppil.file_name,
+			ppil.total_qty,
+			ppil.po_qty,
+			SUM(if(ppom.po_flag != 1,1,0)) no_split_po_main_qty,
+			SUM(if(ppom.po_flag=1,1,0)) is_split_po_main_qty,
+			SUM(if(ppom.po_flag=1,ppom.is_split_totle_qty,0)) is_split_po_main_is_split_totle_qty,
+			su.user_name create_by_user_name
+	 	FROM pos_po_import_log ppil
+		LEFT JOIN pos_purchase_order_main ppom ON ppil.file_no = ppom.file_no
+		LEFT JOIN sys_user su ON (su.user_code = ppil.create_by AND su.is_deleted = false)
+		WHERE ppil.id IN
+		<foreach collection="ids" item="id" index="index" open="(" separator="," close=")">
+			#{id, jdbcType=VARCHAR}
+		</foreach>
+		AND ppil.is_deleted = 0
+		AND ppil.is_disabled= 0
+		GROUP BY ppil.file_no
+	</select>
+</mapper>

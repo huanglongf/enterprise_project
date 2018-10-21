@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpertBillMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.ExpertBill" >
+	<result column="id" property="id"/>
+	<result column="input_time" property="input_time"/>
+	<result column="template" property="template"/>
+	<result column="cycle" property="cycle"/>
+	<result column="file_name" property="file_name"/>
+	<result column="batch_id" property="batch_id"/>
+	<result column="count" property="count"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+</resultMap>
+<resultMap id="impResultMap" type="com.bt.lmis.model.ImpModel" >
+	<result column="id" property="id"/>
+	<result column="bat_id" property="bat_id"/>
+	<result column="field1" property="field1"/>
+	<result column="field2" property="field2"/>
+	<result column="field3" property="field3"/>
+	<result column="field4" property="field4"/>
+	<result column="field5" property="field5"/>
+	<result column="field6" property="field6"/>
+	<result column="field7" property="field7"/>
+	<result column="field8" property="field8"/>
+	<result column="field9" property="field9"/>
+	<result column="field10" property="field10"/>
+	<result column="field11" property="field11"/>
+	<result column="field12" property="field12"/>
+	<result column="field13" property="field13"/>
+	<result column="field14" property="field14"/>
+	<result column="field15" property="field15"/>
+	<result column="field16" property="field16"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="upate_user" property="update_user"/>
+	<result column="flag" property="flag"/>
+	<result column="error_msg" property="error_msg"/>
+</resultMap>
+       
+<!-- tb_expert_bill table all fields -->
+<sql id="Base_Column_List" >
+	 id,input_time,template,cycle,file_name,batch_id,count,create_time,create_user
+</sql>
+
+
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+ 	<if test="template != null and template != ''" >
+	    and template =  #{template}
+	</if>
+ 	<if test="cycle != null and cycle != ''" >
+	    and cycle =  #{cycle}
+	</if>
+ 	<if test="file_name != null and file_name != ''" >
+	    and file_name =  #{file_name}
+	</if>
+ 	<if test="batch_id != null and batch_id != ''" >
+	    and batch_id =  #{batch_id}
+	</if>
+	<if test="count != null" >
+	    and count =  #{count}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+ 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+</trim>
+</sql>
+   
+
+<!--依据条件统计 差异导入记录总数-->
+<select id="countAlls" resultType="java.lang.Integer"  parameterType="com.bt.lmis.controller.form.ExpertBillQueryParam">
+	select count(1) from tb_expert_bill 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的差异导入记录集合 -->
+<select id="findAlls" resultType="com.bt.lmis.model.ExpertBill"  parameterType="com.bt.lmis.controller.form.ExpertBillQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_expert_bill 
+	<include refid="where_Clause"/>
+	LIMIT #{firstResult }, #{maxResult }
+</select>
+
+<select id="finrByID" resultType="com.bt.lmis.model.ExpertBill"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_expert_bill 
+	where id=#{id}
+</select>
+
+
+<select id="findImpByBatId" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+		id,bat_id,field1,field2,
+		field3,field4,
+		field5,field6,
+		field7,field8,field9,
+		field10,field11,
+		field12,field13,
+		field14,field15,
+		field16,
+		create_time,create_user,update_time,upate_user as upate_user,flag,error_msg
+	from imp_express_prescription 
+	where bat_id=#{id} and flag=1
+</select>
+
+<delete id="batchDelete" parameterType="Object">
+	delete from tb_expert_bill where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+
+<delete id="del_ems" parameterType="Object">delete from df_ems_template where bat_id = #{bat_id}</delete>
+<delete id="del_sf" parameterType="Object">delete from df_sf_template where bat_id = #{bat_id}</delete>
+<delete id="del_yto" parameterType="Object">delete from df_yto_template where bat_id = #{bat_id}</delete>
+<delete id="del_sto" parameterType="Object">delete from df_sto_template where bat_id = #{bat_id}</delete>
+<delete id="del_imp" parameterType="Object">delete from imp_express_prescription where bat_id = #{bat_id}</delete>
+<delete id="del_eb" parameterType="Object">delete from tb_expert_bill where id = #{id}</delete>
+
+
+ 
+<insert id="save_eb" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.ExpertBill" >
+  insert into tb_expert_bill(id,input_time,template,cycle,file_name,batch_id,count,create_time,create_user)
+ values(#{id},#{input_time},#{template},#{cycle},#{file_name},#{batch_id},#{count},#{create_time},#{create_user})
+</insert>
+ 
+<insert id="save_ems" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.EmsTemplate" >
+  insert into 
+  	df_ems_template
+  	(bat_id,delivery_time,express_number,reach,type,weight,postage,total_fee,balance_postage,standard_postage,other_fee,product,
+  	num,num_in,payment_amount,big_client,receiver,staff_name,pay_status,package_fee,premium,insurance,declare_fee,additional_fee,single_fee,airport_fee,
+  	return_fee,information_fee,receive_fee,other_postage,insurance_procedures,length,width,higth,volumn_weight,organization_number,system_discount,
+  	adjustment_discount,real_weight,real_standard_postage,balance_freight,weight_different,freight_different)
+ values
+ 	(#{bat_id},#{delivery_time},#{express_number},#{reach},#{type},#{weight},#{postage},#{total_fee},#{balance_postage},#{standard_postage},#{other_fee},#{product},
+ 	#{num},#{num_in},#{payment_amount},#{big_client},#{receiver},#{staff_name},#{pay_status},#{package_fee},#{premium},#{insurance},#{declare_fee},#{additional_fee},#{single_fee},#{airport_fee},
+ 	#{return_fee},#{information_fee},#{receive_fee},#{other_postage},#{insurance_procedures},#{length},#{width},#{higth},#{volumn_weight},#{organization_number},#{system_discount},
+ 	#{adjustment_discount},#{real_weight},#{real_standard_postage},#{balance_freight},#{weight_different},#{freight_different})
+</insert>
+
+<insert id="save_sf" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.SfTemplate" >
+  insert into df_sf_template(id,bat_id,date,express_number,other_area,other_company_name,charge_weight,product_type,pay_method,fee,insurance,delegated_picked,sumsung_project,fragile_pieces,amount_payable,operator,source,deliver_company_name,deliver_company_phone,reach,reach_client_name,reach_client_phone,sender,send_time,origin_province,send_company_address,recipient_no,deliver_content,deliver_num,value,num,volumn,dest_province,recipient,recipient_address,courier_no,weight,return_order_no,receiver,recipient_time,return_related_express_number,default1,default2,default3,balance_date,pay_net_node,subcompany_card_number,remark,express_content,reserve_column3,reserve_column4,reserve_column5,delegated_picked_remark,firstWeight,addedWeight,remark2,length,width,height,return_goods,ts)
+ values(#{id},#{bat_id},#{date},#{express_number},#{other_area},#{other_company_name},#{charge_weight},#{product_type},#{pay_method},#{fee},#{insurance},#{delegated_picked},#{sumsung_project},#{fragile_pieces},#{amount_payable},#{operator},#{source},#{deliver_company_name},#{deliver_company_phone},#{reach},#{reach_client_name},#{reach_client_phone},#{sender},#{send_time},#{origin_province},#{send_company_address},#{recipient_no},#{deliver_content},#{deliver_num},#{value},#{num},#{volumn},#{dest_province},#{recipient},#{recipient_address},#{courier_no},#{weight},#{return_order_no},#{receiver},#{recipient_time},#{return_related_express_number},#{default1},#{default2},#{default3},#{balance_date},#{pay_net_node},#{subcompany_card_number},#{remark},#{express_content},#{reserve_column3},#{reserve_column4},#{reserve_column5},#{delegated_picked_remark},#{firstWeight},#{addedWeight},#{remark2}
+ ,#{length},#{width},#{height},#{return_goods},#{ts})
+</insert>
+
+<insert id='batchInsert' parameterType="java.util.List">
+  insert into df_sf_template(
+  bat_id ,
+		date,
+		express_number,
+		other_area ,
+		other_company_name ,
+		charge_weight,
+		product_type ,
+		pay_method,
+		fee,
+		insurance ,
+		delegated_picked ,
+		sumsung_project ,
+		return_goods,
+		fragile_pieces,
+		ts,
+		amount_payable ,
+		operator ,
+		source ,
+		deliver_company_name,
+		deliver_company_phone ,
+		reach ,
+		reach_client_name,
+		reach_client_phone ,
+		sender ,
+		send_time ,
+		origin_province ,
+		send_company_address,
+		recipient_no,
+		deliver_content,
+		deliver_num ,
+		value ,
+		num ,
+		volumn ,
+		dest_province ,
+		recipient ,
+		recipient_address ,
+		courier_no ,
+		weight,
+		return_order_no ,
+		receiver ,
+		recipient_time ,
+		return_related_express_number ,
+		default1 ,
+		default2 ,
+		default3 ,
+		balance_date ,
+		pay_net_node ,
+		subcompany_card_number,
+		remark ,
+		express_content ,
+		reserve_column3 ,
+		reserve_column4 ,
+		reserve_column5 ,
+		delegated_picked_remark ,
+		firstWeight,
+		addedWeight,
+		remark2 ,
+		length,
+		width ,
+		height
+)
+ values
+   <foreach collection="list" item="item"  separator="," index="index1">
+(
+
+        "${item[0]}",
+		"${item[1]}",
+		"${item[2]}",
+		 "${item[3]}",
+		"${item[4]}",
+		"${item[5]}",
+		"${item[6]}",
+		 "${item[7]}",
+		"${item[8]}",
+		"${item[9]}",
+		"${item[10]}",
+		"${item[11]}",
+		 "${item[12]}",
+		 "${item[13]}",
+		"${item[14]}",
+		 "${item[15]}",
+		 "${item[16]}",
+		 "${item[17]}",
+		"${item[18]}",
+		 "${item[19]}",
+		"${item[20]}",
+		"${item[21]}",
+		 "${item[22]}",
+		"${item[23]}",
+		 "${item[24]}",
+		 "${item[25]}",
+		 "${item[26]}",
+		 "${item[27]}",
+		 "${item[28]}",
+		"${item[29]}",
+		"${item[30]}",
+		"${item[31]}",
+		 "${item[32]}",
+		 "${item[33]}",
+		"${item[34]}",
+		 "${item[35]}",
+		 "${item[36]}",
+		 "${item[37]}",
+		"${item[38]}",
+		 "${item[39]}",
+		 "${item[40]}",
+		"${item[41]}",
+		"${item[42]}",
+		 "${item[43]}",
+		 "${item[44]}",
+		 "${item[45]}",
+		"${item[46]}",
+		 "${item[47]}",
+		 "${item[48]}",
+		 "${item[49]}",
+		 "${item[50]}",
+		 "${item[51]}",
+		"${item[52]}",
+		 "${item[53]}",
+		"${item[54]}",
+		"${item[55]}",
+		 "${item[56]}",
+		 "${item[57]}",
+		 "${item[58]}",
+		"${item[59]}"
+ 
+)
+  </foreach>  
+</insert>
+
+
+<insert id="save_yto" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.YtoTemplate" >
+  insert into df_yto_template(id,bat_id,transport_time,express_number,origin,province_dest,city_dist,weight,charge_weight,firstWeightPrice,addedWeightPrice,discount,standard_freight)
+ values(#{id},#{bat_id},#{transport_time},#{express_number},#{origin},#{province_dest},#{city_dist},#{weight},#{charge_weight},#{firstWeightPrice},#{addedWeightPrice},#{discount},#{standard_freight})
+</insert>
+
+<insert id="save_sto" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.StoTemplate" >
+  insert into df_sto_template(id,bat_id,express_bill,transport_product_type,transport_direction,deliver_date,transport_time,express_number,store,order_number,orign,province_dest,city_dest,weight,sku_number,length,width,higth,volumn,order_amount,firstWeigthPrice,addedWeightPrice,discount,standard_freight,afterDiscount_freight,insurance,other,total_fee,remark)
+ values(#{id},#{bat_id},#{express_bill},#{transport_product_type},#{transport_direction},#{deliver_date},#{transport_time},#{express_number},#{store},#{order_number},#{orign},#{province_dest},#{city_dest},#{weight},#{sku_number},#{length},#{width},#{higth},#{volumn},#{order_amount},#{firstWeigthPrice},#{addedWeightPrice},#{discount},#{standard_freight},#{afterDiscount_freight},#{insurance},#{other},#{total_fee},#{remark})
+</insert>
+
+<insert id="save_imp" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.ImpModel" >
+INSERT INTO imp_express_prescription 
+(bat_id,field1,field2,
+field3,field4,
+field5,field6,
+field7,field8,field9,
+field10,field11,
+field12,field13,
+field14,field15,
+field16,
+create_time,create_user,update_time,upate_user,flag,error_msg) 
+VALUES 
+(#{bat_id},#{field1},#{field2},
+#{field3},#{field4},
+#{field5},#{field6},
+#{field7},#{field8},#{field9},
+#{field10},#{field11},
+#{field12},#{field13},
+#{field14},#{field15},
+#{field16},
+#{create_time},#{create_user},#{update_time},#{update_user},#{flag},#{error_msg})
+</insert>
+
+
+<select id="check_main" parameterType="Object">
+update imp_express_prescription set flag=1 , error_msg='时效已经存在' where id in (
+select bbb.id from 
+(select * from er_receive_time) aaa
+left join (
+select main.id,transport_code,e.product_type_code,warehouse_code,c.area_code sarea,d.area_code qarea,date_format(main.field4,'%H:%i:%s')  from (
+select * from imp_express_prescription where bat_id=#{bat_id} and flag=0) main
+left join (select warehouse_name,warehouse_code from er_physical_warehouse) a on main.field3=a.warehouse_name 
+left join (select transport_name,transport_code from tb_transport_vendor) b on main.field1=b.transport_name 
+left join (select area_name,area_code from tb_area) c on main.field5=c.area_name 
+left join (select area_name,area_code from tb_area) d on main.field6=d.area_name 
+left join (select product_type_code,product_type_name,vendor_code from tb_transport_product_type) e on main.field2=e.product_type_name and e.vendor_code=b.transport_code
+where 
+transport_code is not null 
+and e.product_type_code is not null 
+and warehouse_code is not null 
+and c.area_code is not null 
+and d.area_code is not null 
+and date_format(main.field4,'%H:%i:%s') is not null) bbb on aaa.express_code=bbb.transport_code and aaa.producttype_code=bbb.product_type_code and aaa.warehouse_code=bbb.warehouse_code and aaa.province_code=bbb.sarea and aaa.city_code=bbb.qarea
+where bbb.id is not null)
+</select>
+
+<update id="up_eb" parameterType="Object">
+update imp_express_prescription set flag=0,error_msg=''  where bat_id=#{bat_id}
+</update>
+
+<!-- 校验仓库 -->
+<update id="check_wh" parameterType="Object">
+update imp_express_prescription set flag=1 , error_msg='仓库不存在' where id in(
+select main.id from (
+select * from imp_express_prescription where bat_id=#{bat_id} and flag=0) main
+left join (select warehouse_name from er_physical_warehouse) a on main.field3=a.warehouse_name 
+where a.warehouse_name is null)
+</update>
+
+<!-- 校验快递 -->
+<update id="check_exp" parameterType="Object">
+update imp_express_prescription set flag=1 , error_msg='快递不存在' where id in(
+select main.id from (
+select * from imp_express_prescription where bat_id=#{bat_id} and flag=0) main
+left join (select transport_name from tb_transport_vendor) a on main.field1=a.transport_name 
+where a.transport_name is null)
+</update>
+
+<!-- 省区域验证 -->
+<update id="check_area_s" parameterType="Object">
+update imp_express_prescription set flag=1 , error_msg='省不存在' where id in(
+select main.id from (
+select * from imp_express_prescription where bat_id=#{bat_id} and flag=0) main
+left join (select area_name,area_code from tb_area) a on main.field5=a.area_name 
+where a.area_name is null)
+</update>
+
+<!-- 市区域验证 -->
+<update id="check_area_q" parameterType="Object">
+update imp_express_prescription set flag=1 , error_msg='市不存在' where id in(
+select main.id from (
+select * from imp_express_prescription where bat_id=#{bat_id} and flag=0) main
+left join (select area_name,area_code from tb_area) a on main.field6=a.area_name 
+where a.area_name is null)
+</update>
+
+<!-- 预警类型验证 -->
+<update id="check_type" parameterType="Object">
+update imp_express_prescription set flag=1 , error_msg='预警类型不存在' where id in(
+select main.id from (
+select * from imp_express_prescription where bat_id=#{bat_id} and flag=0) main
+left join (select warningtype_code,warningtype_name from er_warninginfo_maintain_master) a on main.field9=a.warningtype_name 
+where a.warningtype_code is null)
+</update>
+
+<select id="query_main" resultType="java.util.HashMap"  parameterType="Object">
+select 
+	b.transport_code transport_code,main.field1 transport_codes,
+	e.product_type_code product_type_code,main.field2 product_type_codes,
+	warehouse_code,main.field3 warehouse_codes,
+	c.area_code sarea,main.field5 sareas,
+	d.area_code qarea,main.field6 qareas,
+	date_format(main.field4,'%H:%i:%s') embrace_time,
+	f.area_code farea,main.field7 fareas,
+	g.area_code garea,main.field8 gareas,
+	h.warningtype_code 
+from (
+select * from imp_express_prescription where bat_id=#{bat_id} and flag=0) main
+left join (select warehouse_name,warehouse_code from er_physical_warehouse) a on main.field3=a.warehouse_name 
+left join (select transport_name,transport_code from tb_transport_vendor) b on main.field1=b.transport_name 
+left join (select area_name,area_code from tb_area) c on main.field5=c.area_name 
+left join (select area_name,area_code from tb_area) d on main.field6=d.area_name 
+left join (select area_name,area_code from tb_area) f on main.field7=f.area_name 
+left join (select area_name,area_code from tb_area) g on main.field8=g.area_name 
+left join (select warningtype_code,warningtype_name from er_warninginfo_maintain_master) h on main.field9=h.warningtype_name 
+left join (select product_type_code,product_type_name,vendor_code from tb_transport_product_type) e on main.field2=e.product_type_name and e.vendor_code=b.transport_code
+where 
+transport_code is not null 
+and warehouse_code is not null 
+and c.area_code is not null 
+and d.area_code is not null 
+and date_format(main.field4,'%H:%i:%s') is not null
+group by transport_code,warehouse_code,main.field5,main.field6,embrace_time
+</select>
+
+<select id="query_imp_del" resultType="com.bt.lmis.model.ImpModel" parameterType="com.bt.lmis.model.ImpModel">
+select 
+a.id ,a.bat_id ,field1 ,field2 ,field3 ,field4 ,field5 ,field6 ,field7 ,field8 ,warningtype_code as field9 ,
+field10 ,field11 ,field12 ,field13 ,field14 ,field15 ,field16 ,flag ,error_msg 
+from imp_express_prescription a 
+left join (select warningtype_code,warningtype_name from er_warninginfo_maintain_master) h on a.field9=h.warningtype_name 
+where 
+bat_id=#{bat_id} 
+<if test="field1 != null and field1 != ''" >
+and field1=#{field1} 
+</if>
+<if test="field2 != null and field2 != ''" >
+and field2=#{field2} 
+</if>
+<if test="field3 != null and field3 != ''" >
+and field3=#{field3} 
+</if>
+<if test="field5 != null and field5 != ''" >
+and field5=#{field5} 
+</if>
+<if test="field6 != null and field6 != ''" >
+and field6=#{field6}
+</if>
+order by a.id asc
+</select>
+
+<insert id="ins_imp" parameterType="com.bt.radar.model.ReceiveDeadline">
+	insert into er_receive_time
+	(
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		express_code,
+		producttype_code,
+		warehouse_code,
+		province_code,
+		city_code,
+		state_code,
+		street_code,
+		embrace_time,
+		dl_flag
+	) values (
+		#{id },
+		now(),
+		#{create_user },
+		now(),
+		#{create_user },
+		#{express_code },
+		#{producttype_code },
+		#{warehouse_code, },
+		#{province_code },
+		#{city_code },
+		#{state_code },
+		#{street_code },
+		#{embrace_time },
+		1
+	)
+</insert>
+
+<insert id="ins_imp_detail" parameterType="com.bt.lmis.model.ExpressagingDetail" >
+  insert into er_expressaging_detail(id,create_time,create_user,update_time,update_user,number,province_code,city_code,state_code,street_code,efficiency,efficiency_unit,warningtype_code,valibity,pid,dl_flag)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{number},#{province_code},#{city_code},#{state_code},#{street_code},#{efficiency},#{efficiency_unit},#{warningtype_code},#{valibity},#{pid},#{dl_flag})
+</insert>
+
+</mapper>   

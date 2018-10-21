@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TotalVolumeMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.TotalVolume" >
+	<result column="ctv_id" property="ctv_id"/>
+	<result column="ctv_cb_id" property="ctv_cb_id"/>
+	<result column="ctv_section" property="ctv_section"/>
+	<result column="ctv_price" property="ctv_price"/>
+	<result column="ctv_price_unit" property="ctv_price_unit"/>
+	<result column="ctv_status" property="ctv_status"/>
+</resultMap>
+       
+<!-- ssc_total_volume table all fields -->
+<sql id="Base_Column_List" >
+	 ctv_id,ctv_cb_id,ctv_section,ctv_price,ctv_price_unit,ctv_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="ctv_id != null" >
+	    and ctv_id =  #{ctv_id}
+	</if>
+	<if test="ctv_cb_id != null" >
+	    and ctv_cb_id =  #{ctv_cb_id}
+	</if>
+	 	<if test="ctv_section != null and ctv_section != ''" >
+	    and ctv_section =  #{ctv_section}
+	</if>
+	 	<if test="ctv_price != null and ctv_price != ''" >
+	    and ctv_price =  #{ctv_price}
+	</if>
+	<if test="ctv_price_unit != null" >
+	    and ctv_price_unit =  #{ctv_price_unit}
+	</if>
+	<if test="ctv_status != null" >
+	    and ctv_status =  #{ctv_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入超过部分体积表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.TotalVolume" >
+  insert into ssc_total_volume(ctv_id,ctv_cb_id,ctv_section,ctv_price,ctv_price_unit,ctv_status)
+ values(#{ctv_id},#{ctv_cb_id},#{ctv_section},#{ctv_price},#{ctv_price_unit},#{ctv_status})
+</insert>
+
+<!-- 修改超过部分体积表-->  
+ <update id="update" parameterType="com.bt.lmis.model.TotalVolume" >
+  update ssc_total_volume set ctv_cb_id=#{ctv_cb_id},ctv_section=#{ctv_section},ctv_price=#{ctv_price},ctv_price_unit=#{ctv_price_unit},ctv_status=#{ctv_status} where ctv_id=#{ctv_id}
+ </update>
+ 
+ <!-- 选择修改超过部分体积表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.TotalVolume" >
+	update ssc_total_volume set 
+	<trim  suffixOverrides="," >
+	<if test="ctv_cb_id != null  ">
+		ctv_cb_id=#{ctv_cb_id},
+	</if>
+	<if test="ctv_section != null  and ctv_section != '' ">
+		ctv_section=#{ctv_section},
+	</if>
+	<if test="ctv_price != null  and ctv_price != '' ">
+		ctv_price=#{ctv_price},
+	</if>
+	<if test="ctv_price_unit != null  ">
+		ctv_price_unit=#{ctv_price_unit},
+	</if>
+	<if test="ctv_status != null  ">
+		ctv_status=#{ctv_status},
+	</if>
+	</trim> where ctv_id=#{ctv_id}
+</update>
+
+<!-- 删除超过部分体积表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_total_volume where ctv_id = #{ctv_id}
+</update>
+<!-- 批量删除超过部分体积表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_total_volume where ctv_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找超过部分体积表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_total_volume where ctv_id = #{ctv_id}
+</select>
+  	
+<!-- 超过部分体积表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.TotalVolumeQueryParam">
+	select count(1) from ssc_total_volume 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的超过部分体积表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.TotalVolumeQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_total_volume 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 超过部分体积表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.TotalVolumeQueryParam">
+	select count(1) from ssc_total_volume 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的超过部分体积表集合 -->
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_total_volume  where ctv_cb_id=#{cbid}
+</select>
+  	
+</mapper>   

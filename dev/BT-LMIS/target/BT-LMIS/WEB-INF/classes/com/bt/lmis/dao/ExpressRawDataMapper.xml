@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpressRawDataMapper" >
+	<select id= "countByFlag" parameterType= "com.bt.lmis.controller.form.ExpressBalanceDetialQueryParam" resultType= "Integer" >
+		SELECT
+			count(0)
+		FROM
+			tb_warehouse_express_data
+		WHERE
+			dFlag= 0
+		<if test= "cost_center != null and cost_center != ''" >
+			and cost_center= #{cost_center }
+		</if>
+		<if test= "store_name != null and store_name != ''" >
+			and store_name= #{store_name }
+		</if>
+		<if test= "express_name != null and express_name != ''" >
+			and transport_name= #{express_name }
+		</if>
+		<if test= "settle_flag != null" >
+			and settle_flag= #{settle_flag }
+		</if>
+		<if test= "settle_store_flag != null" >
+			and settle_store_flag= #{settle_store_flag }
+		</if>
+		<if test= "settle_client_flag != null" >
+			and settle_client_flag= #{settle_client_flag }
+		</if>
+		and TO_DAYS(transport_time) &gt;= TO_DAYS(#{balance_start_date })
+		and TO_DAYS(transport_time) &lt;= TO_DAYS(#{balance_end_date })
+	</select>
+	<select id= "selectByFlag" parameterType= "com.bt.lmis.controller.form.ExpressBalanceDetialQueryParam" resultType= "java.util.Map" >
+		SELECT
+			store_code,
+			store_name,
+			warehouse,
+			transport_code,
+			transport_name,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			CAST(express_number as char(255)) as express_number,
+			CASE transport_direction
+			WHEN 0 THEN "正向运输"
+			WHEN 1 THEN "逆向运输"
+			ELSE "" END AS transport_direction,
+			itemtype_code,
+			itemtype_name,
+			transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			weight,
+			length,
+			width,
+			higth,
+			volumn,
+			delivery_address,
+			province,
+			city,
+			state,
+			street,
+			detail_address,
+		  	CASE insurance_flag
+		  	WHEN 0 THEN "否"
+			WHEN 1 THEN "是"
+			ELSE "" END AS insurance_flag,
+		  	CASE cod_flag 
+			WHEN 0 THEN "否"
+			WHEN 1 THEN "是"
+			ELSE "" END AS cod_flag
+		FROM
+			tb_warehouse_express_data
+		WHERE
+			dFlag= 0
+		<if test= "express_name != null and express_name != ''" >
+			and transport_name= #{express_name }
+		</if>
+		<if test= "cost_center != null and cost_center != ''" >
+			and cost_center= #{cost_center }
+		</if>
+		<if test= "store_name != null and store_name != ''" >
+			and store_name= #{store_name }
+		</if>
+		<if test= "settle_flag != null" >
+			and settle_flag= #{settle_flag }
+		</if>
+		<if test= "settle_store_flag != null" >
+			and settle_store_flag= #{settle_store_flag }
+		</if>
+		<if test= "settle_client_flag != null" >
+			and settle_client_flag= #{settle_client_flag }
+		</if>
+		and TO_DAYS(transport_time) &gt;= TO_DAYS(#{balance_start_date })
+		and TO_DAYS(transport_time) &lt;= TO_DAYS(#{balance_end_date })
+		ORDER BY transport_time DESC
+	</select>
+	<insert id= "insertRawData" parameterType= "com.bt.lmis.model.ExpressRawData" useGeneratedKeys= "true" keyProperty= "id" >
+		insert into tb_warehouse_express_data
+		<trim prefix= "(" suffix= ")" suffixOverrides= "," >
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			<if test= "cost_center != null" >
+				cost_center,
+			</if>
+			<if test= "store_code != null" >
+				store_code,
+			</if>
+			<if test= "store_name != null" >
+				store_name,
+			</if>
+			<if test= "warehouse != null" >
+				warehouse,
+			</if>
+			<if test= "transport_code != null" >
+				transport_code,
+			</if>
+			<if test= "transport_name != null" >
+				transport_name,
+			</if>
+			<if test= "delivery_order != null" >
+				delivery_order,
+			</if>
+			<if test= "epistatic_order != null" >
+				epistatic_order,
+			</if>
+			<if test= "order_type != null" >
+				order_type,
+			</if>
+			<if test= "express_number != null" >
+				express_number,
+			</if>
+			<if test= "transport_direction != null" >
+				transport_direction,
+			</if>
+			<if test= "itemtype_code != null" >
+				itemtype_code,
+			</if>
+			<if test= "itemtype_name != null" >
+				itemtype_name,
+			</if>
+			<if test= "transport_time != null" >
+				transport_time,
+			</if>
+			<if test= "collection_on_delivery != null" >
+				collection_on_delivery,
+			</if>
+			<if test= "order_amount != null" >
+				order_amount,
+			</if>
+			<if test= "sku_number != null" >
+				sku_number,
+			</if>
+			<if test= "weight != null" >
+				weight,
+			</if>
+			<if test= "length != null" >
+				length,
+			</if>
+			<if test= "width != null" >
+				width,
+			</if>
+			<if test= "higth != null" >
+				higth,
+			</if>
+			<if test= "volumn != null" >
+				volumn,
+			</if>
+			<if test= "delivery_address != null" >
+				delivery_address,
+			</if>
+			<if test= "province != null" >
+				province,
+			</if>
+			<if test= "city != null" >
+				city,
+			</if>
+			<if test= "state != null" >
+				state,
+			</if>
+			<if test= "street != null" >
+				street,
+			</if>
+			<if test= "insurance_flag != null" >
+				insurance_flag,
+			</if>
+			<if test= "cod_flag != null" >
+				cod_flag,
+			</if>
+			<if test= "balance_subject != null" >
+				balance_subject,
+			</if>
+			settle_flag,
+			settle_logistics_flag,
+			settle_client_flag,
+			settle_store_flag,
+			packing_charge_flag,
+			dFlag
+		</trim>
+		<trim prefix= "values (" suffix= ")" suffixOverrides= "," >
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			<if test= "cost_center != null" >
+				#{cost_center },
+			</if>
+			<if test= "store_code != null" >
+				#{store_code },
+			</if>
+			<if test= "store_name != null" >
+				#{store_name },
+			</if>
+			<if test= "warehouse != null" >
+				#{warehouse },
+			</if>
+			<if test= "transport_code != null" >
+				#{transport_code },
+			</if>
+			<if test= "transport_name != null" >
+				#{transport_name },
+			</if>
+			<if test= "delivery_order != null" >
+				#{delivery_order },
+			</if>
+			<if test= "epistatic_order != null" >
+				#{epistatic_order },
+			</if>
+			<if test= "order_type != null" >
+				#{order_type },
+			</if>
+			<if test= "express_number != null" >
+				#{express_number },
+			</if>
+			<if test= "transport_direction != null" >
+				#{transport_direction },
+			</if>
+			<if test= "itemtype_code != null" >
+				#{itemtype_code },
+			</if>
+			<if test= "itemtype_name != null" >
+				#{itemtype_name },
+			</if>
+			<if test= "transport_time != null" >
+				#{transport_time },
+			</if>
+			<if test= "collection_on_delivery != null" >
+				#{collection_on_delivery },
+			</if>
+			<if test= "order_amount != null" >
+				#{order_amount },
+			</if>
+			<if test= "sku_number != null" >
+				#{sku_number },
+			</if>
+			<if test= "weight != null" >
+				#{weight },
+			</if>
+			<if test= "length != null" >
+				#{length },
+			</if>
+			<if test= "width != null" >
+				#{width },
+			</if>
+			<if test= "higth != null" >
+				#{higth },
+			</if>
+			<if test= "volumn != null" >
+				#{volumn },
+			</if>
+			<if test= "delivery_address != null" >
+				#{delivery_address },
+			</if>
+			<if test= "province != null" >
+				#{province },
+			</if>
+			<if test= "city != null" >
+				#{city },
+			</if>
+			<if test= "state != null" >
+				#{state },
+			</if>
+			<if test= "street != null" >
+				#{street },
+			</if>
+			<if test= "insurance_flag != null" >
+				#{insurance_flag },
+			</if>
+			<if test= "cod_flag != null" >
+				#{cod_flag },
+			</if>
+			<if test= "balance_subject != null" >
+				#{balance_subject },
+			</if>
+			0,
+			0,
+			0,
+			0,
+			0,
+			0
+		</trim>
+	</insert>
+	<update id= "updateStatus" parameterType= "Object" >
+		update tb_warehouse_express_data
+		<trim prefix= "SET" suffixOverrides= "," >
+			<if test="settle_flag != null and settle_flag != ''" >
+				settle_flag= #{settle_flag }
+			</if>
+			<if test="settle_logistics_flag != null and settle_logistics_flag != ''" >
+				settle_logistics_flag= #{settle_logistics_flag }
+			</if>
+			<if test="settle_client_flag != null and settle_client_flag != ''" >
+				settle_client_flag= #{settle_client_flag }
+			</if>
+			<if test="settle_store_flag != null and settle_store_flag != ''" >
+				settle_store_flag= #{settle_store_flag }
+			</if>
+		</trim>
+		where id in 
+		<foreach collection= "list" item= "id" index= "index" open= "(" separator= "," close= ")" >  
+	       	#{id }
+	   	</foreach>
+	</update>
+	<select id= "selectRecords" parameterType= "Object" resultType= "com.bt.lmis.model.ExpressRawData" >
+		SELECT
+			a.id,
+			a.create_time,
+			a.create_user,
+			a.update_time,
+			a.update_user,
+			a.cost_center,
+			a.store_code,
+			a.store_name,
+			b.warehouse_name warehouse,
+			a.warehouse_code,
+			a.transport_code,
+			a.transport_name,
+			a.delivery_order,
+			a.epistatic_order,
+			a.order_type,
+			a.express_number,
+			a.transport_direction,
+			a.itemtype_code,
+			a.itemtype_name,
+			a.transport_time,
+			a.platform_order_time,
+			a.platform_pay_time,
+			a.collection_on_delivery,
+			a.order_amount,
+			a.sku_number,
+			a.qty,
+			a.weight,
+			a.length,
+			a.width,
+			a.higth,
+			a.volumn,
+			a.delivery_address,
+			a.province,
+			a.city,
+			a.state,
+			a.street,
+			a.insurance_flag,
+			a.cod_flag,
+			a.balance_subject,
+			a.settle_flag,
+			a.settle_logistics_flag,
+			a.settle_client_flag,
+			a.settle_store_flag,
+			a.packing_charge_flag,
+			a.jk_settle_flag,
+			a.dFlag,
+			a.park_code,
+			a.park_name,
+			a.park_cost_center,
+			a.province_origin,
+			a.city_origin,
+			a.state_origin,
+			b.warehouse_type
+		FROM tb_warehouse_express_data a
+		LEFT JOIN tb_warehouse b ON a.warehouse_code = b.warehouse_code
+		WHERE a.dFlag= 0
+		<if test= "(cost_center == null or cost_center == '') and (store_name == null or store_name == '')" >
+			AND a.settle_flag= 0
+		</if>
+		<if test= "(cost_center != null and cost_center != '') or (store_name != null and store_name != '')" >
+			<if test= "contract_type != null and contract_type != '' and contract_type == 3" >
+				AND a.settle_store_flag=0
+			</if>
+			<if test= "contract_type != null and contract_type != '' and contract_type == 4" >
+				AND a.settle_client_flag=0
+			</if>
+			<if test= "cost_center != null and cost_center != ''" >
+				AND a.cost_center=#{cost_center}
+			</if>
+			<if test= "store_name != null and store_name != ''" >
+				AND a.store_name=#{store_name}
+			</if>
+		</if>
+		AND a.transport_name= #{transport_name }
+		<if test="jk_settle_flag_in_str != null and jk_settle_flag_in_str != ''">
+			AND a.jk_settle_flag in (${jk_settle_flag_in_str})
+		</if>
+		AND a.transport_time &gt;= #{contract_start_time}
+		AND a.transport_time &lt;= #{contract_end_time}
+		<!-- AND b.need_balance = #{type } -->
+		AND b.warehouse_type= #{type}
+		<!-- AND k_flag="0" -->
+		LIMIT #{batch_num}
+	</select>
+	<select id= "countRecords" parameterType= "Object" resultType= "Integer" >
+		SELECT count(1)
+		FROM tb_warehouse_express_data a
+		LEFT JOIN (
+			SELECT warehouse_name, warehouse_type, warehouse_code FROM tb_warehouse
+		) b ON a.warehouse_code = b.warehouse_code
+		WHERE dFlag= 0
+		<if test= "(cost_center == null or cost_center == '') and (store_name == null or store_name == '')" >
+			AND settle_flag= 0
+		</if>
+		<if test= "(cost_center != null and cost_center != '') or (store_name != null and store_name != '')" >
+			<if test= "contract_type != null and contract_type != '' and contract_type == 3" >
+				AND settle_store_flag= 0
+			</if>
+			<if test= "contract_type != null and contract_type != '' and contract_type == 4" >
+				AND settle_client_flag= 0
+			</if>
+			<if test= "cost_center != null and cost_center != ''" >
+				AND cost_center= #{cost_center }
+			</if>
+			<if test= "store_name != null and store_name != ''" >
+				AND store_name= #{store_name }
+			</if>
+		</if>
+		AND transport_name= #{transport_name }
+		<if test="jk_settle_flag_in_str != null and jk_settle_flag_in_str != ''">
+			AND a.jk_settle_flag in (${jk_settle_flag_in_str})
+		</if>
+		AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{contract_start_time })
+		AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{contract_end_time })
+		AND b.warehouse_type= #{type }
+	</select>
+	<select id="getSumWeight" parameterType="java.util.HashMap" resultType="java.math.BigDecimal">
+		SELECT
+			SUM(weight)
+		FROM
+			tb_warehouse_express_data
+		WHERE
+			epistatic_order=#{epistatic_order} 
+			and warehouse_code=#{warehouse_code}
+			and transport_code=#{transport_code}
+	</select>
+</mapper>   

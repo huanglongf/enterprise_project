@@ -1,0 +1,201 @@
+package com.lmis.basis.store.service.impl;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.lmis.common.dynamicSql.dao.DynamicSqlMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.basis.store.dao.BasisStoreMapper;
+import com.lmis.basis.store.model.BasisStore;
+import com.lmis.basis.store.service.BasisStoreServiceInterface;
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.common.dynamicSql.service.DynamicSqlServiceInterface;
+import com.lmis.constant.LBASEConstant;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+
+/** 
+ * @ClassName: BasisStoreServiceImpl
+ * @Description: TODO(店铺业务层实现类)
+ * @author codeGenerator
+ * @date 2018-01-19 16:10:57
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class BasisStoreServiceImpl<T extends BasisStore> implements BasisStoreServiceInterface<T> {
+	
+	@Resource(name="dynamicSqlServiceImpl")
+	DynamicSqlServiceInterface<BasisStore> dynamicSqlService;
+	@Autowired
+	private BasisStoreMapper<T> basisStoreMapper;
+
+	@Autowired
+	private DynamicSqlMapper<T> dynamicSqlMapper;
+	
+	@Autowired
+	private HttpSession session;
+	
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		return dynamicSqlService.executeSelect(dynamicSqlParam, pageObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		LmisResult<?> _lmisResult = dynamicSqlService.executeSelect(dynamicSqlParam);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(_lmisResult.getCode())) return _lmisResult;
+		List<Map<String, Object>> result =  (List<Map<String, Object>>) _lmisResult.getData();
+		if(ObjectUtils.isNull(result)) throw new Exception(LBASEConstant.EBASE000007);
+		if(result.size() != 1) throw new Exception(LBASEConstant.EBASE000008);
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, result.get(0));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		// TODO(业务校验)
+		BasisStore store = dynamicSqlService.generateTableModel((DynamicSqlParam<BasisStore>) dynamicSqlParam, new BasisStore()).getTableModel();
+
+		if(ObjectUtils.isNull(store.getStoreName())) throw new Exception(LBASEConstant.EBASE000086);
+		if (!ObjectUtils.isNull(store.getOrders())&&!isNumeric(store.getOrders())) throw new Exception(LBASEConstant.EBASE000087);
+		if (!ObjectUtils.isNull(store.getArea())&&!isNumeric(store.getArea())) throw new Exception(LBASEConstant.EBASE000088);
+		//非空校验
+		if(ObjectUtils.isNull(store.getStoreCode())) throw new Exception(LBASEConstant.EBASE000089);
+		//唯一校验
+		BasisStore checkStore=new BasisStore();
+		checkStore.setIsDeleted(false);
+		checkStore.setStoreCode(store.getStoreCode());
+
+		if(basisStoreMapper.retrieve((T) checkStore).size()>0) throw new Exception(LBASEConstant.EBASE000090);
+
+         store.setStoreName(store.getStoreName().replaceAll("'","\\\\'"));
+         store.setUpdateBy(session.getAttribute("lmisUserId").toString());
+         store.setCreateBy(session.getAttribute("lmisUserId").toString());
+         store.setPwrOrg(session.getAttribute("lmisUserOrg").toString());
+		LmisResult<?> lmisResult = new LmisResult<>();
+		if(basisStoreMapper.create((T) store)>0){
+			lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+			lmisResult.setMessage("成功");
+		}else{
+			lmisResult.setCode(LmisConstant.RESULT_CODE_ERROR);
+			lmisResult.setMessage("失败");
+		}
+
+	     lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		
+	     return  lmisResult;
+	}
+	public static boolean isNumeric(String str) {
+
+		try {
+			BigDecimal temp = new BigDecimal(str);
+			if(temp.compareTo(new BigDecimal("0"))==-1){
+				return false;
+			}
+		} catch (Exception e) {
+			return false;//异常 说明包含非数字。
+		}
+		return true;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		// TODO(业务校验)
+		//存在校验
+		BasisStore store = dynamicSqlService.generateTableModel((DynamicSqlParam<BasisStore>) dynamicSqlParam, new BasisStore()).getTableModel();
+		BasisStore checkStore=new BasisStore();
+		checkStore.setIsDeleted(false);
+		checkStore.setStoreCode(store.getStoreCode());
+		if(basisStoreMapper.retrieve((T) checkStore).size()==0) throw new Exception(LBASEConstant.EBASE000091);
+		
+		//更新人
+		dynamicSqlParam.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		// 更新操作
+		return dynamicSqlService.executeUpdate(dynamicSqlParam);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> deleteBasisStore(T t) throws Exception {
+		// TODO(业务校验)
+		//存在校验
+		BasisStore checkStore=new BasisStore();
+		checkStore.setIsDeleted(false);
+		checkStore.setStoreCode(t.getStoreCode());
+		if(basisStoreMapper.retrieve((T) checkStore).size()==0) throw new Exception(LBASEConstant.EBASE000091);
+
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		//删除前校验是否在预算值中已经出现
+
+		// 删除操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, basisStoreMapper.logicalDelete(t));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> switchBasisStore(T t) throws Exception {
+		//存在校验
+		BasisStore checkStore=new BasisStore();
+		checkStore.setIsDeleted(false);
+		checkStore.setStoreCode(t.getStoreCode());
+		if(basisStoreMapper.retrieve((T) checkStore).size()==0) throw new Exception(LBASEConstant.EBASE000091);
+
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, basisStoreMapper.shiftValidity(t));
+	}
+
+	@Override
+	public LmisResult<?> filterCheckedStore(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		LmisResult<Map<String, Object>> lmisResult = new LmisResult<Map<String, Object>>();
+		String executeSql = getDynamicSql(dynamicSqlParam);
+		if(!ObjectUtils.isNull(executeSql)){
+			Page<Map<String, Object>> page = PageHelper.startPage(pageObject.getPageNum(), pageObject.getPageSize());
+			this.dynamicSqlMapper.executeSelect(executeSql);
+			lmisResult.setMetaAndData(page.toPageInfo());
+			lmisResult.setCode("S1001");
+		}else {
+			lmisResult.setCode(LmisConstant.RESULT_CODE_ERROR);
+			lmisResult.setMessage("数据异常");
+		}
+		return lmisResult;
+	}
+
+	private String getDynamicSql(DynamicSqlParam<T> dynamicSqlParam) throws Exception{
+		StringBuffer sql = new StringBuffer("");
+		LmisResult<?> result3 = dynamicSqlService.getColumnsAndOrderby(dynamicSqlParam);
+		if (!"E3001".equals(result3.getCode())) {
+			JSONObject data1 = (JSONObject)result3.getData();
+			sql.append(data1.get("selectSql"));
+			LmisResult<?> result2 = dynamicSqlService.getWhereSql(dynamicSqlParam);
+			if(!"E3001".equals(result2.getCode())){
+				sql.append(result2.getData().toString());
+			}
+			sql.append(" AND is_disabled = FALSE");
+			if(!ObjectUtils.isNull(dynamicSqlParam) && !ObjectUtils.isNull(dynamicSqlParam.getId())){
+				sql.append(" AND store_code NOT IN ( select store_code from view_budget_project_define where is_deleted = FALSE AND project_code = '"  + dynamicSqlParam.getId()).append("') ");
+			}
+			sql.append(data1.get("orderbySql"));
+		}
+		return sql.toString();
+	}
+
+}

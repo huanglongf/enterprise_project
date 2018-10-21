@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.PricingFormulaMapper" >
+	<resultMap type= "com.bt.lmis.model.PricingFormulaRedisBean" id= "pricingFormulaRedisBean" >
+		<result column= "redis_key" property= "key" />
+		<result column= "id" property= "value.id" />
+		<result column= "accurate_decimal_place" property= "value.accurate_decimal_place" />
+	</resultMap>
+	<select id="get" parameterType="String" resultType="com.bt.lmis.model.PricingFormula" >
+		select id, accurate_decimal_place from ex_con_pricing_formula
+		where dFlag= 0 and CONCAT("PF", con_id, belong_to, pricing_formula)= #{key }
+	</select>
+	<select id= "loadPF" resultMap="pricingFormulaRedisBean" >
+		SELECT
+			CONCAT("PF", con_id, belong_to, pricing_formula) AS redis_key,
+			id,
+			accurate_decimal_place
+		FROM
+			ex_con_pricing_formula
+		WHERE
+			dFlag= 0
+	</select>
+	<delete id= "deletePF" parameterType= "Object" >
+		delete from ex_con_pricing_formula where con_id = #{con_id } and belong_to = #{belong_to }
+	</delete>
+	<update id= "delPF" parameterType= "Object" >
+		update ex_con_pricing_formula set dFlag = 1 where id = #{id}
+	</update>
+	<select id= "getPF" parameterType= "Object" resultType= "java.util.HashMap" >
+		select
+			id,
+			con_id,
+			pricing_formula,
+			accurate_decimal_place
+		from
+			ex_con_pricing_formula
+		where
+			id = #{id }
+	</select>
+	<select id= "findAllPF" parameterType= "Object" resultType= "java.util.HashMap" >
+		select 
+			id,
+			pricing_formula,
+			pricing_formula_name
+		from
+			ex_con_pricing_formula
+		where
+			dFlag = 0
+		and
+			con_id = #{con_id }
+		and
+			belong_to = #{belong_to }
+	</select>
+	<update id= "updatePricingFormula" parameterType= "java.util.HashMap" >
+		update ex_con_pricing_formula
+		set update_time= now(),
+		    update_by= #{currentUser },
+		    pricing_formula= #{pricing_formula },
+		    pricing_formula_name= #{pricing_formula_name },
+	    	accurate_decimal_place= #{exact_decimal }
+		where id= #{id }
+	</update>
+	<insert id= "addPricingFormula" parameterType= "java.util.HashMap" >
+		insert into ex_con_pricing_formula
+		(
+			con_id,
+			belong_to,
+			pricing_formula,
+			pricing_formula_name,
+			accurate_decimal_place,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		)values(
+			#{con_id, jdbcType=INTEGER },
+			#{belong_to, jdbcType=INTEGER },
+			#{pricing_formula, jdbcType=INTEGER },
+			#{pricing_formula_name, jdbcType=VARCHAR },
+			#{exact_decimal, jdbcType=INTEGER },
+			#{currentUser, jdbcType=VARCHAR },
+			now(),
+			#{currentUser, jdbcType=VARCHAR },
+			now()
+		)
+	</insert>
+	<select id= "getRecord" parameterType= "java.util.HashMap" resultType= "java.util.HashMap" >
+		select
+			id,
+			accurate_decimal_place
+		from 
+			ex_con_pricing_formula
+		where
+			dFlag= 0
+		and 
+			con_id= #{con_id }
+		and
+			belong_to= #{belong_to }
+		and
+			pricing_formula= #{pricing_formula }
+	</select>
+</mapper>   

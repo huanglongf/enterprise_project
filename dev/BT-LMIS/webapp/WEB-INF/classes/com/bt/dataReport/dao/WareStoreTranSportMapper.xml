@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.dataReport.dao.WareStoreTranSportMapper" >
+
+
+  <resultMap id="WareResultMap" type="com.bt.dataReport.bean.WareStoreTranSportBean" >
+       <result column="warehouse_name" property="warehouseName"/>
+  </resultMap>
+   <select id="selectWare" parameterType="com.bt.dataReport.bean.WareStoreTranSportBean" resultMap="WareResultMap">
+       SELECT warehouse_name FROM ins_warehouse 
+   </select>
+   <resultMap id="StoreResultMap" type="com.bt.dataReport.bean." >
+    	<result column="store_name" property="storeName"/>
+   </resultMap>
+   <select id="selectStore" parameterType="com.bt.dataReport.bean.WareStoreTranSportBean" resultMap="StoreResultMap">
+       SELECT name FROM ins_store
+   </select>
+	  <resultMap id="TranSportResultMap" type="com.bt.dataReport.bean." >
+	    	<result column="transport_name" property="transportName"/>
+	  </resultMap>
+   <select id="selectTranSport" parameterType="com.bt.dataReport.bean.WareStoreTranSportBean" resultMap="TranSportResultMap">
+       SELECT transport_name FROM tb_transport_vendor
+   </select>
+</mapper>

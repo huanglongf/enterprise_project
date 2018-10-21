@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lmis.jbasis.area.dao.JbasisAreaMapper">
+    <resultMap id="PersistentObjectMap" type="com.lmis.baseModel.PersistentObject">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="user_address" property="userAddress" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+     <sql id="persistent_list">
+         id,
+         user_name,
+         user_address,
+         create_time
+     </sql>
+
+
+    <select id="getPersistent" parameterType="com.lmi.baseModel.PersistenObject" resultMap="PersistentObjectMap">
+        SELECT  <include refid="persistent_list"/>  FROM persistent
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="id != null">
+                AND id = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="userName != null and userName != '' ">
+                AND user_name = #{userName,jdbcType=VARCHAR}
+            </if>
+            <if test="userAddress != null and userAddress != '' ">
+                AND user_address = #{userAddress,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null " >
+                AND create_time = #{crateTime,jdbcType=TIMESTAMP}
+            </if>
+        </trim>
+    </select>
+     <sql id="inser_persisent_sql">
+         <trim prefix="(" suffix=")" suffixOverrides=",">
+             id,
+             user_name,
+             user_address,
+             create_time,
+         </trim>
+     </sql>
+    <insert id="inserList" parameterType="java.util.List">
+        INSERT INTO persisent
+        <include refid="inser_persisent_sql"/>
+        VALUES
+        <foreach collection="list" item="obj" index="index" separator=",">
+            <trim suffix="(" suffix=")" suffixOverrides=",">
+                #{obj.id,jdbcType=INTEGER},
+                #{obj.userName,jdbcType=VARCHAR},
+                #{obj.userAddress,jdbcType=VARCHAR},
+                #{obj.create_time,jdbcType=TIMESTAMP},
+            </trim>
+        </foreach>
+    </insert>
+
+    <insert id="insertPersisent" parameterType="com.lmi.baseModel.PersistenObject">
+        INSERT INTO persisent
+        <include refid="inser_persisent_sql"/>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            #{obj.id,jdbcType=INTEGER},
+            #{obj.userName,jdbcType=VARCHAR},
+            #{obj.userAddress,jdbcType=VARCHAR},
+            #{obj.create_time,jdbcType=TIMESTAMP},
+        </trim>
+    </insert>
+
+    <delete id="deletePersisentById" parameterType="java.util.List">
+         DELETE FROM persisent
+        <foreach collection="list" item="id" index="index" separator=",">
+            <trim prefix="WHERE" prefixOverrides="AND|OR">
+                AND id = #{id,jdbcType=INTEGER}
+            </trim>
+        </foreach>
+    </delete>
+
+    <update id="updatePersistent" parameterType="java.util.List">
+        UPDATE persisent
+        <foreach collection="list" item="obj" index="index" separator=",">
+            <trim prefix="SET" suffixOverrides=",">
+                user_name = #{obj.userName,jdbcType=VARCHAR},
+                user_address = #{obj.userAddress,jdbcType=VARCHAR},
+                create_time = #{obj.createTime,jdbcType=TIMESTAMP},
+            </trim>
+            <trim prefix="WHERE" suffixOverrides="AND|OR">
+                AND id = #{obj.id,jdbcType=INTEGER}
+            </trim>
+        </foreach>
+    </update>
+
+</mapper>

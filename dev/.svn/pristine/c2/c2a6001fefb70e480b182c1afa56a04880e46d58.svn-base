@@ -1,0 +1,114 @@
+package com.bt.vims.service.impl;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bt.vims.dao.AddressInforMapper;
+import com.bt.vims.model.AddressInfor;
+import com.bt.vims.model.User;
+import com.bt.vims.page.QueryParameter;
+import com.bt.vims.page.QueryResult;
+import com.bt.vims.service.AddressInforService;
+import com.bt.vims.utils.SessionUtils;
+
+import common.AddressException;
+import common.Contents;
+
+@Service
+@Transactional
+public class AddressInforServiceImpl implements AddressInforService {
+
+	@Autowired
+	private AddressInforMapper addressInforMapper;
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public QueryResult<AddressInfor> findAllAddressInfor(QueryParameter qr) throws AddressException{
+		QueryResult<AddressInfor> queryResult = new QueryResult<AddressInfor>();
+		queryResult.setResultlist(addressInforMapper.getDetailInfo(qr));
+		queryResult.setTotalrecord(addressInforMapper.getDetailInfoCount(qr));
+		return queryResult;
+	}
+
+	@Override
+	public AddressInfor findSingleAddressInfor(Integer id) throws AddressException {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("id", id);
+		AddressInfor addressInfor = addressInforMapper.findSingleAddressInfor(map);
+		return addressInfor;
+	}
+
+	@Override
+	public void updateAddressInfor(String id, AddressInfor newAddressInfor, HttpServletRequest request)
+			throws AddressException {
+		User user = SessionUtils.getEMP(request);
+		newAddressInfor.setId(Integer.parseInt(id));
+		newAddressInfor.setParam(Contents.IS_DISABLED, Contents.IS_DELETED, null, new Date(), null, user.getUsername());
+		addressInforMapper.updateAddressInfor(newAddressInfor);
+	}
+
+	@Override
+	public void insertAddressInfor(AddressInfor addressInfor, HttpServletRequest request) throws AddressException {
+		User user = SessionUtils.getEMP(request);
+		addressInfor.setParam(Contents.IS_DISABLED, Contents.IS_DELETED, new Date(), new Date(), user.getUsername(),
+				user.getUsername());
+		addressInforMapper.insertAddressInfor(addressInfor);
+	}
+
+	@Override
+	public void logicDeleteAddressInfor(String[] idArray, HttpServletRequest request) throws AddressException{
+		Map<String, Object> map = new HashMap<>();
+		User user = SessionUtils.getEMP(request);
+		List<String> idLists = Arrays.asList(idArray);
+		map.put("idLists", idLists);
+		map.put("isDeleted", Contents.IS_NOT_DELETED);
+		map.put("updateTime", new Date());
+		map.put("updateBy", user.getUsername());
+		addressInforMapper.logicDeleteAddressInfor(map);
+	}
+
+	@Override
+	public boolean validateCode(String addressCode) {
+		boolean flag = true;
+		Map<String, Object> map = new HashMap<>();
+		map.put("addressCode", addressCode.replace(" ", ""));
+		map.put("isDeleted", Contents.IS_DELETED);
+		List<AddressInfor> addressInfors = addressInforMapper.validateCode(map);
+		if (addressInfors != null && addressInfors.size() > 0) { // 根据地址编码查询出记录不为空则说明该编码已存在
+			flag = false;
+		}
+		return flag;
+	}
+
+	@Override
+	public List<AddressInfor> getAllAddressInfor() throws AddressException{
+		Map<String, Object> map = new HashMap<>();
+		map.put("isDeleted", Contents.IS_DELETED);
+		List<AddressInfor> addressInforLists = addressInforMapper.getAllAddressInfor(map);
+		return addressInforLists;
+	}
+
+	@Override
+	public void phyDeleteAddressInfor(String[] idArray) {
+		List<String> idLists = Arrays.asList(idArray);
+		addressInforMapper.phyDeleteAddressInfor(idLists);
+	}
+
+	@Override
+	public AddressInfor findCodeByName(String addressName) throws AddressException{
+		Map<String, Object> map = new HashMap<>();
+		map.put("addressName", addressName);
+		AddressInfor addressInfor = addressInforMapper.findCodeByName(map);
+		return addressInfor;
+	}
+
+}

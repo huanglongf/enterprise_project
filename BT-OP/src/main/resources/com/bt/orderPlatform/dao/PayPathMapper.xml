@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.PayPathMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.PayPath" >
+	<result column="id" property="id"/>
+	<result column="pay_path" property="pay_path"/>
+	<result column="pay_ame" property="pay_ame"/>
+</resultMap>
+       
+<!-- tb_pay_path table all fields -->
+<sql id="Base_Column_List" >
+	 id,pay_path,pay_ame
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	 	<if test="pay_path != null and pay_path != ''" >
+	    and pay_path =  #{pay_path}
+	</if>
+	 	<if test="pay_ame != null and pay_ame != ''" >
+	    and pay_ame =  #{pay_ame}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入支付方式表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.PayPath" >
+  insert into tb_pay_path(id,pay_path,pay_ame)
+ values(#{id},#{pay_path},#{pay_ame})
+</insert>
+
+<!-- 修改支付方式表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.PayPath" >
+  update tb_pay_path set pay_path=#{pay_path},pay_ame=#{pay_ame} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改支付方式表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.PayPath" >
+	update tb_pay_path set 
+	<trim  suffixOverrides="," >
+	<if test="pay_path != null  and pay_path != '' ">
+		pay_path=#{pay_path},
+	</if>
+	<if test="pay_ame != null  and pay_ame != '' ">
+		pay_ame=#{pay_ame},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除支付方式表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_pay_path where id = #{id}
+</update>
+<!-- 批量删除支付方式表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_pay_path where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找支付方式表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_pay_path where id = #{id}
+</select>
+  	
+<!-- 支付方式表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.PayPathQueryParam">
+	select count(1) from tb_pay_path 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的支付方式表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.PayPathQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_pay_path 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 支付方式表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.PayPathQueryParam">
+	select count(1) from tb_pay_path 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的支付方式表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.PayPathQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_pay_path 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+<select id="queryAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.PayPathQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_pay_path 
+</select>
+<select id="selectByname" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.PayPathQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_pay_path  where pay_ame=#{pay_path}
+</select>
+  	
+</mapper>   

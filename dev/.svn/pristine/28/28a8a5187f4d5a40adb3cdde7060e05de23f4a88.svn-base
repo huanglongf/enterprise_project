@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.WorkBaseMapper">
+	<select id="getOrderBaseInfo" parameterType="java.util.Map" resultType="java.util.HashMap">
+	   select 
+	        t.id,
+	        t.code as wk_code,
+			t.remark,
+			if(t.flag='1','启用中','已停用') as flag_name,
+			if(t.share_flag='1','是','否') as if_share_name,
+			if(t.so_flag='1','是','否') as so_flag,
+			t.flag,
+			t.share_flag as if_share ,
+			t.create_time,
+			t.create_user,
+			t.update_user,
+			t.update_time,
+			t.name as 'wk_type'
+		from wk_type t
+		where 1=1
+	  <if test="typeId != null  and typeId != '' ">
+		and t.name=#{typeId}
+	  </if>	
+	  <if test="status != null  and status != '' ">
+		and t.flag=#{status}
+	  </if>		  
+		order by t.create_time desc
+        limit #{firstResult},#{maxResult}
+	</select>
+	<select id="getOrderBaseInfo2" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	   select 
+	        t.id,
+	        t.code as wk_code,
+			t.remark,
+			if(t.flag='1','启用中','已停用') as flag_name,
+			if(t.share_flag='1','是','否') as if_share_name,
+			if(t.so_flag='1','是','否') as so_flag,
+			share_flag as if_share,
+			t.flag,
+			t.create_time,
+			t.create_user,
+			t.update_user,
+			t.update_time,
+			t.name as 'wk_type'
+		from wk_type t
+		where 1=1
+	  <if test="typeId != null  and typeId != '' ">
+		and t.name=#{typeId}
+	  </if>	
+	  <if test="status != null  and status != '' ">
+		and t.flag=#{status}
+	  </if>		  
+		order by t.create_time desc
+        limit ${firstResult},${maxResult}
+	</select>
+
+<select id="getOrderBaseInfoCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+     select 
+          count(1)
+     from wk_type t
+     where 1=1
+	  <if test="typeId != null  and typeId != '' ">
+		and t.name=#{typeId}
+	  </if>	
+	  <if test="status != null  and status != '' ">
+		and t.flag=#{status}
+	  </if>	     
+	</select>
+<select id="getOrderBaseInfoCount2" parameterType="java.util.Map" resultType="java.lang.Integer">
+     select 
+          count(1)
+     from wk_type t
+     where 1=1
+	  <if test="typeId != null  and typeId != '' ">
+		and t.name=#{typeId}
+	  </if>	
+	  <if test="status != null  and status != '' ">
+		and t.flag=#{status}
+	  </if>	     
+	</select>
+	
+	
+<select id="getAllType" resultType="java.util.HashMap">
+  select 
+  t.name as 'wk_type'
+  from  wk_type t
+  where t.flag=1
+</select>	
+	
+<select id="getAllLevel" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  select 
+  t.name as 'wk_level',
+  t.code as 'wk_code',
+  t.sort as 'sort'
+  
+  from  wk_level t
+  where t.flag=1
+</select>	
+	
+<insert id="addType" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="id">
+    insert into wk_type 
+    (
+    name,
+    code,
+    remark,
+    flag,
+    create_time,
+    update_time,
+    create_user,
+    update_user,
+    share_flag,
+    so_flag
+    )values(
+    #{type},
+    #{code},
+    #{remark},
+    #{status},
+    now(),
+    now(),
+    #{operate_user},
+    #{operate_user},
+    #{if_share},
+    #{so_flag}
+    )
+</insert>
+
+<select id="getTypeInfo" parameterType="java.util.Map" resultType="java.util.HashMap">
+   select 
+    t.id,
+	t.wk_type,
+	t.level as 'level_code',
+    s.`name` as 'level',
+	t.wk_standard,
+	t.wk_plan,
+	t.wk_timeout,
+	date_format(t.create_time,'%Y-%m-%d %T') as create_time,
+	t.create_user,
+    date_format(t.update_time,'%Y-%m-%d %T') as update_time,
+	t.update_user
+   from wk_order_type t left join wk_level s on s.`code`=t.`level`
+  where 1=1
+  and t.wk_type=#{wkCode}
+  and t.status=1
+  <if test="id != null  and id != '' ">
+	and t.id=#{id}
+  </if>	
+  order by s.sort asc
+</select>
+
+
+<select id="getReasonInfo" parameterType="java.util.Map" resultType="java.util.HashMap">
+   select 
+	t.id,
+	t.wk_type,
+	t.reason,
+	t.remark,
+	date_format(t.create_time,'%Y-%m-%d %T') as create_time,
+	t.create_user,
+	date_format(t.update_time,'%Y-%m-%d %T') as update_time,
+	t.update_user
+   from wk_reason t
+  where 1=1
+	and t.wk_type=#{wkCode}
+	and t.status=1
+</select>
+
+
+<select id="getErrorInfo" parameterType="java.util.Map" resultType="java.util.HashMap">
+   select 
+	t.id,
+	t.wk_type,
+	t.type_name,
+	t.remark,
+	date_format(t.create_time,'%Y-%m-%d %T') as create_time,
+	t.create_user,
+	date_format(t.update_time,'%Y-%m-%d %T') as update_time,
+	t.update_user
+   from wo_error_type t
+  where 1=1
+	and t.wk_type=#{wkCode}
+	and t.status=1
+</select>
+
+
+<insert id="addwkType" parameterType="java.util.HashMap">
+    insert into wk_order_type 
+    (
+    wk_type,
+    level,
+    wk_standard,
+    wk_plan,
+    wk_timeout,
+    create_time,
+    create_user,
+    update_time,
+    update_user,
+    status
+    )values(
+    #{wkCode},
+    #{level},
+    #{standard_time_form},
+    #{plan_time_form},
+    #{timeout_time_form},
+    now(),
+    #{operate_user},
+    now(),
+    #{operate_user},
+    '1'
+    )
+</insert>
+
+
+<insert id="addwkReason" parameterType="java.util.HashMap">
+    insert into wk_reason 
+    (
+    wk_type,
+    reason,
+    remark,
+    create_time,
+    create_user,
+    update_time,
+    update_user,
+    status
+    )values(
+    #{wkCode},
+    #{reason},
+    #{remark},
+    now(),
+    #{operate_user},
+    now(),
+    #{operate_user},
+    '1'
+    )
+</insert>
+
+<insert id="addwkError" parameterType="java.util.HashMap">
+    insert into wo_error_type 
+    (
+    wk_type,
+    type_name,
+    remark,
+    create_time,
+    create_user,
+    update_time,
+    update_user,
+    status
+    )values(
+    #{wkCode},
+    #{type_name},
+    #{remark},
+    now(),
+    #{operate_user},
+    now(),
+    #{operate_user},
+    '1'
+    )
+</insert>
+
+
+	<delete id="batchDelete" parameterType="Object">
+	   delete from wo_column where current in (select t.code from wk_type t where t.id in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+	       	#{item}  
+	   	</foreach> 
+	   	);
+
+	   delete from wk_order_type where wk_type in (select t.code from wk_type t where t.id in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+	       	#{item}  
+	   	</foreach> 
+	   	);
+
+	   delete from wk_reason where wk_type in (select t.code from wk_type t where t.id in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+	       	#{item}  
+	   	</foreach> 
+	   	);
+	   delete from wo_error_type where wk_type in (select t.code from wk_type t where t.id in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+	       	#{item}  
+	   	</foreach> 
+	   	);	   	
+		delete from wk_type where id in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+	       	#{item}  
+	   	</foreach> 
+	</delete>
+		
+	
+	<select id="checkStatus" parameterType="Object" resultType="java.lang.Integer">
+	  select count(1) from wk_type where id in
+	   <foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+	       	#{item}  
+	   	</foreach>
+	   	and flag=1
+	</select>
+	
+	<delete id="UpdateStatus" parameterType="java.util.HashMap">
+		update wk_type set flag=#{status} where id in (${priv_ids})
+	</delete>
+	
+	
+	<update id="updateType" parameterType="java.util.HashMap">
+	  update wk_type
+	  set 
+	  remark=#{remark},
+	  flag=#{status},
+	  share_flag=#{if_share},
+	  so_flag=#{so_flag},
+	  update_user=#{operate_user},
+	  update_time=now(),
+	  name=#{type}
+	  where id=#{id}
+	</update>
+	
+	<update id="delType" parameterType="java.util.HashMap">
+	  update wk_order_type
+	  set status=0 
+	  where id=#{id}
+	</update>
+	
+	<update id="delReason" parameterType="java.util.HashMap">
+	  update wk_reason
+	  set status=0 
+	  where id=#{id}
+	</update>
+
+	<update id="delError" parameterType="java.util.HashMap">
+	  update wo_error_type
+	  set status=0 
+	  where id=#{id}
+	</update>
+		
+	<update id="up_type_kid" parameterType="java.util.HashMap">
+	   update wk_order_type
+	   set 
+	   level=#{level},
+	   wk_standard=#{standard_time_form},
+	   wk_plan=#{plan_time_form},
+	   wk_timeout=#{timeout_time_form},
+	   update_time=now(),
+	   update_user=#{operate_user}
+	   where id=#{id}
+	</update>
+	
+	<update id="up_reason_kid" parameterType="java.util.HashMap">
+	  update wk_reason
+	  set 
+	  reason=#{reason},
+	  remark=#{remark},
+	  update_time=now(),
+	  update_user=#{operate_user}
+	  where id=#{id}
+	</update>
+	
+	<update id="up_error_kid" parameterType="java.util.HashMap">
+	  update wo_error_type
+	  set 
+	  type_name=#{type_name},
+	  remark=#{remark},
+	  update_time=now(),
+	  update_user=#{operate_user}
+	  where id=#{id}
+	</update>	
+	<select id="checkCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	  select count(1) from wk_type t  where 1=1 <if test="type != null  and type != '' "> and t.name=#{type}</if>
+	</select>
+
+	<select id="getId" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	  select max(t.id) from wk_type t  where 1=1
+	</select>
+		
+	<select id="getTimePram" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select t.level,t.wk_standard,t.wk_plan,t.wk_timeout,s.sort from wk_order_type t,wk_level s   where t.level=s.code  and t.wk_type=#{wkCode} and t.status=1
+	</select>
+
+
+<insert id="insert_column" parameterType="java.util.ArrayList">
+	   insert into wo_column
+	   (
+	    create_by,
+	    create_time,
+	    update_by,
+	    update_time,
+        current,
+        column_code,
+        column_name,
+        control_type
+	   )
+	   values
+	    <foreach collection="list" item="obj" index="index" separator="," > 
+	   (
+	     'system',
+	     now(),
+	     'system',
+	     now(),
+         #{obj.current,jdbcType=VARCHAR},
+         #{obj.column_code,jdbcType=VARCHAR},
+         #{obj.column_name,jdbcType=VARCHAR},
+         #{obj.control_type,jdbcType=VARCHAR}
+	   )
+	    </foreach> 
+	 </insert>
+	 		
+</mapper>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.tools.whsTempData.dao.WhsTempDataMapper" >
+    <select id="queryWhsTempData" resultType= "java.util.Map" parameterType= "com.bt.common.controller.param.Parameter" >
+		SELECT
+		a.batch_id AS id,
+		DATE_FORMAT(
+		a.create_time,
+		'%Y-%m-%d %H:%i:%S'
+		) AS create_time,
+		b. NAME AS create_by,
+		DATE_FORMAT(
+		a.update_time,
+		'%Y-%m-%d %H:%i:%S'
+		) AS update_time,
+		c. NAME AS update_by,
+		a.batch_id AS batch_id,
+		a.carton_no,
+		a.location,
+		a.sku,
+		a.qty,
+		a.status
+		FROM
+		(
+		SELECT
+		batch_id AS id,
+		DATE_FORMAT(
+		create_time,
+		'%Y-%m-%d %H:%i:%S'
+		) AS create_time,
+		create_by AS create_by,
+		DATE_FORMAT(
+		update_time,
+		'%Y-%m-%d %H:%i:%S'
+		) AS update_time,
+		update_by AS update_by,
+		batch_id AS batch_id,
+		carton_no,
+		location,
+		sku,
+		qty,
+		STATUS
+		FROM
+		tls_whs_temp_data
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+
+			<if test="param.createTimeStart != null and param.createTimeStart != ''  and param.createTimeStart != 'undefined' and param.createTimeStart != 'NaN'">
+				and
+				<![CDATA[  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') >=  DATE_FORMAT(#{param.createTimeStart},'%Y-%m-%d %H:%i:%S') ]]>
+			</if>
+			<if test="param.createTimeEnd != null and param.createTimeEnd != ''  and param.createTimeEnd != 'undefined'  and param.createTimeEnd != 'NaN'">
+				and
+				<![CDATA[  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') <=   DATE_FORMAT(#{param.createTimeEnd},'%Y-%m-%d %H:%i:%S') ]]>
+			</if>
+
+			<if test="param.cartonNo != null and param.cartonNo != '' and param.cartonNo != '-1'  and param.cartonNo != 'undefined'  and param.cartonNo != 'NaN'">
+				and carton_no LIKE CONCAT(CONCAT('%', #{param.cartonNo}), '%')
+			</if>
+			<if test="param.location != null and param.location != '' and param.location != '-1'  and param.location != 'undefined'  and param.location != 'NaN'">
+				and location LIKE CONCAT(CONCAT('%', #{param.location}), '%')
+			</if>
+			<if test="param.sku != null and param.sku != '' and param.sku != '-1'  and param.sku != 'undefined'  and param.sku != 'NaN'">
+				and sku LIKE CONCAT(CONCAT('%', #{param.sku}), '%')
+			</if>
+			<if test="param.status != null and param.status != '' and param.status != '-1'  and param.status != 'undefined'  and param.status != 'NaN'">
+				and status LIKE CONCAT(CONCAT('%', #{param.status}), '%')
+			</if>
+			<if test="param.batchId != null and param.batchId != '' and param.batchId != '-1'  and param.batchId != 'undefined'  and param.batchId != 'NaN'">
+				and batch_id LIKE CONCAT(CONCAT('%', #{param.batchId}), '%')
+			</if>
+		</trim>
+		<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+
+		<if test="param.sortColumn == null or param.sortColumn == ''">
+			ORDER BY create_time desc
+		</if>
+		LIMIT ${firstResult}, ${maxResult}
+		) a
+		LEFT JOIN (
+		SELECT
+		NAME,
+		username
+		FROM
+		s_employee
+		) b ON a.create_by = b.username
+		LEFT JOIN (
+		SELECT
+		NAME,
+		username
+		FROM
+		s_employee
+		) c ON a.update_by = c.username
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.createByName != null and param.createByName != '' and param.createByName != '-1'  and param.createByName != 'undefined'  and param.createByName != 'NaN'">
+				and b.name LIKE CONCAT(CONCAT('%', #{param.createByName}), '%')
+			</if>
+		</trim>
+	</select>
+
+
+	<select id="countWhsTempData" resultType= "java.lang.Integer" parameterType= "com.bt.common.controller.param.Parameter" >
+		SELECT
+		count(1)
+		FROM
+		tls_whs_temp_data a
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+
+			<if test="param.createTimeStart != null and param.createTimeStart != ''  and param.createTimeStart != 'undefined' and param.createTimeStart != 'NaN'">
+				and
+				<![CDATA[  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S') >=  DATE_FORMAT(#{param.createTimeStart},'%Y-%m-%d %H:%i:%S') ]]>
+			</if>
+			<if test="param.createTimeEnd != null and param.createTimeEnd != ''  and param.createTimeEnd != 'undefined'  and param.createTimeEnd != 'NaN'">
+				and
+				<![CDATA[  DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%S') <=   DATE_FORMAT(#{param.createTimeEnd},'%Y-%m-%d %H:%i:%S') ]]>
+			</if>
+
+			<if test="param.cartonNo != null and param.cartonNo != '' and param.cartonNo != '-1'  and param.cartonNo != 'undefined'  and param.cartonNo != 'NaN'">
+				and a.carton_no LIKE CONCAT(CONCAT('%', #{param.cartonNo}), '%')
+			</if>
+			<if test="param.location != null and param.location != '' and param.location != '-1'  and param.location != 'undefined'  and param.location != 'NaN'">
+				and a.location LIKE CONCAT(CONCAT('%', #{param.location}), '%')
+			</if>
+			<if test="param.sku != null and param.sku != '' and param.sku != '-1'  and param.sku != 'undefined'  and param.sku != 'NaN'">
+				and a.sku LIKE CONCAT(CONCAT('%', #{param.sku}), '%')
+			</if>
+			<if test="param.status != null and param.status != '' and param.status != '-1'  and param.status != 'undefined'  and param.status != 'NaN'">
+				and a.status LIKE CONCAT(CONCAT('%', #{param.status}), '%')
+			</if>
+			<if test="param.batchId != null and param.batchId != '' and param.batchId != '-1'  and param.batchId != 'undefined'  and param.batchId != 'NaN'">
+				and a.batch_id LIKE CONCAT(CONCAT('%', #{param.batchId}), '%')
+			</if>
+			<if test="param.createByName != null and param.createByName != '' and param.createByName != '-1'  and param.createByName != 'undefined'  and param.createByName != 'NaN'">
+				and a.create_by exists (
+				select username from  s_employee where name  LIKE CONCAT(CONCAT('%', #{param.createByName}), '%')
+				)
+
+			</if>
+		</trim>
+
+
+	</select>
+	
+	<delete id="deleteBybatchId" parameterType="java.lang.String">
+		delete from tls_whs_temp_data where batch_id=#{batchId}
+	</delete>
+	
+	
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO 
+			tls_whs_temp_data (
+				id,
+				create_time,
+				create_by,
+				update_time,
+				update_by,
+				batch_id,
+				carton_no,
+				location,
+				sku,
+				qty,
+				status
+			)
+		VALUES 
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.updateBy, jdbcType=VARCHAR},
+				#{obj.batchId, jdbcType=VARCHAR},
+				#{obj.cartonNo, jdbcType=VARCHAR},
+				#{obj.location, jdbcType=VARCHAR},
+				#{obj.sku, jdbcType=INTEGER},
+				#{obj.qty, jdbcType=VARCHAR},
+				#{obj.status, jdbcType=INTEGER},
+			</trim>
+		</foreach>
+	</insert>
+	
+	<select id="selectBybatchId" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(1) from tls_whs_temp_data where batch_id=#{batchId}
+	</select>
+	
+	
+	
+	 <select id="exportWhsTempData" resultType= "java.util.Map" parameterType= "com.bt.common.controller.param.Parameter" >
+		
+		SELECT
+			batch_id AS 导入批次号,
+			carton_no 箱号,
+			location 库位,
+			sku SKU,
+			FLOOR(qty) 数量,
+			status 状态
+		FROM
+		tls_whs_temp_data
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+
+			<if test="param.createTimeStart != null and param.createTimeStart != ''  and param.createTimeStart != 'undefined' and param.createTimeStart != 'NaN'">
+				and
+				<![CDATA[  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') >=  DATE_FORMAT(#{param.createTimeStart},'%Y-%m-%d %H:%i:%S') ]]>
+			</if>
+			<if test="param.createTimeEnd != null and param.createTimeEnd != ''  and param.createTimeEnd != 'undefined'  and param.createTimeEnd != 'NaN'">
+				and
+				<![CDATA[  DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') <=   DATE_FORMAT(#{param.createTimeEnd},'%Y-%m-%d %H:%i:%S') ]]>
+			</if>
+
+			<if test="param.cartonNo != null and param.cartonNo != '' and param.cartonNo != '-1'  and param.cartonNo != 'undefined'  and param.cartonNo != 'NaN'">
+				and carton_no LIKE CONCAT(CONCAT('%', #{param.cartonNo}), '%')
+			</if>
+			<if test="param.location != null and param.location != '' and param.location != '-1'  and param.location != 'undefined'  and param.location != 'NaN'">
+				and location LIKE CONCAT(CONCAT('%', #{param.location}), '%')
+			</if>
+			<if test="param.sku != null and param.sku != '' and param.sku != '-1'  and param.sku != 'undefined'  and param.sku != 'NaN'">
+				and sku LIKE CONCAT(CONCAT('%', #{param.sku}), '%')
+			</if>
+			<if test="param.status != null and param.status != '' and param.status != '-1'  and param.status != 'undefined'  and param.status != 'NaN'">
+				and status LIKE CONCAT(CONCAT('%', #{param.status}), '%')
+			</if>
+			<if test="param.batchId != null and param.batchId != '' and param.batchId != '-1'  and param.batchId != 'undefined'  and param.batchId != 'NaN'">
+				and batch_id LIKE CONCAT(CONCAT('%', #{param.batchId}), '%')
+			</if>
+		</trim>
+		<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn} ${param.sort}
+		</if>
+		<if test="param.sortColumn == null or param.sortColumn == ''">
+			ORDER BY create_time desc
+		</if>
+	</select>
+	
+	
+</mapper>

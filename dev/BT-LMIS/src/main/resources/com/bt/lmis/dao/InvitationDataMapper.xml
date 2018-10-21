@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.InvitationMapper" > 
+<!-- Result Map-->
+	<select id="findCB" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select
+		      id,
+			  create_time,
+			  create_user,
+			  update_time,
+			  update_user,
+			  store_code,
+			  store_name,
+			  cost_center,
+			  use_time,
+			  sku_code,
+			  sku_name,
+			  use_amount,
+			  use_amountunit,
+			  settle_flag	
+		from tb_invitation_realuseanmount_data t
+		where 1=1	
+		
+		<if test="storeName != null  and storeName != '' ">
+			and store_name like concat('%',#{storeName},'%')
+		</if>	
+		<if test="hcNo != null  and hcNo != '' ">
+			and sku_code like concat('%',#{hcNo},'%')
+		</if>				
+		<if test="firstResult != null  and firstResult != '' ">
+			LIMIT #{firstResult}, #{maxResult}
+		</if>
+
+	</select>
+	<select id="countCBRecords" resultType="java.lang.Integer" parameterType="com.bt.lmis.controller.form.InvitationQueryParam">
+		select
+		count(1) cnt
+		from tb_invitation_realuseanmount_data t
+		where 1=1
+		<if test="storeName != null  and storeName != '' ">
+			and store_name like concat('%',#{storeName},'%')
+		</if>	
+		<if test="hcNo != null  and hcNo != '' ">
+			and sku_code like concat('%',#{hcNo},'%')
+		</if>			
+	</select>
+</mapper>   

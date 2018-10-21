@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.AllVolumeCalculationMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.AllVolumeCalculation" >
+	<result column="savc_id" property="savc_id"/>
+	<result column="savc_cb_id" property="savc_cb_id"/>
+	<result column="savc_section" property="savc_section"/>
+	<result column="savc_price" property="savc_price"/>
+	<result column="savc_price_unit" property="savc_price_unit"/>
+	<result column="savc_status" property="savc_status"/>
+</resultMap>
+       
+<!-- ssc_all_volume_calculation table all fields -->
+<sql id="Base_Column_List" >
+	 savc_id,savc_cb_id,savc_section,savc_price,savc_price_unit,savc_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="savc_id != null" >
+	    and savc_id =  #{savc_id}
+	</if>
+	<if test="savc_cb_id != null" >
+	    and savc_cb_id =  #{savc_cb_id}
+	</if>
+	 	<if test="savc_section != null and savc_section != ''" >
+	    and savc_section =  #{savc_section}
+	</if>
+	 	<if test="savc_price != null and savc_price != ''" >
+	    and savc_price =  #{savc_price}
+	</if>
+	<if test="savc_price_unit != null" >
+	    and savc_price_unit =  #{savc_price_unit}
+	</if>
+	<if test="savc_status != null" >
+	    and savc_status =  #{savc_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入1 -->
+<insert id="insert" parameterType="com.bt.lmis.model.AllVolumeCalculation" >
+  insert into ssc_all_volume_calculation(savc_id,savc_cb_id,savc_section,savc_price,savc_price_unit,savc_status)
+ values(#{savc_id},#{savc_cb_id},#{savc_section},#{savc_price},#{savc_price_unit},#{savc_status})
+</insert>
+
+<!-- 修改1-->  
+ <update id="update" parameterType="com.bt.lmis.model.AllVolumeCalculation" >
+  update ssc_all_volume_calculation set savc_cb_id=#{savc_cb_id},savc_section=#{savc_section},savc_price=#{savc_price},savc_price_unit=#{savc_price_unit},savc_status=#{savc_status} where savc_id=#{savc_id}
+ </update>
+ 
+ <!-- 选择修改1-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.AllVolumeCalculation" >
+	update ssc_all_volume_calculation set 
+	<trim  suffixOverrides="," >
+	<if test="savc_cb_id != null  ">
+		savc_cb_id=#{savc_cb_id},
+	</if>
+	<if test="savc_section != null  and savc_section != '' ">
+		savc_section=#{savc_section},
+	</if>
+	<if test="savc_price != null  and savc_price != '' ">
+		savc_price=#{savc_price},
+	</if>
+	<if test="savc_price_unit != null  ">
+		savc_price_unit=#{savc_price_unit},
+	</if>
+	<if test="savc_status != null  ">
+		savc_status=#{savc_status},
+	</if>
+	</trim> where savc_id=#{savc_id}
+</update>
+
+<!-- 删除1 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_all_volume_calculation where savc_id = #{savc_id}
+</update>
+<!-- 批量删除1 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_all_volume_calculation where savc_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找1 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_all_volume_calculation where savc_id = #{savc_id}
+</select>
+  	
+<!-- 1 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AllVolumeCalculationQueryParam">
+	select count(1) from ssc_all_volume_calculation 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的1集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AllVolumeCalculationQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_all_volume_calculation 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 1总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AllVolumeCalculationQueryParam">
+	select count(1) from ssc_all_volume_calculation 
+	<include refid="where_Clause"/>
+</select>
+  	
+
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_all_volume_calculation 
+	where savc_cb_id=#{cbid}
+</select>
+  	
+</mapper>   

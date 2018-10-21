@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.sys.errLog.dao.SysErrLogMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.sys.errLog.model.SysErrLog" id="SysErrLogMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="by_function" property="byFunction" jdbcType="VARCHAR" />
+		<result column="err_data" property="errData" jdbcType="VARCHAR" />
+		<result column="err_log" property="errLog" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		by_function,
+		err_data,
+		err_log
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			by_function,
+			err_data,
+			err_log
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.sys.errLog.model.SysErrLog">
+		INSERT INTO sys_err_log
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{byFunction, jdbcType=VARCHAR},
+			#{errData, jdbcType=VARCHAR},
+			#{errLog, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO sys_err_log
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.byFunction, jdbcType=VARCHAR},
+				#{obj.errData, jdbcType=VARCHAR},
+				#{obj.errLog, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.sys.errLog.model.SysErrLog" resultMap="SysErrLogMap">
+		SELECT <include refid="Base_Column_List" /> FROM sys_err_log
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="byFunction!=null and byFunction!=''">
+	            AND by_function = #{byFunction, jdbcType=VARCHAR}
+	        </if>
+	        <if test="errData!=null and errData!=''">
+	            AND err_data = #{errData, jdbcType=VARCHAR}
+	        </if>
+	        <if test="errLog!=null and errLog!=''">
+	            AND err_log = #{errLog, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.sys.errLog.model.SysErrLog">
+		UPDATE sys_err_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="byFunction!=null and byFunction!=''">
+	            by_function = #{byFunction, jdbcType=VARCHAR},
+	        </if>
+	        <if test="errData!=null and errData!=''">
+	            err_data = #{errData, jdbcType=VARCHAR},
+	        </if>
+	        <if test="errLog!=null and errLog!=''">
+	            err_log = #{errLog, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.sys.errLog.model.SysErrLog">
+		UPDATE sys_err_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	by_function = #{byFunction, jdbcType=VARCHAR},
+        	err_data = #{errData, jdbcType=VARCHAR},
+        	err_log = #{errLog, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.sys.errLog.model.SysErrLog">
+		UPDATE sys_err_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.sys.errLog.model.SysErrLog">
+		UPDATE sys_err_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.sys.errLog.model.SysErrLog">
+		DELETE FROM sys_err_log
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+</mapper>

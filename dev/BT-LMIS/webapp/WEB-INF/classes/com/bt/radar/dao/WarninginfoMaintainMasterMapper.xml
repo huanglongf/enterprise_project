@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.WarninginfoMaintainMasterMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.radar.model.WarninginfoMaintainMaster" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="warningtype_code" property="warningtype_code"/>
+	<result column="warningtype_name" property="warningtype_name"/>
+	<result column="warning_category" property="warning_category"/>
+	<result column="timeout_mode" property="timeout_mode"/>
+	<result column="initial_level" property="initial_level"/>
+	<result column="remark" property="remark"/>
+	<result column="dl_flag" property="dl_flag"/>
+</resultMap>
+       
+<!-- er_warninginfo_maintain_master table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,warningtype_code,warningtype_name,warning_category,timeout_mode,initial_level,remark,dl_flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="warningtype_code != null and warningtype_code != ''" >
+	    and warningtype_code =  #{warningtype_code}
+	</if>
+	 	<if test="warningtype_name != null and warningtype_name != ''" >
+	    and warningtype_name =  #{warningtype_name}
+	</if>
+	 	<if test="warning_category != null and warning_category != ''" >
+	    and warning_category =  #{warning_category}
+	</if>
+	 	<if test="timeout_mode != null and timeout_mode != ''" >
+	    and timeout_mode =  #{timeout_mode}
+	</if>
+	<if test="initial_level != null" >
+	    and initial_level =  #{initial_level}
+	</if>
+	 	<if test="remark != null and remark != ''" >
+	    and remark =  #{remark}
+	</if>
+	<if test="dl_flag != null" >
+	    and dl_flag =  #{dl_flag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入快递预警信息配置主表 -->
+<insert id="insert" parameterType="com.bt.radar.model.WarninginfoMaintainMaster" >
+  insert into er_warninginfo_maintain_master(id,create_time,create_user,update_time,update_user,warningtype_code,warningtype_name,warning_category,timeout_mode,initial_level,remark,dl_flag)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{warningtype_code},#{warningtype_name},#{warning_category},#{timeout_mode},#{initial_level},#{remark},#{dl_flag})
+</insert>
+
+<!-- 修改快递预警信息配置主表-->  
+ <update id="update" parameterType="com.bt.radar.model.WarninginfoMaintainMaster" >
+  update er_warninginfo_maintain_master set update_time=#{update_time},update_user=#{update_user},warningtype_code=#{warningtype_code},warningtype_name=#{warningtype_name},warning_category=#{warning_category},timeout_mode=#{timeout_mode},initial_level=#{initial_level},remark=#{remark},dl_flag=#{dl_flag} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改快递预警信息配置主表-->
+<update id="updateBySelective" parameterType="com.bt.radar.model.WarninginfoMaintainMaster" >
+	update er_warninginfo_maintain_master set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="warningtype_code != null  and warningtype_code != '' ">
+		warningtype_code=#{warningtype_code},
+	</if>
+	<if test="warningtype_name != null  and warningtype_name != '' ">
+		warningtype_name=#{warningtype_name},
+	</if>
+	<if test="warning_category != null  and warning_category != '' ">
+		warning_category=#{warning_category},
+	</if>
+	<if test="timeout_mode != null  and timeout_mode != '' ">
+		timeout_mode=#{timeout_mode},
+	</if>
+	<if test="initial_level != null  ">
+		initial_level=#{initial_level},
+	</if>
+	<if test="remark != null  and remark != '' ">
+		remark=#{remark},
+	</if>
+	<if test="dl_flag != null  ">
+		dl_flag=#{dl_flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除快递预警信息配置主表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from er_warninginfo_maintain_master where id = #{id}
+</update>
+<!-- 批量删除快递预警信息配置主表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from er_warninginfo_maintain_master where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找快递预警信息配置主表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_warninginfo_maintain_master where id = #{id}
+</select>
+  	
+<!-- 快递预警信息配置主表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.WarninginfoMaintainMasterQueryParam">
+	select count(1) from er_warninginfo_maintain_master 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的快递预警信息配置主表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.WarninginfoMaintainMasterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_warninginfo_maintain_master 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 快递预警信息配置主表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.WarninginfoMaintainMasterQueryParam">
+	select count(1) from er_warninginfo_maintain_master 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的快递预警信息配置主表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.WarninginfoMaintainMasterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_warninginfo_maintain_master 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+ <select id="findAllData" resultType="java.util.HashMap"  parameterType="com.bt.radar.controller.form.WarninginfoMaintainMasterQueryParam">
+	select a.*,case a.warning_category when 0 then '事件预警' when 1 then '超时预警'  end as warning_category_name from er_warninginfo_maintain_master a where 1=1 and dl_flag=1
+              <if test="warning_category != null and warning_category != ''" >
+	            and warning_category =  #{warning_category}
+	          </if>
+	           <if test="initial_level != null and initial_level != ''" >
+	            and initial_level =  #{initial_level}
+	          </if>
+	          <if test="warningtype_name != null and warningtype_name != ''" >
+	            and warningtype_name =  #{warningtype_name}
+	          </if>
+	          <if test="warningtype_code != null and warningtype_code != ''" >
+	            and warningtype_code =  #{warningtype_code}
+	          </if>
+	           <if test="id != null and id != ''" >
+	            and id =  #{id}
+	          </if>
+	           <if test="maxResult != null and maxResult != ''" >
+	            LIMIT #{firstResult}, #{maxResult}
+	          </if>
+	          
+	         
+	          
+</select>
+  	
+  <select id="selectCount" resultType="java.lang.Integer"  parameterType="com.bt.radar.controller.form.WarninginfoMaintainMasterQueryParam">
+	select count(1) from er_warninginfo_maintain_master where 1=1 and dl_flag=1
+              <if test="warning_category != null and warning_category != ''" >
+	            and warning_category =  #{warning_category}
+	          </if>
+	           <if test="initial_level != null and initial_level != ''" >
+	            and initial_level =  #{initial_level}
+	          </if>
+	          <if test="warningtype_name != null and warningtype_name != ''" >
+	            and warningtype_name =  #{warningtype_name}
+	          </if>      
+</select> 	
+  	
+  	<select id="selectOption" resultType="java.util.HashMap"  parameterType="com.bt.radar.controller.form.WarninginfoMaintainMasterQueryParam">
+  	select distinct warningtype_code,warningtype_name from er_warninginfo_maintain_master where 1=1 and dl_flag=1  
+  	</select>
+  	
+  	<select id="findRecords" resultType="com.bt.radar.model.WarninginfoMaintainMaster" parameterType="com.bt.radar.model.WarninginfoMaintainMaster">
+  		select
+  			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			warningtype_code,
+			warningtype_name,
+			warning_category,
+			timeout_mode,
+			initial_level,
+			remark,
+			dl_flag
+  		from
+  			er_warninginfo_maintain_master
+  		where 
+  			1 = 1 
+  		and 
+  			dl_flag = 1
+  		<if test="warningtype_code != null and warningtype_code != ''">
+			AND warningtype_code = #{warningtype_code }
+		</if>
+		<if test="warningtype_name != null and warningtype_name !=''">
+			AND warningtype_name = #{warningtype_name }
+		</if>
+		<if test="warning_category != null and warning_category !=''">
+			AND warning_category = #{warning_category }
+		</if>
+		<if test="timeout_mode != null and timeout_mode !=''">
+			AND timeout_mode = #{timeout_mode }
+		</if>
+		<if test="initial_level != null and initial_level !=''">
+			AND initial_level = #{initial_level }
+		</if>
+  	</select>
+  	
+  	<select id="selectWarn_type" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    select a.id, a.warningtype_code,a.warningtype_name ,a.initial_level from er_warninginfo_maintain_master  a
+    where 1=1
+  	<if test="warning_category != null and warning_category !=''">
+			AND warning_category = #{warning_category }
+		</if>
+    </select>
+    	<select id="checkCode_name" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    select * from er_warninginfo_maintain_master  a
+    where warningtype_code=#{warningtype_code } and dl_flag=1 or  warningtype_name=#{warningtype_code }  and dl_flag=1 
+    </select>
+<!-- 检测  er_warninginfo_maintain_master 数据是否被绑定-->
+ <select id='checkDel' parameterType='java.lang.String' resultType="java.lang.Integer">
+    SELECT 
+    COUNT(1)
+FROM
+    er_expressaging_detail
+WHERE
+    warningtype_code = (SELECT 
+            warningtype_code
+        FROM
+            er_warninginfo_maintain_master
+        WHERE
+            id = #{id})  and  dl_flag=1;
+    </select>
+</mapper>   

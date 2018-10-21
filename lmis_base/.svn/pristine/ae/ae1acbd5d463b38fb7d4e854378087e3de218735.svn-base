@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.jbasis.transportVendor.dao.JbasisTransportVendorMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.transportVendor.model.JbasisTransportVendor" id="JbasisTransportVendorMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="transport_code" property="transportCode" jdbcType="VARCHAR" />
+		<result column="transport_name" property="transportName" jdbcType="VARCHAR" />
+		<result column="contact" property="contact" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="transport_type" property="transportType" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.transportVendor.model.ViewJbasisTransportVendor" id="ViewJbasisTransportVendorMap">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="transport_code" property="transportCode" jdbcType="VARCHAR" />
+		<result column="transport_name" property="transportName" jdbcType="VARCHAR" />
+		<result column="contact" property="contact" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="transport_type" property="transportType" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		transport_code,
+		transport_name,
+		contact,
+		phone,
+		transport_type
+	</sql>
+	<sql id="ViewJbasisTransportVendor_Column_List">
+		id,
+		is_deleted,
+		version,
+		transport_code,
+		transport_name,
+		contact,
+		phone,
+		transport_type,
+		update_time
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			transport_code,
+			transport_name,
+			contact,
+			phone,
+			transport_type
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.jbasis.transportVendor.model.JbasisTransportVendor">
+		INSERT INTO jbasis_transport_vendor
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{transportCode, jdbcType=VARCHAR},
+			#{transportName, jdbcType=VARCHAR},
+			#{contact, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{transportType, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO jbasis_transport_vendor
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.transportCode, jdbcType=VARCHAR},
+				#{obj.transportName, jdbcType=VARCHAR},
+				#{obj.contact, jdbcType=VARCHAR},
+				#{obj.phone, jdbcType=VARCHAR},
+				#{obj.transportType, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.jbasis.transportVendor.model.JbasisTransportVendor" resultMap="JbasisTransportVendorMap">
+		SELECT <include refid="Base_Column_List" /> FROM jbasis_transport_vendor
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="transportCode!=null and transportCode!=''">
+	            AND transport_code = #{transportCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="transportName!=null and transportName!=''">
+	            AND transport_name = #{transportName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            AND contact = #{contact, jdbcType=VARCHAR}
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            AND phone = #{phone, jdbcType=VARCHAR}
+	        </if>
+	        <if test="transportType!=null and transportType!=''">
+	            AND transport_type = #{transportType, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<select id="retrieveViewJbasisTransportVendor" parameterType="com.lmis.jbasis.transportVendor.model.ViewJbasisTransportVendor" resultMap="ViewJbasisTransportVendorMap">
+		SELECT <include refid="ViewJbasisTransportVendor_Column_List" /> FROM view_jbasis_transport_vendor
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="transportCode!=null and transportCode!=''">
+	            AND transport_code = #{transportCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="transportName!=null and transportName!=''">
+	            AND transport_name = #{transportName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            AND contact = #{contact, jdbcType=VARCHAR}
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            AND phone = #{phone, jdbcType=VARCHAR}
+	        </if>
+	        <if test="transportType!=null and transportType!=''">
+	            AND transport_type = #{transportType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.jbasis.transportVendor.model.JbasisTransportVendor">
+		UPDATE jbasis_transport_vendor
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="transportCode!=null and transportCode!=''">
+	            transport_code = #{transportCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="transportName!=null and transportName!=''">
+	            transport_name = #{transportName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            contact = #{contact, jdbcType=VARCHAR},
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            phone = #{phone, jdbcType=VARCHAR},
+	        </if>
+	        <if test="transportType!=null and transportType!=''">
+	            transport_type = #{transportType, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.jbasis.transportVendor.model.JbasisTransportVendor">
+		UPDATE jbasis_transport_vendor
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	transport_code = #{transportCode, jdbcType=VARCHAR},
+        	transport_name = #{transportName, jdbcType=VARCHAR},
+        	contact = #{contact, jdbcType=VARCHAR},
+        	phone = #{phone, jdbcType=VARCHAR},
+        	transport_type = #{transportType, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.jbasis.transportVendor.model.JbasisTransportVendor">
+		UPDATE jbasis_transport_vendor
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.jbasis.transportVendor.model.JbasisTransportVendor">
+		UPDATE jbasis_transport_vendor
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.jbasis.transportVendor.model.JbasisTransportVendor">
+		DELETE FROM jbasis_transport_vendor
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="id!=null and id!=''">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+	
+	<select id="findVendorType" resultType="java.util.HashMap" parameterType="String">
+	select product_type_code as code,product_type_name as name from jbasis_transport_product_type where vendor_code = #{code}
+	</select>
+	<select id="checkType" resultType="String" parameterType="String">
+	SELECT constant_name FROM setup_constant where group_code="wlslx"	and constant_code=#{transportType}
+	</select>
+</mapper>

@@ -1,0 +1,13 @@
+package com.bt.lmis.balance.model;
+
+/**
+* @ClassName: PackageCharageEstimate
+* @Description: TODO(PackageCharageEstimate)
+* @author Yuriy.Jiang
+* @date 2016年6月22日 上午10:19:25
+*
+*/
+public class PackageCharageEstimate {
+	
+		private String id;			//	private java.util.Date create_time;			//	private String create_user;			//	private java.util.Date update_time;			//	private String update_user;			//	private String batch_number;			//预估批次号	private String cbid;			//合同ID	private String client_code;			//客户code	private String client_name;			//	private String dbf_qty;			//打包费数量	private Integer bjf_qty;			//保价费数量	private String bjf_price;			//保价费价格	private String total_price;			//总费用	private String dbf_price;			//打包费	public String getId() {	    return this.id;	}	public void setId(String id) {	    this.id=id;	}	public java.util.Date getCreate_time() {	    return this.create_time;	}	public void setCreate_time(java.util.Date create_time) {	    this.create_time=create_time;	}	public String getCreate_user() {	    return this.create_user;	}	public void setCreate_user(String create_user) {	    this.create_user=create_user;	}	public java.util.Date getUpdate_time() {	    return this.update_time;	}	public void setUpdate_time(java.util.Date update_time) {	    this.update_time=update_time;	}	public String getUpdate_user() {	    return this.update_user;	}	public void setUpdate_user(String update_user) {	    this.update_user=update_user;	}	public String getBatch_number() {	    return this.batch_number;	}	public void setBatch_number(String batch_number) {	    this.batch_number=batch_number;	}	public String getCbid() {	    return this.cbid;	}	public void setCbid(String cbid) {	    this.cbid=cbid;	}	public String getClient_code() {	    return this.client_code;	}	public void setClient_code(String client_code) {	    this.client_code=client_code;	}	public String getClient_name() {	    return this.client_name;	}	public void setClient_name(String client_name) {	    this.client_name=client_name;	}	public String getDbf_qty() {	    return this.dbf_qty;	}	public void setDbf_qty(String dbf_qty) {	    this.dbf_qty=dbf_qty;	}	public Integer getBjf_qty() {	    return this.bjf_qty;	}	public void setBjf_qty(Integer bjf_qty) {	    this.bjf_qty=bjf_qty;	}	public String getBjf_price() {	    return this.bjf_price;	}	public void setBjf_price(String bjf_price) {	    this.bjf_price=bjf_price;	}	public String getTotal_price() {	    return this.total_price;	}	public void setTotal_price(String total_price) {	    this.total_price=total_price;	}	public String getDbf_price() {	    return this.dbf_price;	}	public void setDbf_price(String dbf_price) {	    this.dbf_price=dbf_price;	}
+}

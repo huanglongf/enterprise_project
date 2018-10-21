@@ -1,0 +1,32 @@
+package com.bt.lmis.model;
+
+import java.util.List;
+
+/**
+* @ClassName: CollectionMaster
+* @Description: TODO(CollectionMaster)
+* @author Yuriy.Jiang
+* @date 2016年6月22日 上午10:19:25
+*
+*/
+public class CollectionMaster {
+	
+		private Integer id;			//	private java.util.Date create_time;			//创建时间	private String create_user;			//创建人	private java.util.Date update_time;			//修改时间	private String update_user;			//修改人	private String cost_center;			//成本中心	private String store_code;			//店铺	private String warehouse_code;			//仓库	private java.math.BigDecimal insurance_fee;			//保价费 sum保价费	private java.math.BigDecimal service_fee;			//服务费 没有	private java.math.BigDecimal total;			//结算汇总表 折后运费sum	private Integer master_id;			//
+	private List<CollectionDetail> details;//从表
+		public List<CollectionDetail> getDetails() {
+		return details;
+	}
+	public void setDetails(List<CollectionDetail> details) {
+		this.details = details;
+	}
+	public Integer getId() {	    return this.id;	}	public void setId(Integer id) {	    this.id=id;	}	public java.util.Date getCreate_time() {	    return this.create_time;	}	public void setCreate_time(java.util.Date create_time) {	    this.create_time=create_time;	}	public String getCreate_user() {	    return this.create_user;	}	public void setCreate_user(String create_user) {	    this.create_user=create_user;	}	public java.util.Date getUpdate_time() {	    return this.update_time;	}	public void setUpdate_time(java.util.Date update_time) {	    this.update_time=update_time;	}	public String getUpdate_user() {	    return this.update_user;	}	public void setUpdate_user(String update_user) {	    this.update_user=update_user;	}	public String getCost_center() {	    return this.cost_center;	}	public void setCost_center(String cost_center) {	    this.cost_center=cost_center;	}	public String getStore_code() {	    return this.store_code;	}	public void setStore_code(String store_code) {	    this.store_code=store_code;	}	public String getWarehouse_code() {	    return this.warehouse_code;	}	public void setWarehouse_code(String warehouse_code) {	    this.warehouse_code=warehouse_code;	}	public java.math.BigDecimal getInsurance_fee() {	    return this.insurance_fee;	}	public void setInsurance_fee(java.math.BigDecimal insurance_fee) {	    this.insurance_fee=insurance_fee;	}	public java.math.BigDecimal getService_fee() {	    return this.service_fee;	}	public void setService_fee(java.math.BigDecimal service_fee) {	    this.service_fee=service_fee;	}	public java.math.BigDecimal getTotal() {	    return this.total;	}	public void setTotal(java.math.BigDecimal total) {	    this.total=total;	}	public Integer getMaster_id() {	    return this.master_id;	}	public void setMaster_id(Integer master_id) {	    this.master_id=master_id;	}
+	@Override
+	public String toString() {
+		return "CollectionMaster [id=" + id + ", create_time=" + create_time + ", create_user=" + create_user
+				+ ", update_time=" + update_time + ", update_user=" + update_user + ", cost_center=" + cost_center
+				+ ", store_code=" + store_code + ", warehouse_code=" + warehouse_code + ", insurance_fee="
+				+ insurance_fee + ", service_fee=" + service_fee + ", total=" + total + ", master_id=" + master_id
+				+ ", details=" + details + "]";
+	}
+	
+}

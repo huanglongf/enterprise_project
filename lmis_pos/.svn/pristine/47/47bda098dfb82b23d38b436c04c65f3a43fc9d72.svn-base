@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.common.dao.ServiceDataFileLogMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.common.model.ServiceDataFileLog" id="ServiceDataFileLogMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="file_path" property="filePath" jdbcType="VARCHAR" />
+		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="data_count" property="dataCount" jdbcType="BIGINT" />
+		<result column="ops_count" property="opsCount" jdbcType="BIGINT" />
+		<result column="ops_status" property="opsStatus" jdbcType="INTEGER" />
+		<result column="ops_error_info" property="opsErrorInfo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		update_time,
+		update_by,
+		create_time,
+		create_by,
+		is_disabled,
+		is_deleted,
+		version,
+		pwr_org,
+		file_path,
+		file_name,
+		data_count,
+		ops_count,
+		ops_status,
+		ops_error_info
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			update_time,
+			update_by,
+			create_time,
+			create_by,
+			is_disabled,
+			is_deleted,
+			version,
+			pwr_org,
+			file_path,
+			file_name,
+			data_count,
+			ops_count,
+			ops_status,
+			ops_error_info
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.pos.common.model.ServiceDataFileLog">
+		INSERT INTO pos_data_file_log
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != ''">
+				#{id, jdbcType=VARCHAR},
+			</if>
+			<if test="id == null or id == ''">
+				UUID(),
+			</if>
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{filePath, jdbcType=VARCHAR},
+			#{fileName, jdbcType=VARCHAR},
+			#{dataCount, jdbcType=BIGINT},
+			#{opsCount, jdbcType=BIGINT},
+			#{opsStatus, jdbcType=INTEGER},
+			#{opsErrorInfo, jdbcType=LONGVARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_data_file_log
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				<if test="obj.id != null and obj.id != ''">
+					#{obj.id, jdbcType=VARCHAR},
+				</if>
+				<if test="obj.id == null or obj.id == ''">
+					UUID(),
+				</if>
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.filePath, jdbcType=VARCHAR},
+				#{obj.fileName, jdbcType=VARCHAR},
+				#{obj.dataCount, jdbcType=BIGINT},
+				#{obj.opsCount, jdbcType=BIGINT},
+				#{obj.opsStatus, jdbcType=INTEGER},
+				#{obj.opsErrorInfo, jdbcType=LONGVARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.pos.common.model.ServiceDataFileLog" resultMap="ServiceDataFileLogMap">
+		SELECT <include refid="Base_Column_List" /> FROM pos_data_file_log
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="filePath!=null and filePath!=''">
+	            AND file_path = #{filePath, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileName!=null and fileName!=''">
+	            AND file_name = #{fileName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="dataCount!=null">
+	            AND data_count = #{dataCount, jdbcType=BIGINT}
+	        </if>
+	        <if test="opsCount!=null">
+	            AND ops_count = #{opsCount, jdbcType=BIGINT}
+	        </if>
+	        <if test="opsStatus!=null and opsStatus!=''">
+	            AND ops_status = #{opsStatus, jdbcType=INTEGER}
+	        </if>
+	        <if test="opsErrorInfo!=null and opsErrorInfo!=''">
+	            AND ops_error_info = #{opsErrorInfo, jdbcType=LONGVARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=INTEGER}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=INTEGER}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.pos.common.model.ServiceDataFileLog">
+		UPDATE pos_data_file_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="pwrOrg!=null">
+	            pwr_org = #{pwrOrg, jdbcType=VARCHAR},
+	        </if>
+	        <if test="filePath!=null and filePath!=''">
+	            file_path = #{filePath, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fileName!=null and fileName!=''">
+	            file_name = #{fileName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="dataCount!=null">
+	            data_count = #{dataCount, jdbcType=BIGINT},
+	        </if>
+	        <if test="opsCount!=null">
+	            ops_count = #{opsCount, jdbcType=BIGINT},
+	        </if>
+	        <if test="opsStatus!=null and opsStatus!=''">
+	            ops_status = #{opsStatus, jdbcType=INTEGER},
+	        </if>
+	        <if test="opsErrorInfo!=null and opsErrorInfo!=''">
+	            ops_error_info = #{opsErrorInfo, jdbcType=LONGVARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.common.model.ServiceDataFileLog">
+		UPDATE pos_data_file_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+            pwr_org = #{pwrOrg, jdbcType=VARCHAR},
+        	file_path = #{filePath, jdbcType=VARCHAR},
+        	file_name = #{fileName, jdbcType=VARCHAR},
+	        data_count = #{dataCount, jdbcType=BIGINT},
+	        ops_count = #{opsCount, jdbcType=BIGINT},
+	        ops_status = #{opsStatus, jdbcType=INTEGER},
+            ops_error_info = #{opsErrorInfo, jdbcType=LONGVARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.common.model.ServiceDataFileLog">
+		UPDATE pos_data_file_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.common.model.ServiceDataFileLog">
+		UPDATE pos_data_file_log
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.common.model.ServiceDataFileLog">
+		DELETE FROM pos_data_file_log
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</delete>
+</mapper>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.WoFollowupResultinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.workOrder.bean.WoFollowupResultinfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="wk_type" property="wkType" jdbcType="VARCHAR" />
+    <result column="exception_type" property="exceptionType" jdbcType="VARCHAR" />
+    <result column="resultInfo" property="resultinfo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, update_time, create_by, update_by,wk_type, exception_type, resultInfo
+  </sql>
+  <select id="selectAll" resultType="java.lang.String" parameterType="java.lang.String" >
+    select 
+    resultInfo
+    from wo_followup_resultinfo
+    where 1=1
+    <if test="wkType !='' and wkType != null">
+   		and wk_type=#{wkType}
+   	</if>
+   	<if test="errorType !='' and errorType != null">
+   		and exception_type=#{errorType}
+   	</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wo_followup_resultinfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.workOrder.bean.WoFollowupResultinfo" >
+    insert into wo_followup_resultinfo ( create_time, update_time, 
+      create_by, update_by,wk_type,exception_type, 
+      resultInfo)
+    values ( NOW(), NOW(), 
+      #{createBy,jdbcType=VARCHAR}, 
+      #{updateBy,jdbcType=VARCHAR}, 
+      #{wkType,jdbcType=VARCHAR},
+      #{exceptionType,jdbcType=VARCHAR}, 
+      #{resultinfo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.workOrder.bean.WoFollowupResultinfo" >
+    insert into wo_followup_resultinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="exceptionType != null" >
+        exception_type,
+      </if>
+      <if test="resultinfo != null" >
+        resultInfo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="exceptionType != null" >
+        #{exceptionType,jdbcType=VARCHAR},
+      </if>
+      <if test="resultinfo != null" >
+        #{resultinfo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="query" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.HashMap">
+	  	SELECT
+			a.id,
+			a.create_by,
+			a.create_time,
+			a.resultInfo,
+			b.`name` AS wk_type,
+			c.type_name as exception_type
+		FROM
+			wo_followup_resultinfo a
+		LEFT JOIN (SELECT
+			name,
+			code
+		FROM
+			wk_type ) b ON a.wk_type = b.code
+		LEFT JOIN (SELECT
+			type_name,
+			id
+		FROM
+			wo_error_type) c ON a.exception_type = c.id
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.wo_no != null and param.wo_no != ''">
+				AND a.resultInfo LIKE CONCAT("%", #{param.wo_no }, "%")
+			</if>
+		</trim>
+		<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+		<if test="param.sortColumn == null or param.sortColumn == ''">
+			ORDER BY create_time DESC
+		</if>
+		LIMIT #{firstResult }, #{maxResult }
+  </select>
+  <select id="count" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+  		SELECT
+			count(1)
+		FROM wo_followup_resultinfo
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.wo_no != null and param.wo_no != ''">
+				AND resultInfo LIKE CONCAT("%", #{param.wo_no }, "%")
+			</if>
+		</trim>
+  </select>
+</mapper>

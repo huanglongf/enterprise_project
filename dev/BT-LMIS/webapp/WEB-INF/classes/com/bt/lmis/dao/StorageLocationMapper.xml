@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.StorageLocationMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.StorageLocation" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="warehouse_code" property="warehouse_code"/>
+	<result column="warehouse_name" property="warehouse_name"/>
+	<result column="location_type" property="location_type"/>
+	<result column="reservoir_code" property="reservoir_code"/>
+	<result column="passageway_code" property="passageway_code"/>
+	<result column="group_code" property="group_code"/>
+	<result column="line_code" property="line_code"/>
+	<result column="cell_code" property="cell_code"/>
+	<result column="del_flag" property="del_flag"/>
+	<result column="single_square" property="single_square"/>
+	<result column="single_volumn" property="single_volumn"/>
+	<result column="all_square" property="all_square"/>
+	<result column="all_volumn" property="all_volumn"/>
+</resultMap>
+       
+<!-- tb_storage_location table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,warehouse_code,warehouse_name,location_type,reservoir_code,passageway_code,group_code,line_code,cell_code,del_flag,single_square,single_volumn,all_square,all_volumn,storage_number
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="warehouse_code != null and warehouse_code != ''" >
+	    and warehouse_code =  #{warehouse_code}
+	</if>
+	 	<if test="warehouse_name != null and warehouse_name != ''" >
+	    and warehouse_name =  #{warehouse_name}
+	</if>
+	 	<if test="location_type != null and location_type != ''" >
+	    and location_type =  #{location_type}
+	</if>
+	 	<if test="reservoir_code != null and reservoir_code != ''" >
+	    and reservoir_code =  #{reservoir_code}
+	</if>
+	 	<if test="passageway_code != null and passageway_code != ''" >
+	    and passageway_code =  #{passageway_code}
+	</if>
+	 	<if test="group_code != null and group_code != ''" >
+	    and group_code =  #{group_code}
+	</if>
+	 	<if test="line_code != null and line_code != ''" >
+	    and line_code =  #{line_code}
+	</if>
+	 	<if test="cell_code != null and cell_code != ''" >
+	    and cell_code =  #{cell_code}
+	</if>
+	 	<if test="del_flag != null and del_flag != ''" >
+	    and del_flag =  #{del_flag}
+	</if>
+	<if test="single_square != null" >
+	    and single_square =  #{single_square}
+	</if>
+	<if test="single_volumn != null" >
+	    and single_volumn =  #{single_volumn}
+	</if>
+	<if test="all_square != null" >
+	    and all_square =  #{all_square}
+	</if>
+	<if test="all_volumn != null" >
+	    and all_volumn =  #{all_volumn}
+	</if>
+	<if test="storage_number != null" >
+	    and storage_number =  #{storage_number}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入库位信息表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.StorageLocation" >
+  insert into tb_storage_location(id,create_time,create_user,update_time,update_user,warehouse_code,warehouse_name,location_type,reservoir_code,passageway_code,group_code,line_code,cell_code,del_flag,single_square,single_volumn,all_square,all_volumn)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{warehouse_code},#{warehouse_name},#{location_type},#{reservoir_code},#{passageway_code},#{group_code},#{line_code},#{cell_code},#{del_flag},#{single_square},#{single_volumn},#{all_square},#{all_volumn})
+</insert>
+
+<!-- 修改库位信息表-->  
+ <update id="update" parameterType="com.bt.lmis.model.StorageLocation" >
+  update tb_storage_location set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},warehouse_code=#{warehouse_code},warehouse_name=#{warehouse_name},location_type=#{location_type},reservoir_code=#{reservoir_code},passageway_code=#{passageway_code},group_code=#{group_code},line_code=#{line_code},cell_code=#{cell_code},del_flag=#{del_flag},single_square=#{single_square},single_volumn=#{single_volumn},all_square=#{all_square},all_volumn=#{all_volumn} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改库位信息表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.StorageLocation" >
+	update tb_storage_location set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="warehouse_code != null  and warehouse_code != '' ">
+		warehouse_code=#{warehouse_code},
+	</if>
+	<if test="warehouse_name != null  and warehouse_name != '' ">
+		warehouse_name=#{warehouse_name},
+	</if>
+	<if test="location_type != null  and location_type != '' ">
+		location_type=#{location_type},
+	</if>
+	<if test="reservoir_code != null  and reservoir_code != '' ">
+		reservoir_code=#{reservoir_code},
+	</if>
+	<if test="passageway_code != null  and passageway_code != '' ">
+		passageway_code=#{passageway_code},
+	</if>
+	<if test="group_code != null  and group_code != '' ">
+		group_code=#{group_code},
+	</if>
+	<if test="line_code != null  and line_code != '' ">
+		line_code=#{line_code},
+	</if>
+	<if test="cell_code != null  and cell_code != '' ">
+		cell_code=#{cell_code},
+	</if>
+	<if test="del_flag != null  and del_flag != '' ">
+		del_flag=#{del_flag},
+	</if>
+	<if test="single_square != null  ">
+		single_square=#{single_square},
+	</if>
+	<if test="single_volumn != null  ">
+		single_volumn=#{single_volumn},
+	</if>
+	<if test="all_square != null  ">
+		all_square=#{all_square},
+	</if>
+	<if test="all_volumn != null  ">
+		all_volumn=#{all_volumn},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除库位信息表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_storage_location where id = #{id}
+</update>
+<!-- 批量删除库位信息表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_storage_location where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找库位信息表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_storage_location where id = #{id}
+</select>
+  	
+<!-- 库位信息表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageLocationQueryParam">
+	select count(1) from tb_storage_location 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的库位信息表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageLocationQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_location 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 库位信息表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageLocationQueryParam">
+	select count(1) from tb_storage_location 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的库位信息表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageLocationQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_location 
+	<include refid="where_Clause"/>
+	
+	 <if test="maxResult != null and maxResult != ''" >
+      limit  #{firstResult},#{maxResult};
+    </if>
+</select>
+  <select id='findRecords' resultType="com.bt.lmis.model.StorageLocation"  parameterType="java.util.HashMap">
+    select  * from 
+      tb_storage_location
+       where 1=1
+       and del_flag=1
+    <if test="warehouse_name != null and warehouse_name != ''" >
+      and  warehouse_name=#{warehouse_name}
+    </if>
+  </select>		
+  
+  <select id='Count' resultType='java.lang.Integer' parameterType='com.bt.lmis.controller.form.StorageLocationQueryParam'>
+  	select 
+	count(1)
+	from tb_storage_location 
+	<include refid="where_Clause"/>
+  </select>
+  
+  	<insert id='deleteListIdRepeat' parameterType='java.util.ArrayList' >
+  INSERT INTO tb_storage_location_repeat
+		(
+		row_no,
+		warehouse_code,
+		reservoir_code,
+		passageway_code,
+		group_code,
+		line_code,
+		cell_code)
+		values
+		 <foreach collection="list" item="obj" index="index" separator="," > 
+		(
+		    #{obj.row_no,jdbcType=VARCHAR},
+			#{obj.warehouse_name,jdbcType=VARCHAR},
+			#{obj.reservoir_code,jdbcType=VARCHAR},
+			#{obj.passageway_code,jdbcType=VARCHAR},
+			#{obj.group_code,jdbcType=VARCHAR},
+			#{obj.line_code,jdbcType=VARCHAR},
+			#{obj.cell_code,jdbcType=VARCHAR}
+					)
+	</foreach>
+  	</insert>
+  	<insert id='addBatch' parameterType='java.util.ArrayList' >
+  INSERT INTO tb_storage_location
+		(
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		warehouse_code,
+		warehouse_name,
+		location_type,
+		reservoir_code,
+		passageway_code,
+		group_code,
+		line_code,
+		cell_code,
+		del_flag,
+		single_square,
+		single_volumn,
+		all_square,
+		storage_number)
+		values
+		 <foreach collection="list" item="obj" index="index" separator="," > 
+		(
+			#{obj.create_time,jdbcType=VARCHAR},
+			#{obj.create_user,jdbcType=VARCHAR},
+			#{obj.update_time,jdbcType=VARCHAR},
+			#{obj.update_user,jdbcType=VARCHAR},
+			#{obj.warehouse_code,jdbcType=VARCHAR},
+			#{obj.warehouse_name,jdbcType=VARCHAR},
+			#{obj.location_type,jdbcType=VARCHAR},
+			#{obj.reservoir_code,jdbcType=VARCHAR},
+			#{obj.passageway_code,jdbcType=VARCHAR},
+			#{obj.group_code,jdbcType=VARCHAR},
+			#{obj.line_code,jdbcType=VARCHAR},
+			#{obj.cell_code,jdbcType=VARCHAR},
+			#{obj.del_flag,jdbcType=VARCHAR},
+			#{obj.single_square,jdbcType=VARCHAR},
+			#{obj.single_volumn,jdbcType=VARCHAR},
+			#{obj.all_square,jdbcType=VARCHAR},
+			#{obj.storage_number,jdbcType=VARCHAR}
+					)
+	</foreach>
+  	</insert>
+  	
+  	<delete id='deleteListId' parameterType='java.util.ArrayList' >
+  	delete from tb_storage_location
+  	  where id in (
+  	   <foreach collection="list" item="obj" index="index" separator="," > 
+			#{obj}
+	</foreach>
+  	  )
+  	
+  	</delete>
+  		<select id='checkBtachinsertBf' parameterType='com.bt.lmis.model.StorageLocation' resultType='java.lang.Integer'>
+  	select count(1) from 
+  	tb_storage_location
+  	where 1=1
+  	<if test="warehouse_code != null  ">
+	and	warehouse_code=#{warehouse_code}
+	</if>
+	<if test="warehouse_code != null  ">
+	and	reservoir_code=#{reservoir_code}
+	</if>
+  	<if test="passageway_code != null  ">
+	and	passageway_code=#{passageway_code}
+	</if>
+	<if test="group_code != null  ">
+	and	group_code=#{group_code}
+	</if>
+	<if test="line_code != null  ">
+	and	line_code=#{line_code}
+	</if>
+  	<if test="cell_code != null  ">
+	and	cell_code=#{cell_code}
+	</if>
+	<if test="id != null  ">
+	and	id!=#{id}
+	</if>
+  	</select>
+  	<select id='checkUpdateBf' parameterType='com.bt.lmis.controller.form.StorageLocationQueryParam' resultType='java.lang.Integer'>
+  	select count(1) from 
+  	tb_storage_location
+  	where 1=1
+  	<if test="warehouse_code != null  ">
+	and	warehouse_code=#{warehouse_code}
+	</if>
+	<if test="warehouse_code != null  ">
+	and	reservoir_code=#{reservoir_code}
+	</if>
+  	<if test="passageway_code != null  ">
+	and	passageway_code=#{passageway_code}
+	</if>
+	<if test="group_code != null  ">
+	and	group_code=#{group_code}
+	</if>
+	<if test="line_code != null  ">
+	and	line_code=#{line_code}
+	</if>
+  	<if test="cell_code != null  ">
+	and	cell_code=#{cell_code}
+	</if>
+	<if test="id != null  ">
+	and	id!=#{id}
+	</if>
+  	</select>
+  	<update id='updateById'  parameterType='com.bt.lmis.model.StorageLocation'>
+  	update tb_storage_location
+  	set update_time =now(),
+  	<if test='warehouse_code!=null'>
+  	warehouse_code=#{warehouse_code},
+  	</if>
+  	<if test='warehouse_code!=null'>
+  	warehouse_name=#{warehouse_name},
+  	</if>
+  	<if test='reservoir_code  !=null'>
+  	reservoir_code=#{reservoir_code},
+  	</if>
+   	<if test='location_type !=null'>
+  	location_type=#{location_type},
+  	</if>	
+  	<if test='passageway_code !=null'>
+  	passageway_code=#{passageway_code},
+  	</if>	
+  	<if test='group_code !=null'>
+  	group_code=#{group_code},
+  	</if>	
+  	<if test='line_code !=null'>
+  	line_code=#{line_code},
+  	</if>
+  	<if test='cell_code !=null'>
+  	cell_code=#{cell_code},
+  	</if>
+  	<if test='single_square !=null'>
+  	single_square=#{single_square},
+  	</if>		
+  	<if test='single_volumn !=null'>
+  	single_volumn=#{single_volumn},
+  	</if>
+  	<if test='all_square !=null'>
+  	all_square=#{all_square},
+  	</if>
+  	<if test='storage_number !=null'>
+  	storage_number=#{storage_number},
+  	</if>
+  	<if test='update_user!=null'>
+  	update_user=#{update_user}
+  	</if>
+  	where id=#{id} 	
+  	</update>
+  	<select id='truncat'>
+  	truncate tb_storage_location_repeat;
+  	</select>
+  	<select id='getSame'  resultType='java.util.HashMap'>
+  	SELECT 
+    row_no,
+    warehouse_code,
+    reservoir_code,
+    passageway_code,
+    group_code,
+    line_code,
+    cell_code
+FROM
+    tb_storage_location_repeat a
+WHERE
+    EXISTS( SELECT 
+            1
+        FROM
+            (SELECT 
+                warehouse_code,
+                    reservoir_code,
+                    passageway_code,
+                    group_code,
+                    line_code,
+                    cell_code
+            FROM
+                tb_storage_location_repeat
+            GROUP BY warehouse_code , reservoir_code , passageway_code , group_code , line_code , cell_code
+            HAVING COUNT(1) > 1) b
+        WHERE
+            a.warehouse_code = b.warehouse_code
+                AND a.passageway_code = b.passageway_code
+                AND a.group_code = b.group_code
+                AND a.line_code = b.line_code
+                AND a.cell_code = b.cell_code);
+  	</select>
+</mapper>   

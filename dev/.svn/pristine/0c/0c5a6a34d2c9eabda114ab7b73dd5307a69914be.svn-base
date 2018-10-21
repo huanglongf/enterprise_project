@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.OperationFeeDataSettlementMapper" > 
+	<resultMap id="OperationFeeDataSettlementMap" type="com.bt.lmis.model.OperationFeeDataSettlement" >
+		<result column="id" property="id"/>
+		<result column="create_time" property="create_time"/>
+		<result column="create_user" property="create_user"/>
+		<result column="update_time" property="update_time"/>
+		<result column="update_user" property="update_user"/>
+		<result column="contract_id" property="contract_id"/>
+		<result column="settle_period" property="settle_period"/>
+		<result column="btc_qty" property="btc_qty"/>
+		<result column="btc_qtyunit" property="btc_qtyunit"/>
+		<result column="btc_fee" property="btc_fee"/>
+		<result column="btc_remark" property="btc_remark"/>
+		<result column="btb_qty" property="btb_qty"/>
+		<result column="btb_qtyunit" property="btb_qtyunit"/>
+		<result column="btb_fee" property="btb_fee"/>
+		<result column="btb_remark" property="btb_remark"/>
+		<result column="return_qty" property="return_qty"/>
+		<result column="return_qtyunit" property="return_qtyunit"/>
+		<result column="return_fee" property="return_fee"/>
+		<result column="return_remark" property="return_remark"/>
+		<result column="ib_qty" property="ib_qty"/>
+		<result column="ib_qtyunit" property="ib_qtyunit"/>
+		<result column="ib_fee" property="ib_fee"/>
+		<result column="ib_remark" property="ib_remark"/>
+	</resultMap>
+	<select id="selectRecord" parameterType="Object" resultType="com.bt.lmis.model.OperationFeeDataSettlement">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			contract_id,
+			settle_period,
+			btc_qty,
+			btc_qtyunit,
+			btc_fee,
+			btc_remark,
+			btb_qty,
+			btb_qtyunit,
+			btb_fee,
+			btb_remark,
+			return_qty,
+			return_qtyunit,
+			return_fee,
+			return_remark,
+			ib_qty,
+			ib_qtyunit,
+			ib_fee,
+			ib_remark
+		from
+			tb_operationfee_data_settlement
+		where
+			1=1
+		and
+			contract_id = #{contract_id }
+		and
+			settle_period = #{settle_period }
+	</select>
+</mapper>   

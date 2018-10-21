@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.common.dao.PosPurchaseOrderMainMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.common.model.PosPurchaseOrderMain" id="PosPurchaseOrderMainMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="bat_id" property="batId" jdbcType="VARCHAR" />
+		<result column="po_number" property="poNumber" jdbcType="VARCHAR" />
+		<result column="po_number1" property="poNumber1" jdbcType="VARCHAR" />
+		<result column="order_type" property="orderType" jdbcType="VARCHAR" />
+		<result column="total_qty" property="totalQty" jdbcType="INTEGER" />
+		<result column="crd_time" property="crdTime" jdbcType="VARCHAR" />
+		<result column="po_flag" property="poFlag" jdbcType="VARCHAR" />
+		<result column="log" property="log" jdbcType="VARCHAR" />
+		<result column="po_type" property="poType" jdbcType="VARCHAR" />
+		<result column="split_time" property="splitTime" jdbcType="TIMESTAMP" />
+		<result column="file_no" property="fileNo" jdbcType="VARCHAR" />
+		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="po_qty" property="poQty" jdbcType="INTEGER" />
+		<result column="is_split_totle_qty" property="isSplitTotleQty" jdbcType="INTEGER" />
+		<result column="is_split_po_qty" property="isSplitPoQty" jdbcType="INTEGER" />
+		<result column="create_by_user_name" property="createByUserName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ppom.id,
+		ppom.bat_id,
+		ppom.po_number,
+		ppom.po_number1,
+		ppom.order_type,
+		ppom.total_qty,
+		ppom.crd_time,
+		ppom.po_flag,
+		ppom.log,
+		ppom.po_type,
+		ppom.split_time,
+		ppom.create_time,
+		ppom.create_by,
+		ppom.update_time,
+		ppom.update_by,
+		ppom.is_deleted,
+		ppom.is_disabled,
+		ppom.file_no,
+		ppom.file_name,
+		ppom.po_qty,
+		ppom.is_split_totle_qty,
+		ppom.is_split_po_qty
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			bat_id,
+			po_number,
+			po_number1,
+			order_type,
+			total_qty,
+			crd_time,
+			po_flag,
+			log,
+			po_type,
+			split_time,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			file_no,
+			file_name,
+			po_qty,
+			is_split_totle_qty,
+			is_split_po_qty
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain">
+		INSERT INTO pos_purchase_order_main
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{batId, jdbcType=VARCHAR},
+			#{poNumber, jdbcType=VARCHAR},
+			#{poNumber1, jdbcType=VARCHAR},
+			#{orderType, jdbcType=VARCHAR},
+			#{totalQty, jdbcType=INTEGER},
+			#{crdTime, jdbcType=VARCHAR},
+			#{poFlag, jdbcType=VARCHAR},
+			#{log, jdbcType=VARCHAR},
+			#{poType, jdbcType=VARCHAR},
+			#{splitTime, jdbcType=TIMESTAMP},
+			#{fileNo, jdbcType=VARCHAR},
+			#{fileName, jdbcType=VARCHAR},
+			#{poQty, jdbcType=INTEGER},
+			#{isSplitTotleQty, jdbcType=INTEGER},
+			#{isSplitPoQty, jdbcType=INTEGER},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_purchase_order_main
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.batId, jdbcType=VARCHAR},
+				#{obj.poNumber, jdbcType=VARCHAR},
+				#{obj.poNumber1, jdbcType=VARCHAR},
+				#{obj.orderType, jdbcType=VARCHAR},
+				#{obj.totalQty, jdbcType=INTEGER},
+				#{obj.crdTime, jdbcType=VARCHAR},
+				#{obj.poFlag, jdbcType=VARCHAR},
+				#{obj.log, jdbcType=VARCHAR},
+				#{obj.poType, jdbcType=VARCHAR},
+				#{obj.splitTime, jdbcType=TIMESTAMP},
+				#{obj.fileNo, jdbcType=VARCHAR},
+				#{obj.fileName, jdbcType=VARCHAR},
+				#{obj.poQty, jdbcType=INTEGER},
+				#{obj.isSplitTotleQty, jdbcType=INTEGER},
+				#{obj.isSplitPoQty, jdbcType=INTEGER},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain" resultMap="PosPurchaseOrderMainMap">
+		SELECT 
+			<include refid="Base_Column_List" />,
+			su.user_name create_by_user_name
+		FROM pos_purchase_order_main ppom
+		LEFT JOIN sys_user su ON (su.user_code = ppom.create_by AND su.is_deleted = false)
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND ppom.id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="batId != null and batId != ''">
+	            AND ppom.bat_id = #{batId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="poNumber!=null and poNumber!=''">
+	            AND ppom.po_number = #{poNumber, jdbcType=VARCHAR}
+	        </if>
+	        <if test="poNumberLike !=null and poNumberLike != ''">
+	            AND ppom.po_number like CONCAT('%',#{poNumberLike, jdbcType=VARCHAR},'%')
+	        </if>
+	        <if test="poNumber1!=null and poNumber1!=''">
+	            AND ppom.po_number1 = #{poNumber1, jdbcType=VARCHAR}
+	        </if>
+	        <if test="orderType!=null and orderType!=''">
+	            AND ppom.order_type = #{orderType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="totalQty!=null">
+	            AND ppom.total_qty = #{totalQty, jdbcType=INTEGER}
+	        </if>
+	        <if test="crdTime!=null and crdTime!=''">
+	            AND ppom.crd_time = #{crdTime, jdbcType=VARCHAR}
+	        </if>
+	        <if test="crdTimeStart != null and crdTimeStart != ''">
+	            AND TO_DAYS(ppom.crd_time) >= TO_DAYS(#{crdTimeStart, jdbcType=VARCHAR})
+	        </if>
+	        <if test="crdTimeEnd != null and crdTimeEnd != ''">
+	            AND TO_DAYS(ppom.crd_time) &lt;= TO_DAYS(#{crdTimeEnd, jdbcType=VARCHAR})
+	        </if>
+	        <if test="poFlag!=null and poFlag!=''">
+	            AND ppom.po_flag = #{poFlag, jdbcType=VARCHAR}
+	        </if>
+	        <if test="log!=null and log!=''">
+	            AND ppom.log = #{log, jdbcType=VARCHAR}
+	        </if>
+	        <if test="poType!=null and poType!=''">
+	            AND ppom.po_type = #{poType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="splitTime!=null">
+	            AND ppom.split_time = #{splitTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createTime!=null">
+	            AND ppom.create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createTimeStart != null and createTimeStart != ''">
+	            AND TO_DAYS(ppom.create_time) >= TO_DAYS(#{createTimeStart, jdbcType=VARCHAR})
+	        </if>
+	        <if test="createTimeEnd != null and createTimeEnd != ''">
+	            AND TO_DAYS(ppom.create_time) &lt;= TO_DAYS(#{createTimeEnd, jdbcType=VARCHAR})
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND ppom.create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND ppom.update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND ppom.update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND ppom.is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND ppom.is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="fileNo!=null and fileNo!=''">
+	            AND ppom.file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileName!=null and fileName!=''">
+	            AND ppom.file_name = #{fileName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="poQty!=null">
+	            AND ppom.po_qty = #{poQty, jdbcType=INTEGER}
+	        </if>
+	        <if test="isSplitTotleQty!=null">
+	            AND ppom.is_split_totle_qty = #{isSplitTotleQty, jdbcType=INTEGER}
+	        </if>
+	        <if test="isSplitPoQty!=null">
+	            AND ppom.is_split_po_qty = #{isSplitPoQty, jdbcType=INTEGER}
+	        </if>
+	    </trim>
+	    ORDER BY create_time DESC
+	</select>
+	<update id="update" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain">
+		UPDATE pos_purchase_order_main
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="batId!=null and batId!=''">
+	            bat_id = #{batId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="poNumber!=null and poNumber!=''">
+	            po_number = #{poNumber, jdbcType=VARCHAR},
+	        </if>
+	        <if test="poNumber1!=null and poNumber1!=''">
+	            po_number1 = #{poNumber1, jdbcType=VARCHAR},
+	        </if>
+	        <if test="orderType!=null and orderType!=''">
+	            order_type = #{orderType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="totalQty!=null">
+	            total_qty = #{totalQty, jdbcType=INTEGER},
+	        </if>
+	        <if test="crdTime!=null and crdTime!=''">
+	            crd_time = #{crdTime, jdbcType=VARCHAR},
+	        </if>
+	        <if test="poFlag!=null and poFlag!=''">
+	            po_flag = #{poFlag, jdbcType=VARCHAR},
+	        </if>
+	        <if test="log!=null and log!=''">
+	            log = #{log, jdbcType=VARCHAR},
+	        </if>
+	        <if test="poType!=null and poType!=''">
+	            po_type = #{poType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="splitTime!=null">
+	            split_time = #{splitTime, jdbcType=TIMESTAMP},
+	        </if>
+	        <if test="fileNo!=null and fileNo!=''">
+	            file_no = #{fileNo, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fileName!=null and fileName!=''">
+	            file_name = #{fileName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="poQty!=null">
+	            po_qty = #{poQty, jdbcType=INTEGER},
+	        </if>
+	        <if test="isSplitTotleQty!=null">
+	            is_split_totle_qty = #{isSplitTotleQty, jdbcType=INTEGER},
+	        </if>
+	        <if test="isSplitPoQty!=null">
+	            is_split_po_qty = #{isSplitPoQty, jdbcType=INTEGER},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain">
+		UPDATE pos_purchase_order_main
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	bat_id = #{batId, jdbcType=VARCHAR},
+        	po_number = #{poNumber, jdbcType=VARCHAR},
+        	po_number1 = #{poNumber1, jdbcType=VARCHAR},
+        	order_type = #{orderType, jdbcType=VARCHAR},
+        	total_qty = #{totalQty, jdbcType=INTEGER},
+        	crd_time = #{crdTime, jdbcType=VARCHAR},
+        	po_flag = #{poFlag, jdbcType=VARCHAR},
+        	log = #{log, jdbcType=VARCHAR},
+        	po_type = #{poType, jdbcType=VARCHAR},
+        	split_time = #{splitTime, jdbcType=TIMESTAMP},
+        	file_no = #{fileNo, jdbcType=VARCHAR},
+        	file_name = #{fileName, jdbcType=VARCHAR},
+        	po_qty = #{poQty, jdbcType=INTEGER},
+        	is_split_totle_qty = #{isSplitTotleQty, jdbcType=INTEGER},
+        	is_split_po_qty = #{isSplitPoQty, jdbcType=INTEGER},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain">
+		UPDATE pos_purchase_order_main ppom,pos_purchase_order_detail ppod
+		<trim prefix="SET" suffixOverrides=",">
+			ppom.update_time = NOW(),
+	        ppom.update_by = #{updateBy, jdbcType=VARCHAR},
+	        ppom.is_deleted = true,
+	        <if test="version!=null">
+	        	ppom.version = version + 1,
+	        </if>
+	        ppod.version = version + 1,
+			ppod.update_time = NOW(),
+	        ppod.update_by = #{updateBy, jdbcType=VARCHAR},
+	        ppod.is_deleted = true
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+	    	AND ppom.po_number = ppod.po_number
+		    <if test="id!=null and id!=''">
+		    	AND ppom.id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND ppom.version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND ppom.file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain">
+		UPDATE pos_purchase_order_main
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain">
+		DELETE FROM pos_purchase_order_main
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="fileNo!=null and fileNo!=''">
+	        	AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+</mapper>

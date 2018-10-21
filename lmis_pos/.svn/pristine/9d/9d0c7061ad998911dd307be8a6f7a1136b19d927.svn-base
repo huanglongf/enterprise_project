@@ -1,0 +1,445 @@
+package com.lmis.pos.common.service.impl;
+
+import java.io.File;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.alibaba.fastjson.JSONObject;
+import com.lmis.common.dataFormat.GetUuidForJava;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.framework.baseModel.PersistentObject;
+import com.lmis.pos.common.dao.BaseExcelMapper;
+import com.lmis.pos.common.dao.PoDataMapper;
+import com.lmis.pos.common.dao.ServiceDataFileLogMapper;
+import com.lmis.pos.common.job.DataSourceAsyncJob;
+import com.lmis.pos.common.model.CallAbleModel;
+import com.lmis.pos.common.model.PoData;
+import com.lmis.pos.common.model.PosDataFileTemplete;
+import com.lmis.pos.common.model.ServiceDataFileLog;
+import com.lmis.pos.common.service.PoDataService;
+import com.lmis.pos.common.service.PosDataFileTempleteService;
+import com.lmis.pos.common.util.ConstantCommon;
+import com.lmis.pos.common.util.SpringUtil;
+
+import cn.hutool.core.date.DateUtil;
+
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class PoDataServiceImpl<T extends PoData> implements PoDataService<T>{
+
+    private static final Logger logger = LoggerFactory.getLogger(PoDataServiceImpl.class);  
+	
+	@Value("${lmis_pos.podata.excel_import_file_download_path}")
+	private String excelImportFileDownloadPath; 
+	
+	@Value("${lmis_pos.podata.excel_import_file_upload_path}")
+	private String excelImportFileUploadPath;
+
+	@Autowired
+	private ServiceDataFileLogMapper<ServiceDataFileLog> serviceDataFileLogMapper;
+	
+	@Autowired
+	private PoDataMapper<PoData> poDataMapper;
+	
+	@Resource(name="redisTemplate")
+    private RedisTemplate<String, ?> redisTemplate;
+
+	@Resource(name="posDataFileTempleteServiceImpl")
+	private PosDataFileTempleteService<PosDataFileTemplete> posDataFileTempleteService;
+	
+	@Autowired
+	private HttpSession session;
+
+	@Override
+	public LmisResult<?> poDataExcelUpload(String templeteId, MultipartFile file) {
+		LmisResult<String> result = new LmisResult<String>(LmisConstant.RESULT_CODE_ERROR,"");
+		
+		//查询模板对像
+		PosDataFileTemplete posDataFileTempleteQuery = new PosDataFileTemplete();
+		posDataFileTempleteQuery.setId(templeteId);
+		posDataFileTempleteQuery.setIsDeleted(false);
+		List<PosDataFileTemplete> posDataFileTempleteList = posDataFileTempleteService.retrieve(posDataFileTempleteQuery);
+		if(CollectionUtils.isEmpty(posDataFileTempleteList)) {
+			result.setMessage("未查找到匹配的模板");
+			return result;
+		}
+		PosDataFileTemplete posDataFileTemplete = posDataFileTempleteList.get(0);
+		@SuppressWarnings({"unchecked" })
+		final Map<String,String> titleMap = JSONObject.parseObject(posDataFileTemplete.getTempleteTitleMap(),
+				LinkedHashMap.class);
+		if(MapUtils.isEmpty(titleMap)) {
+			result.setMessage("匹配模板表头映射未配置，请确认配置");
+			return result;
+		}
+		
+		//移动转存文件并创建任务
+		String updateBy = session.getAttribute("lmisUserId").toString();
+		result = DataSourceAsyncJob.moveFile(file, updateBy);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(result.getCode())) return result;
+
+		final String fileId = result.getData().toString();
+		
+		ServiceDataFileLog serviceDataFileLogQuery = new ServiceDataFileLog();
+		serviceDataFileLogQuery.setId(fileId);
+		serviceDataFileLogQuery.setIsDeleted(false);
+		List<ServiceDataFileLog> serviceDataFileLogList = 
+				serviceDataFileLogMapper.retrieve(serviceDataFileLogQuery);
+		if (CollectionUtils.isEmpty(serviceDataFileLogList)) {
+			result.setCode(LmisConstant.RESULT_CODE_ERROR);
+			result.setMessage("未查找到导入任务记录");
+			return result;
+		}
+		
+		final ServiceDataFileLog serviceDataFileLog = serviceDataFileLogList.get(0);
+		@SuppressWarnings("unchecked")
+		final ValueOperations<String, Object> opsForValue = 
+				(ValueOperations<String, Object>) redisTemplate.opsForValue();
+		
+		//设置默认进度
+    	opsForValue.set(fileId,0l);
+
+		//解析文件
+		CompletableFuture.supplyAsync(() -> {
+			LmisResult<String> taskResult = new LmisResult<>();
+			try {
+				//修改任务状态
+		        DataSourceAsyncJob.updateFileLogStatus(fileId,
+    					1,
+    					null,
+    	    			null,
+    					updateBy,null);
+		        //解析文件，插入数据
+				taskResult = DataSourceAsyncJob.parseExcelFile(fileId, 
+								new File(DataSourceAsyncJob.buildDirectoryUploadPath(null, fileId),
+										serviceDataFileLog.getFileName()),
+								titleMap,
+								"pos_purchase_order_temporary",
+								updateBy,
+								false);
+				if(LmisConstant.RESULT_CODE_ERROR.equals(taskResult.getCode())) {
+					return taskResult;
+				}
+				//执行完毕调用存储过程
+				@SuppressWarnings("unchecked")
+				PoDataMapper<PoData> poDataMapper = 
+						(PoDataMapper<PoData>) SpringUtil.getBean("poDataMapper");
+				CallAbleModel callAbleModel = new CallAbleModel();
+				callAbleModel.setBatIdParam(fileId);
+				callAbleModel.setUserParam(updateBy);
+				callAbleModel.setOutResult(1);
+				callAbleModel.setOutResultReason("");
+				poDataMapper.callProPodataDeal(callAbleModel);
+				if(1 == callAbleModel.getOutResult()) {
+					//成功
+					taskResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+				} else {
+					//失败
+					taskResult.setCode(LmisConstant.RESULT_CODE_ERROR);
+					taskResult.setMessage(String.valueOf(callAbleModel.getOutResultReason()));
+				}
+				taskResult.setData(fileId);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				logger.error(e1.getMessage());
+				taskResult.setCode(LmisConstant.RESULT_CODE_ERROR);
+				taskResult.setData(fileId);
+				taskResult.setMessage("数据插入异常，请检查数据是否完整！message:" + e1.getMessage());
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
+				taskResult.setCode(LmisConstant.RESULT_CODE_ERROR);
+				taskResult.setData(fileId);
+				taskResult.setMessage("运行时异常，请检查文件是否符合要求，或者联系管理员!");
+			}
+			return taskResult;
+		},ConstantCommon.exector).exceptionally(ex->{
+			LmisResult<String> taskResult = new LmisResult<>();
+			taskResult.setCode(LmisConstant.RESULT_CODE_ERROR);
+			taskResult.setData(fileId);
+			taskResult.setMessage(ex.getMessage());
+			return taskResult;
+		}).thenAccept(taskResult -> {
+	        if(LmisConstant.RESULT_CODE_ERROR.equals(taskResult.getCode())) {
+		        DataSourceAsyncJob.updateFileLogStatus(taskResult.getData().toString(),
+    					3,
+    					null,
+    					Long.valueOf(opsForValue.get(fileId).toString()),
+    					updateBy,taskResult.getMessage());
+	        } else {
+		        DataSourceAsyncJob.updateFileLogStatus(taskResult.getData().toString(),
+    					2,
+    					null,
+    					Long.valueOf(opsForValue.get(fileId).toString()),
+    					updateBy,null);
+	        }
+	        try {
+	        	DataSourceAsyncJob.deleteServiceDataSourceUploadFile(fileId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        redisTemplate.delete(fileId);
+		});
+		return result;
+	}
+
+	@Override
+	public LmisResult<?> deleteServiceDataSourceUploadFile(String fileId) throws Exception {
+		return DataSourceAsyncJob.deleteServiceDataSourceUploadFile(fileId);
+	}
+
+
+	@Override
+	public LmisResult<?> fileUploadFileSchedule(String fileId) throws Exception {
+		LmisResult<String> lmisResult = new LmisResult<>(LmisConstant.RESULT_CODE_ERROR,"");
+		
+		@SuppressWarnings("unchecked")
+		final ValueOperations<String, Object> opsForValue = 
+				(ValueOperations<String, Object>) redisTemplate.opsForValue();
+		
+		if(StringUtils.isBlank(fileId)) {
+			lmisResult.setCode(LmisConstant.RESULT_CODE_ERROR);
+			lmisResult.setMessage("fileId不能为空");
+			return lmisResult;
+		}
+		
+        ServiceDataFileLog serviceDataFileLog = new ServiceDataFileLog();
+        serviceDataFileLog.setId(fileId);
+        serviceDataFileLog.setIsDeleted(false);
+        serviceDataFileLog = serviceDataFileLogMapper.retrieve(serviceDataFileLog).get(0);
+        
+        if(serviceDataFileLog.getOpsStatus()<2) {
+        	serviceDataFileLog.setOpsCount(
+        			Long.valueOf(opsForValue.get(fileId) == null ? "0" : opsForValue.get(fileId).toString()));
+        }
+        
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		lmisResult.setData(serviceDataFileLog);
+		
+		return lmisResult;
+	}
+
+	/**
+	 * Title: poDataExcelDownload
+	 * Description: 
+	 * @param templeteId
+	 * @param filterJsonStr
+	 * @param isTemplete  是否未模板
+	 * @return
+	 * @author lsh8044
+	 * @date 2018年5月30日
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> poDataExcelDownload(String templeteId,String filterJsonStr,Boolean isTemplete) {
+		LmisResult<String> result = new LmisResult<>(LmisConstant.RESULT_CODE_ERROR,"");
+		
+		if(isTemplete == null) {
+			isTemplete = false;
+		}
+		final Boolean taskIsTemplete = isTemplete;
+
+		final ValueOperations<String, Object> opsForValue = 
+				(ValueOperations<String, Object>) redisTemplate.opsForValue();
+
+		//查询模板对像
+		PosDataFileTemplete posDataFileTempleteQuery = new PosDataFileTemplete();
+		posDataFileTempleteQuery.setId(templeteId);
+		posDataFileTempleteQuery.setIsDeleted(false);
+		List<PosDataFileTemplete> posDataFileTempleteList = 
+				posDataFileTempleteService.retrieve(posDataFileTempleteQuery);
+		if(CollectionUtils.isEmpty(posDataFileTempleteList)) {
+			result.setMessage("未查找到匹配的模板");
+			return result;
+		}
+		posDataFileTempleteQuery = posDataFileTempleteList.get(0);
+		
+		String fileName = null;
+		if(taskIsTemplete) {
+			if(StringUtils.isNotBlank(posDataFileTempleteQuery.getFileId())) {
+				ServiceDataFileLog serviceDataFileLog = new ServiceDataFileLog();
+				serviceDataFileLog.setId(posDataFileTempleteQuery.getFileId());
+				serviceDataFileLog.setIsDeleted(false);
+				List<ServiceDataFileLog> serviceDataFileLogList = 
+						serviceDataFileLogMapper.retrieve(serviceDataFileLog);
+				if(CollectionUtils.isNotEmpty(serviceDataFileLogList)) {
+					serviceDataFileLog = serviceDataFileLogList.get(0);
+					if("2".equals(String.valueOf(serviceDataFileLog.getOpsStatus()))) {
+						result.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+						result.setData(posDataFileTempleteQuery.getFileId());
+						return result;
+					}
+				}
+			}
+			//模板下载时拼入模板后缀
+			fileName = posDataFileTempleteQuery.getTempleteName() + "模板" +
+					DateUtil.formatDate(new Date()) + ".xlsx";
+		} else {
+			//导出时直接带出模板名称
+			fileName = posDataFileTempleteQuery.getTempleteName() +
+					DateUtil.formatDate(new Date()) + ".xlsx";
+		}
+		
+		final String exportFileName  = fileName;
+		//生成文件任务记录
+		String uuid = GetUuidForJava.getUuidForJava();
+		final String updateBy = session.getAttribute("lmisUserId").toString();
+		ServiceDataFileLog serviceDataFileLog = new ServiceDataFileLog();
+		serviceDataFileLog.setId(uuid);
+        serviceDataFileLog.setFileName(exportFileName);
+        serviceDataFileLog.setFilePath(DataSourceAsyncJob.buildDirectoryDownloadPath(false,uuid,exportFileName));
+        serviceDataFileLog.setDataCount(0l);
+        serviceDataFileLog.setOpsCount(0l);
+        serviceDataFileLog.setOpsStatus(0);
+        serviceDataFileLog.setCreateBy(updateBy);
+        serviceDataFileLog.setUpdateBy(updateBy);
+        int r = serviceDataFileLogMapper.create(serviceDataFileLog);
+        if(r>0) {
+    		final String fileId = serviceDataFileLog.getId();
+    		
+    		final PosDataFileTemplete posDataFileTemplete = posDataFileTempleteQuery;
+			final Map<String,Object> titleMap = JSONObject.parseObject(posDataFileTemplete.getTempleteTitleMap(),
+					LinkedHashMap.class);
+    		if(MapUtils.isEmpty(titleMap)) {
+    			result.setMessage("匹配模板表头映射未配置，请确认配置");
+    			return result;
+    		} else {
+    			int cellNum = 1;
+    		    for (Entry<String,Object> entry : titleMap.entrySet()) {
+    		    	if(StringUtils.isBlank(entry.getKey())) {
+    					result.setMessage("标题列不能以空值为key，在第"+cellNum+"列");
+    					return result;
+    		    	}
+    		    	cellNum++;
+    		    }
+    		}
+
+    		BaseExcelMapper<PersistentObject> baseMapper = null;
+    		if(!taskIsTemplete) {
+    			if(StringUtils.isNotBlank(posDataFileTemplete.getTempleteImpl())) {
+            		baseMapper = 
+            				(BaseExcelMapper<PersistentObject>) SpringUtil
+            					.getBean(posDataFileTemplete.getTempleteImpl());
+            		if(baseMapper == null) {
+        				result.setMessage("未找到对应的模板实现,模板名称:"
+        							+posDataFileTemplete.getTempleteName());
+        				return result;
+            		}
+    			} else {
+    				result.setMessage("对应的模板实现不能为空,模板名称:"
+							+posDataFileTemplete.getTempleteName());
+    				return result;
+    			}
+    		}
+    		final BaseExcelMapper<PersistentObject> mapper = baseMapper;
+
+    		//设置默认进度
+        	opsForValue.set(fileId,0l);
+        	
+    		//解析文件
+    		CompletableFuture.supplyAsync(() -> {
+    			LmisResult<String> taskResult = new LmisResult<>();
+    			try {
+
+    				PersistentObject persistentObject = null;
+    				if(!taskIsTemplete) {
+        				Class<?> onwClass = Class.forName(posDataFileTemplete.getTempleteModel());
+        				if(StringUtils.isNotBlank(filterJsonStr)) {
+        					persistentObject = 
+            						(PersistentObject) JSONObject.parseObject(filterJsonStr,onwClass);
+        				} else {
+        					persistentObject = (PersistentObject) onwClass.newInstance();
+        				}
+    				}
+    				
+    				taskResult = (LmisResult<String>) 
+    						DataSourceAsyncJob.exprotFile(fileId,exportFileName,titleMap,
+    								mapper,persistentObject,updateBy,taskIsTemplete);
+    				taskResult.setData(fileId);
+    			} catch (Exception e) {
+    				e.printStackTrace();
+    			    throw new IllegalArgumentException(e);
+    			}
+    			return taskResult;
+    		},ConstantCommon.exector).exceptionally(ex->{
+    			LmisResult<String> taskResult = new LmisResult<>();
+    			taskResult.setCode(LmisConstant.RESULT_CODE_ERROR);
+    			taskResult.setData(fileId);
+    			taskResult.setMessage(ex.getMessage());
+    			return taskResult;
+    		}).thenAccept(taskResult -> {
+    	        if(LmisConstant.RESULT_CODE_ERROR.equals(taskResult.getCode())) {
+    		        DataSourceAsyncJob.updateFileLogStatus(taskResult.getData().toString(),
+    		        					3,
+        								null,
+        								Long.valueOf(opsForValue.get(fileId).toString()),
+    		        					updateBy,taskResult.getMessage());
+    	        } else {
+    	        	if(taskIsTemplete) {
+    	        		PosDataFileTemplete callBackTemplete = new PosDataFileTemplete();
+    	        		callBackTemplete.setId(templeteId);
+    	        		callBackTemplete.setTempleteMode("1");
+    	        		callBackTemplete.setFileId(fileId);
+    	        		DataSourceAsyncJob.updateTemplete(callBackTemplete);
+    	        	}
+    		        DataSourceAsyncJob.updateFileLogStatus(taskResult.getData().toString(),
+    			    					2,
+        								null,
+        								Long.valueOf(opsForValue.get(fileId).toString()),
+    			    					updateBy,null);
+    	        }
+    	        redisTemplate.delete(fileId);
+    		});
+	    		
+			result.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+			result.setData(fileId);
+    		
+		} else {
+			result.setCode(LmisConstant.RESULT_CODE_ERROR);
+			result.setMessage("导出任务创建失败");
+		}
+		return result;
+	}
+
+	@Override
+	public PosDataFileTemplete getUploadTemplete(String templeteId) throws Exception{
+		//查询模板对像
+		PosDataFileTemplete posDataFileTempleteQuery = new PosDataFileTemplete();
+		posDataFileTempleteQuery.setId(templeteId);
+		posDataFileTempleteQuery.setIsDeleted(false);
+		List<PosDataFileTemplete> posDataFileTempleteList = posDataFileTempleteService.retrieve(posDataFileTempleteQuery);
+		if(CollectionUtils.isEmpty(posDataFileTempleteList)) {
+			throw new Exception("未查找到匹配的模板");
+		}
+		return posDataFileTempleteList.get(0);
+	}
+
+	@Override
+	public LmisResult<?> downLoadTemplete(String templeteId) {
+		return poDataExcelDownload(templeteId,"",true);
+	}
+
+}

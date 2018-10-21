@@ -1,0 +1,1310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.OperationSettlementRuleMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.OperationSettlementRule" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="contract_id" property="contract_id"/>
+	<result column="osr_setttle_method" property="osr_setttle_method"/>
+	<result column="osr_fixed_type" property="osr_fixed_type"/>
+	<result column="osr_fixed_price" property="osr_fixed_price"/>
+	<result column="osr_fixed_price_unit" property="osr_fixed_price_unit"/>
+	<result column="osr_fixed_exceed_tableid" property="osr_fixed_exceed_tableid"/>
+	<result column="osr_sales_percent" property="osr_sales_percent"/>
+	<result column="osr_ibop_fee" property="osr_ibop_fee"/>
+	<result column="osr_ibop_skuprice" property="osr_ibop_skuprice"/>
+	<result column="osr_ibop_skuprice_unit" property="osr_ibop_skuprice_unit"/>
+	<result column="osr_ibop_itemprice" property="osr_ibop_itemprice"/>
+	<result column="osr_ibop_itemprice_unit" property="osr_ibop_itemprice_unit"/>
+	<result column="osr_ibop_qtyprice" property="osr_ibop_qtyprice"/>
+	<result column="osr_ibop_qtyprice_unit" property="osr_ibop_qtyprice_unit"/>
+	<result column="osr_btcobop_fee" property="osr_btcobop_fee"/>
+	<result column="osr_btcobop_numfee" property="osr_btcobop_numfee"/>
+	<result column="osr_btcobop_numprice" property="osr_btcobop_numprice"/>
+	<result column="osr_btcobop_numdc" property="osr_btcobop_numdc"/>
+	<result column="osr_btcobopnum_tableid" property="osr_btcobopnum_tableid"/>
+	<result column="osr_tobtb" property="osr_tobtb"/>
+	<result column="osr_btcobopbill_tobtb_tableid" property="osr_btcobopbill_tobtb_tableid"/>
+	<result column="osr_btcobopbill_tableid" property="osr_btcobopbill_tableid"/>
+	<result column="osr_btcobopbill_discount_tableid" property="osr_btcobopbill_discount_tableid"/>
+	<result column="osr_btbobop_fee" property="osr_btbobop_fee"/>
+	<result column="osr_btbobop_billprice" property="osr_btbobop_billprice"/>
+	<result column="osr_btbobop_billprice_unit" property="osr_btbobop_billprice_unit"/>
+	<result column="osr_btbobop_skuprice" property="osr_btbobop_skuprice"/>
+	<result column="osr_btbobop_skuprice_unit" property="osr_btbobop_skuprice_unit"/>
+	<result column="osr_btbobop_itemprice" property="osr_btbobop_itemprice"/>
+	<result column="osr_btbobop_itemprice_unit" property="osr_btbobop_itemprice_unit"/>
+	<result column="osr_btbrtop_fee" property="osr_btbrtop_fee"/>
+	<result column="osr_btbrtop_sku_skuprice" property="osr_btbrtop_sku_skuprice"/>
+	<result column="osr_btbrtop_sku_skuprice_unit" property="osr_btbrtop_sku_skuprice_unit"/>
+	<result column="osr_btbrtop_sku_billprice" property="osr_btbrtop_sku_billprice"/>
+	<result column="osr_btbrtop_sku_billprice_unit" property="osr_btbrtop_sku_billprice_unit"/>
+	<result column="osr_btbrtop_bill_billprice" property="osr_btbrtop_bill_billprice"/>
+	<result column="osr_btbrtop_bill_billprice_unit" property="osr_btbrtop_bill_billprice_unit"/>
+	<result column="osr_btcrtib_fee" property="osr_btcrtib_fee"/>
+	<result column="osr_btcrtib_bill_billprice" property="osr_btcrtib_bill_billprice"/>
+	<result column="osr_btcrtib_bill_billprice_unit" property="osr_btcrtib_bill_billprice_unit"/>
+	<result column="osr_btcrtib_piece" property="osr_btcrtib_piece"/>
+	<result column="osr_btcrtib_piece_pieceprice" property="osr_btcrtib_piece_pieceprice"/>
+	<result column="osr_btcrtib_piece_pieceprice_unit" property="osr_btcrtib_piece_pieceprice_unit"/>
+	<result column="osr_btcrti_tableid" property="osr_btcrti_tableid"/>
+	<result column="osr_addservice_fee" property="osr_addservice_fee"/>
+	<result column="osr_qc_fee" property="osr_qc_fee"/>
+	<result column="osr_qc_pieceprice" property="osr_qc_pieceprice"/>
+	<result column="osr_qc_pieceprice_unit" property="osr_qc_pieceprice_unit"/>
+	<result column="osr_gift_fee" property="osr_gift_fee"/>
+	<result column="osr_gift_billprice" property="osr_gift_billprice"/>
+	<result column="osr_gift_billprice_unit" property="osr_gift_billprice_unit"/>
+	<result column="osr_mesurement" property="osr_mesurement"/>
+	<result column="osr_mesurement_price" property="osr_mesurement_price"/>
+	<result column="osr_mesurement_price_unit" property="osr_mesurement_price_unit"/>
+	<result column="osr_security_code" property="osr_security_code"/>
+	<result column="osr_security_code_price" property="osr_security_code_price"/>
+	<result column="osr_security_code_price_unit" property="osr_security_code_price_unit"/>
+	<result column="osr_itemnum" property="osr_itemnum"/>
+	<result column="osr_itemnum_price" property="osr_itemnum_price"/>
+	<result column="osr_itemnum_price_unit" property="osr_itemnum_price_unit"/>
+	<result column="osr_drop_photo" property="osr_drop_photo"/>
+	<result column="osr_drop_photo_price" property="osr_drop_photo_price"/>
+	<result column="osr_drop_photo_price_unit" property="osr_drop_photo_price_unit"/>
+	<result column="osr_message" property="osr_message"/>
+	<result column="osr_message_price" property="osr_message_price"/>
+	<result column="osr_message_price_unit" property="osr_message_price_unit"/>
+	<result column="osr_extra_fee" property="osr_extra_fee"/>
+	<result column="osr_extra_fee_price" property="osr_extra_fee_price"/>
+	<result column="osr_extra_fee_price_unit" property="osr_extra_fee_price_unit"/>
+	<result column="osr_change_package" property="osr_change_package"/>
+	<result column="osr_change_package_price" property="osr_change_package_price"/>
+	<result column="osr_change_package_price_unit" property="osr_change_package_price_unit"/>
+	<result column="osr_notworkingtime" property="osr_notworkingtime"/>
+	<result column="osr_notworkingtime_price" property="osr_notworkingtime_price"/>
+	<result column="osr_notworkingtime_price_unit" property="osr_notworkingtime_price_unit"/>
+	<result column="osr_waybillpeer" property="osr_waybillpeer"/>
+	<result column="osr_waybillpeer_price" property="osr_waybillpeer_price"/>
+	<result column="osr_waybillpeer_price_unit" property="osr_waybillpeer_price_unit"/>
+	<result column="osr_emergency_receipt" property="osr_emergency_receipt"/>
+	<result column="osr_emergency_receipt_price" property="osr_emergency_receipt_price"/>
+	<result column="osr_emergency_receipt_price_unit" property="osr_emergency_receipt_price_unit"/>
+	<result column="osr_cancelorder" property="osr_cancelorder"/>
+	<result column="osr_cancelorder_price" property="osr_cancelorder_price"/>
+	<result column="osr_cancelorder_price_unit" property="osr_cancelorder_price_unit"/>
+	<result column="osr_makebarfee" property="osr_makebarfee"/>
+	<result column="osr_makebarfee_price" property="osr_makebarfee_price"/>
+	<result column="osr_makebarfee_price_unit" property="osr_makebarfee_price_unit"/>
+	<result column="osr_landfee" property="osr_landfee"/>
+	<result column="osr_landfee_price" property="osr_landfee_price"/>
+	<result column="osr_landfee_price_util" property="osr_landfee_price_util"/>
+	<result column="osr_btcobopbill_tobtb_js" property="osr_btcobopbill_tobtb_js"/>
+	<result column="osr_btcobopbill_discount_type" property="osr_btcobopbill_discount_type"/>
+	<result column="osr_btcobopbill_discount_tableid2" property="osr_btcobopbill_discount_tableid2"/>
+	<result column="osr_zzfwf_status" property="osr_zzfwf_status"/>
+	<result column="osr_zzfwf_detail" property="osr_zzfwf_detail"/>
+	<result column="osr_tax_point" property="osr_tax_point"/>
+	<result column="allzk" property="allzk"/>
+	<result column="osr_btcobop_numfees" property="osr_btcobop_numfees"/>
+	<result column="osr_btcobop_numprices" property="osr_btcobop_numprices"/>
+	<result column="osr_btcobop_numdcs" property="osr_btcobop_numdcs"/>
+	<result column="osr_btcobopnum_tableids" property="osr_btcobopnum_tableids"/>
+	
+</resultMap>
+       
+<!-- tb_operation_settlement_rule table all fields -->
+<sql id="Base_Column_List" >
+	 id,osr_btcobopnum_tableidss,osr_btcobopnum_tableids,osr_btcobop_numfees,osr_btcobop_numprices,osr_btcobop_numdcs,allzk,osr_tax_point,osr_zzfwf_status,osr_zzfwf_detail,osr_btcobopbill_discount_type,osr_btcobopbill_discount_tableid2,osr_btcobopbill_tobtb_js,create_time,create_user,update_time,update_user,contract_id,osr_setttle_method,osr_fixed_type,osr_fixed_price,osr_fixed_price_unit,osr_fixed_exceed_tableid,osr_sales_percent,osr_ibop_fee,osr_ibop_skuprice,osr_ibop_skuprice_unit,osr_ibop_itemprice,osr_ibop_itemprice_unit,osr_ibop_qtyprice,osr_ibop_qtyprice_unit,osr_btcobop_fee,osr_btcobop_numfee,osr_btcobop_numprice,osr_btcobop_numdc,osr_btcobopnum_tableid,osr_tobtb,osr_btcobopbill_tobtb_tableid,osr_btcobopbill_tableid,osr_btcobopbill_discount_tableid,osr_btbobop_fee,osr_btbobop_billprice,osr_btbobop_billprice_unit,osr_btbobop_skuprice,osr_btbobop_skuprice_unit,osr_btbobop_itemprice,osr_btbobop_itemprice_unit,osr_btbrtop_fee,osr_btbrtop_sku_skuprice,osr_btbrtop_sku_skuprice_unit,osr_btbrtop_sku_billprice,osr_btbrtop_sku_billprice_unit,osr_btbrtop_bill_billprice,osr_btbrtop_bill_billprice_unit,osr_btcrtib_fee,osr_btcrtib_bill_billprice,osr_btcrtib_bill_billprice_unit,osr_btcrtib_piece,osr_btcrtib_piece_pieceprice,osr_btcrtib_piece_pieceprice_unit,osr_btcrti_tableid,osr_addservice_fee,osr_qc_fee,osr_qc_pieceprice,osr_qc_pieceprice_unit,osr_gift_fee,osr_gift_billprice,osr_gift_billprice_unit,osr_mesurement,osr_mesurement_price,osr_mesurement_price_unit,osr_security_code,osr_security_code_price,osr_security_code_price_unit,osr_itemnum,osr_itemnum_price,osr_itemnum_price_unit,osr_drop_photo,osr_drop_photo_price,osr_drop_photo_price_unit,osr_message,osr_message_price,osr_message_price_unit,osr_extra_fee,osr_extra_fee_price,osr_extra_fee_price_unit,osr_change_package,osr_change_package_price,osr_change_package_price_unit,osr_notworkingtime,osr_notworkingtime_price,osr_notworkingtime_price_unit,osr_waybillpeer,osr_waybillpeer_price,osr_waybillpeer_price_unit,osr_emergency_receipt,osr_emergency_receipt_price,osr_emergency_receipt_price_unit,osr_cancelorder,osr_cancelorder_price,osr_cancelorder_price_unit,osr_makebarfee,osr_makebarfee_price,osr_makebarfee_price_unit,osr_landfee,osr_landfee_price,osr_landfee_price_util
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	
+ 	<if test="osr_btcobopnum_tableidss != null and osr_btcobopnum_tableidss != ''" >
+	    and osr_btcobopnum_tableidss =  #{osr_btcobopnum_tableidss}
+	</if>
+ 	<if test="osr_btcobopnum_tableids != null and osr_btcobopnum_tableids != ''" >
+	    and osr_btcobopnum_tableids =  #{osr_btcobopnum_tableids}
+	</if>
+ 	<if test="osr_btcobop_numfees != null and osr_btcobop_numfees != ''" >
+	    and osr_btcobop_numfees =  #{osr_btcobop_numfees}
+	</if>
+ 	<if test="osr_btcobop_numprices != null and osr_btcobop_numprices != ''" >
+	    and osr_btcobop_numprices =  #{osr_btcobop_numprices}
+	</if>
+ 	<if test="osr_btcobop_numdcs != null and osr_btcobop_numdcs != ''" >
+	    and osr_btcobop_numdcs =  #{osr_btcobop_numdcs}
+	</if>
+	
+ 	<if test="osr_tax_point != null and osr_tax_point != ''" >
+	    and osr_tax_point =  #{osr_tax_point}
+	</if>
+ 	<if test="osr_zzfwf_status != null and osr_zzfwf_status != ''" >
+	    and osr_zzfwf_status =  #{osr_zzfwf_status}
+	</if>
+ 	<if test="osr_zzfwf_detail != null and osr_zzfwf_detail != ''" >
+	    and osr_zzfwf_detail =  #{osr_zzfwf_detail}
+	</if>
+ 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+ 	<if test="osr_btcobopbill_tobtb_js != null and osr_btcobopbill_tobtb_js != ''" >
+	    and osr_btcobopbill_tobtb_js =  #{osr_btcobopbill_tobtb_js}
+	</if>
+	 	<if test="osr_btcobopbill_discount_type != null and osr_btcobopbill_discount_type != ''" >
+	    and osr_btcobopbill_discount_type =  #{osr_btcobopbill_discount_type}
+	</if>
+	 	<if test="osr_btcobopbill_discount_tableid2 != null and osr_btcobopbill_discount_tableid2 != ''" >
+	    and osr_btcobopbill_discount_tableid2 =  #{osr_btcobopbill_discount_tableid2}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="contract_id != null" >
+	    and contract_id =  #{contract_id}
+	</if>
+	<if test="osr_setttle_method != null" >
+	    and osr_setttle_method =  #{osr_setttle_method}
+	</if>
+	<if test="osr_fixed_type != null" >
+	    and osr_fixed_type =  #{osr_fixed_type}
+	</if>
+	 	<if test="osr_fixed_price != null and osr_fixed_price != ''" >
+	    and osr_fixed_price =  #{osr_fixed_price}
+	</if>
+	<if test="osr_fixed_price_unit != null" >
+	    and osr_fixed_price_unit =  #{osr_fixed_price_unit}
+	</if>
+	 	<if test="osr_fixed_exceed_tableid != null and osr_fixed_exceed_tableid != ''" >
+	    and osr_fixed_exceed_tableid =  #{osr_fixed_exceed_tableid}
+	</if>
+	 	<if test="osr_sales_percent != null and osr_sales_percent != ''" >
+	    and osr_sales_percent =  #{osr_sales_percent}
+	</if>
+	<if test="osr_ibop_fee != null" >
+	    and osr_ibop_fee =  #{osr_ibop_fee}
+	</if>
+	<if test="osr_ibop_skuprice != null" >
+	    and osr_ibop_skuprice =  #{osr_ibop_skuprice}
+	</if>
+	 	<if test="osr_ibop_skuprice_unit != null and osr_ibop_skuprice_unit != ''" >
+	    and osr_ibop_skuprice_unit =  #{osr_ibop_skuprice_unit}
+	</if>
+	<if test="osr_ibop_itemprice != null" >
+	    and osr_ibop_itemprice =  #{osr_ibop_itemprice}
+	</if>
+	 	<if test="osr_ibop_itemprice_unit != null and osr_ibop_itemprice_unit != ''" >
+	    and osr_ibop_itemprice_unit =  #{osr_ibop_itemprice_unit}
+	</if>
+	<if test="osr_ibop_qtyprice != null" >
+	    and osr_ibop_qtyprice =  #{osr_ibop_qtyprice}
+	</if>
+	 	<if test="osr_ibop_qtyprice_unit != null and osr_ibop_qtyprice_unit != ''" >
+	    and osr_ibop_qtyprice_unit =  #{osr_ibop_qtyprice_unit}
+	</if>
+	<if test="osr_btcobop_fee != null" >
+	    and osr_btcobop_fee =  #{osr_btcobop_fee}
+	</if>
+	<if test="osr_btcobop_numfee != null" >
+	    and osr_btcobop_numfee =  #{osr_btcobop_numfee}
+	</if>
+	<if test="osr_btcobop_numprice != null" >
+	    and osr_btcobop_numprice =  #{osr_btcobop_numprice}
+	</if>
+	<if test="osr_btcobop_numdc != null" >
+	    and osr_btcobop_numdc =  #{osr_btcobop_numdc}
+	</if>
+	<if test="osr_btcobopnum_tableid != null" >
+	    and osr_btcobopnum_tableid =  #{osr_btcobopnum_tableid}
+	</if>
+	<if test="osr_tobtb != null" >
+	    and osr_tobtb =  #{osr_tobtb}
+	</if>
+	<if test="osr_btcobopbill_tobtb_tableid != null" >
+	    and osr_btcobopbill_tobtb_tableid =  #{osr_btcobopbill_tobtb_tableid}
+	</if>
+	<if test="osr_btcobopbill_tableid != null" >
+	    and osr_btcobopbill_tableid =  #{osr_btcobopbill_tableid}
+	</if>
+	<if test="osr_btcobopbill_discount_tableid != null" >
+	    and osr_btcobopbill_discount_tableid =  #{osr_btcobopbill_discount_tableid}
+	</if>
+	<if test="osr_btbobop_fee != null" >
+	    and osr_btbobop_fee =  #{osr_btbobop_fee}
+	</if>
+	<if test="osr_btbobop_billprice != null" >
+	    and osr_btbobop_billprice =  #{osr_btbobop_billprice}
+	</if>
+	 	<if test="osr_btbobop_billprice_unit != null and osr_btbobop_billprice_unit != ''" >
+	    and osr_btbobop_billprice_unit =  #{osr_btbobop_billprice_unit}
+	</if>
+	<if test="osr_btbobop_skuprice != null" >
+	    and osr_btbobop_skuprice =  #{osr_btbobop_skuprice}
+	</if>
+	 	<if test="osr_btbobop_skuprice_unit != null and osr_btbobop_skuprice_unit != ''" >
+	    and osr_btbobop_skuprice_unit =  #{osr_btbobop_skuprice_unit}
+	</if>
+	<if test="osr_btbobop_itemprice != null" >
+	    and osr_btbobop_itemprice =  #{osr_btbobop_itemprice}
+	</if>
+	 	<if test="osr_btbobop_itemprice_unit != null and osr_btbobop_itemprice_unit != ''" >
+	    and osr_btbobop_itemprice_unit =  #{osr_btbobop_itemprice_unit}
+	</if>
+	<if test="osr_btbrtop_fee != null" >
+	    and osr_btbrtop_fee =  #{osr_btbrtop_fee}
+	</if>
+	<if test="osr_btbrtop_sku_skuprice != null" >
+	    and osr_btbrtop_sku_skuprice =  #{osr_btbrtop_sku_skuprice}
+	</if>
+	 	<if test="osr_btbrtop_sku_skuprice_unit != null and osr_btbrtop_sku_skuprice_unit != ''" >
+	    and osr_btbrtop_sku_skuprice_unit =  #{osr_btbrtop_sku_skuprice_unit}
+	</if>
+	<if test="osr_btbrtop_sku_billprice != null" >
+	    and osr_btbrtop_sku_billprice =  #{osr_btbrtop_sku_billprice}
+	</if>
+	 	<if test="osr_btbrtop_sku_billprice_unit != null and osr_btbrtop_sku_billprice_unit != ''" >
+	    and osr_btbrtop_sku_billprice_unit =  #{osr_btbrtop_sku_billprice_unit}
+	</if>
+	<if test="osr_btbrtop_bill_billprice != null" >
+	    and osr_btbrtop_bill_billprice =  #{osr_btbrtop_bill_billprice}
+	</if>
+	 	<if test="osr_btbrtop_bill_billprice_unit != null and osr_btbrtop_bill_billprice_unit != ''" >
+	    and osr_btbrtop_bill_billprice_unit =  #{osr_btbrtop_bill_billprice_unit}
+	</if>
+	<if test="osr_btcrtib_fee != null" >
+	    and osr_btcrtib_fee =  #{osr_btcrtib_fee}
+	</if>
+	<if test="osr_btcrtib_bill_billprice != null" >
+	    and osr_btcrtib_bill_billprice =  #{osr_btcrtib_bill_billprice}
+	</if>
+	 	<if test="osr_btcrtib_bill_billprice_unit != null and osr_btcrtib_bill_billprice_unit != ''" >
+	    and osr_btcrtib_bill_billprice_unit =  #{osr_btcrtib_bill_billprice_unit}
+	</if>
+	<if test="osr_btcrtib_piece != null" >
+	    and osr_btcrtib_piece =  #{osr_btcrtib_piece}
+	</if>
+	<if test="osr_btcrtib_piece_pieceprice != null" >
+	    and osr_btcrtib_piece_pieceprice =  #{osr_btcrtib_piece_pieceprice}
+	</if>
+	 	<if test="osr_btcrtib_piece_pieceprice_unit != null and osr_btcrtib_piece_pieceprice_unit != ''" >
+	    and osr_btcrtib_piece_pieceprice_unit =  #{osr_btcrtib_piece_pieceprice_unit}
+	</if>
+	<if test="osr_btcrti_tableid != null" >
+	    and osr_btcrti_tableid =  #{osr_btcrti_tableid}
+	</if>
+	<if test="osr_addservice_fee != null" >
+	    and osr_addservice_fee =  #{osr_addservice_fee}
+	</if>
+	<if test="osr_qc_fee != null" >
+	    and osr_qc_fee =  #{osr_qc_fee}
+	</if>
+	<if test="osr_qc_pieceprice != null" >
+	    and osr_qc_pieceprice =  #{osr_qc_pieceprice}
+	</if>
+	 	<if test="osr_qc_pieceprice_unit != null and osr_qc_pieceprice_unit != ''" >
+	    and osr_qc_pieceprice_unit =  #{osr_qc_pieceprice_unit}
+	</if>
+	<if test="osr_gift_fee != null" >
+	    and osr_gift_fee =  #{osr_gift_fee}
+	</if>
+	<if test="osr_gift_billprice != null" >
+	    and osr_gift_billprice =  #{osr_gift_billprice}
+	</if>
+	 	<if test="osr_gift_billprice_unit != null and osr_gift_billprice_unit != ''" >
+	    and osr_gift_billprice_unit =  #{osr_gift_billprice_unit}
+	</if>
+	<if test="osr_mesurement != null" >
+	    and osr_mesurement =  #{osr_mesurement}
+	</if>
+	<if test="osr_mesurement_price != null" >
+	    and osr_mesurement_price =  #{osr_mesurement_price}
+	</if>
+	 	<if test="osr_mesurement_price_unit != null and osr_mesurement_price_unit != ''" >
+	    and osr_mesurement_price_unit =  #{osr_mesurement_price_unit}
+	</if>
+	<if test="osr_security_code != null" >
+	    and osr_security_code =  #{osr_security_code}
+	</if>
+	<if test="osr_security_code_price != null" >
+	    and osr_security_code_price =  #{osr_security_code_price}
+	</if>
+	 	<if test="osr_security_code_price_unit != null and osr_security_code_price_unit != ''" >
+	    and osr_security_code_price_unit =  #{osr_security_code_price_unit}
+	</if>
+	<if test="osr_itemnum != null" >
+	    and osr_itemnum =  #{osr_itemnum}
+	</if>
+	<if test="osr_itemnum_price != null" >
+	    and osr_itemnum_price =  #{osr_itemnum_price}
+	</if>
+	 	<if test="osr_itemnum_price_unit != null and osr_itemnum_price_unit != ''" >
+	    and osr_itemnum_price_unit =  #{osr_itemnum_price_unit}
+	</if>
+	<if test="osr_drop_photo != null" >
+	    and osr_drop_photo =  #{osr_drop_photo}
+	</if>
+	<if test="osr_drop_photo_price != null" >
+	    and osr_drop_photo_price =  #{osr_drop_photo_price}
+	</if>
+	 	<if test="osr_drop_photo_price_unit != null and osr_drop_photo_price_unit != ''" >
+	    and osr_drop_photo_price_unit =  #{osr_drop_photo_price_unit}
+	</if>
+	<if test="osr_message != null" >
+	    and osr_message =  #{osr_message}
+	</if>
+	<if test="osr_message_price != null" >
+	    and osr_message_price =  #{osr_message_price}
+	</if>
+	 	<if test="osr_message_price_unit != null and osr_message_price_unit != ''" >
+	    and osr_message_price_unit =  #{osr_message_price_unit}
+	</if>
+	<if test="osr_extra_fee != null" >
+	    and osr_extra_fee =  #{osr_extra_fee}
+	</if>
+	<if test="osr_extra_fee_price != null" >
+	    and osr_extra_fee_price =  #{osr_extra_fee_price}
+	</if>
+	 	<if test="osr_extra_fee_price_unit != null and osr_extra_fee_price_unit != ''" >
+	    and osr_extra_fee_price_unit =  #{osr_extra_fee_price_unit}
+	</if>
+	<if test="osr_change_package != null" >
+	    and osr_change_package =  #{osr_change_package}
+	</if>
+	<if test="osr_change_package_price != null" >
+	    and osr_change_package_price =  #{osr_change_package_price}
+	</if>
+	 	<if test="osr_change_package_price_unit != null and osr_change_package_price_unit != ''" >
+	    and osr_change_package_price_unit =  #{osr_change_package_price_unit}
+	</if>
+	<if test="osr_notworkingtime != null" >
+	    and osr_notworkingtime =  #{osr_notworkingtime}
+	</if>
+	<if test="osr_notworkingtime_price != null" >
+	    and osr_notworkingtime_price =  #{osr_notworkingtime_price}
+	</if>
+	 	<if test="osr_notworkingtime_price_unit != null and osr_notworkingtime_price_unit != ''" >
+	    and osr_notworkingtime_price_unit =  #{osr_notworkingtime_price_unit}
+	</if>
+	<if test="osr_waybillpeer != null" >
+	    and osr_waybillpeer =  #{osr_waybillpeer}
+	</if>
+	<if test="osr_waybillpeer_price != null" >
+	    and osr_waybillpeer_price =  #{osr_waybillpeer_price}
+	</if>
+	 	<if test="osr_waybillpeer_price_unit != null and osr_waybillpeer_price_unit != ''" >
+	    and osr_waybillpeer_price_unit =  #{osr_waybillpeer_price_unit}
+	</if>
+	<if test="osr_emergency_receipt != null" >
+	    and osr_emergency_receipt =  #{osr_emergency_receipt}
+	</if>
+	<if test="osr_emergency_receipt_price != null" >
+	    and osr_emergency_receipt_price =  #{osr_emergency_receipt_price}
+	</if>
+	 	<if test="osr_emergency_receipt_price_unit != null and osr_emergency_receipt_price_unit != ''" >
+	    and osr_emergency_receipt_price_unit =  #{osr_emergency_receipt_price_unit}
+	</if>
+	<if test="osr_cancelorder != null" >
+	    and osr_cancelorder =  #{osr_cancelorder}
+	</if>
+	<if test="osr_cancelorder_price != null" >
+	    and osr_cancelorder_price =  #{osr_cancelorder_price}
+	</if>
+	 	<if test="osr_cancelorder_price_unit != null and osr_cancelorder_price_unit != ''" >
+	    and osr_cancelorder_price_unit =  #{osr_cancelorder_price_unit}
+	</if>
+	<if test="osr_makebarfee != null" >
+	    and osr_makebarfee =  #{osr_makebarfee}
+	</if>
+	<if test="osr_makebarfee_price != null" >
+	    and osr_makebarfee_price =  #{osr_makebarfee_price}
+	</if>
+	 	<if test="osr_makebarfee_price_unit != null and osr_makebarfee_price_unit != ''" >
+	    and osr_makebarfee_price_unit =  #{osr_makebarfee_price_unit}
+	</if>
+	<if test="osr_landfee != null" >
+	    and osr_landfee =  #{osr_landfee}
+	</if>
+	<if test="osr_landfee_price != null" >
+	    and osr_landfee_price =  #{osr_landfee_price}
+	</if>
+	 	<if test="osr_landfee_price_util != null and osr_landfee_price_util != ''" >
+	    and osr_landfee_price_util =  #{osr_landfee_price_util}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入操作费结算规则表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.OperationSettlementRule" >
+	insert into
+	tb_operation_settlement_rule(id,osr_btcobopnum_tableids,osr_btcobop_numfees,osr_btcobop_numprices,osr_btcobop_numdcs,osr_tax_point,osr_btcobopbill_discount_type,osr_zzfwf_status,osr_zzfwf_detail,osr_btcobopbill_discount_tableid2,osr_btcobopbill_tobtb_js,create_time,create_user,update_time,update_user,contract_id,osr_setttle_method,osr_fixed_type,osr_fixed_price,osr_fixed_price_unit,osr_fixed_exceed_tableid,osr_sales_percent,osr_ibop_fee,osr_ibop_skuprice,osr_ibop_skuprice_unit,osr_ibop_itemprice,osr_ibop_itemprice_unit,osr_ibop_qtyprice,osr_ibop_qtyprice_unit,osr_btcobop_fee,osr_btcobop_numfee,osr_btcobop_numprice,osr_btcobop_numdc,osr_btcobopnum_tableid,osr_tobtb,osr_btcobopbill_tobtb_tableid,osr_btcobopbill_tableid,osr_btcobopbill_discount_tableid,osr_btbobop_fee,osr_btbobop_billprice,osr_btbobop_billprice_unit,osr_btbobop_skuprice,osr_btbobop_skuprice_unit,osr_btbobop_itemprice,osr_btbobop_itemprice_unit,osr_btbrtop_fee,osr_btbrtop_sku_skuprice,osr_btbrtop_sku_skuprice_unit,osr_btbrtop_sku_billprice,osr_btbrtop_sku_billprice_unit,osr_btbrtop_bill_billprice,osr_btbrtop_bill_billprice_unit,osr_btcrtib_fee,osr_btcrtib_bill_billprice,osr_btcrtib_bill_billprice_unit,osr_btcrtib_piece,osr_btcrtib_piece_pieceprice,osr_btcrtib_piece_pieceprice_unit,osr_btcrti_tableid,osr_addservice_fee,osr_qc_fee,osr_qc_pieceprice,osr_qc_pieceprice_unit,osr_gift_fee,osr_gift_billprice,osr_gift_billprice_unit,osr_mesurement,osr_mesurement_price,osr_mesurement_price_unit,osr_security_code,osr_security_code_price,osr_security_code_price_unit,osr_itemnum,osr_itemnum_price,osr_itemnum_price_unit,osr_drop_photo,osr_drop_photo_price,osr_drop_photo_price_unit,osr_message,osr_message_price,osr_message_price_unit,osr_extra_fee,osr_extra_fee_price,osr_extra_fee_price_unit,osr_change_package,osr_change_package_price,osr_change_package_price_unit,osr_notworkingtime,osr_notworkingtime_price,osr_notworkingtime_price_unit,osr_waybillpeer,osr_waybillpeer_price,osr_waybillpeer_price_unit,osr_emergency_receipt,osr_emergency_receipt_price,osr_emergency_receipt_price_unit,osr_cancelorder,osr_cancelorder_price,osr_cancelorder_price_unit,osr_makebarfee,osr_makebarfee_price,osr_makebarfee_price_unit,osr_landfee,osr_landfee_price,osr_landfee_price_util)
+	values(#{id},#{osr_btcobopnum_tableids},#{osr_btcobop_numfees},#{osr_btcobop_numprices},#{osr_btcobop_numdcs},#{osr_tax_point},#{osr_btcobopbill_discount_type},#{osr_zzfwf_status},#{osr_zzfwf_detail},#{osr_btcobopbill_discount_tableid2},#{osr_btcobopbill_tobtb_js},now(),#{create_user},now(),#{update_user},#{contract_id},#{osr_setttle_method},#{osr_fixed_type},#{osr_fixed_price},#{osr_fixed_price_unit},#{osr_fixed_exceed_tableid},#{osr_sales_percent},#{osr_ibop_fee},#{osr_ibop_skuprice},#{osr_ibop_skuprice_unit},#{osr_ibop_itemprice},#{osr_ibop_itemprice_unit},#{osr_ibop_qtyprice},#{osr_ibop_qtyprice_unit},#{osr_btcobop_fee},#{osr_btcobop_numfee},#{osr_btcobop_numprice},#{osr_btcobop_numdc},#{osr_btcobopnum_tableid},#{osr_tobtb},#{osr_btcobopbill_tobtb_tableid},#{osr_btcobopbill_tableid},#{osr_btcobopbill_discount_tableid},#{osr_btbobop_fee},#{osr_btbobop_billprice},#{osr_btbobop_billprice_unit},#{osr_btbobop_skuprice},#{osr_btbobop_skuprice_unit},#{osr_btbobop_itemprice},#{osr_btbobop_itemprice_unit},#{osr_btbrtop_fee},#{osr_btbrtop_sku_skuprice},#{osr_btbrtop_sku_skuprice_unit},#{osr_btbrtop_sku_billprice},#{osr_btbrtop_sku_billprice_unit},#{osr_btbrtop_bill_billprice},#{osr_btbrtop_bill_billprice_unit},#{osr_btcrtib_fee},#{osr_btcrtib_bill_billprice},#{osr_btcrtib_bill_billprice_unit},#{osr_btcrtib_piece},#{osr_btcrtib_piece_pieceprice},#{osr_btcrtib_piece_pieceprice_unit},#{osr_btcrti_tableid},#{osr_addservice_fee},#{osr_qc_fee},#{osr_qc_pieceprice},#{osr_qc_pieceprice_unit},#{osr_gift_fee},#{osr_gift_billprice},#{osr_gift_billprice_unit},#{osr_mesurement},#{osr_mesurement_price},#{osr_mesurement_price_unit},#{osr_security_code},#{osr_security_code_price},#{osr_security_code_price_unit},#{osr_itemnum},#{osr_itemnum_price},#{osr_itemnum_price_unit},#{osr_drop_photo},#{osr_drop_photo_price},#{osr_drop_photo_price_unit},#{osr_message},#{osr_message_price},#{osr_message_price_unit},#{osr_extra_fee},#{osr_extra_fee_price},#{osr_extra_fee_price_unit},#{osr_change_package},#{osr_change_package_price},#{osr_change_package_price_unit},#{osr_notworkingtime},#{osr_notworkingtime_price},#{osr_notworkingtime_price_unit},#{osr_waybillpeer},#{osr_waybillpeer_price},#{osr_waybillpeer_price_unit},#{osr_emergency_receipt},#{osr_emergency_receipt_price},#{osr_emergency_receipt_price_unit},#{osr_cancelorder},#{osr_cancelorder_price},#{osr_cancelorder_price_unit},#{osr_makebarfee},#{osr_makebarfee_price},#{osr_makebarfee_price_unit},#{osr_landfee},#{osr_landfee_price},#{osr_landfee_price_util})
+</insert>
+
+<insert id="saveMain" parameterType="java.util.Map" >
+	insert into tb_operation_settlement_rule(osr_tax_point,allzk,osr_btcobop_numfees,osr_btcobop_numprices,osr_btcobop_numdcs,osr_btcobopnum_tableids,osr_btcobopnum_tableidss,
+		osr_btcobopbill_tobtb_js,create_time,create_user,update_time,update_user,osr_btcobopbill_discount_type,osr_btcobopbill_discount_tableid2,
+		contract_id,osr_zzfwf_status,osr_zzfwf_detail,
+		osr_setttle_method,osr_fixed_type,osr_fixed_price,osr_fixed_price_unit,osr_fixed_exceed_tableid,
+		osr_sales_percent,
+		osr_ibop_fee,osr_ibop_skuprice,osr_ibop_skuprice_unit,osr_ibop_itemprice,osr_ibop_itemprice_unit,osr_ibop_qtyprice,
+		osr_ibop_qtyprice_unit,osr_btcobop_fee,osr_btcobop_numfee,osr_btcobop_numprice,osr_btcobop_numdc,osr_btcobopnum_tableid,osr_tobtb,
+		osr_btcobopbill_tobtb_tableid,osr_btcobopbill_tableid,osr_btcobopbill_discount_tableid,osr_btbobop_fee,
+		osr_btbobop_billprice,osr_btbobop_billprice_unit,osr_btbobop_skuprice,osr_btbobop_skuprice_unit,
+		osr_btbobop_itemprice,osr_btbobop_itemprice_unit,osr_btbrtop_fee,osr_btbrtop_sku_skuprice,osr_btbrtop_sku_skuprice_unit,
+		osr_btbrtop_sku_billprice,osr_btbrtop_sku_billprice_unit,osr_btbrtop_bill_billprice,osr_btbrtop_bill_billprice_unit,
+		osr_btcrtib_fee,osr_btcrtib_bill_billprice,osr_btcrtib_bill_billprice_unit,osr_btcrtib_piece,osr_btcrtib_piece_pieceprice,
+		osr_btcrtib_piece_pieceprice_unit,osr_btcrti_tableid,osr_addservice_fee,osr_qc_fee,osr_qc_pieceprice,
+		osr_qc_pieceprice_unit,osr_gift_fee,osr_gift_billprice,osr_gift_billprice_unit,osr_mesurement,osr_mesurement_price,
+		osr_mesurement_price_unit,osr_security_code,osr_security_code_price,osr_security_code_price_unit,osr_itemnum,
+		osr_itemnum_price,osr_itemnum_price_unit,osr_drop_photo,osr_drop_photo_price,osr_drop_photo_price_unit,osr_message,
+		osr_message_price,osr_message_price_unit,osr_extra_fee,osr_extra_fee_price,osr_extra_fee_price_unit,osr_change_package,
+		osr_change_package_price,osr_change_package_price_unit,osr_notworkingtime,osr_notworkingtime_price,osr_notworkingtime_price_unit,
+		osr_waybillpeer,osr_waybillpeer_price,osr_waybillpeer_price_unit,osr_emergency_receipt,osr_emergency_receipt_price,
+		osr_emergency_receipt_price_unit,osr_cancelorder,osr_cancelorder_price,osr_cancelorder_price_unit,osr_makebarfee,
+		osr_makebarfee_price,osr_makebarfee_price_unit,osr_landfee,osr_landfee_price,osr_landfee_price_util)
+ 	values(#{osr_tax_point},#{allzk},#{osr_btcobop_numfees},#{osr_btcobop_numprices},#{osr_btcobop_numdcs},#{osr_btcobopnum_tableids},#{osr_btcobopnum_tableidss},
+ 		#{osr_btcobopbill_tobtb_js},#{create_time},#{create_user},#{update_time},#{update_user},#{osr_btcobopbill_discount_type},#{osr_btcobopbill_discount_tableid2},
+ 		#{contract_id},#{osr_zzfwf_status},#{osr_zzfwf_detail},
+ 		#{osr_setttle_method},#{osr_fixed_type},#{osr_fixed_price},#{osr_fixed_price_unit},#{osr_fixed_exceed_tableid},
+ 		#{osr_sales_percent},
+ 		#{osr_ibop_fee},#{osr_ibop_skuprice},#{osr_ibop_skuprice_unit},#{osr_ibop_itemprice},#{osr_ibop_itemprice_unit},#{osr_ibop_qtyprice},
+ 		#{osr_ibop_qtyprice_unit},#{osr_btcobop_fee},#{osr_btcobop_numfee},#{osr_btcobop_numprice},#{osr_btcobop_numdc},#{osr_btcobopnum_tableid},#{osr_tobtb},
+ 		#{osr_btcobopbill_tobtb_tableid},#{osr_btcobopbill_tableid},#{osr_btcobopbill_discount_tableid},#{osr_btbobop_fee},
+ 		#{osr_btbobop_billprice},#{osr_btbobop_billprice_unit},#{osr_btbobop_skuprice},#{osr_btbobop_skuprice_unit},
+ 		#{osr_btbobop_itemprice},#{osr_btbobop_itemprice_unit},#{osr_btbrtop_fee},#{osr_btbrtop_sku_skuprice},#{osr_btbrtop_sku_skuprice_unit},
+ 		#{osr_btbrtop_sku_billprice},#{osr_btbrtop_sku_billprice_unit},#{osr_btbrtop_bill_billprice},#{osr_btbrtop_bill_billprice_unit},
+ 		#{osr_btcrtib_fee},#{osr_btcrtib_bill_billprice},#{osr_btcrtib_bill_billprice_unit},#{osr_btcrtib_piece},#{osr_btcrtib_piece_pieceprice},
+ 		#{osr_btcrtib_piece_pieceprice_unit},#{osr_btcrti_tableid},#{osr_addservice_fee},#{osr_qc_fee},#{osr_qc_pieceprice},
+ 		#{osr_qc_pieceprice_unit},#{osr_gift_fee},#{osr_gift_billprice},#{osr_gift_billprice_unit},#{osr_mesurement},#{osr_mesurement_price},
+ 		#{osr_mesurement_price_unit},#{osr_security_code},#{osr_security_code_price},#{osr_security_code_price_unit},#{osr_itemnum},
+ 		#{osr_itemnum_price},#{osr_itemnum_price_unit},#{osr_drop_photo},#{osr_drop_photo_price},#{osr_drop_photo_price_unit},#{osr_message},
+ 		#{osr_message_price},#{osr_message_price_unit},#{osr_extra_fee},#{osr_extra_fee_price},#{osr_extra_fee_price_unit},#{osr_change_package},
+ 		#{osr_change_package_price},#{osr_change_package_price_unit},#{osr_notworkingtime},#{osr_notworkingtime_price},#{osr_notworkingtime_price_unit},
+ 		#{osr_waybillpeer},#{osr_waybillpeer_price},#{osr_waybillpeer_price_unit},#{osr_emergency_receipt},#{osr_emergency_receipt_price},
+ 		#{osr_emergency_receipt_price_unit},#{osr_cancelorder},#{osr_cancelorder_price},#{osr_cancelorder_price_unit},#{osr_makebarfee},
+ 		#{osr_makebarfee_price},#{osr_makebarfee_price_unit},#{osr_landfee},#{osr_landfee_price},#{osr_landfee_price_util})
+</insert>
+
+<update id="updateMain" parameterType="java.util.Map" >
+	update 
+		tb_operation_settlement_rule 
+	set 
+		<trim  suffixOverrides="," >
+			<if test="update_time != null  ">
+				update_time=#{update_time},
+			</if>
+		 	<if test="osr_btcobopnum_tableids != null and osr_btcobopnum_tableids != ''" >
+			    osr_btcobopnum_tableids =  #{osr_btcobopnum_tableids},
+			</if>
+		 	<if test="osr_btcobopnum_tableidss != null and osr_btcobopnum_tableidss != ''" >
+			    osr_btcobopnum_tableidss =  #{osr_btcobopnum_tableidss},
+			</if>
+		 	<if test="osr_btcobop_numfees != null and osr_btcobop_numfees != ''" >
+			    osr_btcobop_numfees =  #{osr_btcobop_numfees},
+			</if>
+		 	<if test="osr_btcobop_numprices != null and osr_btcobop_numprices != ''" >
+			    osr_btcobop_numprices =  #{osr_btcobop_numprices},
+			</if>
+		 	<if test="osr_btcobop_numdcs != null and osr_btcobop_numdcs != ''" >
+			    osr_btcobop_numdcs =  #{osr_btcobop_numdcs},
+			</if>
+			<if test="osr_zzfwf_status != null and osr_zzfwf_status !='' ">
+				osr_zzfwf_status=#{osr_zzfwf_status},
+			</if>
+			<if test="allzk != null and allzk !='' ">
+				allzk=#{allzk},
+			</if>
+			<if test="osr_tax_point != null and osr_tax_point !='' ">
+				osr_tax_point=#{osr_tax_point},
+			</if>
+			<if test="osr_zzfwf_detail != null and osr_zzfwf_detail !='' ">
+				osr_zzfwf_detail=#{osr_zzfwf_detail},
+			</if>
+			<if test="osr_btcobopbill_discount_type != null and osr_btcobopbill_discount_type !='' ">
+				osr_btcobopbill_discount_type=#{osr_btcobopbill_discount_type},
+			</if>
+			<if test="osr_btcobopbill_discount_tableid2 != null and osr_btcobopbill_discount_tableid2 !='' ">
+				osr_btcobopbill_discount_tableid2=#{osr_btcobopbill_discount_tableid2},
+			</if>
+			<if test="osr_btcobopbill_tobtb_js != null and osr_btcobopbill_tobtb_js !='' ">
+				osr_btcobopbill_tobtb_js=#{osr_btcobopbill_tobtb_js},
+			</if>
+			<if test="update_user != null  and update_user != '' ">
+				update_user=#{update_user},
+			</if>
+			<if test="contract_id != null  ">
+				contract_id=#{contract_id},
+			</if>
+			<if test="osr_setttle_method != null  ">
+				osr_setttle_method=#{osr_setttle_method},
+			</if>
+			<if test="osr_fixed_type != null  ">
+				osr_fixed_type=#{osr_fixed_type},
+			</if>
+			<if test="osr_fixed_price != null  and osr_fixed_price != '' ">
+				osr_fixed_price=#{osr_fixed_price},
+			</if>
+			<if test="osr_fixed_price_unit != null  ">
+				osr_fixed_price_unit=#{osr_fixed_price_unit},
+			</if>
+			<if test="osr_fixed_exceed_tableid != null  and osr_fixed_exceed_tableid != '' ">
+				osr_fixed_exceed_tableid=#{osr_fixed_exceed_tableid},
+			</if>
+			<if test="osr_sales_percent != null  and osr_sales_percent != '' ">
+				osr_sales_percent=#{osr_sales_percent},
+			</if>
+			<if test="osr_ibop_fee != null  ">
+				osr_ibop_fee=#{osr_ibop_fee},
+			</if>
+			<if test="osr_ibop_skuprice != null  ">
+				osr_ibop_skuprice=#{osr_ibop_skuprice},
+			</if>
+			<if test="osr_ibop_skuprice_unit != null  and osr_ibop_skuprice_unit != '' ">
+				osr_ibop_skuprice_unit=#{osr_ibop_skuprice_unit},
+			</if>
+			<if test="osr_ibop_itemprice != null  ">
+				osr_ibop_itemprice=#{osr_ibop_itemprice},
+			</if>
+			<if test="osr_ibop_itemprice_unit != null  and osr_ibop_itemprice_unit != '' ">
+				osr_ibop_itemprice_unit=#{osr_ibop_itemprice_unit},
+			</if>
+			<if test="osr_ibop_qtyprice != null  ">
+				osr_ibop_qtyprice=#{osr_ibop_qtyprice},
+			</if>
+			<if test="osr_ibop_qtyprice_unit != null  and osr_ibop_qtyprice_unit != '' ">
+				osr_ibop_qtyprice_unit=#{osr_ibop_qtyprice_unit},
+			</if>
+			<if test="osr_btcobop_fee != null  ">
+				osr_btcobop_fee=#{osr_btcobop_fee},
+			</if>
+			<if test="osr_btcobop_numfee != null  ">
+				osr_btcobop_numfee=#{osr_btcobop_numfee},
+			</if>
+			<if test="osr_btcobop_numprice != null  ">
+				osr_btcobop_numprice=#{osr_btcobop_numprice},
+			</if>
+			<if test="osr_btcobop_numdc != null  ">
+				osr_btcobop_numdc=#{osr_btcobop_numdc},
+			</if>
+			<if test="osr_btcobopnum_tableid != null  ">
+				osr_btcobopnum_tableid=#{osr_btcobopnum_tableid},
+			</if>
+			<if test="osr_tobtb != null  ">
+				osr_tobtb=#{osr_tobtb},
+			</if>
+			<if test="osr_btcobopbill_tobtb_tableid != null  ">
+				osr_btcobopbill_tobtb_tableid=#{osr_btcobopbill_tobtb_tableid},
+			</if>
+			<if test="osr_btcobopbill_tableid != null  ">
+				osr_btcobopbill_tableid=#{osr_btcobopbill_tableid},
+			</if>
+			<if test="osr_btcobopbill_discount_tableid != null  ">
+				osr_btcobopbill_discount_tableid=#{osr_btcobopbill_discount_tableid},
+			</if>
+			<if test="osr_btbobop_fee != null  ">
+				osr_btbobop_fee=#{osr_btbobop_fee},
+			</if>
+			<if test="osr_btbobop_billprice != null  ">
+				osr_btbobop_billprice=#{osr_btbobop_billprice},
+			</if>
+			<if test="osr_btbobop_billprice_unit != null  and osr_btbobop_billprice_unit != '' ">
+				osr_btbobop_billprice_unit=#{osr_btbobop_billprice_unit},
+			</if>
+			<if test="osr_btbobop_skuprice != null  ">
+				osr_btbobop_skuprice=#{osr_btbobop_skuprice},
+			</if>
+			<if test="osr_btbobop_skuprice_unit != null  and osr_btbobop_skuprice_unit != '' ">
+				osr_btbobop_skuprice_unit=#{osr_btbobop_skuprice_unit},
+			</if>
+			<if test="osr_btbobop_itemprice != null  ">
+				osr_btbobop_itemprice=#{osr_btbobop_itemprice},
+			</if>
+			<if test="osr_btbobop_itemprice_unit != null  and osr_btbobop_itemprice_unit != '' ">
+				osr_btbobop_itemprice_unit=#{osr_btbobop_itemprice_unit},
+			</if>
+			<if test="osr_btbrtop_fee != null  ">
+				osr_btbrtop_fee=#{osr_btbrtop_fee},
+			</if>
+			<if test="osr_btbrtop_sku_skuprice != null  ">
+				osr_btbrtop_sku_skuprice=#{osr_btbrtop_sku_skuprice},
+			</if>
+			<if test="osr_btbrtop_sku_skuprice_unit != null  and osr_btbrtop_sku_skuprice_unit != '' ">
+				osr_btbrtop_sku_skuprice_unit=#{osr_btbrtop_sku_skuprice_unit},
+			</if>
+			<if test="osr_btbrtop_sku_billprice != null  ">
+				osr_btbrtop_sku_billprice=#{osr_btbrtop_sku_billprice},
+			</if>
+			<if test="osr_btbrtop_sku_billprice_unit != null  and osr_btbrtop_sku_billprice_unit != '' ">
+				osr_btbrtop_sku_billprice_unit=#{osr_btbrtop_sku_billprice_unit},
+			</if>
+			<if test="osr_btbrtop_bill_billprice != null  ">
+				osr_btbrtop_bill_billprice=#{osr_btbrtop_bill_billprice},
+			</if>
+			<if test="osr_btbrtop_bill_billprice_unit != null  and osr_btbrtop_bill_billprice_unit != '' ">
+				osr_btbrtop_bill_billprice_unit=#{osr_btbrtop_bill_billprice_unit},
+			</if>
+			<if test="osr_btcrtib_fee != null  ">
+				osr_btcrtib_fee=#{osr_btcrtib_fee},
+			</if>
+			<if test="osr_btcrtib_bill_billprice != null  ">
+				osr_btcrtib_bill_billprice=#{osr_btcrtib_bill_billprice},
+			</if>
+			<if test="osr_btcrtib_bill_billprice_unit != null  and osr_btcrtib_bill_billprice_unit != '' ">
+				osr_btcrtib_bill_billprice_unit=#{osr_btcrtib_bill_billprice_unit},
+			</if>
+			<if test="osr_btcrtib_piece != null  ">
+				osr_btcrtib_piece=#{osr_btcrtib_piece},
+			</if>
+			<if test="osr_btcrtib_piece_pieceprice != null  ">
+				osr_btcrtib_piece_pieceprice=#{osr_btcrtib_piece_pieceprice},
+			</if>
+			<if test="osr_btcrtib_piece_pieceprice_unit != null  and osr_btcrtib_piece_pieceprice_unit != '' ">
+				osr_btcrtib_piece_pieceprice_unit=#{osr_btcrtib_piece_pieceprice_unit},
+			</if>
+			<if test="osr_btcrti_tableid != null  ">
+				osr_btcrti_tableid=#{osr_btcrti_tableid},
+			</if>
+			<if test="osr_addservice_fee != null  ">
+				osr_addservice_fee=#{osr_addservice_fee},
+			</if>
+			<if test="osr_qc_fee != null  ">
+				osr_qc_fee=#{osr_qc_fee},
+			</if>
+			<if test="osr_qc_pieceprice != null  ">
+				osr_qc_pieceprice=#{osr_qc_pieceprice},
+			</if>
+			<if test="osr_qc_pieceprice_unit != null  and osr_qc_pieceprice_unit != '' ">
+				osr_qc_pieceprice_unit=#{osr_qc_pieceprice_unit},
+			</if>
+			<if test="osr_gift_fee != null  ">
+				osr_gift_fee=#{osr_gift_fee},
+			</if>
+			<if test="osr_gift_billprice != null  ">
+				osr_gift_billprice=#{osr_gift_billprice},
+			</if>
+			<if test="osr_gift_billprice_unit != null  and osr_gift_billprice_unit != '' ">
+				osr_gift_billprice_unit=#{osr_gift_billprice_unit},
+			</if>
+			<if test="osr_mesurement != null  ">
+				osr_mesurement=#{osr_mesurement},
+			</if>
+			<if test="osr_mesurement_price != null  ">
+				osr_mesurement_price=#{osr_mesurement_price},
+			</if>
+			<if test="osr_mesurement_price_unit != null  and osr_mesurement_price_unit != '' ">
+				osr_mesurement_price_unit=#{osr_mesurement_price_unit},
+			</if>
+			<if test="osr_security_code != null  ">
+				osr_security_code=#{osr_security_code},
+			</if>
+			<if test="osr_security_code_price != null  ">
+				osr_security_code_price=#{osr_security_code_price},
+			</if>
+			<if test="osr_security_code_price_unit != null  and osr_security_code_price_unit != '' ">
+				osr_security_code_price_unit=#{osr_security_code_price_unit},
+			</if>
+			<if test="osr_itemnum != null  ">
+				osr_itemnum=#{osr_itemnum},
+			</if>
+			<if test="osr_itemnum_price != null  ">
+				osr_itemnum_price=#{osr_itemnum_price},
+			</if>
+			<if test="osr_itemnum_price_unit != null  and osr_itemnum_price_unit != '' ">
+				osr_itemnum_price_unit=#{osr_itemnum_price_unit},
+			</if>
+			<if test="osr_drop_photo != null  ">
+				osr_drop_photo=#{osr_drop_photo},
+			</if>
+			<if test="osr_drop_photo_price != null  ">
+				osr_drop_photo_price=#{osr_drop_photo_price},
+			</if>
+			<if test="osr_drop_photo_price_unit != null  and osr_drop_photo_price_unit != '' ">
+				osr_drop_photo_price_unit=#{osr_drop_photo_price_unit},
+			</if>
+			<if test="osr_message != null  ">
+				osr_message=#{osr_message},
+			</if>
+			<if test="osr_message_price != null  ">
+				osr_message_price=#{osr_message_price},
+			</if>
+			<if test="osr_message_price_unit != null  and osr_message_price_unit != '' ">
+				osr_message_price_unit=#{osr_message_price_unit},
+			</if>
+			<if test="osr_extra_fee != null  ">
+				osr_extra_fee=#{osr_extra_fee},
+			</if>
+			<if test="osr_extra_fee_price != null  ">
+				osr_extra_fee_price=#{osr_extra_fee_price},
+			</if>
+			<if test="osr_extra_fee_price_unit != null  and osr_extra_fee_price_unit != '' ">
+				osr_extra_fee_price_unit=#{osr_extra_fee_price_unit},
+			</if>
+			<if test="osr_change_package != null  ">
+				osr_change_package=#{osr_change_package},
+			</if>
+			<if test="osr_change_package_price != null  ">
+				osr_change_package_price=#{osr_change_package_price},
+			</if>
+			<if test="osr_change_package_price_unit != null  and osr_change_package_price_unit != '' ">
+				osr_change_package_price_unit=#{osr_change_package_price_unit},
+			</if>
+			<if test="osr_notworkingtime != null  ">
+				osr_notworkingtime=#{osr_notworkingtime},
+			</if>
+			<if test="osr_notworkingtime_price != null  ">
+				osr_notworkingtime_price=#{osr_notworkingtime_price},
+			</if>
+			<if test="osr_notworkingtime_price_unit != null  and osr_notworkingtime_price_unit != '' ">
+				osr_notworkingtime_price_unit=#{osr_notworkingtime_price_unit},
+			</if>
+			<if test="osr_waybillpeer != null  ">
+				osr_waybillpeer=#{osr_waybillpeer},
+			</if>
+			<if test="osr_waybillpeer_price != null  ">
+				osr_waybillpeer_price=#{osr_waybillpeer_price},
+			</if>
+			<if test="osr_waybillpeer_price_unit != null  and osr_waybillpeer_price_unit != '' ">
+				osr_waybillpeer_price_unit=#{osr_waybillpeer_price_unit},
+			</if>
+			<if test="osr_emergency_receipt != null  ">
+				osr_emergency_receipt=#{osr_emergency_receipt},
+			</if>
+			<if test="osr_emergency_receipt_price != null  ">
+				osr_emergency_receipt_price=#{osr_emergency_receipt_price},
+			</if>
+			<if test="osr_emergency_receipt_price_unit != null  and osr_emergency_receipt_price_unit != '' ">
+				osr_emergency_receipt_price_unit=#{osr_emergency_receipt_price_unit},
+			</if>
+			<if test="osr_cancelorder != null  ">
+				osr_cancelorder=#{osr_cancelorder},
+			</if>
+			<if test="osr_cancelorder_price != null  ">
+				osr_cancelorder_price=#{osr_cancelorder_price},
+			</if>
+			<if test="osr_cancelorder_price_unit != null  and osr_cancelorder_price_unit != '' ">
+				osr_cancelorder_price_unit=#{osr_cancelorder_price_unit},
+			</if>
+			<if test="osr_makebarfee != null  ">
+				osr_makebarfee=#{osr_makebarfee},
+			</if>
+			<if test="osr_makebarfee_price != null  ">
+				osr_makebarfee_price=#{osr_makebarfee_price},
+			</if>
+			<if test="osr_makebarfee_price_unit != null  and osr_makebarfee_price_unit != '' ">
+				osr_makebarfee_price_unit=#{osr_makebarfee_price_unit},
+			</if>
+			<if test="osr_landfee != null  ">
+				osr_landfee=#{osr_landfee},
+			</if>
+			<if test="osr_landfee_price != null  ">
+				osr_landfee_price=#{osr_landfee_price},
+			</if>
+			<if test="osr_landfee_price_util != null  and osr_landfee_price_util != '' ">
+				osr_landfee_price_util=#{osr_landfee_price_util},
+			</if>
+		</trim>	
+	where
+		contract_id=#{contract_id}
+</update>
+
+<!-- 修改操作费结算规则表-->  
+ <update id="update" parameterType="com.bt.lmis.model.OperationSettlementRule" >
+  update tb_operation_settlement_rule set osr_btcobopnum_tableidss=#{osr_btcobopnum_tableidss},osr_btcobopnum_tableids=#{osr_btcobopnum_tableids},osr_btcobop_numfees=#{osr_btcobop_numfees},osr_btcobop_numprices=#{osr_btcobop_numprices},osr_btcobop_numdcs=#{osr_btcobop_numdcs},osr_tax_point=#{osr_tax_point},osr_zzfwf_status=#{osr_zzfwf_status},osr_zzfwf_detail=#{osr_zzfwf_detail},osr_btcobopbill_discount_tableid2=#{osr_btcobopbill_discount_tableid2},osr_btcobopbill_discount_type=#{osr_btcobopbill_discount_type},create_time=#{create_time},osr_btcobopbill_tobtb_js=#{osr_btcobopbill_tobtb_js},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},contract_id=#{contract_id},osr_setttle_method=#{osr_setttle_method},osr_fixed_type=#{osr_fixed_type},osr_fixed_price=#{osr_fixed_price},osr_fixed_price_unit=#{osr_fixed_price_unit},osr_fixed_exceed_tableid=#{osr_fixed_exceed_tableid},osr_sales_percent=#{osr_sales_percent},osr_ibop_fee=#{osr_ibop_fee},osr_ibop_skuprice=#{osr_ibop_skuprice},osr_ibop_skuprice_unit=#{osr_ibop_skuprice_unit},osr_ibop_itemprice=#{osr_ibop_itemprice},osr_ibop_itemprice_unit=#{osr_ibop_itemprice_unit},osr_ibop_qtyprice=#{osr_ibop_qtyprice},osr_ibop_qtyprice_unit=#{osr_ibop_qtyprice_unit},osr_btcobop_fee=#{osr_btcobop_fee},osr_btcobop_numfee=#{osr_btcobop_numfee},osr_btcobop_numprice=#{osr_btcobop_numprice},osr_btcobop_numdc=#{osr_btcobop_numdc},osr_btcobopnum_tableid=#{osr_btcobopnum_tableid},osr_tobtb=#{osr_tobtb},osr_btcobopbill_tobtb_tableid=#{osr_btcobopbill_tobtb_tableid},osr_btcobopbill_tableid=#{osr_btcobopbill_tableid},osr_btcobopbill_discount_tableid=#{osr_btcobopbill_discount_tableid},osr_btbobop_fee=#{osr_btbobop_fee},osr_btbobop_billprice=#{osr_btbobop_billprice},osr_btbobop_billprice_unit=#{osr_btbobop_billprice_unit},osr_btbobop_skuprice=#{osr_btbobop_skuprice},osr_btbobop_skuprice_unit=#{osr_btbobop_skuprice_unit},osr_btbobop_itemprice=#{osr_btbobop_itemprice},osr_btbobop_itemprice_unit=#{osr_btbobop_itemprice_unit},osr_btbrtop_fee=#{osr_btbrtop_fee},osr_btbrtop_sku_skuprice=#{osr_btbrtop_sku_skuprice},osr_btbrtop_sku_skuprice_unit=#{osr_btbrtop_sku_skuprice_unit},osr_btbrtop_sku_billprice=#{osr_btbrtop_sku_billprice},osr_btbrtop_sku_billprice_unit=#{osr_btbrtop_sku_billprice_unit},osr_btbrtop_bill_billprice=#{osr_btbrtop_bill_billprice},osr_btbrtop_bill_billprice_unit=#{osr_btbrtop_bill_billprice_unit},osr_btcrtib_fee=#{osr_btcrtib_fee},osr_btcrtib_bill_billprice=#{osr_btcrtib_bill_billprice},osr_btcrtib_bill_billprice_unit=#{osr_btcrtib_bill_billprice_unit},osr_btcrtib_piece=#{osr_btcrtib_piece},osr_btcrtib_piece_pieceprice=#{osr_btcrtib_piece_pieceprice},osr_btcrtib_piece_pieceprice_unit=#{osr_btcrtib_piece_pieceprice_unit},osr_btcrti_tableid=#{osr_btcrti_tableid},osr_addservice_fee=#{osr_addservice_fee},osr_qc_fee=#{osr_qc_fee},osr_qc_pieceprice=#{osr_qc_pieceprice},osr_qc_pieceprice_unit=#{osr_qc_pieceprice_unit},osr_gift_fee=#{osr_gift_fee},osr_gift_billprice=#{osr_gift_billprice},osr_gift_billprice_unit=#{osr_gift_billprice_unit},osr_mesurement=#{osr_mesurement},osr_mesurement_price=#{osr_mesurement_price},osr_mesurement_price_unit=#{osr_mesurement_price_unit},osr_security_code=#{osr_security_code},osr_security_code_price=#{osr_security_code_price},osr_security_code_price_unit=#{osr_security_code_price_unit},osr_itemnum=#{osr_itemnum},osr_itemnum_price=#{osr_itemnum_price},osr_itemnum_price_unit=#{osr_itemnum_price_unit},osr_drop_photo=#{osr_drop_photo},osr_drop_photo_price=#{osr_drop_photo_price},osr_drop_photo_price_unit=#{osr_drop_photo_price_unit},osr_message=#{osr_message},osr_message_price=#{osr_message_price},osr_message_price_unit=#{osr_message_price_unit},osr_extra_fee=#{osr_extra_fee},osr_extra_fee_price=#{osr_extra_fee_price},osr_extra_fee_price_unit=#{osr_extra_fee_price_unit},osr_change_package=#{osr_change_package},osr_change_package_price=#{osr_change_package_price},osr_change_package_price_unit=#{osr_change_package_price_unit},osr_notworkingtime=#{osr_notworkingtime},osr_notworkingtime_price=#{osr_notworkingtime_price},osr_notworkingtime_price_unit=#{osr_notworkingtime_price_unit},osr_waybillpeer=#{osr_waybillpeer},osr_waybillpeer_price=#{osr_waybillpeer_price},osr_waybillpeer_price_unit=#{osr_waybillpeer_price_unit},osr_emergency_receipt=#{osr_emergency_receipt},osr_emergency_receipt_price=#{osr_emergency_receipt_price},osr_emergency_receipt_price_unit=#{osr_emergency_receipt_price_unit},osr_cancelorder=#{osr_cancelorder},osr_cancelorder_price=#{osr_cancelorder_price},osr_cancelorder_price_unit=#{osr_cancelorder_price_unit},osr_makebarfee=#{osr_makebarfee},osr_makebarfee_price=#{osr_makebarfee_price},osr_makebarfee_price_unit=#{osr_makebarfee_price_unit},osr_landfee=#{osr_landfee},osr_landfee_price=#{osr_landfee_price},osr_landfee_price_util=#{osr_landfee_price_util} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改操作费结算规则表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.OperationSettlementRule" >
+	update tb_operation_settlement_rule set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+ 	<if test="osr_btcobop_numfees != null and osr_btcobop_numfees != ''" >
+	    osr_btcobop_numfees =  #{osr_btcobop_numfees},
+	</if>
+ 	<if test="osr_btcobopnum_tableidss != null and osr_btcobopnum_tableidss != ''" >
+	    osr_btcobopnum_tableidss =  #{osr_btcobopnum_tableidss},
+	</if>
+ 	<if test="osr_btcobopnum_tableids != null and osr_btcobopnum_tableids != ''" >
+	    osr_btcobopnum_tableids =  #{osr_btcobopnum_tableids},
+	</if>
+ 	<if test="osr_btcobop_numprices != null and osr_btcobop_numprices != ''" >
+	    osr_btcobop_numprices =  #{osr_btcobop_numprices},
+	</if>
+ 	<if test="osr_btcobop_numdcs != null and osr_btcobop_numdcs != ''" >
+	    osr_btcobop_numdcs =  #{osr_btcobop_numdcs},
+	</if>
+	<if test="osr_zzfwf_status != null  and osr_zzfwf_status != '' ">
+		osr_zzfwf_status=#{osr_zzfwf_status},
+	</if>
+	<if test="osr_tax_point != null  and osr_tax_point != '' ">
+		osr_tax_point=#{osr_tax_point},
+	</if>
+	<if test="osr_zzfwf_detail != null  and osr_zzfwf_detail != '' ">
+		osr_zzfwf_detail=#{osr_zzfwf_detail},
+	</if>
+	<if test="osr_btcobopbill_discount_type != null  and osr_btcobopbill_discount_type != '' ">
+		osr_btcobopbill_discount_type=#{osr_btcobopbill_discount_type},
+	</if>
+	<if test="osr_btcobopbill_discount_tableid2 != null  and osr_btcobopbill_discount_tableid2 != '' ">
+		osr_btcobopbill_discount_tableid2=#{osr_btcobopbill_discount_tableid2},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="contract_id != null  ">
+		contract_id=#{contract_id},
+	</if>
+	<if test="osr_setttle_method != null  ">
+		osr_setttle_method=#{osr_setttle_method},
+	</if>
+	<if test="osr_fixed_type != null  ">
+		osr_fixed_type=#{osr_fixed_type},
+	</if>
+	<if test="osr_fixed_price != null  and osr_fixed_price != '' ">
+		osr_fixed_price=#{osr_fixed_price},
+	</if>
+	<if test="osr_fixed_price_unit != null  ">
+		osr_fixed_price_unit=#{osr_fixed_price_unit},
+	</if>
+	<if test="osr_fixed_exceed_tableid != null  and osr_fixed_exceed_tableid != '' ">
+		osr_fixed_exceed_tableid=#{osr_fixed_exceed_tableid},
+	</if>
+	<if test="osr_sales_percent != null  and osr_sales_percent != '' ">
+		osr_sales_percent=#{osr_sales_percent},
+	</if>
+	<if test="osr_ibop_fee != null  ">
+		osr_ibop_fee=#{osr_ibop_fee},
+	</if>
+	<if test="osr_ibop_skuprice != null  ">
+		osr_ibop_skuprice=#{osr_ibop_skuprice},
+	</if>
+	<if test="osr_ibop_skuprice_unit != null  and osr_ibop_skuprice_unit != '' ">
+		osr_ibop_skuprice_unit=#{osr_ibop_skuprice_unit},
+	</if>
+	<if test="osr_ibop_itemprice != null  ">
+		osr_ibop_itemprice=#{osr_ibop_itemprice},
+	</if>
+	<if test="osr_ibop_itemprice_unit != null  and osr_ibop_itemprice_unit != '' ">
+		osr_ibop_itemprice_unit=#{osr_ibop_itemprice_unit},
+	</if>
+	<if test="osr_ibop_qtyprice != null  ">
+		osr_ibop_qtyprice=#{osr_ibop_qtyprice},
+	</if>
+	<if test="osr_ibop_qtyprice_unit != null  and osr_ibop_qtyprice_unit != '' ">
+		osr_ibop_qtyprice_unit=#{osr_ibop_qtyprice_unit},
+	</if>
+	<if test="osr_btcobop_fee != null  ">
+		osr_btcobop_fee=#{osr_btcobop_fee},
+	</if>
+	<if test="osr_btcobop_numfee != null  ">
+		osr_btcobop_numfee=#{osr_btcobop_numfee},
+	</if>
+	<if test="osr_btcobop_numprice != null  ">
+		osr_btcobop_numprice=#{osr_btcobop_numprice},
+	</if>
+	<if test="osr_btcobop_numdc != null  ">
+		osr_btcobop_numdc=#{osr_btcobop_numdc},
+	</if>
+	<if test="osr_btcobopnum_tableid != null  ">
+		osr_btcobopnum_tableid=#{osr_btcobopnum_tableid},
+	</if>
+	<if test="osr_tobtb != null  ">
+		osr_tobtb=#{osr_tobtb},
+	</if>
+	<if test="osr_btcobopbill_tobtb_tableid != null  ">
+		osr_btcobopbill_tobtb_tableid=#{osr_btcobopbill_tobtb_tableid},
+	</if>
+	<if test="osr_btcobopbill_tableid != null  ">
+		osr_btcobopbill_tableid=#{osr_btcobopbill_tableid},
+	</if>
+	<if test="osr_btcobopbill_discount_tableid != null  ">
+		osr_btcobopbill_discount_tableid=#{osr_btcobopbill_discount_tableid},
+	</if>
+	<if test="osr_btbobop_fee != null  ">
+		osr_btbobop_fee=#{osr_btbobop_fee},
+	</if>
+	<if test="osr_btbobop_billprice != null  ">
+		osr_btbobop_billprice=#{osr_btbobop_billprice},
+	</if>
+	<if test="osr_btbobop_billprice_unit != null  and osr_btbobop_billprice_unit != '' ">
+		osr_btbobop_billprice_unit=#{osr_btbobop_billprice_unit},
+	</if>
+	<if test="osr_btbobop_skuprice != null  ">
+		osr_btbobop_skuprice=#{osr_btbobop_skuprice},
+	</if>
+	<if test="osr_btbobop_skuprice_unit != null  and osr_btbobop_skuprice_unit != '' ">
+		osr_btbobop_skuprice_unit=#{osr_btbobop_skuprice_unit},
+	</if>
+	<if test="osr_btbobop_itemprice != null  ">
+		osr_btbobop_itemprice=#{osr_btbobop_itemprice},
+	</if>
+	<if test="osr_btbobop_itemprice_unit != null  and osr_btbobop_itemprice_unit != '' ">
+		osr_btbobop_itemprice_unit=#{osr_btbobop_itemprice_unit},
+	</if>
+	<if test="osr_btbrtop_fee != null  ">
+		osr_btbrtop_fee=#{osr_btbrtop_fee},
+	</if>
+	<if test="osr_btbrtop_sku_skuprice != null  ">
+		osr_btbrtop_sku_skuprice=#{osr_btbrtop_sku_skuprice},
+	</if>
+	<if test="osr_btbrtop_sku_skuprice_unit != null  and osr_btbrtop_sku_skuprice_unit != '' ">
+		osr_btbrtop_sku_skuprice_unit=#{osr_btbrtop_sku_skuprice_unit},
+	</if>
+	<if test="osr_btbrtop_sku_billprice != null  ">
+		osr_btbrtop_sku_billprice=#{osr_btbrtop_sku_billprice},
+	</if>
+	<if test="osr_btbrtop_sku_billprice_unit != null  and osr_btbrtop_sku_billprice_unit != '' ">
+		osr_btbrtop_sku_billprice_unit=#{osr_btbrtop_sku_billprice_unit},
+	</if>
+	<if test="osr_btbrtop_bill_billprice != null  ">
+		osr_btbrtop_bill_billprice=#{osr_btbrtop_bill_billprice},
+	</if>
+	<if test="osr_btbrtop_bill_billprice_unit != null  and osr_btbrtop_bill_billprice_unit != '' ">
+		osr_btbrtop_bill_billprice_unit=#{osr_btbrtop_bill_billprice_unit},
+	</if>
+	<if test="osr_btcrtib_fee != null  ">
+		osr_btcrtib_fee=#{osr_btcrtib_fee},
+	</if>
+	<if test="osr_btcrtib_bill_billprice != null  ">
+		osr_btcrtib_bill_billprice=#{osr_btcrtib_bill_billprice},
+	</if>
+	<if test="osr_btcrtib_bill_billprice_unit != null  and osr_btcrtib_bill_billprice_unit != '' ">
+		osr_btcrtib_bill_billprice_unit=#{osr_btcrtib_bill_billprice_unit},
+	</if>
+	<if test="osr_btcrtib_piece != null  ">
+		osr_btcrtib_piece=#{osr_btcrtib_piece},
+	</if>
+	<if test="osr_btcrtib_piece_pieceprice != null  ">
+		osr_btcrtib_piece_pieceprice=#{osr_btcrtib_piece_pieceprice},
+	</if>
+	<if test="osr_btcrtib_piece_pieceprice_unit != null  and osr_btcrtib_piece_pieceprice_unit != '' ">
+		osr_btcrtib_piece_pieceprice_unit=#{osr_btcrtib_piece_pieceprice_unit},
+	</if>
+	<if test="osr_btcrti_tableid != null  ">
+		osr_btcrti_tableid=#{osr_btcrti_tableid},
+	</if>
+	<if test="osr_addservice_fee != null  ">
+		osr_addservice_fee=#{osr_addservice_fee},
+	</if>
+	<if test="osr_qc_fee != null  ">
+		osr_qc_fee=#{osr_qc_fee},
+	</if>
+	<if test="osr_qc_pieceprice != null  ">
+		osr_qc_pieceprice=#{osr_qc_pieceprice},
+	</if>
+	<if test="osr_qc_pieceprice_unit != null  and osr_qc_pieceprice_unit != '' ">
+		osr_qc_pieceprice_unit=#{osr_qc_pieceprice_unit},
+	</if>
+	<if test="osr_gift_fee != null  ">
+		osr_gift_fee=#{osr_gift_fee},
+	</if>
+	<if test="osr_gift_billprice != null  ">
+		osr_gift_billprice=#{osr_gift_billprice},
+	</if>
+	<if test="osr_gift_billprice_unit != null  and osr_gift_billprice_unit != '' ">
+		osr_gift_billprice_unit=#{osr_gift_billprice_unit},
+	</if>
+	<if test="osr_mesurement != null  ">
+		osr_mesurement=#{osr_mesurement},
+	</if>
+	<if test="osr_mesurement_price != null  ">
+		osr_mesurement_price=#{osr_mesurement_price},
+	</if>
+	<if test="osr_mesurement_price_unit != null  and osr_mesurement_price_unit != '' ">
+		osr_mesurement_price_unit=#{osr_mesurement_price_unit},
+	</if>
+	<if test="osr_security_code != null  ">
+		osr_security_code=#{osr_security_code},
+	</if>
+	<if test="osr_security_code_price != null  ">
+		osr_security_code_price=#{osr_security_code_price},
+	</if>
+	<if test="osr_security_code_price_unit != null  and osr_security_code_price_unit != '' ">
+		osr_security_code_price_unit=#{osr_security_code_price_unit},
+	</if>
+	<if test="osr_itemnum != null  ">
+		osr_itemnum=#{osr_itemnum},
+	</if>
+	<if test="osr_itemnum_price != null  ">
+		osr_itemnum_price=#{osr_itemnum_price},
+	</if>
+	<if test="osr_itemnum_price_unit != null  and osr_itemnum_price_unit != '' ">
+		osr_itemnum_price_unit=#{osr_itemnum_price_unit},
+	</if>
+	<if test="osr_drop_photo != null  ">
+		osr_drop_photo=#{osr_drop_photo},
+	</if>
+	<if test="osr_drop_photo_price != null  ">
+		osr_drop_photo_price=#{osr_drop_photo_price},
+	</if>
+	<if test="osr_drop_photo_price_unit != null  and osr_drop_photo_price_unit != '' ">
+		osr_drop_photo_price_unit=#{osr_drop_photo_price_unit},
+	</if>
+	<if test="osr_message != null  ">
+		osr_message=#{osr_message},
+	</if>
+	<if test="osr_message_price != null  ">
+		osr_message_price=#{osr_message_price},
+	</if>
+	<if test="osr_message_price_unit != null  and osr_message_price_unit != '' ">
+		osr_message_price_unit=#{osr_message_price_unit},
+	</if>
+	<if test="osr_extra_fee != null  ">
+		osr_extra_fee=#{osr_extra_fee},
+	</if>
+	<if test="osr_extra_fee_price != null  ">
+		osr_extra_fee_price=#{osr_extra_fee_price},
+	</if>
+	<if test="osr_extra_fee_price_unit != null  and osr_extra_fee_price_unit != '' ">
+		osr_extra_fee_price_unit=#{osr_extra_fee_price_unit},
+	</if>
+	<if test="osr_change_package != null  ">
+		osr_change_package=#{osr_change_package},
+	</if>
+	<if test="osr_change_package_price != null  ">
+		osr_change_package_price=#{osr_change_package_price},
+	</if>
+	<if test="osr_change_package_price_unit != null  and osr_change_package_price_unit != '' ">
+		osr_change_package_price_unit=#{osr_change_package_price_unit},
+	</if>
+	<if test="osr_notworkingtime != null  ">
+		osr_notworkingtime=#{osr_notworkingtime},
+	</if>
+	<if test="osr_notworkingtime_price != null  ">
+		osr_notworkingtime_price=#{osr_notworkingtime_price},
+	</if>
+	<if test="osr_notworkingtime_price_unit != null  and osr_notworkingtime_price_unit != '' ">
+		osr_notworkingtime_price_unit=#{osr_notworkingtime_price_unit},
+	</if>
+	<if test="osr_waybillpeer != null  ">
+		osr_waybillpeer=#{osr_waybillpeer},
+	</if>
+	<if test="osr_waybillpeer_price != null  ">
+		osr_waybillpeer_price=#{osr_waybillpeer_price},
+	</if>
+	<if test="osr_waybillpeer_price_unit != null  and osr_waybillpeer_price_unit != '' ">
+		osr_waybillpeer_price_unit=#{osr_waybillpeer_price_unit},
+	</if>
+	<if test="osr_emergency_receipt != null  ">
+		osr_emergency_receipt=#{osr_emergency_receipt},
+	</if>
+	<if test="osr_emergency_receipt_price != null  ">
+		osr_emergency_receipt_price=#{osr_emergency_receipt_price},
+	</if>
+	<if test="osr_emergency_receipt_price_unit != null  and osr_emergency_receipt_price_unit != '' ">
+		osr_emergency_receipt_price_unit=#{osr_emergency_receipt_price_unit},
+	</if>
+	<if test="osr_cancelorder != null  ">
+		osr_cancelorder=#{osr_cancelorder},
+	</if>
+	<if test="osr_cancelorder_price != null  ">
+		osr_cancelorder_price=#{osr_cancelorder_price},
+	</if>
+	<if test="osr_cancelorder_price_unit != null  and osr_cancelorder_price_unit != '' ">
+		osr_cancelorder_price_unit=#{osr_cancelorder_price_unit},
+	</if>
+	<if test="osr_makebarfee != null  ">
+		osr_makebarfee=#{osr_makebarfee},
+	</if>
+	<if test="osr_makebarfee_price != null  ">
+		osr_makebarfee_price=#{osr_makebarfee_price},
+	</if>
+	<if test="osr_makebarfee_price_unit != null  and osr_makebarfee_price_unit != '' ">
+		osr_makebarfee_price_unit=#{osr_makebarfee_price_unit},
+	</if>
+	<if test="osr_landfee != null  ">
+		osr_landfee=#{osr_landfee},
+	</if>
+	<if test="osr_landfee_price != null  ">
+		osr_landfee_price=#{osr_landfee_price},
+	</if>
+	<if test="osr_landfee_price_util != null  and osr_landfee_price_util != '' ">
+		osr_landfee_price_util=#{osr_landfee_price_util},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除操作费结算规则表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_operation_settlement_rule where id = #{id}
+</update>
+
+<insert id="saveAupdateOSF" parameterType="java.util.Map">
+	INSERT INTO tb_operation_settlement_fixed (tosf_section, tosf_tab_id, tosf_price, tosf_price_unit) VALUES (#{tosf_section},#{tosf_tab_id},#{tosf_price},#{tosf_price_unit});
+</insert>
+<select id="queryOSFList" resultType="java.util.HashMap" parameterType="Object">
+select * from tb_operation_settlement_fixed where tosf_tab_id = #{tbid}
+</select>
+<update id="deleteOSF" parameterType="Object">
+	delete 	 from tb_operation_settlement_fixed where tosf_id = #{id}
+</update>
+
+
+<insert id="saveAupdateTBT" parameterType="java.util.Map">
+	INSERT INTO tb_btcrti_table (btcrt_id, btcrti_interval, btcrt_price, btcrt_price_unit) VALUES (#{btcrt_id},#{btcrti_interval},#{btcrt_price},#{btcrt_price_unit});
+</insert>
+<select id="queryTBTList" resultType="java.util.HashMap" parameterType="Object">
+	select * from tb_btcrti_table where btcrt_id = #{tbid}
+</select>
+<update id="deleteTBT" parameterType="Object">
+	delete from tb_btcrti_table where id = #{id}
+</update>
+
+<insert id="saveAupdateTBBT" parameterType="java.util.Map">
+	INSERT INTO tb_btcobopbill_table (bbt_table_id, bbt_interval, bbt_bill_price, bbt_piece_price) VALUES (#{bbt_table_id},#{bbt_interval},#{bbt_bill_price},#{bbt_piece_price});
+</insert>
+<select id="queryTBBTList" resultType="java.util.HashMap" parameterType="Object">
+	select * from tb_btcobopbill_table where bbt_table_id = #{tbid} order by id
+</select>
+<update id="deleteTBBT" parameterType="Object">
+	delete from tb_btcobopbill_table where id = #{id}
+</update>
+
+<insert id="saveAupdateTBBTs" parameterType="java.util.Map">
+	INSERT INTO tb_btcobop_num_tables (bnts_id, bnts_interval, bnts_interval_unit, bnts_price,bnts_discount) VALUES (#{bnts_id},#{bnts_interval},#{bnts_interval_unit},#{bnts_price},#{bnts_discount});
+</insert>
+<select id="queryTBBTLists" resultType="java.util.HashMap" parameterType="Object">
+	select * from tb_btcobop_num_tables where bnts_id = #{tbid}
+</select>
+<update id="deleteTBBTs" parameterType="Object">
+	delete from tb_btcobop_num_tables where id = #{id}
+</update>
+
+
+<insert id="saveAupdateTBBTss" parameterType="java.util.Map">
+	INSERT INTO tb_btcobop_num_tabless (obts_table_id,obts_interval,obts_price,obts_discount) VALUES (#{obts_table_id},#{obts_interval},#{obts_price},#{obts_discount});
+</insert>
+<select id="queryTBBTListss" resultType="java.util.HashMap" parameterType="Object">
+	select * from tb_btcobop_num_tabless where obts_table_id = #{tbid}
+</select>
+<update id="deleteTBBTss" parameterType="Object">
+	delete from tb_btcobop_num_tabless where id = #{id}
+</update>
+
+<insert id="saveAupdateZZFWF" parameterType="java.util.Map">
+	INSERT INTO vas_value_added_service_detail (vasd_id, vasd_tab_id, vasd_section, vasd_section_unit, vasd_value, vasd_value_unit) VALUES (#{vasd_id},#{vasd_tab_id},#{vasd_section},#{vasd_section_unit},#{vasd_value},#{vasd_value_unit});
+</insert>
+<select id="queryZZFWFList" resultType="java.util.HashMap" parameterType="Object">
+	select * from vas_value_added_service_detail where vasd_tab_id = #{tbid}
+</select>
+<update id="deleteZZFWF" parameterType="Object">
+	delete from vas_value_added_service_detail where vasd_id = #{id}
+</update>
+
+<insert id="saveAupdateTBNT" parameterType="java.util.Map">
+	INSERT INTO tb_btcobop_num_table (bnt_id, bnt_interval, bnt_price, bnt_discount) VALUES (#{bnt_id},#{bnt_interval},#{bnt_price},#{bnt_discount});
+</insert>
+<select id="queryTBNTList" resultType="java.util.HashMap" parameterType="Object">
+	select * from tb_btcobop_num_table where bnt_id = #{tbid}
+</select>
+<update id="deleteTBNT" parameterType="Object">
+	delete from tb_btcobop_num_table where id = #{id}
+</update>
+
+<insert id="saveAupdateTOT" parameterType="java.util.Map">
+	INSERT INTO tb_obopbill_tobtb (obt_table_id, obt_interval, obt_price,obt_discount) VALUES (#{obt_table_id},#{obt_interval},#{obt_price},#{obt_discount});
+</insert>
+<select id="queryTOTList" resultType="java.util.HashMap" parameterType="Object">
+	select * from tb_obopbill_tobtb where obt_table_id = #{tbid}
+</select>
+<update id="deleteTOT" parameterType="Object">
+	delete from tb_obopbill_tobtb where id = #{id}
+</update>
+
+<insert id="saveAupdateBTBD" parameterType="java.util.Map">
+	INSERT INTO tb_btcobopbill_discount_table (btcbd_id, btcbd_interval, btcbd_price) VALUES (#{btcbd_id},#{btcbd_interval},#{btcbd_price});
+</insert>
+<select id="queryBTBDList" resultType="java.util.HashMap" parameterType="Object">
+	select * from tb_btcobopbill_discount_table where btcbd_id = #{tbid}
+</select>
+<update id="deleteBTBD" parameterType="Object">
+	delete from tb_btcobopbill_discount_table where id = #{id}
+</update>
+
+<insert id="saveAupdateBTBD2" parameterType="java.util.Map">
+	INSERT INTO tb_btcobopbill_discount_table2 (btcbd2_id, btcbd2_interval, btcbd2_price) VALUES (#{btcbd2_id},#{btcbd2_interval},#{btcbd2_price});
+</insert>
+<select id="queryBTBD2List" resultType="java.util.HashMap" parameterType="Object">
+	select * from tb_btcobopbill_discount_table2 where btcbd2_id = #{tbid}
+</select>
+<update id="deleteBTBD2" parameterType="Object">
+	delete from tb_btcobopbill_discount_table2 where id = #{id}
+</update>
+
+<!-- 批量删除操作费结算规则表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_operation_settlement_rule where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找操作费结算规则表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_operation_settlement_rule where id = #{id}
+</select>
+
+	
+<select id="findByCBID"  resultMap="BaseResultMap" parameterType="Object">
+	select <include refid="Base_Column_List" /> from tb_operation_settlement_rule where contract_id = #{cbid}
+</select>
+<!-- 操作费结算规则表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.OperationSettlementRuleQueryParam">
+	select count(1) from tb_operation_settlement_rule 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的操作费结算规则表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.OperationSettlementRuleQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operation_settlement_rule 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 操作费结算规则表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.OperationSettlementRuleQueryParam">
+	select count(1) from tb_operation_settlement_rule 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的操作费结算规则表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.OperationSettlementRuleQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operation_settlement_rule 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

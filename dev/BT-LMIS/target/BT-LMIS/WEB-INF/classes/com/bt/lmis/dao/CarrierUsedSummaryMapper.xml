@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.CarrierUsedSummaryMapper" > 
+	<select id="getCarrierUsedSummary" parameterType="Object" resultType="java.util.Map">
+		select
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			con_id,
+			balance_subject,
+			subject_type,
+			carrier_used,
+			b.transport_name,
+			balance_month,
+			fee_type,
+			fee
+		from
+			tb_carrier_used_summary a
+		left join(
+			select transport_code,transport_name from tb_transport_vendor where validity= 1
+		) b on a.carrier_used= b.transport_code
+		where
+			1= 1
+		<if test="con_id != null" >
+			and con_id= #{con_id }	
+		</if>
+		<if test="balance_subject != null and balance_subject != ''" >
+			and balance_subject= #{balance_subject }
+		</if>
+		and balance_month= #{balance_month }
+	</select>
+	<insert id="addCarrierUsedSummary" parameterType="com.bt.lmis.model.CarrierUsedSummary" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_carrier_used_summary
+		(
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			con_id,
+			balance_subject,
+			subject_type,
+			carrier_used,
+			balance_month,
+			fee_type,
+			fee
+		) values (
+			'SYSTEM',
+			now(),
+			'SYSTEM',
+			now(),
+			#{con_id },
+			#{balance_subject },
+			#{subject_type },
+			#{carrier_used },
+			#{balance_month },
+			#{fee_type },
+			#{fee }
+		)
+	</insert>
+	<select id="judgeSummaryExistOrNot" parameterType="Object" resultType="Integer">
+		select count(1) from tb_carrier_used_summary where balance_month = #{balance_month}
+	</select>
+</mapper>

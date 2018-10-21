@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.InvitationMapper" >
+	<select id="countData" parameterType="Object" resultType="Integer">
+		select
+			count(0)
+		from
+			jk_settle_invitation
+		where
+			bat_id = #{bat_id }
+		<if test="pro_flag != null and pro_flag !=''">
+			and pro_flag = #{pro_flag }
+		</if>
+	</select>
+	<delete id="del" parameterType="Object">
+		delete from jk_settle_invitation where bat_id = #{bat_id }
+	</delete>
+	<select id="getBatIds" parameterType="Object" resultType="Integer">
+		select
+			distinct bat_id
+		from
+			jk_settle_invitation
+		where
+			1 = 1
+		<if test="bat_id != null">
+			and bat_id = #{bat_id }
+		</if>
+		order by bat_id desc
+	</select>
+	<select id="getBatId" resultType="Integer">
+		select
+			max(bat_id)
+		from
+			jk_settle_invitation
+	</select>
+	<insert id="insertRawData" parameterType="com.bt.lmis.model.Invitation" useGeneratedKeys="true" keyProperty="id">
+		insert into jk_settle_invitation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			bat_id,
+			<if test="ib_time != null and ib_time != ''">
+				ib_time,
+			</if>
+			<if test="store_code != null and store_code != ''">
+				store_code,
+			</if>
+			<if test="store_name != null and store_name != ''">
+				store_name,
+			</if>
+			<if test="vendor != null and vendor != ''">
+				vendor,
+			</if>
+			<if test="inbound_no != null and inbound_no != ''">
+				inbound_no,
+			</if>
+			<if test="barcode != null and barcode != ''">
+				barcode,
+			</if>
+			<if test="bz_number != null and bz_number != ''">
+				bz_number,
+			</if>
+			<if test="item_no != null and item_no != ''">
+				item_no,
+			</if>
+			<if test="inbound_qty != null and inbound_qty != ''">
+				inbound_qty,
+			</if>
+			<if test="purchase_price != null and purchase_price != ''">
+				purchase_price,
+			</if>
+			<if test="inbound_money != null and inbound_money != ''">
+				inbound_money,
+			</if>
+			<if test="end_time != null and end_time != ''">
+				end_time,
+			</if>
+			<if test="create_date != null and create_date != ''">
+				create_date,
+			</if>
+			<if test="operation_time != null and operation_time != ''">
+				operation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{bat_id, jdbcType=INTEGER },
+			<if test="ib_time != null and ib_time != ''">
+				#{ib_time, jdbcType=DATE },
+			</if>
+			<if test="store_code != null and store_code != ''">
+				#{store_code, jdbcType=VARCHAR },
+			</if>
+			<if test="store_name != null and store_name != ''">
+				#{store_name, jdbcType=VARCHAR },
+			</if>
+			<if test="vendor != null and vendor != ''">
+				#{vendor, jdbcType=VARCHAR },
+			</if>
+			<if test="inbound_no != null and inbound_no != ''">
+				#{inbound_no, jdbcType=VARCHAR },
+			</if>
+			<if test="barcode != null and barcode != ''">
+				#{barcode, jdbcType=VARCHAR },
+			</if>
+			<if test="bz_number != null and bz_number != ''">
+				#{bz_number, jdbcType=VARCHAR },
+			</if>
+			<if test="item_no != null and item_no != ''">
+				#{item_no, jdbcType=VARCHAR },
+			</if>
+			<if test="inbound_qty != null and inbound_qty != ''">
+				#{inbound_qty, jdbcType=INTEGER },
+			</if>
+			<if test="purchase_price != null and purchase_price != ''">
+				#{purchase_price, jdbcType=DECIMAL },
+			</if>
+			<if test="inbound_money != null and inbound_money != ''">
+				#{inbound_money, jdbcType=DECIMAL },
+			</if>
+			<if test="end_time != null and end_time != ''">
+				#{end_time, jdbcType=DATE },
+			</if>
+			<if test="create_date != null and create_date != ''">
+				#{create_date, jdbcType=DATE },
+			</if>
+			<if test="operation_time != null and operation_time != ''">
+				#{operation_time, jdbcType=DATE },
+			</if>
+		</trim>
+	</insert>
+</mapper>   

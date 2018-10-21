@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.lmis.dao.BalanceSummaryExMapper" >
+	<select id= "selectAllBallanceSummary" parameterType= "java.util.Map" resultType= "com.bt.lmis.model.BalanceSummaryEx" >
+		SELECT
+			id,
+			ver_id,
+			con_id,
+			express,
+			balance_month,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse_name,
+			order_num,
+			product_type_code,
+			product_type_name,
+			product_type_freight,
+			product_type_discount,
+			product_type_total_discount,
+			insurance,
+			default_1,
+			default_2,
+			default_3,
+			total_fee,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		FROM ex_balance_summary
+		WHERE ver_id = #{ver_id}
+		AND express = #{express_code }
+		AND balance_month = #{balance_month }
+		ORDER BY cost_center and store_code and store_name and warehouse_name
+	</select>
+	<select id= "countRecordsByMonth" parameterType= "com.bt.lmis.controller.form.SummaryQueryParam" resultType= "java.lang.Integer" >
+		select 
+			count(1)
+		from
+			(
+				select
+					DISTINCT
+					express,
+					a.con_id,
+					b.transport_name,
+					balance_month,
+					create_by,
+					DATE_FORMAT(create_time,'%Y-%m-%d') as create_date
+				from
+					ex_balance_summary a
+				left join
+				(
+					select
+						transport_code,
+						transport_name
+					from
+						tb_transport_vendor
+					where
+						transport_type = 1
+				) b on a.express = b.transport_code
+				where
+					1 = 1
+				<if test="cycle != null and cycle != ''" >
+				    and balance_month like CONCAT('%', #{cycle }, '%') 
+				</if>
+				<if test="subject != null and subject != ''" >
+			    	and b.transport_name like CONCAT('%', #{subject }, '%') 
+				</if>
+			) a
+	</select>
+	<select id= "findAllByMonth" parameterType= "com.bt.lmis.controller.form.SummaryQueryParam" resultType= "java.util.HashMap" >
+		select
+			DISTINCT
+			express,
+			a.con_id,
+			b.transport_name,
+			balance_month,
+			create_by,
+			DATE_FORMAT(create_time,'%Y-%m-%d') as create_date
+		from
+			ex_balance_summary a
+		left join
+		(
+			select
+				transport_code,
+				transport_name
+			from
+				tb_transport_vendor
+			where
+				transport_type = 1
+		) b on a.express = b.transport_code
+		where
+			1 = 1
+		<if test="cycle != null and cycle != ''" >
+		    and balance_month like CONCAT('%', #{cycle }, '%') 
+		</if>
+		<if test="subject != null and subject != ''" >
+	    	and b.transport_name like CONCAT('%', #{subject }, '%') 
+		</if>
+		order by transport_name, balance_month desc
+		limit #{firstResult}, #{maxResult}
+	</select>
+	<select id= "selectRecordsExist" parameterType= "Object" resultType= "Integer" >
+		select
+			count(1)
+		from
+			ex_balance_summary
+		where
+			express = #{contract_owner}
+		and
+			balance_month = #{balance_month}
+	</select>
+	<select id="getSummary" resultType="java.util.Map" parameterType="Object">
+		SELECT
+			sum(order_num) AS order_num,
+			sum(
+				product_type_freight - product_type_discount
+			) AS afterDiscount,
+			sum(insurance) AS insurance
+		FROM
+			ex_balance_summary
+		WHERE
+			ver_id = #{ver_id }
+		AND
+			express = #{contract_owner }
+		AND
+			balance_month = #{ym }
+		<if test="product_type != null and product_type != ''" >
+		AND
+			product_type_code = #{product_type }
+		</if>
+	</select>
+	<select id="getSummarySF" resultType="java.util.Map" parameterType="Object">
+		SELECT
+			code AS product_type_code,
+			sum(order_num) AS order_num,
+			sum(
+				product_type_freight - product_type_discount
+			) AS afterDiscount,
+			sum(insurance) AS insurance
+		FROM
+			ex_balance_summary
+		LEFT JOIN (select code,product_type from tb_product_type_discount) b ON product_type_code = b.product_type
+		WHERE
+			ver_id = #{ver_id }
+		AND
+			express = #{contract_owner }
+		AND
+			balance_month = #{ym }
+		GROUP BY code
+	</select>
+	<select id="getSummaryGroupbyType" resultType="java.util.Map" parameterType="Object">
+		SELECT
+			count(1) AS order_num,
+			sum(afterdiscount_freight) AS afterDiscount,
+			sum(insurance_fee) AS insurance
+		FROM
+			<if test="table_name != null and table_name != ''" >
+				${table_name }
+			</if>
+		WHERE
+		1=1
+		AND is_verification = "1"
+		<if test="contract_owner != null and contract_owner != ''" >
+		AND
+			express_code = #{contract_owner }
+		</if>
+		<if test="master_id != null and master_id != ''" >
+		AND
+			master_id = #{master_id }
+		</if>
+		<if test="product_type != null and product_type != ''" >
+		AND
+			producttype_code = #{product_type }
+		</if>
+	</select>
+	<update id="updateBatch" parameterType="Object">
+		update ex_balance_summary
+		set
+			<if test="product_type != null and product_type != ''" >
+				product_type_discount = product_type_freight * #{discount },
+				total_fee = total_fee - product_type_freight * #{discount }
+			</if>
+			<if test="product_type == null or product_type == ''" >
+				<if test="insurance_contain == 0">
+					product_type_total_discount = (product_type_freight - product_type_discount + insurance) * #{discount },
+					total_fee = total_fee - (product_type_freight - product_type_discount + insurance) * #{discount }
+				</if>
+				<if test="insurance_contain == 1">
+					product_type_total_discount = (product_type_freight - product_type_discount) * #{discount },
+					total_fee = total_fee - (product_type_freight - product_type_discount) * #{discount }
+				</if>
+			</if>
+		where
+			ver_id = #{ver_id }
+		and
+			express = #{contract_owner }
+		and
+			balance_month = #{ym }
+		<if test="product_type != null and product_type != ''" >
+		and 
+			product_type_code in (select product_type from tb_product_type_discount where code = #{product_type})
+		</if>
+	</update>
+	<update id="updateBalanceSummaryEx" parameterType="Object">
+		update ex_balance_summary
+		set 
+			product_type_total_discount = #{discount },
+			total_fee = #{total_fee },
+			update_by = 'SYSTEM', 
+			update_time = now()
+		where
+			id = #{id }
+	</update>
+	<select id="selectRecords" parameterType="Object" resultType="com.bt.lmis.model.BalanceSummaryEx">
+		select
+			id,
+			ver_id,
+			con_id,
+			express,
+			balance_month,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse_name,
+			order_num,
+			product_type_code,
+			product_type_name,
+			product_type_freight,
+			product_type_discount,
+			product_type_total_discount,
+			insurance,
+			default_1,
+			default_2,
+			default_3,
+			total_fee,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ex_balance_summary
+		where
+			ver_id = #{ver_id }
+		and
+			express = #{express }
+		and
+			balance_month = #{balance_month }
+		<if test="product_type != null and product_type != ''" >
+		and
+			product_type_code = #{product_type }
+		</if>
+		<if test="cost_center != null and cost_center != ''" >
+		and
+			cost_center = #{cost_center }
+		</if>
+		<if test="store != null and store != ''" >
+		and
+			store_name = #{store }
+		</if>
+		<if test="warehouse != null and warehouse != ''" >
+		and
+			warehouse_name = #{warehouse }
+		</if>
+		order by product_type_code
+	</select>
+	<select id= "selectProductType" parameterType= "Object" resultType= "String" >
+		select
+			distinct product_type_code
+		from
+			ex_balance_summary
+		where
+			ver_id = #{ver_id}
+		and
+			express = #{express }
+		and
+			balance_month = #{balance_month }
+	</select>
+	<select id= "selectProductTypeByExpress" parameterType= "Object" resultType= "java.lang.String" >
+		select
+			distinct producttype_code AS product_type_code
+		from
+			<if test="table_name != null and table_name != ''" >
+				${table_name}
+			</if>
+		where 1=1
+			AND is_verification = "1"
+			<if test="contract_owner != null and contract_owner != ''" >
+				and express_code = #{contract_owner}
+			</if>
+			<if test="master_id != null and master_id != ''" >
+				and master_id = #{master_id}
+			</if>
+	</select>
+	<select id="selectCurrentVerId" parameterType="Object" resultType="Integer">
+		select
+			max(ver_id)
+		from
+			ex_balance_summary
+		where
+			express = #{express }
+		and
+			balance_month = #{balance_month }		
+	</select>
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into ex_balance_summary
+		(
+			ver_id,
+			con_id,
+			express,
+			balance_month,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse_name,
+			order_num,
+			product_type_code,
+			product_type_name,
+			product_type_freight,
+			product_type_discount,
+			product_type_total_discount,
+			insurance,
+			default_1,
+			default_2,
+			default_3,
+			total_fee,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		) values
+		<foreach collection="list" item="obj" index="index" separator="," >
+		(
+			#{obj.ver_id },
+			#{obj.con_id },
+			#{obj.express },
+			#{obj.balance_month },
+			#{obj.cost_center },
+			#{obj.store_code },
+			#{obj.store_name },
+			#{obj.warehouse_name },
+			#{obj.order_num },
+			#{obj.product_type_code },
+			#{obj.product_type_name },
+			#{obj.product_type_freight },
+			#{obj.product_type_discount },
+			#{obj.product_type_total_discount },
+			#{obj.insurance },
+			#{obj.default_1 },
+			#{obj.default_2 },
+			#{obj.default_3 },
+			#{obj.total_fee },
+			'SYSTEM',
+			now(),
+			'SYSTEM',
+			now()
+         )
+         </foreach>
+	</insert>
+	
+	<select id="querytbContractBasicinfo" parameterType="Object" resultType="com.bt.lmis.model.tbContractBasicinfo">
+		select
+			id,
+	        create_time,
+	        create_user,
+	        update_time,
+	        update_user,
+	        contract_no,
+	        contract_name,
+	        contract_type,
+            contract_owner,
+	        contract_version,
+	        contract_start,
+	        contract_end,
+	        settle_date,
+	        validity,
+	        balanced,
+	        contact,
+	        tel,
+	        settlement_body
+		from
+			tb_contract_basicinfo
+		where
+			id = #{con_id }
+	</select>
+	<delete id="deleteSummary" parameterType="Object">
+		DELETE FROM ex_balance_summary
+		WHERE express = #{express }
+		AND balance_month = #{ym};
+	</delete>
+	<update id="returnDetail" parameterType="Object">
+		UPDATE tb_warehouse_express_data_settlement
+		SET discount = 0,
+			afterdiscount_freight = standard_freight,
+			total_fee = standard_freight + insurance_fee
+		WHERE transport_name = #{express }
+		AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{billCycleStart })
+		AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{billCycleEnd })	
+	</update>
+</mapper>   

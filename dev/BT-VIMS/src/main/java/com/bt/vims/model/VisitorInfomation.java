@@ -1,0 +1,228 @@
+package com.bt.vims.model;
+
+import java.util.Date;
+
+/** 
+* @ClassName: VisitorInfomation 
+* @Description: TODO(访客记录) 
+* @author Yuriy.Jiang
+* @date 2017年1月8日 上午11:14:30 
+*  
+*/
+public class VisitorInfomation {
+	//主键
+	private double id;
+	//拜访人姓名
+	private String visitor_name;
+	//拜访人电话
+	private String visitor_phone;
+	//拜访人
+	private String host;
+	//工作单位名称
+	private String visitor_company_name;
+	//是否有开车
+	private String license_plate_number_flag;
+	//车牌号
+	private String license_plate_number;
+	//事由
+	private String content;
+	//备注
+	private String remark;
+	//照片
+	private byte[] photo;
+	//签入时间
+	private Date check_in_time;
+	//签入人
+	private String check_in_user;
+	//签出时间
+	private Date check_out_time;
+	//签出人
+	private String check_out_user;
+	//签到状态
+	private String check_state;
+	
+	private String visitorType; //访客类型
+
+	private Integer visitorNum; //访客人数
+	
+	private String checkInPlcae; //签入地址
+	
+	private String checkOutPlace; //签出地址
+	
+	private String applyFor; //应聘职位
+	//时间
+	private String data;
+	
+	private String datas;
+	
+	
+	
+	public VisitorInfomation() {
+		
+	}
+	
+	public void setParam1(String visitor_name, String visitor_phone, String host, String visitor_company_name,
+			String license_plate_number, String content, String remark) {
+		this.visitor_name = visitor_name;
+		this.visitor_phone = visitor_phone;
+		this.host = host;
+		this.visitor_company_name = visitor_company_name;
+		this.license_plate_number = license_plate_number;
+		this.content = content;
+		this.remark = remark;
+	}
+	
+	public void setParam2(byte[] photo, Date check_in_time, String check_in_user, String visitorType, Integer visitorNum, String checkInPlcae, String applyFor){
+		this.photo = photo;
+		this.check_in_time = check_in_time;
+		this.check_in_user = check_in_user;
+		this.visitorType = visitorType;
+		this.visitorNum = visitorNum;
+		this.checkInPlcae = checkInPlcae;
+		this.applyFor = applyFor;
+	}
+
+
+	public String getDatas() {
+		return datas;
+	}
+	public void setDatas(String datas) {
+		this.datas = datas;
+	}
+	public String getData() {
+		return data;
+	}
+	public void setData(String data) {
+		this.data = data;
+	}
+	
+	public double getId() {
+		return id;
+	}
+	public void setId(double id) {
+		this.id = id;
+	}
+	public String getVisitor_name() {
+		return visitor_name;
+	}
+	public void setVisitor_name(String visitor_name) {
+		this.visitor_name = visitor_name;
+	}
+	public String getVisitor_phone() {
+		return visitor_phone;
+	}
+	public void setVisitor_phone(String visitor_phone) {
+		this.visitor_phone = visitor_phone;
+	}
+	public String getHost() {
+		return host;
+	}
+	public void setHost(String host) {
+		this.host = host;
+	}
+	
+	public String getVisitor_company_name() {
+		return visitor_company_name;
+	}
+	public void setVisitor_company_name(String visitor_company_name) {
+		this.visitor_company_name = visitor_company_name;
+	}
+	public String getLicense_plate_number_flag() {
+		return license_plate_number_flag;
+	}
+	public void setLicense_plate_number_flag(String license_plate_number_flag) {
+		this.license_plate_number_flag = license_plate_number_flag;
+	}
+	
+	public String getLicense_plate_number() {
+		return license_plate_number;
+	}
+	public void setLicense_plate_number(String license_plate_number) {
+		this.license_plate_number = license_plate_number;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public byte[] getPhoto() {
+		return photo;
+	}
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+	public Date getCheck_in_time() {
+		return check_in_time;
+	}
+	public void setCheck_in_time(Date check_in_time) {
+		this.check_in_time = check_in_time;
+	}
+	public String getCheck_in_user() {
+		return check_in_user;
+	}
+	public void setCheck_in_user(String check_in_user) {
+		this.check_in_user = check_in_user;
+	}
+	public Date getCheck_out_time() {
+		return check_out_time;
+	}
+	public void setCheck_out_time(Date check_out_time) {
+		this.check_out_time = check_out_time;
+	}
+	public String getCheck_out_user() {
+		return check_out_user;
+	}
+	public void setCheck_out_user(String check_out_user) {
+		this.check_out_user = check_out_user;
+	}
+	public String getCheck_state() {
+		return check_state;
+	}
+	public void setCheck_state(String check_state) {
+		this.check_state = check_state;
+	}
+	public String getVisitorType() {
+		return visitorType;
+	}
+	public void setVisitorType(String visitorType) {
+		this.visitorType = visitorType;
+	}
+	public Integer getVisitorNum() {
+		return visitorNum;
+	}
+	public void setVisitorNum(Integer visitorNum) {
+		this.visitorNum = visitorNum;
+	}
+	public String getCheckInPlcae() {
+		return checkInPlcae;
+	}
+	public void setCheckInPlcae(String checkInPlcae) {
+		this.checkInPlcae = checkInPlcae;
+	}
+	public String getApplyFor() {
+		return applyFor;
+	}
+	public void setApplyFor(String applyFor) {
+		this.applyFor = applyFor;
+	}
+
+	public String getCheckOutPlace() {
+		return checkOutPlace;
+	}
+
+	public void setCheckOutPlace(String checkOutPlace) {
+		this.checkOutPlace = checkOutPlace;
+	}
+	
+	
+	
+	
+	
+}

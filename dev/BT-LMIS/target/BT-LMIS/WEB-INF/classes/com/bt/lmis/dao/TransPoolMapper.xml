@@ -1,0 +1,1863 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TransPoolMapper">
+	<!-- Result Map -->
+	<select id="findAllData" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.`id`,
+		t.`contract_id`,
+		t.`start_place`,
+		t.`cost_center`,
+		t.`shop_name`,
+		t.warehouse,
+		t.`bill_num`,
+		t.`carload_price`,
+		t.`Lingdan_price`,
+		t.`insurance_price`,
+		t.`upstairs_price`,
+		t.`unloading_price`,
+		t.`send_price`,
+		t.`take_price`,
+		t.`other_price`,
+		t.`discount_price`,
+		t.`total_price`,
+		t.`update_date`,
+		t.`manager_price`,
+		t.`dispatch_price`,
+		t.`every_discount`,
+		t.`bat_id`,
+		t.create_date_day,
+		t.create_date,
+		t.contract_name,
+		t.contract_version,
+		t.contract_no
+		from
+		view_trans_pool_result t
+		where 1=1
+		and contract_id=#{contractId}
+		<if test="createDate != null  and createDate != '' ">
+			and
+			date_format(t.create_date_day,'%Y%m')=date_format(#{createDate},'%Y%m')
+		</if>
+		<if test="transportCode != null  and transportCode != '' ">
+			and transport_code=#{transportCode}
+		</if>
+		or (t.contract_type='sum' and contract_id=#{contractId} and
+		transport_code=#{transportCode})
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+
+	<select id="querySettleInvitation" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.`store_name`,
+		t.`inbound_no`,
+		t.`barcode`,
+		t.`bz_number`,
+		t.`item_no`,
+		t.`item_name`,
+		t.`inbound_qty`,
+		t.purchase_price,
+		t.inbound_money,
+		t.`pro_flag`,
+		t.`pro_remark`
+		from jk_settle_invitation t
+		where 1=1
+		<if test="proFlag != null  and proFlag != '' ">
+			and pro_flag = #{proFlag}
+		</if>
+		GROUP BY pro_remark
+	</select>
+
+	<select id="querySettleOperator" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.`store_name`,
+		t.`job_orderno`,
+		t.`job_type`,
+		t.`storaggelocation_code`,
+		t.`out_num`,
+		t.`item_number`,
+		t.`art_no`,
+		t.`operator`,
+		t.`pro_flag`,
+		t.`pro_remark`
+		from jk_settle_operator t
+		where 1=1
+		<if test="proFlag != null  and proFlag != '' ">
+			and pro_flag = #{proFlag}
+		</if>
+		GROUP BY pro_remark
+	</select>
+
+	<select id="querySettleOrder" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.`store_code`,
+		t.`store_name`,
+		t.`warehouse_code`,
+		t.`warehouse_name`,
+		t.`transport_code`,
+		t.`transport_name`,
+		t.`delivery_order`,
+		t.`epistatic_order`,
+		t.`express_number`,
+		t.`weight`,
+		t.`length`,
+		t.`width`,
+		t.`higth`,
+		t.`volumn`,
+		t.`delivery_address`,
+		t.`province`,
+		t.`city`,
+		t.`state`,
+		t.`shiptoname`,
+		t.`address`,
+		t.`pro_remark`
+		from jk_settle_order t
+		where 1=1
+		<if test="proFlag != null  and proFlag != '' ">
+			and pro_flag = #{proFlag}
+		</if>
+		GROUP BY pro_remark
+	</select>
+
+	<select id="queryOrderDetail" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.`express_number`,
+		t.`sku_number`,
+		t.`barcode`,
+		t.`item_name`,
+		t.`extend_pro`,
+		t.`pro_remark`
+		from jk_settle_order_detail t
+		where 1=1
+		<if test="proFlag != null  and proFlag != '' ">
+			and pro_flag = #{proFlag}
+		</if>
+		GROUP BY pro_remark
+	</select>
+
+	<select id="queryStorage" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.`store_code`,
+		t.`store_name`,
+		t.`warehouse_code`,
+		t.`warehouse_name`,
+		t.`system_warehouse`,
+		t.`item_type`,
+		t.`pro_remark`
+		from jk_settle_storage t
+		where 1=1
+		<if test="proFlag != null  and proFlag != '' ">
+			and pro_flag = #{proFlag}
+		</if>
+		GROUP BY pro_remark
+	</select>
+
+	<select id="queryUse" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.`store_code`,
+		t.`store_name`,
+		t.`sku_code`,
+		t.`sku_name`,
+		t.`pro_remark`
+		from jk_settle_use t
+		where 1=1
+		<if test="proFlag != null  and proFlag != '' ">
+			and pro_flag = #{proFlag}
+		</if>
+		GROUP BY pro_remark
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="com.bt.lmis.controller.form.TransPoolQueryParam">
+		select count(1) from view_trans_pool_result t
+		where 1=1
+		and
+		contract_id=#{contractId}
+		<if test="createDate != null  and createDate != '' ">
+			and
+			date_format(t.create_date_day,'%Y%m')=date_format(#{createDate},'%Y%m')
+		</if>
+		<if test="transportCode != null  and transportCode != '' ">
+			and transport_code=#{transportCode}
+		</if>
+		or (t.contract_type='sum' and contract_id=#{contractId} and
+		transport_code=#{transportCode})
+	</select>
+
+	<select id="findAllDataByGt" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		id,
+		contract_id,
+		contract_type,
+		cycle_month,
+		start_place,
+		store_name,
+		bill_num,
+		trans_total_cost,
+		transfer_total_cost,
+		delivery_total_cost,
+		other_deliever_cost,
+		upstairs_total_cost,
+		take_total_cost,
+		create_date
+		from view_settle_result_gt t
+		where 1=1
+		and
+		contract_type=2
+		or contract_type='sum'
+		<if test="createDate != null  and createDate != '' ">
+			and t.create_date=#{createDate}
+		</if>
+		<if test="storeName != null  and storeName != '' ">
+			and t.store_name=#{storeName}
+		</if>
+		<if test="firstResult != null  and firstResult != '' ">
+			LIMIT #{firstResult}, #{maxResult}
+		</if>
+	</select>
+
+	<select id="selectCountByGt" resultType="java.lang.Integer"
+		parameterType="com.bt.lmis.controller.form.TransPoolQueryParam">
+		select count(1) from view_settle_result_gt t
+		where 1=1
+		and
+		contract_type=2
+		<if test="createDate != null  and createDate != '' ">
+			and t.create_date=#{createDate}
+		</if>
+		<if test="storeName != null  and storeName != '' ">
+			and t.store_name=#{storeName}
+		</if>
+	</select>
+
+
+	<select id="getPoolMain" resultType="java.util.HashMap"
+		parameterType="java.util.HashMap">
+		select
+		t.contract_id,
+		t.transport_name,
+		t.transport_code as
+		transportCode,
+		t.settle_cyle,
+		t.contract_no,
+		t.create_date,
+		t.contract_name
+		from view_pool_main t
+	</select>
+
+	<select id="selectCountPoolMain" resultType="java.lang.Integer"
+		parameterType="java.util.HashMap">
+		select
+		count(1)
+		from view_pool_main
+	</select>
+
+	<select id="queryExpressAll" resultType="java.util.Map"
+		parameterType="com.bt.lmis.controller.form.WarehouseExpressDataParam">
+		select
+		<include refid="Base_Column_Express_List" />
+		from
+		tb_warehouse_express_data
+		where 1=1
+		<if test="transport_code != null  and transport_code != '' ">
+			transport_code=#{transport_code},
+		</if>
+		<if test="transport_name != null  and transport_name != '' ">
+			transport_name=#{transport_name},
+		</if>
+		<if test="store_code != null  and store_code != '' ">
+			store_code=#{store_code},
+		</if>
+		<if test="store_name != null  and store_name != '' ">
+			store_name=#{store_name},
+		</if>
+		and dFlag = 0
+		order by
+		update_time desc
+		LIMIT #{firstResult},
+		#{maxResult}
+	</select>
+
+	<select id="countQueryExpressAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.WarehouseExpressDataParam">
+		select
+		count(1)
+		from
+		(
+		select
+		<include refid="Base_Column_Express_List" />
+		from tb_warehouse_express_data
+		where 1=1
+		<if test="transport_code != null  and transport_code != '' ">
+			transport_code=#{transport_code},
+		</if>
+		<if test="transport_name != null  and transport_name != '' ">
+			transport_name=#{transport_name},
+		</if>
+		<if test="store_code != null  and store_code != '' ">
+			store_code=#{store_code},
+		</if>
+		<if test="store_name != null  and store_name != '' ">
+			store_name=#{store_name},
+		</if>
+		and dFlag = 0
+		) a
+	</select>
+
+	<sql id="Base_Column_Express_List">
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		transport_direction,
+		warehouse,
+		delivery_address,
+		itemtype_code,
+		itemtype_name,
+		transport_code,
+		transport_name,
+		delivery_order,
+		bus_date,
+		transport_time,
+		express_number,
+		cost_center,
+		store_code,
+		store_name,
+		weight,
+		sku_number,
+		length,
+		width,
+		higth,
+		volumn,
+		order_amount,
+		province,
+		city,
+		state,
+		street,
+		cod_flag,
+		balance_subject,
+		settle_flag,
+		dFlag,
+		packing_charge_flag,
+		operating_flag,
+		start_time,
+		end_time,
+		int qty,
+		insurance_flag,
+		hcf_settle_flag,
+		tstart_time,
+		tend_time
+	</sql>
+
+
+	<sql id="Base_Column_ErCalMaster_List">
+		id,
+		waybill,
+		express_code,
+		producttype_code,
+		warehouse_code,
+		p_code,
+		c_code,
+		s_code,
+		check_time,
+		weight_time,
+		embrance_time,
+		flag,
+		run_time
+	</sql>
+
+	<select id="queryErCalMasterAll" resultType="java.util.Map"
+		parameterType="com.bt.lmis.controller.form.ErCalMasterParam">
+		select
+		<include refid="Base_Column_ErCalMaster_List" />
+		from
+		er_cal_master
+		where 1=1
+		<if test="express_code != null  and express_code != '' ">
+			express_code=#{express_code},
+		</if>
+		<if test="waybill != null  and waybill != '' ">
+			waybill=#{waybill},
+		</if>
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+
+	<select id="countQueryErCalMasterAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.ErCalMasterParam">
+		select
+		count(1)
+		from
+		(
+		select
+		<include refid="Base_Column_ErCalMaster_List" />
+		from er_cal_master
+		where 1=1
+		<if test="express_code != null  and express_code != '' ">
+			express_code=#{express_code},
+		</if>
+		<if test="waybill != null  and waybill != '' ">
+			waybill=#{waybill},
+		</if>
+		) a
+	</select>
+
+
+	<sql id="Base_Column_SuppliesDetail_List">
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		ib_time,
+		store_id,
+		store_name,
+		vendor,
+		inbound_no,
+		barcode,
+		sku_name,
+		bz_number,
+		item_no,
+		item_name,
+		inbound_qty,
+		purchase_price,
+		inbound_money,
+		end_time,
+		paymentdays_type,
+		settle_flag
+	</sql>
+
+
+	<select id="querySuppliesDetailAll" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_SuppliesDetail_List" />
+		from
+		tb_invitation_useanmount_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="inbound_no != null  and inbound_no != '' ">
+			and inbound_no=#{inbound_no}
+		</if>
+		<if test="bz_number != null  and bz_number != '' ">
+			and bz_number=#{bz_number}
+		</if>
+		<if test="item_name != null  and item_name != '' ">
+			and item_name like CONCAT('%', #{item_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+		LIMIT #{firstResult}, #{maxResult}
+
+	</select>
+
+	<select id="countQuerySuppliesDetailAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.TbInvitationUseanmountDataParam">
+
+		select
+		count(1)
+		from tb_invitation_useanmount_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="inbound_no != null  and inbound_no != '' ">
+			and inbound_no=#{inbound_no}
+		</if>
+		<if test="bz_number != null  and bz_number != '' ">
+			and bz_number=#{bz_number}
+		</if>
+		<if test="item_name != null  and item_name != '' ">
+			and item_name like CONCAT('%', #{item_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+
+	</select>
+
+	<sql id="Base_Column_operatingCost_List">
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		order_type,
+		operation_time,
+		store_name,
+		job_orderno,
+		related_orderno,
+		job_type,
+		storaggelocation_code,
+		in_num,
+		out_num,
+		item_number,
+		sku_number,
+		art_no,
+		item_name,
+		item_size,
+		inventory_status,
+		operator,
+		store_id,
+		settle_flag
+	</sql>
+
+
+	<select id="queryOperatingCostAll" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_operatingCost_List" />
+		from
+		tb_operationfee_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="job_orderno != null  and job_orderno != '' ">
+			and job_orderno=#{job_orderno}
+		</if>
+		<if test="art_no != null  and art_no != '' ">
+			and art_no=#{art_no}
+		</if>
+		<if test="inventory_status != null  and inventory_status != '' ">
+			and inventory_status=#{inventory_status}
+		</if>
+		and settle_flag=0
+		LIMIT #{firstResult}, #{maxResult}
+
+	</select>
+
+	<select id="countOperatingCostAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.TbOperationfeeDataParam">
+		select
+		count(1)
+		from tb_operationfee_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="job_orderno != null  and job_orderno != '' ">
+			and job_orderno=#{job_orderno}
+		</if>
+		<if test="art_no != null  and art_no != '' ">
+			and art_no=#{art_no}
+		</if>
+		<if test="inventory_status != null  and inventory_status != '' ">
+			and inventory_status=#{inventory_status}
+		</if>
+		and settle_flag=0
+
+	</select>
+
+
+	<sql id="Base_Column_warehousing_List">
+		id,
+		bat_id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		warehouse_type,
+		start_time,
+		store_id,
+		store_name,
+		is_closed,
+		trade,
+		warehouse_code,
+		warehouse_name,
+		system_warehouse,
+		whcost_center,
+		cost_code,
+		cost_name,
+		area_code,
+		area_name,
+		item_type,
+		storage_type,
+		storage_acreage,
+		acreage_unit,
+		settle_flag
+	</sql>
+
+
+	<select id="queryWarehousingAll" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_warehousing_List" />
+		from
+		tb_storage_expenditures_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="warehouse_name != null  and warehouse_name != '' ">
+			and warehouse_name like CONCAT('%', #{warehouse_name},
+			'%')
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code like CONCAT('%', #{warehouse_code},
+			'%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+		LIMIT #{firstResult}, #{maxResult}
+
+	</select>
+
+	<select id="countWarehousingtAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.TbStorageExpendituresDataParam">
+
+		select
+		count(1)
+		from tb_storage_expenditures_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="warehouse_name != null  and warehouse_name != '' ">
+			and warehouse_name like CONCAT('%', #{warehouse_name},
+			'%')
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code like CONCAT('%', #{warehouse_code},
+			'%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+
+	</select>
+
+
+	<sql id="Base_Column_expressInformation_List">
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		sku_number,
+		barcode,
+		item_name,
+		extend_pro,
+		qty,
+		waybill
+	</sql>
+
+
+	<select id="queryExpressInforAll" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_expressInformation_List" />
+		from
+		er_expressinfo_detail
+		where 1=1
+		<if test="barcode != null  and barcode != '' ">
+			and barcode=#{barcode}
+		</if>
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="item_name != null  and item_name != '' ">
+			and item_name like CONCAT('%', #{item_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+
+		LIMIT #{firstResult}, #{maxResult}
+
+	</select>
+
+	<select id="countExpressInforAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.ErExpressinfoDetailParam">
+
+		select
+		count(1)
+		from er_expressinfo_detail
+		where 1=1
+		<if test="barcode != null  and barcode != '' ">
+			and barcode=#{barcode}
+		</if>
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="item_name != null  and item_name != '' ">
+			and item_name like CONCAT('%', #{item_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+	</select>
+
+	<sql id="Base_Column_radarMain_List">
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		waybill,
+		express_code,
+		producttype_code,
+		work_no,
+		platform_no,
+		platform_time,
+		store_code,
+		warehouse_code,
+		systemwh_code,
+		embrace_time,
+		shiptoname,
+		phone,
+		address,
+		provice_code,
+		city_code,
+		state_code,
+		street_code,
+		standard_efficiency,
+		real_efficiency,
+		express_time,
+		check_time,
+		weight_time,
+		embrance_time,
+		last_embrance_time,
+		status,
+		efficiency_starttime,
+		end_flag,
+		receive_id,
+		analysis_flag
+	</sql>
+
+
+	<select id="queryRadarMainAll" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_radarMain_List" />
+		from
+		er_expressinfo_master
+		where 1=1
+		<if test="store_code != null  and store_code != '' ">
+			and store_code like CONCAT('%', #{store_code}, '%')
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code=#{warehouse_code}
+		</if>
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and end_flag=0
+		LIMIT #{firstResult}, #{maxResult}
+
+	</select>
+
+	<select id="countRadarMainAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.ErExpressinfoAasterParam">
+		select
+		count(1)
+		from er_expressinfo_master
+		where 1=1
+		<if test="store_code != null  and store_code != '' ">
+			and store_code like CONCAT('%', #{store_code}, '%')
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code=#{warehouse_code}
+		</if>
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and end_flag=0
+	</select>
+
+	<sql id="Base_Column_radar_List">
+		id,
+		waybill,
+		express_code,
+		producttype_code,
+		warehouse_code,
+		p_code,
+		c_code,
+		s_code,
+		check_time,
+		weight_time
+	</sql>
+
+
+	<select id="queryRadarAll" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_radar_List" />
+		from
+		er_cal_master
+		where 1=1
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code=#{warehouse_code}
+		</if>
+		and flag=0
+		LIMIT #{firstResult}, #{maxResult}
+
+	</select>
+
+	<select id="countRadarAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.ErCalMasterParam">
+
+		select
+		count(1)
+		from er_cal_master
+		where 1=1
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code=#{warehouse_code}
+		</if>
+		and flag=0
+
+	</select>
+
+	<sql id="Base_Column_raw_List">
+		id,
+		bat_id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		cost_center,
+		store_code,
+		store_name,
+		warehouse,
+		transport_code,
+		transport_name,
+		delivery_order,
+		epistatic_order,
+		order_type,
+		express_number,
+		transport_direction,
+		itemtype_code,
+		itemtype_name,
+		transport_time,
+		collection_on_delivery,
+		order_amount,
+		sku_number,
+		weight,
+		length,
+		width,
+		higth,
+		volumn,
+		delivery_address,
+		province,
+		city,
+		state,
+		street,
+		insurance_flag,
+		cod_flag,
+		balance_subject,
+		settle_flag,
+		settle_logistics_flag,
+		settle_client_flag,
+		settle_store_flag,
+		packing_charge_flag,
+		dFlag,
+		operating_flag,
+		qty,
+		hcf_settle_flag,
+		offer_id
+	</sql>
+
+
+	<select id="queryRawExpressAll" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_raw_List" />
+		from
+		tb_warehouse_express_data
+		where 1=1
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="cost_center != null  and cost_center != '' ">
+			and cost_center=#{cost_center}
+		</if>
+		<if test="store_code != null  and store_code != '' ">
+			and store_code=#{store_code}
+		</if>
+		and dFlag = 0
+		LIMIT #{firstResult}, #{maxResult}
+
+	</select>
+
+	<select id="countRawExpressAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.WarehouseExpressDataParam">
+		select
+		count(1)
+		from tb_warehouse_express_data
+		where 1=1
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="cost_center != null  and cost_center != '' ">
+			and cost_center=#{cost_center}
+		</if>
+		<if test="store_code != null  and store_code != '' ">
+			and store_code=#{store_code}
+		</if>
+		and dFlag = 0
+	</select>
+
+	<sql id="Base_Column_suppliesAmount_List">
+		id,
+		bat_id,
+		ob_time,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		store_code,
+		store_name,
+		cost_center,
+		use_time,
+		sku_code,
+		sku_name,
+		use_amount,
+		use_amountunit,
+		settle_flag
+	</sql>
+
+
+	<select id="querySuppliesAmountAll" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_suppliesAmount_List" />
+		from
+		tb_invitation_realuseanmount_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="sku_code != null  and sku_code != '' ">
+			and sku_code=#{sku_code}
+		</if>
+		<if test="cost_center != null  and cost_center != '' ">
+			and cost_center=#{cost_center}
+		</if>
+		<if test="sku_name != null  and sku_name != '' ">
+			and sku_name like CONCAT('%', #{sku_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+		LIMIT #{firstResult}, #{maxResult}
+
+	</select>
+
+	<select id="countSuppliesAmountAll" resultType="Integer"
+		parameterType="com.bt.lmis.controller.form.TbInvitationRealuseanmountDataParam">
+		select
+		count(1)
+		from tb_invitation_realuseanmount_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="sku_code != null  and sku_code != '' ">
+			and sku_code=#{sku_code}
+		</if>
+		<if test="cost_center != null  and cost_center != '' ">
+			and cost_center=#{cost_center}
+		</if>
+		<if test="sku_name != null  and sku_name != '' ">
+			and sku_name like CONCAT('%', #{sku_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+	</select>
+
+	<select id="findInvitationUseanmount" resultType="java.util.Map"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_SuppliesDetail_List" />
+		from
+		tb_invitation_useanmount_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="inbound_no != null  and inbound_no != '' ">
+			and inbound_no=#{inbound_no}
+		</if>
+		<if test="bz_number != null  and bz_number != '' ">
+			and bz_number=#{bz_number}
+		</if>
+		<if test="item_name != null  and item_name != '' ">
+			and item_name like CONCAT('%', #{item_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+	</select>
+
+
+	<select id="warehousingExport" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_warehousing_List" />
+		from
+		tb_storage_expenditures_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name=#{store_name}
+		</if>
+		<if test="warehouse_name != null  and warehouse_name != '' ">
+			and warehouse_name=#{warehouse_name}
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code like CONCAT('%', #{warehouse_code},
+			'%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+	</select>
+
+	<select id="findOperatingCostExport" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_operatingCost_List" />
+		from
+		tb_operationfee_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name=#{store_name}
+		</if>
+		<if test="job_orderno != null  and job_orderno != '' ">
+			and job_orderno=#{job_orderno}
+		</if>
+		<if test="art_no != null  and art_no != '' ">
+			and art_no=#{art_no}
+		</if>
+		<if test="inventory_status != null  and inventory_status != '' ">
+			and inventory_status=#{inventory_status}
+		</if>
+		and settle_flag=0
+		GROUP BY job_orderno
+	</select>
+
+	<select id="findSuppliesAmountExport" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_suppliesAmount_List" />
+		from
+		tb_invitation_realuseanmount_data
+		where 1=1
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="sku_code != null  and sku_code != '' ">
+			and sku_code=#{sku_code}
+		</if>
+		<if test="cost_center != null  and cost_center != '' ">
+			and cost_center=#{cost_center}
+		</if>
+		<if test="sku_name != null  and sku_name != '' ">
+			and sku_name like CONCAT('%', #{sku_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and settle_flag=0
+	</select>
+
+	<select id="QueryexpressInformationExport" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_expressInformation_List" />
+		from
+		er_expressinfo_detail
+		where 1=1
+		<if test="barcode != null  and barcode != '' ">
+			and barcode=#{barcode}
+		</if>
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="item_name != null  and item_name != '' ">
+			and item_name like CONCAT('%', #{item_name}, '%')
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		GROUP BY barcode
+	</select>
+
+	<select id="queryRadarExport" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_radar_List" />
+		from
+		er_cal_master
+		where 1=1
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code=#{warehouse_code}
+		</if>
+		and flag=0
+	</select>
+
+
+	<select id="findRadarMainExport" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_radarMain_List" />
+		from
+		er_expressinfo_master
+		where 1=1
+		<if test="store_code != null  and store_code != '' ">
+			and store_code like CONCAT('%', #{store_code}, '%')
+		</if>
+		<if test="warehouse_code != null  and warehouse_code != '' ">
+			and warehouse_code=#{warehouse_code}
+		</if>
+		<if test="waybill != null  and waybill != '' ">
+			and waybill=#{waybill}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		and end_flag=0
+		GROUP BY store_code
+	</select>
+
+
+	<select id="queryExpressExport" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_raw_List" />
+		from
+		tb_warehouse_express_data
+		where 1=1
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &gt;= #{create_time}
+		</if>
+		<if test="create_time != null  and create_time != '' ">
+			and create_time &lt;= #{update_time}
+		</if>
+		<if test="store_name != null  and store_name != '' ">
+			and store_name like CONCAT('%', #{store_name}, '%')
+		</if>
+		<if test="cost_center != null  and cost_center != '' ">
+			and cost_center=#{cost_center}
+		</if>
+		<if test="store_code != null  and store_code != '' ">
+			and store_code=#{store_code}
+		</if>
+		and dFlag = 0
+		GROUP BY store_name
+	</select>
+	<sql id="Base_Column_List">
+		a.id,
+		a.group_code,
+		a.group_name,
+		a.remark,
+		a.status,
+		a.dFlag,
+		a.create_by,
+		a.create_time,
+		a.update_by,
+		a.update_time,
+		a.instruction,
+		a.superior,
+		a.if_allot,
+		a.is_qa,
+		a.process_control,
+		b.group_name as superior_group
+	</sql>
+	<select id="querysGroup" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		s_group a
+        LEFT JOIN s_group b ON a.superior = b.id
+		where 1=1
+		<if test="group_code != null  and group_code != '' ">
+			and a.group_code=#{group_code}
+		</if>
+		<if test="group_name != null  and group_name != '' ">
+			and a.group_name=#{group_name}
+		</if>
+		<if test="status != null  and status != '' ">
+			and a.status=#{status}
+		</if>
+		<if test="superior != null  and superior != '' ">
+			and a.superior=#{superior}
+		</if>
+		<if test="if_allot != null  and if_allot != '' ">
+			and a.if_allot=#{if_allot}
+		</if>
+		<if test="process_control != null  and process_control != '' ">
+			and a.process_control=#{process_control}
+		</if>
+		ORDER BY CREATE_time DESC
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+	<select id="querysGroup2" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		s_group a
+        LEFT JOIN s_group b ON a.superior = b.id
+		where 1=1
+		<if test="group_code != null  and group_code != '' ">
+			and a.group_code=#{group_code}
+		</if>
+		<if test="group_name != null  and group_name != '' ">
+			and a.group_name=#{group_name}
+		</if>
+		<if test="status != null  and status != '' ">
+			and a.status=#{status}
+		</if>
+		<if test="superior != null  and superior != '' ">
+			and a.superior=#{superior}
+		</if>
+		<if test="if_allot != null  and if_allot != '' ">
+			and a.if_allot=#{if_allot}
+		</if>
+		<if test="process_control != null and process_control != '' ">
+			and a.process_control=#{process_control}
+		</if>
+		ORDER BY CREATE_time DESC
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+
+
+	<select id="countsGroup" resultType="Integer"
+		parameterType="java.util.HashMap">
+		select
+		count(1)
+		from s_group
+		where 1=1
+		<if test="group_code != null  and group_code != '' ">
+			and group_code=#{group_code}
+		</if>
+		<if test="group_name != null  and group_name != '' ">
+			and group_name=#{group_name}
+		</if>
+		<if test="status != null  and status != '' ">
+			and status=#{status}
+		</if>
+		<if test="superior != null  and superior != '' ">
+			and superior=#{superior}
+		</if>
+		<if test="if_allot != null  and if_allot != '' ">
+			and if_allot=#{if_allot}
+		</if>
+		<if test="process_control != null and process_control != '' ">
+			and a.process_control=#{process_control}
+		</if>
+	</select>
+	<select id="countsGroup2" resultType="Integer"
+		parameterType="java.util.HashMap">
+		select
+		count(1)
+		from s_group
+		where 1=1
+		<if test="group_code != null  and group_code != '' ">
+			and group_code=#{group_code}
+		</if>
+		<if test="group_name != null  and group_name != '' ">
+			and group_name=#{group_name}
+		</if>
+		<if test="status != null  and status != '' ">
+			and status=#{status}
+		</if>
+		<if test="superior != null  and superior != '' ">
+			and superior=#{superior}
+		</if>
+		<if test="if_allot != null  and if_allot != '' ">
+			and if_allot=#{if_allot}
+		</if>
+		<if test="process_control != null and process_control != '' ">
+			and a.process_control=#{process_control}
+		</if>
+	</select>
+
+	<!-- 根据菜单ID修改菜单状态 （0停用1启用） -->
+	<update id="updateStatus" parameterType="Object">
+		update s_group set status=#{status} where id = #{id}
+	</update>
+
+	<delete id="deleteGroup" parameterType="java.util.HashMap">
+		delete from s_group where id= #{id } and status=0
+	</delete>
+	<insert id="saveGroup" useGeneratedKeys="true" keyProperty="id"
+		parameterType="com.bt.lmis.model.Group">
+		insert into s_group(
+		group_code,
+		group_name,
+		remark,
+		status,
+		dFlag,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		instruction,
+		superior,
+		if_allot,
+		process_control)
+		values(#{group_code},#{group_name},#{remark},#{status},#{dFlag},#{create_by},#{create_time},#{update_by},#{update_time},#{instruction},#{superior},#{if_allot},#{process_control})
+	</insert>
+
+	<select id="findWorkOrderType" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select id,name,CODE from wk_type where 1=1 and so_flag=0
+	</select>
+
+	<insert id="addwkGroup" parameterType="java.util.HashMap">
+		insert into wk_group
+		(
+		wk_code,
+		g_id,
+		level
+		)values(
+		#{wk_code},
+		#{g_id},
+		#{level}
+		)
+	</insert>
+	<select id="queryWorkOrderType" parameterType="java.util.Map"
+		resultType="java.util.HashMap">
+		SELECT  b.wk_code,b.level,a.name,b.g_id  from  wk_type a,wk_group b where a.code = b.wk_code
+		<if test="g_id != null  and g_id != '' ">
+			and b.g_id=#{g_id}
+		</if>
+	</select>
+
+	<delete id="delWorkOrder" parameterType="java.util.HashMap">
+		delete from wk_group where id= #{id }
+	</delete>
+	<select id="findStore" resultType="java.util.Map" parameterType="java.util.HashMap">
+		SELECT store_name,store_code from tb_store WHERE validity= 1 ORDER BY update_time DESC
+	</select>
+
+	<insert id="addStoreGroup" parameterType="java.util.HashMap">
+		insert into wo_group_storePower
+		(
+		id,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		wo_group_storePower.group,
+		selfwarehouse,
+		outsourcedwarehouse,
+		store		
+		)values(
+		#{id},
+		#{create_by},
+		#{create_time},
+		#{update_by},
+		#{update_time},
+		#{group},
+		#{selfwarehouse},
+		#{outsourcedwarehouse},
+		#{store}
+		)
+	</insert>
+
+	<select id="queryStore" parameterType="java.util.Map"
+		resultType="java.util.HashMap">
+		select
+		wo_group_storePower.id,
+		wo_group_storePower.create_by,
+		wo_group_storePower.create_time,
+		wo_group_storePower.update_by,
+		wo_group_storePower.update_time,
+		wo_group_storePower.group,
+		wo_group_storePower.selfwarehouse,
+		wo_group_storePower.outsourcedwarehouse,
+		wo_group_storePower.store,
+		tb_store.store_name
+		from wo_group_storePower,tb_store 
+		where 1=1
+		and wo_group_storePower.store = tb_store.store_code
+		<if test="g_id != null  and g_id != '' ">
+			and wo_group_storePower.group=#{g_id}
+		</if>
+		ORDER BY wo_group_storePower.create_time DESC
+	</select>
+
+	<delete id="deleteStoreAndGroup" parameterType="java.util.HashMap">
+		delete from wo_group_storePower where id= #{id}
+	</delete>
+
+	<select id="queryTransportVendorGroup" parameterType="java.util.Map"
+		resultType="java.util.HashMap">
+		<!-- select
+		a.id,
+		a.group,
+		a.carrier,
+		b.transport_name
+		from wo_group_workPower a,tb_transport_vendor b
+		where 1=1
+		<if test="g_id != null  and g_id != '' ">
+			and a.group=#{g_id}
+		</if>
+		and a.carrier = b.transport_code -->
+      SELECT  w.group,w.carrier,w.transport_name from (select
+		a.id,
+		a.group,
+		a.carrier,
+		a.create_time,
+		b.transport_name
+		from wo_group_workPower a,tb_transport_vendor b
+		where 1=1
+		<if test="g_id != null  and g_id != '' ">
+			and a.group=#{g_id}
+		</if>
+		and a.carrier = b.transport_code) w 
+        group by w.group,w.carrier,w.transport_name
+        ORDER BY w.create_time DESC 
+	</select>
+
+	<select id="queryLogisticsCode" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		SELECT transport_name,transport_code from tb_transport_vendor WHERE validity= 1 ORDER BY update_time DESC
+	</select>
+
+    <select id= "findLogtics" parameterType= "Object" resultType= "com.bt.workOrder.model.GroupWorkPower" >
+		SELECT
+			id,
+	        create_by,
+	        create_time,
+	        update_by,
+	        update_time,
+	        carrier,
+	        wo_type,
+	        wo_level,
+	        dFlag
+		FROM wo_group_workPower
+		WHERE id= #{id}
+	</select>
+	
+	<insert id="addTransportVendor" parameterType="java.util.HashMap">
+		insert into wo_group_workPower
+		(
+		id,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		wo_group_workPower.group,
+		carrier,
+		wo_type,
+		wo_level
+		)values(
+		#{id},
+		#{create_by},
+		now(),
+		#{update_by},
+		now(),
+		#{group},
+		#{carrier},
+		#{wo_type},
+		#{wo_level}
+		)
+	</insert>
+	
+	<insert id="addTransportVendorTime" parameterType="java.util.HashMap">
+		insert into wo_group_workPower
+		(
+		id,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		wo_group_workPower.group,
+		carrier,
+		wo_type,
+		wo_level
+		)values(
+		#{id},
+		#{create_by},
+		#{create_time},
+		#{update_by},
+		now(),
+		#{group},
+		#{carrier},
+		#{wo_type},
+		#{wo_level}
+		)
+	</insert>
+
+	<delete id="deleteVendorGroup" parameterType="java.util.HashMap">
+		delete from wo_group_workPower where wo_group_workPower.group= #{group} and carrier= #{carrier}
+	</delete>
+	<update id="updateWkGroup" parameterType="java.util.HashMap">
+		update wk_group
+		set
+		level=#{level},
+		wk_code=#{wk_code},
+		g_id=#{g_id}
+		where id=#{id}
+	</update>
+
+	<select id="queryWkGroupSup" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		SELECT id,group_name,superior from s_group
+	</select>
+	
+	<select id="querySeniorQueryGroupSup" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		SELECT id,group_code,group_name,superior,status,if_allot,process_control from s_group 
+	</select>
+	
+
+	<select id="findLevelById" parameterType="java.util.Map"
+		resultType="com.bt.workOrder.model.WkType">
+		select
+		id
+		from wk_type t
+		where 1=1
+		<if test="name != null  and name != '' ">
+			and t.code=#{name}
+		</if>
+	</select>
+	
+	<select id="querysGroupById" parameterType="java.util.Map"
+		resultType="com.bt.lmis.model.Group">
+		select
+		superior
+		from
+		s_group a
+		where 1=1
+		and id=#{id}
+	</select>
+	
+
+	<insert id="addsGroupModel" parameterType="java.util.HashMap"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into s_group(
+		group_code,
+		group_name,
+		remark,
+		status,
+		dFlag,
+		instruction,
+		superior,
+		create_time,
+		update_time,
+		create_by,
+		update_by,
+		if_allot,
+		process_control)
+		values(#{group_code},#{group_name},#{group_name},#{status},#{dFlag},#{instruction},#{superior},now(),now(),#{create_by},#{update_by},#{if_allot},#{process_control})
+	</insert>
+
+
+	<insert id="addsGroupModelisNull" parameterType="java.util.HashMap"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into s_group(
+		group_code,
+		group_name,
+		remark,
+		status,
+		dFlag,
+		instruction,
+		create_time,
+		update_time,
+		create_by,
+		update_by,
+		if_allot,
+		process_control,
+		is_qa
+		)
+		values(#{group_code},#{group_name},#{group_name},#{status},#{dFlag},#{instruction},now(),now(),#{create_by},#{update_by},#{if_allot},#{process_control},#{is_qa})
+	</insert>
+
+	<update id="updateGroupModel" parameterType="java.util.HashMap">
+		update s_group
+		set
+		group_code=#{group_code},
+		group_name=#{group_name},
+		remark=#{group_name},
+		status=#{status},
+		update_time=now(),
+		instruction=#{instruction},
+		superior=#{superior},
+		if_allot=#{if_allot},
+		process_control=#{process_control}
+		where id=#{id}
+	</update>
+
+	<update id="updateStoreGroupPage" parameterType="java.util.HashMap">
+		update wo_group_storePower
+		set
+		wo_group_storePower.group=#{group},
+		selfwarehouse=#{selfwarehouse},
+		outsourcedwarehouse=#{outsourcedwarehouse},
+		store=#{store}
+		where id=#{id}
+	</update>
+
+	<update id="updateTransportVendor" parameterType="java.util.HashMap">
+		update transport_vendor_group
+		set
+		t_code=#{t_code},
+		g_id=#{g_id}
+		where id=#{id}
+	</update>
+	<select id="checkCountWork" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from s_group t where 1=1
+		<if test="group_name != null  and group_name != '' "> and t.group_name=#{group_name} </if>
+	</select>
+	
+	<select id="checkCountWorkCode" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from s_group t where 1=1
+		<if test="group_code != null  and group_code != '' "> and t.group_code=#{group_code} </if>
+	</select>
+
+	<select id="queryfindLevelAndJb" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+        SELECT a.id,b.sort,c.level,b.name from wk_type a,wk_level b, wk_order_type c
+		where a.code=c.wk_type
+		and b.code = c.level 
+		and a.id=#{id}
+		and c.status = 1
+	</select>
+
+	<select id="queryLogisticsCodeName" resultType="com.bt.lmis.model.TransportVendor"
+		parameterType="java.util.List">
+		SELECT transport_name from tb_transport_vendor GROUP BY transport_name
+	</select>
+
+	<insert id="addTransportVendorGroup" parameterType="java.util.HashMap">
+		insert into transport_vendor_group
+		(
+		t_code,
+		g_id
+		)values(
+		#{0},
+		#{1}
+		)
+	</insert>
+
+	<select id="checkCountTransportName" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from transport_vendor_group t where 1=1 and t.t_code=#{0}
+	</select>
+
+	<select id="queryStoreCode" resultType="com.bt.lmis.model.Store"
+		parameterType="java.util.List">
+		SELECT store_code from tb_store GROUP BY store_code
+	</select>
+	
+	<select id="queryWorkPower" resultType="com.bt.workOrder.model.GroupWorkPower"
+		parameterType="java.util.List">
+		SELECT id, create_time  from  wo_group_workPower t where t.carrier = #{carrier} and t.group = #{group}  ORDER BY create_time asc
+	</select>
+
+	<select id="checkCountStoreCode" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from store_group t where 1=1 and t.s_code=#{0}
+	</select>
+
+	<insert id="addtbStore" parameterType="java.util.HashMap">
+		insert into store_group
+		(
+		s_code,
+		g_id
+		)values(
+		#{0},
+		#{1}
+		)
+	</insert>
+	
+	<select id="queryWorkOrderName" resultType="com.bt.workOrder.model.WkType"
+		parameterType="java.util.List">
+		select name from wk_type where 1=1
+	</select>
+	
+	<select id="checkCountWkName" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from wk_group t where 1=1 and t.wk_code=#{0}
+	</select>
+	
+	
+	<select id="queryWkTypeById" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select id from wk_type t where 1=1 and t.name=#{0}
+	</select>
+	
+	
+	<select id="findwkTypeAndwkLevel" resultType="java.util.Map"
+		parameterType="java.util.List">
+		SELECT a.id,b.sort,c.level,b.name from wk_type a,wk_level b, wk_order_type c
+		where a.id=c.wk_id
+		and b.code = c.level
+		and a.id=#{id}
+		and c.status = 1
+	</select>
+	
+	<insert id="addsGroupModelAndMost" parameterType="java.util.HashMap">
+		insert into wk_group
+		(
+		wk_code,
+		g_id,
+		level
+		)values(
+		#{0},
+		#{1},
+		#{2}
+		)
+	</insert>
+	
+	<select id="checkWoGroupStorepower" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from wo_group_storePower t where 1=1
+		<!-- <if test="outsourcedwarehouse != null  and outsourcedwarehouse != '' ">
+			and outsourcedwarehouse=#{outsourcedwarehouse}
+		</if> 
+		<if test="selfwarehouse != null  and selfwarehouse != '' ">
+			and selfwarehouse=#{selfwarehouse}
+		</if>  -->
+		<if test="store != null  and store != '' ">
+			and store=#{store}
+		</if> 
+		<if test="group != null  and group != '' ">
+			and t.group=#{group}
+		</if> 
+	</select>
+	
+	<select id="dindwoGroupWorkPower" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from wo_group_workPower t where 1=1
+		<if test="gId != null  and gId != '' ">
+			and t.group=#{gId}
+		</if> 
+		<if test="tCode != null  and tCode != '' ">
+			and t.carrier=#{tCode}
+		</if> 
+	</select>
+	
+	<delete id="deleteGroupWorkPower" parameterType="java.util.HashMap">
+		delete from wo_group_workPower where wo_group_workPower.group= #{group} and carrier = #{carrier}
+	</delete>
+	
+	<select id="displayWorkOrder" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select wo_type, wo_level from  wo_group_workPower where wo_group_workPower.group= #{group} and carrier=#{carrier}
+	</select>
+	
+	<select id="queryWkGroupSupAndUpdate" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		SELECT id,group_name,superior from s_group where id!=#{id}
+	</select>
+	
+	<select id="workOrderAndLevel" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		SELECT  wk_type,LEVEL from wk_order_type t where t.wk_type=#{code} and status=1
+	</select>
+	
+	<delete id="delWorkPower" parameterType="java.util.HashMap">
+		delete from wo_group_workPower  where wo_group_workPower.group= #{id}
+	</delete>
+	
+	<delete id="delStorePower" parameterType="java.util.HashMap">
+		delete from wo_group_storePower where wo_group_storePower.group= #{id}
+	</delete>
+	
+	
+
+	
+	
+</mapper> 

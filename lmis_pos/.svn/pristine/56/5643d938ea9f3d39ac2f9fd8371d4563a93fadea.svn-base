@@ -1,0 +1,65 @@
+package com.lmis.pos.whs.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import com.lmis.framework.baseDao.BaseMapper;
+import com.lmis.pos.whs.model.PosWhs;
+
+/** 
+ * @ClassName: PosWhsMapper
+ * @Description: TODO(仓库主表DAO映射接口)
+ * @author codeGenerator
+ * @date 2018-05-29 13:23:45
+ * 
+ * @param <T>
+ */
+@Mapper
+@Repository
+public interface PosWhsMapper<T extends PosWhs> extends BaseMapper<T> {
+    /**
+     * 根据当前F/L类型获取仓库
+     * @author xuyisu
+     * @date  2018年5月30日
+     * 
+     * @param allocateType
+     * @return
+     */
+    List<PosWhs> getWhsDepot(@Param("type") String type);
+    /**
+     * 获取尾仓
+     * @author xuyisu
+     * @date  2018年5月31日
+     * 
+     * @return
+     */
+    PosWhs getWhsDepotTailGoods();
+    
+    int countCodeNameUpd(T pw);
+    
+    /**
+     * 
+     * <b>方法名：</b>：queryWhsToSetSaleRate<br>
+     * <b>功能说明：</b>：查询需要设置销售占比的区域仓库<br>
+     * @author <font color='blue'>chenkun</font> 
+     * @date  2018年6月13日 上午10:21:46
+     * @return
+     */
+    List<PosWhs> queryWhsToSetSaleRate();
+    
+    /***
+     * 
+     * <b>方法名：</b>：queryCountWhsToSetSaleRate<br>
+     * <b>功能说明：</b>：查询需要设置销售占比的区域仓库数量<br>
+     * @author <font color='blue'>chenkun</font> 
+     * @date  2018年6月13日 上午10:21:52
+     * @return
+     */
+    Integer  queryCountWhsToSetSaleRate();
+    
+    
+	
+}

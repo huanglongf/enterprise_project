@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.LogisticsStandardDataMapper" > 
+	<insert id="insertRawData" parameterType="com.bt.lmis.model.LogisticsStandardData" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_logistics_standard_data
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			<if test="transport_code != null">
+				transport_code,
+			</if>
+			<if test="transport_name != null">
+				transport_name,
+			</if>
+			<if test="transport_type != null">
+				transport_type,
+			</if>
+			<if test="transport_direction != null">
+				transport_direction,
+			</if>
+			<if test="bookbus_time != null">
+				bookbus_time,
+			</if>
+			<if test="transport_time != null">
+				transport_time,
+			</if>
+			<if test="expressno != null">
+				expressno,
+			</if>
+			<if test="store_code != null">
+				store_code,
+			</if>
+			<if test="store_name != null">
+				store_name,
+			</if>
+			<if test="orderno != null">
+				orderno,
+			</if>
+			<if test="originating_place != null">
+				originating_place,
+			</if>
+			<if test="warehouse != null">
+				warehouse,
+			</if>
+			<if test="privince_name != null">
+				privince_name,
+			</if>
+			<if test="city_name != null">
+				city_name,
+			</if>
+			<if test="state_name != null">
+				state_name,
+			</if>
+			<if test="street_name != null">
+				street_name,
+			</if>
+			<if test="delivery_address != null">
+				delivery_address,
+			</if>
+			<if test="delivery_number != null">
+				delivery_number,
+			</if>
+			<if test="box_number != null">
+				box_number,
+			</if>
+			<if test="if_insurance != null">
+				if_insurance,
+			</if>
+			<if test="real_weight != null">
+				real_weight,
+			</if>
+			<if test="volumn_cubic != null">
+				volumn_cubic,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="settle_target != null">
+				settle_target,
+			</if>
+			<if test="order_price != null">
+				order_price,
+			</if>
+			<if test="service_type != null">
+				service_type,
+			</if>
+			<if test="cost_center != null">
+				cost_center,
+			</if>
+			settle_flag_trans,
+			settle_flag_customer,
+			settle_flag_shop
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			<if test="transport_code != null">
+				#{transport_code },
+			</if>
+			<if test="transport_name != null">
+				#{transport_name },
+			</if>
+			<if test="transport_type != null">
+				#{transport_type },
+			</if>
+			<if test="transport_direction != null">
+				#{transport_direction },
+			</if>
+			<if test="bookbus_time != null">
+				#{bookbus_time },
+			</if>
+			<if test="transport_time != null">
+				#{transport_time },
+			</if>
+			<if test="expressno != null">
+				#{expressno },
+			</if>
+			<if test="store_code != null">
+				#{store_code },
+			</if>
+			<if test="store_name != null">
+				#{store_name },
+			</if>
+			<if test="orderno != null">
+				#{orderno },
+			</if>
+			<if test="originating_place != null">
+				#{originating_place },
+			</if>
+			<if test="warehouse != null">
+				#{warehouse },
+			</if>
+			<if test="privince_name != null">
+				#{privince_name },
+			</if>
+			<if test="city_name != null">
+				#{city_name },
+			</if>
+			<if test="state_name != null">
+				#{state_name },
+			</if>
+			<if test="street_name != null">
+				#{street_name },
+			</if>
+			<if test="delivery_address != null">
+				#{delivery_address },
+			</if>
+			<if test="delivery_number != null">
+				#{delivery_number },
+			</if>
+			<if test="box_number != null">
+				#{box_number },
+			</if>
+			<if test="if_insurance != null">
+				#{if_insurance },
+			</if>
+			<if test="real_weight != null">
+				#{real_weight },
+			</if>
+			<if test="volumn_cubic != null">
+				#{volumn_cubic },
+			</if>
+			<if test="remark != null">
+				#{remark },
+			</if>
+			<if test="settle_target != null">
+				#{settle_target },
+			</if>
+			<if test="order_price != null">
+				#{order_price },
+			</if>
+			<if test="service_type != null">
+				#{service_type },
+			</if>
+			<if test="cost_center != null">
+				#{cost_center },
+			</if>
+			0,
+			0,
+			0
+		</trim>
+	</insert>
+</mapper>   

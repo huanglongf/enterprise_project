@@ -1,0 +1,409 @@
+package com.bt.vims.controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSONObject;
+import com.bt.vims.model.DetailQueryParam;
+import com.bt.vims.model.User;
+import com.bt.vims.model.VisitorInfomation;
+import com.bt.vims.page.PageView;
+import com.bt.vims.page.QueryResult;
+import com.bt.vims.service.UserService;
+import com.bt.vims.service.VisitorInfomationService;
+import com.bt.vims.utils.Base64Util;
+import com.bt.vims.utils.BaseConst;
+import com.bt.vims.utils.BigExcelExport;
+import com.bt.vims.utils.CommonUtils;
+import com.bt.vims.utils.DateUtil;
+import com.bt.vims.utils.SessionUtils;
+import com.bt.vims.utils.dimension.QRCode;
+
+import common.Contents;
+
+@Controller
+@RequestMapping("/control/mainController")
+public class MainController {
+
+	private static final Logger logger = Logger.getLogger(MainController.class);
+
+	@Resource(name = "visitorInfomationServiceImpl")
+	private VisitorInfomationService visitorInfomationServiceImpl;
+
+	@Resource(name = "userServiceImpl")
+	private UserService userServiceImpl;
+	
+	@RequestMapping("/login")
+	public String login(ModelMap map, HttpServletRequest request){
+		String message = request.getParameter("message");
+		if(null!=message && !message.equals("")){
+			map.addAttribute("message", message);
+		}
+
+		String username = request.getParameter("username");
+		if(null!=username && !username.equals("")){
+			map.addAttribute("username", username);
+		}
+		String password = request.getParameter("password");
+		if(null!=password && !password.equals("")){
+			map.addAttribute("password", password);
+		}
+		return "/login";
+	}
+	
+	@RequestMapping("/main_list")
+	public String main_list(ModelMap map, HttpServletRequest request){
+		return "/main_list";
+	}
+	
+	@RequestMapping("/sign")
+	public String sign(ModelMap map, HttpServletRequest request){
+		List<VisitorInfomation> viList = visitorInfomationServiceImpl.query_all(new VisitorInfomation());
+		StringBuffer visitor_names = new StringBuffer();
+		visitor_names.append("[");
+		for (int i = 0; i < viList.size(); i++) {
+			if(i+1>=viList.size()){
+				visitor_names.append("\""+viList.get(i).getVisitor_name()+"/"+viList.get(i).getVisitor_phone()+"/"+viList.get(i).getVisitor_company_name()+"\"");
+			}else{
+				visitor_names.append("\""+viList.get(i).getVisitor_name()+"/"+viList.get(i).getVisitor_phone()+"/"+viList.get(i).getVisitor_company_name()+"\",");
+			}
+		}
+		visitor_names.append("]");
+		//拜访人
+		List<Map<String, Object>> hostList = visitorInfomationServiceImpl.query_host();
+		StringBuffer hosts = new StringBuffer();
+		hosts.append("[");
+		for (int i = 0; i < hostList.size(); i++) {
+			if(i+1>=hostList.size()){
+				hosts.append("\""+hostList.get(i).get("uname")+"/"+hostList.get(i).get("username")+"/"+hostList.get(i).get("company_name")+"/"+hostList.get(i).get("department_name")+"\"");
+			}else{
+				hosts.append("\""+hostList.get(i).get("uname")+"/"+hostList.get(i).get("username")+"/"+hostList.get(i).get("company_name")+"/"+hostList.get(i).get("department_name")+"\",");
+			}
+		}
+		hosts.append("]");
+		map.addAttribute("visitor_names", visitor_names.toString());
+		map.addAttribute("hosts", hosts.toString());	
+		return "/sign";
+	}
+	
+	@RequestMapping("/excel")
+	public void excel(HttpServletRequest request,HttpServletResponse response){
+		PrintWriter out = null;
+		File res=new File("");
+		try{
+			out = response.getWriter();
+			Map<String,Object>param=CommonUtils.getParamMap(request);
+			List<?>list=visitorInfomationServiceImpl.getDetailData(param);
+			LinkedHashMap<String, String>CMap=new LinkedHashMap<String,String>();
+			CMap.put("visitor_type", "访客类型");
+			CMap.put("visitor_name", "拜访人姓名");
+			CMap.put("visitor_phone", "拜访人电话");
+			CMap.put("host", "拜访人");
+			CMap.put("visitor_company_name", "工作单位名称");
+			CMap.put("visitor_num", "拜访人数");
+			CMap.put("license_plate_number", "车牌号");
+			CMap.put("content", "事由");
+			CMap.put("apply_for", "应聘职位");
+			CMap.put("remark", "备注");
+			CMap.put("check_in_time", "签入时间");
+			CMap.put("check_in_user", "签入用户");
+			CMap.put("check_out_time", "签出时间");
+			CMap.put("check_out_user", "签出用户");
+			CMap.put("check_state", "状态");
+			CMap.put("data","编号");
+			CMap.put("check_in_plcae", "签入地点");
+			CMap.put("check_out_place", "签出地点");
+			res=BigExcelExport.excelDownLoadDatab(list,CMap,"访客明细记录.xls");
+		}catch(Exception e){
+			logger.error(e);
+			e.printStackTrace();
+		}
+		out.write("file/"+res.getName());
+		out.flush();
+	}
+	
+	@RequestMapping("/sign_out")
+	public String sign_out(ModelMap map, HttpServletRequest request){
+		try {
+			String data = request.getParameter("data");
+			if(null!=data && !data.equals("")){
+				VisitorInfomation vi = visitorInfomationServiceImpl.query_by_data(data);
+				if(!vi.getCheck_state().equals("[已离开]")){
+					map.addAttribute("obj",vi);
+					map.addAttribute("msg","[已签到]");
+					if(null!=vi.getPhoto() && !vi.getPhoto().equals("")){
+						map.addAttribute("img",new String(vi.getPhoto(),"utf-8"));	
+					}
+				}else{
+					map.addAttribute("msg","[已离开]");
+				}
+			}
+			VisitorInfomation vi = new VisitorInfomation();
+			vi.setCheck_state("[已到访]");
+			List<VisitorInfomation> list = visitorInfomationServiceImpl.query(vi);
+			StringBuffer qcbt = new StringBuffer();
+			qcbt.append("[");
+			for (int i = 0; i < list.size(); i++) {
+				if(i+1>=list.size()){
+					qcbt.append("\""+list.get(i).getData()+"\"");
+				}else{
+					qcbt.append("\""+list.get(i).getData()+"\",");
+				}
+			}
+			qcbt.append("]");
+			map.addAttribute("fkid", qcbt.toString());		
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return "/sign_out";
+	}				
+
+	@RequestMapping("/detailed_list")
+	public String detailed_list(DetailQueryParam queryParam, HttpServletRequest request){
+		try {
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/detailed_list";
+	}
+
+	@RequestMapping("/table_list.do")
+	public String table_list(DetailQueryParam queryParam, HttpServletRequest request){
+		try {
+			PageView<VisitorInfomation> pageView = new PageView<VisitorInfomation>(queryParam.getPageSize()==0?BaseConst.pageSize:queryParam.getPageSize(), queryParam.getPage());
+			queryParam.setFirstResult(pageView.getFirstResult());
+			queryParam.setMaxResult(pageView.getMaxresult());
+//			User user = SessionUtils.getEMP(request);
+//			queryParam.setCheck_in_user(user.getCompany_code());
+			QueryResult<VisitorInfomation> qrs = visitorInfomationServiceImpl.findAllData(queryParam);
+			pageView.setQueryResult(qrs,queryParam.getPage()); 
+			request.setAttribute("pageView", pageView);
+			request.setAttribute("queryParam", queryParam);		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "/table_detal";
+	}
+
+	@RequestMapping("next_save")
+	public void next_save(VisitorInfomation vi_model,HttpServletRequest req,HttpServletResponse res){
+		res.setContentType("text/xml; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		PrintWriter out = null;
+		JSONObject returnJson = new JSONObject();
+		try{
+			User user=SessionUtils.getEMP(req);
+			out = res.getWriter();
+			Map<String, Object> list = visitorInfomationServiceImpl.query_check_log(user.getUsername()).get(0);
+			returnJson.put("list", list);
+			returnJson.put("code", "200");
+		} catch (IOException e) {
+			logger.error(e);
+			returnJson.put("code", "500");
+			returnJson.put("msg", "系统异常!");
+		}
+		out.write(returnJson.toString());
+		out.flush();
+		out.close();
+	}
+	
+	/** 
+	* @Title: saveSign 
+	* @Description: TODO(保存 签入信息&照片) 
+	* @param @param req
+	* @param @param res    设定文件 
+	* @return void    返回类型 
+	* @throws 
+	*/
+	@RequestMapping("saveSign")
+	public void saveSign(String visitorType , VisitorInfomation vi_model,HttpServletRequest req,HttpServletResponse res){
+		vi_model.setVisitorType(visitorType);
+		if(Contents.GROUP.equals(visitorType)){
+			vi_model.setLicense_plate_number("---无---");
+		}
+		String uuid = UUID.randomUUID().toString();
+		JSONObject returnJson = new JSONObject();
+		res.setContentType("text/xml; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		PrintWriter out = null;
+		//base64 图片编码
+		String imageDataurl = req.getParameter("imageDataurl").replace(" ","+");
+		//将Base64图片存入数据库
+		String imageByte= Base64Util.GenerateImage(imageDataurl,BaseConst.file_path+uuid+".png");
+		vi_model.setPhoto(imageByte.getBytes());
+		try {
+			User user=SessionUtils.getEMP(req);
+			out = res.getWriter();
+			//生成图片
+			vi_model.setCheck_in_time(new Date());
+			vi_model.setCheck_in_user(user.getUsername());
+			vi_model.setCheck_state("[已到访]");
+			VisitorInfomation vi = new VisitorInfomation();
+			vi.setDatas(DateUtil.convertToString(new Date(), DateUtil.YMD3));
+			List<VisitorInfomation> viList =visitorInfomationServiceImpl.query(vi);
+			if(viList.size()==0){
+				vi_model.setData(DateUtil.convertToString(new Date(), DateUtil.YMD3)+getNumber(DateUtil.convertToString(new Date(), DateUtil.YMD3), 1));
+			}else{
+				vi_model.setData(DateUtil.convertToString(new Date(), DateUtil.YMD3)+getNumber(DateUtil.convertToString(new Date(), DateUtil.YMD3), (viList.size()+1)));
+			}
+			if(vi_model.getHost().indexOf("/")>=1){
+				vi_model.setHost(vi_model.getHost().substring(0,vi_model.getHost().indexOf("/")));
+			}
+			String addressInfor = (String)SessionUtils.getAttr(req, "addressInfor");
+			if(!StringUtils.isEmpty(addressInfor)){
+				String[] AddressInfor = addressInfor.split("\\——");
+				vi_model.setCheckInPlcae(AddressInfor[1]);
+			}
+			visitorInfomationServiceImpl.save(vi_model);
+			returnJson.put("code", "200");
+			returnJson.put("msg", vi_model.getData());
+		} catch (IOException e) {
+			logger.error(e);
+			returnJson.put("code", "500");
+			returnJson.put("msg", "系统异常!");
+		}
+		out.write(returnJson.toString());
+		out.flush();
+		out.close();
+	}
+
+	@RequestMapping("updateSign")
+	public void updateSign(VisitorInfomation vi_model,HttpServletRequest req,HttpServletResponse res){
+		JSONObject returnJson = new JSONObject();
+		res.setContentType("text/xml; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		PrintWriter out = null;
+		try {
+			User user=SessionUtils.getEMP(req);
+			out = res.getWriter();
+			//生成图片
+			vi_model.setCheck_out_time(new Date());
+			vi_model.setCheck_out_user(user.getUsername());
+			vi_model.setCheck_state("[已离开]");
+			vi_model.setData(req.getParameter("data"));
+			visitorInfomationServiceImpl.update(vi_model);
+			returnJson.put("code", "200");
+			returnJson.put("msg", "签出成功!");
+		} catch (IOException e) {
+			logger.error(e);
+			returnJson.put("code", "500");
+			returnJson.put("msg", "系统异常!");
+		}
+		out.write(returnJson.toString());
+		out.flush();
+		out.close();
+	}
+	
+	/** 
+	* @Title: toPrintPage 
+	* @Description: TODO(跳转打印页面) 
+	* @param @param map
+	* @param @param request
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws 
+	*/
+	@RequestMapping("toPrintPage")
+	public String toPrintPage(ModelMap map, HttpServletRequest request){
+		String data = null!=request.getParameter("data") ? request.getParameter("data").toString():"";
+		if(!data.equals("")){
+			String realpath =BaseConst.file_path;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+			VisitorInfomation vi = visitorInfomationServiceImpl.query_by_data(data);
+			String imgName = sdf.format(new Date())+".png";
+			QRCode.encoderQRCode(String.valueOf(data),realpath+imgName,"png");
+			map.addAttribute("obj",vi);
+			if(null!=vi && null!=vi.getPhoto()){
+				map.addAttribute("img", new String(vi.getPhoto()));
+			}
+			map.addAttribute("img_qrc",imgName);
+		}
+		return "/print";
+	}
+	 
+	/**
+	 * 调用新的打印机打印
+	 * @param visitorData （访客编号）
+	 * @return 成功或失败提示信息
+	 */
+	@RequestMapping(value = "/toNewPrinter.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> toNewPrinter(String visitorData){
+		Map<String, Object> map = new HashMap<>();
+		try {
+			int printFlag = visitorInfomationServiceImpl.toNewPrinter(visitorData);
+			if(printFlag == 1){ //打印成功
+				map.put("msg", "success");
+			}else{
+				map.put("msg", "error");
+			}
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			logger.error("新模板打印方法toNewPrinter()" + e.getMessage());
+		}
+		return map;
+	}
+	
+	
+    public static String getNumber(String ym,int i) {  
+        // 得到一个NumberFormat的实例  
+        NumberFormat nf = NumberFormat.getInstance();  
+        // 设置是否使用分组  
+        nf.setGroupingUsed(false);  
+        // 设置最大整数位数  
+        nf.setMaximumIntegerDigits(4);  
+        // 设置最小整数位数  
+        nf.setMinimumIntegerDigits(4);  
+        return nf.format(i);
+    }  
+
+	@RequestMapping("puch")
+	public void puch(VisitorInfomation vi_model,HttpServletRequest req,HttpServletResponse res){
+		JSONObject returnJson = new JSONObject();
+		res.setContentType("text/xml; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		PrintWriter out = null;
+		try {
+			out = res.getWriter();
+			String data = req.getParameter("data");
+			if(null!=data && !data.equals("")){
+				VisitorInfomation vi = visitorInfomationServiceImpl.query_by_data(data);
+				if(null==vi || vi.getCheck_state().equals("[已离开]")){
+					returnJson.put("code", "500");
+				}else{
+					returnJson.put("code", "200");
+					returnJson.put("data", data);
+				}
+			}
+		} catch (IOException e) {
+			logger.error(e);
+			returnJson.put("code", "500");
+			returnJson.put("msg", "系统异常!");
+		}
+		out.write(returnJson.toString());
+		out.flush();
+		out.close();
+	}
+}

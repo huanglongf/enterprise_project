@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.PcodeMapperingMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.PcodeMappering" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="update_time" property="update_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="updatuser" property="updatuser"/>
+	<result column="sf_opcode" property="sf_opcode"/>
+	<result column="bz_code" property="bz_code"/>
+</resultMap>
+       
+<!-- sfopcode_mappering table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,update_time,create_user,updatuser,sf_opcode,bz_code
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	 	<if test="updatuser != null and updatuser != ''" >
+	    and updatuser =  #{updatuser}
+	</if>
+	 	<if test="sf_opcode != null and sf_opcode != ''" >
+	    and sf_opcode =  #{sf_opcode}
+	</if>
+	 	<if test="bz_code != null and bz_code != ''" >
+	    and bz_code =  #{bz_code}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入测试临时表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.PcodeMappering" >
+  insert into sfopcode_mappering(id,create_time,update_time,create_user,updatuser,sf_opcode,bz_code)
+ values(#{id},#{create_time},#{update_time},#{create_user},#{updatuser},#{sf_opcode},#{bz_code})
+</insert>
+
+<!-- 修改测试临时表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.PcodeMappering" >
+  update sfopcode_mappering set create_time=#{create_time},update_time=#{update_time},create_user=#{create_user},updatuser=#{updatuser},sf_opcode=#{sf_opcode},bz_code=#{bz_code} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改测试临时表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.PcodeMappering" >
+	update sfopcode_mappering set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="updatuser != null  and updatuser != '' ">
+		updatuser=#{updatuser},
+	</if>
+	<if test="sf_opcode != null  and sf_opcode != '' ">
+		sf_opcode=#{sf_opcode},
+	</if>
+	<if test="bz_code != null  and bz_code != '' ">
+		bz_code=#{bz_code},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除测试临时表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from sfopcode_mappering where id = #{id}
+</update>
+<!-- 批量删除测试临时表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from sfopcode_mappering where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<select id="queryBySfopcode"  resultType="com.bt.orderPlatform.model.PcodeMappering" >
+	select <include refid="Base_Column_List" /> 
+	 from sfopcode_mappering where sf_opcode = #{sf_opcode}
+</select>
+
+
+<!-- 依据主键查找测试临时表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from sfopcode_mappering where id = #{id}
+</select>
+  	
+<!-- 测试临时表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.PcodeMapperingQueryParam">
+	select count(1) from sfopcode_mappering 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的测试临时表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.PcodeMapperingQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from sfopcode_mappering 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 测试临时表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.PcodeMapperingQueryParam">
+	select count(1) from sfopcode_mappering 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的测试临时表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.PcodeMapperingQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from sfopcode_mappering 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

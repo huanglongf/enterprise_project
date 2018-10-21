@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.DictMapper">
+  <resultMap id="BaseResultMap" type="com.bt.lmis.model.Dict">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dict_label" jdbcType="VARCHAR" property="dictLabel" />
+    <result column="dict_value" jdbcType="VARCHAR" property="dictValue" />
+    <result column="dict_type" jdbcType="VARCHAR" property="dictType" />
+    <result column="dict_description" jdbcType="VARCHAR" property="dictDescription" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, dict_label, dict_value, dict_type, dict_description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from s_dict
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findByType" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from s_dict
+    where dict_type = #{dictType,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findByTypeValue" resultType="java.lang.String">
+    select 
+    dict_label
+    from s_dict
+    where dict_type = #{dictType,jdbcType=VARCHAR} and dict_value = #{dictValue,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from s_dict
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.model.Dict">
+    insert into s_dict (id, dict_label, dict_value, 
+      dict_type, dict_description)
+    values (#{id,jdbcType=INTEGER}, #{dictLabel,jdbcType=VARCHAR}, #{dictValue,jdbcType=VARCHAR}, 
+      #{dictType,jdbcType=VARCHAR}, #{dictDescription,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.model.Dict">
+    insert into s_dict
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="dictLabel != null">
+        dict_label,
+      </if>
+      <if test="dictValue != null">
+        dict_value,
+      </if>
+      <if test="dictType != null">
+        dict_type,
+      </if>
+      <if test="dictDescription != null">
+        dict_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="dictLabel != null">
+        #{dictLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null">
+        #{dictValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictType != null">
+        #{dictType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictDescription != null">
+        #{dictDescription,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.model.Dict">
+    update s_dict
+    <set>
+      <if test="dictLabel != null">
+        dict_label = #{dictLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="dictValue != null">
+        dict_value = #{dictValue,jdbcType=VARCHAR},
+      </if>
+      <if test="dictType != null">
+        dict_type = #{dictType,jdbcType=VARCHAR},
+      </if>
+      <if test="dictDescription != null">
+        dict_description = #{dictDescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.model.Dict">
+    update s_dict
+    set dict_label = #{dictLabel,jdbcType=VARCHAR},
+      dict_value = #{dictValue,jdbcType=VARCHAR},
+      dict_type = #{dictType,jdbcType=VARCHAR},
+      dict_description = #{dictDescription,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.PerationSettlementFixedMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.PerationSettlementFixed" >
+	<result column="tosf_id" property="tosf_id"/>
+	<result column="tosf_section" property="tosf_section"/>
+	<result column="tosf_tab_id" property="tosf_tab_id"/>
+	<result column="tosf_price" property="tosf_price"/>
+	<result column="tosf_price_unit" property="tosf_price_unit"/>
+	<result column="tosf_status" property="tosf_status"/>
+</resultMap>
+       
+<!-- tb_operation_settlement_fixed table all fields -->
+<sql id="Base_Column_List" >
+	 tosf_id,tosf_section,tosf_tab_id,tosf_price,tosf_price_unit,tosf_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="tosf_section != null and tosf_section != ''" >
+	    and tosf_section =  #{tosf_section}
+	</if>
+	 	<if test="tosf_tab_id != null and tosf_tab_id != ''" >
+	    and tosf_tab_id =  #{tosf_tab_id}
+	</if>
+	 	<if test="tosf_price != null and tosf_price != ''" >
+	    and tosf_price =  #{tosf_price}
+	</if>
+	<if test="tosf_price_unit != null" >
+	    and tosf_price_unit =  #{tosf_price_unit}
+	</if>
+	<if test="tosf_status != null" >
+	    and tosf_status =  #{tosf_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入固定费用超过部分阶梯 -->
+<insert id="insert" parameterType="com.bt.lmis.model.PerationSettlementFixed" >
+  insert into tb_operation_settlement_fixed(tosf_id,tosf_section,tosf_tab_id,tosf_price,tosf_price_unit,tosf_status)
+ values(#{tosf_id},#{tosf_section},#{tosf_tab_id},#{tosf_price},#{tosf_price_unit},#{tosf_status})
+</insert>
+
+<!-- 修改固定费用超过部分阶梯-->  
+ <update id="update" parameterType="com.bt.lmis.model.PerationSettlementFixed" >
+  update tb_operation_settlement_fixed set tosf_section=#{tosf_section},tosf_tab_id=#{tosf_tab_id},tosf_price=#{tosf_price},tosf_price_unit=#{tosf_price_unit},tosf_status=#{tosf_status} where tosf_id=#{tosf_id}
+ </update>
+ 
+ <!-- 选择修改固定费用超过部分阶梯-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.PerationSettlementFixed" >
+	update tb_operation_settlement_fixed set 
+	<trim  suffixOverrides="," >
+	<if test="tosf_section != null  and tosf_section != '' ">
+		tosf_section=#{tosf_section},
+	</if>
+	<if test="tosf_tab_id != null  and tosf_tab_id != '' ">
+		tosf_tab_id=#{tosf_tab_id},
+	</if>
+	<if test="tosf_price != null  and tosf_price != '' ">
+		tosf_price=#{tosf_price},
+	</if>
+	<if test="tosf_price_unit != null  ">
+		tosf_price_unit=#{tosf_price_unit},
+	</if>
+	<if test="tosf_status != null  ">
+		tosf_status=#{tosf_status},
+	</if>
+	</trim> where tosf_id=#{tosf_id}
+</update>
+
+<!-- 删除固定费用超过部分阶梯 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_operation_settlement_fixed where tosf_id = #{tosf_id}
+</update>
+<!-- 批量删除固定费用超过部分阶梯 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_operation_settlement_fixed where tosf_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找固定费用超过部分阶梯 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_operation_settlement_fixed where tosf_id = #{tosf_id}
+</select>
+  	
+<!-- 固定费用超过部分阶梯 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.PerationSettlementFixedQueryParam">
+	select count(1) from tb_operation_settlement_fixed 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的固定费用超过部分阶梯集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.PerationSettlementFixedQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operation_settlement_fixed 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 固定费用超过部分阶梯总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.PerationSettlementFixedQueryParam">
+	select count(1) from tb_operation_settlement_fixed 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的固定费用超过部分阶梯集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.PerationSettlementFixedQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operation_settlement_fixed 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+<select id="findByEntity" resultType="java.util.HashMap"  parameterType="com.bt.lmis.model.PerationSettlementFixed">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operation_settlement_fixed 
+	<include refid="where_Clause"/>
+</select>
+</mapper>   

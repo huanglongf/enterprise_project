@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.lmis.dao.BalanceSummaryUsedExMapper" >
+	<select id= "getSummary" parameterType= "Object" resultType= "java.util.Map" >
+		select
+			<if test="type == 1">
+				express,
+			</if>
+			sum(order_num) as order_num,
+			sum(total_freight) as total_freight,
+			sum(total_insurance) as total_insurance
+		from
+			ex_used_balance_summary
+		where
+			con_id= #{con_id }
+		and balance_month= #{balance_month }
+		<if test="type == 1">
+			group by express
+		</if>
+	</select>
+	<select id="selectRecordsByConId" parameterType="Object" resultType="java.util.Map">
+		select
+			id,
+			con_id,
+			balance_subject,
+			subject_type,
+			balance_month,
+			express,
+			b.transport_name,
+			product_type_code,
+			product_type_name,
+			order_num,
+			total_freight,
+			total_insurance,
+			total_cod,
+			extend_column_1,
+			extend_column_2,
+			extend_column_3,
+			extend_column_4,
+			extend_column_5,
+			total_fee,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ex_used_balance_summary a
+		left join(
+			select
+				transport_code,
+				transport_name
+			from
+				tb_transport_vendor
+			where
+				transport_type = 1
+		) b on a.express = b.transport_code
+		where
+			1= 1
+		<if test="con_id != null">
+			and con_id= #{con_id }
+		</if>
+		<if test="balance_subject != null and balance_subject != ''">
+			and balance_subject= #{balance_subject }
+		</if>
+		and balance_month= #{balance_month }
+	</select>
+	<select id= "judgeSummaryExistOrNot" parameterType= "Object" resultType= "Integer" >
+		select count(1) from ex_used_balance_summary where balance_month= #{balance_month }
+	</select>
+	<insert id="insertBatch" parameterType="com.bt.lmis.model.BalanceSummaryUsedEx">
+		insert into ex_used_balance_summary
+		(
+			con_id,
+			balance_subject,
+			subject_type,
+			balance_month,
+			express,
+			product_type_code,
+			product_type_name,
+			order_num,
+			total_freight,
+			total_insurance,
+			total_cod,
+			extend_column_1,
+			extend_column_2,
+			extend_column_3,
+			extend_column_4,
+			extend_column_5,
+			total_fee,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		) values
+		<foreach collection= "list" item= "obj" index= "index" separator= "," >
+		(
+			#{obj.con_id },
+			#{obj.balance_subject },
+			#{obj.subject_type },
+			#{obj.balance_month },
+			#{obj.express },
+			#{obj.product_type_code },
+			#{obj.product_type_name },
+			#{obj.order_num },
+			#{obj.total_freight },
+			#{obj.total_insurance },
+			#{obj.total_cod },
+			#{obj.extend_column_1 },
+			#{obj.extend_column_2 },
+			#{obj.extend_column_3 },
+			#{obj.extend_column_4 },
+			#{obj.extend_column_5 },
+			#{obj.total_fee },
+			'SYSTEM',
+			now(),
+			'SYSTEM',
+			now()
+		)
+		</foreach>
+	</insert>
+</mapper>   

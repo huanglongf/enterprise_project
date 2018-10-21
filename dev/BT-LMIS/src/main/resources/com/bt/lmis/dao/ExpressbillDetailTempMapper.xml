@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpressbillDetailTempMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.ExpressbillDetailTemp" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="account" property="account"/>
+	<result column="transport_time" property="transport_time"/>
+	<result column="waybill" property="waybill"/>
+	<result column="transport_weight" property="transport_weight"/>
+	<result column="transport_volumn" property="transport_volumn"/>
+	<result column="origin_province" property="origin_province"/>
+	<result column="origin_city" property="origin_city"/>
+	<result column="dest_province" property="dest_province"/>
+	<result column="dest_city" property="dest_city"/>
+	<result column="charged_weight" property="charged_weight"/>
+	<result column="express_code" property="express_code"/>
+	<result column="producttype_code" property="producttype_code"/>
+	<result column="insurance" property="insurance"/>
+	<result column="freight" property="freight"/>
+	<result column="insurance_fee" property="insurance_fee"/>
+	<result column="other_value_added_service_charges" property="other_value_added_service_charges"/>
+	<result column="total_charge" property="total_charge"/>
+	<result column="reason" property="reason"/>
+	<result column="bat_id" property="bat_id"/>
+	<result column="master_id" property="master_id"/>
+	<result column="account_id" property="account_id"/>
+	<result column="account_name" property="account_name"/>
+	<result column="status" property="status"/>
+	<result column="billingcycle" property="billingcycle"/>
+	<result column="origin_state" property="origin_state"/>
+	<result column="dest_state" property="dest_state"/>
+	<result column="transport_warehouse" property="transport_warehouse"/>
+	<result column="store" property="store"/>
+	<result column="cost_center" property="cost_center"/>
+	<result column="epistatic_order" property="epistatic_order"/>
+	<result column="platform_no" property="platform_no"/>
+	<result column="sku_number" property="sku_number"/>
+	<result column="length" property="length"/>
+	<result column="width" property="width"/>
+	<result column="height" property="height"/>
+	<result column="volumn" property="volumn"/>
+	<result column="transport_time1" property="transport_time1"/>
+	<result column="origin_province1" property="origin_province1"/>
+	<result column="origin_city1" property="origin_city1"/>
+	<result column="dest_province1" property="dest_province1"/>
+	<result column="dest_city1" property="dest_city1"/>
+	<result column="transport_weight1" property="transport_weight1"/>
+	<result column="express_code1" property="express_code1"/>
+	<result column="producttype_code1" property="producttype_code1"/>
+	<result column="insurance1" property="insurance1"/>
+	<result column="volumn_charged_weight" property="volumn_charged_weight"/>
+	<result column="charged_weight1" property="charged_weight1"/>
+	<result column="firstWeight" property="firstWeight"/>
+	<result column="addedWeight" property="addedWeight"/>
+	<result column="discount" property="discount"/>
+	<result column="standard_freight" property="standard_freight"/>
+	<result column="afterdiscount_freight" property="afterdiscount_freight"/>
+	<result column="insurance_fee1" property="insurance_fee1"/>
+	<result column="additional_fee" property="additional_fee"/>
+	<result column="last_fee" property="last_fee"/>
+	<result column="is_verification" property="is_verification"/>
+	<result column="remarks" property="remarks"/>
+	<result column="total_discount" property="total_discount"/>
+	<result column="physical_accounting" property="physical_accounting"/>
+	<result column="jp_num" property="jp_num"/>
+	<result column="volumn_weight" property="volumn_weight"/>
+	<result column="volumn_account_weight" property="volumn_account_weight"/>
+	<result column="jf_weight" property="jf_weight"/>
+	<result column="first_weight" property="first_weight"/>
+	<result column="first_weight_price" property="first_weight_price"/>
+	<result column="added_weight" property="added_weight"/>
+	<result column="added_weight_price" property="added_weight_price"/>
+	<result column="express_name" property="express_name"/>
+	<result column="express_name1" property="express_name1"/>
+	<result column="producttype_name" property="producttype_name"/>
+</resultMap>
+       
+<!-- tb_expressbill_detail_temp table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,account,transport_time,waybill,transport_weight,transport_volumn,origin_province,origin_city,dest_province,dest_city,charged_weight,express_code,producttype_code,insurance,freight,insurance_fee,other_value_added_service_charges,total_charge,reason,bat_id,master_id,account_id,account_name,status,billingcycle,origin_state,dest_state,transport_warehouse,store,cost_center,epistatic_order,platform_no,sku_number,length,width,height,volumn,transport_time1,origin_province1,origin_city1,dest_province1,dest_city1,transport_weight1,express_code1,producttype_code1,insurance1,volumn_charged_weight,charged_weight1,firstWeight,addedWeight,discount,standard_freight,afterdiscount_freight,insurance_fee1,additional_fee,last_fee,is_verification,remarks,total_discount,physical_accounting,jp_num,volumn_weight,volumn_account_weight,jf_weight,first_weight,first_weight_price,added_weight,added_weight_price,express_name,express_name1,producttype_name
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	 	<if test="create_time != null and create_time != ''" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	 	<if test="update_time != null and update_time != ''" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="account != null and account != ''" >
+	    and account =  #{account}
+	</if>
+	 	<if test="transport_time != null and transport_time != ''" >
+	    and transport_time =  #{transport_time}
+	</if>
+	 	<if test="waybill != null and waybill != ''" >
+	    and waybill =  #{waybill}
+	</if>
+	 	<if test="transport_weight != null and transport_weight != ''" >
+	    and transport_weight =  #{transport_weight}
+	</if>
+	 	<if test="transport_volumn != null and transport_volumn != ''" >
+	    and transport_volumn =  #{transport_volumn}
+	</if>
+	 	<if test="origin_province != null and origin_province != ''" >
+	    and origin_province =  #{origin_province}
+	</if>
+	 	<if test="origin_city != null and origin_city != ''" >
+	    and origin_city =  #{origin_city}
+	</if>
+	 	<if test="dest_province != null and dest_province != ''" >
+	    and dest_province =  #{dest_province}
+	</if>
+	 	<if test="dest_city != null and dest_city != ''" >
+	    and dest_city =  #{dest_city}
+	</if>
+	 	<if test="charged_weight != null and charged_weight != ''" >
+	    and charged_weight =  #{charged_weight}
+	</if>
+	 	<if test="express_code != null and express_code != ''" >
+	    and express_code =  #{express_code}
+	</if>
+	 	<if test="producttype_code != null and producttype_code != ''" >
+	    and producttype_code =  #{producttype_code}
+	</if>
+	 	<if test="insurance != null and insurance != ''" >
+	    and insurance =  #{insurance}
+	</if>
+	 	<if test="freight != null and freight != ''" >
+	    and freight =  #{freight}
+	</if>
+	 	<if test="insurance_fee != null and insurance_fee != ''" >
+	    and insurance_fee =  #{insurance_fee}
+	</if>
+	 	<if test="other_value_added_service_charges != null and other_value_added_service_charges != ''" >
+	    and other_value_added_service_charges =  #{other_value_added_service_charges}
+	</if>
+	 	<if test="total_charge != null and total_charge != ''" >
+	    and total_charge =  #{total_charge}
+	</if>
+	 	<if test="reason != null and reason != ''" >
+	    and reason =  #{reason}
+	</if>
+	 	<if test="bat_id != null and bat_id != ''" >
+	    and bat_id =  #{bat_id}
+	</if>
+	<if test="master_id != null" >
+	    and master_id =  #{master_id}
+	</if>
+	 	<if test="account_id != null and account_id != ''" >
+	    and account_id =  #{account_id}
+	</if>
+	 	<if test="account_name != null and account_name != ''" >
+	    and account_name =  #{account_name}
+	</if>
+	 	<if test="status != null and status != ''" >
+	    and status =  #{status}
+	</if>
+	 	<if test="billingcycle != null and billingcycle != ''" >
+	    and billingcycle =  #{billingcycle}
+	</if>
+	 	<if test="origin_state != null and origin_state != ''" >
+	    and origin_state =  #{origin_state}
+	</if>
+	 	<if test="dest_state != null and dest_state != ''" >
+	    and dest_state =  #{dest_state}
+	</if>
+	 	<if test="transport_warehouse != null and transport_warehouse != ''" >
+	    and transport_warehouse =  #{transport_warehouse}
+	</if>
+	 	<if test="store != null and store != ''" >
+	    and store =  #{store}
+	</if>
+	 	<if test="cost_center != null and cost_center != ''" >
+	    and cost_center =  #{cost_center}
+	</if>
+	 	<if test="epistatic_order != null and epistatic_order != ''" >
+	    and epistatic_order =  #{epistatic_order}
+	</if>
+	 	<if test="platform_no != null and platform_no != ''" >
+	    and platform_no =  #{platform_no}
+	</if>
+	 	<if test="sku_number != null and sku_number != ''" >
+	    and sku_number =  #{sku_number}
+	</if>
+	 	<if test="length != null and length != ''" >
+	    and length =  #{length}
+	</if>
+	 	<if test="width != null and width != ''" >
+	    and width =  #{width}
+	</if>
+	 	<if test="height != null and height != ''" >
+	    and height =  #{height}
+	</if>
+	 	<if test="volumn != null and volumn != ''" >
+	    and volumn =  #{volumn}
+	</if>
+	 	<if test="transport_time1 != null and transport_time1 != ''" >
+	    and transport_time1 =  #{transport_time1}
+	</if>
+	 	<if test="origin_province1 != null and origin_province1 != ''" >
+	    and origin_province1 =  #{origin_province1}
+	</if>
+	 	<if test="origin_city1 != null and origin_city1 != ''" >
+	    and origin_city1 =  #{origin_city1}
+	</if>
+	 	<if test="dest_province1 != null and dest_province1 != ''" >
+	    and dest_province1 =  #{dest_province1}
+	</if>
+	 	<if test="dest_city1 != null and dest_city1 != ''" >
+	    and dest_city1 =  #{dest_city1}
+	</if>
+	 	<if test="transport_weight1 != null and transport_weight1 != ''" >
+	    and transport_weight1 =  #{transport_weight1}
+	</if>
+	 	<if test="express_code1 != null and express_code1 != ''" >
+	    and express_code1 =  #{express_code1}
+	</if>
+	 	<if test="producttype_code1 != null and producttype_code1 != ''" >
+	    and producttype_code1 =  #{producttype_code1}
+	</if>
+	 	<if test="insurance1 != null and insurance1 != ''" >
+	    and insurance1 =  #{insurance1}
+	</if>
+	 	<if test="volumn_charged_weight != null and volumn_charged_weight != ''" >
+	    and volumn_charged_weight =  #{volumn_charged_weight}
+	</if>
+	 	<if test="charged_weight1 != null and charged_weight1 != ''" >
+	    and charged_weight1 =  #{charged_weight1}
+	</if>
+	 	<if test="firstWeight != null and firstWeight != ''" >
+	    and firstWeight =  #{firstWeight}
+	</if>
+	 	<if test="addedWeight != null and addedWeight != ''" >
+	    and addedWeight =  #{addedWeight}
+	</if>
+	 	<if test="discount != null and discount != ''" >
+	    and discount =  #{discount}
+	</if>
+	 	<if test="standard_freight != null and standard_freight != ''" >
+	    and standard_freight =  #{standard_freight}
+	</if>
+	 	<if test="afterdiscount_freight != null and afterdiscount_freight != ''" >
+	    and afterdiscount_freight =  #{afterdiscount_freight}
+	</if>
+	 	<if test="insurance_fee1 != null and insurance_fee1 != ''" >
+	    and insurance_fee1 =  #{insurance_fee1}
+	</if>
+	 	<if test="additional_fee != null and additional_fee != ''" >
+	    and additional_fee =  #{additional_fee}
+	</if>
+	 	<if test="last_fee != null and last_fee != ''" >
+	    and last_fee =  #{last_fee}
+	</if>
+	 	<if test="is_verification != null and is_verification != ''" >
+	    and is_verification =  #{is_verification}
+	</if>
+	 	<if test="remarks != null and remarks != ''" >
+	    and remarks =  #{remarks}
+	</if>
+	 	<if test="total_discount != null and total_discount != ''" >
+	    and total_discount =  #{total_discount}
+	</if>
+	 	<if test="physical_accounting != null and physical_accounting != ''" >
+	    and physical_accounting =  #{physical_accounting}
+	</if>
+	 	<if test="jp_num != null and jp_num != ''" >
+	    and jp_num =  #{jp_num}
+	</if>
+	 	<if test="volumn_weight != null and volumn_weight != ''" >
+	    and volumn_weight =  #{volumn_weight}
+	</if>
+	 	<if test="volumn_account_weight != null and volumn_account_weight != ''" >
+	    and volumn_account_weight =  #{volumn_account_weight}
+	</if>
+	 	<if test="jf_weight != null and jf_weight != ''" >
+	    and jf_weight =  #{jf_weight}
+	</if>
+	 	<if test="first_weight != null and first_weight != ''" >
+	    and first_weight =  #{first_weight}
+	</if>
+	 	<if test="first_weight_price != null and first_weight_price != ''" >
+	    and first_weight_price =  #{first_weight_price}
+	</if>
+	 	<if test="added_weight != null and added_weight != ''" >
+	    and added_weight =  #{added_weight}
+	</if>
+	 	<if test="added_weight_price != null and added_weight_price != ''" >
+	    and added_weight_price =  #{added_weight_price}
+	</if>
+	 	<if test="express_name != null and express_name != ''" >
+	    and express_name =  #{express_name}
+	</if>
+	 	<if test="express_name1 != null and express_name1 != ''" >
+	    and express_name1 =  #{express_name1}
+	</if>
+	 	<if test="producttype_name != null and producttype_name != ''" >
+	    and producttype_name =  #{producttype_name}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入账单临时表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.ExpressbillDetailTemp" >
+  insert into tb_expressbill_detail_temp(id,create_time,create_user,update_time,update_user,account,transport_time,waybill,transport_weight,transport_volumn,origin_province,origin_city,dest_province,dest_city,charged_weight,express_code,producttype_code,insurance,freight,insurance_fee,other_value_added_service_charges,total_charge,reason,bat_id,master_id,account_id,account_name,status,billingcycle,origin_state,dest_state,transport_warehouse,store,cost_center,epistatic_order,platform_no,sku_number,length,width,height,volumn,transport_time1,origin_province1,origin_city1,dest_province1,dest_city1,transport_weight1,express_code1,producttype_code1,insurance1,volumn_charged_weight,charged_weight1,firstWeight,addedWeight,discount,standard_freight,afterdiscount_freight,insurance_fee1,additional_fee,last_fee,is_verification,remarks,total_discount,physical_accounting,jp_num,volumn_weight,volumn_account_weight,jf_weight,first_weight,first_weight_price,added_weight,added_weight_price,express_name,express_name1,producttype_name)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{account},#{transport_time},#{waybill},#{transport_weight},#{transport_volumn},#{origin_province},#{origin_city},#{dest_province},#{dest_city},#{charged_weight},#{express_code},#{producttype_code},#{insurance},#{freight},#{insurance_fee},#{other_value_added_service_charges},#{total_charge},#{reason},#{bat_id},#{master_id},#{account_id},#{account_name},#{status},#{billingcycle},#{origin_state},#{dest_state},#{transport_warehouse},#{store},#{cost_center},#{epistatic_order},#{platform_no},#{sku_number},#{length},#{width},#{height},#{volumn},#{transport_time1},#{origin_province1},#{origin_city1},#{dest_province1},#{dest_city1},#{transport_weight1},#{express_code1},#{producttype_code1},#{insurance1},#{volumn_charged_weight},#{charged_weight1},#{firstWeight},#{addedWeight},#{discount},#{standard_freight},#{afterdiscount_freight},#{insurance_fee1},#{additional_fee},#{last_fee},#{is_verification},#{remarks},#{total_discount},#{physical_accounting},#{jp_num},#{volumn_weight},#{volumn_account_weight},#{jf_weight},#{first_weight},#{first_weight_price},#{added_weight},#{added_weight_price},#{express_name},#{express_name1},#{producttype_name})
+</insert>
+
+<!-- 修改账单临时表-->  
+ <update id="update" parameterType="com.bt.lmis.model.ExpressbillDetailTemp" >
+  update tb_expressbill_detail_temp set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},account=#{account},transport_time=#{transport_time},waybill=#{waybill},transport_weight=#{transport_weight},transport_volumn=#{transport_volumn},origin_province=#{origin_province},origin_city=#{origin_city},dest_province=#{dest_province},dest_city=#{dest_city},charged_weight=#{charged_weight},express_code=#{express_code},producttype_code=#{producttype_code},insurance=#{insurance},freight=#{freight},insurance_fee=#{insurance_fee},other_value_added_service_charges=#{other_value_added_service_charges},total_charge=#{total_charge},reason=#{reason},bat_id=#{bat_id},master_id=#{master_id},account_id=#{account_id},account_name=#{account_name},status=#{status},billingcycle=#{billingcycle},origin_state=#{origin_state},dest_state=#{dest_state},transport_warehouse=#{transport_warehouse},store=#{store},cost_center=#{cost_center},epistatic_order=#{epistatic_order},platform_no=#{platform_no},sku_number=#{sku_number},length=#{length},width=#{width},height=#{height},volumn=#{volumn},transport_time1=#{transport_time1},origin_province1=#{origin_province1},origin_city1=#{origin_city1},dest_province1=#{dest_province1},dest_city1=#{dest_city1},transport_weight1=#{transport_weight1},express_code1=#{express_code1},producttype_code1=#{producttype_code1},insurance1=#{insurance1},volumn_charged_weight=#{volumn_charged_weight},charged_weight1=#{charged_weight1},firstWeight=#{firstWeight},addedWeight=#{addedWeight},discount=#{discount},standard_freight=#{standard_freight},afterdiscount_freight=#{afterdiscount_freight},insurance_fee1=#{insurance_fee1},additional_fee=#{additional_fee},last_fee=#{last_fee},is_verification=#{is_verification},remarks=#{remarks},total_discount=#{total_discount},physical_accounting=#{physical_accounting},jp_num=#{jp_num},volumn_weight=#{volumn_weight},volumn_account_weight=#{volumn_account_weight},jf_weight=#{jf_weight},first_weight=#{first_weight},first_weight_price=#{first_weight_price},added_weight=#{added_weight},added_weight_price=#{added_weight_price},express_name=#{express_name},express_name1=#{express_name1},producttype_name=#{producttype_name} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改账单临时表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.ExpressbillDetailTemp" >
+	update tb_expressbill_detail_temp set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  and create_time != '' ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  and update_time != '' ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="account != null  and account != '' ">
+		account=#{account},
+	</if>
+	<if test="transport_time != null  and transport_time != '' ">
+		transport_time=#{transport_time},
+	</if>
+	<if test="waybill != null  and waybill != '' ">
+		waybill=#{waybill},
+	</if>
+	<if test="transport_weight != null  and transport_weight != '' ">
+		transport_weight=#{transport_weight},
+	</if>
+	<if test="transport_volumn != null  and transport_volumn != '' ">
+		transport_volumn=#{transport_volumn},
+	</if>
+	<if test="origin_province != null  and origin_province != '' ">
+		origin_province=#{origin_province},
+	</if>
+	<if test="origin_city != null  and origin_city != '' ">
+		origin_city=#{origin_city},
+	</if>
+	<if test="dest_province != null  and dest_province != '' ">
+		dest_province=#{dest_province},
+	</if>
+	<if test="dest_city != null  and dest_city != '' ">
+		dest_city=#{dest_city},
+	</if>
+	<if test="charged_weight != null  and charged_weight != '' ">
+		charged_weight=#{charged_weight},
+	</if>
+	<if test="express_code != null  and express_code != '' ">
+		express_code=#{express_code},
+	</if>
+	<if test="producttype_code != null  and producttype_code != '' ">
+		producttype_code=#{producttype_code},
+	</if>
+	<if test="insurance != null  and insurance != '' ">
+		insurance=#{insurance},
+	</if>
+	<if test="freight != null  and freight != '' ">
+		freight=#{freight},
+	</if>
+	<if test="insurance_fee != null  and insurance_fee != '' ">
+		insurance_fee=#{insurance_fee},
+	</if>
+	<if test="other_value_added_service_charges != null  and other_value_added_service_charges != '' ">
+		other_value_added_service_charges=#{other_value_added_service_charges},
+	</if>
+	<if test="total_charge != null  and total_charge != '' ">
+		total_charge=#{total_charge},
+	</if>
+	<if test="reason != null  and reason != '' ">
+		reason=#{reason},
+	</if>
+	<if test="bat_id != null  and bat_id != '' ">
+		bat_id=#{bat_id},
+	</if>
+	<if test="master_id != null  ">
+		master_id=#{master_id},
+	</if>
+	<if test="account_id != null  and account_id != '' ">
+		account_id=#{account_id},
+	</if>
+	<if test="account_name != null  and account_name != '' ">
+		account_name=#{account_name},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="billingcycle != null  and billingcycle != '' ">
+		billingcycle=#{billingcycle},
+	</if>
+	<if test="origin_state != null  and origin_state != '' ">
+		origin_state=#{origin_state},
+	</if>
+	<if test="dest_state != null  and dest_state != '' ">
+		dest_state=#{dest_state},
+	</if>
+	<if test="transport_warehouse != null  and transport_warehouse != '' ">
+		transport_warehouse=#{transport_warehouse},
+	</if>
+	<if test="store != null  and store != '' ">
+		store=#{store},
+	</if>
+	<if test="cost_center != null  and cost_center != '' ">
+		cost_center=#{cost_center},
+	</if>
+	<if test="epistatic_order != null  and epistatic_order != '' ">
+		epistatic_order=#{epistatic_order},
+	</if>
+	<if test="platform_no != null  and platform_no != '' ">
+		platform_no=#{platform_no},
+	</if>
+	<if test="sku_number != null  and sku_number != '' ">
+		sku_number=#{sku_number},
+	</if>
+	<if test="length != null  and length != '' ">
+		length=#{length},
+	</if>
+	<if test="width != null  and width != '' ">
+		width=#{width},
+	</if>
+	<if test="height != null  and height != '' ">
+		height=#{height},
+	</if>
+	<if test="volumn != null  and volumn != '' ">
+		volumn=#{volumn},
+	</if>
+	<if test="transport_time1 != null  and transport_time1 != '' ">
+		transport_time1=#{transport_time1},
+	</if>
+	<if test="origin_province1 != null  and origin_province1 != '' ">
+		origin_province1=#{origin_province1},
+	</if>
+	<if test="origin_city1 != null  and origin_city1 != '' ">
+		origin_city1=#{origin_city1},
+	</if>
+	<if test="dest_province1 != null  and dest_province1 != '' ">
+		dest_province1=#{dest_province1},
+	</if>
+	<if test="dest_city1 != null  and dest_city1 != '' ">
+		dest_city1=#{dest_city1},
+	</if>
+	<if test="transport_weight1 != null  and transport_weight1 != '' ">
+		transport_weight1=#{transport_weight1},
+	</if>
+	<if test="express_code1 != null  and express_code1 != '' ">
+		express_code1=#{express_code1},
+	</if>
+	<if test="producttype_code1 != null  and producttype_code1 != '' ">
+		producttype_code1=#{producttype_code1},
+	</if>
+	<if test="insurance1 != null  and insurance1 != '' ">
+		insurance1=#{insurance1},
+	</if>
+	<if test="volumn_charged_weight != null  and volumn_charged_weight != '' ">
+		volumn_charged_weight=#{volumn_charged_weight},
+	</if>
+	<if test="charged_weight1 != null  and charged_weight1 != '' ">
+		charged_weight1=#{charged_weight1},
+	</if>
+	<if test="firstWeight != null  and firstWeight != '' ">
+		firstWeight=#{firstWeight},
+	</if>
+	<if test="addedWeight != null  and addedWeight != '' ">
+		addedWeight=#{addedWeight},
+	</if>
+	<if test="discount != null  and discount != '' ">
+		discount=#{discount},
+	</if>
+	<if test="standard_freight != null  and standard_freight != '' ">
+		standard_freight=#{standard_freight},
+	</if>
+	<if test="afterdiscount_freight != null  and afterdiscount_freight != '' ">
+		afterdiscount_freight=#{afterdiscount_freight},
+	</if>
+	<if test="insurance_fee1 != null  and insurance_fee1 != '' ">
+		insurance_fee1=#{insurance_fee1},
+	</if>
+	<if test="additional_fee != null  and additional_fee != '' ">
+		additional_fee=#{additional_fee},
+	</if>
+	<if test="last_fee != null  and last_fee != '' ">
+		last_fee=#{last_fee},
+	</if>
+	<if test="is_verification != null  and is_verification != '' ">
+		is_verification=#{is_verification},
+	</if>
+	<if test="remarks != null  and remarks != '' ">
+		remarks=#{remarks},
+	</if>
+	<if test="total_discount != null  and total_discount != '' ">
+		total_discount=#{total_discount},
+	</if>
+	<if test="physical_accounting != null  and physical_accounting != '' ">
+		physical_accounting=#{physical_accounting},
+	</if>
+	<if test="jp_num != null  and jp_num != '' ">
+		jp_num=#{jp_num},
+	</if>
+	<if test="volumn_weight != null  and volumn_weight != '' ">
+		volumn_weight=#{volumn_weight},
+	</if>
+	<if test="volumn_account_weight != null  and volumn_account_weight != '' ">
+		volumn_account_weight=#{volumn_account_weight},
+	</if>
+	<if test="jf_weight != null  and jf_weight != '' ">
+		jf_weight=#{jf_weight},
+	</if>
+	<if test="first_weight != null  and first_weight != '' ">
+		first_weight=#{first_weight},
+	</if>
+	<if test="first_weight_price != null  and first_weight_price != '' ">
+		first_weight_price=#{first_weight_price},
+	</if>
+	<if test="added_weight != null  and added_weight != '' ">
+		added_weight=#{added_weight},
+	</if>
+	<if test="added_weight_price != null  and added_weight_price != '' ">
+		added_weight_price=#{added_weight_price},
+	</if>
+	<if test="express_name != null  and express_name != '' ">
+		express_name=#{express_name},
+	</if>
+	<if test="express_name1 != null  and express_name1 != '' ">
+		express_name1=#{express_name1},
+	</if>
+	<if test="producttype_name != null  and producttype_name != '' ">
+		producttype_name=#{producttype_name},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除账单临时表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_expressbill_detail_temp where id = #{id}
+</update>
+<!-- 批量删除账单临时表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_expressbill_detail_temp where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+ 
+ 
+<select id="selectByBatId"  resultType="java.util.Map" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_expressbill_detail_temp where bat_id = #{bat_id}  and status = '2'
+</select>
+ 
+<!-- 依据主键查找账单临时表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_expressbill_detail_temp where id = #{id}
+</select>
+  	
+<!-- 账单临时表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.ExpressbillDetailTempQueryParam">
+	select count(1) from tb_expressbill_detail_temp 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的账单临时表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.ExpressbillDetailTempQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_expressbill_detail_temp 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 账单临时表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.ExpressbillDetailTempQueryParam">
+	select count(1) from tb_expressbill_detail_temp 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的账单临时表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.ExpressbillDetailTempQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_expressbill_detail_temp 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

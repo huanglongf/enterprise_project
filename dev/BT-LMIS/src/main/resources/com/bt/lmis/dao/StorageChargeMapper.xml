@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.StorageChargeMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.StorageCharge" >
+	<result column="ssc_id" property="ssc_id"/>
+	<result column="ssc_starttime" property="ssc_starttime"/>
+	<result column="ssc_endtime" property="ssc_endtime"/>
+	<result column="ssc_whs_id" property="ssc_whs_id"/>
+	<result column="ssc_whs_name" property="ssc_whs_name"/>
+	<result column="ssc_whs_code" property="ssc_whs_code"/>
+	<result column="ssc_area_id" property="ssc_area_id"/>
+	<result column="ssc_area_name" property="ssc_area_name"/>
+	<result column="ssc_item_type" property="ssc_item_type"/>
+	<result column="ssc_item_type_name" property="ssc_item_type_name"/>
+	<result column="ssc_sc_type" property="ssc_sc_type"/>
+	<result column="ssc_fixedcost" property="ssc_fixedcost"/>
+	<result column="ssc_fixedcost_unit" property="ssc_fixedcost_unit"/>
+	<result column="ssc_occupied_area_type" property="ssc_occupied_area_type"/>
+	<result column="ssc_area_price" property="ssc_area_price"/>
+	<result column="ssc_area_price_unit" property="ssc_area_price_unit"/>
+	<result column="ssc_total_area_tableid" property="ssc_total_area_tableid"/>
+	<result column="ssc_over_part_area_tableid" property="ssc_over_part_area_tableid"/>
+	<result column="ssc_volume_type" property="ssc_volume_type"/>
+	<result column="ssc_volume_price" property="ssc_volume_price"/>
+	<result column="ssc_volume_price_unit" property="ssc_volume_price_unit"/>
+	<result column="ssc_total_volume_tableid" property="ssc_total_volume_tableid"/>
+	<result column="ssc_over_part_volume_tableid" property="ssc_over_part_volume_tableid"/>
+	<result column="ssc_volume_calculation_type" property="ssc_volume_calculation_type"/>
+	<result column="ssc_volume_calculation_price" property="ssc_volume_calculation_price"/>
+	<result column="ssc_volume_calculation_price_unit" property="ssc_volume_calculation_price_unit"/>
+	<result column="ssc_total_volume_calculation_tableid" property="ssc_total_volume_calculation_tableid"/>
+	<result column="ssc_over_part_volume_calculation_tableid" property="ssc_over_part_volume_calculation_tableid"/>
+	<result column="ssc_number_price" property="ssc_number_price"/>
+	<result column="ssc_number_price_unit" property="ssc_number_price_unit"/>
+	<result column="ssc_square_hold_the_number" property="ssc_square_hold_the_number"/>
+	<result column="ssc_square_hold_the_number_unit" property="ssc_square_hold_the_number_unit"/>
+	<result column="ssc_square_price" property="ssc_square_price"/>
+	<result column="ssc_square_price_unit" property="ssc_square_price_unit"/>
+	<result column="ssc_tray_balance_type" property="ssc_tray_balance_type"/>
+	<result column="ssc_tray_price" property="ssc_tray_price"/>
+	<result column="ssc_tray_price_unit" property="ssc_tray_price_unit"/>
+	<result column="ssc_over_part_tray_tableid" property="ssc_over_part_tray_tableid"/>
+	<result column="ssc_total_tray_tableid" property="ssc_total_tray_tableid"/>
+	<result column="ssc_single_tray_balance_type" property="ssc_single_tray_balance_type"/>
+	<result column="ssc_single_tray_number" property="ssc_single_tray_number"/>
+	<result column="ssc_single_tray_number_unit" property="ssc_single_tray_number_unit"/>
+	<result column="ssc_over_part_single_tray_tableid" property="ssc_over_part_single_tray_tableid"/>
+	<result column="ssc_total_single_tray_tableid" property="ssc_total_single_tray_tableid"/>
+	<result column="ssc_cb_id" property="ssc_cb_id"/>
+	<result column="ssc_singlt_tray_price" property="ssc_singlt_tray_price"/>
+	<result column="ssc_singlt_tray_price_unit" property="ssc_singlt_tray_price_unit"/>
+</resultMap>
+       
+<!-- sosp_storage_charge table all fields -->
+<sql id="Base_Column_List" >
+	 ssc_id,ssc_starttime,ssc_endtime,ssc_whs_id,ssc_area_id,ssc_volume_price,ssc_volume_price_unit,ssc_item_type,ssc_volume_price,
+	 ssc_volume_price_unit,ssc_sc_type,ssc_fixedcost,ssc_fixedcost_unit,ssc_occupied_area_type,ssc_area_price,ssc_area_price_unit,
+	 ssc_total_area_tableid,ssc_over_part_area_tableid,ssc_volume_type,ssc_total_volume_tableid,ssc_over_part_volume_tableid,
+	 ssc_volume_calculation_type,ssc_total_volume_calculation_tableid,ssc_over_part_volume_calculation_tableid,
+	 ssc_number_price,ssc_number_price_unit,ssc_square_hold_the_number,ssc_square_hold_the_number_unit,ssc_square_price,
+	 ssc_square_price_unit,ssc_tray_balance_type,ssc_tray_price,ssc_tray_price_unit,ssc_over_part_tray_tableid,ssc_total_tray_tableid,
+	 ssc_single_tray_balance_type,ssc_single_tray_number,ssc_single_tray_number_unit,ssc_over_part_single_tray_tableid,
+	 ssc_total_single_tray_tableid,ssc_cb_id,ssc_singlt_tray_price,ssc_singlt_tray_price_unit
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="ssc_id != null" >
+	    and ssc_id =  #{ssc_id}
+	</if>
+	<if test="ssc_starttime != null" >
+	    and ssc_starttime =  #{ssc_starttime}
+	</if>
+	<if test="ssc_endtime != null" >
+	    and ssc_endtime =  #{ssc_endtime}
+	</if>
+	<if test="ssc_whs_id != null" >
+	    and ssc_whs_id =  #{ssc_whs_id}
+	</if>
+	<if test="ssc_area_id != null" >
+	    and ssc_area_id =  #{ssc_area_id}
+	</if>
+	<if test="ssc_item_type != null" >
+	    and ssc_item_type =  #{ssc_item_type}
+	</if>
+	<if test="ssc_sc_type != null" >
+	    and ssc_sc_type =  #{ssc_sc_type}
+	</if>
+	 	<if test="ssc_fixedcost != null and ssc_fixedcost != ''" >
+	    and ssc_fixedcost =  #{ssc_fixedcost}
+	</if>
+	<if test="ssc_occupied_area_type != null" >
+	    and ssc_occupied_area_type =  #{ssc_occupied_area_type}
+	</if>
+	 	<if test="ssc_area_price != null and ssc_area_price != ''" >
+	    and ssc_area_price =  #{ssc_area_price}
+	</if>
+	<if test="ssc_area_price_unit != null" >
+	    and ssc_area_price_unit =  #{ssc_area_price_unit}
+	</if>
+	<if test="ssc_total_area_tableid != null" >
+	    and ssc_total_area_tableid =  #{ssc_total_area_tableid}
+	</if>
+	<if test="ssc_over_part_area_tableid != null" >
+	    and ssc_over_part_area_tableid =  #{ssc_over_part_area_tableid}
+	</if>
+	<if test="ssc_volume_type != null" >
+	    and ssc_volume_type =  #{ssc_volume_type}
+	</if>
+	<if test="ssc_total_volume_tableid != null" >
+	    and ssc_total_volume_tableid =  #{ssc_total_volume_tableid}
+	</if>
+	<if test="ssc_over_part_volume_tableid != null" >
+	    and ssc_over_part_volume_tableid =  #{ssc_over_part_volume_tableid}
+	</if>
+	<if test="ssc_volume_calculation_type != null" >
+	    and ssc_volume_calculation_type =  #{ssc_volume_calculation_type}
+	</if>
+	<if test="ssc_total_volume_calculation_tableid != null" >
+	    and ssc_total_volume_calculation_tableid =  #{ssc_total_volume_calculation_tableid}
+	</if>
+	<if test="ssc_over_part_volume_calculation_tableid != null" >
+	    and ssc_over_part_volume_calculation_tableid =  #{ssc_over_part_volume_calculation_tableid}
+	</if>
+	 	<if test="ssc_number_price != null and ssc_number_price != ''" >
+	    and ssc_number_price =  #{ssc_number_price}
+	</if>
+	<if test="ssc_number_price_unit != null" >
+	    and ssc_number_price_unit =  #{ssc_number_price_unit}
+	</if>
+	 	<if test="ssc_square_hold_the_number != null and ssc_square_hold_the_number != ''" >
+	    and ssc_square_hold_the_number =  #{ssc_square_hold_the_number}
+	</if>
+	<if test="ssc_square_hold_the_number_unit != null" >
+	    and ssc_square_hold_the_number_unit =  #{ssc_square_hold_the_number_unit}
+	</if>
+	 	<if test="ssc_square_price != null and ssc_square_price != ''" >
+	    and ssc_square_price =  #{ssc_square_price}
+	</if>
+	<if test="ssc_square_price_unit != null" >
+	    and ssc_square_price_unit =  #{ssc_square_price_unit}
+	</if>
+	<if test="ssc_tray_balance_type != null" >
+	    and ssc_tray_balance_type =  #{ssc_tray_balance_type}
+	</if>
+	 	<if test="ssc_tray_price != null and ssc_tray_price != ''" >
+	    and ssc_tray_price =  #{ssc_tray_price}
+	</if>
+	<if test="ssc_tray_price_unit != null" >
+	    and ssc_tray_price_unit =  #{ssc_tray_price_unit}
+	</if>
+	<if test="ssc_over_part_tray_tableid != null" >
+	    and ssc_over_part_tray_tableid =  #{ssc_over_part_tray_tableid}
+	</if>
+	<if test="ssc_total_tray_tableid != null" >
+	    and ssc_total_tray_tableid =  #{ssc_total_tray_tableid}
+	</if>
+	<if test="ssc_single_tray_balance_type != null" >
+	    and ssc_single_tray_balance_type =  #{ssc_single_tray_balance_type}
+	</if>
+	 	<if test="ssc_single_tray_number != null and ssc_single_tray_number != ''" >
+	    and ssc_single_tray_number =  #{ssc_single_tray_number}
+	</if>
+	 	<if test="ssc_single_tray_number_unit != null and ssc_single_tray_number_unit != ''" >
+	    and ssc_single_tray_number_unit =  #{ssc_single_tray_number_unit}
+	</if>
+	<if test="ssc_over_part_single_tray_tableid != null" >
+	    and ssc_over_part_single_tray_tableid =  #{ssc_over_part_single_tray_tableid}
+	</if>
+	<if test="ssc_total_single_tray_tableid != null" >
+	    and ssc_total_single_tray_tableid =  #{ssc_total_single_tray_tableid}
+	</if>
+	<if test="ssc_cb_id != null" >
+	    and ssc_cb_id =  #{ssc_cb_id}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入仓储费表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.StorageCharge" >
+  insert into sosp_storage_charge(ssc_id,ssc_volume_price,ssc_singlt_tray_price,ssc_singlt_tray_price_unit,ssc_volume_price_unit,ssc_starttime,ssc_endtime,ssc_whs_id,ssc_area_id,ssc_item_type,ssc_sc_type,ssc_fixedcost,ssc_fixedcost_unit,ssc_occupied_area_type,ssc_area_price,ssc_area_price_unit,ssc_total_area_tableid,ssc_over_part_area_tableid,ssc_volume_type,ssc_total_volume_tableid,ssc_over_part_volume_tableid,ssc_volume_calculation_type,ssc_total_volume_calculation_tableid,ssc_over_part_volume_calculation_tableid,ssc_number_price,ssc_number_price_unit,ssc_square_hold_the_number,ssc_square_hold_the_number_unit,ssc_square_price,ssc_square_price_unit,ssc_tray_balance_type,ssc_tray_price,ssc_tray_price_unit,ssc_over_part_tray_tableid,ssc_total_tray_tableid,ssc_single_tray_balance_type,ssc_single_tray_number,ssc_single_tray_number_unit,ssc_over_part_single_tray_tableid,ssc_total_single_tray_tableid,ssc_cb_id)
+ values(#{ssc_id},#{ssc_volume_price},#{ssc_singlt_tray_price},#{ssc_singlt_tray_price_unit},#{ssc_volume_price_unit},#{ssc_starttime},#{ssc_endtime},#{ssc_whs_id},#{ssc_area_id},#{ssc_item_type},#{ssc_sc_type},#{ssc_fixedcost},#{ssc_fixedcost_unit},#{ssc_occupied_area_type},#{ssc_area_price},#{ssc_area_price_unit},#{ssc_total_area_tableid},#{ssc_over_part_area_tableid},#{ssc_volume_type},#{ssc_total_volume_tableid},#{ssc_over_part_volume_tableid},#{ssc_volume_calculation_type},#{ssc_total_volume_calculation_tableid},#{ssc_over_part_volume_calculation_tableid},#{ssc_number_price},#{ssc_number_price_unit},#{ssc_square_hold_the_number},#{ssc_square_hold_the_number_unit},#{ssc_square_price},#{ssc_square_price_unit},#{ssc_tray_balance_type},#{ssc_tray_price},#{ssc_tray_price_unit},#{ssc_over_part_tray_tableid},#{ssc_total_tray_tableid},#{ssc_single_tray_balance_type},#{ssc_single_tray_number},#{ssc_single_tray_number_unit},#{ssc_over_part_single_tray_tableid},#{ssc_total_single_tray_tableid},#{ssc_cb_id})
+</insert>
+
+<!-- 修改仓储费表-->  
+ <update id="update" parameterType="com.bt.lmis.model.StorageCharge" >
+	update sosp_storage_charge 
+		set
+	<trim  suffixOverrides="," >
+		<if test="ssc_starttime != null  ">
+			ssc_starttime=#{ssc_starttime},
+		</if>
+		<if test="ssc_endtime != null  ">
+			ssc_endtime=#{ssc_endtime},
+		</if>
+		<if test="ssc_whs_id != null  ">
+			ssc_whs_id=#{ssc_whs_id},
+		</if>
+		<if test="ssc_area_id != null  ">
+			ssc_area_id=#{ssc_area_id},
+		</if>
+		<if test="ssc_item_type != null  ">
+			ssc_item_type=#{ssc_item_type},
+		</if>
+		<if test="ssc_sc_type != null  ">
+			ssc_sc_type=#{ssc_sc_type},
+		</if>
+		<if test="ssc_fixedcost != null  and ssc_fixedcost != '' ">
+			ssc_fixedcost=#{ssc_fixedcost},
+		</if>
+		<if test="ssc_occupied_area_type != null  ">
+			ssc_occupied_area_type=#{ssc_occupied_area_type},
+		</if>
+		<if test="ssc_area_price != null  and ssc_area_price != '' ">
+			ssc_area_price=#{ssc_area_price},
+		</if>
+		<if test="ssc_area_price_unit != null  ">
+			ssc_area_price_unit=#{ssc_area_price_unit},
+		</if>
+		<if test="ssc_total_area_tableid != null  ">
+			ssc_total_area_tableid=#{ssc_total_area_tableid},
+		</if>
+		<if test="ssc_over_part_area_tableid != null  ">
+			ssc_over_part_area_tableid=#{ssc_over_part_area_tableid},
+		</if>
+		<if test="ssc_volume_type != null  ">
+			ssc_volume_type=#{ssc_volume_type},
+		</if>
+		<if test="ssc_total_volume_tableid != null  ">
+			ssc_total_volume_tableid=#{ssc_total_volume_tableid},
+		</if>
+		<if test="ssc_over_part_volume_tableid != null  ">
+			ssc_over_part_volume_tableid=#{ssc_over_part_volume_tableid},
+		</if>
+		<if test="ssc_volume_calculation_type != null  ">
+			ssc_volume_calculation_type=#{ssc_volume_calculation_type},
+		</if>
+		<if test="ssc_total_volume_calculation_tableid != null  ">
+			ssc_total_volume_calculation_tableid=#{ssc_total_volume_calculation_tableid},
+		</if>
+		<if test="ssc_over_part_volume_calculation_tableid != null  ">
+			ssc_over_part_volume_calculation_tableid=#{ssc_over_part_volume_calculation_tableid},
+		</if>
+		<if test="ssc_number_price != null  and ssc_number_price != '' ">
+			ssc_number_price=#{ssc_number_price},
+		</if>
+		<if test="ssc_number_price_unit != null  ">
+			ssc_number_price_unit=#{ssc_number_price_unit},
+		</if>
+		<if test="ssc_square_hold_the_number != null  and ssc_square_hold_the_number != '' ">
+			ssc_square_hold_the_number=#{ssc_square_hold_the_number},
+		</if>
+		<if test="ssc_square_hold_the_number_unit != null  ">
+			ssc_square_hold_the_number_unit=#{ssc_square_hold_the_number_unit},
+		</if>
+		<if test="ssc_square_price != null  and ssc_square_price != '' ">
+			ssc_square_price=#{ssc_square_price},
+		</if>
+		<if test="ssc_square_price_unit != null  ">
+			ssc_square_price_unit=#{ssc_square_price_unit},
+		</if>
+		<if test="ssc_tray_balance_type != null  ">
+			ssc_tray_balance_type=#{ssc_tray_balance_type},
+		</if>
+		<if test="ssc_tray_price != null  and ssc_tray_price != '' ">
+			ssc_tray_price=#{ssc_tray_price},
+		</if>
+		<if test="ssc_tray_price_unit != null  ">
+			ssc_tray_price_unit=#{ssc_tray_price_unit},
+		</if>
+		<if test="ssc_over_part_tray_tableid != null  ">
+			ssc_over_part_tray_tableid=#{ssc_over_part_tray_tableid},
+		</if>
+		<if test="ssc_total_tray_tableid != null  ">
+			ssc_total_tray_tableid=#{ssc_total_tray_tableid},
+		</if>
+		<if test="ssc_single_tray_balance_type != null  ">
+			ssc_single_tray_balance_type=#{ssc_single_tray_balance_type},
+		</if>
+		<if test="ssc_single_tray_number != null  and ssc_single_tray_number != '' ">
+			ssc_single_tray_number=#{ssc_single_tray_number},
+		</if>
+		<if test="ssc_single_tray_number_unit != null  and ssc_single_tray_number_unit != '' ">
+			ssc_single_tray_number_unit=#{ssc_single_tray_number_unit},
+		</if>
+		<if test="ssc_over_part_single_tray_tableid != null  ">
+			ssc_over_part_single_tray_tableid=#{ssc_over_part_single_tray_tableid},
+		</if>
+		<if test="ssc_total_single_tray_tableid != null  ">
+			ssc_total_single_tray_tableid=#{ssc_total_single_tray_tableid},
+		</if>
+		<if test="ssc_cb_id != null  ">
+			ssc_cb_id=#{ssc_cb_id},
+		</if>
+	</trim>
+	where 
+		ssc_id=#{ssc_id}
+ </update>
+ 
+ <!-- 选择修改仓储费表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.StorageCharge" >
+	update sosp_storage_charge set 
+	<trim  suffixOverrides="," >
+	<if test="ssc_starttime != null  ">
+		ssc_starttime=#{ssc_starttime},
+	</if>
+	<if test="ssc_endtime != null  ">
+		ssc_endtime=#{ssc_endtime},
+	</if>
+	<if test="ssc_whs_id != null  ">
+		ssc_whs_id=#{ssc_whs_id},
+	</if>
+	<if test="ssc_area_id != null  ">
+		ssc_area_id=#{ssc_area_id},
+	</if>
+	<if test="ssc_item_type != null  ">
+		ssc_item_type=#{ssc_item_type},
+	</if>
+	<if test="ssc_sc_type != null  ">
+		ssc_sc_type=#{ssc_sc_type},
+	</if>
+	<if test="ssc_fixedcost != null  and ssc_fixedcost != '' ">
+		ssc_fixedcost=#{ssc_fixedcost},
+	</if>
+	<if test="ssc_occupied_area_type != null  ">
+		ssc_occupied_area_type=#{ssc_occupied_area_type},
+	</if>
+	<if test="ssc_area_price != null  and ssc_area_price != '' ">
+		ssc_area_price=#{ssc_area_price},
+	</if>
+	<if test="ssc_area_price_unit != null  ">
+		ssc_area_price_unit=#{ssc_area_price_unit},
+	</if>
+	<if test="ssc_total_area_tableid != null  ">
+		ssc_total_area_tableid=#{ssc_total_area_tableid},
+	</if>
+	<if test="ssc_over_part_area_tableid != null  ">
+		ssc_over_part_area_tableid=#{ssc_over_part_area_tableid},
+	</if>
+	<if test="ssc_volume_type != null  ">
+		ssc_volume_type=#{ssc_volume_type},
+	</if>
+	<if test="ssc_total_volume_tableid != null  ">
+		ssc_total_volume_tableid=#{ssc_total_volume_tableid},
+	</if>
+	<if test="ssc_over_part_volume_tableid != null  ">
+		ssc_over_part_volume_tableid=#{ssc_over_part_volume_tableid},
+	</if>
+	<if test="ssc_volume_calculation_type != null  ">
+		ssc_volume_calculation_type=#{ssc_volume_calculation_type},
+	</if>
+	<if test="ssc_total_volume_calculation_tableid != null  ">
+		ssc_total_volume_calculation_tableid=#{ssc_total_volume_calculation_tableid},
+	</if>
+	<if test="ssc_over_part_volume_calculation_tableid != null  ">
+		ssc_over_part_volume_calculation_tableid=#{ssc_over_part_volume_calculation_tableid},
+	</if>
+	<if test="ssc_number_price != null  and ssc_number_price != '' ">
+		ssc_number_price=#{ssc_number_price},
+	</if>
+	<if test="ssc_number_price_unit != null  ">
+		ssc_number_price_unit=#{ssc_number_price_unit},
+	</if>
+	<if test="ssc_square_hold_the_number != null  and ssc_square_hold_the_number != '' ">
+		ssc_square_hold_the_number=#{ssc_square_hold_the_number},
+	</if>
+	<if test="ssc_square_hold_the_number_unit != null  ">
+		ssc_square_hold_the_number_unit=#{ssc_square_hold_the_number_unit},
+	</if>
+	<if test="ssc_square_price != null  and ssc_square_price != '' ">
+		ssc_square_price=#{ssc_square_price},
+	</if>
+	<if test="ssc_square_price_unit != null  ">
+		ssc_square_price_unit=#{ssc_square_price_unit},
+	</if>
+	<if test="ssc_tray_balance_type != null  ">
+		ssc_tray_balance_type=#{ssc_tray_balance_type},
+	</if>
+	<if test="ssc_tray_price != null  and ssc_tray_price != '' ">
+		ssc_tray_price=#{ssc_tray_price},
+	</if>
+	<if test="ssc_tray_price_unit != null  ">
+		ssc_tray_price_unit=#{ssc_tray_price_unit},
+	</if>
+	<if test="ssc_over_part_tray_tableid != null  ">
+		ssc_over_part_tray_tableid=#{ssc_over_part_tray_tableid},
+	</if>
+	<if test="ssc_total_tray_tableid != null  ">
+		ssc_total_tray_tableid=#{ssc_total_tray_tableid},
+	</if>
+	<if test="ssc_single_tray_balance_type != null  ">
+		ssc_single_tray_balance_type=#{ssc_single_tray_balance_type},
+	</if>
+	<if test="ssc_single_tray_number != null  and ssc_single_tray_number != '' ">
+		ssc_single_tray_number=#{ssc_single_tray_number},
+	</if>
+	<if test="ssc_single_tray_number_unit != null  and ssc_single_tray_number_unit != '' ">
+		ssc_single_tray_number_unit=#{ssc_single_tray_number_unit},
+	</if>
+	<if test="ssc_over_part_single_tray_tableid != null  ">
+		ssc_over_part_single_tray_tableid=#{ssc_over_part_single_tray_tableid},
+	</if>
+	<if test="ssc_total_single_tray_tableid != null  ">
+		ssc_total_single_tray_tableid=#{ssc_total_single_tray_tableid},
+	</if>
+	<if test="ssc_cb_id != null  ">
+		ssc_cb_id=#{ssc_cb_id},
+	</if>
+	</trim> where ssc_id=#{ssc_id}
+</update>
+
+<!--  -->
+<update id="delete" parameterType="Object">
+	delete 	 from sosp_storage_charge where ssc_id = #{ssc_id}
+</update>
+<!-- 批量删除仓储费表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from sosp_storage_charge where ssc_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找仓储费表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from sosp_storage_charge where ssc_id = #{ssc_id}
+</select>
+  	
+<!-- 仓储费表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageChargeQueryParam">
+	select count(1) from sosp_storage_charge 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的仓储费表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageChargeQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from sosp_storage_charge 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 仓储费表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageChargeQueryParam">
+	select count(1) from sosp_storage_charge 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的仓储费表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageChargeQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from sosp_storage_charge 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="selectSSCById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from sosp_storage_charge where ssc_id = #{id}
+</select>
+
+<!-- 根据合同ID查询已维护的公式 -->
+<select id="findByCBID" resultMap="BaseResultMap" parameterType="Object">
+	SELECT
+		ssc.ssc_id,
+	    ssc.ssc_cb_id,
+	    ssc.ssc_starttime,
+	    ssc.ssc_endtime,
+	    ssc.ssc_whs_id,
+	    wh.warehouse_name as ssc_whs_name,
+	    wh.warehouse_code as ssc_whs_code,
+	    ssc.ssc_area_id,
+	    wha.area_name as ssc_area_name,
+	    ssc.ssc_item_type,
+	    it.itemtype_name as ssc_item_type_name,
+	    ssc.ssc_sc_type,
+	    ssc_fixedcost,
+	    ssc_occupied_area_type,
+	    ssc_area_price,
+	    ssc_area_price_unit,
+	    ssc_total_area_tableid,
+	    ssc_over_part_area_tableid,
+	    ssc_volume_type,
+	    ssc_total_volume_tableid,
+	    ssc_over_part_volume_tableid,
+	    ssc_volume_calculation_type,
+	    ssc_total_volume_calculation_tableid,
+	    ssc_over_part_volume_calculation_tableid,
+	    ssc_number_price,
+	    ssc_number_price_unit,
+	    ssc_square_hold_the_number,
+	    ssc_square_hold_the_number_unit,
+	    ssc_square_price,
+	    ssc_square_price_unit,
+	    ssc_tray_balance_type,
+	    ssc_tray_price,
+	    ssc_tray_price_unit,
+	    ssc_over_part_tray_tableid,
+	    ssc_total_tray_tableid,
+	    ssc_single_tray_balance_type,
+	    ssc_single_tray_number,
+	    ssc_single_tray_number_unit,
+	    ssc_over_part_single_tray_tableid,
+	    ssc_total_single_tray_tableid,
+	    ssc_cb_id 
+	FROM sosp_storage_charge ssc
+	left join tb_warehouse wh on wh.id=ssc.ssc_whs_id
+	left join tb_warehouse_area wha on wha.id=ssc.ssc_area_id
+	left join tb_item_type it on it.id=ssc.ssc_item_type
+	where ssc.ssc_cb_id = #{cbid}
+	order by ssc.ssc_id asc
+</select>
+
+
+<!-- 根据合同ID查询已维护的公式 -->
+<select id="findByID" resultMap="BaseResultMap" parameterType="Object">
+	SELECT
+		ssc.ssc_id,
+	    ssc.ssc_cb_id,
+	    ssc.ssc_starttime,
+	    ssc.ssc_endtime,
+	    ssc.ssc_whs_id,
+	    wh.warehouse_name as ssc_whs_name,
+	    wh.warehouse_code as ssc_whs_code,
+	    ssc.ssc_area_id,
+	    wha.area_name as ssc_area_name,
+	    ssc.ssc_item_type,
+	    it.itemtype_name as ssc_item_type_name,
+	    ssc.ssc_sc_type,
+	    ssc_fixedcost,
+	    ssc_occupied_area_type,
+	    ssc_area_price,
+	    ssc_area_price_unit,
+	    ssc_total_area_tableid,
+	    ssc_over_part_area_tableid,
+	    ssc_volume_type,
+	    ssc_total_volume_tableid,
+	    ssc_over_part_volume_tableid,
+	    ssc_volume_calculation_type,
+	    ssc_total_volume_calculation_tableid,
+	    ssc_over_part_volume_calculation_tableid,
+	    ssc_number_price,
+	    ssc_number_price_unit,
+	    ssc_square_hold_the_number,
+	    ssc_square_hold_the_number_unit,
+	    ssc_square_price,
+	    ssc_square_price_unit,
+	    ssc_tray_balance_type,
+	    ssc_tray_price,
+	    ssc_tray_price_unit,
+	    ssc_over_part_tray_tableid,
+	    ssc_total_tray_tableid,
+	    ssc_single_tray_balance_type,
+	    ssc_single_tray_number,
+	    ssc_single_tray_number_unit,
+	    ssc_over_part_single_tray_tableid,
+	    ssc_total_single_tray_tableid,
+	    ssc_cb_id 
+	FROM sosp_storage_charge ssc
+	left join tb_warehouse wh on wh.id=ssc.ssc_whs_id
+	left join tb_warehouse_area wha on wha.id=ssc.ssc_area_id
+	left join tb_item_type it on it.id=ssc.ssc_item_type
+	where ssc.ssc_cb_id = #{cbid}
+	order by ssc.ssc_id asc
+</select>
+
+<select id="findBySSCID" resultMap="BaseResultMap" parameterType="Object">
+	SELECT
+		ssc.ssc_id,
+	    ssc.ssc_cb_id,
+	    ssc.ssc_starttime,
+	    ssc.ssc_endtime,
+	    ssc.ssc_whs_id,
+	    wh.warehouse_name as ssc_whs_name,
+	    wh.warehouse_code as ssc_whs_code,
+	    ssc.ssc_area_id,
+	    wha.area_name as ssc_area_name,
+	    ssc.ssc_item_type,
+	    it.itemtype_name as ssc_item_type_name,
+	    ssc.ssc_sc_type,
+	    ssc_fixedcost,
+	    ssc_occupied_area_type,
+	    ssc_area_price,
+	    ssc_area_price_unit,
+	    ssc_total_area_tableid,
+	    ssc_over_part_area_tableid,
+	    ssc_volume_type,
+	    ssc_total_volume_tableid,
+	    ssc_over_part_volume_tableid,
+	    ssc_volume_calculation_type,
+	    ssc_total_volume_calculation_tableid,
+	    ssc_over_part_volume_calculation_tableid,
+	    ssc_number_price,
+	    ssc_number_price_unit,
+	    ssc_square_hold_the_number,
+	    ssc_square_hold_the_number_unit,
+	    ssc_square_price,
+	    ssc_square_price_unit,
+	    ssc_tray_balance_type,
+	    ssc_tray_price,
+	    ssc_tray_price_unit,
+	    ssc_over_part_tray_tableid,
+	    ssc_total_tray_tableid,
+	    ssc_single_tray_balance_type,
+	    ssc_single_tray_number,
+	    ssc_single_tray_number_unit,
+	    ssc_over_part_single_tray_tableid,
+	    ssc_total_single_tray_tableid,
+	    ssc_cb_id 
+	FROM sosp_storage_charge ssc
+	left join tb_warehouse wh on wh.id=ssc.ssc_whs_id
+	left join tb_warehouse_area wha on wha.id=ssc.ssc_area_id
+	left join tb_item_type it on it.id=ssc.ssc_item_type
+	where ssc.ssc_id = #{cbid}
+	order by ssc.ssc_id asc
+</select>
+
+<select id="queryWAS" resultMap="BaseResultMap" parameterType="Object">
+	select 
+		<include refid="Base_Column_List" /> 
+ 	from 
+ 		sosp_storage_charge 
+ 	where 
+ 		1=1 
+		<if test="ssc_cb_id != null  and ssc_cb_id != '' ">
+ 			and ssc_cb_id=#{ssc_cb_id}
+		</if>
+		<if test="ssc_whs_id != null  and ssc_whs_id != '' ">
+			and ssc_whs_id=#{ssc_whs_id}
+		</if>
+		<if test="ssc_area_id != null  and ssc_area_id != '' ">
+			and ssc_area_id=#{ssc_area_id}
+		</if>
+		<if test="ssc_item_type != null  and ssc_item_type != '' ">
+			and ssc_item_type=#{ssc_item_type}
+		</if>
+</select>
+
+<update id="deleteByCBID" parameterType="Object">
+	delete from sosp_storage_charge where ssc_id = #{id}
+</update>
+<update id="deleteSAAByCBID" parameterType="Object">
+	delete from ssc_all_area where saa_cb_id = #{cbid}
+</update>
+<update id="deleteSASTByCBID" parameterType="Object">
+	delete from ssc_all_singlt_tray where sast_cb_id = #{cbid}
+</update>
+<update id="deleteSATByCBID" parameterType="Object">
+	delete from ssc_all_tray where sat_cb_id = #{cbid}
+</update>
+<update id="deleteSAVByCBID" parameterType="Object">
+	delete from ssc_all_volume where sav_cb_id = #{cbid}
+</update>
+<update id="deleteSAVCByCBID" parameterType="Object">
+	delete from ssc_all_volume_calculation where savc_cb_id = #{cbid}
+</update>
+<update id="deleteSTAByCBID" parameterType="Object">
+	delete from ssc_total_area where sta_cb_id = #{cbid}
+</update>
+<update id="deleteSTSTByCBID" parameterType="Object">
+	delete from ssc_total_singlt_tray where stat_cb_id = #{cbid}
+</update>
+<update id="deleteSTTByCBID" parameterType="Object">
+	delete from ssc_total_tray where stt_cb_id = #{cbid}
+</update>
+<update id="deleteSTVByCBID" parameterType="Object">
+	delete from ssc_total_volume where ctv_cb_id = #{cbid}
+</update>
+<update id="deleteSTVCByCBID" parameterType="Object">
+	delete from ssc_total_volume_calculation where stvc_cb_id = #{cbid}
+</update>
+
+<update id="deleteSAAByID" parameterType="Object">
+	delete from ssc_all_area where saa_id = #{id}
+</update>
+<update id="deleteSASTByID" parameterType="Object">
+	delete from ssc_all_singlt_tray where sast_id = #{id}
+</update>
+<update id="deleteSATByID" parameterType="Object">
+	delete from ssc_all_tray where sat_id = #{id}
+</update>
+<update id="deleteSAVByID" parameterType="Object">
+	delete from ssc_all_volume where sav_id = #{id}
+</update>
+<update id="deleteSAVyID" parameterType="Object">
+	delete from ssc_all_volume_calculation where savc_id = #{id}
+</update>
+<update id="deleteSTAByID" parameterType="Object">
+	delete from ssc_total_area where sta_id = #{id}
+</update>
+<update id="deleteSTSTByID" parameterType="Object">
+	delete from ssc_total_singlt_tray where stst_id = #{id}
+</update>
+<update id="deleteSTTByID" parameterType="Object">
+	delete from ssc_total_tray where stt_id = #{id}
+</update>
+<update id="deleteSTVByID" parameterType="Object">
+	delete from ssc_total_volume where ctv_id = #{id}
+</update>
+<update id="deleteSTVyID" parameterType="Object">
+	delete from ssc_total_volume_calculation where stvc_id = #{id}
+</update>
+
+</mapper>   

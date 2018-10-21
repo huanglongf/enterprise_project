@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TransportVendorMapper" > 
+	<!-- Result Map-->
+	<resultMap id= "BaseResultMap" type= "com.bt.lmis.model.TransportVendor" >
+		<result column= "id" property="id"/>
+		<result column= "create_time" property= "create_time" />
+		<result column= "create_user" property= "create_user" />
+		<result column= "update_time" property= "update_time" />
+		<result column= "update_user" property= "update_user" />
+		<result column= "transport_code" property= "transport_code" />
+		<result column= "transport_name" property= "transport_name" />
+		<result column= "contact" property= "contact" />
+		<result column= "phone" property= "phone" />
+		<result column= "transport_type" property= "transport_type" />
+		<result column= "validity" property= "validity" />
+	</resultMap>
+       
+	<sql id= "Base_Column_List" >
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		transport_code,
+		transport_name,
+		contact,
+		phone,
+		transport_type,
+		validity
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id= "where_Clause" >
+		where 1= 1
+		<trim suffixOverrides= "," >
+			<if test= "id != null" >
+			    and id= #{id }
+			</if>
+			<if test= "create_time != null" >
+			    and create_time= #{create_time }
+			</if>
+			<if test= "create_user != null and create_user != ''" >
+			    and create_user= #{create_user }
+			</if>
+			<if test= "update_time != null" >
+			    and update_time= #{update_time }
+			</if>
+			<if test= "update_user != null and update_user != ''" >
+			    and update_user= #{update_user }
+			</if>
+			<if test= "transport_code != null and transport_code != ''" >
+			    and transport_code= #{transport_code }
+			</if>
+			<if test= "transport_name != null and transport_name != ''" >
+				and transport_name like concat('%', #{transport_name }, '%')
+			</if>
+			<if test= "contact != null and contact != ''" >
+			    and contact= #{contact }
+			</if>
+			<if test= "phone != null and phone != ''" >
+				and phone= #{phone }
+			</if>
+			<if test= "transport_type != null and transport_type != ''" >
+				and transport_type= #{transport_type }
+			</if>
+			<if test= "validity != null" >
+			    and validity= #{validity }
+			</if>
+		</trim>
+	</sql>
+
+	<select id= "findAllTransportVendor" resultMap= "BaseResultMap" >
+		select <include refid= "Base_Column_List" /> FROM tb_transport_vendor ORDER BY update_time DESC 
+	</select>
+
+	<select id= "findExpress" resultMap= "BaseResultMap" >
+		SELECT <include refid= "Base_Column_List" /> FROM tb_transport_vendor WHERE transport_type= '1' AND validity= 1 ORDER BY update_time DESC
+	</select>
+	
+	<select id= "findPhysicaldistribution" resultMap= "BaseResultMap" >
+		select <include refid= "Base_Column_List" /> FROM tb_transport_vendor WHERE transport_type= '0' AND validity= 1 ORDER BY update_time DESC
+	</select>
+  	
+	<insert id= "addTransportVendor" parameterType= "com.bt.lmis.model.TransportVendor" >
+		insert into tb_transport_vendor(
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			transport_code,
+			transport_name,
+			contact,
+			phone,
+			transport_type,
+			validity	
+		) values (
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{transport_code },
+			#{transport_name },
+			#{contact },
+			#{phone },
+			#{transport_type },
+			#{validity }
+		)
+	</insert>
+  	
+  	<update id= "updateTransportVendor" parameterType= "com.bt.lmis.model.TransportVendor" >
+		update tb_transport_vendor
+		<trim prefix= "SET" suffixOverrides= "," >
+			update_time= now(),
+			<if test= "update_user != null and update_user != ''" >
+				update_user= #{update_user },
+			</if>
+			<if test= "transport_code != null and transport_code != ''" >
+				transport_code= #{transport_code },
+			</if>
+			<if test= "transport_name != null and transport_name != ''" >
+				transport_name= #{transport_name },
+			</if>
+			<if test= "contact != null and contact != ''" >
+				contact= #{contact },
+			</if>
+			<if test= "phone != null and phone != ''" >
+				phone= #{phone },
+			</if>
+			<if test= "transport_type != null and transport_type != ''" >
+				transport_type= #{transport_type },
+			</if>
+			<if test= "validity != null" >
+				validity= #{validity },
+			</if>
+		</trim>
+		where id= #{id }
+	</update>
+  	
+	<select id="findByCode" parameterType="Object" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from
+			tb_transport_vendor 
+		where 1= 1
+		<if test= "validity != null">
+			and validity= #{validity }
+		</if>
+			and transport_code = #{transport_code }
+	</select>
+	
+	<select id= "getById" parameterType= "Object" resultMap= "BaseResultMap" >
+		select <include refid= "Base_Column_List" /> from tb_transport_vendor where id= #{id }
+	</select>
+	
+	<delete id= "delTransportVendors" parameterType= "Object" >
+		delete from tb_transport_vendor where id in 
+		<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	       	#{item }
+	   	</foreach>
+	</delete>
+	
+	<select id= "judgeTransportVendorContractExistOrNotByCode" parameterType= "String" resultType= "Integer" >
+		SELECT count(0) FROM tb_contract_basicinfo WHERE contract_owner= #{vendor_code }
+	</select>
+	
+	<select id= "judgeTransportVendorContractExistOrNot" parameterType= "Integer" resultType= "Integer" >
+		SELECT
+			count(0)
+		FROM
+			(
+				SELECT
+					tb_transport_vendor.id
+				FROM
+					tb_contract_basicinfo
+				LEFT JOIN tb_transport_vendor ON tb_contract_basicinfo.contract_owner = tb_transport_vendor.transport_code
+				WHERE
+					tb_transport_vendor.id = #{id }
+			) a
+	</select>
+	
+	<select id= "count" resultType= "java.lang.Integer"  parameterType= "com.bt.lmis.controller.form.TransportVendorQueryParam" >
+		select count(1) cnt from tb_transport_vendor <include refid= "where_Clause" />
+	</select>
+	
+	<!-- 满足条件的运输供应商(基础数据)集合 -->
+	<select id= "query" resultType= "java.util.Map"  parameterType= "com.bt.lmis.controller.form.TransportVendorQueryParam" >
+		SELECT 
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			transport_code,
+			transport_name,
+			case transport_type
+			when "0" then "物流"
+			when "1" then "快递"
+			else "" end as transport_type,
+			contact,
+			phone,
+			case validity
+			when 0 then "无效"
+			when 1 then "有效"
+			else "" end as validity
+		FROM
+			tb_transport_vendor
+		<include refid= "where_Clause" />
+		ORDER BY update_time DESC
+		LIMIT #{firstResult}, #{maxResult}  
+	</select>
+	<select id= "selectByName" resultMap= "BaseResultMap"  parameterType= "java.lang.String" >
+		SELECT 
+			<include refid="Base_Column_List"/>
+		FROM
+			tb_transport_vendor
+		where transport_name= #{expressName }  and validity='1'
+	</select>
+</mapper>   

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.sys.dao.AccountMapper" > 
+	<!-- Result Map-->
+	<resultMap id="account" type="com.bt.sys.model.Account" >
+		<result column="id" property="id"/>
+		<result column="create_user" property="createUser"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_user" property="updateUser"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="status" property="status"/>
+		<result column="code" property="code"/>
+		<result column="name" property="name"/>
+		<result column="login_password" property="loginPassword"/>
+		<result column="orgid" property="orgid"/>
+	</resultMap>
+	<!-- 字段列表 -->
+	<sql id="Column_List">
+		id,
+		create_user,
+		create_time,
+		update_user,
+		update_time,
+		status,
+		code,
+		name,
+		login_password,
+		orgid
+	</sql>
+	<select id="getAccount" parameterType="com.bt.sys.model.Account" resultMap="account">
+		SELECT <include refid="Column_List" />
+		FROM sys_login_account
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				AND id=#{id}
+			</if>
+			<if test="code!=null and code!=''">
+				AND code=#{code}
+			</if>
+			<if test="loginPassword!=null and loginPassword!=''">
+				AND login_password=#{loginPassword}
+			</if>
+		</trim>
+	</select>
+	
+	<!--获取组织架构节点 -->
+	<select id="getOrg" resultType="java.util.HashMap" parameterType="Object">
+		select 
+			c.code as code from sys_system_authority a
+		left join  sys_login_account b on a.user_id=b.id
+		left join  sys_organization c on c.id=a.org_id
+		where 
+			b.id=#{id} and c.code is not null
+		group by c.code 
+	</select>
+	
+	<select id="getUser_id" resultType="java.util.HashMap" parameterType="Object">
+		select user_id as code from sys_system_authority  where org_id in (${power}) group by user_id 
+	</select>
+	
+	
+	<select id="selectByCode" resultType="java.lang.String" parameterType="Object">
+		select id as code from  sys_organization 
+		where code = ${code}
+	</select>
+	
+	
+	<select id="selectBysuperior_id" resultType="java.util.HashMap" parameterType="Object">
+		select id as code from  sys_organization 
+		where superior_id = #{superior_id}
+	</select>
+	
+	
+	<select id="selectById" resultType="java.util.HashMap" parameterType="Object">
+		select orgid as code from  sys_login_account 
+		where id in (${id}) and orgid is not null group by orgid
+	</select>
+	
+	<!-- 获取承运商 -->
+	<select id="getCarrier" resultType="java.util.HashMap" parameterType="Object">
+		select 
+			c.express_code as code from sys_system_authority a
+		left join  sys_login_account b on a.user_id=b.id
+		left join  tb_transport_vendor c on c.id=a.carrier_id
+		where 
+			b.id=#{id} and c.express_code is not null
+		group by c.express_code
+	</select>
+	
+	<!-- 获取承运商类型 -->
+	<select id="getCarrierType" resultType="java.util.HashMap" parameterType="Object">
+		select 
+			c.product_type_code as code from sys_system_authority a
+		left join  sys_login_account b on a.user_id=b.id
+		left join  tb_transport_product_type c on c.id=a.carrier_type_id
+		where 
+			b.id=#{id} and c.express_code is not null
+		 group by c.product_type_code  
+	</select>
+	
+	<!-- 获取仓库 -->
+	<select id="getWareHouse" resultType="java.util.HashMap" parameterType="Object">
+		select 
+			c.code as code from sys_system_authority a
+		left join  sys_login_account b on a.user_id=b.id
+		left join  sys_organization c on c.id=a.org_id
+		where 
+			b.id=#{id} and c.code is not null
+		group by c.code;
+	</select>
+	
+	
+</mapper>

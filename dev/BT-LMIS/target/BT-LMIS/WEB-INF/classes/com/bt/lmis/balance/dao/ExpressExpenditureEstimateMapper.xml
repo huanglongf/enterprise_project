@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.ExpressExpenditureEstimateMapper">
+	<resultMap type="com.bt.lmis.balance.model.Contract" id="ContractMap">
+		<result property="id" column="id" />
+		<result property="createTime" column="create_time" />
+		<result property="createBy" column="create_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="updateBy" column="update_user" />
+		<result property="contractNo" column="contract_no" />
+		<result property="contractName" column="contract_name" />
+		<result property="contractType" column="contract_type" />
+		<result property="contractOwner" column="contract_owner" />
+		<result property="contractOwnerName" column="transport_name" />
+		<result property="contractVersion" column="contract_version" />
+		<result property="contractStart" column="contract_start" />
+		<result property="contractEnd" column="contract_end" />
+		<result property="settleDate" column="settle_date" />
+		<result property="validity" column="validity" />
+		<result property="contact" column="contact" />
+		<result property="tel" column="tel" />
+	</resultMap>
+	<resultMap type="com.bt.lmis.balance.model.ExpressExpenditureEstimateProductTypeSummary" id="eeeptsMap">
+		<result property="productType" column="product_type_code" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result property="productTypeName" column="product_type_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result property="orderNum" column="order_num" javaType="int" jdbcType="INTEGER" />
+		<result property="afterDiscount" column="after_discount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+		<result property="insurance" column="insurance" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+	</resultMap>
+	<resultMap type="com.bt.lmis.balance.model.ExpressExpenditureDiscountSwitch" id="eedsMap">
+		<result property="waybillDiscount" column="waybill_discount" />
+		<result property="totalFreightDiscount" column="total_freight_discount" />
+	</resultMap>
+	<resultMap type="com.bt.lmis.balance.model.DomainModel" id="dmMap">
+		<result property="compare1" column="compare_1" />
+		<result property="num1" column="num_1" />
+		<result property="compare2" column="compare_2" />
+		<result property="num2" column="num_2" />
+		<result property="domainValue" column="discount" />
+	</resultMap>
+	<resultMap type="com.bt.lmis.balance.model.TotalFreightDiscountDomainModel" id="tfddmMap" extends="dmMap">
+		<result property="ladderType" column="ladder_type" />
+		<result property="insuranceContain" column="insurance_contain" />
+	</resultMap>
+	<resultMap type="com.bt.lmis.balance.model.ExpressExpenditureEstimateSummary" id="eeesMap">
+		<result property="id" column="id" />
+		<result property="createTime" column="create_time" />
+		<result property="createBy" column="create_by" />
+		<result property="updateTime" column="update_time" />
+		<result property="updateBy" column="update_by" />
+		<result property="batchNumber" column="batch_number" />
+		<result property="contractId" column="contract_id" />
+		<result property="express" column="express" />
+		<result property="costCenter" column="cost_center" />
+		<result property="storeCode" column="store_code" />
+		<result property="storeName" column="store_name" />
+		<result property="warehouseName" column="warehouse_name" />
+		<result property="orderNum" column="order_num" />
+		<result property="productTypeCode" column="product_type_code" />
+		<result property="productTypeName" column="product_type_name" />
+		<result property="productTypeFreight" column="product_type_freight" />
+		<result property="productTypeDiscount" column="product_type_discount" />
+		<result property="productTypeTotalDiscount" column="product_type_total_discount" />
+		<result property="insurance" column="insurance" />
+		<result property="totalFee" column="total_fee" />
+	</resultMap>
+	<select id="ensureContractById" parameterType="Integer" resultMap="ContractMap">
+		SELECT a.*,tb_transport_vendor.transport_name
+		FROM (
+			SELECT
+				id,
+				create_time,
+				create_user,
+				update_time,
+				update_user,
+				contract_no,
+				contract_name,
+				contract_type,
+				contract_owner,
+				contract_version,
+				contract_start,
+				contract_end,
+				settle_date,
+				tb_contract_basicinfo.validity,
+				tb_contract_basicinfo.contact,
+				tel
+			FROM tb_contract_basicinfo
+			WHERE contract_type=1
+		) a LEFT JOIN tb_transport_vendor
+		ON a.contract_owner=tb_transport_vendor.transport_code
+		WHERE a.id=#{id }
+	</select>
+	<insert id="copyDetailToTempInDomain" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		INSERT INTO ${param.detailTable }
+		SELECT a.* FROM tb_warehouse_express_data_settlement a
+		WHERE a.transport_code=#{contract.contractOwner }
+		AND TO_DAYS(a.transport_time) &gt;= TO_DAYS(#{fromDate })
+		AND TO_DAYS(a.transport_time) &lt;= TO_DAYS(#{toDate })
+	</insert>
+	<update id="resetDiscount" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		UPDATE ${param.detailTable }
+		SET discount = 0,
+			afterdiscount_freight = standard_freight,
+			total_fee = standard_freight + insurance_fee
+		WHERE discount != 0;
+	</update>
+	<insert id="expressExpenditureEstimateSummary" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		INSERT INTO bal_estimate_express_expenditure (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			batch_number,
+			contract_id,
+			express,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse_name,
+			order_num,
+			product_type_code,
+			product_type_name,
+			product_type_freight,
+			product_type_discount,
+			product_type_total_discount,
+			insurance,
+			total_fee
+		)
+		SELECT
+			UUID() AS id,
+			now() AS create_time,
+			'ESTIMATE-SYSTEM' AS create_by,
+			now() AS update_time,
+			'ESTIMATE-SYSTEM' AS update_by,
+			#{batchNumber } AS batch_number,
+			#{contract.id } AS contract_id,
+			transport_code AS express,
+			cost_center,
+			store_code, 
+			store_name,
+			warehouse as warehouse_name,
+			count(1) AS order_num,
+			itemtype_code as product_type_code,
+			itemtype_name as product_type_name,
+			sum(standard_freight) AS product_type_freight,
+			sum(standard_freight- afterdiscount_freight) AS product_type_discount,
+			0,
+			sum(insurance_fee) AS insurance,
+			sum(total_fee) AS total_fee
+		FROM ${param.detailTable } a
+		WHERE dFlag = 0
+		<if test="contract.contractOwner!='SF'">
+			AND a.transport_code = #{contract.contractOwner }
+			AND TO_DAYS(a.transport_time) &gt;= TO_DAYS(#{fromDate })
+			AND TO_DAYS(a.transport_time) &lt;= TO_DAYS(#{toDate })
+		</if>
+		GROUP BY 
+			a.cost_center,
+			a.store_code, 
+			a.store_name,
+			a.warehouse,
+			a.itemtype_code,
+			a.itemtype_name
+	</insert>
+	<select id="summaryByProductType" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="eeeptsMap">
+		SELECT
+			a.product_type_code,
+			tb_transport_product_type.product_type_name,
+			a.order_num,
+			a.after_discount,
+			a.insurance
+		FROM (
+				SELECT
+					code AS product_type_code,
+					SUM(order_num) AS order_num,
+					SUM(product_type_freight - product_type_discount) AS after_discount,
+					SUM(insurance) AS insurance
+				FROM bal_estimate_express_expenditure 
+				LEFT JOIN (select code,product_type from tb_product_type_discount) b ON product_type_code = b.product_type
+				WHERE batch_number = #{batchNumber }
+				AND express = #{contract.contractOwner }
+				GROUP BY code
+			) a
+		LEFT JOIN tb_transport_product_type
+		ON tb_transport_product_type.vendor_code = #{contract.contractOwner }
+		AND tb_transport_product_type.product_type_code = a.product_type_code
+	</select>
+	<select id="getDiscountSwitch" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="eedsMap">
+		SELECT
+			waybill_discount,
+			total_freight_discount
+		FROM ex_con_config
+		WHERE dFlag = true
+		AND con_id = #{contract.id }
+		AND belong_to = #{contract.contractOwner } 
+	</select>
+	<select id="ensureWaybillDiscountDomain" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="dmMap">
+		SELECT
+			compare_1,
+			num_1,
+			compare_2,
+			num_2,
+			discount
+		FROM ex_con_waybill_discount
+		WHERE dFlag = true
+		AND con_id = #{contract.id }
+		AND belong_to = #{contract.contractOwner }
+		<if test="param.productType != null and param.productType != ''">
+			AND (product_type = #{param.productType } OR product_type = 'ALL')
+		</if>
+		ORDER BY num_1
+	</select>
+	<update id="detailDiscount" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		UPDATE ${param.detailTable }
+		SET
+			discount=#{param.discount }*100,
+			afterdiscount_freight= standard_freight*(1-#{param.discount }),
+			total_fee=total_fee- standard_freight* #{param.discount },
+			update_user='ESTIMATE-SYSTEM',
+			update_time=now()
+		WHERE dFlag= 0 
+		AND itemtype_code in (select product_type from tb_product_type_discount where code = #{param.productType})
+	</update>
+	<update id="summaryDiscount" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		UPDATE bal_estimate_express_expenditure
+		SET
+			<if test="param.productType != null and param.productType != ''" >
+				product_type_discount = product_type_freight * #{param.discount },
+				total_fee = total_fee - product_type_freight * #{param.discount }
+			</if>
+			<if test="param.productType == null or param.productType == ''">
+				<if test="param.insuranceContain == 0">
+					product_type_total_discount = (product_type_freight - product_type_discount + insurance) * #{param.discount },
+					total_fee = total_fee - (product_type_freight - product_type_discount + insurance) * #{param.discount }
+				</if>
+				<if test="param.insuranceContain == 1">
+					product_type_total_discount = (product_type_freight - product_type_discount) * #{param.discount },
+					total_fee = total_fee - (product_type_freight - product_type_discount) * #{param.discount }
+				</if>
+			</if>
+		WHERE batch_number = #{batchNumber }
+		AND express = #{contract.contractOwner }
+		<if test="param.productType != null and param.productType != ''">
+			AND product_type_code in (select product_type from tb_product_type_discount where code = #{param.productType})
+		</if>
+	</update>
+	<select id="ensureTotalFreightDiscountDomain" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="tfddmMap">
+		SELECT
+			ladder_type,
+			compare_1,
+			num_1,
+			compare_2,
+			num_2,
+			discount,
+			insurance_contain
+		FROM ex_con_total_freight_discount
+		WHERE dFlag = 0
+		AND con_id = #{contract.id }
+		ORDER BY num_1
+	</select>
+	<select id="getExpressExpenditureEstimateSummary" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="eeesMap">
+		SELECT
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			batch_number,
+			contract_id,
+			express,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse_name,
+			order_num,
+			product_type_code,
+			product_type_name,
+			product_type_freight,
+			product_type_discount,
+			product_type_total_discount,
+			insurance,
+			total_fee
+		FROM bal_estimate_express_expenditure
+		WHERE batch_number = #{batchNumber }
+		AND express = #{contract.contractOwner }
+		ORDER BY cost_center and store_code and store_name and warehouse_name
+	</select>
+	<select id="getExpressExpenditureEstimateDetail" parameterType="com.bt.lmis.balance.model.EstimateParam" resultType="java.util.Map">
+		SELECT
+			store_name,
+			warehouse,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			express_number,
+			case transport_direction when '0' then '正向运输' else '逆向运输' end as transport_direction,
+			itemtype_name,
+			date_format(transport_time, '%Y-%m-%d-%T') as transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			weight,
+			length,
+			width,
+			higth,
+			volumn,
+			delivery_address,
+			province,
+			city,
+			state,
+			case insurance_flag when true then '是' else '否' end as insurance_flag,
+			case cod_flag when true then '是' else '否' end as cod_flag,
+			first_weight_price,
+			added_weight_price,
+			standard_freight,
+			discount,
+			afterdiscount_freight,
+			insurance_fee,
+			total_fee
+		FROM ${param.detailTable }
+		WHERE dFlag=0
+		<if test="contract.contractOwner!='SF'">
+			AND contract_id=#{contract.id }
+			AND transport_code=#{contract.contractOwner }
+			AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{fromDate })
+			AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{toDate })
+		</if>
+		LIMIT #{param.start }, #{param.length }
+	</select>
+	<select id= "countExpressExpenditureEstimateDetail" parameterType="com.bt.lmis.balance.model.EstimateParam" resultType= "Integer">
+		SELECT COUNT(1)
+		FROM ${param.detailTable }
+		WHERE dFlag=0
+		<if test="contract.contractOwner!='SF'">
+			AND contract_id=#{contract.id }
+			AND transport_code=#{contract.contractOwner }
+			AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{fromDate })
+			AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{toDate })
+		</if>
+	</select> 
+	<delete id="killTempDetail" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		DROP TABLE ${param.detailTable }
+	</delete>
+	<delete id="delExpressExpenditureEstimateByBatchNumber" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		DELETE FROM bal_estimate_express_expenditure WHERE batch_number=#{batchNumber }
+	</delete>
+	<delete id="cleanEstimate" parameterType="Object">
+		DROP TABLE IF EXISTS tb_warehouse_express_data_settlement_temp_${batchNumber };
+		DELETE FROM bal_estimate_express_expenditure WHERE batch_number=#{batchNumber };
+	</delete>
+</mapper>

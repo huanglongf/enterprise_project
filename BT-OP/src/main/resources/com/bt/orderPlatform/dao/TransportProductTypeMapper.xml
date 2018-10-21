@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.TransportProductTypeMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.TransportProductType" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="express_code" property="express_code"/>
+	<result column="product_type_code" property="product_type_code"/>
+	<result column="product_type_name" property="product_type_name"/>
+	<result column="status" property="status"/>
+</resultMap>
+       
+<!-- tb_transport_product_type table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,express_code,product_type_code,product_type_name,status
+</sql>
+  
+<sql id="Base_Column_List_join" >
+	 a.id,a.create_time, a.create_user, a.update_time, a.update_user, a.express_code, a.product_type_code, a.product_type_name, a.status, b.express_name
+</sql>   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="express_code != null and express_code != ''" >
+	    and express_code =  #{express_code}
+	</if>
+	 	<if test="product_type_code != null and product_type_code != ''" >
+	    and product_type_code =  #{product_type_code}
+	</if>
+	 	<if test="product_type_name != null and product_type_name != ''" >
+	    and product_type_name =  #{product_type_name}
+	</if>
+	 	<if test="status != null and status != ''" >
+	    and status =  #{status}
+	</if>
+</trim>
+</sql>
+   
+   
+   <sql id="where_Clause_join">
+where  a.express_code=b.express_code
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and a.id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and a.create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and a.create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and a.update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and a.update_user =  #{update_user}
+	</if>
+	 	<if test="express_code != null and express_code != ''" >
+	    and a.express_code =  #{express_code}
+	</if>
+	 	<if test="product_type_code != null and product_type_code != ''" >
+	    and a.product_type_code =  #{product_type_code}
+	</if>
+	 	<if test="product_type_name != null and product_type_name != ''" >
+	    and a.product_type_name =  #{product_type_name}
+	</if>
+	 	<if test="status != null and status != ''" >
+	    and a.status =  #{status}
+	</if>
+</trim>
+</sql>
+
+<!-- 插入快递业务明细表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.TransportProductType" >
+  insert into tb_transport_product_type(create_time,create_user,update_time,update_user,express_code,product_type_code,product_type_name,status)
+ values(#{create_time},#{create_user},#{update_time},#{update_user},#{express_code},#{product_type_code},#{product_type_name},#{status})
+</insert>
+
+<!-- 修改快递业务明细表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.TransportProductType" >
+  update tb_transport_product_type set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},express_code=#{express_code},product_type_code=#{product_type_code},product_type_name=#{product_type_name},status=#{status} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改快递业务明细表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.TransportProductType" >
+	update tb_transport_product_type set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="express_code != null  and express_code != '' ">
+		express_code=#{express_code},
+	</if>
+	<if test="product_type_code != null  and product_type_code != '' ">
+		product_type_code=#{product_type_code},
+	</if>
+	<if test="product_type_name != null  and product_type_name != '' ">
+		product_type_name=#{product_type_name},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除快递业务明细表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_transport_product_type where id = #{id}
+</update>
+<!-- 批量删除快递业务明细表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_transport_product_type where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找快递业务明细表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_transport_product_type where id = #{id}
+</select>
+  	
+<!-- 快递业务明细表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.TransportProductTypeQueryParam">
+	select count(1) from tb_transport_product_type 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的快递业务明细表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.TransportProductTypeQueryParam">
+	select 
+	<include refid="Base_Column_List_join"/>
+	from tb_transport_product_type a,  tb_transport_vendor b 
+	<include refid="where_Clause_join"/>
+	 LIMIT #{firstResult}, #{maxResult} ;
+</select>
+
+
+<!--依据条件统计 快递业务明细表总数-->
+<select id="Count" resultType="java.lang.Integer"  parameterType="com.bt.orderPlatform.controller.form.TransportProductTypeQueryParam">
+	select count(1) from  tb_transport_product_type a ,  tb_transport_vendor b 
+		<include refid="where_Clause_join"/>
+</select>
+ 
+ <select id='findAllType'  resultMap="BaseResultMap" >
+   select 
+	<include refid="Base_Column_List"/>
+	from tb_transport_product_type 
+<!-- where product_type_code 	in (#{carrier_type}) -->
+</select>
+
+
+ <select id='findByExpresscode'  resultMap="BaseResultMap" >
+   select 
+	<include refid="Base_Column_List"/>
+	from tb_transport_product_type where 
+	express_code=#{express_code}
+</select>
+ 
+ 
+  	
+<!-- 满足条件的快递业务明细表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.TransportProductTypeQueryParam">
+	select 
+	<include refid="Base_Column_List_join"/>
+	from tb_transport_product_type a ,  tb_transport_vendor b
+	<include refid="where_Clause_join"/>
+	<if test="firstResult != null and firstResult != ''" >
+	limit #{firstResult},#{maxResult};
+	</if>
+</select>
+
+
+<select id="selectByProducttype_code" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.TransportProductTypeQueryParam">
+	select 
+	<include refid="Base_Column_List" /> 
+	from tb_transport_product_type 
+	where product_type_code =#{producttype_code} and express_code = #{express_code}
+</select>
+
+
+<select id="selectByProducttype_name" resultMap="BaseResultMap" >
+	select 
+	<include refid="Base_Column_List" /> 
+	from tb_transport_product_type 
+	where product_type_name =#{producttype_name} and express_code=#{express_code} and product_type_code in (${producttype_code})
+</select>
+
+
+
+<select id="findByExpresscodeAndcarrier_type" resultMap="BaseResultMap" >
+	select 
+	<include refid="Base_Column_List" /> 
+	from tb_transport_product_type 
+	where  express_code=#{express_code} and product_type_code in (${producttype_code})
+</select>
+
+
+  <delete id='deleteBatch' parameterType="java.util.ArrayList">
+	delete 	 from tb_transport_product_type where id in 
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach>
+   	 </delete>	
+   	 
+   	 <update id="updateTransportProduct" parameterType="com.bt.orderPlatform.model.TransportProductType" >
+	update tb_transport_product_type set 
+	<trim  suffixOverrides="," >
+		update_time=now(),
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="express_code != null  and express_code != '' ">
+		express_code=#{express_code},
+	</if>
+	<if test="product_type_code != null  and product_type_code != '' ">
+		product_type_code=#{product_type_code},
+	</if>
+	<if test="product_type_name != null  and product_type_name != '' ">
+		product_type_name=#{product_type_name},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	</trim> where id=#{id}
+</update>
+   	 
+</mapper>   

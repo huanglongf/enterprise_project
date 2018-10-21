@@ -1,0 +1,72 @@
+------------------------------------------------
+version:1.0
+author:Yuriy.Jiang
+------------------------------------------------
+
+eclipse过滤文件或文件夹方法
+eclipse的 
+Window版  	Window > Preferences > Team > Ignored Resources里添加要过滤的文件或文件夹名
+Mac版 	 	Eclipse > 偏好设置 > Team > Ignored Resources里添加要过滤的文件或文件夹名
+
+[工具类]
+MD5工具类：com.bt.lmis.utils.MD5Util.java
+Session工具类：com.bt.lmis.utils.SessionUtils.java
+
+[命名规则]
+--首单词字母大写
+1.Entity：统一在com.bt.lmis.model下
+	类名统一格式为		Xxxx.java
+2.Dao：统一在com.bt.lmis.dao下
+	类名统一格式为		XxxxMapper.java
+	SQL名统一格式为	XxxxMapper.xml
+3.Service：统一在com.bt.lmis.service下
+	类名统一格式为		XxxxService.java
+4.Service实现类：统一在com.bt.lmis.service.impl下
+	类名统一格式为		XxxxServiceImpl.java
+5.Controller：统一在com.bt.lmis.controller下
+	类名统一格式为		XxxxController.java
+6.jsp：统一在/webapp/lmis/下
+	查询列表页面命名格式为 xxx_list.jsp
+	编辑页面命名格式为 xxx_form.jsp
+	*/webapp/assets/文件夹存储ace-admin系统文件 css/js/img
+	*/webapp/lmis／文件夹存储 LMIS系统页面
+	*JSP主页面框架在center.jsp中
+	*DIV跳转方法在yuriy.jsp中 方法为 openDiv(url);
+7.Spring映射地址格式为  @RequestMapping("/control/xxxxController")
+	如果不添加control拦截器将无法拦截
+8.分页控件用法案例文件:/webapp/lmis/pagination_example.jsp
+9.Form表单验证 使用开源Validform控件
+	使用方式 
+	1.JSP页面Ajax异步提交
+	$(function(){
+		$(".registerform").Validform({
+			tiptype:2,
+			ajaxPost:true,
+			callback:function(data){
+				if(data.status=="y"){
+					alert(data+"----"+data.status);
+					setTimeout(function(){
+						$.Hidemsg(); //公用方法关闭信息提示框;显示方法是$.Showmsg("message goes here.");
+					},1000);
+				}
+			}
+		});
+	});
+	2.Controller接收请求返回参数
+	public void testValidform(ModelMap map,HttpServletRequest req,HttpServletResponse res){
+		res.setContentType("text/xml; charset=utf-8");
+		res.setCharacterEncoding("utf-8");
+		PrintWriter out = null;
+		try {
+			out = res.getWriter();
+			JSONObject json = new JSONObject();
+			json.put("status", "y");
+			out.write(json.toString());
+		} catch(Exception e){
+			logger.error(e);
+		}
+		out.flush();
+		out.close();
+	}
+	
+	select warehouse,express_number,store_name,province,weight,transport_name from tb_warehouse_express_data where warehouse ='吴江新地1号美妆仓'

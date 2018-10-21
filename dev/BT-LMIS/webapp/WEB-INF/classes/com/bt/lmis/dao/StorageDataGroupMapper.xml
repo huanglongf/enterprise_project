@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.StorageDataGroupMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.StorageDataGroup" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="contract_id" property="contract_id"/>
+	<result column="billing_cycle" property="billing_cycle"/>
+	<result column="fixed_qty" property="fixed_qty"/>
+	<result column="fixed_unit" property="fixed_unit"/>
+	<result column="fixed_cost" property="fixed_cost"/>
+	<result column="fixed_comment" property="fixed_comment"/>
+	<result column="tray_qty" property="tray_qty"/>
+	<result column="tray_qtyunit" property="tray_qtyunit"/>
+	<result column="tray_cost" property="tray_cost"/>
+	<result column="tray_comment" property="tray_comment"/>
+	<result column="area_qty" property="area_qty"/>
+	<result column="area_costunit" property="area_costunit"/>
+	<result column="area_cost" property="area_cost"/>
+	<result column="area_comment" property="area_comment"/>
+	<result column="piece_qty" property="piece_qty"/>
+	<result column="piece_unit" property="piece_unit"/>
+	<result column="piece_cost" property="piece_cost"/>
+	<result column="piece_comment" property="piece_comment"/>
+	<result column="batch" property="batch"/>
+</resultMap>
+       
+<!-- tb_storage_data_group table all fields -->
+<sql id="Base_Column_List" >
+	 id,batch,create_time,create_user,update_time,update_user,contract_id,billing_cycle,fixed_qty,fixed_unit,fixed_cost,fixed_comment,tray_qty,tray_qtyunit,tray_cost,tray_comment,area_qty,area_costunit,area_cost,area_comment,piece_qty,piece_unit,piece_cost,piece_comment
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	 	<if test="batch != null and batch != ''" >
+	    and batch =  #{batch}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="contract_id != null" >
+	    and contract_id =  #{contract_id}
+	</if>
+	<if test="billing_cycle != null" >
+	    and billing_cycle =  #{billing_cycle}
+	</if>
+	<if test="fixed_qty != null" >
+	    and fixed_qty =  #{fixed_qty}
+	</if>
+	 	<if test="fixed_unit != null and fixed_unit != ''" >
+	    and fixed_unit =  #{fixed_unit}
+	</if>
+	<if test="fixed_cost != null" >
+	    and fixed_cost =  #{fixed_cost}
+	</if>
+	 	<if test="fixed_comment != null and fixed_comment != ''" >
+	    and fixed_comment =  #{fixed_comment}
+	</if>
+	<if test="tray_qty != null" >
+	    and tray_qty =  #{tray_qty}
+	</if>
+	 	<if test="tray_qtyunit != null and tray_qtyunit != ''" >
+	    and tray_qtyunit =  #{tray_qtyunit}
+	</if>
+	<if test="tray_cost != null" >
+	    and tray_cost =  #{tray_cost}
+	</if>
+	 	<if test="tray_comment != null and tray_comment != ''" >
+	    and tray_comment =  #{tray_comment}
+	</if>
+	<if test="area_qty != null" >
+	    and area_qty =  #{area_qty}
+	</if>
+	 	<if test="area_costunit != null and area_costunit != ''" >
+	    and area_costunit =  #{area_costunit}
+	</if>
+	<if test="area_cost != null" >
+	    and area_cost =  #{area_cost}
+	</if>
+	 	<if test="area_comment != null and area_comment != ''" >
+	    and area_comment =  #{area_comment}
+	</if>
+	<if test="piece_qty != null" >
+	    and piece_qty =  #{piece_qty}
+	</if>
+	 	<if test="piece_unit != null and piece_unit != ''" >
+	    and piece_unit =  #{piece_unit}
+	</if>
+	<if test="piece_cost != null" >
+	    and piece_cost =  #{piece_cost}
+	</if>
+	 	<if test="piece_comment != null and piece_comment != ''" >
+	    and piece_comment =  #{piece_comment}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入仓储费明细汇总表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.StorageDataGroup" >
+  insert into tb_storage_data_group(id,batch,create_time,create_user,update_time,update_user,contract_id,billing_cycle,fixed_qty,fixed_unit,fixed_cost,fixed_comment,tray_qty,tray_qtyunit,tray_cost,tray_comment,area_qty,area_costunit,area_cost,area_comment,piece_qty,piece_unit,piece_cost,piece_comment)
+ values(#{id},#{batch},#{create_time},#{create_user},#{update_time},#{update_user},#{contract_id},#{billing_cycle},#{fixed_qty},#{fixed_unit},#{fixed_cost},#{fixed_comment},#{tray_qty},#{tray_qtyunit},#{tray_cost},#{tray_comment},#{area_qty},#{area_costunit},#{area_cost},#{area_comment},#{piece_qty},#{piece_unit},#{piece_cost},#{piece_comment})
+</insert>
+
+<insert id="save" parameterType="com.bt.lmis.model.StorageDataGroup" >
+  insert into tb_storage_data_group(id,batch,create_time,create_user,update_time,update_user,contract_id,billing_cycle,fixed_qty,fixed_unit,fixed_cost,fixed_comment,tray_qty,tray_qtyunit,tray_cost,tray_comment,area_qty,area_costunit,area_cost,area_comment,piece_qty,piece_unit,piece_cost,piece_comment)
+ values(#{id},#{batch},#{create_time},#{create_user},#{update_time},#{update_user},#{contract_id},#{billing_cycle},#{fixed_qty},#{fixed_unit},#{fixed_cost},#{fixed_comment},#{tray_qty},#{tray_qtyunit},#{tray_cost},#{tray_comment},#{area_qty},#{area_costunit},#{area_cost},#{area_comment},#{piece_qty},#{piece_unit},#{piece_cost},#{piece_comment})
+</insert>
+
+<!-- 修改仓储费明细汇总表-->  
+ <update id="update" parameterType="com.bt.lmis.model.StorageDataGroup" >
+  update tb_storage_data_group set create_time=#{create_time},batch=#{batch}create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},contract_id=#{contract_id},billing_cycle=#{billing_cycle},fixed_qty=#{fixed_qty},fixed_unit=#{fixed_unit},fixed_cost=#{fixed_cost},fixed_comment=#{fixed_comment},tray_qty=#{tray_qty},tray_qtyunit=#{tray_qtyunit},tray_cost=#{tray_cost},tray_comment=#{tray_comment},area_qty=#{area_qty},area_costunit=#{area_costunit},area_cost=#{area_cost},area_comment=#{area_comment},piece_qty=#{piece_qty},piece_unit=#{piece_unit},piece_cost=#{piece_cost},piece_comment=#{piece_comment} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改仓储费明细汇总表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.StorageDataGroup" >
+	update tb_storage_data_group set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="contract_id != null  ">
+		contract_id=#{contract_id},
+	</if>
+	<if test="billing_cycle != null  ">
+		billing_cycle=#{billing_cycle},
+	</if>
+	<if test="fixed_qty != null  ">
+		fixed_qty=#{fixed_qty},
+	</if>
+	<if test="fixed_unit != null  and fixed_unit != '' ">
+		fixed_unit=#{fixed_unit},
+	</if>
+	<if test="fixed_cost != null  ">
+		fixed_cost=#{fixed_cost},
+	</if>
+	<if test="fixed_comment != null  and fixed_comment != '' ">
+		fixed_comment=#{fixed_comment},
+	</if>
+	<if test="tray_qty != null  ">
+		tray_qty=#{tray_qty},
+	</if>
+	<if test="tray_qtyunit != null  and tray_qtyunit != '' ">
+		tray_qtyunit=#{tray_qtyunit},
+	</if>
+	<if test="tray_cost != null  ">
+		tray_cost=#{tray_cost},
+	</if>
+	<if test="tray_comment != null  and tray_comment != '' ">
+		tray_comment=#{tray_comment},
+	</if>
+	<if test="area_qty != null  ">
+		area_qty=#{area_qty},
+	</if>
+	<if test="area_costunit != null  and area_costunit != '' ">
+		area_costunit=#{area_costunit},
+	</if>
+	<if test="area_cost != null  ">
+		area_cost=#{area_cost},
+	</if>
+	<if test="area_comment != null  and area_comment != '' ">
+		area_comment=#{area_comment},
+	</if>
+	<if test="piece_qty != null  ">
+		piece_qty=#{piece_qty},
+	</if>
+	<if test="piece_unit != null  and piece_unit != '' ">
+		piece_unit=#{piece_unit},
+	</if>
+	<if test="piece_cost != null  ">
+		piece_cost=#{piece_cost},
+	</if>
+	<if test="piece_comment != null  and piece_comment != '' ">
+		piece_comment=#{piece_comment},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除仓储费明细汇总表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_storage_data_group where id = #{id}
+</update>
+<!-- 批量删除仓储费明细汇总表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_storage_data_group where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+ <!-- 客户运费结算汇总 -->
+ <select id="findByCSP" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   select 
+    sum(t.total_price) as total_price,
+    sum(t.bill_num) as bill_num,
+    t.contract_id,
+    t.transport_name,
+    date_format(t.create_date,'%Y%m%d') as create_date
+   from se_pool_trans t
+   where 1=1
+     and  date_format(t.create_date,'%Y%m')=date_format(#{create_date},'%Y%m')
+     and  contract_type=4
+     and  contract_id=#{contract_id}
+   group by t.contract_id,t.transport_name
+ </select>
+ 
+<!-- 依据主键查找仓储费明细汇总表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_storage_data_group where id = #{id}
+</select>
+  	
+<!-- 仓储费明细汇总表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageDataGroupQueryParam">
+	select count(1) from tb_storage_data_group 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的仓储费明细汇总表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageDataGroupQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_data_group 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 仓储费明细汇总表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageDataGroupQueryParam">
+	select count(1) from tb_storage_data_group 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的仓储费明细汇总表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageDataGroupQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_data_group 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="findBySDG" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.StorageDataGroup">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_data_group 
+	<include refid="where_Clause"/>
+</select>
+<delete id='delete_readyForResettle' parameterType="com.bt.lmis.model.StorageDataGroup">
+delete from tb_storage_data_group where 1=1
+and contract_id=#{contract_id} and billing_cycle=#{billing_cycle};
+</delete>
+	
+
+</mapper>   

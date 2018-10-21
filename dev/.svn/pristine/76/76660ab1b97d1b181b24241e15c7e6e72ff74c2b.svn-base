@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.StorageExpendituresOriginalDataMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.StorageExpendituresOriginalData" >
+	<result column="id" property="id"/>
+	<result column="primary_id" property="primary_id"/>
+	<result column="bat_id" property="bat_id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="warehouse_type" property="warehouse_type"/>
+	<result column="start_time" property="start_time"/>
+	<result column="store_id" property="store_id"/>
+	<result column="store_name" property="store_name"/>
+	<result column="is_closed" property="is_closed"/>
+	<result column="trade" property="trade"/>
+	<result column="warehouse_code" property="warehouse_code"/>
+	<result column="warehouse_name" property="warehouse_name"/>
+	<result column="system_warehouse" property="system_warehouse"/>
+	<result column="whcost_center" property="whcost_center"/>
+	<result column="cost_code" property="cost_code"/>
+	<result column="cost_name" property="cost_name"/>
+	<result column="area_code" property="area_code"/>
+	<result column="area_name" property="area_name"/>
+	<result column="item_type" property="item_type"/>
+	<result column="storage_type" property="storage_type"/>
+	<result column="storage_acreage" property="storage_acreage"/>
+	<result column="acreage_unit" property="acreage_unit"/>
+	<result column="settle_flag" property="settle_flag"/>
+	<result column="acreage_size" property="acreage_size"/>
+	<result column="volume_size" property="volume_size"/>
+	<result column="qty_size" property="qty_size"/>
+</resultMap>
+       
+<!-- tb_storage_expenditures_original_data table all fields -->
+<sql id="Base_Column_List" >
+	 id,primary_id,bat_id,create_time,create_user,update_time,update_user,warehouse_type,start_time,store_id,store_name,is_closed,trade,warehouse_code,warehouse_name,system_warehouse,whcost_center,cost_code,cost_name,area_code,area_name,item_type,storage_type,storage_acreage,acreage_unit,settle_flag,acreage_size,volume_size,qty_size
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="primary_id != null" >
+	    and primary_id =  #{primary_id}
+	</if>
+	 	<if test="bat_id != null and bat_id != ''" >
+	    and bat_id =  #{bat_id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="warehouse_type != null" >
+	    and warehouse_type =  #{warehouse_type}
+	</if>
+	<if test="start_time != null" >
+	    and start_time =  #{start_time}
+	</if>
+	 	<if test="store_id != null and store_id != ''" >
+	    and store_id =  #{store_id}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	<if test="is_closed != null" >
+	    and is_closed =  #{is_closed}
+	</if>
+	 	<if test="trade != null and trade != ''" >
+	    and trade =  #{trade}
+	</if>
+	 	<if test="warehouse_code != null and warehouse_code != ''" >
+	    and warehouse_code =  #{warehouse_code}
+	</if>
+	 	<if test="warehouse_name != null and warehouse_name != ''" >
+	    and warehouse_name =  #{warehouse_name}
+	</if>
+	 	<if test="system_warehouse != null and system_warehouse != ''" >
+	    and system_warehouse =  #{system_warehouse}
+	</if>
+	 	<if test="whcost_center != null and whcost_center != ''" >
+	    and whcost_center =  #{whcost_center}
+	</if>
+	 	<if test="cost_code != null and cost_code != ''" >
+	    and cost_code =  #{cost_code}
+	</if>
+	 	<if test="cost_name != null and cost_name != ''" >
+	    and cost_name =  #{cost_name}
+	</if>
+	 	<if test="area_code != null and area_code != ''" >
+	    and area_code =  #{area_code}
+	</if>
+	 	<if test="area_name != null and area_name != ''" >
+	    and area_name =  #{area_name}
+	</if>
+	 	<if test="item_type != null and item_type != ''" >
+	    and item_type =  #{item_type}
+	</if>
+	<if test="storage_type != null" >
+	    and storage_type =  #{storage_type}
+	</if>
+	<if test="storage_acreage != null" >
+	    and storage_acreage =  #{storage_acreage}
+	</if>
+	 	<if test="acreage_unit != null and acreage_unit != ''" >
+	    and acreage_unit =  #{acreage_unit}
+	</if>
+	<if test="settle_flag != null" >
+	    and settle_flag =  #{settle_flag}
+	</if>
+	<if test="acreage_size != null" >
+	    and acreage_size =  #{acreage_size}
+	</if>
+	<if test="volume_size != null" >
+	    and volume_size =  #{volume_size}
+	</if>
+	<if test="qty_size != null" >
+	    and qty_size =  #{qty_size}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入storageExpendituresOriginalData -->
+<insert id="insert" parameterType="com.bt.lmis.model.StorageExpendituresOriginalData" >
+  insert into tb_storage_expenditures_original_data(id,primary_id,bat_id,create_time,create_user,update_time,update_user,warehouse_type,start_time,store_id,store_name,is_closed,trade,warehouse_code,warehouse_name,system_warehouse,whcost_center,cost_code,cost_name,area_code,area_name,item_type,storage_type,storage_acreage,acreage_unit,settle_flag,acreage_size,volume_size,qty_size)
+ values(#{id},#{primary_id},#{bat_id},#{create_time},#{create_user},#{update_time},#{update_user},#{warehouse_type},#{start_time},#{store_id},#{store_name},#{is_closed},#{trade},#{warehouse_code},#{warehouse_name},#{system_warehouse},#{whcost_center},#{cost_code},#{cost_name},#{area_code},#{area_name},#{item_type},#{storage_type},#{storage_acreage},#{acreage_unit},#{settle_flag},#{acreage_size},#{volume_size},#{qty_size})
+</insert>
+
+<!-- 修改storageExpendituresOriginalData-->  
+ <update id="update" parameterType="com.bt.lmis.model.StorageExpendituresOriginalData" >
+  update tb_storage_expenditures_original_data set primary_id=#{primary_id},bat_id=#{bat_id},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},warehouse_type=#{warehouse_type},start_time=#{start_time},store_id=#{store_id},store_name=#{store_name},is_closed=#{is_closed},trade=#{trade},warehouse_code=#{warehouse_code},warehouse_name=#{warehouse_name},system_warehouse=#{system_warehouse},whcost_center=#{whcost_center},cost_code=#{cost_code},cost_name=#{cost_name},area_code=#{area_code},area_name=#{area_name},item_type=#{item_type},storage_type=#{storage_type},storage_acreage=#{storage_acreage},acreage_unit=#{acreage_unit},settle_flag=#{settle_flag},acreage_size=#{acreage_size},volume_size=#{volume_size},qty_size=#{qty_size} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改storageExpendituresOriginalData-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.StorageExpendituresOriginalData" >
+	update tb_storage_expenditures_original_data set 
+	<trim  suffixOverrides="," >
+	<if test="primary_id != null  ">
+		primary_id=#{primary_id},
+	</if>
+	<if test="bat_id != null  and bat_id != '' ">
+		bat_id=#{bat_id},
+	</if>
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="warehouse_type != null  ">
+		warehouse_type=#{warehouse_type},
+	</if>
+	<if test="start_time != null  ">
+		start_time=#{start_time},
+	</if>
+	<if test="store_id != null  and store_id != '' ">
+		store_id=#{store_id},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="is_closed != null  ">
+		is_closed=#{is_closed},
+	</if>
+	<if test="trade != null  and trade != '' ">
+		trade=#{trade},
+	</if>
+	<if test="warehouse_code != null  and warehouse_code != '' ">
+		warehouse_code=#{warehouse_code},
+	</if>
+	<if test="warehouse_name != null  and warehouse_name != '' ">
+		warehouse_name=#{warehouse_name},
+	</if>
+	<if test="system_warehouse != null  and system_warehouse != '' ">
+		system_warehouse=#{system_warehouse},
+	</if>
+	<if test="whcost_center != null  and whcost_center != '' ">
+		whcost_center=#{whcost_center},
+	</if>
+	<if test="cost_code != null  and cost_code != '' ">
+		cost_code=#{cost_code},
+	</if>
+	<if test="cost_name != null  and cost_name != '' ">
+		cost_name=#{cost_name},
+	</if>
+	<if test="area_code != null  and area_code != '' ">
+		area_code=#{area_code},
+	</if>
+	<if test="area_name != null  and area_name != '' ">
+		area_name=#{area_name},
+	</if>
+	<if test="item_type != null  and item_type != '' ">
+		item_type=#{item_type},
+	</if>
+	<if test="storage_type != null  ">
+		storage_type=#{storage_type},
+	</if>
+	<if test="storage_acreage != null  ">
+		storage_acreage=#{storage_acreage},
+	</if>
+	<if test="acreage_unit != null  and acreage_unit != '' ">
+		acreage_unit=#{acreage_unit},
+	</if>
+	<if test="settle_flag != null  ">
+		settle_flag=#{settle_flag},
+	</if>
+	<if test="acreage_size != null  ">
+		acreage_size=#{acreage_size},
+	</if>
+	<if test="volume_size != null  ">
+		volume_size=#{volume_size},
+	</if>
+	<if test="qty_size != null  ">
+		qty_size=#{qty_size},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除storageExpendituresOriginalData -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_storage_expenditures_original_data where id = #{id}
+</update>
+<!-- 批量删除storageExpendituresOriginalData -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_storage_expenditures_original_data where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找storageExpendituresOriginalData -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_storage_expenditures_original_data where id = #{id}
+</select>
+  	
+<!-- storageExpendituresOriginalData 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageExpendituresOriginalDataQueryParam">
+	select count(1) from tb_storage_expenditures_original_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的storageExpendituresOriginalData集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageExpendituresOriginalDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_expenditures_original_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 storageExpendituresOriginalData总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageExpendituresOriginalDataQueryParam">
+	select count(1) from tb_storage_expenditures_original_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的storageExpendituresOriginalData集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageExpendituresOriginalDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_expenditures_original_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id='getPageData' parameterType="com.bt.lmis.controller.form.StorageExpendituresOriginalDataQueryParam"  resultType='com.bt.lmis.model.StorageExpendituresOriginalData'>
+select id,
+  primary_id,
+  bat_id,
+  create_time,
+  create_user,
+  update_time,
+  update_user,
+  warehouse_type,
+  start_time,
+  store_id,
+  store_name,
+  is_closed,
+  trade,
+  warehouse_code,
+  warehouse_name,
+  system_warehouse,
+  whcost_center,
+  cost_code,
+  cost_name,
+  area_code,
+  area_name,
+  item_type,
+  storage_type,
+  storage_acreage,
+  acreage_unit,
+  settle_flag,
+  acreage_size,
+  volume_size,
+  qty_size  
+  FROM
+tb_storage_expenditures_original_data
+<include refid="where_Clause"/>
+<if test="end_start_time!= null and end_start_time != ''">
+and start_time &lt;=#{end_start_time}
+</if>
+<if test="begin_start_time!= null and begin_start_time != ''">
+and start_time &gt;=#{begin_start_time}
+</if>
+<if test="maxResult!= null and maxResult != ''">
+limit #{firstResult}, #{maxResult}
+</if>
+</select>
+  	
+ <select id='getCount' parameterType="com.bt.lmis.controller.form.StorageExpendituresOriginalDataQueryParam"  resultType='java.lang.Integer'> 
+ select 
+  count(1) 
+  FROM
+tb_storage_expenditures_original_data
+<include refid="where_Clause"/>
+ <if test="end_start_time!= null and end_start_time != ''">
+and start_time &lt;=#{end_start_time}
+</if>
+<if test="begin_start_time!= null and begin_start_time != ''">
+and start_time &gt;=#{begin_start_time}
+</if>
+ </select> 	
+<select  id='getListMap' parameterType='com.bt.lmis.controller.form.StorageExpendituresOriginalDataQueryParam' resultType='java.util.HashMap'>
+select  * from tb_storage_expenditures_original_data
+<include refid="where_Clause"/>
+ <if test="end_start_time!= null and end_start_time != ''">
+and start_time &lt;=#{end_start_time}
+</if>
+<if test="begin_start_time!= null and begin_start_time != ''">
+and start_time &gt;=#{begin_start_time}
+</if>
+
+</select>
+</mapper>   

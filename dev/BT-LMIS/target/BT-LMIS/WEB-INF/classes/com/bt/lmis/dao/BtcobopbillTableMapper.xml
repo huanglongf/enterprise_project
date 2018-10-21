@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.BtcobopbillTableMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.BtcobopbillTable" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="bbt_table_id" property="bbt_table_id"/>
+	<result column="bbt_interval" property="bbt_interval"/>
+	<result column="bbt_bill_price" property="bbt_bill_price"/>
+	<result column="bbt_bill_price_unit" property="bbt_bill_price_unit"/>
+	<result column="bbt_piece_price" property="bbt_piece_price"/>
+	<result column="bbt_piece_price_unit" property="bbt_piece_price_unit"/>
+</resultMap>
+       
+<!-- tb_btcobopbill_table table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,bbt_table_id,bbt_interval,bbt_bill_price,bbt_bill_price_unit,bbt_piece_price,bbt_piece_price_unit
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="bbt_table_id != null" >
+	    and bbt_table_id =  #{bbt_table_id}
+	</if>
+	 	<if test="bbt_interval != null and bbt_interval != ''" >
+	    and bbt_interval =  #{bbt_interval}
+	</if>
+	<if test="bbt_bill_price != null" >
+	    and bbt_bill_price =  #{bbt_bill_price}
+	</if>
+	 	<if test="bbt_bill_price_unit != null and bbt_bill_price_unit != ''" >
+	    and bbt_bill_price_unit =  #{bbt_bill_price_unit}
+	</if>
+	<if test="bbt_piece_price != null" >
+	    and bbt_piece_price =  #{bbt_piece_price}
+	</if>
+	 	<if test="bbt_piece_price_unit != null and bbt_piece_price_unit != ''" >
+	    and bbt_piece_price_unit =  #{bbt_piece_price_unit}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入B2C出库操作费按单出库 -->
+<insert id="insert" parameterType="com.bt.lmis.model.BtcobopbillTable" >
+  insert into tb_btcobopbill_table(id,create_time,create_user,update_time,update_user,bbt_table_id,bbt_interval,bbt_bill_price,bbt_bill_price_unit,bbt_piece_price,bbt_piece_price_unit)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{bbt_table_id},#{bbt_interval},#{bbt_bill_price},#{bbt_bill_price_unit},#{bbt_piece_price},#{bbt_piece_price_unit})
+</insert>
+
+<!-- 修改B2C出库操作费按单出库-->  
+ <update id="update" parameterType="com.bt.lmis.model.BtcobopbillTable" >
+  update tb_btcobopbill_table set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},bbt_table_id=#{bbt_table_id},bbt_interval=#{bbt_interval},bbt_bill_price=#{bbt_bill_price},bbt_bill_price_unit=#{bbt_bill_price_unit},bbt_piece_price=#{bbt_piece_price},bbt_piece_price_unit=#{bbt_piece_price_unit} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改B2C出库操作费按单出库-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.BtcobopbillTable" >
+	update tb_btcobopbill_table set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="bbt_table_id != null  ">
+		bbt_table_id=#{bbt_table_id},
+	</if>
+	<if test="bbt_interval != null  and bbt_interval != '' ">
+		bbt_interval=#{bbt_interval},
+	</if>
+	<if test="bbt_bill_price != null  ">
+		bbt_bill_price=#{bbt_bill_price},
+	</if>
+	<if test="bbt_bill_price_unit != null  and bbt_bill_price_unit != '' ">
+		bbt_bill_price_unit=#{bbt_bill_price_unit},
+	</if>
+	<if test="bbt_piece_price != null  ">
+		bbt_piece_price=#{bbt_piece_price},
+	</if>
+	<if test="bbt_piece_price_unit != null  and bbt_piece_price_unit != '' ">
+		bbt_piece_price_unit=#{bbt_piece_price_unit},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除B2C出库操作费按单出库 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_btcobopbill_table where id = #{id}
+</update>
+<!-- 批量删除B2C出库操作费按单出库 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_btcobopbill_table where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找B2C出库操作费按单出库 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_btcobopbill_table where id = #{id}
+</select>
+  	
+<!-- B2C出库操作费按单出库 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.BtcobopbillTableQueryParam">
+	select count(1) from tb_btcobopbill_table 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的B2C出库操作费按单出库集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.BtcobopbillTableQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_btcobopbill_table 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 B2C出库操作费按单出库总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.BtcobopbillTableQueryParam">
+	select count(1) from tb_btcobopbill_table 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的B2C出库操作费按单出库集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.BtcobopbillTableQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_btcobopbill_table 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

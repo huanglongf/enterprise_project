@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.AinMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.Ain" >
+	<result column="id" property="id"/>
+	<result column="hc_no" property="hc_no"/>
+	<result column="hc_name" property="hc_name"/>
+	<result column="hc_unit" property="hc_unit"/>
+	<result column="cat_type" property="cat_type"/>
+	<result column="cat_type_name" property="cat_type_name"/>
+	<result column="hc_price" property="hc_price"/>
+	<result column="price_unit" property="price_unit"/>
+	<result column="bill_num" property="bill_num"/>
+	<result column="create_user" property="create_user"/>
+	<result column="create_date" property="create_date"/>
+	<result column="contract_id" property="contract_id"/>
+	<result column="hc_type" property="hc_type"/>
+</resultMap>
+       
+<!-- hc_main table all fields -->
+<sql id="Base_Column_List" >
+	 id,hc_no,hc_name,hc_unit,cat_type,cat_type_name,hc_price,price_unit,bill_num,create_user,create_date,contract_id,hc_type
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	 	<if test="hc_no != null and hc_no != ''" >
+	    and hc_no =  #{hc_no}
+	</if>
+	 	<if test="hc_name != null and hc_name != ''" >
+	    and hc_name =  #{hc_name}
+	</if>
+	 	<if test="hc_unit != null and hc_unit != ''" >
+	    and hc_unit =  #{hc_unit}
+	</if>
+	<if test="cat_type != null" >
+	    and cat_type =  #{cat_type}
+	</if>
+	 	<if test="cat_type_name != null and cat_type_name != ''" >
+	    and cat_type_name =  #{cat_type_name}
+	</if>
+	<if test="hc_price != null" >
+	    and hc_price =  #{hc_price}
+	</if>
+	 	<if test="price_unit != null and price_unit != ''" >
+	    and price_unit =  #{price_unit}
+	</if>
+	<if test="bill_num != null" >
+	    and bill_num =  #{bill_num}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="create_date != null" >
+	    and create_date =  #{create_date}
+	</if>
+	<if test="contract_id != null" >
+	    and contract_id =  #{contract_id}
+	</if>
+	<if test="hc_type != null" >
+	    and hc_type =  #{hc_type}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入耗材费 -->
+<insert id="insert" parameterType="com.bt.lmis.model.Ain" >
+  insert into hc_main(id,hc_no,hc_name,hc_unit,cat_type,cat_type_name,hc_price,price_unit,bill_num,create_user,create_date,contract_id,hc_type)
+ values(#{id},#{hc_no},#{hc_name},#{hc_unit},#{cat_type},#{cat_type_name},#{hc_price},#{price_unit},#{bill_num},#{create_user},#{create_date},#{contract_id},#{hc_type})
+</insert>
+
+<!-- 修改耗材费-->  
+ <update id="update" parameterType="com.bt.lmis.model.Ain" >
+  update hc_main set hc_no=#{hc_no},hc_name=#{hc_name},hc_unit=#{hc_unit},cat_type=#{cat_type},cat_type_name=#{cat_type_name},hc_price=#{hc_price},price_unit=#{price_unit},bill_num=#{bill_num},create_user=#{create_user},create_date=#{create_date},contract_id=#{contract_id},hc_type=#{hc_type} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改耗材费-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.Ain" >
+	update hc_main set 
+	<trim  suffixOverrides="," >
+	<if test="hc_no != null  and hc_no != '' ">
+		hc_no=#{hc_no},
+	</if>
+	<if test="hc_name != null  and hc_name != '' ">
+		hc_name=#{hc_name},
+	</if>
+	<if test="hc_unit != null  and hc_unit != '' ">
+		hc_unit=#{hc_unit},
+	</if>
+	<if test="cat_type != null  ">
+		cat_type=#{cat_type},
+	</if>
+	<if test="cat_type_name != null  and cat_type_name != '' ">
+		cat_type_name=#{cat_type_name},
+	</if>
+	<if test="hc_price != null  ">
+		hc_price=#{hc_price},
+	</if>
+	<if test="price_unit != null  and price_unit != '' ">
+		price_unit=#{price_unit},
+	</if>
+	<if test="bill_num != null  ">
+		bill_num=#{bill_num},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="create_date != null  ">
+		create_date=#{create_date},
+	</if>
+	<if test="contract_id != null  ">
+		contract_id=#{contract_id},
+	</if>
+	<if test="hc_type != null  ">
+		hc_type=#{hc_type},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除耗材费 -->
+<update id="delete" parameterType="Object">
+	delete 	 from hc_main where id = #{id}
+</update>
+<!-- 批量删除耗材费 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from hc_main where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找耗材费 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from hc_main where id = #{id}
+</select>
+  	
+<!-- 耗材费 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AinQueryParam">
+	select count(1) from hc_main 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的耗材费集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AinQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from hc_main 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 耗材费总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AinQueryParam">
+	select count(1) from hc_main 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的耗材费集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AinQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from hc_main 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="findByCBID" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from hc_main 
+	where contract_id =  #{cbid}
+</select>
+  	
+</mapper>   

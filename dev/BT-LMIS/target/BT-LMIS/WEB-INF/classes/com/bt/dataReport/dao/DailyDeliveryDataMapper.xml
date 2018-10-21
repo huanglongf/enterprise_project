@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.dataReport.dao.DailyDeliveryDataMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.dataReport.bean.DailyDeliveryDataBean" >
+    	<result column="transport_time" property="transportTime"/>
+    	<result column="transport_hour" property="transportHour"/>
+    	<result column="warehouse_name" property="warehouseName"/>
+    	<result column="start_province" property="startProvince"/>
+    	<result column="store_code" property="storeCode"/>
+    	<result column="store_name" property="storeName"/>
+        <result column="transport_code" property="transportCode"/>
+        <result column="transport_name" property="transportName"/>
+        <result column="order_count" property="orderCount"/>
+  </resultMap>
+  	<sql id="skq_view_sheet_03_list">
+		 skq.transport_time transport_time,
+		 skq.transport_hour transport_hour,
+		 skq.warehouse_name warehouse_name,
+		 skq.start_province start_province,
+		 skq.store_code store_code,
+		 skq.store_name store_name,
+		 skq.transport_code transport_code,
+		 ttv.transport_name transport_name,
+		 skq.order_count order_count
+	</sql>
+   <select id="selectDailyDeliveryDataBean" parameterType="com.bt.dataReport.bean.DailyDeliveryDataBean" resultMap="BaseResultMap">
+	  SELECT <include refid="skq_view_sheet_03_list" /> FROM skq_view_sheet_03 skq LEFT JOIN tb_transport_vendor ttv ON skq.transport_code = ttv.transport_code
+	  <include refid="refid_list"></include>
+	</select>
+	<sql id="refid_list">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="warehouseName != null and warehouseName != '' ">
+	             and skq.warehouse_name = #{warehouseName}
+	        </if>
+	        <if test="storeName != null and storeName != '' ">
+	             and skq.store_name = #{storeName}
+	        </if>
+	        <if test="transportName != null and transportName != '' ">
+	             and ttv.transport_name = #{transportName}
+	        </if>
+	        <if test="beginDateTime != null and beginDateTime != '' ">
+	             and skq.express_time <![CDATA[>=]]> #{beginDateTime}
+	        </if>
+	        <if test="endDateTime != null and endDateTime != '' ">
+	             and skq.express_time <![CDATA[<=]]> #{endDateTime}
+	        </if>
+	        ORDER BY skq.transport_time,skq.transport_hour,skq.warehouse_name,skq.store_code,skq.start_province,skq.transport_code
+	    </trim>
+	</sql>
+	  <select id="exportDailyDeliveryDataBean" parameterType="com.bt.dataReport.bean.DailyDeliveryDataBean" resultMap="BaseResultMap">
+	  SELECT <include refid="skq_view_sheet_03_list" /> FROM skq_view_sheet_03 skq LEFT JOIN tb_transport_vendor ttv ON skq.transport_code = ttv.transport_code
+	  <trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="warehouseName != null and warehouseName != '' ">
+	             and skq.warehouse_name = #{warehouseName}
+	        </if>
+	        <if test="storeName != null and storeName != '' ">
+	             and skq.store_name = #{storeName}
+	        </if>
+	        <if test="transportName != null and transportName != '' ">
+	             and ttv.transport_name = #{transportName}
+	        </if>
+	        <if test="beginDateTime != null and beginDateTime != '' ">
+	             and skq.express_time <![CDATA[>=]]> #{beginDateTime}
+	        </if>
+	        <if test="endDateTime != null and endDateTime != '' ">
+	             and skq.express_time <![CDATA[<=]]> #{endDateTime}
+	        </if>
+	       ORDER BY skq.transport_time,skq.transport_hour,skq.warehouse_name,skq.store_code,skq.start_province,skq.transport_code
+	       limit 10000
+	    </trim>
+	</select>
+</mapper>

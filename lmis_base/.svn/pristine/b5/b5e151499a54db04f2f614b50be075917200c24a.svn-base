@@ -1,0 +1,118 @@
+package com.lmis.setup.pageLayout.controller;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSON;
+import com.lmis.basis.store.model.BasisStore;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.setup.constantSql.model.SetupConstantSql;
+import com.lmis.setup.page.model.SetupPage;
+import com.lmis.setup.pageLayout.model.SetupPageLayout;
+import com.lmis.setup.pageLayout.model.ViewSetupPageLayout;
+import com.lmis.setup.pageLayout.service.SetupPageLayoutServiceInterface;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+/** 
+ * @ClassName: SetupPageLayoutController
+ * @Description: TODO(这里用一句话描述这个类的作用)
+ * @author Ian.Huang
+ * @date 2017年12月8日 下午6:45:25 
+ * 
+ */
+@Api(value = "公共配置-4.4页面布局")
+@RestController
+@RequestMapping(value="/setup")
+public class SetupPageLayoutController {
+
+	@Resource(name="setupPageLayoutServiceImpl")
+	SetupPageLayoutServiceInterface<SetupPageLayout> setupPageLayoutService;
+	
+	@Value("${base.page.pageNum}")
+    int defPageNum;
+	
+	@Value("${base.page.pageSize}")
+    int defPageSize;
+	
+	@ApiOperation(value="4.4.1查询页面布局")
+	@RequestMapping(value = "/selectSetupPageLayout", method = RequestMethod.POST)
+    public String selectSetupPageLayout(@ModelAttribute ViewSetupPageLayout viewSetupPageLayout, @ModelAttribute LmisPageObject pageObject) {
+		pageObject.setDefaultPage(defPageNum, defPageSize);
+        return JSON.toJSONString(setupPageLayoutService.queryPage(viewSetupPageLayout, pageObject));
+    }
+	
+	@ApiOperation(value="4.4.1查询页面布局(动态传参)")
+	@RequestMapping(value = "/selectSetupPageLayoutDynamic", method = RequestMethod.POST)
+    public String selectSetupPageLayoutDynamic(@ModelAttribute DynamicSqlParam<SetupPageLayout> dynamicSqlParam, @ModelAttribute LmisPageObject pageObject) throws Exception {
+		pageObject.setDefaultPage(defPageNum, defPageSize);
+        return JSON.toJSONString(setupPageLayoutService.executeSelect(dynamicSqlParam, pageObject));
+    }
+	
+	@ApiOperation(value="4.4.2新增页面布局")
+	@RequestMapping(value = "/addSetupPageLayout", method = RequestMethod.POST)
+    public String addSetupPageLayout(@ModelAttribute SetupPageLayout setupPageLayout) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.addSetupPageLayout(setupPageLayout));
+    }
+	
+	@ApiOperation(value="4.4.2新增页面布局(动态传参)")
+	@RequestMapping(value = "/addSetupPageLayoutDynamic", method = RequestMethod.POST)
+    public String addSetupPageLayoutDynamic(@ModelAttribute DynamicSqlParam<SetupPageLayout> dynamicSqlParam) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.executeInsert(dynamicSqlParam));
+    }
+	
+	@ApiOperation(value="4.4.3修改页面布局")
+	@RequestMapping(value = "/updateSetupPageLayout", method = RequestMethod.POST)
+    public String updateSetupPageLayout(@ModelAttribute SetupPageLayout setupPageLayout) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.updateSetupPageLayout(setupPageLayout));
+    }
+	
+	@ApiOperation(value="4.4.3修改页面布局(动态传参)")
+	@RequestMapping(value = "/updateSetupPageLayoutDynamic", method = RequestMethod.POST)
+    public String updateSetupPageLayoutDynamic(@ModelAttribute DynamicSqlParam<SetupPageLayout> dynamicSqlParam) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.executeUpdate(dynamicSqlParam));
+    }
+	
+	@ApiOperation(value="4.4.4删除页面布局（删除页面布局前的信息提示功能）")
+	@RequestMapping(value = "/preDeleteSetupPageLayout", method = RequestMethod.POST)
+    public String preDeleteSetupPageLayout(@ModelAttribute SetupPageLayout setupPageLayout) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.preDeleteSetupPageLayout(setupPageLayout));
+    }
+	
+	@ApiOperation(value="4.4.4删除页面布局")
+	@RequestMapping(value = "/deleteSetupPageLayout", method = RequestMethod.POST)
+    public String deleteSetupPageLayout(@ModelAttribute SetupPageLayout setupPageLayout) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.deleteSetupPageLayout(setupPageLayout));
+    }
+	
+	@ApiOperation(value="4.4.5查看页面布局")
+	@RequestMapping(value = "/getSetupPageLayout", method = RequestMethod.POST)
+    public String checkSetupPageLayout(@ModelAttribute SetupPageLayout setupPageLayout) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.getSetupPageLayout(setupPageLayout));
+    }
+	
+	@ApiOperation(value="4.4.5查看页面布局(动态传参)")
+	@RequestMapping(value = "/getSetupPageLayoutDynamic", method = RequestMethod.POST)
+    public String checkSetupPageLayoutDynamic(@ModelAttribute DynamicSqlParam<SetupPageLayout> dynamicSqlParam) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.executeSelect(dynamicSqlParam));
+    }
+	
+	@ApiOperation(value="查看页面布局配置")
+	@RequestMapping(value = "/checkSetupPageLayout", method = RequestMethod.POST)
+    public String checkSetupPageLayout(@ModelAttribute DynamicSqlParam<SetupPageLayout> dynamicSqlParam) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.executeSelect(dynamicSqlParam));
+    }
+	
+	@ApiOperation(value="4.4.16展示页面布局")
+	@RequestMapping(value = "/previewSetupPageLayout", method = RequestMethod.POST)
+    public String previewSetupPageLayout(@ModelAttribute SetupPageLayout setupPageLayout) throws Exception {
+        return JSON.toJSONString(setupPageLayoutService.previewSetupPageLayout(setupPageLayout));
+    }
+}

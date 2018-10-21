@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.InterfaceRouteinfoMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.InterfaceRouteinfo" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="transport_code" property="transport_code"/>
+	<result column="waybill" property="waybill"/>
+	<result column="route_time" property="route_time"/>
+	<result column="route_city" property="route_city"/>
+	<result column="facility_no" property="facility_no"/>
+	<result column="facility_name" property="facility_name"/>
+	<result column="route_remark" property="route_remark"/>
+	<result column="route_opcode" property="route_opcode"/>
+	<result column="flag" property="flag"/>
+</resultMap>
+       
+<!-- er_interface_routeinfo table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,transport_code,waybill,route_time,route_city,facility_no,facility_name,route_remark,route_opcode,flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="transport_code != null and transport_code != ''" >
+	    and transport_code =  #{transport_code}
+	</if>
+	 	<if test="waybill != null and waybill != ''" >
+	    and waybill =  #{waybill}
+	</if>
+	<if test="route_time != null" >
+	    and route_time =  #{route_time}
+	</if>
+	 	<if test="route_city != null and route_city != ''" >
+	    and route_city =  #{route_city}
+	</if>
+	 	<if test="facility_no != null and facility_no != ''" >
+	    and facility_no =  #{facility_no}
+	</if>
+	 	<if test="facility_name != null and facility_name != ''" >
+	    and facility_name =  #{facility_name}
+	</if>
+	 	<if test="route_remark != null and route_remark != ''" >
+	    and route_remark =  #{route_remark}
+	</if>
+	 	<if test="route_opcode != null and route_opcode != ''" >
+	    and route_opcode =  #{route_opcode}
+	</if>
+	<if test="flag != null" >
+	    and flag =  #{flag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入路由信息接口表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.InterfaceRouteinfo" >
+  insert into er_interface_routeinfo(id,create_time,create_user,update_time,update_user,transport_code,waybill,route_time,route_city,facility_no,facility_name,route_remark,route_opcode,flag)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{transport_code},#{waybill},#{route_time},#{route_city},#{facility_no},#{facility_name},#{route_remark},#{route_opcode},#{flag})
+</insert>
+
+<!-- 修改路由信息接口表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.InterfaceRouteinfo" >
+  update er_interface_routeinfo set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},transport_code=#{transport_code},waybill=#{waybill},route_time=#{route_time},route_city=#{route_city},facility_no=#{facility_no},facility_name=#{facility_name},route_remark=#{route_remark},route_opcode=#{route_opcode},flag=#{flag} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改路由信息接口表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.InterfaceRouteinfo" >
+	update er_interface_routeinfo set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="transport_code != null  and transport_code != '' ">
+		transport_code=#{transport_code},
+	</if>
+	<if test="waybill != null  and waybill != '' ">
+		waybill=#{waybill},
+	</if>
+	<if test="route_time != null  ">
+		route_time=#{route_time},
+	</if>
+	<if test="route_city != null  and route_city != '' ">
+		route_city=#{route_city},
+	</if>
+	<if test="facility_no != null  and facility_no != '' ">
+		facility_no=#{facility_no},
+	</if>
+	<if test="facility_name != null  and facility_name != '' ">
+		facility_name=#{facility_name},
+	</if>
+	<if test="route_remark != null  and route_remark != '' ">
+		route_remark=#{route_remark},
+	</if>
+	<if test="route_opcode != null  and route_opcode != '' ">
+		route_opcode=#{route_opcode},
+	</if>
+	<if test="flag != null  ">
+		flag=#{flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除路由信息接口表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from er_interface_routeinfo where id = #{id}
+</update>
+
+
+<update id="deleteByWaybill" parameterType="com.bt.orderPlatform.model.InterfaceRouteinfo">
+	delete 	 from er_interface_routeinfo where waybill = #{waybill}
+</update>
+
+
+<!-- 批量删除路由信息接口表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from er_interface_routeinfo where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找路由信息接口表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_interface_routeinfo where id = #{id}
+</select>
+
+
+<select id="selectByWaybill"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_interface_routeinfo where waybill = #{waybill} ORDER BY route_time
+</select>
+
+<select id="queryByWayBillAndTime"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_interface_routeinfo where waybill = #{waybill}
+	 ORDER BY route_time DESC LIMIT 0,1
+</select>
+<select id="queryByWayBillAndASCTime"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_interface_routeinfo where waybill = #{waybill}
+	 ORDER BY route_time ASC LIMIT 0,1
+</select>
+
+
+<select id="queryByWaybill"  resultType="java.lang.Integer" >
+	select MAX(route_opcode) 
+	 from er_interface_routeinfo where waybill = #{waybill}
+</select>
+  	
+<!-- 路由信息接口表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.InterfaceRouteinfoQueryParam">
+	select count(1) from er_interface_routeinfo 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的路由信息接口表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.InterfaceRouteinfoQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_interface_routeinfo 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 路由信息接口表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.InterfaceRouteinfoQueryParam">
+	select count(1) from er_interface_routeinfo 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的路由信息接口表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.InterfaceRouteinfoQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_interface_routeinfo 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<insert id="insertByObj" parameterType="com.bt.orderPlatform.model.InterfaceRouteinfo" >
+  insert into er_interface_routeinfo(
+  create_time,
+  create_user,
+  update_time,
+  update_user,
+  transport_code,
+  waybill,
+  route_time,
+  route_city,
+  facility_no,
+  facility_name,
+  route_remark,
+  route_opcode,
+  flag,
+  route_source) values (#{create_time},#{create_user},#{update_time},#{update_user},#{transport_code},#{waybill},#{route_time},#{route_city},#{facility_no},#{facility_name},#{route_remark},#{route_opcode},#{flag},#{route_source})
+</insert>
+  	
+</mapper>   

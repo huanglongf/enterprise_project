@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.NextPriceInternalMapper" >
+	<resultMap type="com.bt.lmis.model.NextPriceInternalRedisBean" id= "nextPriceInternalRedisBean" >
+		<result column= "redis_key" property= "key" />
+		<collection column= "redis_key" select= "get" property= "value" javaType= "ArrayList" ofType= "com.bt.lmis.model.NextPriceInternal" />
+	</resultMap>
+	<select id= "get" parameterType= "String" resultType= "com.bt.lmis.model.NextPriceInternal" >
+		SELECT 
+			internal,
+			internal_unit,
+			price,
+			price_unit
+		FROM
+			tb_internal_price
+		where
+			CONCAT("NPI", table_id)= #{redis_key }
+	</select>
+	<select id= "loadNextPriceInternal" resultMap= "nextPriceInternalRedisBean" >
+		SELECT
+			CONCAT("NPI", szxz_id) as redis_key
+		FROM
+			tb_origin_desitination_paramlist a
+		LEFT JOIN (
+			SELECT
+				transport_name,
+				transport_type
+			FROM
+				tb_transport_vendor
+		) b ON a.carrier_name= b.transport_name
+		WHERE
+			b.transport_type= 1
+	</select>
+	<select id= "selectNextPriceInternal" parameterType= "Object" resultType= "java.util.HashMap" >
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			internal,
+			internal_unit,
+			price,
+			price_unit,
+			table_id
+		from
+			tb_internal_price
+		where
+			table_id = #{table_id}
+	</select>
+</mapper>   

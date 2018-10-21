@@ -1,0 +1,9 @@
+.ul-common li {
+	list-style: none;
+}
+.ul-header {
+	font-weight: bold;
+}
+.text-inline {
+	white-space: nowrap;
+}

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.OperatorMapper" >
+	<select id="countData" parameterType="Object" resultType="Integer">
+		select
+			count(0)
+		from
+			jk_settle_operator
+		where
+			bat_id = #{bat_id }
+		<if test="pro_flag != null and pro_flag !=''">
+			and pro_flag = #{pro_flag }
+		</if>
+	</select>
+	<delete id="del" parameterType="Object">
+		delete from jk_settle_operator where bat_id = #{bat_id }
+	</delete>
+	<select id="getBatIds" parameterType="Object" resultType="Integer">
+		select
+			distinct bat_id
+		from
+			jk_settle_operator
+		where
+			1 = 1
+		<if test="bat_id != null">
+			and bat_id = #{bat_id }
+		</if>
+		order by bat_id desc
+	</select>
+	<select id="getBatId" resultType="Integer">
+		select
+			max(bat_id)
+		from
+			jk_settle_operator
+	</select>
+	<insert id="insertRawData" parameterType="com.bt.lmis.model.Operator" useGeneratedKeys="true" keyProperty="id">
+		insert into jk_settle_operator
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			bat_id,
+			<if test="order_type != null and order_type != ''">
+				order_type,
+			</if>
+			<if test="operation_time != null and operation_time != ''">
+				operation_time,
+			</if>
+			<if test="store_code != null and store_code != ''">
+				store_code,
+			</if>
+			<if test="store_name != null and store_name != ''">
+				store_name,
+			</if>
+			<if test="job_orderno != null and job_orderno != ''">
+				job_orderno,
+			</if>
+			<if test="related_orderno != null and related_orderno != ''">
+				related_orderno,
+			</if>
+			<if test="job_type != null and job_type != ''">
+				job_type,
+			</if>
+			<if test="storaggelocation_code != null and storaggelocation_code != ''">
+				storaggelocation_code,
+			</if>
+			<if test="in_num != null and in_num != ''">
+				in_num,
+			</if>
+			<if test="out_num != null and out_num != ''">
+				out_num,
+			</if>
+			<if test="item_number != null and item_number != ''">
+				item_number,
+			</if>
+			<if test="sku_number != null and sku_number != ''">
+				sku_number,
+			</if>
+			<if test="art_no != null and art_no != ''">
+				art_no,
+			</if>
+			<if test="item_name != null and item_name != ''">
+				item_name,
+			</if>
+			<if test="item_size != null and item_size != ''">
+				item_size,
+			</if>
+			<if test="inventory_status != null and inventory_status != ''">
+				inventory_status,
+			</if>
+			<if test="operator != null and operator != ''">
+				operator,
+			</if>
+			<if test="create_date != null and create_date != ''">
+				create_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{bat_id, jdbcType=INTEGER },
+			<if test="order_type != null and order_type != ''">
+				#{order_type, jdbcType=VARCHAR },
+			</if>
+			<if test="operation_time != null and operation_time != ''">
+				#{operation_time, jdbcType=DATE },
+			</if>
+			<if test="store_code != null and store_code != ''">
+				#{store_code, jdbcType=VARCHAR },
+			</if>
+			<if test="store_name != null and store_name != ''">
+				#{store_name, jdbcType=VARCHAR },
+			</if>
+			<if test="job_orderno != null and job_orderno != ''">
+				#{job_orderno, jdbcType=VARCHAR },
+			</if>
+			<if test="related_orderno != null and related_orderno != ''">
+				#{related_orderno, jdbcType=VARCHAR },
+			</if>
+			<if test="job_type != null and job_type != ''">
+				#{job_type, jdbcType=VARCHAR },
+			</if>
+			<if test="storaggelocation_code != null and storaggelocation_code != ''">
+				#{storaggelocation_code, jdbcType=VARCHAR },
+			</if>
+			<if test="in_num != null and in_num != ''">
+				#{in_num, jdbcType=VARCHAR },
+			</if>
+			<if test="out_num != null and out_num != ''">
+				#{out_num, jdbcType=VARCHAR },
+			</if>
+			<if test="item_number != null and item_number != ''">
+				#{item_number, jdbcType=VARCHAR },
+			</if>
+			<if test="sku_number != null and sku_number != ''">
+				#{sku_number, jdbcType=VARCHAR },
+			</if>
+			<if test="art_no != null and art_no != ''">
+				#{art_no, jdbcType=VARCHAR },
+			</if>
+			<if test="item_name != null and item_name != ''">
+				#{item_name, jdbcType=VARCHAR },
+			</if>
+			<if test="item_size != null and item_size != ''">
+				#{item_size, jdbcType=VARCHAR },
+			</if>
+			<if test="inventory_status != null and inventory_status != ''">
+				#{inventory_status, jdbcType=VARCHAR },
+			</if>
+			<if test="operator != null and operator != ''">
+				#{operator, jdbcType=VARCHAR },
+			</if>
+			<if test="create_date != null and create_date != ''">
+				#{create_date, jdbcType=DATE },
+			</if>
+		</trim>
+	</insert>
+</mapper>   

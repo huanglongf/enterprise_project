@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.DistributionMapper">
+	<select id="getOrderInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	   select 
+	   t.id as wo_id,
+	   t.create_time,
+	   t.create_by,
+	   t.update_time,
+	   t.update_by,
+	   t.wo_no,
+	   t.wo_source,
+	   t.wo_alloc_status,
+	   t.wo_process_status,
+	   t.wo_type,
+	   (select w.`name` from wk_type w where w.`code`=t.wo_type and w.flag=1) as wo_type_name,
+	   t.wo_level,
+	   (select v.`name` from wk_level v where v.`code`=t.wo_level and v.flag=1) as wo_level_name,
+	   t.store,
+	   t.warehouse,
+	   t.carrier,
+	   t.express_number,
+	   t.platform_number,
+	   t.related_number,
+<!-- 	   t.job_number, -->
+	   t.order_amount,
+	   t.logistics_status,
+	   t.warning_type,
+	   t.warning_level,
+	   t.recipient,
+	   t.phone,
+	   t.address,
+	   t.allocated_by,
+	   t.processor,
+	   t.process_content,
+	   t.pause_reason,
+	   t.estimated_time_of_completion,
+	   t.standard_manhours,
+	   t.process_start_point,
+	   t.actual_manhours,
+	   w.warehouse_type
+	   from wo_master t
+	   left join tb_warehouse w on w.warehouse_code=t.warehouse
+	   where t.wo_alloc_status='WAA'
+	     and t.wo_process_status='NEW'
+	    <if test= "woId != null and woId != ''" >
+	       and  t.id= #{woId}
+	    </if>
+	    <if test= "woId == null or woId == ''" >
+	       order by t.create_time asc
+	       limit 0,300
+	    </if>	    
+	</select>
+	
+	
+	<select id="getFirstResult" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+		  t.id,
+		  t.create_by,
+		  t.create_time,
+		  t.update_by,
+		  t.update_time,
+		  t.group,
+		  t.carrier,
+		  t.wo_type,
+		  t.wo_level
+	 from wo_group_workPower t left join s_group s on s.id=t.`group`
+	 where 1=1
+       and s.if_allot=1
+	   and t.carrier=#{carrier}
+	   and t.wo_type=#{wo_type}
+	   and t.wo_level=#{wo_level}
+	</select>
+	
+	
+	
+   <select id="getSecondResult" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+		  t.id,
+		  t.create_by,
+		  t.create_time,
+		  t.update_by,
+		  t.update_time,
+		  t.group,
+		  (select s.group_name from wo_group s where s.id=t.group and s.`status`=1 and s.dFlag=1) as group_name,
+		  t.selfwarehouse,
+		  t.outsourcedwarehouse,
+		  t.store,
+		  #{wo_id} as 'wo_id'
+	  from wo_group_storePower t
+	 where 1=1
+	   and t.group=#{group}
+	   and (t.selfwarehouse=#{selfwarehouseFlag}  or t.outsourcedwarehouse=#{outsourcedwarehouseFlag})
+	   and t.store=#{store}
+   </select>
+	
+	<select id="getMaxUsable" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	  t.group,
+	  t.employee,
+	  t.usable_time,
+	  #{wo_id} as 'wo_id'
+	  from view_max_usable_time_emp t
+	  where t.group=#{group}
+	  order by usable_time desc
+	  limit 0,1
+	</select>
+	
+	<select id="getMaxUsable_beforehand" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	  t.group,
+	  t.employee,
+	  t.usable_time,
+	  #{wo_id} as 'wo_id',
+	  t.date as date_time,
+	  t.id as hour_id
+	  from view_max_usable_time_emp t
+	  where t.group=#{group}
+	</select>
+	
+	<update id="updateInfo" parameterType="java.util.HashMap">
+	   update wo_master set wo_alloc_status='WMA',wo_alloc_status_display='待手动分配',update_time=now(),update_by='job' where id=#{wo_id};
+	</update>
+	
+	
+	<select id="wk_distribution_pro" parameterType="java.util.HashMap" statementType="CALLABLE" resultType="java.util.HashMap">
+<!-- 	 {call pro_wk_distribution_new( -->
+<!-- 	                #{hour_id,,jdbcType=VARCHAR,mode=IN}, -->
+<!-- 					#{wo_id,jdbcType=VARCHAR,mode=IN}, -->
+<!-- 					#{emp_id,jdbcType=VARCHAR,mode=IN}, -->
+<!-- 					#{out_result,jdbcType=VARCHAR,mode=OUT}, -->
+<!-- 					#{out_result_reason,jdbcType=VARCHAR,mode=OUT})} -->
+	 {call pro_wk_distribution(
+					#{wo_id,jdbcType=VARCHAR,mode=IN},
+					#{emp_id,jdbcType=VARCHAR,mode=IN},
+					#{out_result,jdbcType=VARCHAR,mode=OUT},
+					#{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+	
+	<select id="getMaxId" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	   select (ifnull(max(t.sort),0)+1)  from wo_event_monitor t where t.wo_id=#{wo_id} ;
+	</select>
+	
+	<insert id="insertLogInfo" parameterType="java.util.HashMap">
+	  insert into wo_event_monitor
+	  (
+	  id,
+	  sort,
+	  create_by,
+	  create_time,
+	  update_by,
+	  update_time,
+	  wo_id,
+	  event,
+	  remark,
+	  event_status,
+	  event_description
+	  )values(
+	  #{id},
+	  #{sort},
+	  '0',
+	  now(),
+	  '0',
+	  now(),
+	  #{wo_id},
+	  'ALLOC_ERROR',
+	  #{remark},
+	  '0',
+	   '自动分配'
+	  )
+	</insert>
+	
+	<select id="getSetParam" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	  t.args_1 as status,
+	  t.args_2 as sleepTime,
+	  t.args_3 as spaceTime,
+	  t.args_4 as macId,
+	  t.args_5 as if_beforehand
+	  from s_method_param t
+	  where t.type='wk0001'
+	</select>
+</mapper>

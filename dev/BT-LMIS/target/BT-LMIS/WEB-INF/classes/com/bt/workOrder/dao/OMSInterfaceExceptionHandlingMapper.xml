@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.workOrder.dao.OMSInterfaceExceptionHandlingMapper" >
+	<select id="query" parameterType="com.bt.workOrder.controller.param.OMSInterfaceExcpeitonHandlingParam" resultType="java.util.Map">
+		SELECT
+			id,
+			claimCode,
+			systemCode,
+			omsOrderCode,
+			erpOrderCode,
+			rasCode,
+			shopOwner,
+			createTime,
+			createUserName,
+			transName,
+			transCode,
+			transNumber,
+			CASE claimReason
+			WHEN "1" THEN "无路由信息"
+			WHEN "2" THEN "路由停滞24H"
+			WHEN "3" THEN "买家未收到货（路由显示签收）"
+			WHEN "4" THEN "物流反馈丢件"
+			WHEN "5" THEN "开箱少/无货"
+			WHEN "6" THEN "物流反馈破损"
+			WHEN "7" THEN "开箱后发现破损"
+			WHEN "8" THEN "开箱确认错发"
+			WHEN "9" THEN "补偿金"
+			ELSE "" END AS claimReason,
+			CASE isOuterContainerDamaged
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isOuterContainerDamaged,
+			CASE isPackageDamaged
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isPackageDamaged,
+			CASE isTwoSubBox
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isTwoSubBox,
+			CASE isHasProductReturn
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isHasProductReturn,
+			CASE isFilledWith
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isFilledWith,
+			remark,
+			fileUrl,
+			extralAmt,
+			extralRemark,
+			CASE exception_handling
+			WHEN "0" THEN "未处理"
+			WHEN "2" THEN "已处理"
+			WHEN "3" THEN "已反馈"
+			ELSE "" END AS exception_handling,
+			totalClaimAmt
+		FROM jk_claim_data
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			pro_flag > 1 
+			<!-- 默认查询未处理 -->
+			<if test="claim_flag == null or claim_flag == '' ">
+				AND exception_handling = 0
+			</if>
+			<if test="claim_flag != null and claim_flag != '' ">
+				AND exception_handling = #{claim_flag}
+			</if>
+			<if test="claimCode != null and claimCode != '' ">
+				AND claimCode LIKE CONCAT('%', #{claimCode}, '%')
+	        </if>     
+	        <if test="systemCode != null and systemCode != '' ">
+	        	AND systemCode LIKE CONCAT('%', #{systemCode}, '%')
+	        </if>
+	        <if test="omsOrderCode != null and omsOrderCode != '' ">
+	        	AND omsOrderCode LIKE CONCAT('%', #{omsOrderCode}, '%')
+	        </if>
+	        <if test="erpOrderCode != null and erpOrderCode != '' ">
+	        	AND erpOrderCode LIKE CONCAT('%', #{erpOrderCode}, '%')
+	        </if>
+	        <if test="rasCode != null and rasCode != '' ">
+	        	AND rasCode LIKE CONCAT('%', #{rasCode}, '%')
+	        </if>
+	        <if test="transNumber != null and transNumber != '' ">
+	        	AND transNumber LIKE CONCAT('%', #{transNumber}, '%')
+	        </if>
+		</trim>
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id="count" parameterType="com.bt.workOrder.controller.param.OMSInterfaceExcpeitonHandlingParam" resultType="Integer">
+		SELECT COUNT(1) FROM jk_claim_data
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			pro_flag > 1 
+			<!-- 默认查询未处理 -->
+			<if test="claim_flag == null or claim_flag == '' ">
+				AND exception_handling = 0
+			</if>
+			<if test="claim_flag != null and claim_flag != '' ">
+				AND exception_handling = #{claim_flag}
+			</if>
+			<if test="claimCode != null and claimCode != '' ">
+				AND claimCode LIKE CONCAT('%', #{claimCode}, '%')
+	        </if>     
+	        <if test="systemCode != null and systemCode != '' ">
+	        	AND systemCode LIKE CONCAT('%', #{systemCode}, '%')
+	        </if>
+	        <if test="omsOrderCode != null and omsOrderCode != '' ">
+	        	AND omsOrderCode LIKE CONCAT('%', #{omsOrderCode}, '%')
+	        </if>
+	        <if test="erpOrderCode != null and erpOrderCode != '' ">
+	        	AND erpOrderCode LIKE CONCAT('%', #{erpOrderCode}, '%')
+	        </if>
+	        <if test="rasCode != null and rasCode != '' ">
+	        	AND rasCode LIKE CONCAT('%', #{rasCode}, '%')
+	        </if>
+	        <if test="transNumber != null and transNumber != '' ">
+	        	AND transNumber LIKE CONCAT('%', #{transNumber}, '%')
+	        </if>
+		</trim>
+	</select>
+	<select id="queryById" parameterType="com.bt.workOrder.controller.param.OMSInterfaceExcpeitonHandlingParam" resultType="java.util.Map">
+		SELECT
+			id,
+			claimCode,
+			systemCode,
+			omsOrderCode,
+			erpOrderCode,
+			rasCode,
+			shopOwner,
+			createTime,
+			createUserName,
+			transName,
+			transCode,
+			transNumber,
+			CASE claimReason
+			WHEN "1" THEN "无路由信息"
+			WHEN "2" THEN "路由停滞24H"
+			WHEN "3" THEN "买家未收到货（路由显示签收）"
+			WHEN "4" THEN "物流反馈丢件"
+			WHEN "5" THEN "开箱少/无货"
+			WHEN "6" THEN "物流反馈破损"
+			WHEN "7" THEN "开箱后发现破损"
+			WHEN "8" THEN "开箱确认错发"
+			WHEN "9" THEN "补偿金"
+			ELSE "" END AS claimReason,
+			CASE isOuterContainerDamaged
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isOuterContainerDamaged,
+			CASE isPackageDamaged
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isPackageDamaged,
+			CASE isTwoSubBox
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isTwoSubBox,
+			CASE isHasProductReturn
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isHasProductReturn,
+			CASE isFilledWith
+			WHEN "1" THEN "是"
+			WHEN "0" THEN "否"
+			ELSE "" END AS isFilledWith,
+			remark,
+			fileUrl,
+			extralAmt,
+			extralRemark,
+			totalClaimAmt
+		FROM jk_claim_data
+		where id = #{id}
+	</select>
+	<select id="getCarriers" resultType="java.util.Map">
+		SELECT transport_code, transport_name FROM tb_transport_vendor WHERE validity = 1
+	</select>
+	<select id="getWarehouses" resultType="java.util.Map">
+		SELECT warehouse_code, warehouse_name FROM tb_warehouse WHERE validity = 1
+	</select>
+	<select id="getStores" resultType="java.util.Map">
+		SELECT store_code, store_name FROM tb_store WHERE validity = 1
+	</select>
+	<select id="getByExpressNumber" resultType="java.util.Map" parameterType="Object">
+		SELECT
+			tb_transport_vendor.transport_code,
+			tb_transport_vendor.transport_name,
+			tb_warehouse.warehouse_code,
+			tb_warehouse.warehouse_name,
+			DATE_FORMAT(transport_time, '%Y-%m-%d %H:%i:%s') AS transport_time,
+			tb_store.store_code,
+			tb_store.store_name,
+			order_amount,
+			shiptoname,
+			wo_waybill_master.phone,
+			detail_address
+		FROM wo_waybill_master
+		LEFT JOIN tb_store ON wo_waybill_master.store_name = tb_store.store_name
+		LEFT JOIN tb_warehouse ON wo_waybill_master.warehouse = tb_warehouse.warehouse_name
+		LEFT JOIN tb_transport_vendor ON wo_waybill_master.transport_name = tb_transport_vendor.transport_name
+		WHERE express_number = #{express_number }
+	</select>
+	<select id="judgeExceptionHandling" parameterType="Integer" resultType="Boolean">
+		SELECT exception_handling FROM jk_claim_data WHERE id= #{id }
+	</select>
+	<select id="queryEHById" parameterType="Integer" resultType="int">
+		SELECT exception_handling FROM jk_claim_data WHERE id= #{id }
+	</select>
+	<select id= "getInitialLevel" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT code, name
+		FROM wk_level
+		WHERE sort = (
+			SELECT MIN(wk_level.sort)
+			FROM (
+				SELECT level
+				FROM wk_order_type
+				WHERE STATUS = 1
+				AND wk_type = #{wk_type }
+			) a LEFT JOIN wk_level ON a.level = wk_level.code
+		)
+	</select>
+	<update id="shiftProcessFlag" parameterType="Object" >
+		UPDATE jk_claim_data SET exception_handling=1 WHERE id= #{id }
+	</update>
+	<update id="updateById" parameterType="Object">
+		UPDATE jk_claim_data SET exception_handling=2 WHERE 
+		 id= #{id } 
+		 and exception_handling=0
+	</update>
+</mapper>

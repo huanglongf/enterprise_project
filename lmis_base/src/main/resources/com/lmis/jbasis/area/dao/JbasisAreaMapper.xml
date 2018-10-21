@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.jbasis.area.dao.JbasisAreaMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.area.model.JbasisArea" id="JbasisAreaMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+		<result column="area_name" property="areaName" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="pid" property="pid" jdbcType="VARCHAR" />
+		<result column="haschild" property="haschild" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.area.model.ViewJbasisArea" id="ViewJbasisAreaMap">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+		<result column="area_name" property="areaName" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="pid" property="pid" jdbcType="VARCHAR" />
+		<result column="haschild" property="haschild" jdbcType="INTEGER" />
+		<result column="pName" property="pName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		area_code,
+		area_name,
+		level,
+		pid,
+		haschild
+	</sql>
+	<sql id="ViewJbasisArea_Column_List">
+		id,
+		area_code,
+		area_name,
+		level,
+		pid,
+		haschild
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			area_code,
+			area_name,
+			level,
+			pid,
+			haschild
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.jbasis.area.model.JbasisArea">
+		INSERT INTO jbasis_area(
+		<include refid="Base_Column_List"/>)
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{areaCode, jdbcType=VARCHAR},
+			#{areaName, jdbcType=VARCHAR},
+			#{level, jdbcType=INTEGER},
+			#{pid, jdbcType=VARCHAR},
+			#{haschild, jdbcType=INTEGER},
+		</trim>
+	</insert>
+
+	<insert id="insert" parameterType="java.util.List">
+		INSERT INTO USER
+		<include refid="inser_list"></include>
+		VALUES
+		<foreach collection="list" index="obj" item="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.areaCode, jdbcType=VARCHAR},
+				#{obj.areaName, jdbcType=VARCHAR},
+				#{obj.level, jdbcType=INTEGER},
+				#{obj.pid, jdbcType=VARCHAR},
+				#{obj.haschild, jdbcType=INTEGER},
+			</trim>
+		</foreach>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO jbasis_area
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.areaCode, jdbcType=VARCHAR},
+				#{obj.areaName, jdbcType=VARCHAR},
+				#{obj.level, jdbcType=INTEGER},
+				#{obj.pid, jdbcType=VARCHAR},
+				#{obj.haschild, jdbcType=INTEGER},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.jbasis.area.model.JbasisArea" resultMap="JbasisAreaMap">
+		SELECT <include refid="Base_Column_List" /> FROM jbasis_area
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	         <if test="id!=null and id!='' and id!=1">
+		    id = #{id, jdbcType=TIMESTAMP}
+		    	
+
+		    </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="areaCode!=null and areaCode!=''">
+	            AND area_code = #{areaCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="areaName!=null and areaName!=''">
+	            AND area_name = #{areaName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="level!=null">
+	            AND level = #{level, jdbcType=INTEGER}
+	        </if>
+	        <if test="pid!=null">
+	            AND pid = #{pid, jdbcType=VARCHAR}
+	        </if>
+	        <if test="haschild!=null">
+	            AND haschild = #{haschild, jdbcType=INTEGER}
+	        </if>
+	    </trim>
+	</select>
+	
+	<select id="retrieveByCode" parameterType="com.lmis.jbasis.area.model.JbasisArea" resultMap="JbasisAreaMap">
+		SELECT <include refid="Base_Column_List" /> FROM jbasis_area
+		where 1=1
+		<if test="areaCode!=null">
+	         and  area_code = #{areaCode, jdbcType=VARCHAR}
+	       </if>
+	       <if test="areaName!=null">
+	         and area_name = #{areaName, jdbcType=VARCHAR}
+	       </if>
+		  <if test="pid!=null">
+	            AND area_code = #{pid, jdbcType=VARCHAR}
+	        </if>
+	        <if test="id!=null">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+		</select>
+	<select id="retrieveJbasisArea" parameterType="com.lmis.jbasis.area.model.JbasisArea" resultMap="JbasisAreaMap">
+		SELECT <include refid="Base_Column_List" /> FROM jbasis_area  
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="areaCode!=null and areaCode!=''">
+		    pid = #{areaCode, jdbcType=VARCHAR}
+		    </if>
+	        <if test="id!=null">
+				AND pid = (select area_code from jbasis_area where id=#{id,jdbcType=VARCHAR})	
+	        </if>
+	    </trim>
+	    order by id
+	</select>
+	<update id="update" parameterType="com.lmis.jbasis.area.model.JbasisArea">
+		UPDATE jbasis_area
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="areaCode!=null and areaCode!=''">
+	            area_code = #{areaCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="areaName!=null and areaName!=''">
+	            area_name = #{areaName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="level!=null">
+	            level = #{level, jdbcType=INTEGER},
+	        </if>
+	        <if test="pid!=null">
+	            pid = #{pid, jdbcType=VARCHAR},
+	        </if>
+	        <if test="haschild!=null">
+	            haschild = #{haschild, jdbcType=INTEGER},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	         <if test="pid!=null">
+	            AND pid = #{pid, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+		<update id="updateByPid" parameterType="com.lmis.jbasis.area.model.JbasisArea">
+		UPDATE jbasis_area
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="pid!=null">
+	            pid = #{pid, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+	         <if test="areaCode!=null">
+	            AND pid = #{areaCode, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.jbasis.area.model.JbasisArea">
+		UPDATE jbasis_area
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	area_code = #{areaCode, jdbcType=VARCHAR},
+        	area_name = #{areaName, jdbcType=VARCHAR},
+        	level = #{level, jdbcType=INTEGER},
+        	pid = #{pid, jdbcType=VARCHAR},
+        	haschild = #{haschild, jdbcType=INTEGER},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="logicalDelete" parameterType="com.lmis.jbasis.area.model.JbasisArea">
+		delete from  jbasis_area
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="areaCode!=null and areaCode!=''">
+		    area_code in
+		    	<foreach collection="flag1" index="index" item="id" open="(" separator="," close=")">
+               	#{areaCode, jdbcType=VARCHAR}
+          </foreach>
+
+		    </if>
+	    </trim>
+	</delete>
+	<select id="getChildLst" parameterType="com.lmis.jbasis.area.model.JbasisArea" resultType="String">
+		select getChildLst(#{areaCode, jdbcType=VARCHAR}) from dual
+	</select>
+	<update id="shiftValidity" parameterType="com.lmis.jbasis.area.model.JbasisArea">
+		UPDATE jbasis_area
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="id!=null">
+	        	AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.jbasis.area.model.JbasisArea">
+		DELETE FROM jbasis_area
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="areaCode!=null and areaCode!=''">
+	        	area_code = #{areaCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="pid!=null and pid!=''">
+	        	pid = #{pid, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+	
+	<!-- 根据省市区名称查询名称是否合理 -->
+	<select id="retrieveByNames" parameterType="com.lmis.jbasis.warehouse.model.JbasisWarehouse" resultMap="JbasisAreaMap">
+		SELECT
+			a.id id
+		FROM
+			jbasis_area a
+		WHERE
+			a. LEVEL = 1
+		AND a.area_name = #{province, jdbcType=VARCHAR}
+		UNION
+			SELECT
+				a1.id id
+			FROM
+				jbasis_area a1
+			LEFT JOIN jbasis_area a2 ON a2.area_code = a1.pid
+			WHERE
+				a1.area_name = #{city, jdbcType=VARCHAR}
+			AND a1. LEVEL = 2
+			AND a2.area_name = #{province, jdbcType=VARCHAR}
+			AND a2. LEVEL = 1
+			UNION
+				SELECT
+					a3.id id
+				FROM
+					jbasis_area a3
+				LEFT JOIN jbasis_area a4 ON a4.area_code = a3.pid
+				WHERE
+					a3.area_name = #{state, jdbcType=VARCHAR}
+				AND a3. LEVEL = 3
+				AND a4.area_name = #{city, jdbcType=VARCHAR}
+				AND a4. LEVEL = 2;
+	</select>
+	
+</mapper>

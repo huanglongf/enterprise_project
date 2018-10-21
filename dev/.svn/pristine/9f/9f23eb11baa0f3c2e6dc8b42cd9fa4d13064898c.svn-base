@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.login.dao.UserMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.login.model.User" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_by" property="create_by"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="is_deleted" property="is_deleted"/>
+	<result column="is_disabled" property="is_disabled"/>
+	<result column="version" property="version"/>
+	<result column="pwr_org" property="pwr_org"/>
+	<result column="user_code" property="user_code"/>
+	<result column="user_name" property="user_name"/>
+	<result column="user_pwd" property="user_pwd"/>
+	<result column="user_phone" property="user_phone"/>
+	<result column="user_org_code" property="user_org_code"/>
+	<result column="user_remark" property="user_remark"/>
+</resultMap>
+       
+<!-- sys_user table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_by,update_time,update_user,is_deleted,is_disabled,version,pwr_org,user_code,user_name,user_pwd,user_phone,user_org_code,user_remark
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_by != null and create_by != ''" >
+	    and create_by =  #{create_by}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="is_deleted != null" >
+	    and is_deleted =  #{is_deleted}
+	</if>
+	<if test="is_disabled != null" >
+	    and is_disabled =  #{is_disabled}
+	</if>
+	<if test="version != null" >
+	    and version =  #{version}
+	</if>
+	 	<if test="pwr_org != null and pwr_org != ''" >
+	    and pwr_org =  #{pwr_org}
+	</if>
+	 	<if test="user_code != null and user_code != ''" >
+	    and user_code =  #{user_code}
+	</if>
+	 	<if test="user_name != null and user_name != ''" >
+	    and user_name =  #{user_name}
+	</if>
+	 	<if test="user_pwd != null and user_pwd != ''" >
+	    and user_pwd =  #{user_pwd}
+	</if>
+	 	<if test="user_phone != null and user_phone != ''" >
+	    and user_phone =  #{user_phone}
+	</if>
+	 	<if test="user_org_code != null and user_org_code != ''" >
+	    and user_org_code =  #{user_org_code}
+	</if>
+	 	<if test="user_remark != null and user_remark != ''" >
+	    and user_remark =  #{user_remark}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入用户表 -->
+<insert id="insert" parameterType="com.bt.login.model.User" >
+  insert into sys_user(id,create_time,create_by,update_time,update_user,is_deleted,is_disabled,version,pwr_org,user_code,user_name,user_pwd,user_phone,user_org_code,user_remark)
+ values(#{id},#{create_time},#{create_by},#{update_time},#{update_user},#{is_deleted},#{is_disabled},#{version},#{pwr_org},#{user_code},#{user_name},#{user_pwd},#{user_phone},#{user_org_code},#{user_remark})
+</insert>
+
+<insert id="insertUser" parameterType="com.bt.login.model.User" >
+  insert into sys_user(id,create_time,create_by,update_time,update_user,is_deleted,is_disabled,version,pwr_org,user_code,user_name,user_pwd,user_phone,user_org_code,user_remark)
+ values(#{id},#{create_time},#{create_by},#{update_time},#{update_user},#{is_deleted},#{is_disabled},#{version},#{pwr_org},#{user_code},#{user_name},#{user_pwd},#{user_phone},#{user_org_code},#{user_remark})
+</insert>
+
+<!-- 修改用户表-->  
+ <update id="update" parameterType="com.bt.login.model.User" >
+  update sys_user set create_time=#{create_time},create_by=#{create_by},update_time=#{update_time},update_user=#{update_user},is_deleted=#{is_deleted},is_disabled=#{is_disabled},version=#{version},pwr_org=#{pwr_org},user_code=#{user_code},user_name=#{user_name},user_pwd=#{user_pwd},user_phone=#{user_phone},user_org_code=#{user_org_code},user_remark=#{user_remark} where id=#{id}
+ </update>
+ <update id="updateuser" parameterType="com.bt.login.model.User" >
+  update sys_user set create_time=#{create_time},create_by=#{create_by},update_time=#{update_time},update_user=#{update_user},is_deleted=#{is_deleted},is_disabled=#{is_disabled},version=#{version},pwr_org=#{pwr_org},user_code=#{user_code},user_name=#{user_name},user_pwd=#{user_pwd},user_phone=#{user_phone},user_org_code=#{user_org_code},user_remark=#{user_remark} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改用户表-->
+<update id="updateBySelective" parameterType="com.bt.login.model.User" >
+	update sys_user set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_by != null  and create_by != '' ">
+		create_by=#{create_by},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="is_deleted != null  ">
+		is_deleted=#{is_deleted},
+	</if>
+	<if test="is_disabled != null  ">
+		is_disabled=#{is_disabled},
+	</if>
+	<if test="version != null  ">
+		version=#{version},
+	</if>
+	<if test="pwr_org != null  and pwr_org != '' ">
+		pwr_org=#{pwr_org},
+	</if>
+	<if test="user_code != null  and user_code != '' ">
+		user_code=#{user_code},
+	</if>
+	<if test="user_name != null  and user_name != '' ">
+		user_name=#{user_name},
+	</if>
+	<if test="user_pwd != null  and user_pwd != '' ">
+		user_pwd=#{user_pwd},
+	</if>
+	<if test="user_phone != null  and user_phone != '' ">
+		user_phone=#{user_phone},
+	</if>
+	<if test="user_org_code != null  and user_org_code != '' ">
+		user_org_code=#{user_org_code},
+	</if>
+	<if test="user_remark != null  and user_remark != '' ">
+		user_remark=#{user_remark},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除用户表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from sys_user where id = #{id}
+</update>
+<!-- 批量删除用户表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from sys_user where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找用户表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from sys_user where id = #{id}
+</select>
+  	
+<!-- 用户表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.login.controller.form.UserQueryParam">
+	select count(1) from sys_user 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的用户表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.login.controller.form.UserQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from sys_user 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<select id="selectAllUser" resultMap="BaseResultMap"  parameterType="com.bt.login.controller.form.UserQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from sys_user 
+	<include refid="where_Clause"/>
+	ORDER BY create_time DESC
+	LIMIT #{firstResult }, #{maxResult }
+</select>
+
+
+<!--依据条件统计 用户表总数-->
+<select id="countAllUser" resultType="java.lang.Integer"  parameterType="com.bt.login.controller.form.UserQueryParam">
+	select count(1) from sys_user 
+	<include refid="where_Clause"/>
+</select>
+
+
+<!--依据条件统计 用户表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.login.controller.form.UserQueryParam">
+	select count(1) from sys_user 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的用户表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.login.controller.form.UserQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from sys_user 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

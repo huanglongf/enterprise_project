@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.sys.functionButton.dao.SysFunctionButtonMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.sys.functionButton.model.SysFunctionButton" id="SysFunctionButtonMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="fb_id" property="fbId" jdbcType="VARCHAR" />
+		<result column="fb_name" property="fbName" jdbcType="VARCHAR" />
+		<result column="fb_pid" property="fbPid" jdbcType="VARCHAR" />
+		<result column="fb_lv" property="fbLv" jdbcType="VARCHAR" />
+		<result column="fb_type" property="fbType" jdbcType="VARCHAR" />
+		<result column="fb_seq" property="fbSeq" jdbcType="INTEGER" />
+		<result column="fb_url" property="fbUrl" jdbcType="VARCHAR" />
+		<result column="fb_gif_id" property="fbGifId" jdbcType="VARCHAR" />
+		<result column="fb_page" property="fbPage" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		fb_id,
+		fb_name,
+		fb_pid,
+		fb_lv,
+		fb_type,
+		fb_seq,
+		fb_url,
+		fb_gif_id,
+		fb_page
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			fb_id,
+			fb_name,
+			fb_pid,
+			fb_lv,
+			fb_type,
+			fb_seq,
+			fb_url,
+			fb_gif_id,
+			fb_page
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.sys.functionButton.model.SysFunctionButton">
+		INSERT INTO sys_function_button
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{fbId, jdbcType=VARCHAR},
+			#{fbName, jdbcType=VARCHAR},
+			#{fbPid, jdbcType=VARCHAR},
+			#{fbLv, jdbcType=VARCHAR},
+			#{fbType, jdbcType=VARCHAR},
+			#{fbSeq, jdbcType=INTEGER},
+			#{fbUrl, jdbcType=VARCHAR},
+			#{fbGifId, jdbcType=VARCHAR},
+			#{fbPage, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO sys_function_button
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.fbId, jdbcType=VARCHAR},
+				#{obj.fbName, jdbcType=VARCHAR},
+				#{obj.fbPid, jdbcType=VARCHAR},
+				#{obj.fbLv, jdbcType=VARCHAR},
+				#{obj.fbType, jdbcType=VARCHAR},
+				#{obj.fbSeq, jdbcType=INTEGER},
+				#{obj.fbUrl, jdbcType=VARCHAR},
+				#{obj.fbGifId, jdbcType=VARCHAR},
+				#{obj.fbPage, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.sys.functionButton.model.SysFunctionButton" resultMap="SysFunctionButtonMap">
+		SELECT <include refid="Base_Column_List" /> FROM sys_function_button
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbId!=null and fbId!=''">
+	            AND fb_id = #{fbId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbName!=null and fbName!=''">
+	            AND fb_name = #{fbName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbPid!=null and fbPid!=''">
+	            AND fb_pid = #{fbPid, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbLv!=null and fbLv!=''">
+	            AND fb_lv = #{fbLv, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbType!=null and fbType!=''">
+	            AND fb_type = #{fbType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbSeq!=null">
+	            AND fb_seq = #{fbSeq, jdbcType=INTEGER}
+	        </if>
+	        <if test="fbUrl!=null and fbUrl!=''">
+	            AND fb_url = #{fbUrl, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbGifId!=null and fbGifId!=''">
+	            AND fb_gif_id = #{fbGifId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbPage!=null and fbPage!=''">
+	            AND fb_page = #{fbPage, jdbcType=VARCHAR}
+	        </if>
+	        <if test="userId!=null and userId!=''">
+	            AND fb_id in (select fb_id from sys_role_function_button where is_deleted = false AND is_disabled = false AND role_id in (select role_id from sys_user_role where is_deleted = false AND is_disabled = false AND user_id=#{userId, jdbcType=VARCHAR}))
+	        </if>
+	    </trim>
+        ORDER BY fb_seq ASC
+	</select>
+	
+	<select id="sortQuery" parameterType="com.lmis.sys.functionButton.model.SysFunctionButton" resultMap="SysFunctionButtonMap">
+		SELECT <include refid="Base_Column_List" /> FROM sys_function_button
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbId!=null and fbId!=''">
+	            AND fb_id = #{fbId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbName!=null and fbName!=''">
+	            AND fb_name = #{fbName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbPid!=null and fbPid!=''">
+	            AND fb_pid = #{fbPid, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbLv!=null and fbLv!=''">
+	            AND fb_lv = #{fbLv, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbType!=null and fbType!=''">
+	            AND fb_type = #{fbType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbSeq!=null">
+	            AND fb_seq = #{fbSeq, jdbcType=INTEGER}
+	        </if>
+	        <if test="fbUrl!=null and fbUrl!=''">
+	            AND fb_url = #{fbUrl, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbGifId!=null and fbGifId!=''">
+	            AND fb_gif_id = #{fbGifId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fbPage!=null and fbPage!=''">
+	            AND fb_page = #{fbPage, jdbcType=VARCHAR}
+	        </if>
+	        <if test="userId!=null and userId!=''">
+	            AND fb_id in (select fb_id from sys_role_function_button where role_id in (select role_id from sys_user_role where user_id=#{userId, jdbcType=VARCHAR}))
+	        </if>
+	    </trim>
+	    ORDER BY fb_seq
+	</select>
+	
+	<update id="update" parameterType="com.lmis.sys.functionButton.model.SysFunctionButton">
+		UPDATE sys_function_button
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="fbId!=null and fbId!=''">
+	            fb_id = #{fbId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fbName!=null and fbName!=''">
+	            fb_name = #{fbName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fbPid!=null and fbPid!=''">
+	            fb_pid = #{fbPid, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fbLv!=null and fbLv!=''">
+	            fb_lv = #{fbLv, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fbType!=null and fbType!=''">
+	            fb_type = #{fbType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fbSeq!=null">
+	            fb_seq = #{fbSeq, jdbcType=INTEGER},
+	        </if>
+	        <if test="fbUrl!=null and fbUrl!=''">
+	            fb_url = #{fbUrl, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fbGifId!=null and fbGifId!=''">
+	            fb_gif_id = #{fbGifId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fbPage!=null and fbPage!=''">
+	            fb_page = #{fbPage, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fbId!=null and fbId!=''">
+	        	AND fb_id = #{fbId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.sys.functionButton.model.SysFunctionButton">
+		UPDATE sys_function_button
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	fb_id = #{fbId, jdbcType=VARCHAR},
+        	fb_name = #{fbName, jdbcType=VARCHAR},
+        	fb_pid = #{fbPid, jdbcType=VARCHAR},
+        	fb_lv = #{fbLv, jdbcType=VARCHAR},
+        	fb_type = #{fbType, jdbcType=VARCHAR},
+        	fb_seq = #{fbSeq, jdbcType=INTEGER},
+        	fb_url = #{fbUrl, jdbcType=VARCHAR},
+        	fb_gif_id = #{fbGifId, jdbcType=VARCHAR},
+        	fb_page = #{fbPage, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fbId!=null and fbId!=''">
+	        	AND fb_id = #{fbId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.sys.functionButton.model.SysFunctionButton">
+		UPDATE sys_function_button
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="fbId!=null and fbId!=''">
+	        	AND fb_id = #{fbId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.sys.functionButton.model.SysFunctionButton">
+		UPDATE sys_function_button
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="fbId!=null and fbId!=''">
+	        	AND fb_id = #{fbId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.sys.functionButton.model.SysFunctionButton">
+		DELETE FROM sys_function_button
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="fbId!=null and fbId!=''">
+	        	AND fb_id = #{fbId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+	
+	
+</mapper>

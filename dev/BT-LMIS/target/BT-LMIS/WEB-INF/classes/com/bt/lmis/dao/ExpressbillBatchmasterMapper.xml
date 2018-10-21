@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpressbillBatchmasterMapper">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.bt.lmis.model.ExpressbillBatchmaster">
+		<result column="id" property="id" />
+		<result column="master_id" property="master_id" />
+		<result column="batch_id" property="batch_id" />
+		<result column="success_num" property="success_num" />
+		<result column="fail_num" property="fail_num" />
+		<result column="create_time" property="create_time" />
+		<result column="create_user" property="create_user" />
+		<result column="total_num" property="total_num" />
+		<result column="master_id" property="master_id" />
+		<result column="status" property="status" />
+		<result column="local_address" property="local_address" />
+	</resultMap>
+
+	<!-- tb_expressbill_batchmaster table all fields -->
+	<sql id="Base_Column_List">
+		id,master_id,batch_id,success_num,fail_num,create_time,create_user,total_num,local_address,status
+	</sql>
+
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="master_id != null and master_id != ''">
+				and master_id = #{master_id}
+			</if>
+			<if test="batch_id != null and batch_id != ''">
+				and batch_id = #{batch_id}
+			</if>
+			<if test="success_num != null">
+				and success_num = #{success_num}
+			</if>
+			<if test="fail_num != null">
+				and fail_num = #{fail_num}
+			</if>
+			<if test="create_time != null">
+				and create_time = #{create_time}
+			</if>
+			<if test="create_user != null and create_user != ''">
+				and create_user = #{create_user}
+			</if>
+			<if test="total_num != null">
+				and total_num = #{total_num}
+			</if>
+			<if test="status != null">
+				and status = #{status}
+			</if>
+		</trim>
+	</sql>
+
+
+	<!-- 插入承运商账单导入批次表 -->
+	<insert id="insert" parameterType="com.bt.lmis.model.ExpressbillBatchmaster">
+		insert into
+		tb_expressbill_batchmaster(master_id,batch_id,success_num,fail_num,create_time,create_user,total_num,status,local_address)
+		values(#{master_id},#{batch_id},#{success_num},#{fail_num},#{create_time},#{create_user},#{total_num},#{status},#{local_address})
+	</insert>
+
+	<!-- 修改承运商账单导入批次表 -->
+	<update id="update" parameterType="com.bt.lmis.model.ExpressbillBatchmaster">
+		update tb_expressbill_batchmaster set
+		master_id=#{master_id},batch_id=#{batch_id},success_num=#{success_num},fail_num=#{fail_num},create_time=#{create_time},create_user=#{create_user},total_num=#{total_num},status=#{status}
+		where id=#{id}
+	</update>
+
+	<!-- 选择修改承运商账单导入批次表 -->
+	<update id="updateBySelective" parameterType="com.bt.lmis.model.ExpressbillBatchmaster">
+		update tb_expressbill_batchmaster set
+		<trim suffixOverrides=",">
+			<if test="master_id != null  and master_id != '' ">
+				master_id=#{master_id},
+			</if>
+			<if test="batch_id != null  and batch_id != '' ">
+				batch_id=#{batch_id},
+			</if>
+			<if test="success_num != null  ">
+				success_num=#{success_num},
+			</if>
+			<if test="fail_num != null  ">
+				fail_num=#{fail_num},
+			</if>
+			<if test="create_time != null  ">
+				create_time=#{create_time},
+			</if>
+			<if test="create_user != null  and create_user != '' ">
+				create_user=#{create_user},
+			</if>
+			<if test="total_num != null  ">
+				total_num=#{total_num},
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<update id="deleteByMaster_id" parameterType="Object">
+		delete from tb_expressbill_batchmaster where master_id = #{master_id}
+	</update>
+
+
+	<!-- 删除承运商账单导入批次表 -->
+	<update id="delete" parameterType="Object">
+		delete from tb_expressbill_batchmaster where id = #{id}
+	</update>
+	<!-- 批量删除承运商账单导入批次表 -->
+	<delete id="batchDelete" parameterType="Object">
+		delete from tb_expressbill_batchmaster where id in
+		<foreach collection="array" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 依据主键查找承运商账单导入批次表 -->
+	<select id="selectById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_expressbill_batchmaster where id = #{id}
+	</select>
+
+	<!-- 承运商账单导入批次表 列表总数 为分页组件使用 -->
+	<select id="pageTotalRecord" resultType="java.lang.Long"
+		parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam">
+		select count(1) from tb_expressbill_batchmaster
+		<include refid="where_Clause" />
+	</select>
+
+	<!-- 分页中的承运商账单导入批次表集合，为分页组件使用 -->
+	<select id="pageData" resultMap="BaseResultMap"
+		parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam">
+		select
+		<include refid="Base_Column_List" />
+		from tb_expressbill_batchmaster
+		<include refid="where_Clause" />
+		<if test="orderCondition != null and orderCondition != ''">
+			${orderCondition}
+		</if>
+		${queryCondition}
+	</select>
+
+
+	<!--依据条件统计 承运商账单导入批次表总数 -->
+	<select id="count" resultType="java.lang.Long"
+		parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam">
+		select count(1) from tb_expressbill_batchmaster
+		<include refid="where_Clause" />
+	</select>
+
+	<!-- 满足条件的承运商账单导入批次表集合 -->
+	<select id="findAll" resultMap="BaseResultMap"
+		parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam">
+		select
+		<include refid="Base_Column_List" />
+		from tb_expressbill_batchmaster
+		<include refid="where_Clause" />
+		<if test="orderCondition != null and orderCondition != ''">
+			${orderCondition}
+		</if>
+	</select>
+
+  <select id='selectExpressBillBatch' parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam" resultType="com.bt.lmis.model.ExpressbillBatchmaster">
+  select  * from tb_expressbill_batchmaster
+ <include refid="where_Clause" />
+        <if test="maxResult != null and maxResult != ''">
+			LIMIT #{firstResult}, #{maxResult}
+		</if>
+  </select>
+
+<select id="Count" resultType="java.lang.Integer" parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam">
+select count(1) from tb_expressbill_batchmaster
+ <include refid="where_Clause" />
+
+</select>
+
+<insert id='insertDetailTemp' parameterType="java.util.List">
+insert into tb_expressbill_detail_temp 
+(create_time,
+create_user,
+update_time,
+update_user,
+account,
+transport_time,
+waybill,
+transport_weight,
+transport_volumn,
+origin_province,
+origin_city,
+dest_province,
+dest_city,
+charged_weight,
+express_name,
+producttype_name,
+insurance,
+freight,
+insurance_fee,
+other_value_added_service_charges,
+total_charge,
+
+
+
+
+
+
+
+bat_id,
+master_id)
+values 
+<foreach collection="list" item="item" separator="," index="index1">
+(
+ now(),
+ '0',
+ now(),
+ '0',
+ "${item[0]}",
+ "${item[1]}",
+ "${item[2]}",
+ "${item[3]}",
+ "${item[4]}",
+"${item[5]}",
+"${item[6]}",
+"${item[7]}",
+"${item[8]}",
+"${item[9]}",
+"${item[10]}",
+"${item[11]}",
+"${item[12]}",
+"${item[13]}",
+"${item[14]}",
+"${item[15]}",
+"${item[16]}",
+"${item[17]}",
+"${item[18]}"
+)
+</foreach>
+</insert>
+
+<update id='checkTemp' parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam">
+update  tb_expressbill_detail_temp  set reason=concat(reason,'成本中心不能为空;') ,status='2' 
+where  bat_id=#{batch_id} and account ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'发货时间不能空;') ,status='2' 
+where  bat_id=#{batch_id} and transport_time ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'运单号不能为空;') ,status='2' 
+where  bat_id=#{batch_id} and waybill ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'发货重量不能为空;') ,status='2' 
+where  bat_id=#{batch_id} and transport_weight ='';
+update tb_expressbill_detail_temp set transport_volumn='0.00'
+where bat_id=#{batch_id} and transport_volumn ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'始发地不能为空;') ,status='2' 
+where  bat_id=#{batch_id} and origin_province ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'目的地省不能为空;') ,status='2' 
+where  bat_id=#{batch_id} and dest_province ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'目的地市	不能为空;')  ,status='2'
+where  bat_id=#{batch_id} and dest_city ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'计费重量不能为空;')  ,status='2'
+where  bat_id=#{batch_id} and charged_weight ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'产品类型不能为空;')  ,status='2'
+where  bat_id=#{batch_id} and express_code="SF" and  producttype_code ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'运费不能为空;') ,status='2' 
+where  bat_id=#{batch_id} and  freight ='';
+update  tb_expressbill_detail_temp  set reason=concat(reason,'合计费用不能为空;') ,status='2' 
+where  bat_id=#{batch_id} and  total_charge ='';
+UPDATE tb_expressbill_detail_temp  a
+SET 
+   a.reason = concat(a.reason, ';物流商信息错误'),
+   a.status='2'
+WHERE
+     a.bat_id=#{batch_id}
+and
+    a.express_name != (SELECT 
+    b.transport_name
+FROM
+    tb_expressbill_master a,
+    tb_transport_vendor b
+WHERE
+    a.express_code = b.transport_code
+        AND b.validity = 1 and a.id=#{master_id});
+UPDATE tb_expressbill_detail_temp a
+        INNER JOIN
+    tb_diff_billdeatils b 
+SET 
+    a.status = '2',
+    a.reason = CONCAT(a.reason, '该单已经核销')
+WHERE
+    a.waybill = b.waybill
+        AND b.is_verification = 1 and a.id=#{master_id};
+   UPDATE tb_expressbill_detail_temp a
+        LEFT JOIN
+    (SELECT 
+        product_type_code, product_type_name
+    FROM
+        tb_transport_product_type
+    WHERE
+        status = 1) b ON a.producttype_name = b.product_type_name 
+SET 
+    a.status = '2',
+    a.reason = CONCAT(a.reason, '产品类型不存在;')
+WHERE
+    a.express_name='顺丰快递'
+   and b.product_type_code IS NULL
+        AND a.status != 2  
+        and a.bat_id=#{batch_id};     
+DELETE FROM tb_expressbill_detail 
+WHERE
+    EXISTS( SELECT 
+        1
+    FROM
+        tb_expressbill_detail_temp b
+    
+    WHERE
+        tb_expressbill_detail.waybill = b.waybill
+        AND b.bat_id = #{batch_id}  and b.status!='2' ) ;
+        
+  DELETE FROM tb_diff_billdeatils 
+WHERE
+    EXISTS( SELECT 
+        1
+    FROM
+        tb_expressbill_detail_temp a
+    
+    WHERE
+        a.waybill = tb_diff_billdeatils.waybill
+        AND tb_diff_billdeatils.is_verification != 1 and a.bat_id=#{batch_id})       
+        </update>
+<insert id="insertDetail" parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam">
+insert into tb_expressbill_detail
+(create_time,
+create_user,
+update_time,
+update_user,
+account,
+transport_time,
+waybill,
+transport_weight,
+transport_volumn,
+origin_province,
+origin_city,
+dest_province,
+dest_city,
+charged_weight,
+express_name,
+producttype_name,
+insurance,
+freight,
+insurance_fee,
+other_value_added_service_charges,
+total_charge,
+is_verification,
+reason,
+bat_id,
+master_id,
+account_id,
+account_name,
+status,
+express_code,
+producttype_code
+)
+ select 
+a.create_time,
+a.create_user,
+a.update_time,
+a.update_user,
+a.account,
+a.transport_time,
+a.waybill,
+a.transport_weight,
+a.transport_volumn,
+a.origin_province,
+a.origin_city,
+a.dest_province,
+a.dest_city,
+a.charged_weight,
+a.express_name,
+a.producttype_name,
+a.insurance,
+a.freight,
+a.insurance_fee,
+a.other_value_added_service_charges,
+a.total_charge,
+a.is_verification,
+a.reason,
+a.bat_id,
+a.master_id,
+a.account_id,
+a.account_name,
+'0',
+b.transport_code,
+c.product_type_code
+  from tb_expressbill_detail_temp a left join 
+     (select  transport_code,transport_name from  tb_transport_vendor where validity=1
+     ) b  on b.transport_name=a.express_name
+        left join 
+        (select  product_type_name,product_type_code from  tb_transport_product_type where status=1) c
+   on a.producttype_name=c.product_type_name   
+        
+where a.bat_id=#{batch_id} and a.status=0;
+</insert>
+
+<select id='selectSuccess' parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam" resultType='java.lang.Integer'>
+select  count(1) from tb_expressbill_detail where bat_id=#{batch_id};
+</select>
+
+<select id='selectFail' parameterType="com.bt.lmis.controller.form.ExpressbillBatchmasterQueryParam" resultType='java.lang.Integer'>
+select  count(1) from tb_expressbill_detail_temp where bat_id=#{batch_id} and status='2';
+</select>
+</mapper>   

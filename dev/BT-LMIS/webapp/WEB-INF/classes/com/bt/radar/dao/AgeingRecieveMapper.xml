@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.radar.dao.AgeingRecieveMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.radar.model.AgeingRecieve" >
+    <id column="waybill" property="waybill" jdbcType="VARCHAR" />
+    <result column="ageing_id" property="ageingId" jdbcType="VARCHAR" />
+    <result column="receive_cal_time" property="receiveCalTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="weight_time" property="weightTime" jdbcType="TIMESTAMP" />
+    <result column="platfrom_pay_time" property="platfromPayTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    waybill, ageing_id, receive_cal_time, create_time, weight_time, platfrom_pay_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_recieve
+    where waybill = #{waybill,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from er_ageing_recieve
+    where waybill = #{waybill,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.bt.radar.model.AgeingRecieve" >
+    insert into er_ageing_recieve (waybill, ageing_id, receive_cal_time, 
+      create_time, weight_time, platfrom_pay_time
+      )
+    values (#{waybill,jdbcType=VARCHAR}, #{ageingId,jdbcType=VARCHAR}, #{receiveCalTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{weightTime,jdbcType=TIMESTAMP}, #{platfromPayTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.radar.model.AgeingRecieve" >
+    insert into er_ageing_recieve
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="waybill != null" >
+        waybill,
+      </if>
+      <if test="ageingId != null" >
+        ageing_id,
+      </if>
+      <if test="receiveCalTime != null" >
+        receive_cal_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="weightTime != null" >
+        weight_time,
+      </if>
+      <if test="platfromPayTime != null" >
+        platfrom_pay_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="waybill != null" >
+        #{waybill,jdbcType=VARCHAR},
+      </if>
+      <if test="ageingId != null" >
+        #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveCalTime != null" >
+        #{receiveCalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="weightTime != null" >
+        #{weightTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="platfromPayTime != null" >
+        #{platfromPayTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.radar.model.AgeingRecieve" >
+    update er_ageing_recieve
+    <set >
+      <if test="ageingId != null" >
+        ageing_id = #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveCalTime != null" >
+        receive_cal_time = #{receiveCalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="weightTime != null" >
+        weight_time = #{weightTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="platfromPayTime != null" >
+        platfrom_pay_time = #{platfromPayTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where waybill = #{waybill,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.radar.model.AgeingRecieve" >
+    update er_ageing_recieve
+    set ageing_id = #{ageingId,jdbcType=VARCHAR},
+      receive_cal_time = #{receiveCalTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      weight_time = #{weightTime,jdbcType=TIMESTAMP},
+      platfrom_pay_time = #{platfromPayTime,jdbcType=TIMESTAMP}
+    where waybill = #{waybill,jdbcType=VARCHAR}
+  </update>
+</mapper>

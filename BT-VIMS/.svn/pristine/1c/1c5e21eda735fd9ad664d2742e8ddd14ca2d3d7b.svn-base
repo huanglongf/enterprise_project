@@ -1,0 +1,176 @@
+package com.bt.vims.service.impl;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.bt.vims.dao.VimsDataMapper;
+import com.bt.vims.dao.VisitorInfomationMapper;
+import com.bt.vims.model.VimsData;
+import com.bt.vims.model.VisitorInfomation;
+import com.bt.vims.model.Visitors;
+import com.bt.vims.service.VimsDataService;
+import com.bt.vims.utils.DateUtil;
+import com.bt.vims.utils.ParseJsonUtil;
+import com.bt.vims.utils.PrintUtil;
+import com.bt.vims.utils.SignProcess;
+
+import common.AddressException;
+import common.Contents;
+
+@Service
+@Transactional
+public class VimsDataServiceImpl implements VimsDataService {
+
+	private static final Logger logger = Logger.getLogger(VimsDataServiceImpl.class);
+
+	@Autowired
+	private VimsDataMapper vimsDataMapper;
+
+	@Autowired
+	private VisitorInfomationMapper visitorInfomationMapper;
+
+	@Override
+	public Map<String, Object> responseSocket(String oldSign, String bodyParam) {
+		Map<String, Object> backMessage = new LinkedHashMap<>();
+		if (!StringUtils.isEmpty(oldSign) && !StringUtils.isEmpty(bodyParam)) {
+			if ("3b95f25f6b5f26a6a3cb1d69a57d6dbc".equals(oldSign)) { // 此判断说明客户端发来数据与读取一致
+				try {
+					List<VimsData> vimsDatas = ParseJsonUtil.parseJsonData(bodyParam);
+					if (vimsDatas != null && vimsDatas.size() > 0) {
+						int id = vimsDataMapper.create(vimsDatas);
+						List<VisitorInfomation> visitorInfomations = insertMainInfor(vimsDatas); // 返回主表信息实例
+						int mainId = visitorInfomationMapper.insertMainInfor(visitorInfomations);
+						if (new Integer(id) != null && new Integer(mainId) != null) { // 判断两张表数据都插入成功
+							backMessage.put("msg", "POST同步请求完成");
+							backMessage.put("status_code", "200");
+							// backMessage.put("visitorInfomations",
+							// visitorInfomations);
+						}
+					}
+				} catch (RuntimeException e) {
+					e.printStackTrace();
+					logger.error("responseSocket()执行失败，失败信息： " + e.getMessage());
+					backMessage.put("msg", "服务器错误，确认状态并报告问题");
+					backMessage.put("status_code", "500");
+				}
+			}
+		}else{
+			backMessage.put("msg", "客户端请求参数为空或不正确");
+			backMessage.put("status_code", "400");
+		}
+		return backMessage;
+	}
+
+	/**
+	 * 批量将访客数据添加到b_visitor_information实体类中
+	 * @param vimsDatas（解析后的访客数据）
+	 * @return （VisitorInfomation主信息表实体）
+	 */
+	private List<VisitorInfomation> insertMainInfor(List<VimsData> vimsDatas) throws AddressException {
+		List<VisitorInfomation> visitorInfomations = new ArrayList<>();
+		int dataNum = 1; // 对于保证数据插入data编号唯一
+		for (VimsData vimsData : vimsDatas) {
+			VisitorInfomation visitorInfomation = new VisitorInfomation();
+			visitorInfomation.setDatas(DateUtil.convertToString(new Date(), DateUtil.YMD3));
+			Integer vistorNum = visitorInfomationMapper.columnTheDay(visitorInfomation);
+			if (vistorNum.intValue() == 0) {
+				visitorInfomation.setData(DateUtil.convertToString(new Date(), DateUtil.YMD3)
+						+ getNumber(DateUtil.convertToString(new Date(), DateUtil.YMD3), dataNum));
+			} else {
+				visitorInfomation.setData(DateUtil.convertToString(new Date(), DateUtil.YMD3)
+						+ getNumber(DateUtil.convertToString(new Date(), DateUtil.YMD3), (vistorNum.intValue() + dataNum)));
+			}
+			visitorInfomation.setParam1(vimsData.getVisitorName(), vimsData.getVisitorPhone(), vimsData.getHost(),
+					vimsData.getVisitorCompanyName(), vimsData.getLicensePlateNumber(), vimsData.getContent(),
+					vimsData.getRemark());
+			visitorInfomation.setParam2(ParseJsonUtil.produceBytePhoto(vimsData.getPhoto()), vimsData.getCheckInTime(),
+					vimsData.getCheckInUser(), vimsData.getVisitorType(), vimsData.getVisitorNum(),
+					vimsData.getCheckInPlcae(), vimsData.getApplyFor());
+			visitorInfomation.setCheck_state("[已到访]");
+			visitorInfomations.add(visitorInfomation);
+			dataNum++;
+		}
+		return visitorInfomations;
+	}
+
+	@Override
+	public Map<String, Object> callPrintInterface(List<VisitorInfomation> visitorInfomations) {
+		Map<String, Object> backMessage = new LinkedHashMap<>();
+		List<Visitors> visitorLists = new ArrayList<>();
+		try {
+			for (VisitorInfomation visitorInfomation : visitorInfomations) {
+				Visitors visitors = new Visitors();
+				String vistorType = visitorInfomation.getVisitorType();
+				if (Contents.INDIVIDUAL.equals(vistorType)) { // 访客姓名设值
+					visitors.setVisitor_name(visitorInfomation.getVisitor_name());
+				} else {
+					visitors.setVisitor_name(visitorInfomation.getVisitor_company_name());
+				}
+				visitors.setHost(visitorInfomation.getHost()); // 设值被拜访人
+				visitors.setContent(visitorInfomation.getContent()); // 拜访事由
+				String dateParam = DateUtil.convertToString(new Date(), DateUtil.YMD8); // 转换年月日
+				visitors.setVisitor_year(dateParam.substring(0, 4)); // 截取年
+				visitors.setVisitor_date(dateParam.substring(5)); // 截取月日
+				visitors.setVisitor_type(visitorInfomation.getVisitorType()); // 访问类型
+				visitors.setVisitorNum(visitorInfomation.getVisitorNum()); // 访问人数
+				visitorLists.add(visitors);
+			}
+			int printFlag = PrintUtil.printConnection(Contents.PRINTER_NAME, visitorLists);
+			if (printFlag == 1) {
+				backMessage.put("msg", "数据存储且打印成功！");
+				backMessage.put("status_code", "200");
+			} else {
+				backMessage.put("msg", "数据存储成功，但打印失败！");
+				backMessage.put("status_code", "500");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("调用打印机callPrintInterface()方法出错！" + e.getMessage());
+		}
+		return backMessage;
+	}
+
+	/**
+	 * 整合日期和整数
+	 * 
+	 * @param ym
+	 *            (日期值)
+	 * @param i
+	 *            (整数)
+	 * @return
+	 */
+	private static String getNumber(String ym, int i) {
+		// 得到一个NumberFormat的实例
+		NumberFormat nf = NumberFormat.getInstance();
+		// 设置是否使用分组
+		nf.setGroupingUsed(false);
+		// 设置最大整数位数
+		nf.setMaximumIntegerDigits(4);
+		// 设置最小整数位数
+		nf.setMinimumIntegerDigits(4);
+		return nf.format(i);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void main(String[] args) {
+		Map<String, String> severMap = new LinkedHashMap();
+		severMap.put("contactCode", Contents.CONTACT_CODE);
+		severMap.put("method", Contents.METHOD);
+		severMap.put("systemKey", Contents.SYSTEM_KEY);
+		severMap.put("body", "baozun");
+		severMap.put("version", Contents.VERSION);
+		String newSign = SignProcess.makeMd5Sign(severMap, Contents.SECRET_KEY); // 加密传入的数据
+		System.out.println(newSign);
+	}
+
+}

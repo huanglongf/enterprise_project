@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TransOrderMapper">
+	<insert id="saveMianData" parameterType="java.util.HashMap"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tb_contract_basicinfo
+		(
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		contract_no,
+		contract_name,
+		contract_type,
+		contract_owner,
+		contract_version,
+		contract_start,
+		contract_end,
+		settle_date,
+		validity
+		)values(
+		now(),
+		#{createUser},
+		now(),
+		#{createUser},
+		#{orderNum},
+		#{orderName},
+		#{contractType},
+		#{belongTo},
+		#{orderVersion},
+		#{startDate},
+		#{endDate},
+		#{settleDate},
+		#{validity}
+		)
+	</insert>
+
+	<insert id="saveDetailData" parameterType="java.util.HashMap">
+		insert into wl_formula_td
+		(
+		    create_user,
+		    create_date
+		<if test="formula != null  and formula != '' ">
+			,formula
+		</if>
+		<if test="cat_type != null  and cat_type != '' ">
+			,cat_type
+		</if>
+		<if test="standard_args != null  and standard_args != '' ">
+			,standard_args
+		</if>
+		<if test="low_weight != null  and low_weight != '' ">
+			,low_weight
+		</if>
+		<if test="contract_id != null  and contract_id != '' ">
+			,contract_id
+		</if>
+		<if test="belong_to != null  and belong_to != '' ">
+			,belong_to
+		</if>			
+		)values(
+		    #{operate_user},
+		    now()
+		<if test="formula != null  and formula != '' ">
+			,#{formula}
+		</if>
+		<if test="cat_type != null  and cat_type != '' ">
+			,#{cat_type}
+		</if>
+		<if test="standard_args != null  and standard_args != '' ">
+			,#{standard_args}
+		</if>
+		<if test="low_weight != null  and low_weight != '' ">
+			,#{low_weight}
+		</if>
+		<if test="contract_id != null  and contract_id != '' ">
+			,#{contract_id}
+		</if>
+		<if test="belong_to != null  and belong_to != '' ">
+			,#{belong_to}
+		</if>		
+		)
+	</insert>
+
+	<update id="updateDetailData" parameterType="java.util.HashMap">
+		update wl_formula_td t
+		set
+		    update_user=#{operate_user},
+		    update_date=now()
+		<if test="formula != null  and formula != '' ">
+			,t.formula=#{formula}
+		</if>
+		<if test="cat_type != null  and cat_type != '' ">
+			,t.cat_type=#{cat_type}
+		</if>
+		<if test="standard_args != null  and standard_args != '' ">
+			,t.standard_args=#{standard_args}
+		</if>
+		<if test="low_weight != null  and low_weight != '' ">
+			,t.low_weight=#{low_weight}
+		</if>
+		<if test="contract_id != null  and contract_id != '' ">
+			,t.contract_id=#{contract_id}
+		</if>
+		where
+		t.id=#{id}
+	</update>
+
+
+	<insert id="saveDiscount" parameterType="java.util.HashMap">
+		insert into wl_discount_td
+		(
+		 	create_user,
+		    create_date
+		<if test="good_type != null  and good_type != '' ">
+			,good_type
+		</if>
+		<if test="interva_type_id != null  and interva_type_id != '' ">
+			,interva_type_id
+		</if>
+		<if test="interval_type_name != null  and interval_type_name != '' ">
+			,interval_type_name
+		</if>
+		<if test="section != null  and section != '' ">
+			,section
+		</if>
+		<if test="discount_type != null  and discount_type != '' ">
+			,discount_type
+		</if>
+		<if test="discount != null  and discount != '' ">
+			,discount
+		</if>
+		<if test="status != null  and status != '' ">
+			,status
+		</if>
+		<if test="contract_id != null  and contract_id != '' ">
+			,contract_id
+		</if>
+		<if test="low_price != null  and low_price != '' ">
+			,low_price
+		</if>
+		<if test="cat_id != null  and cat_id != '' ">
+			,cat_id
+		</if>
+		<if test="belong_to != null  and belong_to != '' ">
+			,belong_to
+		</if>		
+		)values(
+		    #{operate_user},
+		    now()
+		<if test="good_type != null  and good_type != '' ">
+			,#{good_type}
+		</if>
+		<if test="interva_type_id != null  and interva_type_id != '' ">
+			,#{interva_type_id}
+		</if>
+		<if test="interval_type_name != null  and interval_type_name != '' ">
+			,#{interval_type_name}
+		</if>
+		<if test="section != null  and section != '' ">
+			,#{section:VARCHAR}
+		</if>
+		<if test="discount_type != null  and discount_type != '' ">
+			,#{discount_type}
+		</if>
+		<if test="discount != null  and discount != '' ">
+			,#{discount}
+		</if>
+		<if test="status != null  and status != '' ">
+			,#{status}
+		</if>
+		<if test="contract_id != null  and contract_id != '' ">
+			,#{contract_id}
+		</if>
+		<if test="low_price != null  and low_price != '' ">
+			,#{low_price}
+		</if>
+		<if test="cat_id != null  and cat_id != '' ">
+			,#{cat_id}
+		</if>
+		<if test="belong_to != null  and belong_to != '' ">
+			,#{belong_to}
+		</if>		
+		)
+	</insert>
+
+	<insert id="saveCarriageData" parameterType="java.util.HashMap">
+		insert into
+		wl_carriage
+		(
+		create_user,
+		create_date,
+		table_id,
+		contract_id
+		<if test="belong_to != null  and belong_to != '' ">
+			,belong_to
+		</if>		
+		)values(
+		#{operate_user},
+		now(),
+		#{contract_id},
+		#{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			,#{belong_to}
+		</if>		
+		)
+	</insert>
+
+	<insert id="saveOfferData" parameterType="java.util.HashMap">
+		insert into wl_offer
+		(
+		create_user,
+		create_date,
+		if_baojia,
+		table_id,
+		contract_id
+		<if test="belong_to != null  and belong_to != '' ">
+			,belong_to
+		</if>		
+		)values(
+		#{operate_user},
+		now(),	
+		#{if_baojia},
+		#{contract_id},
+		#{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			,#{belong_to}
+		</if>		
+		)
+	</insert>
+
+	<select id="checkContract" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from wl_carriage t where
+		t.contract_id=#{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			and t.belong_to=#{belong_to}
+		</if>
+	</select>
+
+	<select id="checkContractByOffer" parameterType="java.util.HashMap"
+		resultType="java.lang.Integer">
+		select count(1) from wl_offer t where
+		t.contract_id=#{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			and t.belong_to=#{belong_to}
+		</if>		
+	</select>
+
+	<update id="updateOfferData" parameterType="java.util.HashMap">
+		update wl_offer
+		set
+		<trim suffixOverrides=",">
+		    update_user=#{operate_user},
+		    update_date=now()
+			<if test="if_baojia != null  and if_baojia != '' ">
+				,if_baojia=#{if_baojia}
+			</if>
+			<if test="contract_id != null  and contract_id != '' ">
+				,table_id=#{contract_id}
+			</if>
+		</trim>
+		where contract_id=#{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			and belong_to=#{belong_to}
+		</if>		
+	</update>
+
+
+	<update id="updateCarriagelData" parameterType="java.util.HashMap">
+		update wl_carriage
+		set
+		<trim suffixOverrides=",">
+		  	update_user=#{operate_user},
+		    update_date=now()
+			<if test="contract_id != null  and contract_id != '' ">
+				,table_id=#{contract_id}
+			</if>
+			<if test="if_disount != null  and if_disount != '' ">
+				,if_disount=#{if_disount}
+			</if>
+			<if test="contract_id != null  and contract_id != '' ">
+				,dis_table_id=#{contract_id}
+			</if>
+		
+		</trim>
+		where contract_id=#{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			and belong_to=#{belong_to}
+		</if>			
+	</update>
+
+
+
+	<select id="getFormulaTd" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.id,
+		t.formula,
+		t.cat_type,
+		t.standard_args,
+		t.low_weight,
+		t.contract_id,
+		t.status,
+		(select w.if_disount from
+		wl_carriage w where t.contract_id=w.contract_id
+		<if test="belong_to != null  and belong_to != '' ">
+			and w.belong_to=#{belong_to}
+		</if>		
+		) as
+		if_disount
+		from
+		wl_formula_td t
+		where t.contract_id=#{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			and t.belong_to=#{belong_to}
+		</if>	
+		and t.status="1"
+	</select>
+
+	<select id="getDiscountTd" parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+		select
+		t.id as "id",
+		(select s.product_type_name from tb_transport_product_type s where s.product_type_code=t.good_type and s.vendor_code=t.belong_to) as "good_type",
+		t.interva_type_id as "interva_type_id",
+		ifnull(t.interval_type_name,"") as "interval_type_name",
+		ifnull(t.section,"") as "section",
+		ifnull(get_section_native(t.section),'') as "section_native",
+		ifnull(t.discount_type,"") as "discount_type",
+		ifnull(t.discount,"") as "discount",
+		ifnull(t.low_price,"") as "low_price"
+		from
+		wl_discount_td t
+		where
+		t.contract_id=#{contract_id}
+		and t.status="1"
+		<if test="belong_to != null  and belong_to != '' ">
+			and t.belong_to=#{belong_to}
+		</if>		
+		and t.cat_id=#{cat_id}
+	</select>
+
+
+	<select id="checkData_td_formula" resultType="java.lang.Integer">
+		select t.id from
+		wl_formula_td t
+		where
+		1=1
+		and t.cat_type=#{cat_type}
+		and
+		t.contract_id=#{contract_id}
+		and t.status="1"
+		<if test="belong_to != null  and belong_to != '' ">
+			and belong_to=#{belong_to}
+		</if>			
+	</select>
+
+
+	<select id="checkData_td_discount" resultType="java.lang.Integer" parameterType="java.util.HashMap" >
+		select 
+		interva_type_id
+		from wl_discount_td t
+		where
+		1=1
+		and t.good_type=#{good_type}
+		and t.contract_id=#{contract_id}
+		and t.status="1"
+		and t.cat_id=#{cat_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			and t.belong_to=#{belong_to}
+		</if>			
+		limit 0,1
+	</select>
+
+<select id="getSection" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+      select
+      t.section
+      from wl_discount_td t
+		where
+		1=1
+		and t.good_type=#{good_type}
+		and t.interva_type_id=#{interva_type_id}
+		and t.contract_id=#{contract_id}
+		and t.status="1"
+		and t.cat_id=#{cat_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			and t.belong_to=#{belong_to}
+		</if>			
+</select>
+
+
+	<select id="getdiscount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+      select
+      count(1)
+      from wl_discount_td t
+		where
+		1=1
+		and t.good_type=#{good_type}
+		and t.interva_type_id=#{interva_type_id}
+		and t.contract_id=#{contract_id}
+		and t.status="1"
+		and t.cat_id=#{cat_id}
+		and t.discount=#{discount}
+		<if test="belong_to != null  and belong_to != '' ">
+			and t.belong_to=#{belong_to}
+		</if>		
+	</select>
+	<update id="delFormulaTd" parameterType="java.util.HashMap">
+		update wl_formula_td t
+		set
+		t.status='0',
+		t.update_user=#{operate_user},
+		t.update_date=now()
+		where t.id=#{id}
+	</update>
+
+	<update id="delDiscountTd" parameterType="java.util.HashMap">
+		update wl_discount_td t
+		set
+		t.status='0',
+		t.update_user=#{operate_user},
+		t.update_date=now()
+		where t.id=#{id}
+	</update>
+
+	<insert id="saveSpecial" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="id">
+		insert into wl_special
+		(
+		create_user,
+		create_date,
+		contract_id,
+		if_dispatch
+		<if test="if_transfer != null  and if_transfer != '' ">
+			,if_transfer
+		</if>
+		<if test="if_unloading != null  and if_unloading != '' ">
+			,if_unloading
+		</if>
+		<if test="unloading_cat != null  and unloading_cat != '' ">
+			,unloading_cat
+		</if>
+		<if test="unloading_price != null  and unloading_price != '' ">
+			,unloading_price
+		</if>
+		<if test="unloading_unit != null  and unloading_unit != '' ">
+			,unloading_unit
+		</if>	
+		<if test="unloading_price2 != null  and unloading_price2 != '' ">
+			,unloading_price2
+		</if>					
+		<if test="if_take != null  and if_take != '' ">
+			,if_take
+		</if>
+		<if test="take_type != null  and take_type != '' ">
+			,take_type
+		</if>
+		<if test="take_by_time_price != null  and take_by_time_price != '' ">
+			,take_by_time_price
+		</if>
+		<if test="take_by_num_price != null  and take_by_num_price != '' ">
+			,take_by_num_price
+		</if>			
+		<if test="if_take_free != null  and if_take_free != '' ">
+			,if_take_free
+		</if>
+		<if test="if_take_free_by_weight != null  and if_take_free_by_weight != '' ">
+			,if_take_free_by_weight
+		</if>
+		<if test="if_take_free_by_volume != null  and if_take_free_by_volume != '' ">
+			,if_take_free_by_volume
+		</if>
+		<if test="every_time_take_weight != null  and every_time_take_weight != '' ">
+			,every_time_take_weight
+		</if>
+
+		<if test="every_time_take_volume != null  and every_time_take_volume != '' ">
+			,every_time_take_volume
+		</if>
+
+
+		<if test="if_upstairs != null  and if_upstairs != '' ">
+			,if_upstairs
+		</if>
+		<if test="upstairs_price != null  and upstairs_price != '' ">
+			,upstairs_price
+		</if>		
+		<if test="if_send != null  and if_send != '' ">
+			,if_send
+		</if>
+		<if test="send_price != null  and send_price != '' ">
+			,send_price
+		</if>
+		<if test="if_send_free != null  and if_send_free != '' ">
+			,if_send_free
+		</if>
+		<if test="send_free_weight != null  and send_free_weight != '' ">
+			,send_free_weight
+		</if>
+		 <if test="send_free_volum != null  and send_free_volum != '' ">
+			,send_free_volum
+	    </if>		
+		<if test="belong_to != null  and belong_to != '' ">
+			,belong_to
+		</if>			
+		)values(
+		    #{operate_user},
+		    now(),
+		    #{contract_id},
+			#{if_dispatch}
+		<if test="if_transfer != null  and if_transfer != '' ">
+			,#{if_transfer}
+		</if>
+		<if test="if_unloading != null  and if_unloading != '' ">
+			,#{if_unloading}
+		</if>
+		<if test="unloading_cat != null  and unloading_cat != '' ">
+			,#{unloading_cat}
+		</if>
+		<if test="unloading_price != null  and unloading_price != '' ">
+			,#{unloading_price}
+		</if>
+		<if test="unloading_unit != null  and unloading_unit != '' ">
+			,#{unloading_unit}
+		</if>			
+		<if test="unloading_price2 != null  and unloading_price2 != '' ">
+			,#{unloading_price2}
+		</if>			
+		<if test="if_take != null  and if_take != '' ">
+			,#{if_take}
+		</if>
+		<if test="take_type != null  and take_type != '' ">
+			,#{take_type}
+		</if>
+		<if test="take_by_time_price != null  and take_by_time_price != '' ">
+			,#{take_by_time_price}
+		</if>
+		<if test="take_by_num_price != null  and take_by_num_price != '' ">
+			,#{take_by_num_price}
+		</if>			
+		<if test="if_take_free != null  and if_take_free != '' ">
+			,#{if_take_free}
+		</if>
+		<if test="if_take_free_by_weight != null  and if_take_free_by_weight != '' ">
+			,#{if_take_free_by_weight}
+		</if>
+		<if test="if_take_free_by_volume != null  and if_take_free_by_volume != '' ">
+			,#{if_take_free_by_volume}
+		</if>
+		<if test="every_time_take_weight != null  and every_time_take_weight != '' ">
+			,#{every_time_take_weight}
+		</if>
+
+		<if test="every_time_take_volume != null  and every_time_take_volume != '' ">
+			,#{every_time_take_volume}
+		</if>
+		<if test="if_upstairs != null  and if_upstairs != '' ">
+			,#{if_upstairs}
+		</if>
+
+		<if test="upstairs_price != null  and upstairs_price != '' ">
+			,#{upstairs_price}
+		</if>
+		<if test="if_send != null  and if_send != '' ">
+			,#{if_send}
+		</if>
+		<if test="send_price != null  and send_price != '' ">
+			,#{send_price}
+		</if>
+		<if test="if_send_free != null  and if_send_free != '' ">
+			,#{if_send_free}
+		</if>
+		<if test="send_free_weight != null  and send_free_weight != '' ">
+			,#{send_free_weight}
+		</if>
+		 <if test="send_free_volum != null  and send_free_volum != '' ">
+			,#{send_free_volum}
+	    </if>
+		<if test="belong_to != null  and belong_to != '' ">
+			,#{belong_to}
+		</if>			
+		)
+	</insert>
+	
+	
+	<insert id="updateSpecial" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="id">
+		update  wl_special
+		set 
+		update_user=#{operate_user},
+		update_date=now(),
+		contract_id =#{contract_id}
+
+		<if test="if_dispatch != null  and if_dispatch != '' ">
+			,if_dispatch=#{if_dispatch}
+		</if>
+		<if test="if_transfer != null  and if_transfer != '' ">
+			,if_transfer=#{if_transfer}
+		</if>
+		<if test="if_unloading != null  and if_unloading != '' ">
+			,if_unloading=#{if_unloading}
+		</if>
+		<if test="unloading_cat != null  and unloading_cat != '' ">
+			,unloading_cat=#{unloading_cat}
+		</if>
+		<if test="unloading_price2 != null  and unloading_price2 != '' ">
+			,unloading_price2=#{unloading_price2}
+		</if>		
+		<if test="unloading_price != null  and unloading_price != '' ">
+			,unloading_price=#{unloading_price}
+		</if>
+		<if test="if_take != null  and if_take != '' ">
+			,if_take=#{if_take}
+		</if>
+		<if test="take_type != null  and take_type != '' ">
+			,take_type=#{take_type}
+		</if>
+		<if test="take_by_time_price != null  and take_by_time_price != '' ">
+			,take_by_time_price=#{take_by_time_price}
+		</if>
+		<if test="take_by_num_price != null  and take_by_num_price != '' ">
+			,take_by_num_price=#{take_by_num_price}
+		</if>		
+		<if test="if_take_free != null  and if_take_free != '' ">
+			,if_take_free=#{if_take_free}
+		</if>
+		<if test="if_take_free_by_weight != null  and if_take_free_by_weight != '' ">
+			,if_take_free_by_weight=#{if_take_free_by_weight}
+		</if>
+		<if test="if_take_free_by_volume != null  and if_take_free_by_volume != '' ">
+			,if_take_free_by_volume=#{if_take_free_by_volume}
+		</if>
+		<if test="every_time_take_weight != null  and every_time_take_weight != '' ">
+			,every_time_take_weight=#{every_time_take_weight}
+		</if>
+
+		<if test="every_time_take_volume != null  and every_time_take_volume != '' ">
+			,every_time_take_volume=#{every_time_take_volume}
+		</if>
+		<if test="if_upstairs != null  and if_upstairs != '' ">
+			,if_upstairs=#{if_upstairs}
+		</if>
+
+		<if test="upstairs_price != null  and upstairs_price != '' ">
+			,upstairs_price=#{upstairs_price}
+		</if>
+		<if test="if_send != null  and if_send != '' ">
+			,if_send=#{if_send}
+		</if>
+		<if test="send_price != null  and send_price != '' ">
+			,send_price=#{send_price}
+		</if>
+		<if test="if_send_free != null  and if_send_free != '' ">
+			,send_price=#{send_price}
+		</if>
+		<if test="send_free_weight != null  and send_free_weight != '' ">
+			,send_free_weight=#{send_free_weight}
+		</if>
+		<if test="send_free_volum != null  and send_free_volum != '' ">
+				,send_free_volum=#{send_free_volum}
+		</if>	
+		<if test="if_send_free != null  and if_send_free != '' ">
+				,if_send_free=#{if_send_free}
+		</if>				
+		where belong_to=#{belong_to}
+		and contract_id=#{contract_id}
+	</insert>
+	
+	<insert id="saveManager" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="id">
+	  insert into
+	  wl_manager
+	  (
+	  create_user,
+	  create_date,
+	  if_manager,
+	  manager_price,
+	  contract_id
+		<if test="belong_to != null  and belong_to != '' ">
+		,belong_to
+		</if>		  
+	  )values(
+	  #{operate_user},
+	  now(),  
+	  #{if_manager},
+	  #{manager_price},
+	  #{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+	   ,#{belong_to}
+		</if>		  
+	  )
+	</insert>
+	
+	<update id="updateManager" parameterType="java.util.HashMap">
+	  update wl_manager
+	  set 
+	  contract_id=#{contract_id},
+	  update_user=#{operate_user},
+	  update_date=now()	  
+	   <if test="if_manager != null  and if_manager != '' ">
+		,if_manager=#{if_manager}
+		</if>	
+		<if test="manager_price != null  and manager_price != '' ">
+		,manager_price=#{manager_price}
+		</if>	
+	  where contract_id=#{contract_id}
+		and belong_to=#{belong_to}		  
+	</update>
+	
+	
+	<select id="checkSpecialCat" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	  select 
+	   t.id
+	  from wl_special t
+	  where t.contract_id=#{contract_id}
+		<if test="belong_to != null  and belong_to != '' ">
+			and belong_to=#{belong_to}
+		</if>		  
+	</select>
+	
+    <select id="checkManagerCat" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	  select 
+	   t.id
+	  from wl_manager t
+	  where t.contract_id=#{contract_id}
+	  and t.belong_to=#{belong_to}
+	</select>
+	
+	<select id="getGoodType" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	   t.id,
+	   t.vendor_code,
+	   t.product_type_code,
+	   t.product_type_name
+	  from tb_transport_product_type t
+	  where t.vendor_code=#{typeId}
+	  and t.status='1'
+	  order by t.id desc
+	</select>
+	
+	<insert id="addExpress" parameterType="java.util.HashMap">
+	  insert into wl_express 
+	  (
+	   transport_code,
+	   contract_id
+	  )values(
+	   #{transport_id},
+	   #{contract_id}
+	  )
+	</insert>
+	
+	<select id="getExpressTab" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	  id,
+	  transport_code,
+	  (select transport_name from tb_transport_vendor t where t.transport_code=w.transport_code) as "transport_name"
+	  from wl_express w
+	  where w.contract_id=#{contract_id}
+	</select>
+	
+	<delete id="delExpressTab"  parameterType="java.util.HashMap" >
+	  delete 
+	  from wl_express
+	  where id=#{id}
+	</delete>
+	
+	<select id="checkexpress" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	  select count(1) from wl_express m 
+	  where m.transport_code=#{transport_id}
+	  and   m.contract_id=#{contract_id}
+	  
+	</select>
+	
+	<select id="getCarriageInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	  t.id,
+	  table_id,
+	  if_disount,
+	  dis_table_id,
+	  stauts,
+	  contract_id,
+	  belong_to
+	  from wl_carriage t
+	  where 
+	       contract_id=#{contract_id} 
+	  and  belong_to=#{belong_to}
+	</select>
+	
+	<select id="getSpecial" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  select 
+  `id`,
+  `if_dispatch`,
+  `if_transfer`,
+  `if_unloading`,
+  `unloading_cat`,
+  `unloading_price`,
+  `unloading_price2`,
+  `if_take`,
+  `take_type`,
+  `take_by_time_price`,
+  `take_by_num_price`,
+  `if_take_free`,
+  `if_take_free_by_weight`,
+  `if_take_free_by_volume`,
+   getNum(every_time_take_weight) as every_time_take_weight,
+   getNum(every_time_take_volume) as every_time_take_volume,
+  `if_upstairs`,
+  `upstairs_price`,
+  `if_send`,
+  `send_price`,
+  `if_send_free`,
+  getNum(send_free_weight) as send_free_weight,
+   getNum(send_free_volum) as send_free_volum,
+  `contract_id`,
+  `create_user`,
+  `create_date`,
+  `update_date`,
+  `update_user`,
+  belong_to
+	  from wl_special t
+	  where 
+	       contract_id=#{contract_id} 
+	  and  belong_to=#{belong_to}
+	</select>
+	<select id="init_bj_data"  parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select if_baojia from wl_offer 
+	   where  contract_id=#{contract_id} 
+	     and  belong_to=#{belong_to}
+	</select>
+	<select id="initData_glf"  parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	   if_manager,
+	   manager_price
+	   from wl_manager 
+	   where  contract_id=#{contract_id} 
+	     and  belong_to=#{belong_to}
+	</select>
+
+<insert id="savegoods" parameterType="java.util.HashMap">
+  insert into wl_special_td
+  (goods_name,
+  price,
+  contract_id,
+  belong_to
+  )values(
+   #{goods_name},
+   #{price},
+   #{contract_id},
+   #{belong_to}
+  )
+</insert>
+
+<insert id="saveWk" parameterType="java.util.HashMap">
+  insert into wl_express_td
+  (
+   cat_code,
+   cat_name,
+   decimal_num,
+   contract_id,
+   transport_code,
+   status
+  )values(
+   #{cat_code},
+   #{cat_name},
+   #{decimal_num},
+   #{contract_id},
+   #{transport_code},
+   '1'
+  )
+</insert>
+
+<update id="updateWk" parameterType="java.util.HashMap">
+ update wl_express_td
+ set
+   cat_code=#{cat_code},
+   cat_name=#{cat_name},
+   decimal_num=#{decimal_num},
+   contract_id=#{contract_id},
+   transport_code=#{transport_code}
+   where id=#{id}
+</update>
+
+<select id="initgoods" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+ select 
+  t.id,
+  t.goods_name,
+  t.price,
+  t.contract_id,
+  t.belong_to
+  from wl_special_td t
+  where t.contract_id=#{contract_id}
+   and  t.belong_to=#{belong_to}
+</select>
+
+<delete id="delete_gs_tab" parameterType="java.util.HashMap">
+  delete from wl_special_td
+  where id=#{id}
+</delete>
+
+
+<select id="findAllData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	select
+      t.id,
+	  t.create_time,
+	  t.create_user,
+	  t.update_time,
+	  t.update_user,
+	  t.transport_code,
+	  t.transport_name,
+	  t.transport_type,
+	  t.bookbus_time,
+	  t.transport_time,
+	  t.expressno,
+	  t.store_code,
+	  t.store_name,
+	  t.orderno,
+	  t.originating_place,
+	  t.warehouse,
+	  t.privince_name,
+	  t.city_name,
+	  t.state_name,
+	  t.street_name,
+	  t.delivery_address,
+	  t.delivery_number,
+	  t.box_number,
+	  t.real_weight,
+	  t.volumn_cubic,
+	  t.remark,
+	  t.settle_flag_trans,
+	  t.settle_flag_customer,
+	  t.settle_flag_shop,
+	  t.settle_target,
+	  t.order_price,
+	  t.service_type,
+	  t.cost_center
+		from tb_logistics_standard_data t
+		where 1=1						
+		<if test="storeName != null  and storeName != '' ">
+		and t.store_name like concat('%',#{storeName},'%')
+		</if>	
+		<if test="transportName != null  and transportName != '' ">
+		and t.transport_name like concat('%',#{transportName},'%')
+		</if>				
+		<if test="firstResult != null  and firstResult != '' ">
+			LIMIT #{firstResult}, #{maxResult}
+		</if>
+
+	</select>
+	<select id="selectCount" resultType="java.lang.Integer" parameterType="com.bt.lmis.controller.form.AddressQueryParam">
+		select
+		count(1) cnt
+		from tb_logistics_standard_data t
+		where 1=1
+		<if test="storeName != null  and storeName != '' ">
+		 and t.store_name like concat('%',#{storeName},'%')
+		</if>	
+		<if test="transportName != null  and transportName != '' ">
+		 and t.transport_name like concat('%',#{transportName},'%')
+		</if>				
+	</select>
+	
+	
+	<select id="getWkData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	    select
+	     t.id,
+	     t.cat_code,
+	     t.cat_name,
+	     t.decimal_num,
+	     t.contract_id,
+	     t.transport_code,
+	     t.status
+	    from  wl_express_td t
+	    where t.contract_id=#{contract_id}
+	      and t.transport_code=#{transport_code}
+	      and t.status='1'
+	</select>
+	
+	<update id="del_wk" parameterType="java.util.HashMap">
+	 update wl_express_td
+	 set status=0
+	 where id=#{id}
+	</update>
+	
+	<select id="checkData_td_wk" parameterType="java.util.HashMap" resultType="java.lang.Long">
+	  select count(1) from wl_express_td t
+	    where t.contract_id=#{contract_id}
+	      and t.transport_code=#{transport_code}
+	      and t.cat_code=#{cat_code}
+	      and t.status='1'
+	</select>
+</mapper>   

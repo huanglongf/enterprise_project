@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee [url]http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd[/url]"  
+    version="2.0">  
+    <tlib-version>1.0</tlib-version>  
+    <short-name>func</short-name>  
+    <function>  
+        <description>获取映射字典label</description>  
+        <name>getDictLabel</name>  
+        <function-class>com.bt.utils.DictUtil</function-class>  
+        <function-signature>java.lang.String getDictLabel(java.lang.Object,java.lang.Object)</function-signature>  
+        <example>${func:getDictLabel(dictType, dictValue)}</example>  
+    </function>  
+    <function>  
+        <description>获取工单类型Name</description>  
+        <name>getWkTypeNameByCode</name>  
+        <function-class>com.bt.utils.DictUtil</function-class>  
+        <function-signature>java.lang.String getWkTypeNameByCode(java.lang.Object)</function-signature>  
+        <example>${func:getWkTypeNameByCode(wkTypeCode)}</example>  
+    </function> 
+    <function>  
+        <description>获取工单类型Name</description>  
+        <name>getNginxDownloadPreFix</name>  
+        <function-class>com.bt.utils.DictUtil</function-class>  
+        <function-signature>java.lang.String getNginxDownloadPreFix()</function-signature>  
+        <example>${func:getNginxDownloadPreFix()}</example>  
+    </function>  
+    <function>  
+        <description>获取工单类型Name</description>  
+        <name>getNginxUploadPreFix</name>  
+        <function-class>com.bt.utils.DictUtil</function-class>  
+        <function-signature>java.lang.String getNginxUploadPreFix()</function-signature>  
+        <example>${func:getNginxUploadPreFix()}</example>  
+    </function>
+</taglib>

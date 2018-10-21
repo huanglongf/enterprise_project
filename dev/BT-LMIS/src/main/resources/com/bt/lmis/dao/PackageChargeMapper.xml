@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.PackageChargeMapper" >
+	<resultMap id="PackageChargeMap" type="com.bt.lmis.model.PackagePrice" >
+		<result column="id" property="id"/>
+		<result column="con_id" property="con_id"/>
+		<result column="carrier_charge" property="carrier_charge"/>
+		<result column="storage" property="storage"/>
+		<result column="operation" property="operation"/>
+		<result column="consumable" property="consumable"/>
+		<result column="unit_price" property="unit_price"/>
+		<result column="unit_price_uom" property="unit_price_uom"/>
+		<result column="insurance" property="insurance"/>
+		<result column="return_unit_price" property="return_unit_price"/>
+		<result column="return_unit_price_uom" property="return_unit_price_uom"/>
+		<result column="delegated_pickup_unit_price" property="delegated_pickup_unit_price"/>
+		<result column="delegated_pickup_unit_price_uom" property="delegated_pickup_unit_price_uom"/>
+		<result column="return_insurance" property="return_insurance"/>
+		<result column="create_by" property="create_by"/>
+		<result column="create_time" property="create_time"/>
+		<result column="update_by" property="update_by"/>
+		<result column="update_time" property="update_time"/>
+	</resultMap>
+	<select id="findByConId" parameterType="Object" resultType="com.bt.lmis.model.PackagePrice">
+		select
+			id,
+			con_id,
+			carrier_charge,
+			storage,
+			operation,
+			consumable,
+			unit_price,
+			unit_price_uom,
+			insurance,
+			return_unit_price,
+			return_unit_price_uom,
+			delegated_pickup_unit_price,
+			delegated_pickup_unit_price_uom,
+			return_insurance,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ssc_package_price
+		where
+			1=1
+		and
+			con_id = #{con_id}
+	</select>
+	<update id="updatePackageCharge" parameterType="com.bt.lmis.model.PackagePrice">
+		update ssc_package_price
+		set carrier_charge=#{carrier_charge},
+			storage=#{storage},
+			operation=#{operation},
+			consumable=#{consumable},
+			unit_price=#{unit_price},
+			unit_price_uom=#{unit_price_uom},
+			insurance=#{insurance},
+			return_unit_price=#{return_unit_price},
+			return_unit_price_uom=#{return_unit_price_uom},
+			delegated_pickup_unit_price=#{delegated_pickup_unit_price},
+			delegated_pickup_unit_price_uom=#{delegated_pickup_unit_price_uom},
+			return_insurance=#{return_insurance},
+			update_by=#{update_by},
+			update_time=now()
+		where id=#{id}
+	</update>
+	<insert id="addPackageCharge" parameterType="com.bt.lmis.model.PackagePrice" useGeneratedKeys="true" keyProperty="id">
+		insert into ssc_package_price
+		(
+			con_id,
+			carrier_charge,
+			storage,
+			operation,
+			consumable,
+			unit_price,
+			unit_price_uom,
+			insurance,
+			return_unit_price,
+			return_unit_price_uom,
+			delegated_pickup_unit_price,
+			delegated_pickup_unit_price_uom,
+			return_insurance,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		) values (
+			#{con_id},
+			#{carrier_charge},
+			#{storage},
+			#{operation},
+			#{consumable},
+			#{unit_price},
+			#{unit_price_uom},
+			#{insurance},
+			#{return_unit_price},
+			#{return_unit_price_uom},
+			#{delegated_pickup_unit_price},
+			#{delegated_pickup_unit_price_uom},
+			#{return_insurance},
+			#{create_by},
+			now(),
+			#{create_by},
+			now()
+		)
+	</insert>
+</mapper>   

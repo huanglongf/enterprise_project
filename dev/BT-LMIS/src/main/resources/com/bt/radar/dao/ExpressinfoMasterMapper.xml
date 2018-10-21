@@ -1,0 +1,2140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.ExpressinfoMasterMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.radar.model.ExpressinfoMaster" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="waybill" property="waybill"/>
+	<result column="express_code" property="express_code"/>
+	<result column="producttype_code" property="producttype_code"/>
+	<result column="work_no" property="work_no"/>
+	<result column="platform_no" property="platform_no"/>
+	<result column="platform_time" property="platform_time"/>
+	<result column="store_code" property="store_code"/>
+	<result column="warehouse_code" property="warehouse_code"/>
+	<result column="systemwh_code" property="systemwh_code"/>
+	<result column="embrace_time" property="embrace_time"/>
+	<result column="shiptoname" property="shiptoname"/>
+	<result column="phone" property="phone"/>
+	<result column="address" property="address"/>
+	<result column="provice_code" property="provice_code"/>
+	<result column="city_code" property="city_code"/>
+	<result column="state_code" property="state_code"/>
+	<result column="street_code" property="street_code"/>
+	<result column="routestatus_code" property="routestatus_code"/>
+	<result column="warningtype_code" property="warningtype_code"/>
+	<result column="warning_level" property="warning_level"/>
+	<result column="standard_efficiency" property="standard_efficiency"/>
+	<result column="real_efficiency" property="real_efficiency"/>
+	<result column="express_time" property="express_time"/>
+	<result column="check_time" property="check_time"/>
+	<result column="weight_time" property="weight_time" javaType='java.sql.Date' jdbcType='DATE'/>
+	<result column="embrance_time" property="embrance_time"/>
+	<result column="last_embrance_time" property="last_embrance_time"/>
+	<result column="status" property="status"/>
+	<result column="jkpoint" property="jkpoint"/>
+</resultMap>
+       
+<!-- er_expressinfo_master table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,waybill,express_code,producttype_code,work_no,platform_no,platform_time,store_code,warehouse_code,systemwh_code,embrace_time,shiptoname,phone,address,provice_code,city_code,state_code,street_code,routestatus_code,warningtype_code,warning_level,standard_efficiency,real_efficiency,express_time,check_time,weight_time,embrance_time,last_embrance_time,status,jkpoint
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="waybill != null and waybill != ''" >
+	    and waybill =  #{waybill}
+	</if>
+	 	<if test="express_code != null and express_code != ''" >
+	    and express_code =  #{express_code}
+	</if>
+	 	<if test="producttype_code != null and producttype_code != ''" >
+	    and producttype_code =  #{producttype_code}
+	</if>
+	 	<if test="work_no != null and work_no != ''" >
+	    and work_no =  #{work_no}
+	</if>
+	 	<if test="platform_no != null and platform_no != ''" >
+	    and platform_no =  #{platform_no}
+	</if>
+	<if test="platform_time != null" >
+	    and platform_time =  #{platform_time}
+	</if>
+	 	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+	 	<if test="warehouse_code != null and warehouse_code != ''" >
+	    and warehouse_code =  #{warehouse_code}
+	</if>
+	 	<if test="systemwh_code != null and systemwh_code != ''" >
+	    and systemwh_code =  #{systemwh_code}
+	</if>
+	<if test="embrace_time != null" >
+	    and embrace_time =  #{embrace_time}
+	</if>
+	 	<if test="shiptoname != null and shiptoname != ''" >
+	    and shiptoname =  #{shiptoname}
+	</if>
+	 	<if test="phone != null and phone != ''" >
+	    and phone =  #{phone}
+	</if>
+	 	<if test="address != null and address != ''" >
+	    and address =  #{address}
+	</if>
+	 	<if test="provice_code != null and provice_code != ''" >
+	    and provice_code =  #{provice_code}
+	</if>
+	 	<if test="city_code != null and city_code != ''" >
+	    and city_code =  #{city_code}
+	</if>
+	 	<if test="state_code != null and state_code != ''" >
+	    and state_code =  #{state_code}
+	</if>
+	 	<if test="street_code != null and street_code != ''" >
+	    and street_code =  #{street_code}
+	</if>
+	 	<if test="routestatus_code != null and routestatus_code != ''" >
+	    and routestatus_code =  #{routestatus_code}
+	</if>
+	 	<if test="warningtype_code != null and warningtype_code != ''" >
+	    and warningtype_code =  #{warningtype_code}
+	</if>
+	<if test="warning_level != null" >
+	    and warning_level =  #{warning_level}
+	</if>
+	<if test="standard_efficiency != null" >
+	    and standard_efficiency =  #{standard_efficiency}
+	</if>
+	<if test="real_efficiency != null" >
+	    and real_efficiency =  #{real_efficiency}
+	</if>
+	<if test="express_time != null" >
+	    and express_time =  #{express_time}
+	</if>
+	<if test="check_time != null" >
+	    and check_time =  #{check_time}
+	</if>
+	<if test="weight_time != null" >
+	    and weight_time =  #{weight_time}
+	</if>
+	<if test="embrance_time != null" >
+	    and embrance_time =  #{embrance_time}
+	</if>
+	<if test="last_embrance_time != null" >
+	    and last_embrance_time =  #{last_embrance_time}
+	</if>
+	 	<if test="status != null and status != ''" >
+	    and status =  #{status}
+	</if>
+	 	<if test="jkpoint != null and jkpoint != ''" >
+	    and jkpoint =  #{jkpoint}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入快速信息主表 -->
+<insert id="insert" parameterType="com.bt.radar.model.ExpressinfoMaster" >
+  insert into er_expressinfo_master(id,create_time,create_user,update_time,update_user,waybill,express_code,producttype_code,work_no,platform_no,platform_time,store_code,warehouse_code,systemwh_code,embrace_time,shiptoname,phone,address,provice_code,city_code,state_code,street_code,routestatus_code,warningtype_code,warning_level,standard_efficiency,real_efficiency,express_time,check_time,weight_time,embrance_time,last_embrance_time,status,jkpoint)
+ values(#{id},#{create_time},#{create_user},#{waybill},#{express_code},#{producttype_code},#{work_no},#{platform_no},#{platform_time},#{store_code},#{warehouse_code},#{systemwh_code},#{embrace_time},#{shiptoname},#{phone},#{address},#{provice_code},#{city_code},#{state_code},#{street_code},#{routestatus_code},#{warningtype_code},#{warning_level},#{standard_efficiency},#{real_efficiency},#{express_time},#{check_time},#{weight_time},#{embrance_time},#{last_embrance_time},#{status},#{jkpoint})
+</insert>
+<insert id="addExpressMasterInput" parameterType='java.util.ArrayList'  >
+  insert into er_expressinfo_master_input(
+bat_id,
+create_time,
+create_user,
+waybill,
+express_code,
+producttype_code,
+work_no,
+platform_no,
+platform_time,
+store_code,		
+shiptoname,
+phone,
+address,
+provice_name,
+city_name,
+state_name,
+warehouse_code,
+line_number,
+remark
+  )
+ values
+ <foreach collection="list" item="obj" index="index" separator="," > 
+		(
+		    #{obj.bat_id,jdbcType=VARCHAR},
+			#{obj.create_time,jdbcType=VARCHAR},
+			#{obj.create_user,jdbcType=VARCHAR},
+			#{obj.waybill,jdbcType=VARCHAR},
+			#{obj.express_code,jdbcType=VARCHAR},
+			#{obj.producttype_code,jdbcType=VARCHAR},
+			#{obj.work_no,jdbcType=VARCHAR},
+			#{obj.platform_no,jdbcType=VARCHAR},
+            #{obj.platform_time,jdbcType=VARCHAR},			
+            #{obj.store_code,jdbcType=VARCHAR},	
+            #{obj.shiptoname,jdbcType=VARCHAR},
+            #{obj.phone,jdbcType=VARCHAR},
+            #{obj.address,jdbcType=VARCHAR},
+            #{obj.provice_name,jdbcType=VARCHAR},
+            #{obj.city_name,jdbcType=VARCHAR},
+            #{obj.state_name,jdbcType=VARCHAR},
+			#{obj.warehouse_code,jdbcType=VARCHAR},
+			#{obj.line_number,jdbcType=VARCHAR},
+			#{obj.remark,jdbcType=VARCHAR}
+					)
+ </foreach>
+</insert>
+
+
+
+<insert id="addExpressDetailsInput" parameterType='java.util.ArrayList'  >
+  insert into er_expressinfo_detail_input(
+  bat_id,
+create_time,
+create_user,
+update_time,
+update_user,
+waybill,
+sku_number,
+barcode,
+item_name,
+qty
+  )
+ values
+ <foreach collection="list" item="obj" index="index" separator="," > 
+		(
+		    #{obj.bat_id,jdbcType=VARCHAR},
+			#{obj.create_time,jdbcType=VARCHAR},
+			#{obj.create_user,jdbcType=VARCHAR},
+			#{obj.update_time,jdbcType=VARCHAR},
+			#{obj.update_user,jdbcType=VARCHAR},
+			#{obj.waybill,jdbcType=VARCHAR},
+			#{obj.sku_number,jdbcType=VARCHAR},
+			#{obj.barcode,jdbcType=VARCHAR},
+			#{obj.item_name,jdbcType=VARCHAR},
+			#{obj.qty,jdbcType=VARCHAR}
+					)	
+  </foreach>
+</insert>
+
+<!-- 修改快速信息主表-->  
+ <update id="update" parameterType="com.bt.radar.model.ExpressinfoMaster" >
+  update er_expressinfo_master set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},waybill=#{waybill},express_code=#{express_code},producttype_code=#{producttype_code},work_no=#{work_no},platform_no=#{platform_no},platform_time=#{platform_time},store_code=#{store_code},warehouse_code=#{warehouse_code},systemwh_code=#{systemwh_code},embrace_time=#{embrace_time},shiptoname=#{shiptoname},phone=#{phone},address=#{address},provice_code=#{provice_code},city_code=#{city_code},state_code=#{state_code},street_code=#{street_code},routestatus_code=#{routestatus_code},warningtype_code=#{warningtype_code},warning_level=#{warning_level},standard_efficiency=#{standard_efficiency},real_efficiency=#{real_efficiency},express_time=#{express_time},check_time=#{check_time},weight_time=#{weight_time},embrance_time=#{embrance_time},last_embrance_time=#{last_embrance_time},status=#{status},jkpoint=#{jkpoint} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改快速信息主表-->
+<update id="updateBySelective" parameterType="com.bt.radar.model.ExpressinfoMaster" >
+	update er_expressinfo_master set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="waybill != null  and waybill != '' ">
+		waybill=#{waybill},
+	</if>
+	<if test="express_code != null  and express_code != '' ">
+		express_code=#{express_code},
+	</if>
+	<if test="producttype_code != null  and producttype_code != '' ">
+		producttype_code=#{producttype_code},
+	</if>
+	<if test="work_no != null  and work_no != '' ">
+		work_no=#{work_no},
+	</if>
+	<if test="platform_no != null  and platform_no != '' ">
+		platform_no=#{platform_no},
+	</if>
+	<if test="platform_time != null  ">
+		platform_time=#{platform_time},
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code},
+	</if>
+	<if test="warehouse_code != null  and warehouse_code != '' ">
+		warehouse_code=#{warehouse_code},
+	</if>
+	<if test="systemwh_code != null  and systemwh_code != '' ">
+		systemwh_code=#{systemwh_code},
+	</if>
+	<if test="embrace_time != null  ">
+		embrace_time=#{embrace_time},
+	</if>
+	<if test="shiptoname != null  and shiptoname != '' ">
+		shiptoname=#{shiptoname},
+	</if>
+	<if test="phone != null  and phone != '' ">
+		phone=#{phone},
+	</if>
+	<if test="address != null  and address != '' ">
+		address=#{address},
+	</if>
+	<if test="provice_code != null  and provice_code != '' ">
+		provice_code=#{provice_code},
+	</if>
+	<if test="city_code != null  and city_code != '' ">
+		city_code=#{city_code},
+	</if>
+	<if test="state_code != null  and state_code != '' ">
+		state_code=#{state_code},
+	</if>
+	<if test="street_code != null  and street_code != '' ">
+		street_code=#{street_code},
+	</if>
+	<if test="routestatus_code != null  and routestatus_code != '' ">
+		routestatus_code=#{routestatus_code},
+	</if>
+	<if test="warningtype_code != null  and warningtype_code != '' ">
+		warningtype_code=#{warningtype_code},
+	</if>
+	<if test="warning_level != null  ">
+		warning_level=#{warning_level},
+	</if>
+	<if test="standard_efficiency != null  ">
+		standard_efficiency=#{standard_efficiency},
+	</if>
+	<if test="real_efficiency != null  ">
+		real_efficiency=#{real_efficiency},
+	</if>
+	<if test="express_time != null  ">
+		express_time=#{express_time},
+	</if>
+	<if test="check_time != null  ">
+		check_time=#{check_time},
+	</if>
+	<if test="weight_time != null  ">
+		weight_time=#{weight_time},
+	</if>
+	<if test="embrance_time != null  ">
+		embrance_time=#{embrance_time},
+	</if>
+	<if test="last_embrance_time != null  ">
+		last_embrance_time=#{last_embrance_time},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="jkpoint != null  and jkpoint != '' ">
+		jkpoint=#{jkpoint},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除快速信息主表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from er_expressinfo_master where id = #{id}
+</update>
+<!-- 批量删除快速信息主表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from er_expressinfo_master where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找快速信息主表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_expressinfo_master where id = #{id}
+</select>	
+<!-- 快速信息主表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.ExpressinfoMasterQueryParam">
+	select count(1) from er_expressinfo_master 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的快速信息主表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.ExpressinfoMasterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_expressinfo_master 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 快速信息主表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.ExpressinfoMasterQueryParam">
+	select count(1) from er_expressinfo_master 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的快速信息主表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.ExpressinfoMasterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_expressinfo_master 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+<select id="getProduct_type" resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+	select  product_type_name,product_type_code 
+	     from  tb_transport_product_type 
+	      where status=1
+	       <if test="vendor_code != null and vendor_code != ''" >
+        and   vendor_code=#{vendor_code}
+    </if>
+    group  by product_type_name,product_type_code
+</select> 	
+<select id="getPhysical_Warehouse" resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+select  warehouse_name,warehouse_code   from er_physical_warehouse  where dl_flag=1  GROUP BY  warehouse_name,warehouse_code 
+</select>
+<select id="getWarehouse" resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+select  warehouse_name,warehouse_code   from tb_warehouse  where validity=1  GROUP BY  warehouse_name,warehouse_code 
+</select>
+<select id="getStore" resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+select  store_code,store_name from tb_store  where  validity=1 group  by  store_code,store_name 
+</select>
+
+<select id='findBaseInfo' parameterType="com.bt.lmis.page.QueryParameter" resultType="java.util.HashMap">
+SELECT 
+    a.waybill,
+    a.express_code,
+    a.producttype_code,
+    a.producttype_name,
+    a.work_no,
+    a.platform_no,
+    a.store_code,
+    a.address,
+    a.provice_code,
+    a.city_code,
+    a.state_code,
+    a.check_time,
+    a.weight_time,
+    a.warehouse_code,
+    a.phone,
+    a.shiptoname,
+    c.order_amount,
+    c.epistatic_order,
+    b.warningtype_code,
+    b.routestatus_code,
+    b.warning_level,
+    a.store_name,
+    a.warehouse_name,
+    a.express_name
+FROM
+   er_expressinfo_master a
+   left join 
+   er_waybill_warninginfo_detail b
+   on a.waybill=b.waybill
+   left join
+   tb_warehouse_express_data c 
+   on a.waybill=c.express_number
+   where a.waybill=#{waybill}
+</select>
+
+
+<select id="findAllData" parameterType="com.bt.lmis.page.QueryParameter" resultType="java.util.HashMap">
+SELECT 
+    a.waybill,
+    a.express_code,
+    a.producttype_code,
+    a.work_no,
+    a.platform_no,
+    a.store_code,
+    a.address,
+    a.provice_code,
+    a.city_code,
+    a.state_code,
+    a.check_time,
+    a.weight_time,
+    a.warehouse_code,
+    a.phone,
+    a.shiptoname,
+    (select transport_name from tb_transport_vendor where transport_code=a.express_code) as transport_name,
+    (select store_name from tb_store where store_code=a.store_code) as store_name,
+    ifnull(DATE_FORMAT(a.standard_receive_time,'%Y-%m-%d %H:%i:%s'),'') AS standard_receive_time,
+    ifnull(DATE_FORMAT(a.embrance_time,'%Y-%m-%d %H:%i:%s'),'') AS embrance_time,
+    ifnull(DATE_FORMAT(a.receive_time,'%Y-%m-%d %H:%i:%s'),'') AS receive_time,
+    ifnull(DATE_FORMAT(a.run_time,'%Y-%m-%d %H:%i:%s'),'') AS run_time,
+    (SELECT 
+        warehouse_name
+    FROM
+        tb_warehouse
+    WHERE
+        validity = 1  and warehouse_code=a.warehouse_code) as warehouse_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.provice_code) AS provice_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.city_code) AS city_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.state_code) AS state_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.street_code) AS street_name,
+            a.standard_receive_time
+FROM
+   er_expressinfo_master a ,
+    er_waybill_warninginfo_detail c where  a.waybill=c.waybill and a.express_code=c.express_code
+   <if test="warning_category != null and warning_category != ''" >
+     and   c.warning_category=#{warning_category}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="warehouse_code != null and warehouse_code != ''" >
+    and a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != ''" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != ''" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+    and a.routestatus_code=#{routestatus_code}
+    </if>
+    <if test="warningtype_code != null and warningtype_code != ''" >
+    and c.warningtype_code=#{warningtype_code}
+    </if>
+    <if test="warning_level != null and warning_level != ''" >
+    and  c.warning_level=#{warning_level}
+    </if> 
+     <if test="start_time != null and start_time != ''" >
+     and a.embrace_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.embrace_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="del_flag != null and del_flag != ''" >
+     and c.del_flag=#{del_flag}
+    </if>  
+    LIMIT #{firstResult}, #{maxResult} 
+</select>
+<select id="findAllData_adv" parameterType="com.bt.lmis.page.QueryParameter" resultType="java.util.HashMap">
+SELECT 
+    a.waybill,
+    a.express_code,
+    a.producttype_code,
+    a.work_no,
+    a.platform_no,
+    a.store_code,
+    a.address,
+    a.provice_code,
+    a.city_code,
+    a.state_code,
+    a.check_time,
+    a.weight_time,
+    a.warehouse_code,
+    a.phone,
+    a.shiptoname,
+    (select transport_name from tb_transport_vendor where transport_code=a.express_code) as transport_name,
+    (select store_name from tb_store where store_code=a.store_code) as store_name,
+    ifnull(DATE_FORMAT(a.standard_receive_time,'%Y-%m-%d %H:%i:%s'),'') AS standard_receive_time,
+    ifnull(DATE_FORMAT(a.embrance_time,'%Y-%m-%d %H:%i:%s'),'') AS embrance_time,
+    ifnull(DATE_FORMAT(a.receive_time,'%Y-%m-%d %H:%i:%s'),'') AS receive_time,
+    ifnull(DATE_FORMAT(a.run_time,'%Y-%m-%d %H:%i:%s'),'') AS run_time,
+    (SELECT 
+        warehouse_name
+    FROM
+        tb_warehouse
+    WHERE
+        validity = 1  and warehouse_code=a.warehouse_code) as warehouse_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.provice_code) AS provice_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.city_code) AS city_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.state_code) AS state_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.street_code) AS street_name,
+            a.standard_receive_time
+FROM
+   er_expressinfo_master a ,
+    er_waybill_warninginfo_detail c where  a.waybill=c.waybill and a.express_code=c.express_code
+    <if test="warning_category != null and warning_category != ''" >
+     and   c.warning_category=#{warning_category}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="warehouse_code != null and warehouse_code != ''" >
+    and a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != ''" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != ''" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+    and a.routestatus_code=#{routestatus_code}
+    </if>
+    <if test="warningtype_code != null and warningtype_code != ''" >
+    and c.warningtype_code=#{warningtype_code}
+    </if>
+    <if test="warning_level != null and warning_level != ''" >
+    and  c.warning_level=#{warning_level}
+    </if> 
+     <if test="start_time != null and start_time != ''" >
+     and a.embrace_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.embrace_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="del_flag != null and del_flag != ''" >
+     and c.del_flag=#{del_flag}
+    </if>  
+    LIMIT #{firstResult}, #{maxResult} 
+</select>
+
+
+
+<select id="selectCount" parameterType="com.bt.lmis.page.QueryParameter" resultType="java.lang.Integer">
+
+select count(1)
+   from  er_expressinfo_master a ,er_waybill_warninginfo_detail b where a.waybill=b.waybill
+     <if test="warining_status != null and warining_status != ''" >
+       and b.warining_status=#{warining_status}
+      </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="warehouse_code != null and warehouse_code != ''" >
+    and a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != ''" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != ''" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+    and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.embrace_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.embrace_time<![CDATA[ <= ]]>#{end_time}
+    </if> 
+     <if test="warning_category != null and warning_category != ''" >
+        and  c.warning_category=#{warning_category}
+     </if>
+     <if test="warningtype_code != null and warningtype_code != ''" >
+       and c.warningtype_code=#{warningtype_code}
+     </if>
+     <if test="warning_level != null and warning_level != ''" >
+        and  c.warning_level=#{warning_level}
+      </if> 
+</select>
+
+<select id="selectWarnTB"  parameterType="com.bt.lmis.page.QueryParameter" resultType="java.lang.Integer">
+select count(1) from (
+SELECT 
+    1
+FROM
+    er_waybill_warninginfo_detail b  where 1=1
+       <if test="warining_status != null and warining_status != ''" >
+       and a.warining_status=#{warining_status}
+       </if>
+       <if test="warning_category != null and warning_category != ''" >
+        and  b.warning_category=#{warning_category}
+       </if>
+       <if test="warningtype_code != null and warningtype_code != ''" >
+       and b.warningtype_code=#{warningtype_code}
+       </if>
+       <if test="warning_level != null and warning_level != ''" >
+        and  b.warning_level=#{warning_level}
+        </if>
+        <if test="del_flag != null and del_flag != ''" >
+        and  b.del_flag=#{del_flag}
+        </if>
+        group by waybill) b
+</select>
+
+<select  id='findDetailsByOrderNo' parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+    select * from er_expressinfo_detail 
+      where 1=1 
+    <if test="waybill != null and waybill != ''" >
+     and waybill=#{waybill}
+    </if>
+</select>
+
+<select  id='findAlarmDetailsByOrderNo' parameterType="com.bt.lmis.page.QueryParameter" resultType='java.util.HashMap'>
+ SELECT 
+    *
+FROM
+    er_waybill_warninginfo_detail a,
+    er_warninginfo_maintain_master b
+WHERE
+    a.warningtype_code = b.warningtype_code
+     <if test="id != null and id != ''" >
+     and a.id=#{id}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and a.waybill=#{waybill}
+    </if>
+    order by a.create_time
+</select>
+
+<select  id='findAlarmDetailsByOrderNo_ADV' parameterType="com.bt.lmis.page.QueryParameter" resultType='java.util.HashMap'>
+SELECT 
+    a.*, b.warningtype_name, c.wo_process_status
+FROM
+    er_waybill_warninginfo_detail a
+        LEFT JOIN
+    er_warninginfo_maintain_master b ON a.warningtype_code = b.warningtype_code
+        LEFT JOIN
+    wo_master c ON a.wk_id = c.id
+  where 1=1
+   <if test="id != null and id != ''" >
+     and a.id=#{id}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and a.waybill=#{waybill}
+    </if>
+     order by a.create_time
+</select>
+
+<select  id='findExpressByCondition'  parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+   SELECT 
+    distinct(a.id),a.waybill,a.express_code,a.producttype_code,a.work_no,a.platform_no,a.store_code,a.warehouse_code,a.provice_code,a.city_code,a.state_code,a.street_code,
+    DATE_FORMAT(a.weight_time,'%Y-%m-%d %H:%i:%s') AS weight_time,
+    a.address,a.shiptoname,a.phone,
+    g.product_type_name
+,(select area_name from tb_area where area_code=a.provice_code) as provice_name
+,(select area_name from tb_area where area_code=a.city_code) as city_name
+,(select area_name from tb_area where area_code=a.state_code) as state_name
+,(select area_name from tb_area where area_code=a.street_code) as street_name,
+b.transport_name,c.store_name,a.warehouse_name,
+ifnull(DATE_FORMAT(a.standard_receive_time,'%Y-%m-%d %H:%i:%s'),'') AS standard_receive_time,
+ifnull(DATE_FORMAT(a.embrance_time,'%Y-%m-%d %H:%i:%s'),'') AS embrance_time,
+ifnull(DATE_FORMAT(a.receive_time,'%Y-%m-%d %H:%i:%s'),'') AS receive_time,
+ifnull(DATE_FORMAT(a.run_time,'%Y-%m-%d %H:%i:%s'),'') AS run_time
+FROM
+  ( select 
+   a.id,a.waybill,a.express_code,a.producttype_code,a.work_no,a.platform_no,a.store_code,a.warehouse_code,a.provice_code,a.city_code,a.state_code,a.weight_time,a.street_code,a.address,a.shiptoname,a.phone,a.standard_receive_time,a.embrance_time,a.receive_time,a.run_time
+   ,er_physical_warehouse.warehouse_code as physical_warehouse_code,tb_warehouse.warehouse_name
+    from 
+    er_expressinfo_master a left join er_warehouse_relation on a.warehouse_code= er_warehouse_relation.logic_code
+    left join er_physical_warehouse on er_warehouse_relation.physical_code=er_physical_warehouse.warehouse_code
+    left join tb_warehouse on a.warehouse_code=tb_warehouse.warehouse_code
+    where er_warehouse_relation.dl_flag=1
+     <if test="physical_warehouse_code != null and physical_warehouse_code != ''" >
+     and   er_physical_warehouse.warehouse_code=#{physical_warehouse_code}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+      <if test="warehouse_code != null and warehouse_code != ''" >
+     and   a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_n
+    </if>
+    <if test="warehouse_code != null and warehouse_code != ''" >
+    and a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+    and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="ebc_timestart != null and ebc_timestart!= ''" >
+     and a.embrance_time<![CDATA[ >= ]]>#{ebc_timestart}
+    </if>
+    <if test="ebc_timeend != null and ebc_timeend != ''" >
+     and a.embrance_time<![CDATA[ <= ]]>#{ebc_timeend}
+    </if>
+     <if test="sr_timestart != null and sr_timestart != ''" >
+     and a.standard_receive_time<![CDATA[ >= ]]>#{sr_timestart}
+    </if>
+    <if test="sr_timeend != null and sr_timeend != ''" >
+     and a.standard_receive_time<![CDATA[ <= ]]>#{sr_timeend}
+    </if>
+    <if test="r_timestart != null and r_timestart != ''" >
+     and a.receive_time<![CDATA[ >= ]]>#{r_timestart}
+    </if>
+    <if test="r_timeend != null and r_timeend != ''" >
+     and a.receive_time<![CDATA[ <= ]]>#{r_timeend}
+    </if>
+    
+    LIMIT #{firstResult}, #{maxResult} 
+    ) a
+        LEFT JOIN
+    (select  transport_code,transport_name from   
+    tb_transport_vendor where validity = 1 AND transport_type = 1) b ON a.express_code = b.transport_code
+        LEFT JOIN
+    (SELECT 
+        store_code, store_name
+    FROM
+        tb_store
+    WHERE
+        validity = 1) c ON a.store_code = c.store_code
+        LEFT JOIN
+    (SELECT 
+        product_type_name, product_type_code
+    FROM
+        tb_transport_product_type
+    WHERE
+        status = 1) g ON a.producttype_code = g.product_type_code
+
+ 	      
+</select>
+<select id='findExpressByConditionCount'  parameterType='java.util.HashMap' resultType='java.lang.Integer'>
+select  count(1) from (
+ select distinct(1) from er_expressinfo_master a
+    left join er_waybill_warninginfo_detail b on a.waybill=b.waybill 
+    left join er_warehouse_relation on a.warehouse_code= er_warehouse_relation.logic_code
+    left join er_physical_warehouse on er_warehouse_relation.physical_code=er_physical_warehouse.warehouse_code
+    left join tb_warehouse on a.warehouse_code=tb_warehouse.warehouse_code 
+  <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="warehouse_code != null and warehouse_code != ''" >
+    and a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+    and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.embrace_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.embrace_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+     <if test="warning_level!= null and warning_level != ''" >
+     and b.warning_level=#{warning_level}
+    </if>
+     <if test="warningtype_code!= null and warningtype_code!= ''" >
+     and b.warningtype_code=#{warningtype_code}
+    </if>
+     <if test="warning_category!= null and warning_category!= ''" >
+     and b.warning_category=#{warning_category}
+    </if>) aa
+</select>
+<select  id='findExpressByWarning'  parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+ SELECT 
+    a.*,
+    b.validity,
+    b.transport_type,
+    g.product_type_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.provice_code) AS provice_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.city_code) AS city_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.state_code) AS state_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.street_code) AS street_name,
+    b.transport_name,
+    c.store_name,
+    d.warehouse_name
+FROM
+    er_expressinfo_master a
+        LEFT JOIN
+    tb_transport_vendor b ON a.express_code = b.transport_code
+        LEFT JOIN
+    (SELECT 
+        store_code, store_name
+    FROM
+        tb_store
+    WHERE
+        validity = 1) c ON a.store_code = c.store_code
+        LEFT JOIN
+    (SELECT 
+        warehouse_code, warehouse_name
+    FROM
+        er_physical_warehouse
+    WHERE
+        dl_flag = 1) d ON d.warehouse_code = a.warehouse_code
+        LEFT JOIN
+    (SELECT 
+        product_type_name, product_type_code
+    FROM
+        tb_transport_product_type
+    WHERE
+        status = 1) g ON a.producttype_code = g.product_type_code
+WHERE
+    EXISTS( SELECT 
+            1
+        FROM
+            er_waybill_warninginfo_master h
+        WHERE
+                a.waybill = h.waybill
+                AND b.validity = 1
+                AND transport_type = 1
+                AND h.warningtype_code = 'zzcs'
+    <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="warehouse_code != null and warehouse_code != ''" >
+    and a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+    and a.routestatus_code=#{routestatus_code}
+    </if>
+    <if test="warningtype_code != null and warningtype_code != ''" >
+    and h.warningtype_code=#{warningtype_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.embrace_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.embrace_time<![CDATA[ <= ]]>#{end_time}
+    </if>                
+                )
+LIMIT #{firstResult}, #{maxResult}  
+</select>
+<select  id='findExpressByWarningCount'  parameterType='java.util.HashMap' resultType='java.lang.Integer'>
+ Select  count(1) from (
+ SELECT 
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.provice_code) AS provice_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.city_code) AS city_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.state_code) AS state_name,
+    (SELECT 
+            area_name
+        FROM
+            tb_area
+        WHERE
+            area_code = a.street_code) AS street_name
+FROM
+    er_expressinfo_master a
+        LEFT JOIN
+    tb_transport_vendor b ON a.express_code = b.transport_code
+        LEFT JOIN
+    (SELECT 
+        store_code, store_name
+    FROM
+        tb_store
+    WHERE
+        validity = 1) c ON a.store_code = c.store_code
+        LEFT JOIN
+    (SELECT 
+        warehouse_code, warehouse_name
+    FROM
+        er_physical_warehouse
+    WHERE
+        dl_flag = 1 ) d ON d.warehouse_code = a.warehouse_code
+        LEFT JOIN
+    (SELECT 
+        product_type_name, product_type_code
+    FROM
+        tb_transport_product_type
+    WHERE
+        status = 1) g ON a.producttype_code = g.product_type_code
+WHERE
+    EXISTS( SELECT 
+            1
+        FROM
+            er_waybill_warninginfo_master h
+        WHERE
+                a.waybill = h.waybill
+                AND b.validity = 1
+                AND transport_type = 1
+                AND h.warningtype_code = 'zzcs'
+    <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="warehouse_code != null and warehouse_code != ''" >
+    and a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+    and a.routestatus_code=#{routestatus_code}
+    </if>
+    <if test="warningtype_code != null and warningtype_code != ''" >
+    and h.warningtype_code=#{warningtype_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.embrace_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.embrace_time<![CDATA[ <= ]]>#{end_time}
+    </if>                
+                )) aa
+
+</select>
+
+<select id='downLoad'   parameterType="com.bt.radar.controller.form.ExpressinfoMasterQueryParam" resultType='java.util.HashMap'>
+SELECT 
+    distinct(a.id),
+    a.waybill,
+    a.work_no,
+    a.platform_no,
+    a.shiptoname,
+    a.phone,
+    a.address,
+    a.check_time,
+    a.weight_time,
+    a.new_waybill,
+    a.express_name,
+    a.producttype_name,
+    a.warehouse_name,
+    a.embrance_time,
+    a.systemwh_name AS physical_name,
+    a.store_name,
+    IFNULL(a.provice_name,
+            '') AS provice_name,
+    IFNULL(a.city_name,
+            '') AS city_name,
+    IFNULL(a.state_name,
+            '') AS state_name,
+          a.  embrance_time,
+          a. standard_receive_time,
+           a.receive_time,
+           a.run_time,
+           a.route_time,
+           a.route_info  
+   <!--  a.status,
+    CASE i.del_flag
+        WHEN 0 THEN '预警中'
+        WHEN 1 THEN '预警取消'
+        ELSE '-'
+    END AS warning_status,
+    j.warningtype_name,
+    i.warning_level,
+    CASE i.warning_category
+        WHEN '0' THEN '事件预警'
+        WHEN '1' THEN '超时预警'
+        ELSE '-'
+    END AS warning_category -->
+FROM
+    er_expressinfo_master a
+        LEFT JOIN
+    er_waybill_warninginfo_detail i ON i.waybill = a.waybill 
+        LEFT JOIN
+    er_warninginfo_maintain_master j  on i.warningtype_code=j.warningtype_code and j.dl_flag=1
+where 1=1
+  <if test="waybill != null and waybill != ''" >
+     and a.waybill=#{waybill}
+  </if> 
+  <if test="express_code != null and express_code != ''" >
+     and a.express_code=#{express_code}
+  </if> 
+  <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+  </if> 
+   <if test="work_no != null and work_no != ''" >
+     and a.work_no=#{work_no}
+  </if> 
+    <if test="platform_no != null and platform_no != ''" >
+     and a.platform_no=#{platform_no}
+  </if> 
+   <if test="store_code != null and store_code != ''" >
+     and a.store_code=#{store_code}
+  </if> 
+  <if test="warehouse_code != null and warehouse_code != ''" >
+     and a.warehouse_code=#{warehouse_code}
+  </if> 
+  <if test="shiptoname != null and shiptoname != ''" >
+     and a.shiptoname=#{shiptoname}
+  </if> 
+  <if test="phone != null and phone != ''" >
+     and a.phone=#{phone}
+  </if> 
+  <if test="address != null and address != ''" >
+     and a.address=#{address}
+  </if> 
+  <if test="provice_code != null and provice_code != ''" >
+     and a.provice_code=#{provice_code}
+  </if> 
+  <if test="city_code != null and city_code != ''" >
+     and a.city_code=#{city_code}
+  </if> 
+  <if test="state_code != null and state_code != ''" >
+     and a.state_code=#{state_code}
+  </if>
+   <if test="end_time != null and end_time != ''" >
+     and a.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>   
+      <if test="start_time != null and start_time != ''" >
+     and a.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>  
+   <if test="sr_timeend != null and sr_timeend != ''" >
+     and a.standard_receive_time<![CDATA[ <= ]]>#{sr_timeend}
+    </if>   
+      <if test="sr_timestart != null and sr_timestart != ''" >
+     and a.standard_receive_time<![CDATA[ >= ]]>#{sr_timestart}
+    </if>  
+     <if test="r_timeend != null and r_timeend != ''" >
+     and a.receive_time<![CDATA[ <= ]]>#{r_timeend}
+    </if>   
+      <if test="r_timestart != null and r_timestart != ''" >
+     and a.receive_time<![CDATA[ >= ]]>#{r_timestart}
+    </if> 
+     <if test="ebc_timeend != null and ebc_timeend != ''" >
+     and a.embrance_time<![CDATA[ <= ]]>#{ebc_timeend}
+    </if>   
+      <if test="ebc_timestart != null and ebc_timestart != ''" >
+     and a.embrance_time<![CDATA[ >= ]]>#{ebc_timestart}
+    </if> 
+      <if test="warning_level != null and warning_level != ''" >
+     and a.warning_level<![CDATA[ >= ]]>#{warning_level}
+    </if> 
+LIMIT #{firstResult}, #{maxResult} 
+</select>
+<select id='findExpress'  parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+  select  
+   a.id,a.waybill,a.express_code,a.producttype_code,a.work_no,a.platform_no,a.store_code,a.warehouse_code,a.provice_code,a.city_code,a.state_code,a.street_code,
+    DATE_FORMAT(a.weight_time,'%Y-%m-%d %H:%i:%s') AS weight_time,
+    a.address,a.shiptoname,a.phone,
+    a.producttype_name
+,a.provice_name
+,a.city_name
+,a.state_name
+,
+a.express_name,a.store_name,a.warehouse_name,
+ifnull(DATE_FORMAT(a.standard_receive_time,'%Y-%m-%d %H:%i:%s'),'') AS standard_receive_time,
+ifnull(DATE_FORMAT(a.embrance_time,'%Y-%m-%d %H:%i:%s'),'') AS embrance_time,
+ifnull(DATE_FORMAT(a.receive_time,'%Y-%m-%d %H:%i:%s'),'') AS receive_time,
+ifnull(DATE_FORMAT(a.run_time,'%Y-%m-%d %H:%i:%s'),'') AS run_time 
+  from  er_expressinfo_master a where 1=1
+    <if test="physical_warehouse_code != null and physical_warehouse_code != ''" >
+     and   a.systemwh_code=#{physical_warehouse_code}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+      <if test="warehouse_code != null and warehouse_code != ''" >
+     and   a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+     and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="ebc_timestart != null and ebc_timestart!= ''" >
+     and a.embrance_time<![CDATA[ >= ]]>#{ebc_timestart}
+    </if>
+    <if test="ebc_timeend != null and ebc_timeend != ''" >
+     and a.embrance_time<![CDATA[ <= ]]>#{ebc_timeend}
+    </if>
+     <if test="sr_timestart != null and sr_timestart != ''" >
+     and a.standard_receive_time<![CDATA[ >= ]]>#{sr_timestart}
+    </if>
+    <if test="sr_timeend != null and sr_timeend != ''" >
+     and a.standard_receive_time<![CDATA[ <= ]]>#{sr_timeend}
+    </if>
+    <if test="r_timestart != null and r_timestart != ''" >
+     and a.receive_time<![CDATA[ >= ]]>#{r_timestart}
+    </if>
+    <if test="r_timeend != null and r_timeend != ''" >
+     and a.receive_time<![CDATA[ <= ]]>#{r_timeend}
+    </if>
+    LIMIT #{firstResult}, #{maxResult} 
+</select>
+
+<select id="findExpressByConditionUnionCnt"  parameterType='java.util.HashMap' resultType='java.lang.Integer'>
+select  count(1)  from  
+er_expressinfo_master a where 1=1
+    <if test="provice_code != null and provice_code != ''" >
+     and   a.provice_code=#{provice_code}
+    </if>
+     <if test="city_code != null and city_code != ''" >
+     and   a.city_code=#{city_code}
+    </if>
+     <if test="state_code != null and state_code != ''" >
+     and   a.state_code=#{state_code}
+    </if>
+    <if test="physical_warehouse_code != null and physical_warehouse_code != ''" >
+     and   a.systemwh_code=#{physical_warehouse_code}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+      <if test="warehouse_code != null and warehouse_code != ''" >
+     and   a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+     and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="ebc_timestart != null and ebc_timestart!= ''" >
+     and a.embrance_time<![CDATA[ >= ]]>#{ebc_timestart}
+    </if>
+    <if test="ebc_timeend != null and ebc_timeend != ''" >
+     and a.embrance_time<![CDATA[ <= ]]>#{ebc_timeend}
+    </if>
+     <if test="sr_timestart != null and sr_timestart != ''" >
+     and a.standard_receive_time<![CDATA[ >= ]]>#{sr_timestart}
+    </if>
+    <if test="sr_timeend != null and sr_timeend != ''" >
+     and a.standard_receive_time<![CDATA[ <= ]]>#{sr_timeend}
+    </if>
+    <if test="r_timestart != null and r_timestart != ''" >
+     and a.receive_time<![CDATA[ >= ]]>#{r_timestart}
+    </if>
+    <if test="r_timeend != null and r_timeend != ''" >
+     and a.receive_time<![CDATA[ <= ]]>#{r_timeend}
+    </if>
+</select>
+<select id="findExpressByWarningUnion"  parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+ select  
+   a.id,a.waybill,a.work_no,a.platform_no,
+    DATE_FORMAT(a.weight_time,'%Y-%m-%d %H:%i:%s') AS weight_time,
+    a.address,a.shiptoname,a.phone,
+    a.producttype_name
+,a.provice_name
+,a.city_name
+,a.state_name
+,a.express_name
+,a.store_name
+,a.warehouse_name
+,ifnull(DATE_FORMAT(a.standard_receive_time,'%Y-%m-%d %H:%i:%s'),'') AS standard_receive_time,
+ifnull(DATE_FORMAT(a.embrance_time,'%Y-%m-%d %H:%i:%s'),'') AS embrance_time,
+ifnull(DATE_FORMAT(a.receive_time,'%Y-%m-%d %H:%i:%s'),'') AS receive_time,
+ifnull(DATE_FORMAT(a.run_time,'%Y-%m-%d %H:%i:%s'),'') AS run_time,
+c.status as routestatus_name,
+a.systemwh_name ,
+a.new_waybill,
+a.delivery_failure_time,
+a.delivery_failure_reason
+  from     er_expressinfo_master a 
+    
+    left join er_routecode c 
+    on a.routestatus_code=c.status_code
+    where 
+    exists (select 1 from   er_waybill_warninginfo_detail b where a.waybill=b.waybill
+     <if test="del_flag != null and del_flag != ''" >
+     and   b.del_flag=#{del_flag}
+    </if>
+     <if test="warningtype_code != null and warningtype_code != ''" >
+     and   b.warningtype_code=#{warningtype_code}
+    </if>
+     <if test="warning_level != null and warning_level != ''" >
+     and   b.warning_level=#{warning_level}
+    </if>
+      <if test="warning_category != null and warning_category != ''" >
+     and   b.warning_category=#{warning_category}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   b.waybill=#{waybill}
+    </if>
+     )
+    <if test="provice_code != null and provice_code != ''" >
+     and   a.provice_code=#{provice_code}
+    </if>
+     <if test="city_code != null and city_code != ''" >
+     and   a.city_code=#{city_code}
+    </if>
+     <if test="state_code != null and state_code != ''" >
+     and   a.state_code=#{state_code}
+    </if>
+    <if test="physical_warehouse_code != null and physical_warehouse_code != ''" >
+     and   a.systemwh_code=#{physical_warehouse_code}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+      <if test="warehouse_code != null and warehouse_code != ''" >
+     and   a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+     and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="ebc_timestart != null and ebc_timestart!= ''" >
+     and a.embrance_time<![CDATA[ >= ]]>#{ebc_timestart}
+    </if>
+    <if test="ebc_timeend != null and ebc_timeend != ''" >
+     and a.embrance_time<![CDATA[ <= ]]>#{ebc_timeend}
+    </if>
+     <if test="sr_timestart != null and sr_timestart != ''" >
+     and a.standard_receive_time<![CDATA[ >= ]]>#{sr_timestart}
+    </if>
+    <if test="sr_timeend != null and sr_timeend != ''" >
+     and a.standard_receive_time<![CDATA[ <= ]]>#{sr_timeend}
+    </if>
+    <if test="r_timestart != null and r_timestart != ''" >
+     and a.receive_time<![CDATA[ >= ]]>#{r_timestart}
+    </if>
+    <if test="r_timeend != null and r_timeend != ''" >
+     and a.receive_time<![CDATA[ <= ]]>#{r_timeend}
+    </if>
+     <if test="delivery_failure_start_time != null and delivery_failure_start_time != ''" >
+     and a.delivery_failure_time<![CDATA[ >= ]]>#{delivery_failure_start_time}
+    </if>
+     <if test="delivery_failure_end_time != null and delivery_failure_end_time != ''" >
+     and a.delivery_failure_time<![CDATA[ <= ]]>#{delivery_failure_end_time}
+    </if>
+     <if test="delivery_failure_reason != null and delivery_failure_reason != ''" >
+     and a.delivery_failure_reason=#{delivery_failure_reason}
+    </if>
+     <if test="new_waybill != null and new_waybill != ''" >
+     and a.new_waybill=#{new_waybill}
+    </if>
+     
+    <!--  <if test="warehouse_code != null and warehouse_code != ''" >
+     and   b.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="start_time != null and start_time != ''" >
+     and b.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and b.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+     and b.routestatus_code=#{routestatus_code}
+    </if>  -->
+    LIMIT #{firstResult}, #{maxResult} 
+</select>
+<select id="findExpressByWarningUnionCnt"  parameterType='java.util.HashMap' resultType='java.lang.Integer'>
+ select  count(1)
+   from  er_expressinfo_master a 
+    
+    left join er_routecode c 
+    on a.routestatus_code=c.status_code
+    where 
+    exists (select 1 from   er_waybill_warninginfo_detail b where a.waybill=b.waybill
+    <if test="waybill != null and waybill != ''" >
+     and   b.waybill=#{waybill}
+    </if>
+     <if test="del_flag != null and del_flag != ''" >
+     and   b.del_flag=#{del_flag}
+    </if>
+     <if test="warningtype_code != null and warningtype_code != ''" >
+     and   b.warningtype_code=#{warningtype_code}
+    </if>
+     <if test="warning_level != null and warning_level != ''" >
+     and   b.warning_level=#{warning_level}
+    </if>
+      <if test="warning_category != null and warning_category != ''" >
+     and   b.warning_category=#{warning_category}
+    </if>
+    <if test="express_code != null and express_code != ''" >
+     and   b.express_code=#{express_code}
+    </if>
+     )
+    <if test="provice_code != null and provice_code != ''" >
+     and   a.provice_code=#{provice_code}
+    </if>
+     <if test="city_code != null and city_code != ''" >
+     and   a.city_code=#{city_code}
+    </if>
+     <if test="state_code != null and state_code != ''" >
+     and   a.state_code=#{state_code}
+    </if>
+    <if test="physical_warehouse_code != null and physical_warehouse_code != ''" >
+     and   a.systemwh_code=#{physical_warehouse_code}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+      <if test="warehouse_code != null and warehouse_code != ''" >
+     and   a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+     and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="ebc_timestart != null and ebc_timestart!= ''" >
+     and a.embrance_time<![CDATA[ >= ]]>#{ebc_timestart}
+    </if>
+    <if test="ebc_timeend != null and ebc_timeend != ''" >
+     and a.embrance_time<![CDATA[ <= ]]>#{ebc_timeend}
+    </if>
+     <if test="sr_timestart != null and sr_timestart != ''" >
+     and a.standard_receive_time<![CDATA[ >= ]]>#{sr_timestart}
+    </if>
+    <if test="sr_timeend != null and sr_timeend != ''" >
+     and a.standard_receive_time<![CDATA[ <= ]]>#{sr_timeend}
+    </if>
+    <if test="r_timestart != null and r_timestart != ''" >
+     and a.receive_time<![CDATA[ >= ]]>#{r_timestart}
+    </if>
+    <if test="r_timeend != null and r_timeend != ''" >
+     and a.receive_time<![CDATA[ <= ]]>#{r_timeend}
+    </if>
+     <if test="delivery_failure_start_time != null and delivery_failure_start_time != ''" >
+     and a.delivery_failure_time<![CDATA[ >= ]]>#{delivery_failure_start_time}
+    </if>
+     <if test="delivery_failure_end_time != null and delivery_failure_end_time != ''" >
+     and a.delivery_failure_time<![CDATA[ <= ]]>#{delivery_failure_end_time}
+    </if>
+     <if test="delivery_failure_reason != null and delivery_failure_reason != ''" >
+     and a.delivery_failure_reason=#{delivery_failure_reason}
+    </if>
+     <if test="new_waybill != null and new_waybill != ''" >
+     and a.new_waybill=#{new_waybill}
+    </if>
+</select>
+
+<select id="findExpressByWarningUnionCnt_se"  parameterType='java.util.HashMap' resultType='java.lang.Integer'>
+ select  count(1)
+  from    er_expressinfo_master a left join er_waybill_warninginfo_detail b
+     on a.waybill=b.waybill  where 1=1
+    <if test="provice_code != null and provice_code != ''" >
+     and   a.provice_code=#{provice_code}
+    </if>
+     <if test="city_code != null and city_code != ''" >
+     and   a.city_code=#{city_code}
+    </if>
+     <if test="state_code != null and state_code != ''" >
+     and   a.state_code=#{state_code}
+    </if>
+    <if test="physical_warehouse_code != null and physical_warehouse_code != ''" >
+     and   a.systemwh_code=#{physical_warehouse_code}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+      <if test="warehouse_code != null and warehouse_code != ''" >
+     and   a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+     and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="ebc_timestart != null and ebc_timestart!= ''" >
+     and a.embrance_time<![CDATA[ >= ]]>#{ebc_timestart}
+    </if>
+    <if test="ebc_timeend != null and ebc_timeend != ''" >
+     and a.embrance_time<![CDATA[ <= ]]>#{ebc_timeend}
+    </if>
+     <if test="sr_timestart != null and sr_timestart != ''" >
+     and a.standard_receive_time<![CDATA[ >= ]]>#{sr_timestart}
+    </if>
+    <if test="sr_timeend != null and sr_timeend != ''" >
+     and a.standard_receive_time<![CDATA[ <= ]]>#{sr_timeend}
+    </if>
+    <if test="r_timestart != null and r_timestart != ''" >
+     and a.receive_time<![CDATA[ >= ]]>#{r_timestart}
+    </if>
+    <if test="r_timeend != null and r_timeend != ''" >
+     and a.receive_time<![CDATA[ <= ]]>#{r_timeend}
+    </if>
+     <if test="del_flag != null and del_flag != ''" >
+     and   b.del_flag=#{del_flag}
+    </if>
+     <if test="warningtype_code != null and warningtype_code != ''" >
+     and   b.warningtype_code=#{warningtype_code}
+    </if>
+      <if test="warning_category != null and warning_category != ''" >
+     and   b.warning_category=#{warning_category}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+     and b.routestatus_code=#{routestatus_code}
+    </if>
+</select>
+
+<select id='findExpressByConditionUnion'  parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+  select  
+   a.id,a.waybill,
+   <!--a.express_code,a.producttype_code,a.store_code,a.warehouse_code,a.provice_code,a.city_code,a.state_code,a.street_code, -->
+   a.work_no,a.platform_no,
+   DATE_FORMAT(a.weight_time,'%Y-%m-%d %H:%i:%s') AS weight_time,
+   a.address,a.shiptoname,a.phone,
+   a.producttype_name,
+   a.provice_name,
+   a.city_name,
+   a.state_name,
+   a.express_name,a.store_name,a.warehouse_name,
+   ifnull(DATE_FORMAT(a.standard_receive_time,'%Y-%m-%d %H:%i:%s'),'') AS standard_receive_time,
+   ifnull(DATE_FORMAT(a.embrance_time,'%Y-%m-%d %H:%i:%s'),'') AS embrance_time,
+   ifnull(DATE_FORMAT(a.receive_time,'%Y-%m-%d %H:%i:%s'),'') AS receive_time,
+   ifnull(DATE_FORMAT(a.run_time,'%Y-%m-%d %H:%i:%s'),'') AS run_time,
+   a.routestatus_code,
+   b.status as routestatus_name,
+   a.systemwh_name,
+   a.new_waybill,
+   a.delivery_failure_reason,
+   a.delivery_failure_time
+  from  er_expressinfo_master a 
+  left join 
+  er_routecode b
+  on a.routestatus_code=b.status_code
+  where 1=1
+   <if test="physical_warehouse_code != null and physical_warehouse_code != ''" >
+     and   a.systemwh_code=#{physical_warehouse_code}
+    </if>
+    <if test="waybill != null and waybill != ''" >
+     and   a.waybill=#{waybill}
+    </if>
+     <if test="express_code != null and express_code != ''" >
+     and   a.express_code=#{express_code}
+    </if>
+      <if test="warehouse_code != null and warehouse_code != ''" >
+     and   a.warehouse_code=#{warehouse_code}
+    </if>
+    <if test="producttype_code != null and producttype_code != ''" >
+     and a.producttype_code=#{producttype_code}
+    </if>
+    <if test="work_no != null and work_no != ''" >
+    and a.work_no=#{work_no}
+    </if>
+    <if test="platform_no != null and platform_no != ''" >
+    and a.platform_no=#{platform_no}
+    </if>
+    <if test="store_code != null and store_code != ''" >
+    and a.store_code=#{store_code}
+    </if>
+    <if test="provice_code != null and provice_code != ''  and provice_code !=0" >
+    and a.provice_code=#{provice_code}
+    </if>
+    <if test="city_code != null and city_code != '' and city_code != 0" >
+    and a.city_code=#{city_code}
+    </if>
+    <if test="state_code != null and state_code != '' and state_code != 0" >
+    and a.state_code=#{state_code}
+    </if>
+    <if test="routestatus_code != null and routestatus_code != ''" >
+     and a.routestatus_code=#{routestatus_code}
+    </if>
+     <if test="start_time != null and start_time != ''" >
+     and a.weight_time<![CDATA[ >= ]]>#{start_time}
+    </if>
+    <if test="end_time != null and end_time != ''" >
+     and a.weight_time<![CDATA[ <= ]]>#{end_time}
+    </if>
+    <if test="ebc_timestart != null and ebc_timestart!= ''" >
+     and a.embrance_time<![CDATA[ >= ]]>#{ebc_timestart}
+    </if>
+    <if test="ebc_timeend != null and ebc_timeend != ''" >
+     and a.embrance_time<![CDATA[ <= ]]>#{ebc_timeend}
+    </if>
+     <if test="sr_timestart != null and sr_timestart != ''" >
+     and a.standard_receive_time<![CDATA[ >= ]]>#{sr_timestart}
+    </if>
+    <if test="sr_timeend != null and sr_timeend != ''" >
+     and a.standard_receive_time<![CDATA[ <= ]]>#{sr_timeend}
+    </if>
+    <if test="r_timestart != null and r_timestart != ''" >
+     and a.receive_time<![CDATA[ >= ]]>#{r_timestart}
+    </if>
+    <if test="r_timeend != null and r_timeend != ''" >
+     and a.receive_time<![CDATA[ <= ]]>#{r_timeend}
+    </if>
+    <if test="delivery_failure_start_time != null and delivery_failure_start_time != ''" >
+     and a.delivery_failure_time<![CDATA[ >= ]]>#{delivery_failure_start_time}
+    </if>
+     <if test="delivery_failure_end_time != null and delivery_failure_end_time != ''" >
+     and a.delivery_failure_time<![CDATA[ <= ]]>#{delivery_failure_end_time}
+    </if>
+     <if test="delivery_failure_reason != null and delivery_failure_reason != ''" >
+     and a.delivery_failure_reason=#{delivery_failure_reason}
+    </if>
+     <if test="new_waybill != null and new_waybill != ''" >
+     and a.new_waybill=#{new_waybill}
+    </if>
+    
+    LIMIT #{firstResult}, #{maxResult} 
+</select>
+
+
+<select  id='findDataAll' parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+    select a.epistatic_order,a.delivery_order,b.* from er_expressinfo_detail b, tb_warehouse_express_data a
+      where 1=1 
+      and a.express_number=b.waybill
+    <if test="waybill != null and waybill != ''" >
+     and b.waybill=#{waybill}
+    </if>
+    <if test="id != null and id != ''" >
+     and  b.id=#{id}
+    </if>
+</select>
+<select id="downloadCsv"   parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+select * from er_routecode into outfile '/home/file/woFile/test.csv' fields terminated by ','optionally enclosed by ''lines terminated by '/n';
+</select>
+<!--
+update er_expressinfo_master_input set flag=2,remark=concat(remark,';物流商编码不能为空') where bat_id=#{bat_id} and express_code is null;
+update er_expressinfo_master_input set flag=2, remark=concat(remark,';运单号不能为空') where bat_id=#{bat_id} and waybill is null;
+update er_expressinfo_master_input set flag=2, remark=concat(remark,';店铺编码不能为空') where bat_id=#{bat_id} and store_code is null;
+update er_expressinfo_master_input set flag=2, remark=concat(remark,';仓库编码不能为空') where bat_id=#{bat_id} and warehouse_code is null;
+update er_expressinfo_master_input set flag=2, remark=concat(remark,';目的地省不能为空') where bat_id=#{bat_id} and provice_code is null;
+update er_expressinfo_master_input set flag=2, remark=concat(remark,';目的地市不能为空') where bat_id=#{bat_id} and city_code is null;
+
+  -->
+<update id="checkIsNUll"  parameterType='Object'>
+update er_expressinfo_master_input set flag=2, remark=concat(remark,'运单号不能为空;') where bat_id=#{bat_id} and waybill is null;
+update  er_expressinfo_master_input a left join (select  transport_code from tb_transport_vendor where validity=1) b on binary a.express_code= b.transport_code
+set a.flag=2 ,a.remark=concat(remark,'没有匹配的物流商') where a.bat_id=#{bat_id}  and  b.transport_code is null;
+update  er_expressinfo_master_input a left join (select  warehouse_code from tb_warehouse  where validity=1) b on binary a.warehouse_code= b.warehouse_code
+set a.flag=2 ,a.remark=concat(remark,'没有匹配的仓库编码;') where  a.bat_id=#{bat_id}  and b.warehouse_code is null;
+update  er_expressinfo_master_input a left join (select  store_code from  tb_store where  validity=1) b on binary a.store_code= b.store_code
+set a.flag=2 ,a.remark=concat(a.remark,'没有匹配的店铺;') where  a.bat_id=#{bat_id}  and b.store_code is null;
+update  er_expressinfo_master_input a left join (select  vendor_code,product_type_code from tb_transport_product_type where status=1) b on binary a.express_code= b.vendor_code and a.producttype_code=b.product_type_code
+set a.flag=2 ,a.remark=concat(a.remark,'没有匹配的产品类型;') where  a.bat_id=#{bat_id} and a.producttype_code !=''
+ and b.product_type_code is  null;
+update er_expressinfo_master_input set flag=2, remark=concat(remark,'收件人不能为空;') where bat_id=#{bat_id} and shiptoname is null;
+update er_expressinfo_master_input set flag=2, remark=concat(remark,'收件地址不能为空;') where bat_id=#{bat_id} and address is null;
+update  er_expressinfo_master_input a left join (select area_code,area_name from   tb_area where level=1)  b on a.provice_name= b.area_name
+set a.flag=2 ,a.remark=concat(a.remark,'目的地省不匹配;') where a.bat_id=#{bat_id} and  b.area_name is null; 
+update  er_expressinfo_master_input a left join (select area_code,area_name from   tb_area where level=2)  b on a.city_name= b.area_name
+set a.flag=2 ,a.remark=concat(a.remark,'目的地市不匹配;') where a.bat_id=#{bat_id} and  b.area_name is null;
+update  er_expressinfo_master_input a left join (select area_code,area_name from   tb_area where level=3)  b on a.state_name= b.area_name
+set a.flag=2 ,a.remark=concat(a.remark,'目的地区不匹配;') where a.bat_id=#{bat_id} and a.state_name !='' and  b.area_name is null;
+UPDATE er_expressinfo_master_input a
+        INNER JOIN
+    (SELECT 
+        waybill
+    FROM
+        er_expressinfo_master_input b  where   b.bat_id=#{bat_id}
+    GROUP BY waybill
+    HAVING COUNT(1) > 1) b 
+SET  a.flag=2,
+    a.remark = concat(a.remark , '运单重复;')
+WHERE
+    a.waybill = b.waybill and a.bat_id=#{bat_id};
+update er_expressinfo_master_input a inner join er_expressinfo_master b set a.flag=2 , a.remark=concat(a.remark,'运单号已经存在;') where a.waybill=b.waybill
+and  a.bat_id=#{bat_id};
+update er_expressinfo_detail_input a inner join er_expressinfo_master_input b 
+set a.flag =2
+where a.waybill=b.waybill
+and b.flag=2 and a.bat_id=#{bat_id}  and b.bat_id=#{bat_id};
+
+update  er_expressinfo_master_input a left join (select  transport_code,transport_name from tb_transport_vendor where validity=1) b on a.express_code= b.transport_code
+set a.express_name=b.transport_name where a.bat_id=#{bat_id}  and  a.flag=0;
+update  er_expressinfo_master_input a left join (select  warehouse_code,warehouse_name from tb_warehouse  where validity=1) b on a.warehouse_code= b.warehouse_code
+set a.warehouse_name=b.warehouse_name where  a.bat_id=#{bat_id}  and a.flag=0;
+update  er_expressinfo_master_input a left join (select  store_code,store_name from  tb_store where  validity=1) b on a.store_code= b.store_code
+set a.store_name=b.store_name where  a.bat_id=#{bat_id}  and a.flag=0;
+update  er_expressinfo_master_input a left join (select  vendor_code,product_type_code,product_type_name from tb_transport_product_type where status=1) b on a.express_code= b.vendor_code and a.producttype_code=b.product_type_code
+set a.producttype_name=b.product_type_name where  a.bat_id=#{bat_id} and a.flag=0
+and a.producttype_code is not null;
+update  er_expressinfo_master_input a left join (select area_code,area_name from   tb_area where level=1)  b on a.provice_name= b.area_name
+set a.provice_code=b.area_code where a.bat_id=#{bat_id} and  a.flag=0; 
+update  er_expressinfo_master_input a left join (select area_code,area_name from   tb_area where level=2)  b on a.city_name= b.area_name
+set a.city_code=b.area_code where a.bat_id=#{bat_id} and  a.flag=0;
+update  er_expressinfo_master_input a left join (select area_code,area_name from   tb_area where level=3)  b on a.state_name= b.area_name
+set a.state_code=b.area_code where a.bat_id=#{bat_id} and a.state_name !=''  and a.flag=0;
+</update>
+<select id='insertMaster' parameterType='Object'>
+INSERT INTO er_expressinfo_master
+(id,
+bat_id,
+create_time,
+create_user,
+update_time,
+update_user,
+waybill,
+express_code,
+producttype_code,
+work_no,
+platform_no,
+platform_time,
+store_code,
+warehouse_code,
+systemwh_code,
+shiptoname,
+phone,
+address,
+provice_code,
+city_code,
+state_code,
+street_code,
+express_time,
+weight_time,
+express_name,
+producttype_name,
+store_name,
+warehouse_name,
+systemwh_name,
+provice_name,
+city_name,
+state_name,
+operation_time,
+order_amount,
+related_number,
+source)
+ SELECT
+    UUID(),
+    bat_id,
+    now(),
+    'sys',
+    now(),
+    'sys',
+    waybill,
+    express_code,
+    producttype_code,
+    work_no,
+    platform_no,
+    platform_time,
+    store_code,
+    warehouse_code,
+    systemwh_code,
+    shiptoname,
+    phone,
+    address,
+    provice_code,
+    city_code,
+    state_code,
+    street_code,
+    express_time,
+    weight_time,
+    express_name,
+    producttype_name,
+    store_name,
+    warehouse_name,
+    systemwh_name,
+    provice_name,
+    city_name,
+    state_name,
+    now(),
+    order_amount,
+    related_number,
+    '1'
+FROM er_expressinfo_master_input a where flag=0 and bat_id=#{bat_id};
+</select>
+<select id='getTrbFilePath' parameterType="Object"    resultType='java.util.HashMap'>
+select remark from
+er_expressinfo_master_input  where bat_id=#{bat_id} and flag=2;
+</select>
+<insert id='insertMasterList' parameterType='java.util.HashMap'>
+INSERT INTO er_expressinfo_master_inputlist
+(
+bat_id,
+create_time,
+create_user,
+update_time,
+upddate_user,
+success_num,
+fail_num,
+total_num,
+flag)
+VALUES
+(
+#{bat_id },
+#{create_time },
+#{create_user },
+#{update_time },
+#{upddate_user },
+#{success_num },
+#{fail_num },
+#{total_num },
+#{flag} );
+</insert>
+<insert id="insertDetails" parameterType='Object'>
+	INSERT INTO er_expressinfo_detail
+(id,
+bat_id,
+create_time,
+create_user,
+update_time,
+update_user,
+sku_number,
+qty,
+waybill)
+SELECT 
+  uuid(),
+    a.bat_id,
+    now(),
+    a.create_user,
+    now(),
+    a.update_user,
+    a.sku_number,
+    a.qty,
+   a.waybill
+FROM er_expressinfo_detail_input a , er_expressinfo_master_input b where a.bat_id=b.bat_id  and a.waybill=b.waybill
+and a.bat_id=#{bat_id}
+and b.flag=0 and a.flag=0;
+</insert>
+
+<update id='updateStatus' parameterType='java.util.HashMap'>
+update er_expressinfo_master_inputlist set flag=#{flag} where bat_id=#{bat_id};
+</update>
+<insert id="insertImportMatchDetail" parameterType='java.util.HashMap'>
+	insert into er_expressinfo_master_import_match_detail
+	(bat_id,create_time,create_user,update_time,update_user,waybill)
+	values
+	(#{bat_id},now(),#{create_user},now(),#{update_user},#{waybill})
+</insert>
+<select id="getExpressinfoImportMatchResult" resultType="java.util.HashMap">
+	SELECT
+		eemimd.waybill '运单号',
+		eem.express_name '快递公司',
+		eem.producttype_name '产品类型',
+		erc.`status` '路由状态',
+		eem.embrance_time '揽件时间',
+		eem.receive_time '签收时间',
+		eem.route_info '最新路由信息'
+	FROM
+		er_expressinfo_master_import_match_detail eemimd
+	LEFT JOIN er_expressinfo_master eem ON eem.waybill = eemimd.waybill
+	LEFT JOIN er_routecode erc ON eem.routestatus_code=erc.status_code
+	WHERE
+		eemimd.bat_id = #{bat_id}
+	ORDER BY eemimd.id
+</select>
+<delete id="clearMatchedData" parameterType="java.lang.String">
+	delete from er_expressinfo_master_import_match_detail where bat_id=#{bat_id}
+</delete>
+
+</mapper>   

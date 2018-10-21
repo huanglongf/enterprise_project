@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ContractBasicinfoMapper" > 
+	<!-- Result Map-->
+	<resultMap id= "BaseResultMap" type= "com.bt.lmis.model.ContractBasicinfo" >
+		<result column= "id" property= "id" />
+		<result column= "create_time" property= "create_time" />
+		<result column= "create_user" property= "create_user" />
+		<result column= "update_time" property= "update_time" />
+		<result column= "update_user" property= "update_user" />
+		<result column= "contract_no" property= "contract_no" />
+		<result column= "contract_name" property= "contract_name" />
+		<result column= "contract_type" property= "contract_type" />
+		<result column= "contract_owner" property= "contract_owner" />
+		<result column= "contract_version" property= "contract_version" />
+		<result column= "contract_start" property= "contract_start" />
+		<result column= "contract_end" property= "contract_end" />
+		<result column= "settle_date" property= "settle_date" />
+		<result column= "settlement_body" property= "settlement_body" />
+		<result column= "validity" property= "validity" />
+		<result column= "contact" property= "contact" />
+		<result column= "tel" property= "tel" />
+		<result column= "distribution_unit" property= "distribution_unit" />
+	</resultMap>
+       
+	<!-- s_employee table all fields -->
+	<sql id="Base_Column_List" >
+	 	id, create_time, create_user,update_time,update_user,contract_no,contract_name,contract_type,contract_owner,
+		contract_version,contract_start,contract_end,settle_date,validity,contact,tel,distribution_unit,settlement_body
+	</sql>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.ContractBasicinfo" >
+		insert into tb_contract_basicinfo(create_time, create_user,update_time,update_user,contract_no,contract_name,contract_type,contract_owner,
+		contract_version,contract_start,contract_end,settle_date,validity,contact,tel,distribution_unit,settlement_body)
+		values(now(),#{create_user},now(),#{update_user},#{contract_no},#{contract_name},#{contract_type},#{contract_owner},#{
+		contract_version},#{contract_start},#{contract_end},#{settle_date},#{validity},#{contact},#{tel},#{distribution_unit},#{settlement_body});
+	</insert>
+	   
+	<!-- 查询条件 -->
+	<sql id="where_Clause">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			    and id =  #{id}
+			</if>
+		</trim>
+	</sql>
+	  
+	<delete id="batchDelete" parameterType="Object">
+		delete from tb_contract_basicinfo where id in 
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+	       	#{item}  
+	   	</foreach> 
+	</delete>
+	   
+	<!-- 查询条件 -->
+	<sql id="where_Clause_like">
+		<trim  suffixOverrides="," >
+		 	<if test="contract_no != null and contract_no != ''" >
+		 	    <if test="mark=='0'">
+		 	     and contract_no like CONCAT('%', #{contract_no}, '%')
+		 	    </if>
+			    <if test="mark==1">
+			     and contract_no = #{contract_no}
+			    </if>
+			    <if test="mark==2">
+			     and contract_no &gt; #{contract_no}
+			    </if>	    
+		
+			    <if test="mark==3">
+			     and contract_no &gt;= #{contract_no}
+			    </if>
+		
+			    <if test="mark==4">
+			     and contract_no &lt; #{contract_no}
+			    </if>
+		
+			    <if test="mark==5">
+			     and contract_no &lt;= #{contract_no}
+			    </if>
+			    <if test="mark=='' or mark==null">
+			     and contract_no like CONCAT('%', #{contract_no}, '%')
+			    </if>		    
+			</if>
+		 	<if test="contract_name != null and contract_name != ''" >
+		 	    <if test="mark==0">
+		 	     and contract_name like CONCAT('%', #{contract_name}, '%')
+		 	    </if>
+			    <if test="mark==1">
+			     and contract_name = #{contract_name}
+			    </if>
+			    <if test="mark==2">
+			     and contract_name &gt; #{contract_name}
+			    </if>	    
+		
+			    <if test="mark==3">
+			     and contract_name &gt;= #{contract_name}
+			    </if>
+		
+			    <if test="mark==4">
+			     and contract_name &lt; #{contract_name}
+			    </if>
+		
+			    <if test="mark==5">
+			     and contract_name &lt;= #{contract_name}
+			    </if>
+			    <if test="mark=='' or mark==null">
+			     and contract_name like CONCAT('%', #{contract_name}, '%')
+			    </if>		        
+			</if>
+		 	<if test="id != null and id != ''" >
+		 	    <if test="mark==0">
+		 	     and id like CONCAT('%', #{id}, '%')
+		 	    </if>
+		       <if test="mark==1">
+			     and id = #{id}
+			    </if>
+			    <if test="mark==2">
+			     and id &gt; #{id}
+			    </if>	    
+		
+			    <if test="mark==3">
+			     and id &gt;= #{id}
+			    </if>
+		
+			    <if test="mark==4">
+			     and id &lt; #{id}
+			    </if>
+		
+			    <if test="mark==5">
+			     and id &lt;= #{id}
+			    </if>	
+			    <if test="mark=='' or mark==null">
+			     and id like CONCAT('%', #{id}, '%')
+			    </if>	     	   
+			</if>	
+		 	<if test="contract_version != null and contract_version != ''" >
+		 	    <if test="mark==0">
+		 	     and contract_version like CONCAT('%', #{contract_version}, '%')
+		 	    </if>
+		       <if test="mark==1">
+			     and contract_version = #{contract_version}
+			    </if>
+			    <if test="mark==2">
+			     and contract_version &gt; #{contract_version}
+			    </if>	    
+		
+			    <if test="mark==3">
+			     and contract_version &gt;= #{contract_version}
+			    </if>
+		
+			    <if test="mark==4">
+			     and contract_version &lt; #{contract_version}
+			    </if>
+		
+			    <if test="mark==5">
+			     and contract_version &lt;= #{contract_version}
+			    </if>	
+			    <if test="mark=='' or mark==null">
+			     and contract_version like CONCAT('%', #{contract_version}, '%')
+			    </if>		    	
+			</if>
+			<if test="validity != null and validity != ''" >
+		 	    <if test="mark==0">
+		 	     and validity like CONCAT('%', #{validity}, '%')
+		 	    </if>
+		       <if test="mark==1">
+			     and validity = #{validity}
+			    </if>
+			    <if test="mark==2">
+			     and validity &gt; #{validity}
+			    </if>	    
+		
+			    <if test="mark==3">
+			     and validity &gt;= #{validity}
+			    </if>
+		
+			    <if test="mark==4">
+			     and validity &lt; #{validity}
+			    </if>
+		
+			    <if test="mark==5">
+			     and validity &lt;= #{validity}
+			    </if>	
+			    <if test="mark=='' or mark==null">
+			     and validity like CONCAT('%', #{validity}, '%')
+			    </if>		    	
+			</if>
+		 	<if test="create_user != null and create_user != ''" >
+		 	    <if test="mark==0">
+		 	     and create_user like CONCAT('%', #{create_user}, '%')
+		 	    </if>
+		        <if test="mark==1">
+			     and create_user = #{create_user}
+			    </if>
+			    <if test="mark==2">
+			     and create_user &gt; #{create_user}
+			    </if>	    
+		
+			    <if test="mark==3">
+			     and create_user &gt;= #{create_user}
+			    </if>
+		
+			    <if test="mark==4">
+			     and create_user &lt; #{create_user}
+			    </if>
+		
+			    <if test="mark==5">
+			     and create_user &lt;= #{create_user}
+			    </if>	 
+			    <if test="mark=='' or mark==null">
+			     and create_user like CONCAT('%', #{create_user}, '%')
+			    </if>		    	
+			</if>
+			<if test="contract_type != null and contract_type != ''" >
+		 	    <if test="mark==0">
+		 	     and contract_type like CONCAT('%', #{contract_type}, '%')
+		 	    </if>
+		        <if test="mark==1">
+			     and contract_type = #{contract_type}
+			    </if>
+			    <if test="mark==2">
+			     and contract_type &gt; #{contract_type}
+			    </if>	    
+		
+			    <if test="mark==3">
+			     and contract_type &gt;= #{contract_type}
+			    </if>
+		
+			    <if test="mark==4">
+			     and contract_type &lt; #{contract_type}
+			    </if>
+		
+			    <if test="mark==5">
+			     and contract_type &lt;= #{contract_type}
+			    </if>	 
+			    <if test="mark=='' or mark==null">
+			     and contract_type like CONCAT('%', #{contract_type}, '%')
+			    </if>		    	 	
+			</if>
+			<if test="create_time != null and create_time != ''" >
+			   and  DATE_FORMAT(create_time, '%Y-%m-%d') &gt;=  DATE_FORMAT(getDate(#{create_time},'1'), '%Y-%m-%d') 
+			</if>
+			
+			<if test="create_time != null and create_time != ''" >
+			   and  DATE_FORMAT(create_time, '%Y-%m-%d') &lt;=  DATE_FORMAT(getDate(#{create_time},'2'), '%Y-%m-%d') 
+			</if>
+				
+			<if test="update_time != null and update_time != ''" >
+			   and  DATE_FORMAT(update_time, '%Y-%m-%d') &gt;=  DATE_FORMAT(getDate(#{update_time},'1'), '%Y-%m-%d')
+			</if>
+			<if test="update_time != null and update_time != ''" >
+			    and  DATE_FORMAT(update_time, '%Y-%m-%d') &lt;=  DATE_FORMAT(getDate(#{update_time},'2'), '%Y-%m-%d')
+			</if>
+			
+			<if test="contract_start != null and contract_start != ''" >
+			   and  DATE_FORMAT(contract_start, '%Y-%m-%d') &gt;=  DATE_FORMAT(getDate(#{contract_start},'1'), '%Y-%m-%d')
+			</if>
+			<if test="contract_start != null and contract_start != ''" >
+			    and  DATE_FORMAT(contract_start, '%Y-%m-%d') &lt;=  DATE_FORMAT(getDate(#{contract_start},'2'), '%Y-%m-%d')
+			</if>
+			
+			<if test="contract_end != null and contract_end != ''" >
+			   and  DATE_FORMAT(contract_end, '%Y-%m-%d') &gt;=  DATE_FORMAT(getDate(#{contract_end},'1'), '%Y-%m-%d')
+			</if>
+			<if test="contract_end != null and contract_end != ''" >
+			    and  DATE_FORMAT(contract_end, '%Y-%m-%d') &lt;=  DATE_FORMAT(getDate(#{contract_end},'2'), '%Y-%m-%d')
+			</if>
+			<if test="update_user != null and update_user != ''" >
+		 	    <if test="mark==0">
+		 	     and update_user like CONCAT('%', #{update_user}, '%')
+		 	    </if>
+		       <if test="mark==1">
+			     and update_user = #{update_user}
+			    </if>
+			    <if test="mark==2">
+			     and update_user &gt; #{update_user}
+			    </if>
+			    <if test="mark==3">
+			     and update_user &gt;= #{update_user}
+			    </if>
+			    <if test="mark==4">
+			     and update_user &lt; #{update_user}
+			    </if>
+			    <if test="mark==5">
+			     and update_user &lt;= #{update_user}
+			    </if>	
+			    <if test="mark=='' or mark==null">
+			     and update_user like CONCAT('%', #{update_user}, '%')
+			    </if>	  
+			</if>	
+			<if test="contact != null and contact != ''" >
+		 	    <if test="mark==0">
+		 	     and contact like CONCAT('%', #{contact}, '%')
+		 	    </if>
+		       <if test="mark==1">
+			     and contact = #{contact}
+			    </if>
+			    <if test="mark==2">
+			     and contact &gt; #{contact}
+			    </if>
+			    <if test="mark==3">
+			     and contact &gt;= #{contact}
+			    </if>
+			    <if test="mark==4">
+			     and contact &lt; #{contact}
+			    </if>
+			    <if test="mark==5">
+			     and contact &lt;= #{contact}
+			    </if>	
+			    <if test="mark=='' or mark==null">
+			     and contact like CONCAT('%', #{contact}, '%')
+			    </if>	    
+			</if>		
+			<if test="contract_owner != null and contract_owner != ''" >
+		 	    <if test="mark==0">
+		 	     and contract_owner like CONCAT('%', #{contract_owner}, '%')
+		 	    </if>
+		       <if test="mark==1">
+			     and contract_owner = #{contract_owner}
+			    </if>
+			    <if test="mark==2">
+			     and contract_owner &gt; #{contract_owner}
+			    </if>
+			    <if test="mark==3">
+			     and contract_owner &gt;= #{contract_owner}
+			    </if>
+			    <if test="mark==4">
+			     and contract_owner &lt; #{contract_owner}
+			    </if>
+			    <if test="mark==5">
+			     and contract_owner &lt;= #{contract_owner}
+			    </if>	
+			    <if test="mark=='' or mark==null">
+			     and contract_owner like CONCAT('%', #{contract_owner}, '%')
+			    </if>	    
+			</if>	
+			<if test="tel != null and tel != ''" >
+		 	    <if test="mark==0">
+		 	     and tel like CONCAT('%', #{tel}, '%')
+		 	    </if>
+		        <if test="mark==1">
+			     and tel = #{tel}
+			    </if>
+			    <if test="mark==2">
+			     and tel &gt; #{tel}
+			    </if>
+			    <if test="mark==3">
+			     and tel &gt;= #{tel}
+			    </if>
+			    <if test="mark==4">
+			     and tel &lt; #{tel}
+			    </if>
+			    <if test="mark==5">
+			     and tel &lt;= #{tel}
+			    </if>	
+			    <if test="mark=='' or mark==null">
+			     and tel like CONCAT('%', #{tel}, '%')
+			    </if>		    
+			</if>	
+			<if test="settle_date != null and settle_date != ''" >
+		 	    <if test="mark==0">
+		 	    	and settle_date like CONCAT('%', #{settle_date}, '%')
+		 	    </if>
+		 		<if test="mark==1">
+			    	and settle_date = #{settle_date}
+			    </if>
+			    <if test="mark==2">
+			    	and settle_date &gt; #{settle_date}
+			    </if>
+			    <if test="mark==3">
+			   		and settle_date &gt;= #{settle_date}
+			    </if>
+			    <if test="mark==4">
+			    	and settle_date &lt; #{settle_date}
+			    </if>
+			    <if test="mark==5">
+			    	and settle_date &lt;= #{settle_date}
+			    </if>
+			    <if test="mark==''or mark==null">
+			    	and settle_date like CONCAT('%', #{settle_date}, '%')
+			    </if>	
+			</if>	
+			<if test="settlement_body != null and settlement_body != ''" >
+		 	    <if test="mark==0">
+		 	    	and settlement_body like CONCAT('%', #{settlement_body}, '%')
+		 	    </if>
+		 		<if test="mark==1">
+			    	and settlement_body = #{settlement_body}
+			    </if>
+			    <if test="mark==2">
+			    	and settlement_body &gt; #{settlement_body}
+			    </if>
+			    <if test="mark==3">
+			   		and settlement_body &gt;= #{settlement_body}
+			    </if>
+			    <if test="mark==4">
+			    	and settlement_body &lt; #{settlement_body}
+			    </if>
+			    <if test="mark==5">
+			    	and settlement_body &lt;= #{settlement_body}
+			    </if>
+			    <if test="mark==''or mark==null">
+			    	and settlement_body like CONCAT('%', #{settlement_body}, '%')
+			    </if>	
+			</if>							
+		</trim>
+	</sql>
+
+	<select id="findCB" parameterType="com.bt.lmis.controller.form.ContractBasicinfoQueryParam" resultType="com.bt.lmis.model.ContractBasicinfo">
+	    SELECT 
+	    	t.*    
+	  	FROM 
+	  		view_contract_base_info t
+	 	WHERE 1=1
+		<include refid="where_Clause_like"/>
+		
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+
+	<select id="findById" parameterType="Object" resultType="com.bt.lmis.model.ContractBasicinfo">
+	    SELECT
+	    	id,
+	    	create_time,
+	    	create_user,
+	    	update_time,
+	    	update_user,
+	    	contract_no,
+	    	contract_name,
+	    	contract_type,
+	    	contract_owner,
+			contract_version,
+			contract_start,
+			contract_end,
+			settle_date,
+			validity,
+			contact,
+			tel,
+			distribution_unit 
+	  	FROM
+	  		tb_contract_basicinfo 
+	 	WHERE
+	 		id= #{id }
+	</select>
+	<select id="findValidContract" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			contract_no,
+			contract_name,
+			contract_type,
+			a.contract_owner,
+			b.transport_name,
+			contract_version,
+			contract_start,
+			contract_end,
+			settle_date,
+			validity,
+			contact,
+			tel
+		from 
+			tb_contract_basicinfo a
+		left join(
+			select
+				transport_code,
+				transport_name
+			from
+				tb_transport_vendor
+			where
+				transport_type = 1
+		) b on a.contract_owner = b.transport_code
+		where a.id = #{conId}
+	</select>
+	<update id="update" parameterType="com.bt.lmis.model.ContractBasicinfo" >
+		update
+			tb_contract_basicinfo
+		set
+			update_time= now(),
+			update_user= #{update_user },
+			contract_no= #{contract_no },
+			contract_name= #{contract_name },
+			validity= #{validity },
+	  		settle_date= #{settle_date },
+	  		contact= #{contact },
+	  		tel= #{tel },
+	  		distribution_unit = #{distribution_unit}
+	   where id= #{id }
+	</update>
+
+	<select id="countCBRecords" parameterType="com.bt.lmis.controller.form.ContractBasicinfoQueryParam" resultType="java.lang.Integer">
+		SELECT COUNT(1) FROM view_contract_base_info WHERE 1=1 
+		<include refid="where_Clause_like"/>
+	</select>
+
+	<select id="getSearchParam" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+	   		t.field_name,
+	   		t.field_value,
+	   		t.data_type
+	  	from td_search t
+	  	where t.field_type='2'
+	    and t.create_user=#{operate_user}
+	  	order by t.weight asc
+	</select>
+
+	<select id="getShowParam" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  		select 
+	   		t.field_name,
+	   		t.field_value,
+	   		t.data_type
+	  	from td_search t
+	  	where t.field_type='1' and t.create_user= #{operate_user }
+	  	order by t.weight asc
+	</select>
+	
+	<select id="getPageInfo" parameterType="java.util.HashMap" resultType="com.bt.lmis.model.ContractBasicinfo">
+		SELECT
+	    	DISTINCT
+			column_name,
+			column_comment,
+	    	data_type
+	   	FROM
+			Information_schema.COLUMNS
+	  	WHERE
+			table_Name = 'tb_contract_basicinfo'
+	</select>
+	
+	<select id= "getCurrentParam" parameterType= "java.util.HashMap" resultType= "com.bt.lmis.model.SearchBean" >
+		select
+	   		id,
+		   	field_name,
+		   	field_value,
+		   	page_id,
+		   	user_id,
+		   	create_date,
+		   	create_user,
+		   	status,
+		   	field_type,
+		   	weight,
+		   	if(field_type='1','显示列','查询条件') as field_type_name
+	   	from 
+   			td_search 
+	   	where
+   			field_type= '1'
+	   	and page_id= #{page_id}
+	   	and user_id= #{user_id}
+	   	order by weight asc
+	</select>
+
+	<select id="getCurrentParamForSearch" parameterType="java.util.HashMap" resultType="com.bt.lmis.model.SearchBean">
+   		select
+	   		id,
+	   		field_name,
+	   		field_value,
+	   		page_id,
+	   		user_id,
+	   		create_date,
+	   		create_user,
+	   		status,
+	   		field_type,
+	   		weight,
+	   		if(field_type='1','显示列','查询条件') as field_type_name
+	   	from
+	   		td_search 
+	   	where 
+	   		field_type='2'
+	   	and page_id=#{page_id}
+	   	and user_id=#{user_id}
+	   	order by weight asc
+	</select>
+	
+	<insert id="addParam" parameterType="java.util.HashMap">
+		insert into td_search (
+	   		field_name,
+	   		field_value,
+	   		data_type,
+	   		page_id,
+	   		user_id,
+	   		create_date,
+	   		create_user,
+	   		status,
+	   		field_type,
+	   		weight
+	  	) values (
+	    	#{column_name },
+	    	#{comment },
+	    	#{data_type },
+	    	'1',
+	    	#{user_id },
+	    	now(),
+	    	#{user_id },
+	    	'1',
+	    	#{field_type },
+	    	((select count(1) from td_search t where t.field_type= #{field_type } and t.user_id= #{user_id })+ 1)
+	  	)
+	</insert>
+
+	<delete id= "delParam" parameterType= "java.util.HashMap" >
+	   delete from td_search where id= #{id }
+	</delete>
+	
+	<update id= "upParam" parameterType= "java.util.HashMap" >
+	  update td_search set  weight= #{value }, update_date= now() where id= #{id } 
+	</update>
+
+	<select id="check_param" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+  		select count(1) from td_search where field_name=#{column_name} and field_type=#{field_type} and user_id=#{user_id} and page_id='1'
+	</select>
+	<insert id= "textA" >
+ 		insert into textA(name) values(#{name });
+	</insert>
+	<insert id="textB">
+ 		insert into textB(name) values(#{name });
+	</insert>
+
+	<select id="find_by_cb" resultType="com.bt.lmis.model.ContractBasicinfo">
+		select <include refid="Base_Column_List" /> from tb_contract_basicinfo where 1=1 and (contract_type=3 or contract_type=4) and validity=1 
+	</select>
+
+	<update id="update_cb_validity" parameterType="java.util.HashMap">
+  		update tb_contract_basicinfo
+  		set 
+		  	validity= 1,
+		  	update_time= now(),
+		  	update_user=#{update_user }
+	  	where id= #{id } 
+	</update>
+	
+	<select id="findZZFWFList" resultType="java.util.HashMap" parameterType="Object">
+		SELECT abc.* FROM tb_contract_basicinfo cb 
+		left join tb_addservicefee_billdata_collect abc on cb.id=abc.contract_id
+		left join tb_client c on c.client_code=cb.contract_owner
+		where 1=1 and abc.time=#{ym} and abc.contract_id=#{client_code};
+	</select>
+	
+	<select id="findCCFList" resultType="java.util.HashMap" parameterType="Object">
+		SELECT abc.* FROM tb_contract_basicinfo cb 
+		left join tb_storage_data_group abc on cb.id=abc.contract_id
+		left join tb_client c on c.client_code=cb.contract_owner
+		where 1=1 and abc.billing_cycle=#{ym} and abc.contract_id=#{client_code};
+	</select>
+	
+	<select id="findHCFList" resultType="java.util.HashMap" parameterType="Object">
+		SELECT  abc.id,abc.contract_id,abc.billing_cycle,abc.sku_type,sum(abc.qty) as qty,abc.qty_unit,abc.fee,abc.fee_unit,sum(abc.total_amount) as total_amount,abc.totalamount_unit FROM tb_contract_basicinfo cb 
+		left join tb_invitationdata_collect abc on cb.id=abc.contract_id
+		left join tb_client c on c.client_code=cb.contract_owner
+		where 1=1 and abc.billing_cycle=#{ym} and abc.contract_id=#{client_code} group by abc.sku_type order by abc.id;
+	</select>
+	
+	<select id="findDBFList" resultType="java.util.HashMap" parameterType="Object">
+		SELECT c.client_code as client_code,c.client_name as client_name,cb.id as cbid,sum(abc.package_price) as package_price FROM tb_contract_basicinfo cb 
+		left join tb_warehouse_express_data_store_settlement abc on cb.id=abc.contract_id
+		left join tb_client c on c.client_code=cb.contract_owner
+		where 1=1 and year(abc.transport_time)=#{yy} and month(abc.transport_time)=#{mm} and abc.contract_id=#{client_code}
+		group by abc.contract_id
+	</select>
+	
+	<select id="findSectionDBF" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT c.client_code as client_code,c.client_name as client_name,cb.id as cbid,
+		sum(abc.package_price) as package_price,COUNT(abc.package_price) as cnt FROM tb_contract_basicinfo cb 
+		left join bal_warehouse_express_data_store_settlement_estimate abc on cb.id=abc.contract_id
+		left join tb_client c on c.client_code=cb.contract_owner
+		where 1=1 
+		and
+		abc.batch_number = #{batch_number}
+		and abc.contract_id=#{clientCode}
+		group by abc.contract_id
+	</select>
+	
+	<select id="findWlPoolList" resultType="java.util.HashMap" parameterType="Object">
+   		select 
+   			t.total_price as 'total_price',
+   			t.bill_num as 'bill_num',
+   			t.contract_id as 'con_id',
+   			t.transport_code,
+   			date_format(t.create_date,'%Y-%m') as create_date,
+   			t.transport_name as 'transport_name'
+	   from se_pool_trans t
+	   where t.contract_id=#{client_code} and date_format(t.create_date,'%Y-%c')=#{ym }
+	</select>
+	
+	<select id="CsToCBID" resultMap="BaseResultMap" parameterType="Object">
+		select * from tb_contract_basicinfo where contract_owner=#{contract_owner }
+	</select>
+	
+	<select id= "set_SQL" resultType= "java.util.HashMap" parameterType= "Object" >
+		${sql }
+	</select>
+	
+	<select id= "get_count" resultType= "java.lang.Integer" parameterType= "Object" >
+		${sql }
+	</select>
+
+	<select id= "getContractName" resultType= "java.util.Map" >
+		select id, contract_name from tb_contract_basicinfo
+	</select>
+	
+</mapper>   

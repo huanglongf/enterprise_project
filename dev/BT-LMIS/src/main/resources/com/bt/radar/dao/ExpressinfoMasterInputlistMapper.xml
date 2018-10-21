@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.ExpressinfoMasterInputlistMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.radar.model.ExpressinfoMasterInputlist" >
+	<result column="id" property="id"/>
+	<result column="bat_id" property="bat_id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="upddate_user" property="upddate_user"/>
+	<result column="success_num" property="success_num"/>
+	<result column="fail_num" property="fail_num"/>
+	<result column="total_num" property="total_num"/>
+	<result column="flag" property="flag"/>
+	<result column="username" property="username"/>
+</resultMap>
+       
+<!-- er_expressinfo_master_inputlist table all fields -->
+<sql id="Base_Column_List" >
+	 id,bat_id,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS create_time,create_user,update_time,upddate_user,success_num,fail_num,total_num,flag,wrong_path
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	 	<if test="bat_id != null and bat_id != ''" >
+	    and bat_id =  #{bat_id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="upddate_user != null and upddate_user != ''" >
+	    and upddate_user =  #{upddate_user}
+	</if>
+	<if test="success_num != null" >
+	    and success_num =  #{success_num}
+	</if>
+	<if test="fail_num != null" >
+	    and fail_num =  #{fail_num}
+	</if>
+	<if test="total_num != null" >
+	    and total_num =  #{total_num}
+	</if>
+	<if test="flag != null" >
+	    and flag =  #{flag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入运单导入明细表 -->
+<insert id="insert" parameterType="com.bt.radar.model.ExpressinfoMasterInputlist" >
+  insert into er_expressinfo_master_inputlist(id,bat_id,create_time,create_user,update_time,upddate_user,success_num,fail_num,total_num,flag)
+ values(#{id},#{bat_id},#{create_time},#{create_user},#{update_time},#{upddate_user},#{success_num},#{fail_num},#{total_num},#{flag})
+</insert>
+
+<!-- 修改运单导入明细表-->  
+ <update id="update" parameterType="com.bt.radar.model.ExpressinfoMasterInputlist" >
+  update er_expressinfo_master_inputlist set bat_id=#{bat_id},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},upddate_user=#{upddate_user},success_num=#{success_num},fail_num=#{fail_num},total_num=#{total_num},flag=#{flag} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改运单导入明细表-->
+<update id="updateBySelective" parameterType="com.bt.radar.model.ExpressinfoMasterInputlist" >
+	update er_expressinfo_master_inputlist set 
+	<trim  suffixOverrides="," >
+	<if test="bat_id != null  and bat_id != '' ">
+		bat_id=#{bat_id},
+	</if>
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="upddate_user != null  and upddate_user != '' ">
+		upddate_user=#{upddate_user},
+	</if>
+	<if test="success_num != null  ">
+		success_num=#{success_num},
+	</if>
+	<if test="fail_num != null  ">
+		fail_num=#{fail_num},
+	</if>
+	<if test="total_num != null  ">
+		total_num=#{total_num},
+	</if>
+	<if test="flag != null  ">
+		flag=#{flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除运单导入明细表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from er_expressinfo_master_inputlist where id = #{id}
+</update>
+<!-- 批量删除运单导入明细表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from er_expressinfo_master_inputlist where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找运单导入明细表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_expressinfo_master_inputlist where id = #{id}
+</select>
+  	
+<!-- 运单导入明细表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.ExpressinfoMasterInputlistQueryParam">
+	select count(1) from er_expressinfo_master_inputlist 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的运单导入明细表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.ExpressinfoMasterInputlistQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_expressinfo_master_inputlist 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 运单导入明细表总数-->
+<select id="count" resultType="java.lang.Integer"  parameterType="com.bt.radar.controller.form.ExpressinfoMasterInputlistQueryParam">
+	select count(1) from er_expressinfo_master_inputlist 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的运单导入明细表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.ExpressinfoMasterInputlistQueryParam">
+	select a.*,b.username from
+	(select 
+	<include refid="Base_Column_List"/>
+	from er_expressinfo_master_inputlist 
+	<include refid="where_Clause"/>order by create_time desc
+	limit 
+	#{firstResult},#{maxResult}
+	 ) a left join ( select  employee_number , username from s_employee where status=1) b
+	on a.create_user=b.employee_number 
+</select>
+<update id='updateMaster' parameterType="java.util.HashMap">
+
+UPDATE er_expressinfo_master_inputlist a
+        INNER JOIN
+    (SELECT 
+        COUNT(1) AS num, bat_id
+    FROM
+        er_expressinfo_master_input
+    WHERE
+        bat_id = #{bat_id}
+            AND flag = 2) b 
+SET 
+    a.fail_num = b.num
+WHERE
+    a.bat_id = b.bat_id
+        AND a.bat_id = #{bat_id};
+              
+UPDATE er_expressinfo_master_inputlist a
+        INNER JOIN
+    (SELECT 
+        COUNT(1) AS num, bat_id
+    FROM
+        er_expressinfo_master
+    WHERE
+        bat_id = #{bat_id}) b 
+SET 
+    a.success_num = b.num
+WHERE
+    a.bat_id = b.bat_id
+        AND a.bat_id = #{bat_id};
+ 
+ <if test="wrong_path != null and wrong_path != ''" >
+ update er_expressinfo_master_inputlist set wrong_path=#{wrong_path} where bat_id=#{bat_id};
+ </if>
+</update>
+<delete id='del' parameterType="Object">
+delete from er_expressinfo_master_input where bat_id in
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> ;
+   	
+delete from er_expressinfo_master_inputlist	where bat_id in
+<foreach collection="list" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> ;
+
+</delete>
+</mapper>   

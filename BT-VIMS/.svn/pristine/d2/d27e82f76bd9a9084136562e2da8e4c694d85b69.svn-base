@@ -1,0 +1,23 @@
+package com.bt.vims.dao;
+
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.bt.vims.model.VimsData;
+
+/**
+ * 读取访客信息仓库
+ * @author liuqingqiang
+ * @date 2018-05-11
+ * @version V1.0
+ *
+ */
+@Repository
+public interface VimsDataMapper{
+    
+    /** 将客户端的访客数据插入数据表中 **/
+    public void create(List<VimsData> vimsDatas);
+
+}

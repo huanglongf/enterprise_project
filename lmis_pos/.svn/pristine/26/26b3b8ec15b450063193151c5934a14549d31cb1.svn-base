@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.poSplitCollect.dao.PoSplitCollectWhsAllocateMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject"
+		id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 表格2映射 -->	
+	<resultMap type="com.lmis.pos.poSplitCollect.model.ViewPosSplitAllocateTableTwo"
+		id="posSplitAllocateTableTwoMap">
+		<!-- 子类字段 -->
+		<result column="bz_num" property="bzNum" jdbcType="INTEGER" />
+		<result column="bz_ratio" property="bzRatio" jdbcType="INTEGER" />
+		<result column="other_num" property="otherNum" jdbcType="INTEGER" />
+		<result column="other_ratio" property="otherRatio" jdbcType="INTEGER" />
+	</resultMap>
+	<!-- 表格3映射 -->
+	<resultMap type="com.lmis.pos.poSplitCollect.model.ViewPosSplitAllocateTableThree"
+		id="posSplitAllocateTableThreeMap">
+		<!-- 子类字段 -->
+		<result column="whs_name" property="whsName" jdbcType="VARCHAR" />
+		<result column="plan_num" property="planNum" jdbcType="INTEGER" />
+		<result column="plan_num_ratio" property="planNumRatio" jdbcType="INTEGER" />
+		<result column="tm_l_num" property="tmlNum" jdbcType="INTEGER" />
+		<result column="tm_f_num" property="tmfNum" jdbcType="INTEGER" />
+		<result column="tm_other_num" property="tmOtherNum" jdbcType="INTEGER" />
+		<result column="tm_num" property="tmNum" jdbcType="INTEGER" />
+		<result column="gw_l_num" property="gwlNum" jdbcType="INTEGER" />
+		<result column="gw_f_num" property="gwfNum" jdbcType="INTEGER" />
+		<result column="gw_other_num" property="gwOtherNum" jdbcType="INTEGER" />
+		<result column="gw_num" property="gwNum" jdbcType="INTEGER" />
+	</resultMap>
+	<!-- 表格4映射 -->
+	<resultMap type="com.lmis.pos.poSplitCollect.model.ViewPosSplitAllocateTableFour"
+		id="posSplitAllocateTableFourMap">
+		<!-- 子类字段 -->
+		<result column="whs_name" property="whsName" jdbcType="VARCHAR" />
+		<result column="join_split_num" property="joinSplitNum" jdbcType="INTEGER" />
+		<result column="join_split_ratio" property="joinSplitRatio" jdbcType="INTEGER" />
+		<result column="join_no_split_num" property="joinNoSplitNum" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="viewPosSplitAllocateTableTwo_Column_List">
+		bz_num,
+		bz_ratio,
+		other_num,
+		other_ratio
+	</sql>
+	
+	<sql id="viewPosSplitAllocateTableThree_Column_List">
+		whs_name,
+		plan_num,
+		plan_num_ratio,
+		tm_l_num,
+		tm_f_num,
+		tm_other_num,
+		tm_num,
+		gw_l_num,
+		gw_f_num,
+		gw_other_num,
+		gw_num
+	</sql>
+	
+	<sql id="viewPosSplitAllocateTableFour_Column_List">
+		whs_name,
+		join_split_num,
+		join_split_ratio,
+		join_no_split_num
+	</sql>
+	
+	<!-- 根据页面上条件查询表格2数据 -->
+	<select id="getTableTwoData" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain" resultType="com.lmis.pos.poSplitCollect.model.ViewPosSplitAllocateTableTwo">
+		<!-- SELECT
+			<include refid="viewPosSplitAllocateTableTwo_Column_List"></include>
+		FROM view_po_split_collect_tabletwo -->
+		SELECT
+	sum(
+
+		IF (
+			(s.is_sc_occupy = 1),
+			t.plat_qty,
+			0
+		)
+	) AS bz_num,
+	(
+		sum(
+
+			IF (
+				(s.is_sc_occupy = 1),
+				t.plat_qty,
+				0
+			)
+		) / sum(t.plat_qty)
+	) AS bz_ratio,
+	sum(
+
+		IF (
+			(s.is_sc_occupy = 0),
+			t.plat_qty,
+			0
+		)
+	) AS other_num,
+	(
+		sum(
+
+			IF (
+				(s.is_sc_occupy = 0),
+				t.plat_qty,
+				0
+			)
+		) / sum(t.plat_qty)
+	) AS other_ratio
+FROM
+	(
+		view_po_outs t
+		LEFT JOIN pos_soldto_rule s ON (
+			(t.sold_to = s.soldto)
+		)
+	)
+WHERE
+	(t.is_deleted = 0)
+		<if test="createTimeStart != null and createTimeStart != ''">
+			AND DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') >= #{createTimeStart, jdbcType=VARCHAR}
+		</if>
+		<if test="createTimeEnd != null and createTimeEnd != ''">
+			AND DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') &lt;= #{createTimeEnd, jdbcType=VARCHAR}
+		</if>
+		<if test="fileNo != null and fileNo != ''">
+			AND file_no = #{t.fileNo, jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<!-- 根据页面上条件查询表格3数据 -->
+	<select id="getTableThreeData" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain" resultMap="posSplitAllocateTableThreeMap">
+		<!-- SELECT
+			<include refid="viewPosSplitAllocateTableThree_Column_List"></include>
+		FROM view_po_split_collect_tablethree -->
+		SELECT
+		s.whs_name AS whs_name,
+		sum(t.plat_qty) AS plan_num,
+		(
+		sum(t.plat_qty) / (
+			SELECT
+				sum(n.plat_qty)
+			FROM
+				view_po_outs n
+			WHERE
+				(n.whs_code IS NOT NULL) AND n.is_deleted = 0
+			<if test="createTimeStart != null and createTimeStart != ''">
+				AND DATE_FORMAT(n.create_time,'%Y-%m-%d %H:%i:%S') >= #{createTimeStart, jdbcType=VARCHAR}
+			</if>
+			<if test="createTimeEnd != null and createTimeEnd != ''">
+				AND DATE_FORMAT(n.create_time,'%Y-%m-%d %H:%i:%S') &lt;= #{createTimeEnd, jdbcType=VARCHAR}
+			</if>
+			<if test="fileNo != null and fileNo != ''">
+				AND n.file_no = #{fileNo, jdbcType=VARCHAR}
+			</if>
+		)
+	) AS plan_num_ratio,
+	sum(
+
+		IF (
+			(
+				(t.type = '天猫')
+				AND (t.po_type = 'L')
+			),
+			t.plat_qty,
+			0
+		)
+	) AS `tm_l_num`,
+	sum(
+
+		IF (
+			(
+				(t.type = '天猫')
+				AND (t.po_type = 'F')
+			),
+			t.plat_qty,
+			0
+		)
+	) AS tm_f_num,
+	sum(
+
+		IF (
+			(
+				(t.type = '天猫')
+				AND (t.po_type <![CDATA[ <> ]]> 'L')
+				AND (t.po_type <![CDATA[ <> ]]> 'F')
+			),
+			t.plat_qty,
+			0
+		)
+	) AS tm_other_num,
+	sum(
+
+		IF (
+			(t.type = '天猫'),
+			t.plat_qty,
+			0
+		)
+	) AS tm_num,
+	sum(
+
+		IF (
+			(
+				(t.type = '官网')
+				AND (t.po_type = 'L')
+			),
+			t.plat_qty,
+			0
+		)
+	) AS gw_l_num,
+	sum(
+
+		IF (
+			(
+				(t.type = '官网')
+				AND (t.po_type = 'F')
+			),
+			t.plat_qty,
+			0
+		)
+	) AS gw_f_num,
+	sum(
+
+		IF (
+			(
+				(t.type = '官网')
+				AND (t.po_type <![CDATA[ <> ]]> 'L')
+				AND (t.po_type <![CDATA[ <> ]]> 'F')
+			),
+			t.plat_qty,
+			0
+		)
+	) AS gw_other_num,
+	sum(
+
+		IF (
+			(t.type = '官网'),
+			t.plat_qty,
+			0
+		)
+	) AS gw_num
+FROM
+	(
+		view_po_outs t
+		LEFT JOIN pos_whs s ON (
+			(
+				t.whs_code = s.whs_code
+			)
+		)
+	)
+WHERE
+	(
+		(t.whs_code IS NOT NULL)
+		AND (t.is_deleted = 0)
+	)
+		<if test="createTimeStart != null and createTimeStart != ''">
+			AND DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') >= #{createTimeStart, jdbcType=VARCHAR}
+		</if>
+		<if test="createTimeEnd != null and createTimeEnd != ''">
+			AND DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') &lt;= #{createTimeEnd, jdbcType=VARCHAR}
+		</if>
+		<if test="fileNo != null and fileNo != ''">
+			AND t.file_no = #{fileNo, jdbcType=VARCHAR}
+		</if>
+	GROUP BY t.whs_code
+	</select>
+	
+	<!-- 根据页面上条件查询表格4数据 -->
+	<select id="getTableFourData" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain"
+	resultMap="posSplitAllocateTableFourMap">
+	<!-- SELECT <include refid="viewPosSplitAllocateTableFour_Column_List"></include> 
+		FROM view_po_split_collect_tablefour -->
+	SELECT
+	s.whs_name AS whs_name,
+	sum(
+
+		IF (
+			(t.is_whs_allocate = 1),
+			t.plat_qty,
+			0
+		)
+	) AS join_split_num,
+	(
+		sum(
+
+			IF (
+				(t.is_whs_allocate = 1),
+				t.plat_qty,
+				0
+			)
+		) / (
+			SELECT
+				sum(
+
+					IF (
+						(n.is_whs_allocate = 1),
+						n.plat_qty,
+						0
+					)
+				)
+			FROM
+				view_po_outs n
+			WHERE
+				(n.whs_code IS NOT NULL) AND n.is_deleted = 0
+			<if test="createTimeStart != null and createTimeStart != ''">
+				AND DATE_FORMAT(n.create_time,'%Y-%m-%d %H:%i:%S') >= #{createTimeStart,
+				jdbcType=VARCHAR}
+			</if>
+			<if test="createTimeEnd != null and createTimeEnd != ''">
+				AND DATE_FORMAT(n.create_time,'%Y-%m-%d %H:%i:%S') &lt;= #{createTimeEnd,
+				jdbcType=VARCHAR}
+			</if>
+			<if test="fileNo != null and fileNo != ''">
+				AND n.file_no = #{fileNo, jdbcType=VARCHAR}
+			</if>
+			<!-- 增加表格4的子查询过滤条件 -->
+			<if test="bu != null and bu != ''">
+				AND n.bu = #{bu, jdbcType=VARCHAR}
+			</if>
+			<if test="poType != null and poType != ''">
+				AND n.po_type = #{poType, jdbcType=VARCHAR}
+			</if>
+		)
+	) AS join_split_ratio,
+	sum(
+
+		IF (
+			(t.is_whs_allocate = 0),
+			t.plat_qty,
+			0
+		)
+	) AS join_no_split_num
+FROM
+	(
+		(
+			view_po_outs t
+			LEFT JOIN pos_whs s ON (
+				(
+					t.whs_code = s.whs_code
+				)
+			)
+		)
+		LEFT JOIN pos_soldto_rule sr ON (
+			(
+				t.sold_to = sr.soldto
+			)
+		)
+	)
+WHERE
+	(
+		(t.whs_code IS NOT NULL)
+		AND (t.is_deleted = 0)
+	)
+	<if test="createTimeStart != null and createTimeStart != ''">
+		AND DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') >= #{createTimeStart,
+		jdbcType=VARCHAR}
+	</if>
+	<if test="createTimeEnd != null and createTimeEnd != ''">
+		AND DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%S') &lt;= #{createTimeEnd,
+		jdbcType=VARCHAR}
+	</if>
+	<if test="fileNo != null and fileNo != ''">
+		AND t.file_no = #{fileNo, jdbcType=VARCHAR}
+	</if>
+	<!-- 增加表格4的子查询过滤条件 -->
+	<if test="bu != null and bu != ''">
+		AND t.bu = #{bu, jdbcType=VARCHAR}
+	</if>
+	<if test="poType != null and poType != ''">
+		<choose>
+			<when test="poType != 'F'.toString() and poType != 'L'.toString()">
+				AND t.po_type <![CDATA[ <> ]]> 'L' AND t.po_type <![CDATA[ <> ]]> 'F'
+			</when>
+			<otherwise>
+				AND t.po_type = #{poType, jdbcType=VARCHAR}
+			</otherwise>
+		</choose>
+	</if>
+	GROUP BY t.whs_code
+</select>
+	
+
+</mapper>

@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.StoreMapper" > 
+	<!-- Result Map-->
+	<resultMap id= "BaseResultMap" type= "com.bt.lmis.model.Store" >
+		<result column= "id" property= "id" />
+		<result column= "create_time" property= "create_time" />
+		<result column= "create_user" property= "create_user" />
+		<result column= "update_time" property= "update_time" />
+		<result column= "update_user" property= "update_user" />
+		<result column= "client_id" property= "client_id" />
+		<result column= "cost_center" property= "cost_center" />
+		<result column= "store_code" property= "store_code" />
+		<result column= "store_name" property= "store_name" />
+		<result column= "store_type" property= "store_type" />
+		<result column= "settlement_method" property= "settlement_method" />
+		<result column= "contact" property= "contact" />
+		<result column= "phone" property= "phone" />
+		<result column= "address" property= "address" />
+		<result column= "company" property= "company" />
+		<result column= "invoice_type" property= "invoice_type" />
+		<result column= "invoice_info" property= "invoice_info" />
+		<result column= "remark" property= "remark" />
+		<result column= "validity" property= "validity" />
+	</resultMap>
+       
+	<!-- tb_store table all fields -->
+	<sql id= "Base_Column_List" >
+		 id,
+		 create_time,
+		 create_user,
+		 update_time,
+		 update_user,
+		 client_id,
+		 cost_center,
+		 store_code,
+		 store_name,
+		 store_type,
+		 settlement_method,
+		 contact,
+		 phone,
+		 address,
+		 company,
+		 invoice_type,
+		 invoice_info,
+		 remark,
+		 validity
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id= "where_Clause" >
+		where 1= 1
+		<trim suffixOverrides= "," >
+			<if test= "id != null" >
+			    and id= #{id }
+			</if>
+			<if test= "create_time != null" >
+			    and create_time= #{create_time }
+			</if>
+			<if test= "create_user != null and create_user != ''" >
+			    and create_user= #{create_user }
+			</if>
+			<if test= "update_time != null" >
+			    and update_time= #{update_time }
+			</if>
+			<if test= "update_user != null and update_user != ''" >
+			    and update_user= #{update_user }
+			</if>
+			<if test= "client_id != null" >
+			    and client_id= #{client_id }
+			</if>
+			<if test= "cost_center != null and cost_center != ''" >
+			    and cost_center= #{cost_center }
+			</if>
+			<if test= "store_code != null and store_code != ''" >
+			    and store_code= #{store_code }
+			</if>
+			<if test= "store_name != null and store_name != ''" >
+			    and store_name like concat('%', #{store_name }, '%')  
+			</if>
+			<if test= "store_type != null and store_type != ''" >
+			    and store_type= #{store_type }
+			</if>
+			<if test= "settlement_method != null and settlement_method != -1">
+			    and settlement_method= #{settlement_method }
+			</if>
+			<if test= "contact != null and contact != ''" >
+			    and contact= #{contact }
+			</if>
+			 <if test= "phone != null and phone != ''" >
+			    and phone= #{phone }
+			</if>
+			<if test= "address != null and address != ''" >
+			    and address= #{address }
+			</if>
+			<if test= "company != null and company != ''" >
+			    and company= #{company }
+			</if>
+			<if test= "invoice_type != null and invoice_type != ''" >
+			    and invoice_type= #{invoice_type }
+			</if>
+			<if test= "invoice_info != null and invoice_info != ''" >
+			    and invoice_info= #{invoice_info }
+			</if>
+			<if test= "remark != null and remark != ''" >
+			    and remark= #{remark }
+			</if>
+			<if test= "validity != null and validity != -1" >
+			    and validity=  #{validity }
+			</if>
+		</trim>
+	</sql>
+  	
+	<select id= "findCostCenterByStoreName" resultType= "String" parameterType= "Object" >
+		select cost_center from tb_store where store_name= #{store_name }
+	</select>
+	<select id= "StoreByStoreName" resultType= "java.util.HashMap" parameterType= "java.util.HashMap" >
+		select * from tb_store where store_name= #{store_name }
+	</select>
+	<select id= "findStoresByCostCenter" resultType= "String" parameterType= "Object" >
+		select store_name from tb_store where cost_center= #{cost_center }
+	</select>
+	
+	<select id= "getStoresByCostCenter" resultType= "com.bt.lmis.model.Store" parameterType= "Object" >
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			cost_center,
+			store_code,
+			store_name,
+			store_type,
+			contact,
+			phone,
+			address,
+			invoice_type,
+			invoice_info,
+			company,
+			remark,
+			settlement_method,
+			settlement_period,
+			client_id,
+			validity
+		from
+			tb_store
+		where
+			cost_center= #{cost_center }
+	</select>
+	
+	<!-- 满足条件的店铺表集合 -->
+	<select id= "findAll" resultMap= "BaseResultMap" >
+		select
+			<include refid= "Base_Column_List" />
+		from
+			tb_store
+		<if test= "orderCondition != null and orderCondition != ''" >
+	    	${orderCondition }
+	    </if>
+	</select>
+	
+	<insert id= "addStore" parameterType= "com.bt.lmis.model.Store" useGeneratedKeys= "true" keyProperty= "id" >
+		insert into tb_store(
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			client_id,
+			cost_center,
+			store_code,
+			store_name,
+			store_type,
+			settlement_method,
+			contact,
+			phone,
+			address,
+			company,
+			invoice_type,
+			invoice_info,
+			remark,
+			validity
+		) values (
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{client_id },
+			#{cost_center },
+			#{store_code },
+			#{store_name },
+			#{store_type },
+			#{settlement_method },
+			#{contact },
+			#{phone },
+			#{address },
+			#{company },
+			#{invoice_type },
+			#{invoice_info },
+			#{remark },
+			#{validity }
+		)
+	</insert>
+	
+	<update id= "updateStore" parameterType= "com.bt.lmis.model.Store" >
+		update tb_store
+		<trim prefix= "SET" suffixOverrides= "," >
+			update_time= now(),
+			<if test= "update_user != null and update_user != ''" >
+				update_user= #{update_user },
+			</if>
+			<if test= "cost_center != null and cost_center !=''" >
+		    	cost_center= #{cost_center },
+			</if>
+			<if test= "store_code != null and store_code != ''" >
+				store_code= #{store_code },
+			</if>
+			<if test= "store_name != null and store_name != ''" >
+				store_name= #{store_name },
+			</if>
+			<if test= "store_type != null and store_type != ''" >
+				store_type= #{store_type },
+			</if>
+			<if test= "settlement_method != null" >
+			    settlement_method= #{settlement_method },
+			</if>
+			<if test= "contact != null and contact != ''" >
+				contact= #{contact },
+			</if>
+			<if test= "phone != null and phone != ''" >
+				phone= #{phone },
+			</if>
+			<if test= "address != null and address != ''" >
+				address= #{address },
+			</if>
+			<if test= "company != null and company != ''" >
+				company= #{company },
+			</if>
+			<if test= "invoice_type != null and invoice_type != ''" >
+				invoice_type= #{invoice_type },
+			</if>
+			<if test= "invoice_info != null and invoice_info != ''" >
+				invoice_info= #{invoice_info },
+			</if>
+			<if test= "remark != null and remark != ''" >
+				remark= #{remark },
+			</if>
+			<if test= "validity != null" >
+				validity= #{validity},
+			</if>
+		</trim>
+		where id= #{id }
+	</update>
+	
+	<select id= "findByContractOwner" parameterType= "Object" resultMap= "BaseResultMap" >
+		select <include refid="Base_Column_List"/> from tb_store where store_code= #{contract_owner }
+	</select>
+	
+	<!-- 依据主键查找店铺表 -->
+	<select id= "selectById" parameterType= "java.lang.Integer"  resultMap= "BaseResultMap" >
+		select <include refid= "Base_Column_List" /> from tb_store where id = #{id }
+	</select>
+	
+	<!-- 依据条件查找店铺表 -->
+	<select id= "selectBySelective" parameterType= "com.bt.lmis.model.Store"  resultMap= "BaseResultMap" >
+		select <include refid= "Base_Column_List" /> from tb_store where 1=1
+		<if test="store_code != null and store_code != ''">
+			and store_code = #{store_code}
+		</if>
+	</select>
+	
+	<!-- 批量删除店铺表 -->
+	<delete id= "delStores" parameterType= "Object" >
+		delete from tb_store where id in 
+		<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	    	#{item }  
+	   	</foreach> 
+	</delete>
+	
+	<select id= "judgeStoreContractExistOrNot" parameterType= "Integer" resultType= "Integer" >
+		SELECT
+			count(0)
+		FROM
+			(
+				SELECT
+					tb_store.id
+				FROM
+					tb_contract_basicinfo
+				LEFT JOIN tb_store ON tb_contract_basicinfo.contract_owner= tb_store.store_code
+				WHERE
+					tb_store.id= #{id }
+			) a
+	</select>
+	
+	<!-- 查询数据总行 -->
+	<select id= "count" resultType= "java.lang.Integer"  parameterType= "com.bt.lmis.controller.form.StoreQueryParam" >
+		select count(1) cnt from tb_store <include refid= "where_Clause" />
+	</select>
+	
+	<!-- 列表查询 -->
+	<select id= "query" resultType= "java.util.Map"  parameterType= "com.bt.lmis.controller.form.StoreQueryParam" >
+		SELECT
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			client_id,
+			cost_center,
+			store_code,
+			store_name,
+			case store_type
+			when "0" then "A类"
+			when "1" then "B类"
+			when "2" then "其它"
+			else "" end as store_type,
+			case settlement_method
+			when "0" then "代销"
+			when "1" then "结算经销"
+			when "2" then "付款经销"
+			else "" end as settlement_method,
+			contact,
+			phone,
+			address,
+			company,
+			case invoice_type
+			when "0" then "手写发票"
+			when "1" then "机打发票"
+			when "2" then "普通发票"
+			when "3" then "增值税发票"
+			when "4" then "其它发票"
+			else "" end as invoice_type,
+			invoice_info,
+			remark,
+			case validity
+			when 0 then "无效"
+			when 1 then "有效"
+			else "" end as validity
+		FROM
+			tb_store
+		<include refid= "where_Clause" />
+		ORDER BY update_time DESC
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+	<select id= "selectByClient" parameterType= "Object" resultMap= "BaseResultMap" >
+		select <include refid="Base_Column_List" /> from tb_store where	client_id= #{client_id }
+	</select>
+	<select id='existRecord'  parameterType= "java.util.HashMap" resultType= "java.util.HashMap">
+		SELECT 
+		    *
+		FROM
+		    wo_group_storePower
+		WHERE
+		    1 = 1
+		    and  wo_group_storePower.group=#{group}
+		    and  wo_group_storePower.store=#{store}
+		    and wo_group_storePower.dFlag=1;
+	</select>
+</mapper>   

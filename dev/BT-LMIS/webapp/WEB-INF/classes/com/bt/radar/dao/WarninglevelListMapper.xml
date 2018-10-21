@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.WarninglevelListMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.radar.model.WarninglevelList" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="levelup_time" property="levelup_time"/>
+	<result column="levelup_level" property="levelup_level"/>
+	<result column="warningtype_code" property="warningtype_code"/>
+	<result column="dl_flag" property="dl_flag"/>
+</resultMap>
+       
+<!-- er_warninglevel_list table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,levelup_time,levelup_level,warningtype_code,dl_flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="levelup_time != null" >
+	    and levelup_time =  #{levelup_time}
+	</if>
+	<if test="levelup_level != null" >
+	    and levelup_level =  #{levelup_level}
+	</if>
+	 	<if test="warningtype_code != null and warningtype_code != ''" >
+	    and warningtype_code =  #{warningtype_code}
+	</if>
+	<if test="dl_flag != null" >
+	    and dl_flag =  #{dl_flag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入预警级别升级维护列表 -->
+<insert id="insert" parameterType="com.bt.radar.model.WarninglevelList" >
+  insert into er_warninglevel_list(id,create_time,create_user,update_time,update_user,levelup_time,levelup_level,warningtype_code,dl_flag)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{levelup_time},#{levelup_level},#{warningtype_code},#{dl_flag})
+</insert>
+
+<!-- 修改预警级别升级维护列表-->  
+ <update id="update" parameterType="com.bt.radar.model.WarninglevelList" >
+  update er_warninglevel_list set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},levelup_time=#{levelup_time},levelup_level=#{levelup_level},warningtype_code=#{warningtype_code},dl_flag=#{dl_flag} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改预警级别升级维护列表-->
+<update id="updateBySelective" parameterType="com.bt.radar.model.WarninglevelList" >
+	update er_warninglevel_list set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="levelup_time != null  ">
+		levelup_time=#{levelup_time},
+	</if>
+	<if test="levelup_level != null  ">
+		levelup_level=#{levelup_level},
+	</if>
+	<if test="warningtype_code != null  and warningtype_code != '' ">
+		warningtype_code=#{warningtype_code},
+	</if>
+	<if test="dl_flag != null  ">
+		dl_flag=#{dl_flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除预警级别升级维护列表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from er_warninglevel_list where id = #{id}
+</update>
+<!-- 批量删除预警级别升级维护列表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from er_warninglevel_list where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找预警级别升级维护列表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_warninglevel_list where id = #{id}
+</select>
+  	
+<!-- 预警级别升级维护列表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.WarninglevelListQueryParam">
+	select count(1) from er_warninglevel_list 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的预警级别升级维护列表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.WarninglevelListQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_warninglevel_list 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 预警级别升级维护列表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.WarninglevelListQueryParam">
+	select count(1) from er_warninglevel_list 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的预警级别升级维护列表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.WarninglevelListQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_warninglevel_list 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="selectRecords" parameterType="com.bt.radar.model.WarninglevelList" resultType="com.bt.radar.model.WarninglevelList">
+	select
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		levelup_time,
+		levelup_level,
+		warningtype_code,
+		dl_flag
+	from
+		er_warninglevel_list
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		dl_flag = 1
+		<if test="levelup_time != null and levelup_time != ''">
+			AND levelup_time = #{levelup_time }
+		</if>
+		<if test="levelup_level != null and levelup_level != ''">
+			AND levelup_level = #{levelup_level }
+		</if>
+		<if test="warningtype_code != null and warningtype_code != ''">
+			AND warningtype_code = #{warningtype_code }
+		</if>
+   	</trim>
+</select>
+
+<select id="selectRecord" parameterType="Object" resultType="com.bt.radar.model.WarninglevelList">
+	select
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		levelup_time,
+		levelup_level,
+		warningtype_code,
+		dl_flag
+	from
+		er_warninglevel_list
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		dl_flag = 1
+		<if test="levelup_level != null and levelup_level != ''">
+			AND levelup_level > #{levelup_level }
+		</if>
+		<if test="warningtype_code != null and warningtype_code != ''">
+			AND warningtype_code = #{warningtype_code }
+		</if>
+   	</trim>
+</select>
+
+<select id="findByWType" resultType="java.util.HashMap"  parameterType="com.bt.radar.controller.form.WarninglevelListQueryParam">
+	select 
+	*
+	from er_warninglevel_list 
+	 where 1=1
+	 <if test="warningtype_code != null and warningtype_code != ''" >
+        and warningtype_code= #{warningtype_code}
+    </if>
+     order by levelup_level
+</select>
+
+<update id="updateWll" parameterType="com.bt.radar.controller.form.WarninglevelListQueryParam">
+	update 	  er_warninglevel_list
+	set 
+	<if test="levelup_level != null and levelup_level != ''" >
+         levelup_level= #{levelup_level}
+    </if>
+	 <if test="warningtype_code != null and warningtype_code != ''" >
+       ,  warningtype_code= #{warningtype_code}
+    </if>
+     <if test="levelup_time != null and levelup_time != ''" >
+       ,  levelup_time= #{levelup_time}
+    </if>
+	 where id = #{id}
+</update>
+ 
+ <select id="getBigANDLittle" resultType="java.util.HashMap"  parameterType='java.util.HashMap'>
+ select 
+ (SELECT 
+    levelup_time
+FROM
+    er_warninglevel_list
+WHERE
+1=1
+<if test="warningtype_code != null and warningtype_code != ''" >
+       and  warningtype_code= #{warningtype_code}
+    </if>
+ <if test="id != null and id != ''" >
+       and  id!= #{id}
+    </if>
+    <if test="levelup_level != null and levelup_level != ''" >
+       and  levelup_level &lt; #{levelup_level}
+    </if>
+        order by levelup_level desc limit 0,1) as big_value,
+    ( SELECT 
+    levelup_time
+FROM
+    er_warninglevel_list
+WHERE
+1=1
+<if test="warningtype_code != null and warningtype_code != ''" >
+       and  warningtype_code= #{warningtype_code}
+    </if>
+ <if test="id != null and id != ''" >
+       and  id!= #{id}
+    </if>
+    <if test="levelup_level != null and levelup_level != ''" >
+       and  levelup_level &gt; #{levelup_level}
+    </if>
+        order by levelup_level desc limit 0,1) as little_value            
+ </select>
+<update id="updateLevel" parameterType="java.util.HashMap">
+  update  er_waybill_warninginfo_detail set warning_level=#{warning_level}
+  where id=#{id}
+</update>
+
+<select id='ExistsLevel' resultType="java.util.HashMap" parameterType="java.util.HashMap">
+select  levelup_level,levelup_time  from  er_warninglevel_list   where  warningtype_code=(select warningtype_code from er_warninglevel_list where id=#{id})  and   id !=#{id}
+and  levelup_level=#{levelup_level}
+union all  
+select  levelup_level,levelup_time  from  er_warninglevel_list   where   warningtype_code=(select warningtype_code from er_warninglevel_list where id=#{id}) and   id !=#{id}
+and  levelup_time=#{levelup_time}
+</select>
+<select id='checkLevel' resultType="java.util.HashMap" parameterType="java.util.HashMap">
+select  * from
+(select  count(1) as level from  er_warninglevel_list where  warningtype_code=(select warningtype_code from er_warninglevel_list where id=#{id})  and  levelup_level&lt;#{levelup_level} and id !=#{id}) a
+,
+(select  count(1) as time from  er_warninglevel_list where  warningtype_code=(select warningtype_code from er_warninglevel_list where id=#{id})  and  levelup_time&lt;#{levelup_time} and id !=#{id}) b
+
+</select>
+
+<select id='analyzeLevel' resultType="java.util.HashMap" parameterType="java.util.HashMap">
+     SELECT * from  
+    (SELECT 
+            MIN(levelup_level) AS max_num,min(levelup_time) AS max_time
+        FROM
+            er_warninglevel_list
+        WHERE
+            warningtype_code = #{warningtype_code}
+                AND levelup_time &gt; #{time} ) a,
+    (SELECT 
+            MAX(levelup_level)  AS min_num,max(levelup_time) AS min_time
+        FROM
+            er_warninglevel_list
+        WHERE
+            warningtype_code = #{warningtype_code}
+                AND levelup_time &lt;=  #{time}) b where 1=1
+
+</select>
+<select id='findLittlestLevel'  parameterType="com.bt.radar.controller.form.WarninglevelListQueryParam" resultType='com.bt.radar.model.WarninglevelList'>
+SELECT 
+    *
+FROM
+    er_warninglevel_list
+WHERE
+    warningtype_code = #{warningtype_code}
+        AND dl_flag = 1
+ORDER BY levelup_level
+LIMIT 0 , 1
+</select>
+<delete  id='deleteByCon' parameterType='java.util.HashMap'>
+delete from  er_warninglevel_list where warningtype_code=#{warningtype_code};
+</delete>
+
+</mapper>   

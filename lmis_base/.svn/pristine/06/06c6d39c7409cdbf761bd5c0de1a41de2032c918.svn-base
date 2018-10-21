@@ -1,0 +1,135 @@
+package com.lmis.setup.pageTable.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.framework.baseModel.PersistentObject;
+import com.lmis.setup.pageTable.model.ViewSetupPageTable;
+
+/** 
+ * @ClassName: SetupPageTableServiceInterface
+ * @Description: TODO(页面列表业务层接口)
+ * @author Ian.Huang
+ * @date 2017年12月11日 下午4:41:03 
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public interface SetupPageTableServiceInterface<T extends PersistentObject> {
+
+	/**
+	 * @Title: queryPage
+	 * @Description: TODO(查询查询结果字段)
+	 * @param viewSetupPageTable
+	 * @param pageObject
+	 * @throws Exception
+	 * @return: LmisResult<?>
+	 * @author: Ian.Huang
+	 * @date: 2017年12月11日 下午4:42:07
+	 */
+	LmisResult<?> queryPage(ViewSetupPageTable viewSetupPageTable, LmisPageObject pageObject) throws Exception;
+
+	/**
+	 * @Title: executeSelect
+	 * @Description: TODO(执行搜索语句，获取多条记录，可分页)
+	 * @param sql
+	 * @param pageObject
+	 * @throws Exception
+	 * @return: LmisResult<?>
+	 * @author: Ian.Huang
+	 * @date: 2017年12月28日 上午11:09:03
+	 */
+	LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception;
+	
+	/**
+	 * @Title: executeSelect
+	 * @Description: TODO(执行搜索语句，获取单条记录，不分页)
+	 * @param dynamicSqlParam
+	 * @throws Exception
+	 * @return: LmisResult<?>
+	 * @author: Ian.Huang
+	 * @date: 2017年12月28日 上午11:13:06
+	 */
+	LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception;
+	
+	/**
+	 * @Title: addSetupPageTable
+	 * @Description: TODO(新增查询结果字段)
+	 * @param t
+	 * @throws Exception
+	 * @return: LmisResult<T>
+	 * @author: Ian.Huang
+	 * @date: 2017年12月11日 下午4:41:35
+	 */
+	LmisResult<T> addSetupPageTable(T t) throws Exception;
+	
+	/**
+	 * @Title: updateSetupPageTable
+	 * @Description: TODO(更新查询结果字段)
+	 * @param t
+	 * @throws Exception
+	 * @return: LmisResult<T>
+	 * @author: Ian.Huang
+	 * @date: 2017年12月11日 下午4:42:38
+	 */
+	LmisResult<T> updateSetupPageTable(T t) throws Exception;
+	
+	/**
+	 * @Title: executeUpdate
+	 * @Description: TODO(动态更新查询结果字段)
+	 * @param dynamicSqlParam
+	 * @throws Exception
+	 * @return: LmisResult<?>
+	 * @author: Ian.Huang
+	 * @date: 2018年1月9日 下午8:45:56
+	 */
+	LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception;
+	
+	/**
+	 * @Title: deleteSetupPageTable
+	 * @Description: TODO(删除查询结果字段)
+	 * @param t
+	 * @throws Exception
+	 * @return: LmisResult<T>
+	 * @author: Ian.Huang
+	 * @date: 2017年12月11日 下午4:43:32
+	 */
+	LmisResult<T> deleteSetupPageTable(T t) throws Exception;
+	
+	/**
+	 * @Title: getSetupPageTable
+	 * @Description: TODO(查看查询结果字段)
+	 * @param t
+	 * @throws Exception
+	 * @return: LmisResult<T>
+	 * @author: Ian.Huang
+	 * @date: 2018年1月9日 下午5:42:02
+	 */
+	LmisResult<T> getSetupPageTable(T t) throws Exception;
+	
+	/**
+	 * @Title: redisForPageTables
+	 * @Description: TODO(同步页面列表数据)
+	 * @throws Exception
+	 * @return: LmisResult<?>
+	 * @author: Ian.Huang
+	 * @date: 2018年1月9日 下午2:21:14
+	 */
+	LmisResult<?> redisForPageTables() throws Exception;
+	
+	/**
+	 * @Title: executeInsert
+	 * @Description: TODO(执行插入语句)
+	 * @param dynamicSqlParam
+	 * @throws Exception
+	 * @return: LmisResult<?>
+	 * @author: wenhui.bai
+	 * @date: 2018年05月23日
+	 */
+	LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception;
+	
+}

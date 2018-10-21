@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.balance.dao.OperationfeeDataDailySettlementEstimateMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.OperationfeeDataDailySettlementEstimate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="batch_number" property="batchNumber" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contractId" jdbcType="INTEGER" />
+    <result column="btc_qty" property="btcQty" jdbcType="DECIMAL" />
+    <result column="btc_qtyunit" property="btcQtyunit" jdbcType="VARCHAR" />
+    <result column="btc_fee" property="btcFee" jdbcType="DECIMAL" />
+    <result column="btc_remark" property="btcRemark" jdbcType="VARCHAR" />
+    <result column="btb_qty" property="btbQty" jdbcType="DECIMAL" />
+    <result column="btb_qtyunit" property="btbQtyunit" jdbcType="VARCHAR" />
+    <result column="btb_fee" property="btbFee" jdbcType="DECIMAL" />
+    <result column="btb_remark" property="btbRemark" jdbcType="VARCHAR" />
+    <result column="return_qty" property="returnQty" jdbcType="DECIMAL" />
+    <result column="return_qtyunit" property="returnQtyunit" jdbcType="VARCHAR" />
+    <result column="return_fee" property="returnFee" jdbcType="DECIMAL" />
+    <result column="return_remark" property="returnRemark" jdbcType="VARCHAR" />
+    <result column="ib_qty" property="ibQty" jdbcType="DECIMAL" />
+    <result column="ib_qtyunit" property="ibQtyunit" jdbcType="VARCHAR" />
+    <result column="ib_fee" property="ibFee" jdbcType="DECIMAL" />
+    <result column="ib_remark" property="ibRemark" jdbcType="VARCHAR" />
+    <result column="xse_qty" property="xseQty" jdbcType="DECIMAL" />
+    <result column="xse_qtyunit" property="xseQtyunit" jdbcType="VARCHAR" />
+    <result column="xse_fee" property="xseFee" jdbcType="DECIMAL" />
+    <result column="xse_remark" property="xseRemark" jdbcType="VARCHAR" />
+    <result column="gd_qty" property="gdQty" jdbcType="DECIMAL" />
+    <result column="gd_qtyunit" property="gdQtyunit" jdbcType="VARCHAR" />
+    <result column="gd_fee" property="gdFee" jdbcType="DECIMAL" />
+    <result column="gd_remark" property="gdRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, create_user, update_time, update_user, batch_number, contract_id, 
+    btc_qty, btc_qtyunit, btc_fee, btc_remark, btb_qty, btb_qtyunit, btb_fee, 
+    btb_remark, return_qty, return_qtyunit, return_fee, return_remark, ib_qty, ib_qtyunit, 
+    ib_fee, ib_remark, xse_qty, xse_qtyunit, xse_fee, xse_remark, gd_qty, gd_qtyunit, 
+    gd_fee, gd_remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from bal_operationfee_data_daily_settlement_estimate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="countByEntity" resultType="java.lang.Integer" parameterType="com.bt.lmis.balance.model.OperationfeeDataDailySettlementEstimate" >
+    select 
+    	count(1)
+    from bal_operationfee_data_daily_settlement_estimate
+    <where>
+    	<if test="batchNumber != null and batchNumber != ''">
+    		and batch_number = #{batchNumber,jdbcType=VARCHAR}
+    	</if>
+    	<if test="contractId != null">
+    		and contract_id = #{contractId,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </select>
+  <select id="findByEntity" resultMap="BaseResultMap" parameterType="com.bt.lmis.balance.model.OperationfeeDataDailySettlementEstimate" >
+    select 
+    <include refid="Base_Column_List" />
+    from bal_operationfee_data_daily_settlement_estimate
+    <where>
+    	<if test="batchNumber != null and batchNumber != ''">
+    		and batch_number = #{batchNumber,jdbcType=VARCHAR}
+    	</if>
+    	<if test="contractId != null">
+    		and contract_id = #{contractId,jdbcType=INTEGER}
+    	</if>
+    </where>
+	<if test="firstResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bal_operationfee_data_daily_settlement_estimate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.balance.model.OperationfeeDataDailySettlementEstimate" >
+    insert into bal_operationfee_data_daily_settlement_estimate (id, create_time, create_user, 
+      update_time, update_user, batch_number, 
+      contract_id, btc_qty, 
+      btc_qtyunit, btc_fee, btc_remark, 
+      btb_qty, btb_qtyunit, btb_fee, 
+      btb_remark, return_qty, return_qtyunit, 
+      return_fee, return_remark, ib_qty, 
+      ib_qtyunit, ib_fee, ib_remark, 
+      xse_qty, xse_qtyunit, xse_fee, 
+      xse_remark, gd_qty, gd_qtyunit, 
+      gd_fee, gd_remark)
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{batchNumber,jdbcType=VARCHAR}, 
+      #{contractId,jdbcType=INTEGER}, #{btcQty,jdbcType=DECIMAL}, 
+      #{btcQtyunit,jdbcType=VARCHAR}, #{btcFee,jdbcType=DECIMAL}, #{btcRemark,jdbcType=VARCHAR}, 
+      #{btbQty,jdbcType=DECIMAL}, #{btbQtyunit,jdbcType=VARCHAR}, #{btbFee,jdbcType=DECIMAL}, 
+      #{btbRemark,jdbcType=VARCHAR}, #{returnQty,jdbcType=DECIMAL}, #{returnQtyunit,jdbcType=VARCHAR}, 
+      #{returnFee,jdbcType=DECIMAL}, #{returnRemark,jdbcType=VARCHAR}, #{ibQty,jdbcType=DECIMAL}, 
+      #{ibQtyunit,jdbcType=VARCHAR}, #{ibFee,jdbcType=DECIMAL}, #{ibRemark,jdbcType=VARCHAR}, 
+      #{xseQty,jdbcType=DECIMAL}, #{xseQtyunit,jdbcType=VARCHAR}, #{xseFee,jdbcType=DECIMAL}, 
+      #{xseRemark,jdbcType=VARCHAR}, #{gdQty,jdbcType=DECIMAL}, #{gdQtyunit,jdbcType=VARCHAR}, 
+      #{gdFee,jdbcType=DECIMAL}, #{gdRemark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.balance.model.OperationfeeDataDailySettlementEstimate" >
+    insert into bal_operationfee_data_daily_settlement_estimate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="batchNumber != null" >
+        batch_number,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="btcQty != null" >
+        btc_qty,
+      </if>
+      <if test="btcQtyunit != null" >
+        btc_qtyunit,
+      </if>
+      <if test="btcFee != null" >
+        btc_fee,
+      </if>
+      <if test="btcRemark != null" >
+        btc_remark,
+      </if>
+      <if test="btbQty != null" >
+        btb_qty,
+      </if>
+      <if test="btbQtyunit != null" >
+        btb_qtyunit,
+      </if>
+      <if test="btbFee != null" >
+        btb_fee,
+      </if>
+      <if test="btbRemark != null" >
+        btb_remark,
+      </if>
+      <if test="returnQty != null" >
+        return_qty,
+      </if>
+      <if test="returnQtyunit != null" >
+        return_qtyunit,
+      </if>
+      <if test="returnFee != null" >
+        return_fee,
+      </if>
+      <if test="returnRemark != null" >
+        return_remark,
+      </if>
+      <if test="ibQty != null" >
+        ib_qty,
+      </if>
+      <if test="ibQtyunit != null" >
+        ib_qtyunit,
+      </if>
+      <if test="ibFee != null" >
+        ib_fee,
+      </if>
+      <if test="ibRemark != null" >
+        ib_remark,
+      </if>
+      <if test="xseQty != null" >
+        xse_qty,
+      </if>
+      <if test="xseQtyunit != null" >
+        xse_qtyunit,
+      </if>
+      <if test="xseFee != null" >
+        xse_fee,
+      </if>
+      <if test="xseRemark != null" >
+        xse_remark,
+      </if>
+      <if test="gdQty != null" >
+        gd_qty,
+      </if>
+      <if test="gdQtyunit != null" >
+        gd_qtyunit,
+      </if>
+      <if test="gdFee != null" >
+        gd_fee,
+      </if>
+      <if test="gdRemark != null" >
+        gd_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="btcQty != null" >
+        #{btcQty,jdbcType=DECIMAL},
+      </if>
+      <if test="btcQtyunit != null" >
+        #{btcQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="btcFee != null" >
+        #{btcFee,jdbcType=DECIMAL},
+      </if>
+      <if test="btcRemark != null" >
+        #{btcRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="btbQty != null" >
+        #{btbQty,jdbcType=DECIMAL},
+      </if>
+      <if test="btbQtyunit != null" >
+        #{btbQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="btbFee != null" >
+        #{btbFee,jdbcType=DECIMAL},
+      </if>
+      <if test="btbRemark != null" >
+        #{btbRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="returnQty != null" >
+        #{returnQty,jdbcType=DECIMAL},
+      </if>
+      <if test="returnQtyunit != null" >
+        #{returnQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="returnFee != null" >
+        #{returnFee,jdbcType=DECIMAL},
+      </if>
+      <if test="returnRemark != null" >
+        #{returnRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="ibQty != null" >
+        #{ibQty,jdbcType=DECIMAL},
+      </if>
+      <if test="ibQtyunit != null" >
+        #{ibQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="ibFee != null" >
+        #{ibFee,jdbcType=DECIMAL},
+      </if>
+      <if test="ibRemark != null" >
+        #{ibRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="xseQty != null" >
+        #{xseQty,jdbcType=DECIMAL},
+      </if>
+      <if test="xseQtyunit != null" >
+        #{xseQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="xseFee != null" >
+        #{xseFee,jdbcType=DECIMAL},
+      </if>
+      <if test="xseRemark != null" >
+        #{xseRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="gdQty != null" >
+        #{gdQty,jdbcType=DECIMAL},
+      </if>
+      <if test="gdQtyunit != null" >
+        #{gdQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="gdFee != null" >
+        #{gdFee,jdbcType=DECIMAL},
+      </if>
+      <if test="gdRemark != null" >
+        #{gdRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.balance.model.OperationfeeDataDailySettlementEstimate" >
+    update bal_operationfee_data_daily_settlement_estimate
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNumber != null" >
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="btcQty != null" >
+        btc_qty = #{btcQty,jdbcType=DECIMAL},
+      </if>
+      <if test="btcQtyunit != null" >
+        btc_qtyunit = #{btcQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="btcFee != null" >
+        btc_fee = #{btcFee,jdbcType=DECIMAL},
+      </if>
+      <if test="btcRemark != null" >
+        btc_remark = #{btcRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="btbQty != null" >
+        btb_qty = #{btbQty,jdbcType=DECIMAL},
+      </if>
+      <if test="btbQtyunit != null" >
+        btb_qtyunit = #{btbQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="btbFee != null" >
+        btb_fee = #{btbFee,jdbcType=DECIMAL},
+      </if>
+      <if test="btbRemark != null" >
+        btb_remark = #{btbRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="returnQty != null" >
+        return_qty = #{returnQty,jdbcType=DECIMAL},
+      </if>
+      <if test="returnQtyunit != null" >
+        return_qtyunit = #{returnQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="returnFee != null" >
+        return_fee = #{returnFee,jdbcType=DECIMAL},
+      </if>
+      <if test="returnRemark != null" >
+        return_remark = #{returnRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="ibQty != null" >
+        ib_qty = #{ibQty,jdbcType=DECIMAL},
+      </if>
+      <if test="ibQtyunit != null" >
+        ib_qtyunit = #{ibQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="ibFee != null" >
+        ib_fee = #{ibFee,jdbcType=DECIMAL},
+      </if>
+      <if test="ibRemark != null" >
+        ib_remark = #{ibRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="xseQty != null" >
+        xse_qty = #{xseQty,jdbcType=DECIMAL},
+      </if>
+      <if test="xseQtyunit != null" >
+        xse_qtyunit = #{xseQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="xseFee != null" >
+        xse_fee = #{xseFee,jdbcType=DECIMAL},
+      </if>
+      <if test="xseRemark != null" >
+        xse_remark = #{xseRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="gdQty != null" >
+        gd_qty = #{gdQty,jdbcType=DECIMAL},
+      </if>
+      <if test="gdQtyunit != null" >
+        gd_qtyunit = #{gdQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="gdFee != null" >
+        gd_fee = #{gdFee,jdbcType=DECIMAL},
+      </if>
+      <if test="gdRemark != null" >
+        gd_remark = #{gdRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.balance.model.OperationfeeDataDailySettlementEstimate" >
+    update bal_operationfee_data_daily_settlement_estimate
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      batch_number = #{batchNumber,jdbcType=VARCHAR},
+      contract_id = #{contractId,jdbcType=INTEGER},
+      btc_qty = #{btcQty,jdbcType=DECIMAL},
+      btc_qtyunit = #{btcQtyunit,jdbcType=VARCHAR},
+      btc_fee = #{btcFee,jdbcType=DECIMAL},
+      btc_remark = #{btcRemark,jdbcType=VARCHAR},
+      btb_qty = #{btbQty,jdbcType=DECIMAL},
+      btb_qtyunit = #{btbQtyunit,jdbcType=VARCHAR},
+      btb_fee = #{btbFee,jdbcType=DECIMAL},
+      btb_remark = #{btbRemark,jdbcType=VARCHAR},
+      return_qty = #{returnQty,jdbcType=DECIMAL},
+      return_qtyunit = #{returnQtyunit,jdbcType=VARCHAR},
+      return_fee = #{returnFee,jdbcType=DECIMAL},
+      return_remark = #{returnRemark,jdbcType=VARCHAR},
+      ib_qty = #{ibQty,jdbcType=DECIMAL},
+      ib_qtyunit = #{ibQtyunit,jdbcType=VARCHAR},
+      ib_fee = #{ibFee,jdbcType=DECIMAL},
+      ib_remark = #{ibRemark,jdbcType=VARCHAR},
+      xse_qty = #{xseQty,jdbcType=DECIMAL},
+      xse_qtyunit = #{xseQtyunit,jdbcType=VARCHAR},
+      xse_fee = #{xseFee,jdbcType=DECIMAL},
+      xse_remark = #{xseRemark,jdbcType=VARCHAR},
+      gd_qty = #{gdQty,jdbcType=DECIMAL},
+      gd_qtyunit = #{gdQtyunit,jdbcType=VARCHAR},
+      gd_fee = #{gdFee,jdbcType=DECIMAL},
+      gd_remark = #{gdRemark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

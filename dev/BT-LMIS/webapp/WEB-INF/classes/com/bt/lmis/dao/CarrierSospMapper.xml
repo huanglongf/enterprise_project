@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.CarrierSospMapper" > 
+	<resultMap id="CarrierSospMap" type="com.bt.lmis.model.CarrierSosp" >
+		<result column="id" property="id"/>
+		<result column="con_id" property="con_id"/>
+		<result column="carrier_type" property="carrier_type"/>
+		<result column="carrier" property="carrier"/>
+		<result column="create_by" property="create_by"/>
+		<result column="create_time" property="create_time"/>
+		<result column="update_by" property="update_by"/>
+		<result column="update_time" property="update_time"/>
+	</resultMap>
+	<select id= "getById" parameterType= "Object" resultType= "com.bt.lmis.model.CarrierSosp" >
+		select
+			id,
+			con_id,
+			carrier_type,
+			carrier,
+			dFlag,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ssc_carrier
+		where
+			id= #{id }
+	</select>
+	<select id= "findLogistics" parameterType= "Object" resultType= "java.util.Map" >
+		select
+			id,
+			con_id,
+			carrier_type,
+			carrier as carrier_code,
+			b.transport_name as carrier,
+			dFlag,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ssc_carrier a
+		left join(
+			select
+				transport_code,
+				transport_name
+			from
+				tb_transport_vendor
+		) b on a.carrier = b.transport_code 
+		where
+			dFlag= 0
+		and
+			carrier_type= 0
+		and
+			con_id = #{con_id }
+	</select>
+	<select id= "findExpress" parameterType= "Object" resultType= "java.util.Map" >
+		select
+			id,
+			con_id,
+			carrier_type,
+			carrier as carrier_code,
+			b.transport_name as carrier,
+			dFlag,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ssc_carrier a
+		left join(
+			select
+				transport_code,
+				transport_name
+			from
+				tb_transport_vendor
+		) b on a.carrier = b.transport_code 
+		where
+			dFlag= 0
+		and
+			carrier_type= 1
+		and
+			con_id = #{con_id }
+	</select>
+	<select id= "checkExist" parameterType= "Object" resultType= "Integer" >
+		select 
+			count(1)
+		from
+			ssc_carrier
+		where
+			dFlag= 0
+		and
+			con_id= #{con_id }
+		and
+			carrier= #{carrier }
+	</select>
+	<select id= "findCarriers" parameterType= "Object" resultType= "java.util.Map" >
+		select
+			id,
+			con_id,
+			carrier_type,
+			carrier as carrier_code,
+			b.transport_name as carrier,
+			dFlag,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ssc_carrier a
+		left join(
+			select
+				transport_code,
+				transport_name
+			from
+				tb_transport_vendor
+		) b on a.carrier = b.transport_code 
+		where
+			dFlag= 0
+		and con_id= #{con_id }
+		order by carrier_type
+	</select>
+	<update id= "delCarrier" parameterType= "Object" >
+		delete from ssc_carrier where id = #{id }
+	</update>
+	<insert id= "addCarrier" parameterType= "com.bt.lmis.model.CarrierSosp" useGeneratedKeys= "true" keyProperty= "id" >
+		insert into ssc_carrier
+		(
+			con_id,
+			carrier_type,
+			carrier,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		) values (
+			#{con_id },
+			#{carrier_type },
+			#{carrier },
+			#{create_by },
+			now(),
+			#{create_by },
+			now()
+		)
+	</insert>
+</mapper>   

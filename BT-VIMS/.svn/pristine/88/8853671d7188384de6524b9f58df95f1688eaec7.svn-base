@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.vims.dao.VimsDataMapper">
+	<resultMap id="BaseResultMap" type="com.bt.vims.model.VimsData">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="visitor_name" property="visitorName" jdbcType="VARCHAR" />
+		<result column="visitor_phone" property="visitorPhone"
+			jdbcType="VARCHAR" />
+		<result column="host" property="host" jdbcType="VARCHAR" />
+		<result column="visitor_company_name" property="visitorCompanyName"
+			jdbcType="VARCHAR" />
+		<result column="license_plate_number" property="licensePlateNumber"
+			jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="photo" property="photo" jdbcType="VARCHAR" />
+		<result column="check_in_time" property="checkInTime" jdbcType="TIMESTAMP" />
+		<result column="check_in_user" property="checkInUser" jdbcType="VARCHAR" />
+		<result column="check_in_plcae" property="checkInPlcae"
+			jdbcType="VARCHAR" />
+		<result column="apply_for" property="applyFor" jdbcType="VARCHAR" />
+		<result column="visitor_type" property="visitorType" jdbcType="VARCHAR" />
+		<result column="visitor_num" property="visitorNum" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<!-- 查询时所用得字段 -->
+	<sql id="base_cloumn_list">
+		id,
+		visitor_name,
+		visitor_phone,
+		host,
+		visitor_company_name,
+		license_plate_number,
+		content,
+		remark,
+		photo,
+		check_in_time,
+		check_in_user,
+		check_in_plcae,
+		apply_for,
+		visitor_type,
+		visitor_num,
+		create_time,
+		update_time
+	</sql>
+
+	<!-- 插入时所用得字段值 -->
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			visitor_name,
+			visitor_phone,
+			host,
+			visitor_company_name,
+			license_plate_number,
+			content,
+			remark,
+			photo,
+			check_in_time,
+			check_in_user,
+			check_in_plcae,
+			apply_for,
+			visitor_type,
+			visitor_num,
+			create_time,
+			update_time
+		</trim>
+	</sql>
+
+	<!-- 将客户端访客数据批量插入表中 -->
+	<insert id="create" parameterType="java.util.List">
+		INSERT INTO ins_vims_info
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" index="index" item="obj" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				#{obj.visitorName,
+				jdbcType=VARCHAR},
+				#{obj.visitorPhone, jdbcType=VARCHAR},
+				#{obj.host,
+				jdbcType=VARCHAR},
+				#{obj.visitorCompanyName, jdbcType=VARCHAR},
+				#{obj.licensePlateNumber, jdbcType=VARCHAR},
+				#{obj.content,
+				jdbcType=VARCHAR},
+				#{obj.remark, jdbcType=VARCHAR},
+				#{obj.photo,
+				jdbcType=VARCHAR},
+				#{obj.checkInTime, jdbcType=TIMESTAMP},
+				#{obj.checkInUser, jdbcType=VARCHAR},
+				#{obj.checkInPlcae,
+				jdbcType=VARCHAR},
+				#{obj.applyFor, jdbcType=VARCHAR},
+				#{obj.visitorType, jdbcType=VARCHAR},
+				#{obj.visitorNum,
+				jdbcType=INTEGER},
+				#{obj.createTime, jdbcType=TIMESTAMP},
+				#{obj.updateTime, jdbcType=TIMESTAMP}
+			</trim>
+		</foreach>
+	</insert>
+
+</mapper>

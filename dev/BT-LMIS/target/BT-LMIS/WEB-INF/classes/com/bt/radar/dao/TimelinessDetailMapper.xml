@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.TimelinessDetailMapper" >
+	<resultMap id="TimelinessDetailMap" type="com.bt.radar.model.TimelinessDetail" >
+		<result column="id" property="id"/>
+		<result column="create_time" property="create_time"/>
+		<result column="create_user" property="create_user"/>
+		<result column="update_time" property="update_time"/>
+		<result column="update_user" property="update_user"/>
+		<result column="number" property="number"/>
+		<result column="province_code" property="province_code"/>
+		<result column="city_code" property="city_code"/>
+		<result column="state_code" property="state_code"/>
+		<result column="street_code" property="street_code"/>
+		<result column="efficiency" property="efficiency"/>
+		<result column="efficiency_unit" property="efficiency_unit"/>
+		<result column="warningtype_code" property="warningtype_code"/>
+		<result column="valibity" property="valibity"/>
+		<result column="pid" property="pid"/>
+		<result column="dl_flag" property="dl_flag"/>
+	</resultMap>
+	<select id="getAfterNodes" parameterType="Object" resultType="com.bt.radar.model.TimelinessDetail">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			number,
+			province_code,
+			city_code,
+			state_code,
+			street_code,
+			efficiency,
+			efficiency_unit,
+			warningtype_code,
+			valibity,
+			pid,
+			dl_flag
+		from
+			er_expressaging_detail
+		where
+			pid = #{pid }
+		and
+			number > #{number }
+	</select>
+	<select id="getMaxNumber" parameterType="Object" resultType="Integer">
+		select
+			max(number)
+		from
+			er_expressaging_detail
+		where
+			dl_flag = 1
+		and
+			pid = #{pid }
+	</select>
+	<select id="getById" parameterType="Object" resultType="com.bt.radar.model.TimelinessDetail">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			number,
+			province_code,
+			city_code,
+			state_code,
+			street_code,
+			efficiency,
+			efficiency_unit,
+			warningtype_code,
+			valibity,
+			pid,
+			dl_flag
+		from
+			er_expressaging_detail
+		where
+			id = #{id }
+	</select>
+	<select id="countAllExist" parameterType="com.bt.radar.controller.form.TimelinessDetailQueryParam" resultType="Integer">
+		select
+			count(1)
+		from
+			(
+				select
+					id,
+					create_time,
+					create_user,
+					update_time,
+					update_user,
+					number,
+					province_code,
+					city_code,
+					state_code,
+					street_code,
+					efficiency,
+					efficiency_unit,
+					warningtype_code,
+					valibity,
+					pid,
+					dl_flag
+				from
+					er_expressaging_detail
+				<trim prefix="WHERE" prefixOverrides="AND|OR">
+					dl_flag = 1
+					<if test="pid != null and pid != ''">
+						AND pid = #{pid }
+					</if>
+		   		</trim>
+			) a
+	</select>
+	<select id="toList" parameterType="com.bt.radar.controller.form.TimelinessDetailQueryParam" resultType="java.util.Map">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			number,
+			province_code,
+			b.area_name as province_name,
+			city_code,
+			c.area_name as city_name,
+			state_code,
+			d.area_name as state_name,
+			street_code,
+			e.area_name as street_name,
+			concat(efficiency, case efficiency_unit 
+			when '0' then 'H'
+			when '1' then 'D'
+			else '' end) as efficiency,
+			a.warningtype_code,
+			f.warningtype_name as warningtype,
+			case valibity
+			when 0 then '无效'
+			when 1 then '有效'
+			else '' end as valibity,
+			dl_flag
+		from
+			er_expressaging_detail a
+		left join(
+			select
+				area_code,
+				area_name
+			from
+				tb_area
+		) b on a.province_code = b.area_code
+		left join(
+			select
+				area_code,
+				area_name
+			from
+				tb_area
+		) c on a.city_code = c.area_code
+		left join(
+			select
+				area_code,
+				area_name
+			from
+				tb_area
+		) d on a.state_code = d.area_code
+		left join(
+			select
+				area_code,
+				area_name
+			from
+				tb_area
+		) e on a.street_code = e.area_code
+		left join(
+			select
+				warningtype_code,
+				warningtype_name
+			from
+				er_warninginfo_maintain_master
+			where
+				warning_category = '1'
+		) f on a.warningtype_code = f.warningtype_code
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			dl_flag = 1
+			<if test="pid != null and pid != ''">
+				AND pid = #{pid }
+			</if>
+   		</trim>
+    	order by  number
+    	LIMIT #{firstResult}, #{maxResult}
+	</select>
+	<select id="findAllExist" parameterType="com.bt.radar.model.TimelinessDetail" resultType="com.bt.radar.model.TimelinessDetail">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			number,
+			province_code,
+			city_code,
+			state_code,
+			street_code,
+			efficiency,
+			efficiency_unit,
+			warningtype_code,
+			valibity,
+			pid,
+			dl_flag
+		from
+			er_expressaging_detail
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			dl_flag = 1
+			<if test="number != null and number != ''">
+				AND number = #{number }
+			</if>
+			<if test="province_code != null and province_code != ''">
+				AND province_code = #{province_code }
+			</if>
+			<if test="city_code != null">
+				AND city_code = #{city_code }
+			</if>
+			<if test="state_code != null">
+				AND state_code = #{state_code }
+			</if>
+			<if test="street_code != null">
+				AND street_code = #{street_code }
+			</if>
+			<if test="efficiency != null and efficiency != ''">
+				AND efficiency = #{efficiency }
+			</if>
+			<if test="efficiency_unit != null and efficiency_unit != ''">
+				AND efficiency_unit = #{efficiency_unit }
+			</if>
+			<if test="warningtype_code != null and warningtype_code != ''">
+				AND warningtype_code = #{warningtype_code }
+			</if>
+			<if test="pid != null and pid != ''">
+				AND pid = #{pid }
+			</if>
+    	</trim>
+	</select>
+	<update id="updateTimelinessDetail" parameterType="com.bt.radar.model.TimelinessDetail">
+		update er_expressaging_detail
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="number != null and number != ''">
+				number = #{number },
+			</if>
+			<if test="province_code != null and province_code != ''">
+				province_code = #{province_code },
+			</if>
+			<if test="city_code != null and city_code != ''">
+				city_code = #{city_code },
+			</if>
+			<if test="state_code != null and state_code != ''">
+				state_code = #{state_code },
+			</if>
+			<if test="street_code != null and street_code != ''">
+				street_code = #{street_code },
+			</if>
+			<if test="efficiency != null and efficiency != ''">
+				efficiency = #{efficiency },
+			</if>
+			<if test="efficiency_unit != null and efficiency_unit != ''">
+				efficiency_unit = #{efficiency_unit },
+			</if>
+			<if test="warningtype_code != null and warningtype_code != ''">
+				warningtype_code = #{warningtype_code },
+			</if>
+			<if test="valibity != null and valibity != ''">
+				valibity = #{valibity },
+			</if>
+			<if test="pid != null and pid != ''">
+				pid = #{pid },
+			</if>
+			<if test="dl_flag != null and dl_flag != ''">
+				dl_flag = #{dl_flag }
+			</if>
+		</trim>
+		where id = #{id } 
+	</update>
+	<insert id="insertTimelinessDetail" parameterType="com.bt.radar.model.TimelinessDetail">
+		insert into er_expressaging_detail
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			number,
+			province_code,
+			city_code,
+			state_code,
+			street_code,
+			efficiency,
+			efficiency_unit,
+			warningtype_code,
+			valibity,
+			pid,
+			dl_flag
+		) values (
+			#{id },
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{number },
+			#{province_code },
+			#{city_code },
+			#{state_code },
+			#{street_code },
+			#{efficiency },
+			#{efficiency_unit },
+			#{warningtype_code },
+			1,
+			#{pid },
+			1
+		)
+	</insert>
+</mapper>   

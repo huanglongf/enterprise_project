@@ -1,0 +1,177 @@
+.table_head_line td{
+	font-weight : bold;
+}
+.table_head_line td h5{
+	font-weight : bold;
+}
+.form_table .left{
+	text-align: left;
+}
+ 
+.form_table .right{
+	text-align: right;
+}
+
+.form_table input{
+	width: 100%;
+}
+ 
+.form_table .select{
+	width: 100%;
+}
+ 
+table{
+	border-collapse: collapse;
+}
+
+tr,td{
+	padding: 0.5em 0.1em;
+}
+ 
+.form_table .red{
+	color: red;
+	font-size:18px;
+}
+ 
+.with-border{
+	width: 98%;
+	border-color: #BFEFFF;
+	text-align: center;
+	border-collapse: collapse;
+}
+
+ 
+.with-border tr,td{
+	padding: 0.5em 0.1em;
+	margin: 0.5em 0.1em;
+}
+ 
+.with-border .title td{
+	background-color: #7EC0EE;
+}
+ 
+.add_button{
+	margin-right: 18px;
+	text-align: right;
+	margin-top:10px;
+	margin-bottom: 20px;
+}
+ 
+.moudle_dashed{
+	display: none; 
+	width: 60%; 
+	margin-bottom: 20px;
+	margin-top: 18px;
+	background-color: #F0FFFF;
+}
+ 
+.div_margin_border{
+	border: dashed gray 1px;
+}
+ 
+.moudle_dashed_border{
+	display: none; 
+	width: 60%; 
+	border: dashed gray 1px;
+	margin-bottom: 20px;
+	margin-top: 18px;
+	background-color: #F0FFFF;
+}
+ 
+.moudle_dashed_border_show{
+	width: 60%; 
+	border: dashed gray 1px;
+	margin-bottom: 20px;
+	margin-top: 18px;
+	background-color: #F0FFFF;
+}
+ 
+.moudle_dashed_border_show_90{
+	width: 90%; 
+	border: dashed gray 1px;
+	margin-bottom: 20px;
+	margin-top: 18px;
+	background-color: #F0FFFF;
+}
+ 
+.moudle_dashed_border_width_90{
+	display: none; 
+	width: 90%; 
+	border: dashed gray 1px;
+	margin-bottom: 20px;
+	margin-top: 18px;
+	background-color: #F0FFFF;
+}
+ 
+.moudle_dashed_border_width_100{
+	display: none; 
+	width: 100%; 
+	border: dashed gray 1px;
+	margin-bottom: 20px;
+	margin-top: 18px;
+	background-color: #F0FFFF;
+}
+ 
+.moudle_dashed_border_width_90_red{
+	display: none; 
+	width: 90%; 
+	border: dashed red 1px;
+	margin-bottom: 20px;
+	margin-top: 18px;
+	background-color: #F0FFFF;
+}
+ 
+.div_margin{
+	margin-top: 12px;
+	margin-bottom: 12px;
+}
+ 
+.moudle_dashed_border input{
+	height: 27px;
+}
+ 
+.moudle_dashed_border select{
+	height: 27px;
+}
+
+.td_cs{
+	width: 150px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
+	
+}
+.td_ch{
+	width:20px;
+	font-weight: bold;
+	text-align: center;
+	
+}
+.tree_div{
+	width: 17px;
+	height:37px;
+	background-color: #dddddd;
+	float: right;
+	margin-top:-37px;
+}
+.title_div{
+	height:38px;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	margin-top: 22px;
+	margin-right: 16px;
+}
+.title_div td{
+	font-size: 18px;
+}
+.content_div{
+	height:400px;
+	overflow:auto;
+	overflow:scroll; 
+	border:solid #F2F2F2 1px;
+}
+
+.td_cs input{
+	width: 120px;
+}

@@ -1,0 +1,76 @@
+package com.bt.vims.service.impl;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.bt.vims.dao.VimsDataMapper;
+import com.bt.vims.model.VimsData;
+import com.bt.vims.service.VimsDataService;
+import com.bt.vims.utils.AESUtil;
+import com.bt.vims.utils.ParseJsonUtil;
+import com.bt.vims.utils.SignProcess;
+import com.google.gson.Gson;
+
+import common.Contents;
+
+@Service
+@Transactional
+public class VimsDataServiceImpl implements VimsDataService {
+
+	private static final Logger logger = Logger.getLogger(VimsDataServiceImpl.class);
+
+	@Autowired
+	private VimsDataMapper vimsDataMapper;
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Map<String, String> responseSocket(String oldSign, String bodyParam, Map<String, Object> clientMap) {
+		Map<String, String> backMessage = new LinkedHashMap<>();
+		if (!StringUtils.isEmpty(oldSign) && !StringUtils.isEmpty(bodyParam)) {
+			boolean flag = false;
+			Map<String, String> severMap = new LinkedHashMap();
+			
+			clientMap = new Gson().fromJson(bodyParam, clientMap.getClass());
+		    String bodyValue = (String) clientMap.get("body");
+			
+			String decBodyParam = AESUtil.decrypt(bodyValue, Contents.SECRET_KEY); // 此处解密bodyValue
+			severMap.put("contactCode", Contents.CONTACT_CODE);
+			severMap.put("method", Contents.METHOD);
+			severMap.put("systemKey", Contents.SYSTEM_KEY);
+			String encBodyParam = AESUtil.encrypt(decBodyParam, Contents.SECRET_KEY);
+			severMap.put("body", encBodyParam);
+			severMap.put("version", Contents.VERSION);
+			String newSign = SignProcess.makeMd5Sign(severMap, Contents.SECRET_KEY); // 加密传入的数据
+			if (oldSign.equals(newSign)) { // 此判断说明客户端发来数据与读取一致
+				flag = true;
+				backMessage.put("msg", "POST 同步请求完成");
+				backMessage.put("status_code", "200");
+			}else{
+				backMessage.put("msg", "服务器错误，确认状态并报告问题");
+				backMessage.put("status_code", "500");
+			}
+			if (flag) {
+				try {
+					List<VimsData> vimsDatas = ParseJsonUtil.parseJsonData(decBodyParam);
+					if (vimsDatas != null && vimsDatas.size() > 0) {
+						vimsDataMapper.create(vimsDatas);
+					}
+				} catch (RuntimeException e) {
+					e.printStackTrace();
+					backMessage.put("msg", "服务器错误，确认状态并报告问题");
+					backMessage.put("status_code", "500");
+					logger.error("responseSocket()执行失败，失败信息： " + e.getMessage());
+				}
+			}
+		}
+		return backMessage;
+	}
+
+}

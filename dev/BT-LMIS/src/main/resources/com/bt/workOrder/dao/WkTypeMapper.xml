@@ -1,0 +1,825 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.workOrder.dao.WkTypeMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.workOrder.model.WkType" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="create_user" property="create_user"/>
+	<result column="name" property="name"/>
+	<result column="code" property="code"/>
+	<result column="sort" property="sort"/>
+</resultMap>
+       
+<!-- wk_type table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,update_time,update_user,create_user,name,code,sort
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	 	<if test="name != null and name != ''" >
+	    and name =  #{name}
+	</if>
+	 	<if test="code != null and code != ''" >
+	    and code =  #{code}
+	</if>
+	<if test="sort != null" >
+	    and sort =  #{sort}
+	</if>
+	<if test="flag != null" >
+	    and flag =  #{flag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入工单类型 -->
+<insert id="insert" parameterType="com.bt.workOrder.model.WkType" >
+  insert into wk_type(id,create_time,update_time,update_user,create_user,name,code,sort)
+ values(#{id},#{create_time},#{update_time},#{update_user},#{create_user},#{name},#{code},#{sort})
+</insert>
+
+<!-- 修改工单类型-->  
+ <update id="update" parameterType="com.bt.workOrder.model.WkType" >
+  update wk_type set create_time=#{create_time},update_time=#{update_time},update_user=#{update_user},create_user=#{create_user},name=#{name},code=#{code},sort=#{sort} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改工单类型-->
+<update id="updateBySelective" parameterType="com.bt.workOrder.model.WkType" >
+	update wk_type set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="name != null  and name != '' ">
+		name=#{name},
+	</if>
+	<if test="code != null  and code != '' ">
+		code=#{code},
+	</if>
+	<if test="sort != null  ">
+		sort=#{sort},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除工单类型 -->
+<update id="delete" parameterType="Object">
+	delete 	 from wk_type where id = #{id}
+</update>
+<!-- 批量删除工单类型 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from wk_type where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找工单类型 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from wk_type where id = #{id}
+</select>
+  	
+<!-- 工单类型 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.workOrder.controller.form.WkTypeQueryParam">
+	select count(1) from wk_type 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的工单类型集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.workOrder.controller.form.WkTypeQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from wk_type 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 工单类型总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.workOrder.controller.form.WkTypeQueryParam">
+	select count(1) from wk_type 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的工单类型集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.workOrder.controller.form.WkTypeQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from wk_type 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+<select id="findWk_type_level" resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+select 
+	a.id as id,
+    b.id as bid,
+    c.id as cid,
+    b.code as wk_type_code,
+    b.name as wk_type_name,
+    c.code as wk_level_code,
+    c.name as wk_level_name,
+    a.wk_timeout as wk_timeout
+	from 
+	wk_order_type a,
+	wk_type b,
+	wk_level c
+where a.wk_type=b.code and a.level=c.code
+	<if test="wk_type != null and wk_type != ''" >
+ and    b.code=#{wk_type}
+    </if>
+    <if test="wk_level != null and wk_level != ''" >
+   and c.code=#{wk_level}
+    </if>
+</select>
+<select id='parseCaldate'>
+ call  pro_wk_gener_caldate;
+</select>
+
+<select id="findByWKTYPE" resultType="java.util.HashMap">
+	select * from wk_type where flag=1
+</select>
+
+<select id="findByWKERROR" resultType="java.util.HashMap" parameterType="Object">
+select * from wo_error_type where wk_type=#{code};
+</select>
+
+<select id="getWkTypeByCode" resultType="java.lang.String">
+select name from wk_type where code=#{wkTypeCode} and flag = 1;
+</select>
+
+<select id="exportWK" resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+select 
+	a.wo_no as 工单号,a.create_time as 创建时间,a.create_by_display as 创建人,a.query_person as 查询人,
+    k.store_name as 店铺名称,a.carrier_display as 快递公司,a.express_number as 快递单号,a.transport_time as 出库时间,
+    '' as 省,'' as 市,'' as 区,a.address as 详细地址,
+    a.wo_type_display as 工单类型,a.exception_type as 异常类型,processor_display as 处理人,q.column_value as 跟进结果,
+	case a.wo_process_status
+		when 'NEW' then '新建'
+		when 'PRO' then '处理中'
+		when 'PAU' then '挂起'
+		when 'CCD' then '已取消'
+		when 'FIN' then '已处理'
+    end as 工单状态,
+    terminal_time as 处理时间
+    ,k.store_name as store,i.warehouse_name as iwarehouse_name,j.warehouse_name as jwarehouse_name 
+from wo_master a
+left join tb_warehouse i on i.warehouse_code=a.warehouse
+left join er_physical_warehouse j on j.province_code=i.province
+left join tb_store k on k.store_code=a.store
+left join (select * from wo_operation_detail where column_code='resultInfo') q on q.wo_id=a.id
+<include refid="wk_where_Clause"/>
+and a.wo_type not in ('OMSC','NOMSC')
+group by a.wo_no
+</select>
+<sql id="wk_where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+ 	<if test="s_time != null and s_time != ''  and s_time != 'undefined' and s_time != 'NaN'" >
+	   and <![CDATA[  a.create_time >= #{s_time} ]]>   
+	</if>
+ 	<if test="e_time != null and e_time != ''  and e_time != 'undefined' and e_time != 'NaN'" >
+	   and <![CDATA[  a.create_time <= #{e_time} ]]>   
+	</if>
+ 	<if test="create_by != null and create_by != '' and create_by != '-1'  and create_by != 'undefined' and create_by != 'NaN'" >
+	  and  a.create_by = #{create_by}
+	</if>
+ 	<if test="processor != null and processor != '' and processor != '-1'  and processor != 'undefined' and processor != 'NaN'" >
+	  and  a.processor = #{processor}
+	</if>
+ 	<if test="store != null and store != '' and store != '-1'  and store != 'undefined' and store != 'NaN'" >
+	  and  a.store = #{store}
+	</if>
+ 	<if test="carrier != null and carrier != '' and carrier != '-1'  and carrier != 'undefined' and carrier != 'NaN'" >
+	  and  a.carrier = #{carrier}
+	</if>
+ 	<if test="wo_type != null and wo_type != '' and wo_type != '-1'  and wo_type != 'undefined' and wo_type != 'NaN'" >
+	  and  a.wo_type = #{wo_type}
+	</if>
+ 	<if test="exception_type != null and exception_type != '' and exception_type != '-1'  and exception_type != 'undefined' and exception_type != 'NaN'" >
+	 and   a.exception_type = #{exception_type}
+	</if>
+ 	<if test="express_number != null and express_number != '' and express_number != '-1'  and express_number != 'NaN'" >
+	  and  a.express_number = #{express_number}
+	</if>
+ 	<if test="wo_no != null and wo_no != '' and wo_no != 'NaN'" >
+	  and  a.wo_no = #{wo_no}
+	</if>
+</trim>
+</sql>
+
+<select id="queryCHECKWK" resultType= "java.util.Map" parameterType= "com.bt.workOrder.controller.form.CheckWKParam" >
+	select 
+		a.wo_no as 工单号,a.create_time as 创建时间,a.create_by_display as 创建人,a.query_person as 查询人,
+	    k.store_name as 店铺名称,a.carrier_display as 快递公司,a.express_number as 快递单号,a.transport_time as 出库时间,
+	    '' as 省,'' as 市,'' as 区,a.address as 详细地址,
+	    a.wo_type_display as 工单类型,a.exception_type as 异常类型,processor_display as 处理人,q.column_value as 跟进结果,
+		case a.wo_process_status
+			when 'NEW' then '新建'
+			when 'PRO' then '处理中'
+			when 'PAU' then '挂起'
+			when 'CCD' then '已取消'
+			when 'FIN' then '已处理'
+	    end as 工单状态,
+	    terminal_time as 处理时间
+	    ,k.store_name as store,i.warehouse_name as iwarehouse_name,j.warehouse_name as jwarehouse_name 
+	from wo_master a
+	left join tb_warehouse i on i.warehouse_code=a.warehouse
+	left join er_physical_warehouse j on j.province_code=i.province
+	left join tb_store k on k.store_code=a.store
+	left join (select * from wo_operation_detail where column_code='resultInfo') q on q.wo_id=a.id
+		<include refid="wk_where_Clause"/>
+	and a.wo_type not in ('OMSC','NOMSC')
+	group by a.wo_no
+	LIMIT #{firstResult}, #{maxResult}
+</select>
+<select id="queryCHECKWK2" resultType= "java.util.Map" parameterType= "com.bt.common.controller.param.Parameter" >
+	select 
+		a.wo_no as 工单号,a.create_time as 创建时间,a.create_by_display as 创建人,a.query_person as 查询人,
+	    k.store_name as 店铺名称,a.carrier_display as 快递公司,a.express_number as 快递单号,
+	    wwm.delivery_order as 平台订单号,
+		wwm.epistatic_order AS 相关单据号,
+		a.transport_time as 出库时间,
+	    '' as 省,'' as 市,'' as 区,a.address as 详细地址,
+	    a.wo_type_display as 工单类型,a.exception_type as 异常类型,processor_display as 处理人,q.column_value as 跟进结果,
+		case a.wo_process_status
+			when 'NEW' then '新建'
+			when 'PRO' then '处理中'
+			when 'PAU' then '挂起'
+			when 'CCD' then '已取消'
+			when 'FIN' then '已处理'
+	    end as 工单状态,
+	    terminal_time as 处理时间
+	    ,k.store_name as store,i.warehouse_name as iwarehouse_name,j.warehouse_name as jwarehouse_name 
+	from wo_master a
+	left join tb_warehouse i on i.warehouse_code=a.warehouse
+	left join er_physical_warehouse j on j.province_code=i.province
+	left join tb_store k on k.store_code=a.store
+	left join (select * from wo_operation_detail where column_code='resultInfo') q on q.wo_id=a.id
+	LEFT JOIN wo_waybill_master wwm ON a.express_number=wwm.express_number
+
+where 1=1
+<trim  suffixOverrides="," >
+ 	<if test="param.wo_type != null and param.wo_type != '' and param.wo_type != '-1'  and param.wo_type != 'undefined' and param.wo_type != 'NaN'" >
+	  and  a.wo_type = #{param.wo_type}
+	</if>
+ 	<if test="param.exception_type != null and param.exception_type != '' and param.exception_type != '-1'  and param.exception_type != 'undefined' and param.exception_type != 'NaN'" >
+	 and   a.exception_type = #{param.exception_type}
+	</if>
+	<if test="param.s_time != null and param.s_time != ''  and param.s_time != 'undefined' and param.s_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) >= TO_DAYS(#{param.s_time}) ]]>   
+	</if>
+ 	<if test="param.e_time != null and param.e_time != ''  and param.e_time != 'undefined'  and param.e_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) <= TO_DAYS(#{param.e_time}) ]]>   
+	</if>
+ 	<if test="param.create_by != null and param.create_by != '' and param.create_by != '-1'  and param.create_by != 'undefined'  and param.create_by != 'NaN'" >
+	  and  a.create_by = #{param.create_by}
+	</if>
+ 	<if test="param.processor != null and param.processor != '' and param.processor != '-1'  and param.processor != 'undefined'  and param.processor != 'NaN'" >
+	  and  a.processor = #{param.processor}
+	</if>
+ 	<if test="param.store != null and param.store != '' and param.store != '-1'  and param.store != 'undefined'  and param.store != 'NaN'" >
+	  and  a.store = #{param.store}
+	</if>
+ 	<if test="param.carrier != null and param.carrier != '' and param.carrier != '-1'  and param.carrier != 'undefined'  and param.carrier != 'NaN'" >
+	  and  a.carrier = #{param.carrier}
+	</if>
+ 	<if test="param.express_number != null and param.express_number != '' and param.express_number != '-1'  and param.express_number != 'undefined'  and param.express_number != 'NaN'" >
+	  and  a.express_number = #{param.express_number}
+	</if>
+ 	<if test="param.wo_no != null and param.wo_no != ''  and param.wo_no != 'undefined'" >
+	  and  a.wo_no = #{param.wo_no}
+	</if>
+</trim>
+
+	and a.wo_type not in ('OMSC','NOMSC')
+	group by a.wo_no
+	LIMIT #{firstResult}, #{maxResult}
+</select>
+<select id="exportCheckWKExcel" resultType= "java.util.Map" parameterType= "com.bt.common.controller.param.Parameter" >
+	select 
+		a.wo_no as 工单号,a.create_time as 创建时间,a.create_by_display as 创建人,a.query_person as 查询人,
+	    k.store_name as 店铺名称,a.carrier_display as 快递公司,a.express_number as 快递单号,
+	    wwm.delivery_order as 平台订单号,
+		wwm.epistatic_order AS 相关单据号,
+	    a.transport_time as 出库时间,
+	    '' as 省,'' as 市,'' as 区,a.address as 详细地址,
+	    a.wo_type_display as 工单类型,a.exception_type as 异常类型,processor_display as 处理人,q.column_value as 跟进结果,
+		case a.wo_process_status
+			when 'NEW' then '新建'
+			when 'PRO' then '处理中'
+			when 'PAU' then '挂起'
+			when 'CCD' then '已取消'
+			when 'FIN' then '已处理'
+	    end as 工单状态,
+	    terminal_time as 处理时间
+	    ,k.store_name as store,i.warehouse_name as iwarehouse_name,j.warehouse_name as jwarehouse_name 
+	from wo_master a
+	left join tb_warehouse i on i.warehouse_code=a.warehouse
+	left join er_physical_warehouse j on j.province_code=i.province
+	left join tb_store k on k.store_code=a.store
+	left join (select * from wo_operation_detail where column_code='resultInfo') q on q.wo_id=a.id
+	LEFT JOIN wo_waybill_master wwm ON a.express_number=wwm.express_number
+
+where 1=1
+<trim  suffixOverrides="," >
+ 	<if test="param.wo_type != null and param.wo_type != '' and param.wo_type != '-1'  and param.wo_type != 'undefined' and param.wo_type != 'NaN'" >
+	  and  a.wo_type = #{param.wo_type}
+	</if>
+ 	<if test="param.exception_type != null and param.exception_type != '' and param.exception_type != '-1'  and param.exception_type != 'undefined' and param.exception_type != 'NaN'" >
+	 and   a.exception_type = #{param.exception_type}
+	</if>
+	<if test="param.s_time != null and param.s_time != ''  and param.s_time != 'undefined' and param.s_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) >= TO_DAYS(#{param.s_time}) ]]>   
+	</if>
+ 	<if test="param.e_time != null and param.e_time != ''  and param.e_time != 'undefined'  and param.e_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) <= TO_DAYS(#{param.e_time}) ]]>   
+	</if>
+ 	<if test="param.create_by != null and param.create_by != '' and param.create_by != '-1'  and param.create_by != 'undefined'  and param.create_by != 'NaN'" >
+	  and  a.create_by = #{param.create_by}
+	</if>
+ 	<if test="param.processor != null and param.processor != '' and param.processor != '-1'  and param.processor != 'undefined'  and param.processor != 'NaN'" >
+	  and  a.processor = #{param.processor}
+	</if>
+ 	<if test="param.store != null and param.store != '' and param.store != '-1'  and param.store != 'undefined'  and param.store != 'NaN'" >
+	  and  a.store = #{param.store}
+	</if>
+ 	<if test="param.carrier != null and param.carrier != '' and param.carrier != '-1'  and param.carrier != 'undefined'  and param.carrier != 'NaN'" >
+	  and  a.carrier = #{param.carrier}
+	</if>
+ 	<if test="param.express_number != null and param.express_number != '' and param.express_number != '-1'  and param.express_number != 'undefined'  and param.express_number != 'NaN'" >
+	  and  a.express_number = #{param.express_number}
+	</if>
+ 	<if test="param.wo_no != null and param.wo_no != ''  and param.wo_no != 'undefined'" >
+	  and  a.wo_no = #{param.wo_no}
+	</if>
+</trim>
+
+	and a.wo_type not in ('OMSC','NOMSC')
+	group by a.wo_no
+</select>
+<select id="countCHECKWK" resultType= "Integer" parameterType= "com.bt.workOrder.controller.form.CheckWKParam" >
+select 
+	count(1)
+from wo_master a
+<include refid="wk_where_Clause"/>
+and a.wo_type not in ('OMSC','NOMSC')
+</select>
+<select id="countCHECKWK2" resultType= "Integer" parameterType= "com.bt.common.controller.param.Parameter" >
+select 
+	count(1)
+from wo_master a
+where 1=1
+<trim  suffixOverrides="," >
+ 	<if test="param.wo_type != null and param.wo_type != '' and param.wo_type != '-1'  and param.wo_type != 'undefined' and param.wo_type != 'NaN'" >
+	  and  a.wo_type = #{param.wo_type}
+	</if>
+ 	<if test="param.exception_type != null and param.exception_type != '' and param.exception_type != '-1'  and param.exception_type != 'undefined' and param.exception_type != 'NaN'" >
+	 and   a.exception_type = #{param.exception_type}
+	</if>
+	<if test="param.s_time != null and param.s_time != ''  and param.s_time != 'undefined' and param.s_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) >= TO_DAYS(#{param.s_time}) ]]>   
+	</if>
+ 	<if test="param.e_time != null and param.e_time != ''  and param.e_time != 'undefined'  and param.e_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) <= TO_DAYS(#{param.e_time}) ]]>   
+	</if>
+ 	<if test="param.create_by != null and param.create_by != '' and param.create_by != '-1'  and param.create_by != 'undefined'  and param.create_by != 'NaN'" >
+	  and  a.create_by = #{param.create_by}
+	</if>
+ 	<if test="param.processor != null and param.processor != '' and param.processor != '-1'  and param.processor != 'undefined'  and param.processor != 'NaN'" >
+	  and  a.processor = #{param.processor}
+	</if>
+ 	<if test="param.store != null and param.store != '' and param.store != '-1'  and param.store != 'undefined'  and param.store != 'NaN'" >
+	  and  a.store = #{param.store}
+	</if>
+ 	<if test="param.carrier != null and param.carrier != '' and param.carrier != '-1'  and param.carrier != 'undefined'  and param.carrier != 'NaN'" >
+	  and  a.carrier = #{param.carrier}
+	</if>
+ 	<if test="param.express_number != null and param.express_number != '' and param.express_number != '-1'  and param.express_number != 'undefined'  and param.express_number != 'NaN'" >
+	  and  a.express_number = #{param.express_number}
+	</if>
+ 	<if test="param.wo_no != null and param.wo_no != ''  and param.wo_no != 'undefined'" >
+	  and  a.wo_no = #{param.wo_no}
+	</if>
+</trim>
+
+and a.wo_type not in ('OMSC','NOMSC')
+</select>
+
+<select id="queryCAIMANTWK" resultType= "java.util.Map" parameterType= "com.bt.workOrder.controller.form.CaimantWKParam" >
+	select 
+		a.wo_no as wo_no,a.create_time as create_time,d.warehouse_name as dwarehouse_name,f.warehouse_name as fwarehouse_name,a.transport_time as transport_time,
+	    '' as hy,p.store_name as store,a.platform_number as platform_number,a.related_number as related_number,a.address as address,a.failure_reason as failure_reason,
+	    group_concat(b.sku_number separator ',') as sku_number,group_concat(b.sku_name separator ',') as 'sku_name',sum(sku_num) as sku_num
+	    ,order_amount as order_amount,g.column_value as gcolumn_value,
+	    ifnull(h.column_value,0) as hcolumn_value,
+	    ifnull(i.column_value,0) as logistics_departmentCA,
+	    ifnull(r.column_value,0) as transport_vendorCA,
+	    ifnull(h.column_value,0)-(ifnull(i.column_value,0)+ifnull(r.column_value,0)) as storeCA,
+	    (ifnull(i.column_value,0)+ifnull(r.column_value,0)) as icolumn_value,
+	    
+	     case c.column_value when '0' then '暂做索赔' when '1' then '索赔成功' when '2' then '索赔失败' else '' end as ccolumn_value,
+    case 
+    	k.column_value 
+    	when 1 then '遗失' when 2 then '破损' when 3 then '错发' when 4 then '补偿' 
+    	else k.column_value
+    end as kcolumn_value,
+    case 
+		k.column_value 
+		when 1 then (case l.column_value when 1 then '无路由信息' when 2 then '路由停滞24小时' when 3 then '买家未收到货（路由显示签收）' when 4 then '物流反馈丢件' when 5 then '开箱少/无货' end)
+		when 2 then (case l.column_value when 1 then '物流反馈破损' when 2 then '开箱后反馈破损'  end )
+		when 3 then (case l.column_value when 1 then '开箱后反馈错发' end  )
+		when 4 then (case l.column_value when 1 then '补偿金' end )
+		else kk.column_value
+    end as lcolumn_value,
+    a.terminal_time ,
+	    n.transport_name as transport_name,a.express_number as express_number,'' as thdh,o.column_value as ocolumn_value,'' as s, '' as ss,'' as qq
+	    ,j.column_value as jcolumn_value,m.column_value as mcolumn_value,case a.wo_process_status when 'FIN' then '已结案' else '未结案' end as jiean,
+	case s.column_code when 1 then '是' else '否' end as isbj,
+	t.column_code as result,
+	u.column_code as resultxf,
+	v.column_code as zrgs,
+	w.column_code as  ps
+	from wo_master a
+	left join wo_claim_detail b on b.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_status') c on c.wo_id=a.id
+	left join er_warehouse_relation e on e.logic_code=a.warehouse
+	left join tb_warehouse d on d.warehouse_code=a.warehouse
+	left join er_physical_warehouse f on f.warehouse_code=e.physical_code
+	left join (select * from wo_operation_detail where column_code='added_value') g on g.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='total_applied_claim_amount') h on h.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='logistics_department_claim_amount') i on i.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='logistics_department_claim_flag') j on j.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_type') k on k.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_reason') kk on kk.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_reason') l on l.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='transport_vendor_claim_flag') m on m.wo_id=a.id
+	left join tb_transport_vendor n on n.transport_code=a.carrier
+	left join (select * from wo_operation_detail where column_code='remark') o on o.wo_id=a.id
+	left join tb_store p on p.store_code=a.store
+	left join (select * from wo_operation_detail where column_code='resultInfo') q on q.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='transport_vendor_claim_amount') r on r.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='isbj') s on s.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='result') t on t.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='resultxf') u on u.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='zrgs') v on v.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='ps') w on w.wo_id=a.id
+	
+	<include refid="wksp_where_Clause"/>
+	group by a.wo_no
+	LIMIT #{firstResult}, #{maxResult}
+</select>
+<select id="queryCAIMANTWK2" resultType= "java.util.Map" parameterType= "com.bt.common.controller.param.Parameter" >
+	select 
+		a.wo_no as wo_no,a.create_time as create_time,d.warehouse_name as dwarehouse_name,f.warehouse_name as fwarehouse_name,a.transport_time as transport_time,
+	    '' as hy,p.store_name as store,a.platform_number as platform_number,a.related_number as related_number,a.address as address,a.failure_reason as failure_reason,
+	    group_concat(b.sku_number separator ',') as sku_number,group_concat(b.sku_name separator ',') as 'sku_name',sum(sku_num) as sku_num
+	    ,order_amount as order_amount,g.column_value as gcolumn_value,
+	    ifnull(h.column_value,0) as hcolumn_value,
+	    ifnull(i.column_value,0) as logistics_departmentCA,
+	    ifnull(r.column_value,0) as transport_vendorCA,
+	    ifnull(h.column_value,0)-(ifnull(i.column_value,0)+ifnull(r.column_value,0)) as storeCA,
+	    (ifnull(i.column_value,0)+ifnull(r.column_value,0)) as icolumn_value,
+	    
+	     case c.column_value when '0' then '暂做索赔' when '1' then '索赔成功' when '2' then '索赔失败' else '' end as ccolumn_value,
+    case 
+    	k.column_value 
+    	when 1 then '遗失' when 2 then '破损' when 3 then '错发' when 4 then '补偿' 
+    	else k.column_value
+    end as kcolumn_value,
+    case 
+		k.column_value 
+		when 1 then (case l.column_value when 1 then '无路由信息' when 2 then '路由停滞24小时' when 3 then '买家未收到货（路由显示签收）' when 4 then '物流反馈丢件' when 5 then '开箱少/无货' end)
+		when 2 then (case l.column_value when 1 then '物流反馈破损' when 2 then '开箱后反馈破损'  end )
+		when 3 then (case l.column_value when 1 then '开箱后反馈错发' end  )
+		when 4 then (case l.column_value when 1 then '补偿金' end )
+		else kk.column_value
+    end as lcolumn_value,
+    a.terminal_time ,
+	    n.transport_name as transport_name,a.express_number as express_number,'' as thdh,o.column_value as ocolumn_value,'' as s, '' as ss,'' as qq
+	    ,j.column_value as jcolumn_value,m.column_value as mcolumn_value,case a.wo_process_status when 'FIN' then '已结案' else '未结案' end as jiean,
+	case s.column_code when 1 then '是' else '否' end as isbj,
+	t.column_code as result,
+	u.column_code as resultxf,
+	v.column_code as zrgs,
+	w.column_code as  ps
+	from wo_master a
+	left join wo_claim_detail b on b.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_status') c on c.wo_id=a.id
+	left join er_warehouse_relation e on e.logic_code=a.warehouse
+	left join tb_warehouse d on d.warehouse_code=a.warehouse
+	left join er_physical_warehouse f on f.warehouse_code=e.physical_code
+	left join (select * from wo_operation_detail where column_code='added_value') g on g.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='total_applied_claim_amount') h on h.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='logistics_department_claim_amount') i on i.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='logistics_department_claim_flag') j on j.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_type') k on k.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_reason') kk on kk.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_reason') l on l.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='transport_vendor_claim_flag') m on m.wo_id=a.id
+	left join tb_transport_vendor n on n.transport_code=a.carrier
+	left join (select * from wo_operation_detail where column_code='remark') o on o.wo_id=a.id
+	left join tb_store p on p.store_code=a.store
+	left join (select * from wo_operation_detail where column_code='resultInfo') q on q.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='transport_vendor_claim_amount') r on r.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='isbj') s on s.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='result') t on t.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='resultxf') u on u.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='zrgs') v on v.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='ps') w on w.wo_id=a.id
+	
+	
+where (a.wo_type ='NOMSC' or a.wo_type='OMSC')
+<trim  suffixOverrides="," >
+ 	<if test="param.s_time != null and param.s_time != ''  and param.s_time != 'undefined' and param.s_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) >= TO_DAYS(#{param.s_time}) ]]>   
+	</if>
+ 	<if test="param.e_time != null and param.e_time != ''  and param.e_time != 'undefined'  and param.e_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) <= TO_DAYS(#{param.e_time}) ]]>   
+	</if>
+ 	<if test="param.create_by != null and param.create_by != '' and param.create_by != '-1'  and param.create_by != 'undefined'  and param.create_by != 'NaN'" >
+	  and  a.create_by = #{param.create_by}
+	</if>
+ 	<if test="param.processor != null and param.processor != '' and param.processor != '-1'  and param.processor != 'undefined'  and param.processor != 'NaN'" >
+	  and  a.processor = #{param.processor}
+	</if>
+ 	<if test="param.store != null and param.store != '' and param.store != '-1'  and param.store != 'undefined'  and param.store != 'NaN'" >
+	  and  a.store = #{param.store}
+	</if>
+ 	<if test="param.carrier != null and param.carrier != '' and param.carrier != '-1'  and param.carrier != 'undefined'  and param.carrier != 'NaN'" >
+	  and  a.carrier = #{param.carrier}
+	</if>
+ 	<if test="param.sp_type != null and param.sp_type != '' and param.sp_type != '-1'  and param.sp_type != 'undefined'  and param.sp_type != 'NaN'" >
+	  and  c.column_value = #{param.sp_type}
+	</if>
+ 	<if test="param.express_number != null and param.express_number != '' and param.express_number != '-1'  and param.express_number != 'undefined'  and param.express_number != 'NaN'" >
+	  and  a.express_number = #{param.express_number}
+	</if>
+ 	<if test="param.wo_no != null and param.wo_no != ''  and param.wo_no != 'undefined'" >
+	  and  a.wo_no = #{param.wo_no}
+	</if>
+</trim>
+
+<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+	group by a.wo_no
+	LIMIT #{firstResult}, #{maxResult}
+</select>
+<select id="exportCaimantWKExcel" resultType= "java.util.Map" parameterType= "com.bt.common.controller.param.Parameter" >
+	select 
+		a.wo_no as wo_no,a.create_time as create_time,d.warehouse_name as dwarehouse_name,f.warehouse_name as fwarehouse_name,a.transport_time as transport_time,
+	    '' as hy,p.store_name as store,a.platform_number as platform_number,a.related_number as related_number,a.address as address,a.failure_reason as failure_reason,
+	    group_concat(b.sku_number separator ',') as sku_number,group_concat(b.sku_name separator ',') as 'sku_name',sum(sku_num) as sku_num
+	    ,order_amount as order_amount,g.column_value as gcolumn_value,
+	    ifnull(h.column_value,0) as hcolumn_value,
+	    ifnull(i.column_value,0) as logistics_departmentCA,
+	    ifnull(r.column_value,0) as transport_vendorCA,
+	    ifnull(h.column_value,0)-(ifnull(i.column_value,0)+ifnull(r.column_value,0)) as storeCA,
+	    (ifnull(i.column_value,0)+ifnull(r.column_value,0)) as icolumn_value,
+	    
+	     case c.column_value when '0' then '暂做索赔' when '1' then '索赔成功' when '2' then '索赔失败' else '' end as ccolumn_value,
+    case 
+    	k.column_value 
+    	when 1 then '遗失' when 2 then '破损' when 3 then '错发' when 4 then '补偿' 
+    	else k.column_value
+    end as kcolumn_value,
+    case 
+		k.column_value 
+		when 1 then (case l.column_value when 1 then '无路由信息' when 2 then '路由停滞24小时' when 3 then '买家未收到货（路由显示签收）' when 4 then '物流反馈丢件' when 5 then '开箱少/无货' end)
+		when 2 then (case l.column_value when 1 then '物流反馈破损' when 2 then '开箱后反馈破损'  end )
+		when 3 then (case l.column_value when 1 then '开箱后反馈错发' end  )
+		when 4 then (case l.column_value when 1 then '补偿金' end )
+		else kk.column_value
+    end as lcolumn_value,
+    a.terminal_time ,
+	    n.transport_name as transport_name,a.express_number as express_number,'' as thdh,o.column_value as ocolumn_value,'' as s, '' as ss,'' as qq
+	    ,j.column_value as jcolumn_value,m.column_value as mcolumn_value,case a.wo_process_status when 'FIN' then '已结案' else '未结案' end as jiean
+	from wo_master a
+	left join wo_claim_detail b on b.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_status') c on c.wo_id=a.id
+	left join er_warehouse_relation e on e.logic_code=a.warehouse
+	left join tb_warehouse d on d.warehouse_code=a.warehouse
+	left join er_physical_warehouse f on f.warehouse_code=e.physical_code
+	left join (select * from wo_operation_detail where column_code='added_value') g on g.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='total_applied_claim_amount') h on h.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='logistics_department_claim_amount') i on i.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='logistics_department_claim_flag') j on j.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_type') k on k.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_reason') kk on kk.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_reason') l on l.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='transport_vendor_claim_flag') m on m.wo_id=a.id
+	left join tb_transport_vendor n on n.transport_code=a.carrier
+	left join (select * from wo_operation_detail where column_code='remark') o on o.wo_id=a.id
+	left join tb_store p on p.store_code=a.store
+	left join (select * from wo_operation_detail where column_code='resultInfo') q on q.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='transport_vendor_claim_amount') r on r.wo_id=a.id
+	
+where (a.wo_type ='NOMSC' or a.wo_type='OMSC')
+<trim  suffixOverrides="," >
+ 	<if test="param.s_time != null and param.s_time != ''  and param.s_time != 'undefined' and param.s_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) >= TO_DAYS(#{param.s_time}) ]]>   
+	</if>
+ 	<if test="param.e_time != null and param.e_time != ''  and param.e_time != 'undefined'  and param.e_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) <= TO_DAYS(#{param.e_time}) ]]>   
+	</if>
+ 	<if test="param.create_by != null and param.create_by != '' and param.create_by != '-1'  and param.create_by != 'undefined'  and param.create_by != 'NaN'" >
+	  and  a.create_by = #{param.create_by}
+	</if>
+ 	<if test="param.processor != null and param.processor != '' and param.processor != '-1'  and param.processor != 'undefined'  and param.processor != 'NaN'" >
+	  and  a.processor = #{param.processor}
+	</if>
+ 	<if test="param.store != null and param.store != '' and param.store != '-1'  and param.store != 'undefined'  and param.store != 'NaN'" >
+	  and  a.store = #{param.store}
+	</if>
+ 	<if test="param.carrier != null and param.carrier != '' and param.carrier != '-1'  and param.carrier != 'undefined'  and param.carrier != 'NaN'" >
+	  and  a.carrier = #{param.carrier}
+	</if>
+ 	<if test="param.sp_type != null and param.sp_type != '' and param.sp_type != '-1'  and param.sp_type != 'undefined'  and param.sp_type != 'NaN'" >
+	  and  c.column_value = #{param.sp_type}
+	</if>
+ 	<if test="param.express_number != null and param.express_number != '' and param.express_number != '-1'  and param.express_number != 'undefined'  and param.express_number != 'NaN'" >
+	  and  a.express_number = #{param.express_number}
+	</if>
+ 	<if test="param.wo_no != null and param.wo_no != ''  and param.wo_no != 'undefined'" >
+	  and  a.wo_no = #{param.wo_no}
+	</if>
+</trim>
+
+<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+	group by a.wo_no
+</select>
+
+<select id="countCAIMANTWK" resultType= "Integer" parameterType= "com.bt.workOrder.controller.form.CaimantWKParam" >
+	select 
+		count(1)
+	from wo_master a
+	left join (select * from wo_operation_detail where column_code='claim_status') c on c.wo_id=a.id
+	<include refid="wksp_where_Clause"/>
+</select>
+<select id="countCAIMANTWK2" resultType= "Integer" parameterType= "com.bt.common.controller.param.Parameter" >
+	select 
+		count(1)
+	from wo_master a
+	left join (select * from wo_operation_detail where column_code='claim_status') c on c.wo_id=a.id
+	
+where (a.wo_type ='NOMSC' or a.wo_type='OMSC')
+<trim  suffixOverrides="," >
+ 	<if test="param.s_time != null and param.s_time != ''  and param.s_time != 'undefined' and param.s_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) >= TO_DAYS(#{param.s_time}) ]]>   
+	</if>
+ 	<if test="param.e_time != null and param.e_time != ''  and param.e_time != 'undefined'  and param.e_time != 'NaN'" >
+	  and  <![CDATA[  TO_DAYS(a.create_time) <= TO_DAYS(#{param.e_time}) ]]>   
+	</if>
+ 	<if test="param.create_by != null and param.create_by != '' and param.create_by != '-1'  and param.create_by != 'undefined'  and param.create_by != 'NaN'" >
+	  and  a.create_by = #{param.create_by}
+	</if>
+ 	<if test="param.processor != null and param.processor != '' and param.processor != '-1'  and param.processor != 'undefined'  and param.processor != 'NaN'" >
+	  and  a.processor = #{param.processor}
+	</if>
+ 	<if test="param.store != null and param.store != '' and param.store != '-1'  and param.store != 'undefined'  and param.store != 'NaN'" >
+	  and  a.store = #{param.store}
+	</if>
+ 	<if test="param.carrier != null and param.carrier != '' and param.carrier != '-1'  and param.carrier != 'undefined'  and param.carrier != 'NaN'" >
+	  and  a.carrier = #{param.carrier}
+	</if>
+ 	<if test="param.sp_type != null and param.sp_type != '' and param.sp_type != '-1'  and param.sp_type != 'undefined'  and param.sp_type != 'NaN'" >
+	  and  c.column_value = #{param.sp_type}
+	</if>
+ 	<if test="param.express_number != null and param.express_number != '' and param.express_number != '-1'  and param.express_number != 'undefined'  and param.express_number != 'NaN'" >
+	  and  a.express_number = #{param.express_number}
+	</if>
+ 	<if test="param.wo_no != null and param.wo_no != ''  and param.wo_no != 'undefined'" >
+	  and  a.wo_no = #{param.wo_no}
+	</if>
+</trim>
+
+</select>
+
+<select id="exportWKSP"  resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+select 
+	a.wo_no as 工单号,a.create_time as 创建日期,f.warehouse_name as 物理仓,d.warehouse_name as 系统仓,a.transport_time as 出库时间,
+    '' as 行业,p.store_name as 店铺名称,a.platform_number as 平台订单号,a.related_number as 前置单据号,
+    group_concat(b.sku_number separator ',') as 商品SKU编码,group_concat(b.sku_name separator ',') as '商品名称/型号',group_concat(b.sku_num separator ',') ,sum(b.sku_num) as 商品数量
+    ,order_amount as 商品金额,g.column_value as 附加金额,ifnull(h.column_value,0) as 申请赔付金额,
+	    ifnull(i.column_value,0) as 物流部赔付金额,
+	    ifnull(r.column_value,0) as 快递赔付金额,
+	    ifnull(h.column_value,0)-(ifnull(i.column_value,0)+ifnull(r.column_value,0)) as 店铺赔付金额,
+    (ifnull(i.column_value,0)+ifnull(r.column_value,0))  as 实际赔付总计,
+     case c.column_value when '0' then '暂做索赔' when '1' then '索赔成功' when '2' then '索赔失败' else '' end as 索赔状态,
+    case 
+    	k.column_value 
+    	when 1 then '遗失' when 2 then '破损' when 3 then '错发' when 4 then '补偿' 
+    	else k.column_value
+    end as 索赔分类,
+    terminal_time as 完成时间,
+    case 
+		k.column_value 
+		when 1 then (case l.column_value when 1 then '无路由信息' when 2 then '路由停滞24小时' when 3 then '买家未收到货（路由显示签收）' when 4 then '物流反馈丢件' when 5 then '开箱少/无货' end)
+		when 2 then (case l.column_value when 1 then '物流反馈破损' when 2 then '开箱后反馈破损'  end )
+		when 3 then (case l.column_value when 1 then '开箱后反馈错发' end  )
+		when 4 then (case l.column_value when 1 then '补偿金' end )
+		else kk.column_value
+    end as 索赔原因,
+    n.transport_name as 快递公司,a.express_number as 快递单号,'' as 退货单号,o.column_value as 备注,'' as 省, '' as 市,'' as 区,
+    a.address as 详细地址,
+    case  j.column_value  
+    	when 'true' then (case m.column_value when 'true' then '物流部,承运商' else '物流部' end) 
+		when 'flase' then (case m.column_value when 'true' then '承运商' else ''  end) 
+	end as jcolumn_value
+    ,case a.wo_process_status when 'FIN' then '已结案' else '未结案' end as 是否已结案
+from wo_master a
+left join wo_claim_detail b on b.wo_id=a.id
+left join (select * from wo_operation_detail where column_code='claim_status') c on c.wo_id=a.id
+left join er_warehouse_relation e on e.logic_code=a.warehouse
+left join tb_warehouse d on d.warehouse_code=a.warehouse
+left join er_physical_warehouse f on f.warehouse_code=e.physical_code
+left join (select * from wo_operation_detail where column_code='added_value') g on g.wo_id=a.id
+left join (select * from wo_operation_detail where column_code='total_applied_claim_amount') h on h.wo_id=a.id
+left join (select * from wo_operation_detail where column_code='logistics_department_claim_amount') i on i.wo_id=a.id
+left join (select * from wo_operation_detail where column_code='logistics_department_claim_flag') j on j.wo_id=a.id
+left join (select * from wo_operation_detail where column_code='claim_type') k on k.wo_id=a.id
+	left join (select * from wo_operation_detail where column_code='claim_reason') kk on kk.wo_id=a.id
+left join (select * from wo_operation_detail where column_code='claim_reason') l on l.wo_id=a.id
+left join (select * from wo_operation_detail where column_code='transport_vendor_claim_flag') m on m.wo_id=a.id
+left join tb_transport_vendor n on n.transport_code=a.carrier
+left join (select * from wo_operation_detail where column_code='remark') o on o.wo_id=a.id
+left join tb_store p on p.store_code=a.store
+left join (select * from wo_operation_detail where column_code='transport_vendor_claim_amount') r on r.wo_id=a.id
+<include refid="wksp_where_Clause"/>
+group by a.wo_no;
+</select>
+
+<sql id="wksp_where_Clause">
+where (a.wo_type ='NOMSC' or a.wo_type='OMSC')
+<trim  suffixOverrides="," >
+ 	<if test="s_time != null and s_time != ''  and s_time != 'undefined' and s_time != 'NaN'" >
+	  and  <![CDATA[  a.create_time >= #{s_time} ]]>   
+	</if>
+ 	<if test="e_time != null and e_time != ''  and e_time != 'undefined'  and e_time != 'NaN'" >
+	  and  <![CDATA[  a.create_time <= #{e_time} ]]>   
+	</if>
+ 	<if test="create_by != null and create_by != '' and create_by != '-1'  and create_by != 'undefined'  and create_by != 'NaN'" >
+	  and  a.create_by = #{create_by}
+	</if>
+ 	<if test="processor != null and processor != '' and processor != '-1'  and processor != 'undefined'  and processor != 'NaN'" >
+	  and  a.processor = #{processor}
+	</if>
+ 	<if test="store != null and store != '' and store != '-1'  and store != 'undefined'  and store != 'NaN'" >
+	  and  a.store = #{store}
+	</if>
+ 	<if test="carrier != null and carrier != '' and carrier != '-1'  and carrier != 'undefined'  and carrier != 'NaN'" >
+	  and  a.carrier = #{carrier}
+	</if>
+ 	<if test="sp_type != null and sp_type != '' and sp_type != '-1'  and sp_type != 'undefined'  and sp_type != 'NaN'" >
+	  and  c.column_value = #{sp_type}
+	</if>
+ 	<if test="express_number != null and express_number != '' and express_number != '-1'  and express_number != 'undefined'  and express_number != 'NaN'" >
+	  and  a.express_number = #{express_number}
+	</if>
+ 	<if test="wo_no != null and wo_no != ''  and wo_no != 'undefined'" >
+	  and  a.wo_no = #{wo_no}
+	</if>
+</trim>
+</sql>
+</mapper>   

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.EstimateMapper">
+	<resultMap type="com.bt.lmis.balance.model.Estimate" id="estimateMap">
+		<result property="id" column="id" />
+		<result property="createTime" column="create_time" />
+		<result property="createBy" column="create_by" />
+		<result property="update_time" column="updateTime" />
+		<result property="updateBy" column="update_by" />
+		<result property="batchNumber" column="batch_number" />
+		<result property="batchStatus" column="batch_status" />
+		<result property="rank" column="rank" />
+		<result property="domainFrom" column="domain_from" />
+		<result property="domainTo" column="domain_to" />
+		<result property="estimateType" column="estimate_type" />
+		<result property="remark" column="remark" />
+	</resultMap>
+	<select id="queryEstimateByContract" parameterType="Object" resultType="String">
+		SELECT estimate_id FROM bal_estimate_contract WHERE contract_id=#{contract_id }
+	</select>
+	<select id="queryEstimate" parameterType="com.bt.lmis.balance.controller.form.EstimateQueryParam" resultType="java.util.Map">
+		SELECT
+			id,
+			batch_number,
+			CASE batch_status
+			WHEN 'WAI' THEN '等待中'
+			WHEN 'ING' THEN '进行中'
+			WHEN 'FIN' THEN '已完成'
+			WHEN 'CAN' THEN '已取消'
+			WHEN 'ERR' THEN '异常待处理'
+			ELSE '' END AS batch_status,
+			CASE rank
+			WHEN 0 THEN 0
+			ELSE rank-1 END AS rank,
+			CONCAT(domain_from,' - ',domain_to) AS domain,
+			CASE estimate_type
+			WHEN 0 THEN '支出'
+			WHEN 1 THEN '收入'
+			ELSE '' END AS estimate_type,
+			remark
+		FROM bal_estimate
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="estimate_id != null">
+				id in
+				<foreach collection= "estimate_id" item= "id" index= "index" open= "(" separator= "," close= ")" >
+					#{id }
+				</foreach>
+			</if>
+			<if test="batch_number != '' and batch_number != null">
+				AND batch_number LIKE CONCAT("%",#{batch_number },"%")
+			</if>
+			<if test="batch_status != '' and batch_status != null">
+				AND batch_status=#{batch_status }
+			</if>
+			<if test="domain_from != '' and domain_from != null">
+				AND domain_from=#{domain_from }
+			</if>
+			<if test="domain_to != '' and domain_to != null">
+				AND domain_to=#{domain_to }
+			</if>
+			<if test="estimate_type != '' and estimate_type != null">
+				AND estimate_type=#{estimate_type }
+			</if>
+		</trim>
+		ORDER BY batch_status,update_time DESC
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id="queryContractByEstimate" parameterType="Object" resultType="String">
+		SELECT tb_contract_basicinfo.contract_name
+		FROM bal_estimate_contract
+		LEFT JOIN tb_contract_basicinfo
+		ON bal_estimate_contract.contract_id=tb_contract_basicinfo.id
+		WHERE estimate_id=#{estimate_id }
+	</select>
+	<select id="countEstimate" parameterType="com.bt.lmis.balance.controller.form.EstimateQueryParam" resultType="int">
+		SELECT COUNT(1)
+		FROM bal_estimate
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="estimate_id != null">
+				id in
+				<foreach collection= "estimate_id" item= "id" index= "index" open= "(" separator= "," close= ")" >
+					#{id }
+				</foreach>
+			</if>
+			<if test="batch_number != '' and batch_number != null">
+				AND batch_number=#{batch_number }
+			</if>
+			<if test="batch_status != '' and batch_status != null">
+				AND batch_status=#{batch_status }
+			</if>
+			<if test="domain_from != '' and domain_from != null">
+				AND domain_from=#{domain_from }
+			</if>
+			<if test="domain_to != '' and domain_to != null">
+				AND domain_to=#{domain_to }
+			</if>
+			<if test="estimate_type != '' and estimate_type != null">
+				AND estimate_type=#{estimate_type }
+			</if>
+		</trim>
+	</select>
+	<select id="shiftContractByType" resultType="java.util.Map" parameterType="com.bt.lmis.balance.controller.param.Parameter">
+		SELECT id, contract_name FROM tb_contract_basicinfo
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.type != null and param.type==0">
+				contract_type=1
+			</if>
+			<if test="param.type != null and param.type==1">
+				contract_type=4
+			</if>
+		    <if test="param.contractName != null and param.contractName != ''">
+		    	AND contract_name LIKE CONCAT("%", #{param.contractName }, "%")
+		    </if>
+		</trim>
+	</select>
+	<select id="ensureMaxRank" resultType="Integer">
+		SELECT MAX(rank) FROM bal_estimate
+	</select>
+	<insert id="add" parameterType="com.bt.lmis.balance.model.Estimate">
+		INSERT INTO bal_estimate (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			batch_number,
+			batch_status,
+			rank,
+			domain_from,
+			domain_to,
+			estimate_type,
+			remark
+		
+		) VALUES (
+			#{id },
+			now(),
+			#{createBy },
+			now(),
+			#{createBy },
+			#{batchNumber },
+			#{batchStatus },
+			#{rank },
+			#{domainFrom },
+			#{domainTo },
+			#{estimateType },
+			#{remark }
+		
+		)
+	</insert>
+	<insert id="addContract" parameterType="java.util.List">
+		INSERT INTO bal_estimate_contract (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			estimate_id,
+			contract_id
+			
+		) VALUES
+		<foreach collection="list" item="contract" index="index" separator=",">
+		(
+			#{contract.id },
+			now(),
+			#{contract.createBy },
+			now(),
+			#{contract.createBy },
+			#{contract.estimateId },
+			#{contract.contractId }
+		)
+		</foreach>
+	</insert>
+	<select id="ensurePriorityEstimate" resultMap="estimateMap">
+		SELECT
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			batch_number,
+			batch_status,
+			rank,
+			domain_from,
+			domain_to,
+			estimate_type,
+			remark
+		FROM bal_estimate
+		WHERE rank=1
+	</select>
+	<select id="ensureContractId" parameterType="Object" resultType="Integer">
+		SELECT contract_id FROM bal_estimate_contract WHERE estimate_id=#{estimate_id }
+	</select>
+	<update id="ingEstimate" parameterType="Object">
+		UPDATE bal_estimate SET batch_status="ING" WHERE batch_number=#{batchNumber }
+	</update>
+	<update id="finEstimate" parameterType="Object">
+		UPDATE bal_estimate SET rank=rank-1 WHERE rank!=0;
+		UPDATE bal_estimate SET batch_status="FIN" WHERE batch_number=#{batchNumber };
+	</update>
+	<update id="errEstimate" parameterType="Object">
+		UPDATE bal_estimate SET rank=rank-1 WHERE rank!=0;
+		UPDATE bal_estimate SET batch_status="ERR" WHERE batch_number=#{batchNumber };
+	</update>
+	<update id="canEstimate" parameterType="Object">
+		UPDATE bal_estimate SET rank=rank-1 WHERE rank&gt;#{rank };
+		UPDATE bal_estimate SET batch_status="CAN",rank=0 WHERE batch_number=#{batchNumber };
+	</update>
+	<update id="resEstimate" parameterType="Object">
+		UPDATE bal_estimate SET batch_status="WAI",rank=#{rank } WHERE batch_number=#{batchNumber };
+	</update>
+	<select id="ensureEstimateByBatchNumber" parameterType="String" resultMap="estimateMap">
+		SELECT
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			batch_number,
+			batch_status,
+			rank,
+			domain_from,
+			domain_to,
+			estimate_type,
+			remark
+		FROM bal_estimate
+		WHERE batch_number=#{batchNumber }
+	</select>
+	<delete id="delEstimateById" parameterType="String">
+		DELETE FROM bal_estimate WHERE id=#{id };
+		DELETE FROM bal_estimate_contract WHERE estimate_id=#{id };
+	</delete>
+</mapper>

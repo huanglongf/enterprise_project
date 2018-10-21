@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.lmis.dao.EmployeeInGroupMapper" > 
+	<select id= "selectByEmployee" parameterType= "Object" resultType= "java.util.Map" >
+		select
+			a.id,
+			a.group,
+			b.group_name,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			s_employee_in_group a
+		left join(
+			select
+				id,
+				group_name
+			from
+				s_group
+			where
+				dFlag = true
+		) b on a.group = b.id
+		where
+			employee = #{employee_id }
+		order by update_time desc
+	</select>
+	<insert id= "addRelations" parameterType= "com.bt.lmis.model.EmployeeInGroup" useGeneratedKeys= "true" keyProperty= "id" >
+		insert into s_employee_in_group
+		(
+			employee,
+			s_employee_in_group.group,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+			
+		) values (
+			#{employee },
+			#{group },
+			#{create_by },
+			now(),
+			#{create_by },
+			now()
+			
+		)
+	</insert>
+	<delete id= "deleteRelation" parameterType= "Object" >
+		delete from s_employee_in_group where employee = #{employee_id }
+	</delete>
+	<select id="checkEmployeeExist" resultType="Integer" parameterType="Object">
+		select
+			count(1)
+		from
+			s_employee_in_group
+		where
+			s_employee_in_group.group = #{group_id }
+	</select>
+</mapper>   

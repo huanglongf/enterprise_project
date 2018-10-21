@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.RouteInfoMapper" >
+	<update id="updateRouteInfo" parameterType="com.bt.radar.model.RouteInfo">
+		update er_route_info
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="route_time != null and route_time != ''">
+				route_time = #{route_time },
+			</if>
+			<if test="transport_code != null and transport_code != ''">
+				transport_code = #{transport_code },
+			</if>
+			<if test="routestatus_code != null and routestatus_code != ''">
+				routestatus_code = #{routestatus_code },
+			</if>
+			<if test="province_code != null and province_code != ''">
+				province_code = #{province_code },
+			</if>
+			<if test="city_code != null and city_code != ''">
+				city_code = #{city_code },
+			</if>
+			<if test="state_code != null and state_code != ''">
+				state_code = #{state_code },
+			</if>
+			<if test="street_code != null and street_code != ''">
+				street_code = #{street_code },
+			</if>
+			<if test="description != null and description != ''">
+				description = #{description },
+			</if>
+			<if test="waybill != null and waybill != ''">
+				waybill = #{waybill },
+			</if>
+			<if test="event_warning_flag != null and event_warning_flag != ''">
+				event_warning_flag = #{event_warning_flag },
+			</if>
+		</trim>
+		where id = #{id } 
+	</update>
+	<select id="findRecords" parameterType="com.bt.radar.model.RouteInfo" resultType="com.bt.radar.model.RouteInfo">
+		select
+			a.id,
+			a.create_time,
+			a.create_user,
+			a.update_time,
+			a.update_user,
+			a.route_time,
+			a.transport_code,
+			a.routestatus_code,
+			a.province_code,
+			a.city_code,
+			a.state_code,
+			a.street_code,
+			a.description,
+			a.waybill,
+			a.event_warning_flag,
+			b.status
+		from
+			er_route_info  a
+			left join  er_routecode b on a.routestatus_code=b.status_code
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id != null and id != ''">
+				AND a.id = #{id }
+			</if>
+			<if test="route_time != null and route_time != ''">
+				AND a.route_time = #{route_time }
+			</if>
+			<if test="transport_code != null and transport_code != ''">
+				AND a.transport_code = #{transport_code }
+			</if>
+			<if test="routestatus_code != null and routestatus_code != ''">
+				AND a.routestatus_code = #{routestatus_code }
+			</if>
+			<if test="province_code != null and province_code != ''">
+				AND a.province_code = #{province_code }
+			</if>
+			<if test="city_code != null and city_code != ''">
+				AND a.city_code = #{city_code }
+			</if>
+			<if test="state_code != null and state_code != ''">
+				AND a.state_code = #{state_code }
+			</if>
+			<if test="street_code != null and street_code != ''">
+				AND a.street_code = #{street_code }
+			</if>
+			<if test="description != null and description != ''">
+				AND a.description = #{description }
+			</if>
+			<if test="waybill != null and waybill != ''">
+				AND a.waybill = #{waybill }
+			</if>
+			<if test="event_warning_flag != null and event_warning_flag != ''">
+				AND a.event_warning_flag = #{event_warning_flag }
+			</if>
+    	</trim>
+    	order by  route_time
+	</select>
+</mapper>   

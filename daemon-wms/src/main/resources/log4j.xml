@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  Log4j Configuration                                                  -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!-- $Id: log4j.xml,v 1.5 2011-07-27 08:33:45 benjamin Exp $ -->
+
+<!--
+   | For more configuration infromation and examples see the Jakarta Log4j
+   | owebsite: http://jakarta.apache.org/log4j
+ -->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+   <!-- ================================= -->
+   <!-- Preserve messages in a local file -->
+   <!-- ================================= -->
+
+   <!-- A size based file rolling appender
+   <appender name="FILE" class="org.jboss.logging.appender.RollingFileAppender">
+     <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
+     <param name="File" value="${jboss.server.log.dir}/server.log"/>
+     <param name="Append" value="false"/>
+     <param name="MaxFileSize" value="500KB"/>
+     <param name="MaxBackupIndex" value="1"/>
+
+     <layout class="org.apache.log4j.PatternLayout">
+       <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+     </layout>
+   </appender>
+   -->
+
+   <!-- ============================== -->
+   <!-- Append messages to the console -->
+   <!-- ============================== -->
+
+   <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+      <!--<errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/> -->
+      <param name="Target" value="System.out"/>
+      <param name="Threshold" value="WARN"/>
+
+      <layout class="org.apache.log4j.PatternLayout">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <!-- <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/> -->
+         <param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss:SSS z}] %5p %l: %m%n"/>
+      </layout>
+   </appender>  
+   <!--  -->
+	
+   <appender name="logFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+		<!-- <param name="File" value="${catalina.home}/logs/wms.log" /> -->
+		<param name="File" value="/service/logs/software/tomcat/production/wms3/daemon/wms.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p [%F:%L]- %m%n" /> -->
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss:SSS z}] %5p %l: %m%n" />
+		</layout>
+	</appender>
+
+   
+   <root>
+      <level value="ERROR"/>
+      <!-- <appender-ref ref="CONSOLE"/> -->
+      <appender-ref ref="logFile"/>
+   </root>
+
+</log4j:configuration>

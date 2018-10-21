@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.dao.FileTempleteMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.model.FileTemplete" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="templete_name" property="templeteName" jdbcType="VARCHAR" />
+    <result column="business_type" property="businessType" jdbcType="VARCHAR" />
+    <result column="business_group" property="businessGroup" jdbcType="VARCHAR" />
+    <result column="templete_type" property="templeteType" jdbcType="VARCHAR" />
+    <result column="templete_title" property="templeteTitle" jdbcType="VARCHAR" />
+    <result column="templete_mode" property="templeteMode" jdbcType="VARCHAR" />
+    <result column="templete_mode_url" property="templeteModeUrl" jdbcType="VARCHAR" />
+    <result column="title_length" property="titleLength" jdbcType="INTEGER" />
+    <result column="upload_url" property="uploadUrl" jdbcType="VARCHAR" />
+    <result column="history_version" property="historyVersion" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultMapQuery" type="com.bt.lmis.controller.form.FileTempleteQueryParam" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="templete_name" property="templeteName" jdbcType="VARCHAR" />
+    <result column="business_type" property="businessType" jdbcType="VARCHAR" />
+    <result column="business_group" property="businessGroup" jdbcType="VARCHAR" />
+    <result column="templete_type" property="templeteType" jdbcType="VARCHAR" />
+    <result column="templete_title" property="templeteTitle" jdbcType="VARCHAR" />
+    <result column="templete_mode" property="templeteMode" jdbcType="VARCHAR" />
+    <result column="templete_mode_url" property="templeteModeUrl" jdbcType="VARCHAR" />
+    <result column="title_length" property="titleLength" jdbcType="INTEGER" />
+    <result column="upload_url" property="uploadUrl" jdbcType="VARCHAR" />
+    <result column="history_version" property="historyVersion" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, templete_name, business_type, business_group, templete_type, templete_title, 
+    templete_mode, templete_mode_url, title_length, upload_url, history_version,
+    remark, del_flag, create_time, update_time, create_by, update_by
+  </sql>
+  <sql id="sql_where">
+  	where del_flag = 0
+  		<if test="id != null and id != ''">
+  			and id = #{id}
+  		</if>
+  		<if test="businessType != null and businessType != ''">
+  			and business_type = #{businessType}
+  		</if>
+  		<if test="businessGroup != null and businessGroup != ''">
+  			and business_group = #{businessGroup}
+  		</if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_file_templete
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="getByQueryParam" resultMap="BaseResultMapQuery" 
+  						  parameterType="com.bt.lmis.controller.form.FileTempleteQueryParam" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_file_templete
+    <include refid="sql_where" />
+    order by update_time desc
+    limit 1
+  </select>
+  <select id="findByQueryParam" resultMap="BaseResultMapQuery" 
+  						  parameterType="com.bt.lmis.controller.form.FileTempleteQueryParam" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_file_templete
+    <include refid="sql_where" />
+    order by update_time desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_file_templete
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.model.FileTemplete" >
+    insert into tb_file_templete (id, templete_name, business_type, business_group
+      templete_type, templete_title, templete_mode, templete_mode_url, title_length,  
+      upload_url, history_version, remark, del_flag, 
+      create_time, update_time, create_by, 
+      update_by)
+    values (#{id,jdbcType=VARCHAR}, #{templeteName,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, 
+      #{businessGroup,jdbcType=VARCHAR}, #{templeteType,jdbcType=VARCHAR}, 
+      #{templeteTitle,jdbcType=VARCHAR}, #{templeteMode,jdbcType=VARCHAR},  
+      #{templeteModeUrl,jdbcType=VARCHAR},#{titleLength,jdbcType=INTEGER}, 
+      #{uploadUrl,jdbcType=VARCHAR}, #{historyVersion,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{updateBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.model.FileTemplete" >
+    insert into tb_file_templete
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="templeteName != null" >
+        templete_name,
+      </if>
+      <if test="businessType != null" >
+        business_type,
+      </if>
+      <if test="businessGroup != null" >
+        business_group,
+      </if>
+      <if test="templeteType != null" >
+        templete_type,
+      </if>
+      <if test="templeteTitle != null" >
+        templete_title,
+      </if>
+      <if test="templeteMode != null" >
+        templete_mode,
+      </if>
+      <if test="templeteModeUrl != null" >
+        templete_mode_url,
+      </if>
+      <if test="titleLength != null" >
+        title_length,
+      </if>
+      <if test="uploadUrl != null" >
+        upload_url,
+      </if>
+      <if test="historyVersion != null" >
+        history_version,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteName != null" >
+        #{templeteName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessGroup != null" >
+        #{businessGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteType != null" >
+        #{templeteType,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteTitle != null" >
+        #{templeteTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteMode != null" >
+        #{templeteMode,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteModeUrl != null" >
+        #{templeteModeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="titleLength != null" >
+        #{titleLength,jdbcType=INTEGER},
+      </if>
+      <if test="uploadUrl != null" >
+        #{uploadUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="historyVersion != null" >
+        #{historyVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.model.FileTemplete" >
+    update tb_file_templete
+    <set >
+      <if test="templeteName != null" >
+        templete_name = #{templeteName,jdbcType=VARCHAR},
+      </if>
+      <if test="businessType != null" >
+        business_type = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessGroup != null" >
+        business_group = #{businessGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteType != null" >
+        templete_type = #{templeteType,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteTitle != null" >
+        templete_title = #{templeteTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteMode != null" >
+        templete_mode = #{templeteMode,jdbcType=VARCHAR},
+      </if>
+      <if test="templeteModeUrl != null" >
+        templete_mode_url = #{templeteModeUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="titleLength != null" >
+        title_length = #{titleLength,jdbcType=INTEGER},
+      </if>
+      <if test="uploadUrl != null" >
+        upload_url = #{uploadUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="historyVersion != null" >
+        history_version = #{historyVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.model.FileTemplete" >
+    update tb_file_templete
+    set templete_name = #{templeteName,jdbcType=VARCHAR},
+      business_type = #{businessType,jdbcType=VARCHAR},
+      business_group = #{businessGroup,jdbcType=VARCHAR},
+      templete_type = #{templeteType,jdbcType=VARCHAR},
+      templete_title = #{templeteTitle,jdbcType=VARCHAR},
+      templete_mode = #{templeteMode,jdbcType=VARCHAR},
+      templete_mode_url = #{templeteModeUrl,jdbcType=VARCHAR},
+      title_length = #{titleLength,jdbcType=INTEGER},
+      upload_url = #{uploadUrl,jdbcType=VARCHAR},
+      history_version = #{historyVersion,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

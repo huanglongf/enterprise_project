@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpressbillDetailMapper">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.bt.lmis.model.ExpressbillDetail">
+		<result column="id" property="id" />
+		<result column="create_time" property="create_time" />
+		<result column="create_user" property="create_user" />
+		<result column="update_time" property="update_time" />
+		<result column="update_user" property="update_user" />
+		<result column="account" property="account" />
+		<result column="transport_time" property="transport_time" />
+		<result column="waybill" property="waybill" />
+		<result column="transport_weight" property="transport_weight" />
+		<result column="transport_volumn" property="transport_volumn" />
+		<result column="origin_province" property="origin_province" />
+		<result column="origin_city" property="origin_city" />
+		<result column="dest_province" property="dest_province" />
+		<result column="dest_city" property="dest_city" />
+		<result column="charged_weight" property="charged_weight" />
+		<result column="express_code" property="express_code" />
+		<result column="producttype_code" property="producttype_code" />
+		<result column="insurance" property="insurance" />
+		<result column="freight" property="freight" />
+		<result column="insurance_fee" property="insurance_fee" />
+		<result column="other_value_added_service_charges" property="other_value_added_service_charges" />
+		<result column="total_charge" property="total_charge" />
+		<result column="is_verification" property="is_verification" />
+		<result column="reason" property="reason" />
+		<result column="bat_id" property="bat_id" />
+		<result column="master_id" property="master_id" />
+	</resultMap>
+
+	<!-- tb_expressbill_detail table all fields -->
+	<sql id="Base_Column_List">
+		id,create_time,create_user,update_time,update_user,account,transport_time,waybill,transport_weight,transport_volumn,origin_province,origin_city,dest_province,dest_city,charged_weight,express_code,producttype_code,insurance,freight,insurance_fee,other_value_added_service_charges,total_charge,is_verification,reason,bat_id,master_id
+	</sql>
+
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="create_time != null">
+				and create_time = #{create_time}
+			</if>
+			<if test="create_user != null and create_user != ''">
+				and create_user = #{create_user}
+			</if>
+			<if test="update_time != null">
+				and update_time = #{update_time}
+			</if>
+			<if test="update_user != null and update_user != ''">
+				and update_user = #{update_user}
+			</if>
+			<if test="account != null and account != ''">
+				and account = #{account}
+			</if>
+			<if test="transport_time != null">
+				and transport_time = #{transport_time}
+			</if>
+			<if test="waybill != null and waybill != ''">
+				and waybill = #{waybill}
+			</if>
+			<if test="transport_weight != null">
+				and transport_weight = #{transport_weight}
+			</if>
+			<if test="transport_volumn != null">
+				and transport_volumn = #{transport_volumn}
+			</if>
+			<if test="origin_province != null and origin_province != ''">
+				and origin_province = #{origin_province}
+			</if>
+			<if test="origin_city != null and origin_city != ''">
+				and origin_city = #{origin_city}
+			</if>
+			<if test="dest_province != null and dest_province != ''">
+				and dest_province = #{dest_province}
+			</if>
+			<if test="dest_city != null and dest_city != ''">
+				and dest_city = #{dest_city}
+			</if>
+			<if test="charged_weight != null">
+				and charged_weight = #{charged_weight}
+			</if>
+			<if test="express_code != null and express_code != ''">
+				and express_code = #{express_code}
+			</if>
+			<if test="producttype_code != null and producttype_code != ''">
+				and producttype_code = #{producttype_code}
+			</if>
+			<if test="insurance != null">
+				and insurance = #{insurance}
+			</if>
+			<if test="freight != null">
+				and freight = #{freight}
+			</if>
+			<if test="insurance_fee != null">
+				and insurance_fee = #{insurance_fee}
+			</if>
+			<if test="other_value_added_service_charges != null">
+				and other_value_added_service_charges =
+				#{other_value_added_service_charges}
+			</if>
+			<if test="total_charge != null">
+				and total_charge = #{total_charge}
+			</if>
+			<if test="is_verification != null and is_verification != ''">
+				and is_verification = #{is_verification}
+			</if>
+			<if test="reason != null and reason != ''">
+				and reason = #{reason}
+			</if>
+			<if test="bat_id != null and bat_id != ''">
+				and bat_id = #{bat_id}
+			</if>
+			<if test="master_id != null">
+				and master_id = #{master_id}
+			</if>
+		</trim>
+	</sql>
+
+
+	<!-- 插入承运商账单明细表 -->
+	<insert id="insert" parameterType="com.bt.lmis.model.ExpressbillDetail">
+		insert into
+		tb_expressbill_detail(id,create_time,create_user,update_time,update_user,account,transport_time,waybill,transport_weight,transport_volumn,origin_province,origin_city,dest_province,dest_city,charged_weight,express_code,producttype_code,insurance,freight,insurance_fee,other_value_added_service_charges,total_charge,is_verification,reason,bat_id,master_id)
+		values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{account},#{transport_time},#{waybill},#{transport_weight},#{transport_volumn},#{origin_province},#{origin_city},#{dest_province},#{dest_city},#{charged_weight},#{express_code},#{producttype_code},#{insurance},#{freight},#{insurance_fee},#{other_value_added_service_charges},#{total_charge},#{is_verification},#{reason},#{bat_id},#{master_id})
+	</insert>
+
+	<!-- 修改承运商账单明细表 -->
+	<update id="update" parameterType="com.bt.lmis.model.ExpressbillDetail">
+		update tb_expressbill_detail set
+		create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},account=#{account},transport_time=#{transport_time},waybill=#{waybill},transport_weight=#{transport_weight},transport_volumn=#{transport_volumn},origin_province=#{origin_province},origin_city=#{origin_city},dest_province=#{dest_province},dest_city=#{dest_city},charged_weight=#{charged_weight},express_code=#{express_code},producttype_code=#{producttype_code},insurance=#{insurance},freight=#{freight},insurance_fee=#{insurance_fee},other_value_added_service_charges=#{other_value_added_service_charges},total_charge=#{total_charge},is_verification=#{is_verification},reason=#{reason},bat_id=#{bat_id},master_id=#{master_id}
+		where id=#{id}
+	</update>
+
+	<!-- 选择修改承运商账单明细表 -->
+	<update id="updateBySelective" parameterType="com.bt.lmis.model.ExpressbillDetail">
+		update tb_expressbill_detail set
+		<trim suffixOverrides=",">
+			<if test="create_time != null  ">
+				create_time=#{create_time},
+			</if>
+			<if test="create_user != null  and create_user != '' ">
+				create_user=#{create_user},
+			</if>
+			<if test="update_time != null  ">
+				update_time=#{update_time},
+			</if>
+			<if test="update_user != null  and update_user != '' ">
+				update_user=#{update_user},
+			</if>
+			<if test="account != null  and account != '' ">
+				account=#{account},
+			</if>
+			<if test="transport_time != null  ">
+				transport_time=#{transport_time},
+			</if>
+			<if test="waybill != null  and waybill != '' ">
+				waybill=#{waybill},
+			</if>
+			<if test="transport_weight != null  ">
+				transport_weight=#{transport_weight},
+			</if>
+			<if test="transport_volumn != null  ">
+				transport_volumn=#{transport_volumn},
+			</if>
+			<if test="origin_province != null  and origin_province != '' ">
+				origin_province=#{origin_province},
+			</if>
+			<if test="origin_city != null  and origin_city != '' ">
+				origin_city=#{origin_city},
+			</if>
+			<if test="dest_province != null  and dest_province != '' ">
+				dest_province=#{dest_province},
+			</if>
+			<if test="dest_city != null  and dest_city != '' ">
+				dest_city=#{dest_city},
+			</if>
+			<if test="charged_weight != null  ">
+				charged_weight=#{charged_weight},
+			</if>
+			<if test="express_code != null  and express_code != '' ">
+				express_code=#{express_code},
+			</if>
+			<if test="producttype_code != null  and producttype_code != '' ">
+				producttype_code=#{producttype_code},
+			</if>
+			<if test="insurance != null  ">
+				insurance=#{insurance},
+			</if>
+			<if test="freight != null  ">
+				freight=#{freight},
+			</if>
+			<if test="insurance_fee != null  ">
+				insurance_fee=#{insurance_fee},
+			</if>
+			<if test="other_value_added_service_charges != null  ">
+				other_value_added_service_charges=#{other_value_added_service_charges},
+			</if>
+			<if test="total_charge != null  ">
+				total_charge=#{total_charge},
+			</if>
+			<if test="is_verification != null  and is_verification != '' ">
+				is_verification=#{is_verification},
+			</if>
+			<if test="reason != null  and reason != '' ">
+				reason=#{reason},
+			</if>
+			<if test="bat_id != null  and bat_id != '' ">
+				bat_id=#{bat_id},
+			</if>
+			<if test="master_id != null  ">
+				master_id=#{master_id},
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+
+	<update id="deleteByMaster_id" parameterType="Object">
+		delete from tb_expressbill_detail where master_id = #{master_id}
+	</update>
+	
+	<update id="deleteByBat_id" parameterType="Object">
+		delete from tb_expressbill_detail where bat_id = #{bat_id}
+	</update>
+
+
+
+	<!-- 删除承运商账单明细表 -->
+	<update id="delete" parameterType="Object">
+		delete from tb_expressbill_detail where id = #{id}
+	</update>
+	<!-- 批量删除承运商账单明细表 -->
+	<delete id="batchDelete" parameterType="Object">
+		delete from tb_expressbill_detail where id in
+		<foreach collection="array" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 依据主键查找承运商账单明细表 -->
+	<select id="selectById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_expressbill_detail where id = #{id}
+	</select>
+
+	<!-- 承运商账单明细表 列表总数 为分页组件使用 -->
+	<select id="pageTotalRecord" resultType="java.lang.Long"
+		parameterType="com.bt.lmis.controller.form.ExpressbillDetailQueryParam">
+		select count(1) from tb_expressbill_detail
+		<include refid="where_Clause" />
+	</select>
+
+	<!-- 分页中的承运商账单明细表集合，为分页组件使用 -->
+	<select id="pageData" resultMap="BaseResultMap"
+		parameterType="com.bt.lmis.controller.form.ExpressbillDetailQueryParam">
+		select
+		<include refid="Base_Column_List" />
+		from tb_expressbill_detail
+		<include refid="where_Clause" />
+		<if test="orderCondition != null and orderCondition != ''">
+			${orderCondition}
+		</if>
+		${queryCondition}
+	</select>
+
+
+	<!--依据条件统计 承运商账单明细表总数 -->
+	<select id="count" resultType="java.lang.Long"
+		parameterType="com.bt.lmis.controller.form.ExpressbillDetailQueryParam">
+		select count(1) from tb_expressbill_detail
+		<include refid="where_Clause" />
+	</select>
+
+	<select id="Count" parameterType="com.bt.lmis.controller.form.ExpressbillDetailQueryParam" resultType='java.lang.Integer'>
+	select  count(1) from tb_expressbill_detail
+	<include refid="where_Clause" />
+	</select>
+	<select id='findAll' parameterType="com.bt.lmis.controller.form.ExpressbillDetailQueryParam"  resultType="com.bt.lmis.model.ExpressbillDetail">
+	select 
+    <include refid="Base_Column_List" />
+ from tb_expressbill_detail
+	<include refid="where_Clause" />
+	 <if test="maxResult != null and maxResult != ''">
+			LIMIT #{firstResult}, #{maxResult}
+		</if>
+	</select>
+	<select id='getIdByBatId' parameterType= "Object" resultType= "java.util.Map">
+	SELECT 
+    (SELECT 
+            id AS min_id
+        FROM
+            tb_expressbill_detail
+        WHERE
+            bat_id = #{bat_id}
+        LIMIT 0 , 1) AS min_id,
+    (SELECT 
+            id AS max_id
+        FROM
+            tb_expressbill_detail
+        WHERE
+            bat_id = #{bat_id}
+        ORDER BY id DESC
+        LIMIT 0 , 1) AS max_id;
+	</select>
+    <update id='toClear'  parameterType= "Object" >
+    truncate tb_expressbill_detail_raw;
+    truncate tb_expressbill_detail_retrun;
+    </update>
+
+  <delete id='clearDiff' >
+  DELETE FROM tb_diff_billdeatils 
+WHERE
+    EXISTS( SELECT 
+        1
+    FROM
+        tb_expressbill_detail
+    
+    WHERE
+        tb_expressbill_detail.bat_id = #{bat_id}
+        AND tb_diff_billdeatils.is_verification != '1'
+        AND tb_expressbill_detail.waybill = tb_diff_billdeatils.waybill)
+  </delete>
+
+<select id='checkToDiff' parameterType="com.bt.lmis.controller.form.ExpressbillDetailQueryParam" resultType='java.util.HashMap'>
+select 
+  1 from 
+ (select waybill from tb_expressbill_detail <include refid="where_Clause" /> ) a
+ left join tb_diff_billdeatils b on a.waybill=b.waybill where b.is_verification='1'
+</select>
+<delete id='deleteVerification' parameterType="com.bt.lmis.controller.form.ExpressbillDetailQueryParam">
+  DELETE FROM tb_expressbill_detail 
+WHERE
+    EXISTS( SELECT 
+        1
+    FROM
+        tb_diff_billdeatils
+    
+    WHERE
+        tb_expressbill_detail.waybill = tb_diff_billdeatils.waybill
+        AND tb_expressbill_detail.bat_id =#{bat_id}
+        AND tb_diff_billdeatils.is_verification = 1);
+</delete>
+</mapper>   

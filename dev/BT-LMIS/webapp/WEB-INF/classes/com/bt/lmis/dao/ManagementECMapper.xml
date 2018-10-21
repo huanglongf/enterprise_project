@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ManagementECMapper" > 
+	<resultMap id="ManagementECMap" type="com.bt.lmis.model.ManagementEC" >
+		<result column="id" property="id"/>
+		<result column="con_id" property="con_id"/>
+		<result column="belong_to" property="belong_to"/>
+		<result column="freight" property="freight"/>
+		<result column="insurance" property="insurance"/>
+		<result column="special_service" property="special_service"/>
+		<result column="cod" property="cod"/>
+		<result column="delegated_pickup" property="delegated_pickup"/>
+		<result column="ladder_type" property="ladder_type"/>
+		<result column="compare_1" property="compare_1"/>
+		<result column="num_1" property="num_1"/>
+		<result column="uom_1" property="uom_1"/>
+		<result column="rel" property="rel"/>
+		<result column="compare_2" property="compare_2"/>
+		<result column="num_2" property="num_2"/>
+		<result column="uom_2" property="uom_2"/>
+		<result column="charge_percent" property="charge_percent"/>
+		<result column="charge_percent_uom" property="charge_percent_uom"/>
+		<result column="create_by" property="create_by"/>
+		<result column="create_time" property="create_time"/>
+		<result column="update_by" property="update_by"/>
+		<result column="update_time" property="update_time"/>
+	</resultMap>
+	<select id= "getExpressWithRule" parameterType= "Object" resultType= "String" >
+		select distinct belong_to from tb_carrier_management where con_id= #{con_id }
+	</select>
+	<delete id= "deleteMan" parameterType= "Object" >
+		delete from tb_carrier_management where con_id= #{con_id }
+	</delete>
+	<update id= "delManEC" parameterType= "Object" >
+		update tb_carrier_management set dFlag= 1 where id= #{id }
+	</update>
+	<select id= "selectAllManEC" parameterType= "Object" resultType= "java.util.HashMap" >
+		select
+			id,
+			con_id,
+			belong_to,
+			b.transport_name as carrier,
+			freight,
+			insurance,
+			special_service,
+			cod,
+			delegated_pickup,
+			ladder_type,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge_percent,
+			charge_percent_uom,
+			dFlag,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from 
+			tb_carrier_management a
+		left join(
+			select transport_code,transport_name from tb_transport_vendor where validity= 1
+		) b on a.belong_to = b.transport_code
+		where
+			dFlag = 0
+		and
+			con_id = #{con_id }
+		<if test="belong_to != null and belong_to != ''" >
+			and belong_to = #{belong_to }
+		</if>
+		order by 
+			freight,
+			insurance,
+			special_service,
+			cod,
+			delegated_pickup,
+			num_1
+	</select>
+	<select id= "selectRegion" parameterType= "java.util.HashMap" resultType= "java.util.HashMap" >
+		select 
+			compare_1,num_1,compare_2,num_2
+		from 
+			tb_carrier_management
+		where 
+			dFlag= 0
+	    and 
+	    	con_id= #{con_id }
+		and
+			freight= #{freight }
+		and 
+			insurance= #{insurance }
+		and 
+			special_service= #{special_service }
+		and 
+			cod= #{cod }
+		and 
+			delegated_pickup= #{delegated_pickup }
+	    and 
+	    	ladder_type= #{ladder_type }
+		order by num_1
+	</select>
+	<select id= "checkCombination" parameterType= "java.util.HashMap" resultType= "Integer" >
+		select 
+			count(1)
+		from 
+			tb_carrier_management
+		<where>
+			dFlag = 0 and con_id = #{con_id }
+			<if test="belong_to != null and belong_to != ''" >
+				and belong_to = #{belong_to }
+			</if>
+			<if test="freight != null" >
+				and freight=#{freight }
+			</if>
+			<if test="insurance != null" >
+				and insurance=#{insurance }
+			</if>
+			<if test="special_service != null" >
+				and special_service=#{special_service }
+			</if>
+			<if test="cod != null" >
+				and cod=#{cod }
+			</if>
+			<if test="delegated_pickup != null" >
+				and delegated_pickup=#{delegated_pickup }
+			</if>
+			<if test="ladder_type != null" >
+				and ladder_type=#{ladder_type }
+			</if>
+		</where>
+	</select>
+	<insert id= "addManagementEC" parameterType= "com.bt.lmis.model.ManagementEC" useGeneratedKeys= "true" keyProperty= "id" >
+		insert into tb_carrier_management
+		(
+			con_id,
+			belong_to,
+			freight,
+			insurance,
+			special_service,
+			cod,
+			delegated_pickup,
+			ladder_type,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge_percent,
+			charge_percent_uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		)values(
+			#{con_id },
+			#{belong_to },
+			#{freight },
+			#{insurance },
+			#{special_service },
+			#{cod },
+			#{delegated_pickup },
+			#{ladder_type },
+			#{compare_1 },
+			#{num_1 },
+			#{uom_1 },
+			#{rel },
+			#{compare_2 },
+			#{num_2 },
+			#{uom_2 },
+			#{charge_percent },
+			#{charge_percent_uom },
+			#{create_by },
+			now(),
+			#{create_by },
+			now()
+		)	
+	</insert>
+</mapper>   

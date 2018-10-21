@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.lmis.dao.OriginDestParamMapper" >
+	<resultMap type="com.bt.lmis.model.OfferRedisBean" id="offerRedisBean">
+		<result column="redis_key" property="key" />
+		<result column="formula" property="value.formula" />
+		<result column="szxz_switch" property="value.szxz_switch" />
+		<result column="szxz_sz" property="value.szxz_sz" />
+		<result column="szxz_price" property="value.szxz_price" />
+		<result column="szxz_id" property="value.szxz_id" />
+		<result column="szxz_jpnum" property="value.szxz_jpnum" />
+		<result column="szxz_discount" property="value.szxz_discount" />
+		<result column="jf_weight" property="value.jf_weight" />
+		<result column="province_origin" property="value.province_origin" />
+		<result column="city_origin" property="value.city_origin" />
+		<result column="state_origin" property="value.state_origin" />
+		<result column="country_destination" property="value.country_destination" />
+		<result column="province_destination" property="value.province_destination" />
+		<result column="city_destination" property="value.city_destination" />
+		<result column="district_destination" property="value.district_destination" />
+	</resultMap>
+	<select id= "get" parameterType= "String" resultType= "com.bt.lmis.model.OriginationDestinationParam" >
+		select
+			formula,
+			szxz_switch,
+			szxz_sz,
+			szxz_price,
+			szxz_id,
+			szxz_jpnum,
+			szxz_discount,
+			jf_weight,
+			ifnull(province_origin,'') province_origin,
+			ifnull(city_origin,'') city_origin,
+			ifnull(state_origin,'') state_origin,
+			ifnull(country_destination,'') country_destination,
+			ifnull(province_destination,'') province_destination,
+			ifnull(city_destination,'') city_destination,
+			ifnull(district_destination,'') district_destination
+		from 
+			tb_origin_desitination_paramlist
+		where
+			CONCAT(
+				con_id,
+				carrier_name,
+				ifnull(itemtype_name,''),
+				ifnull(province_origin,''),
+				ifnull(city_origin,''),
+				ifnull(state_origin,''),
+				ifnull(country_destination,''),
+				ifnull(province_destination,''),
+				ifnull(city_destination,''),
+				ifnull(district_destination,'')
+			)= #{key }
+	</select>
+	<select id="loadOffer" parameterType="Integer" resultMap="offerRedisBean" >
+		SELECT
+			*
+		FROM
+			(
+				SELECT
+					CONCAT(
+						con_id,
+						carrier_name,
+						ifnull(itemtype_name,''),
+						ifnull(province_origin,''),
+						ifnull(city_origin,''),
+						ifnull(state_origin,''),
+						ifnull(country_destination,''),
+						ifnull(province_destination,''),
+						ifnull(city_destination,''),
+						ifnull(district_destination,'')
+					) AS redis_key,
+					formula,
+					szxz_switch,
+					szxz_sz,
+					szxz_price,
+					szxz_id,
+					szxz_jpnum,
+					szxz_discount,
+					jf_weight,
+					ifnull(province_origin,'') province_origin,
+					ifnull(city_origin,'') city_origin,
+					ifnull(state_origin,'') state_origin,
+					ifnull(country_destination,'') country_destination,
+					ifnull(province_destination,'') province_destination,
+					ifnull(city_destination,'') city_destination,
+					ifnull(district_destination,'') district_destination,
+					transport_type
+				FROM
+					tb_origin_desitination_paramlist a
+				LEFT JOIN(
+					SELECT
+						transport_name,
+						transport_type
+					FROM
+						tb_transport_vendor
+				) b ON a.carrier_name = b.transport_name
+			) a
+		WHERE
+			transport_type = #{transport_type }
+	</select>
+	<select id="findRecord" resultType="com.bt.lmis.model.OriginationDestinationParam" parameterType="java.util.Map" >
+		select
+			formula,
+			szxz_switch,
+			szxz_sz,
+			szxz_price,
+			szxz_id,
+			szxz_jpnum,
+			szxz_discount,
+			jf_weight,
+			province_origin,
+			city_origin,
+			state_origin,
+			country_destination,
+			province_destination,
+			CASE WHEN city_destination IS NULL THEN "" ELSE city_destination END city_destination,
+			CASE WHEN district_destination IS NULL THEN "" ELSE district_destination END district_destination
+		from 
+			tb_origin_desitination_paramlist
+		where
+			con_id= #{con_id }
+		and
+			carrier_name= #{carrier_name }
+		<if test="itemtype_name != null" >
+			and itemtype_name= #{itemtype_name }
+		</if>
+		<if test="province_origin != null" >
+			and province_origin like CONCAT(#{province_origin }, '%')
+		</if>
+		<if test="country_destination != null and country_destination != ''" >
+			and country_destination= #{country_destination }
+		</if>
+		<if test="province_destination != null and province_destination != ''" >
+			and province_destination like CONCAT(#{province_destination }, '%')
+		</if>
+		<if test="city_destination != null and city_destination != ''" >
+			and city_destination like CONCAT(#{city_destination }, '%')
+		</if>
+		<if test="city_destination == null or city_destination == ''" >
+			and (city_destination= #{city_destination } or city_destination is null)
+		</if>
+		<if test="district_destination != null and district_destination !=  ''" >
+			and district_destination like CONCAT(#{district_destination }, '%')
+		</if>
+		<if test="district_destination == null or district_destination == ''" >
+			and (district_destination= #{district_destination } or district_destination is null)
+		</if>
+	</select>
+	<select id="selectLevel" resultType="Integer" parameterType="Object" >
+		select level from tb_area where area_name like CONCAT(#{area_name }, '%')
+	</select>
+</mapper>   

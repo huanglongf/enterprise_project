@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.ExpressinfoDetailMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.radar.model.ExpressinfoDetail" >
+	<result column="id" property="id"/>
+	<result column="u_id" property="u_id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="sku_number" property="sku_number"/>
+	<result column="barcode" property="barcode"/>
+	<result column="item_name" property="item_name"/>
+	<result column="extend_pro" property="extend_pro"/>
+	<result column="qty" property="qty"/>
+	<result column="waybill" property="waybill"/>
+</resultMap>
+       
+<!-- er_expressinfo_detail table all fields -->
+<sql id="Base_Column_List" >
+	 id,u_id,create_time,create_user,update_time,update_user,sku_number,barcode,item_name,extend_pro,qty,waybill
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	 	<if test="u_id != null and u_id != ''" >
+	    and u_id =  #{u_id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="sku_number != null and sku_number != ''" >
+	    and sku_number =  #{sku_number}
+	</if>
+	 	<if test="barcode != null and barcode != ''" >
+	    and barcode =  #{barcode}
+	</if>
+	 	<if test="item_name != null and item_name != ''" >
+	    and item_name =  #{item_name}
+	</if>
+	 	<if test="extend_pro != null and extend_pro != ''" >
+	    and extend_pro =  #{extend_pro}
+	</if>
+	<if test="qty != null" >
+	    and qty =  #{qty}
+	</if>
+	 	<if test="waybill != null and waybill != ''" >
+	    and waybill =  #{waybill}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入运单明细表 -->
+<insert id="insert" parameterType="com.bt.radar.model.ExpressinfoDetail" >
+  insert into er_expressinfo_detail(id,u_id,create_time,create_user,update_time,update_user,sku_number,barcode,item_name,extend_pro,qty,waybill)
+ values(#{id},#{u_id},#{create_time},#{create_user},#{update_time},#{update_user},#{sku_number},#{barcode},#{item_name},#{extend_pro},#{qty},#{waybill})
+</insert>
+
+<!-- 修改运单明细表-->  
+ <update id="update" parameterType="com.bt.radar.model.ExpressinfoDetail" >
+  update er_expressinfo_detail set u_id=#{u_id},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},sku_number=#{sku_number},barcode=#{barcode},item_name=#{item_name},extend_pro=#{extend_pro},qty=#{qty},waybill=#{waybill} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改运单明细表-->
+<update id="updateBySelective" parameterType="com.bt.radar.model.ExpressinfoDetail" >
+	update er_expressinfo_detail set 
+	<trim  suffixOverrides="," >
+	<if test="u_id != null  and u_id != '' ">
+		u_id=#{u_id},
+	</if>
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="sku_number != null  and sku_number != '' ">
+		sku_number=#{sku_number},
+	</if>
+	<if test="barcode != null  and barcode != '' ">
+		barcode=#{barcode},
+	</if>
+	<if test="item_name != null  and item_name != '' ">
+		item_name=#{item_name},
+	</if>
+	<if test="extend_pro != null  and extend_pro != '' ">
+		extend_pro=#{extend_pro},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="waybill != null  and waybill != '' ">
+		waybill=#{waybill},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除运单明细表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from er_expressinfo_detail where id = #{id}
+</update>
+<!-- 批量删除运单明细表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from er_expressinfo_detail where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找运单明细表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_expressinfo_detail where id = #{id}
+</select>
+  	
+<!-- 运单明细表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.ExpressinfoDetailQueryParam">
+	select count(1) from er_expressinfo_detail 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的运单明细表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.ExpressinfoDetailQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_expressinfo_detail 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 运单明细表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.ExpressinfoDetailQueryParam">
+	select count(1) from er_expressinfo_detail 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的运单明细表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.ExpressinfoDetailQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_expressinfo_detail 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

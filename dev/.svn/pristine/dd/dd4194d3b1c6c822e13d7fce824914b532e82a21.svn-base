@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.AllAreaMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.AllArea" >
+	<result column="saa_id" property="saa_id"/>
+	<result column="saa_cb_id" property="saa_cb_id"/>
+	<result column="saa_section" property="saa_section"/>
+	<result column="saa_price" property="saa_price"/>
+	<result column="saa_price_unit" property="saa_price_unit"/>
+	<result column="saa_status" property="saa_status"/>
+</resultMap>
+       
+<!-- ssc_all_area table all fields -->
+<sql id="Base_Column_List" >
+	 saa_id,saa_cb_id,saa_section,saa_price,saa_price_unit,saa_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="saa_id != null" >
+	    and saa_id =  #{saa_id}
+	</if>
+	<if test="saa_cb_id != null" >
+	    and saa_cb_id =  #{saa_cb_id}
+	</if>
+	 	<if test="saa_section != null and saa_section != ''" >
+	    and saa_section =  #{saa_section}
+	</if>
+	 	<if test="saa_price != null and saa_price != ''" >
+	    and saa_price =  #{saa_price}
+	</if>
+	<if test="saa_price_unit != null" >
+	    and saa_price_unit =  #{saa_price_unit}
+	</if>
+	<if test="saa_status != null" >
+	    and saa_status =  #{saa_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入总占用面积表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.AllArea" >
+  insert into ssc_all_area(saa_cb_id,saa_section,saa_price,saa_price_unit,saa_status)
+ values(#{saa_cb_id},#{saa_section},#{saa_price},#{saa_price_unit},#{saa_status})
+</insert>
+
+<!-- 修改总占用面积表-->  
+ <update id="update" parameterType="com.bt.lmis.model.AllArea" >
+  update ssc_all_area set saa_cb_id=#{saa_cb_id},saa_section=#{saa_section},saa_price=#{saa_price},saa_price_unit=#{saa_price_unit},saa_status=#{saa_status} where saa_id=#{saa_id}
+ </update>
+ 
+ <!-- 选择修改总占用面积表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.AllArea" >
+	update ssc_all_area set 
+	<trim  suffixOverrides="," >
+	<if test="saa_cb_id != null  ">
+		saa_cb_id=#{saa_cb_id},
+	</if>
+	<if test="saa_section != null  and saa_section != '' ">
+		saa_section=#{saa_section},
+	</if>
+	<if test="saa_price != null  and saa_price != '' ">
+		saa_price=#{saa_price},
+	</if>
+	<if test="saa_price_unit != null  ">
+		saa_price_unit=#{saa_price_unit},
+	</if>
+	<if test="saa_status != null  ">
+		saa_status=#{saa_status},
+	</if>
+	</trim> where saa_id=#{saa_id}
+</update>
+
+<!-- 删除总占用面积表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_all_area where saa_id = #{saa_id}
+</update>
+<!-- 批量删除总占用面积表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_all_area where saa_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找总占用面积表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_all_area where saa_id = #{saa_id}
+</select>
+  	
+<!-- 总占用面积表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AllAreaQueryParam">
+	select count(1) from ssc_all_area 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的总占用面积表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AllAreaQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_all_area 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 总占用面积表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AllAreaQueryParam">
+	select count(1) from ssc_all_area 
+	<include refid="where_Clause"/>
+</select>
+  	
+
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_all_area where saa_cb_id=#{cbid}
+	order by saa_id asc
+</select>
+  	
+</mapper>   

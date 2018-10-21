@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.dao.WareImportErrorMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.model.WareImportError" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="twit_id" property="twitId" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_cost_center" property="storeCostCenter" jdbcType="VARCHAR" />
+    <result column="park_cost_center" property="parkCostCenter" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="park_code" property="parkCode" jdbcType="VARCHAR" />
+    <result column="park_name" property="parkName" jdbcType="VARCHAR" />
+    <result column="show_by_cp_flag" property="showByCpFlag" jdbcType="VARCHAR" />
+    <result column="show_st_re_flag" property="showStReFlag" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="ware_flag" property="wareFlag" jdbcType="VARCHAR" />
+    <result column="dis_flag" property="disFlag" jdbcType="VARCHAR" />
+    <result column="error_code" property="errorCode" jdbcType="VARCHAR" />
+    <result column="error_message" property="errorMessage" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseQueryResultMap" type="com.bt.lmis.controller.form.WareImportErrorQueryParam" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="twit_id" property="twitId" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_cost_center" property="storeCostCenter" jdbcType="VARCHAR" />
+    <result column="park_cost_center" property="parkCostCenter" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="park_code" property="parkCode" jdbcType="VARCHAR" />
+    <result column="park_name" property="parkName" jdbcType="VARCHAR" />
+    <result column="show_by_cp_flag" property="showByCpFlag" jdbcType="VARCHAR" />
+    <result column="show_st_re_flag" property="showStReFlag" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="ware_flag" property="wareFlag" jdbcType="VARCHAR" />
+    <result column="dis_flag" property="disFlag" jdbcType="VARCHAR" />
+    <result column="error_code" property="errorCode" jdbcType="VARCHAR" />
+    <result column="error_message" property="errorMessage" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, twit_id, warehouse_code, store_code, store_cost_center, park_cost_center, brand_name, 
+    park_code, park_name, show_by_cp_flag, show_st_re_flag, remark, ware_flag, dis_flag, error_code, 
+    error_message, sort, create_time, create_user, update_time, update_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_ware_import_error
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_ware_import_error
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.model.WareImportError" >
+    insert into tb_ware_import_error (id, twit_id, warehouse_code, store_code, 
+      store_cost_center, park_cost_center, brand_name, 
+      park_code,park_name, show_by_cp_flag, show_st_re_flag, 
+      remark, ware_flag, dis_flag, 
+      error_code, error_message, sort, 
+      create_time, create_user, update_time, 
+      update_user)
+    values (#{id,jdbcType=INTEGER}, #{twitId,jdbcType=INTEGER}, #{warehouseCode,jdbcType=VARCHAR}, #{storeCode,jdbcType=VARCHAR}, 
+      #{storeCostCenter,jdbcType=VARCHAR}, #{parkCostCenter,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR}, 
+      #{parkCode,jdbcType=VARCHAR}, #{parkName,jdbcType=VARCHAR}, #{showByCpFlag,jdbcType=VARCHAR}, #{showStReFlag,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{wareFlag,jdbcType=VARCHAR}, #{disFlag,jdbcType=VARCHAR}, 
+      #{errorCode,jdbcType=VARCHAR}, #{errorMessage,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.model.WareImportError" >
+    insert into tb_ware_import_error
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="twitId != null and twitId != ''" >
+        twit_id,
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code,
+      </if>
+      <if test="storeCode != null" >
+        store_code,
+      </if>
+      <if test="storeCostCenter != null" >
+        store_cost_center,
+      </if>
+      <if test="parkCostCenter != null" >
+        park_cost_center,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="parkCode != null" >
+        park_code,
+      </if>
+      <if test="parkName != null" >
+        park_name,
+      </if>
+      <if test="showByCpFlag != null" >
+        show_by_cp_flag,
+      </if>
+      <if test="showStReFlag != null" >
+        show_st_re_flag,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="wareFlag != null" >
+        ware_flag,
+      </if>
+      <if test="disFlag != null" >
+        dis_flag,
+      </if>
+      <if test="errorCode != null" >
+        error_code,
+      </if>
+      <if test="errorMessage != null" >
+        error_message,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="twitId != null and twitId != ''" >
+        #{twitId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCostCenter != null" >
+        #{storeCostCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCostCenter != null" >
+        #{parkCostCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCode != null" >
+        #{parkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null" >
+        #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="showByCpFlag != null" >
+        #{showByCpFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="showStReFlag != null" >
+        #{showStReFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="wareFlag != null" >
+        #{wareFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="disFlag != null" >
+        #{disFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="errorCode != null" >
+        #{errorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMessage != null" >
+        #{errorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.model.WareImportError" >
+    update tb_ware_import_error
+    <set >
+      <if test="twitId != null and twitId != ''" >
+        twit_id = #{twitId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCostCenter != null" >
+        store_cost_center = #{storeCostCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCostCenter != null" >
+        park_cost_center = #{parkCostCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCode != null" >
+        park_code = #{parkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null" >
+        park_name = #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="showByCpFlag != null" >
+        show_by_cp_flag = #{showByCpFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="showStReFlag != null" >
+        show_st_re_flag = #{showStReFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="wareFlag != null" >
+        ware_flag = #{wareFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="disFlag != null" >
+        dis_flag = #{disFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="errorCode != null" >
+        error_code = #{errorCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMessage != null" >
+        error_message = #{errorMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.model.WareImportError" >
+    update tb_ware_import_error
+    set 
+      twit_id = #{twitId,jdbcType=VARCHAR},
+      warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      store_code = #{storeCode,jdbcType=VARCHAR},
+      store_cost_center = #{storeCostCenter,jdbcType=VARCHAR},
+      park_cost_center = #{parkCostCenter,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      park_code = #{parkCode,jdbcType=VARCHAR},
+      park_name = #{parkName,jdbcType=VARCHAR},
+      show_by_cp_flag = #{showByCpFlag,jdbcType=VARCHAR},
+      show_st_re_flag = #{showStReFlag,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      ware_flag = #{wareFlag,jdbcType=VARCHAR},
+      dis_flag = #{disFlag,jdbcType=VARCHAR},
+      error_code = #{errorCode,jdbcType=VARCHAR},
+      error_message = #{errorMessage,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="query_sql_where">
+  	where 1=1
+  		<if test="id != null and id != ''">
+  			and id = #{id}
+  		</if>
+  		<if test="createUser != null and createUser != ''">
+  			and create_user = #{createUser}
+  		</if>
+  		<if test="twitId != null and twitId != ''">
+  			and twit_id = #{twitId}
+  		</if>
+  </sql>
+  <select id="getList" parameterType="com.bt.lmis.controller.form.WareImportErrorQueryParam" resultMap="BaseQueryResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from tb_ware_import_error
+    <include refid="query_sql_where" />
+    order by create_time desc
+	limit #{firstResult }, #{maxResult }
+  </select>
+  
+  <select id="getListCount" parameterType="com.bt.lmis.controller.form.WareImportErrorQueryParam" resultType="java.lang.Integer">
+  	select 
+    	count(1)
+    from tb_ware_import_error
+    <include refid="query_sql_where" />
+  </select>
+</mapper>

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.vims.dao.VisitorInfomationMapper">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.bt.vims.model.VisitorInfomation">
+		<result column="id" property="id" />
+		<result column="visitor_type" property="visitorType" />
+		<result column="visitor_num" property="visitorNum" />
+		<result column="apply_for" property="applyFor" />
+		<result column="check_in_plcae" property="checkInPlcae" />
+		<result column="visitor_name" property="visitor_name" />
+		<result column="visitor_phone" property="visitor_phone" />
+		<result column="host" property="host" />
+		<result column="visitor_company_name" property="visitor_company_name" />
+		<result column="license_plate_number_flag" property="license_plate_number_flag" />
+		<result column="license_plate_number" property="license_plate_number" />
+		<result column="content" property="content" />
+		<result column="remark" property="remark" />
+		<result column="photo" property="photo" />
+		<result column="content" property="content" />
+		<result column="check_in_time" property="check_in_time" />
+		<result column="check_in_user" property="check_in_user" />
+		<result column="check_out_time" property="check_out_time" />
+		<result column="check_out_user" property="check_out_user" />
+		<result column="check_state" property="check_state" />
+		<result column="data" property="data" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		bvi.id, visitor_type, visitor_num,apply_for, bpi.address_name as check_in_plcae, visitor_name, visitor_phone, host, visitor_company_name, license_plate_number_flag, license_plate_number, content,bvi.remark, photo, content,
+		check_in_time, check_in_user, check_out_time, check_out_user, check_state, data
+	</sql>
+
+	<sql id="where_Clause">
+		where 1=1
+		<trim  suffixOverrides="," >
+			<if test="id != null and id != ''" >
+			    and id =  #{id }
+			</if>
+		 	<if test="visitor_name != null and visitor_name != ''" >
+			    and visitor_name like CONCAT('%', #{visitor_name }, '%')
+			</if>
+		 	<if test="data != null and data != ''" >
+			    and data = #{data} 
+			</if>
+		 	<if test="datas != null and datas != ''" >
+			    and data like CONCAT( #{datas}, '%')
+			</if>
+		 	<if test="check_state != null and check_state != ''" >
+			    and check_state = #{check_state}
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 查询所有访客记录 -->
+	<select id="query_all" resultMap="BaseResultMap" parameterType="com.bt.vims.model.VisitorInfomation">
+		select
+			b_visitor_information.id,visitor_type,visitor_num,apply_for,b_printer_info.address_name as check_in_plcae,visitor_name,visitor_phone,host,visitor_company_name,license_plate_number_flag,license_plate_number,content,b_visitor_information.remark,content,
+			check_in_time,check_in_user,check_out_time,check_out_user,check_state,data
+		from 
+			b_visitor_information LEFT JOIN b_printer_info ON b_visitor_information.check_in_plcae = b_printer_info.address_code
+		group by visitor_phone,visitor_name
+		order by id desc 
+		limit 0,1000
+	</select>
+
+
+	<select id="getDetailInfo" parameterType="com.bt.vims.model.VisitorInfomation" resultMap="BaseResultMap">
+		select
+			a.id,a.visitor_type,a.visitor_num,a.apply_for,b.address_name as check_in_plcae,a.visitor_name,a.visitor_phone,a.host,a.visitor_company_name,a.license_plate_number_flag,a.license_plate_number,a.content,a.remark,a.photo,a.
+			check_in_time,a.check_in_user,a.check_out_time,a.check_out_user,a.check_state,a.data
+		from		b_visitor_information as a
+		left join	b_printer_info b on b.address_code = a.check_in_plcae
+			
+		where 1=1
+		<if test="default_time != null and default_time != ''">
+		  and  date_format(check_in_time,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
+		</if>
+		<if test="visitor_name != null and visitor_name != ''">
+		  and  a.visitor_name=#{visitor_name}
+		</if>
+		<if test="visitor_phone != null and visitor_phone != ''">
+		  and  a.visitor_phone=#{visitor_phone}
+		</if>	
+		<if test="host != null and host != ''">
+		  and  a.host=#{host}
+		</if>	
+		<if test="check_in_user != null and check_in_user != ''">
+		  and  c.company_code =#{check_in_user}
+		</if>	
+		<if test="license_plate_number != null and license_plate_number != ''">
+		  and  a.license_plate_number=#{license_plate_number}
+		</if>
+		<if test="start_time != null and start_time != ''">
+		  and  date_format(a.check_in_time,'%Y-%m-%d %T')&gt;=date_format(#{start_time},'%Y-%m-%d %T')
+		</if>	
+		<if test="end_time != null and end_time != ''">
+		  and  date_format(a.check_in_time,'%Y-%m-%d %T')&lt;=date_format(#{end_time},'%Y-%m-%d %T')
+		</if>					
+		group by a.visitor_phone,a.visitor_name		
+		order by a.id desc 
+		limit #{firstResult},#{maxResult}
+	</select>	
+	
+	
+	<select id="getDetailInfoCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+	 select count(1) from (
+	       select
+				a.id
+			from		b_visitor_information as a
+		where 1=1
+		<if test="default_time != null and default_time != ''">
+		  and  date_format(check_in_time,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
+		</if>
+		<if test="visitor_name != null and visitor_name != ''">
+		  and  a.visitor_name=#{visitor_name}
+		</if>
+		<if test="visitor_phone != null and visitor_phone != ''">
+		  and  a.visitor_phone=#{visitor_phone}
+		</if>	
+		<if test="host != null and host != ''">
+		  and  a.host=#{host}
+		</if>	
+		<if test="check_in_user != null and check_in_user != ''">
+		  and  c.company_code =#{check_in_user}
+		</if>	
+		<if test="license_plate_number != null and license_plate_number != ''">
+		  and  a.license_plate_number=#{license_plate_number}
+		</if>
+		<if test="start_time != null and start_time != ''">
+		  and  date_format(a.check_in_time,'%Y-%m-%d %T')&gt;=date_format(#{start_time},'%Y-%m-%d %T')
+		</if>	
+		<if test="end_time != null and end_time != ''">
+		  and  date_format(a.check_in_time,'%Y-%m-%d %T')&lt;=date_format(#{end_time},'%Y-%m-%d %T')
+		</if>					
+		group by a.visitor_phone,a.visitor_name		
+		order by a.id desc 
+	 ) as c
+	</select>
+	
+	
+	
+	
+	<select id="getExcelInfo" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select
+		   visitor_type,
+		   visitor_num,
+		   apply_for,
+		   visitor_name,
+		   visitor_phone,
+		   host,
+		   visitor_company_name,
+		   license_plate_number_flag,
+		   license_plate_number,
+		   content,
+		   remark,
+		   check_in_time,
+		   check_in_user,
+		   check_out_time,
+		   check_out_user,
+		   check_state,
+		   data,
+		   check_in_plcae,
+		   check_out_place
+		from 
+			view_detail_info 
+		where 1=1
+		<if test="default_time != null and default_time != ''">
+		  and  date_format(check_in_time,'%Y-%m-%d %T')=date_format(now(),'%Y-%m-%d %T')
+		</if>
+		<if test="visitor_name != null and visitor_name != ''">
+		  and  visitor_name=#{visitor_name}
+		</if>
+		<if test="visitor_phone != null and visitor_phone != ''">
+		  and  visitor_phone=#{visitor_phone}
+		</if>	
+		<if test="host != null and host != ''">
+		  and  host=#{host}
+		</if>					
+		<if test="license_plate_number != null and license_plate_number != ''">
+		  and  license_plate_number=#{license_plate_number}
+		</if>
+		<if test="start_time != null and start_time != ''">
+		  and  date_format(check_in_time,'%Y-%m-%d %T')&gt;=date_format(#{start_time},'%Y-%m-%d %T')
+		</if>	
+		<if test="end_time != null and end_time != ''">
+		  and  date_format(check_in_time,'%Y-%m-%d %T')&lt;=date_format(#{end_time},'%Y-%m-%d %T')
+		</if>					
+	</select>	
+	
+	
+	
+	<!-- 根据ID查询访客记录 -->
+	<select id="query_by_data" resultMap="BaseResultMap" parameterType="Object">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			b_visitor_information as bvi LEFT JOIN b_printer_info as bpi ON bvi.check_in_plcae = bpi.address_code
+		where data=#{data}
+	</select>
+
+	<!-- 查询访客记录 -->
+	<select id="query_host" resultType="java.util.HashMap">
+		SELECT 
+			u.id as userid,u.username as username,u.name as uname,c.company_name,c.company_code,d.department_name,d.department_code 
+		FROM 
+			s_user u
+		left join s_company c on u.company_code=c.company_code
+		left join s_department d on u.department_code=d.department_code
+	</select>
+
+	<select id="query_check_log" resultType="java.util.HashMap" parameterType="Object">
+		SELECT 
+			*
+		FROM 
+			b_visitor_information 
+		where check_in_user=#{username}
+		order by id desc
+	</select>
+
+	<!-- 插入时所用得字段值 -->
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			visitor_type,
+			visitor_num,
+			apply_for,
+			check_in_plcae,
+			visitor_name,
+			visitor_phone,
+			host,
+			visitor_company_name,
+			license_plate_number_flag,
+			license_plate_number,
+			content,
+			remark,
+			photo,
+			check_in_time,
+			check_in_user,
+			check_out_time,
+			check_out_user,
+			check_state,
+			data
+		</trim>
+	</sql>
+
+	<!-- 新增访客记录 -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.vims.model.VisitorInfomation" >
+		insert into b_visitor_information(
+			visitor_type,visitor_num,apply_for,check_in_plcae,visitor_name,visitor_phone,host,visitor_company_name,
+			license_plate_number_flag,license_plate_number,
+			content,remark,photo,
+			check_in_time,check_in_user,check_out_time,check_out_user,
+			check_state,data
+		) values(
+			#{visitorType},#{visitorNum},#{applyFor},#{checkInPlcae},#{visitor_name},#{visitor_phone},#{host},#{visitor_company_name},
+			#{license_plate_number_flag},#{license_plate_number},
+			#{content},#{remark},#{photo},
+			#{check_in_time},#{check_in_user},#{check_out_time},#{check_out_user},
+			#{check_state},#{data}
+		)
+	</insert>
+	
+	<!-- 将客户端访客数据批量插入主表中 -->
+	<insert id="insertMainInfor" parameterType="java.util.List" keyProperty="id" keyColumn="id">
+		INSERT INTO b_visitor_information
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" index="index" item="obj" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				#{obj.visitorType},
+				#{obj.visitorNum},
+				#{obj.applyFor},
+				#{obj.checkInPlcae},
+				#{obj.visitor_name},
+				#{obj.visitor_phone},
+				#{obj.host},
+				#{obj.visitor_company_name},
+				#{obj.license_plate_number_flag},
+				#{obj.license_plate_number},
+				#{obj.content},
+				#{obj.remark},
+				#{obj.photo},
+				#{obj.check_in_time},
+				#{obj.check_in_user},
+				#{obj.check_out_time},
+				#{obj.check_out_user},
+				#{obj.check_state},
+				#{obj.data}
+			</trim>
+		</foreach>
+	</insert>
+
+	<!-- 更新访客记录 -->
+	<update id="update" parameterType="com.bt.vims.model.VisitorInfomation" >
+  		update b_visitor_information set 
+			check_out_time=#{check_out_time},check_out_user=#{check_out_user},check_state=#{check_state}
+		where data=#{data}
+	</update>
+	
+	<!-- 按条件查询 -->
+	<select id="query" resultMap="BaseResultMap" parameterType="com.bt.vims.model.VisitorInfomation" >
+		SELECT 
+			<include refid="Base_Column_List" />
+		from 
+			b_visitor_information as bvi LEFT JOIN b_printer_info as bpi ON bvi.check_in_plcae = bpi.address_code 
+		<include refid="where_Clause"></include>
+		
+	</select>
+</mapper>   

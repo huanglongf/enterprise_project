@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.sys.codeRule.dao.SysCoderuleDataMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject"
+		id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.sys.codeRule.model.SysCoderuleData"
+		id="SysCoderuleDataMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="rule_code" property="ruleCode" jdbcType="VARCHAR" />
+		<result column="config_code" property="configCode" jdbcType="VARCHAR" />
+		<result column="data_order" property="dataOrder" jdbcType="INTEGER" />
+		<result column="start_value" property="startValue" jdbcType="VARCHAR" />
+		<result column="incre_value" property="increValue" jdbcType="INTEGER" />
+		<result column="number" property="number" jdbcType="INTEGER" />
+		<result column="data_valuelg" property="dataValuelg" jdbcType="INTEGER" />
+		<result column="update_cycle" property="updateCycle" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.sys.codeRule.model.ViewSysCoderuleData"
+		id="ViewSysCoderuleDataMap">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="create_user_name" property="createUserName"
+			jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="update_user_name" property="updateUserName"
+			jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+		<result column="is_disabled" property="isDisabled" jdbcType="TINYINT" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+		<result column="pwr_org_name" property="pwrOrgName" jdbcType="VARCHAR" />
+		<result column="config_code" property="configCode" jdbcType="VARCHAR" />
+		<result column="rule_code" property="ruleCode" jdbcType="VARCHAR" />
+		<result column="data_order" property="dataOrder" jdbcType="INTEGER" />
+		<result column="start_value" property="startValue" jdbcType="VARCHAR" />
+		<result column="incre_value" property="increValue" jdbcType="INTEGER" />
+		<result column="data_valuelg" property="dataValuelg" jdbcType="INTEGER" />
+		<result column="number" property="number" jdbcType="INTEGER" />
+		<result column="update_cycle" property="updateCycle" jdbcType="VARCHAR" />
+		<result column="rule_name" property="ruleName" jdbcType="VARCHAR" />
+		<result column="update_cycle_desc" property="updateCycleDesc"
+			jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		remark,
+		rule_code,
+		config_code,
+		data_order,
+		start_value,
+		incre_value,
+		number,
+		data_valuelg,
+		update_cycle
+	</sql>
+	<sql id="ViewSysCoderuleData_Column_List">
+		id,
+		create_time,
+		create_by,
+		create_user_name,
+		update_time,
+		update_by,
+		update_user_name,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		pwr_org_name,
+		config_code,
+		rule_code,
+		data_order,
+		start_value,
+		incre_value,
+		data_valuelg,
+		number,
+		update_cycle,
+		rule_name,
+		update_cycle_desc,
+		remark
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			remark,
+			rule_code,
+			config_code,
+			data_order,
+			start_value,
+			incre_value,
+			number,
+			data_valuelg,
+			update_cycle
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.sys.codeRule.model.SysCoderuleData">
+		INSERT INTO sys_coderule_data
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{remark,
+			jdbcType=VARCHAR},
+			#{ruleCode, jdbcType=VARCHAR},
+			#{configCode,
+			jdbcType=VARCHAR},
+			#{dataOrder, jdbcType=INTEGER},
+			#{startValue,
+			jdbcType=VARCHAR},
+			#{increValue, jdbcType=INTEGER},
+			#{number,
+			jdbcType=INTEGER},
+			#{dataValuelg, jdbcType=INTEGER},
+			#{updateCycle,
+			jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO sys_coderule_data
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy,
+				jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.remark, jdbcType=VARCHAR},
+				#{obj.ruleCode, jdbcType=VARCHAR},
+				#{obj.configCode, jdbcType=VARCHAR},
+				#{obj.dataOrder,
+				jdbcType=INTEGER},
+				#{obj.startValue, jdbcType=VARCHAR},
+				#{obj.increValue, jdbcType=INTEGER},
+				#{obj.number, jdbcType=INTEGER},
+				#{obj.dataValuelg, jdbcType=INTEGER},
+				#{obj.updateCycle,
+				jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.sys.codeRule.model.SysCoderuleData"
+		resultMap="SysCoderuleDataMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM sys_coderule_data
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime!=null">
+				AND create_time = #{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy!=null and createBy!=''">
+				AND create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime!=null">
+				AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy!=null and updateBy!=''">
+				AND update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="isDeleted!=null">
+				AND is_deleted = #{isDeleted, jdbcType=TINYINT}
+			</if>
+			<if test="isDisabled!=null">
+				AND is_disabled = #{isDisabled, jdbcType=TINYINT}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="pwrOrg!=null and pwrOrg!=''">
+				AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+			</if>
+			<if test="remark!=null and remark!=''">
+				AND remark = #{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="ruleCode!=null and ruleCode!=''">
+				AND rule_code = #{ruleCode, jdbcType=VARCHAR}
+			</if>
+			<if test="configCode!=null and configCode!=''">
+				AND config_code = #{configCode, jdbcType=VARCHAR}
+			</if>
+			<if test="dataOrder!=null">
+				AND data_order = #{dataOrder, jdbcType=INTEGER}
+			</if>
+			<if test="startValue!=null and startValue!=''">
+				AND start_value = #{startValue, jdbcType=VARCHAR}
+			</if>
+			<if test="increValue!=null">
+				AND incre_value = #{increValue, jdbcType=INTEGER}
+			</if>
+			<if test="number!=null">
+				AND number = #{number, jdbcType=INTEGER}
+			</if>
+			<if test="dataValuelg!=null">
+				AND data_valuelg = #{dataValuelg, jdbcType=INTEGER}
+			</if>
+			<if test="updateCycle!=null and updateCycle!=''">
+				AND update_cycle = #{updateCycle, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+	<select id="retrieveViewSysCoderuleData" parameterType="com.lmis.sys.codeRule.model.ViewSysCoderuleData"
+		resultMap="ViewSysCoderuleDataMap">
+		SELECT
+		<include refid="ViewSysCoderuleData_Column_List" />
+		FROM view_sys_coderule_data
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime!=null">
+				AND create_time = #{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy!=null and createBy!=''">
+				AND create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="createUserName!=null and createUserName!=''">
+				AND create_user_name = #{createUserName, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime!=null">
+				AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy!=null and updateBy!=''">
+				AND update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateUserName!=null and updateUserName!=''">
+				AND update_user_name = #{updateUserName, jdbcType=VARCHAR}
+			</if>
+			<if test="isDeleted!=null">
+				AND is_deleted = #{isDeleted, jdbcType=TINYINT}
+			</if>
+			<if test="isDisabled!=null">
+				AND is_disabled = #{isDisabled, jdbcType=TINYINT}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="pwrOrg!=null and pwrOrg!=''">
+				AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+			</if>
+			<if test="pwrOrgName!=null and pwrOrgName!=''">
+				AND pwr_org_name = #{pwrOrgName, jdbcType=VARCHAR}
+			</if>
+			<if test="configCode!=null and configCode!=''">
+				AND config_code = #{configCode, jdbcType=VARCHAR}
+			</if>
+			<if test="ruleCode!=null and ruleCode!=''">
+				AND rule_code = #{ruleCode, jdbcType=VARCHAR}
+			</if>
+			<if test="dataOrder!=null">
+				AND data_order = #{dataOrder, jdbcType=INTEGER}
+			</if>
+			<if test="startValue!=null and startValue!=''">
+				AND start_value = #{startValue, jdbcType=VARCHAR}
+			</if>
+			<if test="increValue!=null">
+				AND incre_value = #{increValue, jdbcType=INTEGER}
+			</if>
+			<if test="dataValuelg!=null">
+				AND data_valuelg = #{dataValuelg, jdbcType=INTEGER}
+			</if>
+			<if test="number!=null">
+				AND number = #{number, jdbcType=INTEGER}
+			</if>
+			<if test="updateCycle!=null and updateCycle!=''">
+				AND update_cycle = #{updateCycle, jdbcType=VARCHAR}
+			</if>
+			<if test="ruleName!=null and ruleName!=''">
+				AND rule_name = #{ruleName, jdbcType=VARCHAR}
+			</if>
+			<if test="updateCycleDesc!=null and updateCycleDesc!=''">
+				AND update_cycle_desc = #{updateCycleDesc, jdbcType=VARCHAR}
+			</if>
+			<if test="remark!=null and remark!=''">
+				AND remark = #{remark, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+	<update id="update" parameterType="com.lmis.sys.codeRule.model.SysCoderuleData">
+		UPDATE sys_coderule_data
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="isDeleted!=null">
+				is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+			</if>
+			<if test="isDisabled!=null">
+				is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+			</if>
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+			<if test="remark!=null and remark!=''">
+				remark = #{remark, jdbcType=VARCHAR},
+			</if>
+			<if test="ruleCode!=null and ruleCode!=''">
+				rule_code = #{ruleCode, jdbcType=VARCHAR},
+			</if>
+			<if test="configCode!=null and configCode!=''">
+				config_code = #{configCode, jdbcType=VARCHAR},
+			</if>
+			<if test="dataOrder!=null">
+				data_order = #{dataOrder, jdbcType=INTEGER},
+			</if>
+			<if test="startValue!=null and startValue!=''">
+				start_value = #{startValue, jdbcType=VARCHAR},
+			</if>
+			<if test="increValue!=null">
+				incre_value = #{increValue, jdbcType=INTEGER},
+			</if>
+			<if test="number!=null">
+				number = #{number, jdbcType=INTEGER},
+			</if>
+			<if test="dataValuelg!=null">
+				data_valuelg = #{dataValuelg, jdbcType=INTEGER},
+			</if>
+			<if test="updateCycle!=null and updateCycle!=''">
+				update_cycle = #{updateCycle, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.sys.codeRule.model.SysCoderuleData">
+		UPDATE sys_coderule_data
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+			remark = #{remark, jdbcType=VARCHAR},
+			rule_code = #{ruleCode, jdbcType=VARCHAR},
+			config_code = #{configCode, jdbcType=VARCHAR},
+			data_order = #{dataOrder, jdbcType=INTEGER},
+			start_value = #{startValue, jdbcType=VARCHAR},
+			incre_value = #{increValue, jdbcType=INTEGER},
+			number = #{number, jdbcType=INTEGER},
+			data_valuelg = #{dataValuelg, jdbcType=INTEGER},
+			update_cycle = #{updateCycle, jdbcType=VARCHAR},
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.sys.codeRule.model.SysCoderuleData">
+		UPDATE sys_coderule_data
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			is_deleted = true,
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.sys.codeRule.model.SysCoderuleData">
+		UPDATE sys_coderule_data
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="isDisabled!=null">
+				is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+			</if>
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.sys.codeRule.model.SysCoderuleData">
+		DELETE FROM sys_coderule_data
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+
+	<!-- 自定义sql -->
+	<select id="getDataCountByConfigCode" resultType="java.lang.Integer">
+		SELECT
+		count(0)
+		FROM
+		sys_coderule_data de
+		WHERE
+		de.is_deleted = 0
+		AND de.is_disabled = 0
+		AND de.config_code = #{configcode}
+	</select>
+</mapper>

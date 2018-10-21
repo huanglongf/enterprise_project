@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:p="http://www.springframework.org/schema/p"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		">
+
+	<!-- 更改序列化方式 -->
+	<bean id="zkSerializer" class="com.baozun.zkpro.bean.ZkSerializerImpl"></bean>
+	<!-- zk data listener -->
+	<bean id="iZkDataListener" class="com.baozun.zkpro.listener.IZkDataListenerImpl"></bean>
+	<!-- zk chlid listener -->
+	<bean id="iZkChildListener" class="com.baozun.zkpro.listener.IZkChildListenerImpl"></bean>
+	<!-- zk state listener -->
+	<bean id="iZkStateListener" class="com.baozun.zkpro.listener.IZkStateListenerImpl"></bean>
+
+	<!-- 以上为标准配置 -->
+	<!-- 以下为项目定制化配置 -->
+	<!-- zk客户端 必须配置 -->
+	<bean id="zkClient" class="org.I0Itec.zkclient.ZkClient">
+		<!-- zk.timeout -->
+		<constructor-arg index="0" value="${zk.host}"></constructor-arg>
+		<constructor-arg index="1" value="${zk.session.timeout}"></constructor-arg>
+		<constructor-arg index="2" value="${zk.connection.timeout}"></constructor-arg>
+		<constructor-arg index="3" ref="zkSerializer"></constructor-arg>
+	</bean>
+
+	<!-- zk data change的实际处理逻辑 -->
+	<bean id="zkDataChangeManager" class="com.jumbo.zk.ZkDateChangeManagerImpl"></bean>
+	<!-- zk child change的实际处理逻辑 -->
+	<bean id="zkChildChangeManager" class="com.jumbo.zk.ZkChildChangeManagerImpl"></bean>
+	<!-- zk state change的实际处理逻辑 -->
+	<bean id="zkStateChangeManager" class="com.jumbo.zk.ZkStateChangeManagerImpl"></bean>
+	<!-- zk数据 -->
+	<bean id="zkClientFactory" class="com.baozun.zkpro.bean.ZkClientInitBean">
+		<property name="dataChangePaths">
+			<list>
+				<!-- 系统任务变更通知 -->
+				<value>${zk.notice.task.root}</value>
+				<value>${zk.notice.log.change}</value>
+				<value>${path.cfg.thread.pool}</value>
+				<value>${zk.create.sta.root}</value>
+			</list>
+		</property>
+	</bean>
+</beans>

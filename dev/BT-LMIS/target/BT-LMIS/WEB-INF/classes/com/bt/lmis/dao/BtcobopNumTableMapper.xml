@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.BtcobopNumTableMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.BtcobopNumTable" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="bnt_id" property="bnt_id"/>
+	<result column="bnt_interval" property="bnt_interval"/>
+	<result column="bnt_interval_unit" property="bnt_interval_unit"/>
+	<result column="bnt_price" property="bnt_price"/>
+	<result column="bnt_discount" property="bnt_discount"/>
+</resultMap>
+       
+<!-- tb_btcobop_num_table table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,bnt_id,bnt_interval,bnt_interval_unit,bnt_price,bnt_discount
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="bnt_id != null" >
+	    and bnt_id =  #{bnt_id}
+	</if>
+	 	<if test="bnt_interval != null and bnt_interval != ''" >
+	    and bnt_interval =  #{bnt_interval}
+	</if>
+	 	<if test="bnt_interval_unit != null and bnt_interval_unit != ''" >
+	    and bnt_interval_unit =  #{bnt_interval_unit}
+	</if>
+	<if test="bnt_price != null" >
+	    and bnt_price =  #{bnt_price}
+	</if>
+	<if test="bnt_discount != null" >
+	    and bnt_discount =  #{bnt_discount}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入B2C出库操作费表格 -->
+<insert id="insert" parameterType="com.bt.lmis.model.BtcobopNumTable" >
+  insert into tb_btcobop_num_table(id,create_time,create_user,update_time,update_user,bnt_id,bnt_interval,bnt_interval_unit,bnt_price,bnt_discount)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{bnt_id},#{bnt_interval},#{bnt_interval_unit},#{bnt_price},#{bnt_discount})
+</insert>
+
+<!-- 修改B2C出库操作费表格-->  
+ <update id="update" parameterType="com.bt.lmis.model.BtcobopNumTable" >
+  update tb_btcobop_num_table set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},bnt_id=#{bnt_id},bnt_interval=#{bnt_interval},bnt_interval_unit=#{bnt_interval_unit},bnt_price=#{bnt_price},bnt_discount=#{bnt_discount} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改B2C出库操作费表格-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.BtcobopNumTable" >
+	update tb_btcobop_num_table set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="bnt_id != null  ">
+		bnt_id=#{bnt_id},
+	</if>
+	<if test="bnt_interval != null  and bnt_interval != '' ">
+		bnt_interval=#{bnt_interval},
+	</if>
+	<if test="bnt_interval_unit != null  and bnt_interval_unit != '' ">
+		bnt_interval_unit=#{bnt_interval_unit},
+	</if>
+	<if test="bnt_price != null  ">
+		bnt_price=#{bnt_price},
+	</if>
+	<if test="bnt_discount != null  ">
+		bnt_discount=#{bnt_discount},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除B2C出库操作费表格 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_btcobop_num_table where id = #{id}
+</update>
+<!-- 批量删除B2C出库操作费表格 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_btcobop_num_table where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找B2C出库操作费表格 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_btcobop_num_table where id = #{id}
+</select>
+  	
+<!-- B2C出库操作费表格 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.BtcobopNumTableQueryParam">
+	select count(1) from tb_btcobop_num_table 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的B2C出库操作费表格集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.BtcobopNumTableQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_btcobop_num_table 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 B2C出库操作费表格总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.BtcobopNumTableQueryParam">
+	select count(1) from tb_btcobop_num_table 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的B2C出库操作费表格集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.BtcobopNumTableQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_btcobop_num_table 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

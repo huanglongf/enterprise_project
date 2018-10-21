@@ -1,0 +1,22 @@
+package com.bt.vims.service;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+/**
+ * 读取访客数据信息接口类
+ * @author liuqingqiang 
+ * @date 2018-05-11
+ * @version V1.0
+ */
+@Service
+public interface VimsDataService{
+    
+    /**
+     * 响应客户端
+     * @return 返回处理信息给予客户端
+     */
+    public Map<String, String> responseSocket(String sign , String bodyParam, Map<String, Object> clientMap);
+
+}

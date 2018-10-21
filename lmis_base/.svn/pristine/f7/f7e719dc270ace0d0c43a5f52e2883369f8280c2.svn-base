@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.jbasis.contractBasicinfo.dao.JbasisContractBasicinfoDeatilMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.contractBasicinfo.model.JbasisContractBasicinfoDeatil" id="JbasisContractBasicinfoDeatilMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+		<result column="type_code" property="typeCode" jdbcType="VARCHAR" />
+		<result column="incomeandexp_type" property="incomeandexpType" jdbcType="VARCHAR" />
+		<result column="rule_code" property="ruleCode" jdbcType="VARCHAR" />
+		<result column="is_balance" property="isBalance" jdbcType="VARCHAR" />
+		<result column="is_estimate" property="isEstimate" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.contractBasicinfo.model.ViewJbasisContractBasicinfoDeatil" id="ViewJbasisContractBasicinfoDeatilMap">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+		<result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+		<result column="type_code" property="typeCode" jdbcType="VARCHAR" />
+		<result column="type_code_display" property="typeCodeDisplay" jdbcType="VARCHAR" />
+		<result column="incomeandexp_type" property="incomeandexpType" jdbcType="VARCHAR" />
+		<result column="incomeandexp_type_display" property="incomeandexpTypeDisplay" jdbcType="VARCHAR" />
+		<result column="rule_code" property="ruleCode" jdbcType="VARCHAR" />
+		<result column="rule_code_display" property="ruleCodeDisplay" jdbcType="VARCHAR" />
+		<result column="is_balance" property="isBalance" jdbcType="VARCHAR" />
+		<result column="is_balance_display" property="isBalanceDisplay" jdbcType="VARCHAR" />
+		<result column="is_estimate" property="isEstimate" jdbcType="VARCHAR" />
+		<result column="is_estimate_display" property="isEstimateDisplay" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		contract_no,
+		type_code,
+		incomeandexp_type,
+		rule_code,
+		is_balance,
+		is_estimate
+	</sql>
+	<sql id="ViewJbasisContractBasicinfoDeatil_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		contract_no,
+		type_code,
+		type_code_display,
+		incomeandexp_type,
+		incomeandexp_type_display,
+		rule_code,
+		rule_code_display,
+		is_balance,
+		is_balance_display,
+		is_estimate,
+		is_estimate_display
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			contract_no,
+			type_code,
+			incomeandexp_type,
+			rule_code,
+			is_balance,
+			is_estimate
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.jbasis.contractBasicinfo.model.JbasisContractBasicinfoDeatil">
+		INSERT INTO jbasis_contract_basicinfo_deatil
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{contractNo, jdbcType=VARCHAR},
+			#{typeCode, jdbcType=VARCHAR},
+			#{incomeandexpType, jdbcType=VARCHAR},
+			#{ruleCode, jdbcType=VARCHAR},
+			#{isBalance, jdbcType=VARCHAR},
+			#{isEstimate, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO jbasis_contract_basicinfo_deatil
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.contractNo, jdbcType=VARCHAR},
+				#{obj.typeCode, jdbcType=VARCHAR},
+				#{obj.incomeandexpType, jdbcType=VARCHAR},
+				#{obj.ruleCode, jdbcType=VARCHAR},
+				#{obj.isBalance, jdbcType=VARCHAR},
+				#{obj.isEstimate, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.jbasis.contractBasicinfo.model.JbasisContractBasicinfoDeatil" resultMap="JbasisContractBasicinfoDeatilMap">
+		SELECT <include refid="Base_Column_List" /> FROM jbasis_contract_basicinfo_deatil
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contractNo!=null and contractNo!=''">
+	            AND contract_no = #{contractNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="typeCode!=null and typeCode!=''">
+	            AND type_code = #{typeCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="incomeandexpType!=null and incomeandexpType!=''">
+	            AND incomeandexp_type = #{incomeandexpType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="ruleCode!=null and ruleCode!=''">
+	            AND rule_code = #{ruleCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isBalance!=null and isBalance!=''">
+	            AND is_balance = #{isBalance, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isEstimate!=null and isEstimate!=''">
+	            AND is_estimate = #{isEstimate, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<select id="retrieveViewJbasisContractBasicinfoDeatil" parameterType="com.lmis.jbasis.contractBasicinfo.model.ViewJbasisContractBasicinfoDeatil" resultMap="ViewJbasisContractBasicinfoDeatilMap">
+		SELECT <include refid="ViewJbasisContractBasicinfoDeatil_Column_List" /> FROM view_jbasis_contract_basicinfo_deatil
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contractNo!=null and contractNo!=''">
+	            AND contract_no = #{contractNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="typeCode!=null and typeCode!=''">
+	            AND type_code = #{typeCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="typeCodeDisplay!=null and typeCodeDisplay!=''">
+	            AND type_code_display = #{typeCodeDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="incomeandexpType!=null and incomeandexpType!=''">
+	            AND incomeandexp_type = #{incomeandexpType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="incomeandexpTypeDisplay!=null and incomeandexpTypeDisplay!=''">
+	            AND incomeandexp_type_display = #{incomeandexpTypeDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="ruleCode!=null and ruleCode!=''">
+	            AND rule_code = #{ruleCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="ruleCodeDisplay!=null and ruleCodeDisplay!=''">
+	            AND rule_code_display = #{ruleCodeDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isBalance!=null and isBalance!=''">
+	            AND is_balance = #{isBalance, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isBalanceDisplay!=null and isBalanceDisplay!=''">
+	            AND is_balance_display = #{isBalanceDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isEstimate!=null and isEstimate!=''">
+	            AND is_estimate = #{isEstimate, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isEstimateDisplay!=null and isEstimateDisplay!=''">
+	            AND is_estimate_display = #{isEstimateDisplay, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.jbasis.contractBasicinfo.model.JbasisContractBasicinfoDeatil">
+		UPDATE jbasis_contract_basicinfo_deatil
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="contractNo!=null and contractNo!=''">
+	            contract_no = #{contractNo, jdbcType=VARCHAR},
+	        </if>
+	        <if test="typeCode!=null and typeCode!=''">
+	            type_code = #{typeCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="incomeandexpType!=null and incomeandexpType!=''">
+	            incomeandexp_type = #{incomeandexpType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="ruleCode!=null and ruleCode!=''">
+	            rule_code = #{ruleCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="isBalance!=null and isBalance!=''">
+	            is_balance = #{isBalance, jdbcType=VARCHAR},
+	        </if>
+	        <if test="isEstimate!=null and isEstimate!=''">
+	            is_estimate = #{isEstimate, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.jbasis.contractBasicinfo.model.JbasisContractBasicinfoDeatil">
+		UPDATE jbasis_contract_basicinfo_deatil
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	contract_no = #{contractNo, jdbcType=VARCHAR},
+        	type_code = #{typeCode, jdbcType=VARCHAR},
+        	incomeandexp_type = #{incomeandexpType, jdbcType=VARCHAR},
+        	rule_code = #{ruleCode, jdbcType=VARCHAR},
+        	is_balance = #{isBalance, jdbcType=VARCHAR},
+        	is_estimate = #{isEstimate, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.jbasis.contractBasicinfo.model.JbasisContractBasicinfoDeatil">
+		UPDATE jbasis_contract_basicinfo_deatil
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.jbasis.contractBasicinfo.model.JbasisContractBasicinfoDeatil">
+		UPDATE jbasis_contract_basicinfo_deatil
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.jbasis.contractBasicinfo.model.JbasisContractBasicinfoDeatil">
+		DELETE FROM jbasis_contract_basicinfo_deatil
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</delete>
+</mapper>

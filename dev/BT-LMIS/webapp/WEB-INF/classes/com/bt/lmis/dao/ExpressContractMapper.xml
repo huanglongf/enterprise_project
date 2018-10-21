@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpressContractMapper" >
+	<select id="selectValidContractByOwner" parameterType="Object" resultType="Integer">
+		select
+			count(1)
+		from
+			tb_contract_basicinfo
+		where
+			validity = 1
+		and
+			contract_owner = #{contract_owner }
+	</select>
+	<update id="updateValidity" parameterType="Object">
+		update tb_contract_basicinfo 
+		set 
+		    update_time = now(),
+		    update_user = #{currentUser},
+		    validity = #{validity}
+		where id = #{id}
+	</update>
+	
+	<update id="updateWarehouseExpressData" parameterType="Object">
+		update tb_warehouse_express_data 
+		set 
+		    settle_flag = 0 
+		where settle_flag!=0
+	</update>
+	
+	<select id="findValidContract" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			contract_no,
+			contract_name,
+			contract_type,
+			a.contract_owner,
+			b.transport_name,
+			contract_version,
+			contract_start,
+			contract_end,
+			settle_date,
+			validity,
+			contact,
+			tel
+		from 
+			tb_contract_basicinfo a
+		left join(
+			select
+				transport_code,
+				transport_name
+			from
+				tb_transport_vendor
+			where
+				transport_type = 1
+		) b on a.contract_owner = b.transport_code
+		<where>
+			validity = 1
+			<if test="contractType != null">
+				and contract_type = #{contractType}
+			</if>
+			<if test="contractOwner != null">
+				and contract_owner = #{contractOwner}
+			</if>
+		</where>
+	</select>
+	<insert id="addECM" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_contract_basicinfo
+		(
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			contract_no,
+			contract_name,
+			contract_type,
+			contract_owner,
+			contract_version,
+			contract_start,
+			contract_end,
+			settle_date,
+			validity,
+			contact,
+			tel
+		)values(
+			now(),
+			#{currentUser},
+			now(),
+			#{currentUser},
+			#{contractCode},
+			#{contractName},
+			#{contractType},
+			#{belongTo},
+			#{contractVersion},
+			#{startDate},
+			#{endDate},
+			#{balanceDate},
+			#{validity},
+			#{contact},
+			#{tel}
+		)
+	</insert>
+	<select id="findByCnoAndCvsAndCtp" parameterType="Object" resultType="java.util.HashMap">
+		select 
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			contract_no,
+			contract_name,
+			contract_type,
+			contract_owner,
+			contract_version,
+			contract_start,
+			contract_end,
+			settle_date,
+			validity,
+			contact,
+			tel
+		from 
+			tb_contract_basicinfo
+		where 
+			contract_no = #{contract_no} 
+		and contract_type = #{contract_type} 
+		and contract_version = #{contract_version}
+	</select>
+	<select id="findById" parameterType="Object" resultType="java.util.HashMap">
+		select 
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			contract_no,
+			contract_name,
+			contract_type,
+			contract_owner,
+			contract_version,
+			contract_start,
+			contract_end,
+			settle_date,
+			validity,
+			contact,
+			tel
+		from 
+			tb_contract_basicinfo
+		where
+			id=#{id}
+	</select>
+  	<update id = "updateECM" parameterType = "java.util.HashMap" >
+		update tb_contract_basicinfo 
+		set 
+		    update_time = now(),
+		    update_user = #{currentUser},
+		    contract_no = #{contractCode},
+		    contract_name = #{contractName},
+		    contract_version = #{contractVersion},
+		    settle_date = #{balanceDate},
+		    contact = #{contact},
+		    tel = #{tel},
+		    validity = #{validity}
+		where id = #{id}
+	</update>
+</mapper>   

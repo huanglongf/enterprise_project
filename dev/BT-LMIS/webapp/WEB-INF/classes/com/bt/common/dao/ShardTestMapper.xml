@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.common.dao.ShardTestMapper">
+	<resultMap id="ShardTestMap" type="com.bt.common.model.ShardTest">
+		<result column="id" property="id"/>
+		<result column="time" property="time"/>
+	</resultMap>
+	<insert id="insert" parameterType="com.bt.common.model.ShardTest">
+		INSERT INTO shard_test (id, time) VALUES (UUID(), #{time })
+	</insert>
+</mapper>   

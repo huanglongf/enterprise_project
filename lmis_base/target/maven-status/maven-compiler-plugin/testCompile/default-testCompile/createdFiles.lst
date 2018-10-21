@@ -1,0 +1,14 @@
+com\lmis\setup\pageElement\dao\SetupPageElementMapperTest.class
+com\lmis\jbasis\store\dao\JbasisStoreMapperTest.class
+com\lmis\sys\codeRule\CodeTest.class
+com\lmis\sys\message\MessageTest.class
+com\lmis\setup\pageLayout\dao\SetupPageLayoutMapperTest.class
+com\lmis\sys\codeRule\InfoTest.class
+com\lmis\setup\pageElement\service\SetupPageElementServiceInterfaceTest.class
+com\lmis\bill\contract\ContractTest.class
+com\lmis\setup\constantSql\dao\SetupConstantSqlMapperTest.class
+com\lmis\setup\pageTable\service\SetupPageTableServiceTest.class
+com\lmis\setup\pageTable\dao\SetupPageTableMapperTest.class
+com\lmis\setup\pageLayout\service\SetupPageLayoutServiceInterfaceTest.class
+com\lmis\sys\codeRule\RuleTest.class
+com\lmis\setup\constant\dao\SetupConstantMapperTest.class

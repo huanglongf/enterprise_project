@@ -1,0 +1,174 @@
+package com.lmis.basis.fixedAssetsDetail.service.impl;
+
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+import com.lmis.basis.fixedAssetsAmt.dao.BasisFixedAssetsAmtMapper;
+import com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.common.dynamicSql.service.DynamicSqlServiceInterface;
+import com.lmis.constant.LBASEConstant;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.lmis.basis.fixedAssetsDetail.dao.BasisFixedAssetsDetailMapper;
+import com.lmis.basis.fixedAssetsDetail.model.BasisFixedAssetsDetail;
+import com.lmis.basis.fixedAssetsDetail.model.ViewBasisFixedAssetsDetail;
+import com.lmis.basis.fixedAssetsDetail.service.BasisFixedAssetsDetailServiceInterface;
+
+/** 
+ * @ClassName: BasisFixedAssetsDetailServiceImpl
+ * @Description: TODO(固定资产明细业务层实现类)
+ * @author codeGenerator
+ * @date 2018-03-23 17:12:34
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class BasisFixedAssetsDetailServiceImpl<T extends BasisFixedAssetsDetail> implements BasisFixedAssetsDetailServiceInterface<T> {
+	
+	@Resource(name="dynamicSqlServiceImpl")
+	DynamicSqlServiceInterface<BasisFixedAssetsDetail> dynamicSqlService;
+	@Autowired
+	private BasisFixedAssetsDetailMapper<T> basisFixedAssetsDetailMapper;
+
+    @Autowired
+	private HttpSession session;
+    @Autowired
+	private BasisFixedAssetsAmtMapper<BasisFixedAssetsAmt> basisFixedAssetsAmtMapperMapper;
+
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		return dynamicSqlService.executeSelect(dynamicSqlParam, pageObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		LmisResult<?> _lmisResult = dynamicSqlService.executeSelect(dynamicSqlParam);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(_lmisResult.getCode())) return _lmisResult;
+		List<Map<String, Object>> result =  (List<Map<String, Object>>) _lmisResult.getData();
+		if(ObjectUtils.isNull(result)) throw new Exception(LBASEConstant.EBASE000007);
+		if(result.size() != 1) throw new Exception(LBASEConstant.EBASE000008);
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, result.get(0));
+	}
+
+	@Override
+	public LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+			
+		// TODO(业务校验)
+		
+		// 插入操作
+		return dynamicSqlService.executeInsert(dynamicSqlParam);
+	}
+
+	@Override
+	public LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+			
+		// TODO(业务校验)
+		
+		// 更新操作
+		return dynamicSqlService.executeUpdate(dynamicSqlParam);
+	}
+
+	@Override
+	public LmisResult<?> deleteBasisFixedAssetsDetail(T t) throws Exception {
+			
+		// TODO(业务校验)
+		
+		// 删除操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, basisFixedAssetsDetailMapper.logicalDelete(t));
+	}
+
+	@Override
+	public LmisResult<?> selectBasisFixedAssetsDetail(ViewBasisFixedAssetsDetail detail, LmisPageObject pageObject)
+			throws Exception {
+		Page<Map<String, Object>> page = PageHelper.startPage(pageObject.getPageNum(), pageObject.getPageSize());
+		basisFixedAssetsDetailMapper.selectBasisFixedAssetsDetail(detail);
+		LmisResult<Map<String, Object>> lmisResult = new LmisResult<Map<String, Object>>();
+		lmisResult.setMetaAndData(page.toPageInfo());
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		return lmisResult;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> basisFixedAssetsScrap(String assetsCode, String expiryDate,String version) throws Exception {
+		if(ObjectUtils.isNull(assetsCode)||ObjectUtils.isNull(expiryDate)) throw new Exception(LBASEConstant.EBASE000066);
+		DateTimeFormatter strToDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate tempExpiryDate = LocalDate.parse(expiryDate,strToDateFormatter);
+		int month = tempExpiryDate.getMonthValue();
+		int year = tempExpiryDate.getYear();
+		BasisFixedAssetsAmt basisFixedAssetsAmt = new BasisFixedAssetsAmt();
+		basisFixedAssetsAmt.setIsDisabled(false);
+		basisFixedAssetsAmt.setIsDeleted(false);
+		basisFixedAssetsAmt.setYearCode("year"+"_"+year);
+		basisFixedAssetsAmt.setTimeCode("month"+"_"+month);
+		basisFixedAssetsAmt.setAssetsCode(assetsCode);
+		List<BasisFixedAssetsAmt> retrieveBasisFixedAssetsAmts = basisFixedAssetsAmtMapperMapper.retrieve(basisFixedAssetsAmt);
+
+		if(retrieveBasisFixedAssetsAmts.size()>0){//报废日期小于原先预定的报废日期   禁用报废日期之后的所有月份直到原先报废日期
+			int changeYear = year;
+			while (true){
+				basisFixedAssetsAmt.setYearCode("year"+"_"+changeYear);
+				basisFixedAssetsAmt.setTimeValue(null);
+				if(changeYear==year){
+					basisFixedAssetsAmt.setTimeValue(month);
+				}
+				List<BasisFixedAssetsAmt> basisFixedAssetsAmts = basisFixedAssetsAmtMapperMapper.selectByTimeValue(basisFixedAssetsAmt);
+				if(basisFixedAssetsAmts.size()==0){
+					break;
+				}else{
+					for (BasisFixedAssetsAmt assetsAmt :basisFixedAssetsAmts){
+						assetsAmt.setIsDisabled(true);
+						basisFixedAssetsAmtMapperMapper.update(assetsAmt);
+					}
+					changeYear++;
+					basisFixedAssetsAmt.setTimeValue(null);
+					basisFixedAssetsAmt.setYearCode("year"+"_"+year);
+				}
+			}
+
+		}else{//报废日期大于原先预定的报废日期
+			throw new Exception(LBASEConstant.EBASE000072);
+		}
+	    BasisFixedAssetsDetail basisFixedAssetsDetail = new BasisFixedAssetsDetail();
+		basisFixedAssetsDetail.setIsDeleted(false);
+		basisFixedAssetsDetail.setIsDisabled(false);
+		basisFixedAssetsDetail.setAssetsCode(assetsCode);
+		List<T> list = basisFixedAssetsDetailMapper.retrieve((T)basisFixedAssetsDetail);
+		LmisResult<Map<String, Object>> lmisResult = new LmisResult<>();
+		if (list.size()==0) throw  new Exception(LBASEConstant.EBASE000073);
+		BasisFixedAssetsDetail updateRecord = list.get(0);
+	     updateRecord.setAssetsStatus("fixed_assets_status_ybf");
+		updateRecord.setExpiryDate(expiryDate);
+		//创建人
+		updateRecord.setCreateBy(session.getAttribute("lmisUserId").toString());
+		//更新人
+		updateRecord.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		//所属机构
+		updateRecord.setPwrOrg(session.getAttribute("lmisUserOrg").toString());
+		updateRecord.setVersion(Integer.parseInt(version));
+		if (basisFixedAssetsDetailMapper.update((T)updateRecord)==0){
+			throw new Exception(LBASEConstant.EBASE000074);
+		}
+
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		lmisResult.setMessage("保存成功");
+		return lmisResult;
+	}
+
+
+
+}

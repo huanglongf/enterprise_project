@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.radar.dao.AreaRadarMapper" >
+	<select id= "getRecords" parameterType= "Object" resultType= "com.bt.radar.model.Area" >
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			area_code,
+			area_name,
+			level,
+			pid,
+			haschild
+		from
+			tb_area
+		where pid= (
+			select
+				id
+			from
+				tb_area
+			where
+				area_code= #{area_code }
+		)
+		order by id
+	</select>
+	<select id= "findRecords" parameterType= "com.bt.radar.model.Area" resultType= "com.bt.radar.model.Area" >
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			area_code,
+			area_name,
+			level,
+			pid,
+			haschild
+		from
+			tb_area
+		<trim prefix= "WHERE" prefixOverrides= "AND|OR" >
+			<if test= "area_code != null and area_code != ''" >
+				AND area_code= #{area_code }
+			</if>
+			<if test= "area_name != null and area_name != ''" >
+				AND area_name= #{area_name }
+			</if>
+			<if test= "level != null and level != ''" >
+				AND level= #{level }
+			</if>
+			<if test= "pid != null and pid != ''" >
+				AND pid= #{pid }
+			</if>
+			<if test= "haschild != null and haschild != ''" >
+				AND haschild= #{haschild }
+			</if>
+    	</trim>
+    	order by id
+	</select>
+
+	<select id= "findRecordsByP_code" parameterType= "com.bt.radar.model.Area" resultType= "com.bt.radar.model.Area" >
+		select
+			a.id,
+			a.area_code,
+			a.area_name,
+			a.level,
+			a.pid,
+			a.haschild
+		from
+			tb_area a , tb_area b where b.id=a.pid
+			<if test= "area_code != null and area_code != ''" >
+				AND b.area_code = #{area_code }
+			</if>
+			<if test= "area_name != null and area_name != ''" >
+				AND b.area_name = #{area_name }
+			</if>
+    	order by id
+	</select>
+	<select id= "findLikeArea" parameterType= "com.bt.radar.model.Area" resultType= "com.bt.radar.model.Area" >
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			area_code,
+			area_name,
+			level,
+			pid,
+			haschild
+		from
+			tb_area
+		<trim prefix= "WHERE" prefixOverrides= "AND|OR" >
+			<if test= "area_code != null and area_code != ''" >
+				AND area_code= #{area_code }
+			</if>
+			<if test= "area_name != null and area_name != ''" >
+				AND area_name like CONCAT('%', #{area_name}, '%')
+			</if>
+			<if test= "level != null and level != ''" >
+				AND level= #{level }
+			</if>
+			<if test= "pid != null and pid != ''" >
+				AND pid= #{pid }
+			</if>
+			<if test= "haschild != null and haschild != ''" >
+				AND haschild= #{haschild }
+			</if>
+    	</trim>
+    	order by id
+	</select>
+</mapper>   

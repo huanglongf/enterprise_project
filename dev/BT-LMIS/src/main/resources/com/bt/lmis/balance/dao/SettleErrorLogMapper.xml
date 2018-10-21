@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.SettleErrorLogMapper">
+	<insert id="insert" parameterType="com.bt.lmis.balance.model.SettleErrorLog">
+		INSERT INTO tb_settle_error_result (
+			create_time,
+			create_by,
+			contract_id,
+			contract_type,
+			fee_type,
+			settlement_object,
+			error_log,
+			remark,
+			default1,
+			default2
+			
+		) values (
+			now(),
+			'TIMER',
+			#{contractId },
+			#{contractType },
+			#{feeType },
+			#{settlementObject },
+			#{errorLog },
+			#{remark },
+			#{default1 },
+			#{default2 }
+			
+		)
+	</insert>
+</mapper>   

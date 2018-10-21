@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.radar.dao.AgeingMasterMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.radar.model.AgeingMaster" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="ageing_name" property="ageingName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ageing_name, create_time, create_user, remark, status,store_name,store_code,update_time,update_user
+  </sql>
+  
+  
+  <sql id="where_Clause">
+	where 1=1
+	<trim  suffixOverrides="," >
+ 		<if test="id != null and id != ''" >
+    		and id =  #{id}
+	</if>
+	<if test="updateTime != null and updateTime != ''" >
+    		and update_time =  #{updateTime}
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		and update_user =  #{updateUser}
+	</if>
+ 		<if test="ageingName != null and ageingName != ''" >
+    		and ageing_name like CONCAT('%', #{ageingName}, '%')
+	</if>
+ 		<if test="createTime != null and createTime != ''" >
+    		and create_time =  #{createTime}
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		and create_user =  #{createUser}
+	</if>
+ 		<if test="remark != null and remark != ''" >
+    		and remark like CONCAT('%', #{remark}, '%')
+	</if>
+ 		<if test="status != null and status != ''" >
+    		and status =  #{status}
+	</if>
+ 		<if test="storeCode != null and storeCode != ''" >
+    		and store_code =  #{storeCode}
+	</if>
+ 		<if test="storeName != null and storeName != ''" >
+    		and store_name =  #{storeName}
+	</if>
+	</trim>
+	</sql>
+	
+	<!-- 根据主键查询 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_master
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  
+   <!-- 满足条件的表集合 -->
+  <select id="selectByAgeingName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_master
+    where  ageing_name =  #{ageingName,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 满足条件的表集合 -->
+  <select id="queryAgeingMaster" resultMap="BaseResultMap" parameterType="com.bt.radar.model.AgeingMaster" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_master
+    <include refid="where_Clause"/>
+    ORDER BY create_time DESC
+	LIMIT #{firstResult }, #{maxResult }
+  </select>
+  <select id="queryAgeingMasterById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_master
+    where id=#{id,jdbcType=VARCHAR}
+  </select>
+ 
+  
+  <!--依据条件统计表总数-->
+  <select id="countAllAgeingMaster" resultType="java.lang.Integer" parameterType="com.bt.radar.model.AgeingMaster" >
+    select count(1) from er_ageing_master
+    <include refid="where_Clause"/>
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from er_ageing_master
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.bt.radar.model.AgeingMaster" >
+    insert into er_ageing_master (id, store_code, 
+      store_name,ageing_name, create_time, 
+      create_user, remark, status,update_time,update_user
+      )
+    values (#{id,jdbcType=VARCHAR},#{storeCode,jdbcType=VARCHAR}, 
+      #{storeName,jdbcType=VARCHAR}, #{ageingName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP},
+      #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <!-- 插入数据 -->
+  <insert id="insertAgeingMaster" parameterType="com.bt.radar.model.AgeingMaster" >
+    insert into er_ageing_master (id, store_code, 
+      store_name,ageing_name, create_time, 
+      create_user, remark, status,update_time,update_user
+      )
+    values (#{id,jdbcType=VARCHAR},#{storeCode,jdbcType=VARCHAR}, 
+      #{storeName,jdbcType=VARCHAR}, #{ageingName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP},
+      #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
+  <insert id="insertSelective" parameterType="com.bt.radar.model.AgeingMaster" >
+    insert into er_ageing_master
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="ageingName != null" >
+        ageing_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if><if test="updateTime != null and updateTime != ''" >
+    		update_time,
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		update_user,
+	</if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+       <if test="storeCode != null" >
+        store_code,
+      </if>
+      <if test="storeName != null" >
+        store_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="ageingName != null" >
+        #{ageingName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null and updateTime != ''" >
+    		#{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		#{updateUser},
+	</if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+        <if test="storeCode != null" >
+        #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.radar.model.AgeingMaster" >
+    update er_ageing_master
+    <set >
+      <if test="ageingName != null" >
+        ageing_name = #{ageingName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null and updateTime != ''" >
+    		 update_time =  #{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		 update_user =  #{updateUser},
+	</if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+       <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.radar.model.AgeingMaster" >
+    update er_ageing_master
+    set ageing_name = #{ageingName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+       store_code = #{storeCode,jdbcType=VARCHAR},
+      store_name = #{storeName,jdbcType=VARCHAR},
+       update_time =#{updateTime,jdbcType=TIMESTAMP},
+      update_user=#{updateUser,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <!--批量删除-->
+  <delete id="delBatchAgeingMaster" parameterType="java.util.List">
+    DELETE FROM `er_ageing_master` WHERE id IN
+    <foreach collection="masterIdList" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+</mapper>

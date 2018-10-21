@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.WarningRoutestatusListMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.radar.model.WarningRoutestatusList" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="transport_code" property="transport_code"/>
+	<result column="routestatus_code" property="routestatus_code"/>
+	<result column="warningtype_code" property="warningtype_code"/>
+	<result column="dl_flag" property="dl_flag"/>
+</resultMap>
+       
+<!-- er_warning_routestatus_list table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,transport_code,routestatus_code,warningtype_code,dl_flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="transport_code != null and transport_code != ''" >
+	    and transport_code =  #{transport_code}
+	</if>
+	 	<if test="routestatus_code != null and routestatus_code != ''" >
+	    and routestatus_code =  #{routestatus_code}
+	</if>
+	 	<if test="warningtype_code != null and warningtype_code != ''" >
+	    and warningtype_code =  #{warningtype_code}
+	</if>
+	<if test="dl_flag != null" >
+	    and dl_flag =  #{dl_flag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入预警状态维护列表 -->
+<insert id="insert" parameterType="com.bt.radar.model.WarningRoutestatusList" >
+  insert into er_warning_routestatus_list(id,create_time,create_user,update_time,update_user,transport_code,routestatus_code,warningtype_code,dl_flag)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{transport_code},#{routestatus_code},#{warningtype_code},#{dl_flag})
+</insert>
+
+<!-- 修改预警状态维护列表-->  
+ <update id="update" parameterType="com.bt.radar.model.WarningRoutestatusList" >
+  update er_warning_routestatus_list set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},transport_code=#{transport_code},routestatus_code=#{routestatus_code},warningtype_code=#{warningtype_code},dl_flag=#{dl_flag} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改预警状态维护列表-->
+<update id="updateBySelective" parameterType="com.bt.radar.model.WarningRoutestatusList" >
+	update er_warning_routestatus_list set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="transport_code != null  and transport_code != '' ">
+		transport_code=#{transport_code},
+	</if>
+	<if test="routestatus_code != null  and routestatus_code != '' ">
+		routestatus_code=#{routestatus_code},
+	</if>
+	<if test="warningtype_code != null  and warningtype_code != '' ">
+		warningtype_code=#{warningtype_code},
+	</if>
+	<if test="dl_flag != null  ">
+		dl_flag=#{dl_flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除预警状态维护列表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from er_warning_routestatus_list where id = #{id}
+</update>
+<!-- 批量删除预警状态维护列表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from er_warning_routestatus_list where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找预警状态维护列表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_warning_routestatus_list where id = #{id}
+</select>
+  	
+<!-- 预警状态维护列表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.WarningRoutestatusListQueryParam">
+	select count(1) from er_warning_routestatus_list 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的预警状态维护列表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.WarningRoutestatusListQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_warning_routestatus_list 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 预警状态维护列表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.WarningRoutestatusListQueryParam">
+	select count(1) from er_warning_routestatus_list 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的预警状态维护列表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.WarningRoutestatusListQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_warning_routestatus_list 
+	<include refid="where_Clause"/>
+</select>
+  	
+  	<!-- 检查表内是否已经存在 -->                                          
+ <select id="checkExisit" resultType="java.lang.Integer"  parameterType="com.bt.radar.controller.form.WarningRoutestatusListQueryParam">
+	select count(1) as count  from er_warning_routestatus_list
+	where 1=1
+    	<if test="transport_code != null and transport_code != ''" >	
+	    and transport_code =#{transport_code}
+	         </if>
+	         <if test="routestatus_code != null and routestatus_code != ''" >	
+	    and routestatus_code =#{routestatus_code}
+	         </if>
+	          <if test="warningtype_code != null and warningtype_code != ''" >	
+	    and warningtype_code =#{warningtype_code}
+	         </if>
+</select>
+
+<select id="getRecords" parameterType="com.bt.radar.model.WarningRoutestatusList" resultType="com.bt.radar.model.WarningRoutestatusList">
+	select
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		transport_code,
+		routestatus_code,
+		warningtype_code,
+		dl_flag
+	from
+		er_warning_routestatus_list
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		dl_flag = 1
+		<if test="transport_code != null and transport_code != ''">
+			AND transport_code = #{transport_code }
+		</if>
+		<if test="routestatus_code != null and routestatus_code != ''">
+			AND routestatus_code = #{routestatus_code }
+		</if>
+		<if test="warningtype_code != null and warningtype_code != ''">
+			AND warningtype_code = #{warningtype_code }
+		</if>
+   	</trim>	
+</select>
+</mapper>   

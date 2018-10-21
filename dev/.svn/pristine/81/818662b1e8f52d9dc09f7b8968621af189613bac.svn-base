@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.workOrder.dao.ShopGroupMapper" >
+	
+	<sql id="Base_Column_List">
+		a.id,
+		a.group_code,
+		a.group_name,
+		if(a.group_type=1,'销售运营','店铺客服') as group_type,
+		if(a.error_flag=1,'是','否') as error_flag,
+		a.remark,
+		if(a.status=1,'是','否') as status,
+		a.dFlag,
+		a.create_by,
+		a.create_time,
+		a.update_by,
+		a.update_time,
+		a.instruction,
+		a.if_Share,
+		if(a.if_Share=1,'是','否') as if_Share_name,
+		b.group_name as superior_group,
+		a.email,
+		a.is_wo_email
+	</sql>
+	<select id="querysGroup" resultType="java.util.Map" parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_shop_group a
+        LEFT JOIN tb_shop_group b ON a.superior = b.id
+		where 1=1
+		<if test="group_code != null and group_code != ''">
+				AND a.group_code LIKE CONCAT("%", #{group_code }, "%")
+		</if>
+		<if test="group_name != null and group_name != ''">
+				AND a.group_name LIKE CONCAT("%", #{group_name }, "%")
+		</if>
+		<if test="status != null  and status != '' ">
+			and a.status=#{status}
+		</if>
+			and a.id in(${team_id}) 
+		ORDER BY CREATE_time DESC
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+	<select id="queryGroup" resultType="java.util.Map" parameterType="java.util.HashMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		tb_shop_group a
+        LEFT JOIN tb_shop_group b ON a.superior = b.id
+		where 1=1
+		
+		<if test="group_code != null and group_code != ''">
+				AND a.group_code LIKE CONCAT("%", #{group_code }, "%")
+		</if>
+		<if test="group_name != null and group_name != ''">
+				AND a.group_name LIKE CONCAT("%", #{group_name }, "%")
+		</if>
+		<if test="status != null  and status != '' ">
+			and a.status=#{status}
+		</if>
+		<if test="group_type != null  and group_type != '' ">
+			and a.group_type=#{group_type}
+		</if>
+		<!-- and a.id in(${team_id}) -->
+		ORDER BY CREATE_time DESC
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+	<select id="countsGroup" resultType="Integer"  parameterType="com.bt.lmis.controller.form.GroupParam">
+		select
+		count(1)
+		from tb_shop_group
+		where 1=1
+		<if test="group_code != null and group_code != ''">
+				AND group_code LIKE CONCAT("%", #{group_code }, "%")
+		</if>
+		<if test="group_name != null and group_name != ''">
+				AND group_name LIKE CONCAT("%", #{group_name }, "%")
+		</if>
+		<if test="status != null  and status != '' ">
+			and status=#{status}
+		</if>
+		and id in(${team_id})
+	</select>
+	
+	<select id="countGroup" resultType="Integer"  parameterType="com.bt.lmis.controller.form.GroupParam">
+		select
+		count(1)
+		from tb_shop_group
+		where 1=1
+		<if test="group_code != null and group_code != ''">
+				AND group_code LIKE CONCAT("%", #{group_code }, "%")
+		</if>
+		<if test="group_name != null and group_name != ''">
+				AND group_name LIKE CONCAT("%", #{group_name }, "%")
+		</if>
+		<if test="group_type != null  and group_type != '' ">
+			and group_type=#{group_type}
+		</if>
+		<!-- and id in(${team_id}) -->
+	</select>
+	
+	
+		<select id="querySeniorQueryGroupSup" resultType="java.util.Map" parameterType="com.bt.lmis.controller.form.GroupParam">
+		SELECT id,group_code,group_name,superior,status,group_type from tb_shop_group where id in(${team_id}) and status=1
+	</select>
+	
+	<select id="getGroupTypeById" resultType="java.util.Map" parameterType="java.lang.String">
+		SELECT id,group_type from tb_shop_group where id =#{id} and status=1
+	</select>
+	
+		<select id="queryWkGroupSupAndUpdate" resultType="java.util.Map" parameterType="java.util.HashMap">
+		SELECT id,group_name,superior from tb_shop_group where id!=#{id} and status=1
+	</select>
+	
+		<select id="findWorkOrderType" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select id,name,CODE from tb_shop_wk_type where 1=1
+	</select>
+	
+		<select id="findWkType" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		SELECT name type_name,code type_code from wk_type WHERE flag= 1 AND share_flag=1 ORDER BY update_time DESC
+	</select>
+	
+		<select id="queryLogisticsCode" resultType="java.util.Map" parameterType="java.util.HashMap">
+		SELECT transport_name,transport_code from tb_transport_vendor WHERE validity= 1 ORDER BY update_time DESC
+	</select>
+	
+		<select id="findStore" resultType="java.util.Map" parameterType="java.util.HashMap">
+		SELECT store_name,store_code from tb_store WHERE validity= 1 ORDER BY update_time DESC
+	</select>
+	
+		<select id="workOrderAndLevel" resultType="java.util.Map" parameterType="java.util.HashMap">
+		SELECT  wk_type,LEVEL from tb_shop_wk_order_type t where t.wk_type=#{code} and status=1
+	</select>
+	
+		<select id="querysGroupById" parameterType="java.util.Map" resultType="com.bt.lmis.model.Group">
+		select
+		superior
+		from
+		tb_shop_group a
+		where 1=1
+		and id=#{id} and status=1
+	</select>
+		<select id="getSOteam" parameterType="java.lang.String" resultType="java.util.Map">
+		select
+		id,
+		group_name
+		from
+		tb_shop_group 
+		where 1=1
+		<if test="groupType != null  and groupType != '' ">
+			and group_type=#{groupType}
+		</if>
+			and status=1
+	</select>
+	
+	
+	<select id="getSrorePage" parameterType="com.bt.lmis.model.StoreBean" resultType="java.util.HashMap">
+		select
+			tb_shop_group_store_power.id,
+			tb_shop_group_store_power.create_by,
+			tb_shop_group_store_power.create_time,
+			tb_shop_group_store_power.update_by,
+			tb_shop_group_store_power.update_time,
+			tb_shop_group_store_power.group,
+			tb_store.store_code,
+			tb_shop_group_store_power.store,
+			tb_store.store_name
+			from tb_shop_group_store_power,tb_store 
+			where 1=1
+			and tb_shop_group_store_power.store = tb_store.store_code
+			and tb_shop_group_store_power.group=#{g_id}
+		ORDER BY tb_shop_group_store_power.create_time DESC
+    	LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+	<select id="getWorkPowerBywkType" parameterType="com.bt.lmis.model.StoreBean" resultType="java.util.HashMap">
+		select
+			p.id,
+			p.group_id,
+			t.code,
+			t.name
+			from tb_shop_group_work_power p,wk_type t 
+			where 1=1
+			and p.work_type = t.code
+			and p.group_id=#{group_id}
+		ORDER BY p.create_time DESC
+	</select>
+	
+	
+	<select id="selectStoreCount" parameterType="com.bt.lmis.model.StoreBean" resultType="java.lang.Integer">
+     select  count(1)
+     from  tb_shop_group_store_power,tb_store 
+     where 1=1
+			and tb_shop_group_store_power.store = tb_store.store_code
+			and tb_shop_group_store_power.group=#{g_id}
+	</select>
+		
+	<update id="updateGroupModel" parameterType="java.util.HashMap">
+		update tb_shop_group
+		set
+		update_time=now(),
+		instruction=#{instruction},
+		group_name=#{group_name},
+		group_type=#{group_type},
+		error_flag=#{error_flag},
+		if_Share=#{if_allot},
+		email=#{email},
+		is_wo_email=#{isWoEmail}
+		where id=#{id}
+	</update>
+	
+	
+	<select id="getEmpPage"  parameterType="java.util.Map"  resultType="java.util.Map">
+       select 
+         	s.name
+       	FROM
+			s_employee s ,wo_group_member w
+		WHERE
+			w.employee_id=s.id
+		AND
+       		w.group_id=#{team_id}	
+       LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+		<select id="selectEmpCount"  parameterType="java.util.Map"  resultType="java.util.Map">
+       select 
+         count(1)
+       FROM
+			s_employee s ,wo_group_member w
+		WHERE
+			w.employee_id=s.id
+		AND
+       		w.group_id=#{team_id}	
+       LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+	<select id="get_team_emp" parameterType="java.util.Map" resultType="java.util.Map">
+	  SELECT
+			t.id,
+			t.employee_number,
+			t.name,
+			t.username,
+		IF (
+			w.is_auto_allct = 0,
+			'否',
+		
+			IF (
+				w.is_auto_allct = 1,
+				'是',
+				'未知'
+			)
+		) AS isAutoAllc,	
+		IF (
+			t. STATUS = 0,
+			'禁用',
+		
+			IF (
+				t. STATUS = 1,
+				'启用',
+				'未知'
+			)
+		) AS status_name
+		FROM
+			s_employee t,
+			wo_group_member w
+		WHERE
+			w.employee_id = t.id
+		AND w.group_id = #{team_id}
+		AND t.id != #{owerId}
+		AND t.id != 1
+	</select>
+	
+	
+	<insert id="insertEmp"  parameterType="java.util.List">
+		insert into tb_shop_emp_import(
+		  bat_id,
+		  row_number,
+		  employee_number,
+		  username,
+		  name,
+		  email,
+		  createby,
+		  project_id,
+		  create_data,
+		  iphone
+		)values
+		<foreach collection="list" item="obj" index="index" separator=",">
+		(
+		  #{obj.bat_id},
+		  #{obj.row_number},
+		  #{obj.employee_number},
+		  #{obj.username},
+		  #{obj.name},
+		  #{obj.email},
+		  #{obj.createby},
+		  #{obj.project_id},
+		  now(),
+		  #{obj.iphone}
+		)
+		</foreach>
+	</insert>
+	
+	
+	<insert id="addEmpimportError"  parameterType="com.bt.lmis.model.StoreEmployee">
+		insert into tb_shop_emp_import(
+		  bat_id,
+		  row_number,
+		  employee_number,
+		  username,
+		  name,
+		  email,
+		  createby,
+		  project_id,
+		  create_data,
+		  iphone,
+		  pro_remark,
+		  pro_flag,
+		  is_auto_allct
+		  
+		)values
+		(
+		  #{bat_id},
+		  #{row_number},
+		  #{employee_number},
+		  #{username},
+		  #{name},
+		  #{email},
+		  #{createby},
+		  #{project_id},
+		  now(),
+		  #{iphone},
+		  #{proRemark},
+		  2,
+		  #{isAutoAllct}
+		)
+	</insert>
+	
+	
+	<select id="checkImport" parameterType="java.util.HashMap" resultType="java.util.HashMap" statementType="CALLABLE">
+		  {call pro_shop_import(
+			  #{bat_id,jdbcType=VARCHAR,mode=IN},
+			  #{out_result,jdbcType=VARCHAR,mode=OUT},
+			  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+	
+	<select id="query_export"  parameterType="java.lang.String"  resultType="java.util.Map">
+	   select 
+	   t.row_number as "行号",
+	   t.employee_number as "工号",
+	   t.username as "登录名" ,
+	   t.name as "昵称",
+	   t.iphone as "手机号",
+	   t.email as "邮箱",
+	   t.is_auto_allct as "是否自动分配0-否1-是",
+	   t.pro_remark as "原因"
+	   from tb_shop_emp_import t
+	  where t.pro_flag=2
+	      and t.bat_id=#{bat_id}
+	</select>
+	
+	<insert id="addGroupModel" parameterType="java.util.Map"  useGeneratedKeys="true" keyProperty="id">
+	  insert into tb_shop_group(
+	   group_code,
+	   group_name,
+	   if_Share,
+	   group_type,
+	   error_flag,
+	   status,
+	   dFlag,
+	   create_by,
+	   create_time,
+	   update_by,
+	   update_time,
+	   instruction,
+	   email,
+	   is_wo_email
+	  )values(
+	   #{group_code},
+	   #{group_name},
+	   #{if_share},
+	   #{group_type},
+	   #{error_flag},
+	   1,
+	   0,
+	   #{create_by},
+	   now(),
+	   #{update_by},
+	   now(),
+	   #{instruction},
+	   #{email},
+	   #{isWoEmail}
+	  )
+	</insert>
+	
+	
+	<insert id="addGroupMember" parameterType="java.util.Map" >
+	  insert into wo_group_member(
+	   id,
+	   create_time,
+	   create_by,
+	   update_time,
+	   update_by,
+	   group_id,
+	   employee_id,
+	   is_auto_allct
+	  )values(
+	   UUID(),
+	   now(),
+	   'admin',
+	   now(),
+	   'admin',
+	   #{id},
+	   1,
+	   0
+	  )
+	</insert>
+	
+	
+	<update id="updateDataRole"  parameterType="java.util.Map">
+	  update s_employee set team_id=concat(team_id,',',#{id}) where id=1
+	</update>
+	
+	 <select id="checkCountWorkCode" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		select count(1) from tb_shop_group t where 1=1
+		<if test="group_code != null  and group_code != '' "> and t.group_code=#{group_code} </if>
+		 and t.status=1
+	</select>
+	
+	<select id="checkCountWork" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		select count(1) from tb_shop_group t where 1=1
+		<if test="group_name != null  and group_name != '' "> and t.group_name=#{group_name} </if> 	 and t.status=1
+	</select>
+	
+	<select id="checkCountStore"  parameterType="java.util.Map" resultType="java.lang.Integer">
+	   select count(1) from tb_shop_group_store_power t where t.group=#{group} and t.store=#{store_code} and dFlag=1
+	</select>
+	
+	<select id="checkCountWorkType"  parameterType="java.util.Map" resultType="java.lang.Integer">
+	   select count(1) from tb_shop_group_work_power t where t.group_id=#{group_id} and t.work_type=#{work_type} and dFlag=1
+	</select>
+	
+	<insert id="addStore" parameterType="java.util.Map">
+	  insert into tb_shop_group_store_power 
+	  (
+	    create_by,
+	    create_time,
+	    update_by,
+	    update_time,
+	    tb_shop_group_store_power.group,
+	    tb_shop_group_store_power.store
+	  )
+	  values(
+	    #{create_by},
+	    now(),
+	    #{update_by},
+	    now(),
+	    #{group},
+	    #{store_code}
+	  )
+	</insert>
+	
+	<insert id="addWorkType" parameterType="java.util.Map">
+	  insert into tb_shop_group_work_power 
+	  (
+	    create_by,
+	    create_time,
+	    update_by,
+	    update_time,
+	    tb_shop_group_work_power.group_id,
+	    tb_shop_group_work_power.work_type
+	  )
+	  values(
+	    #{create_by},
+	    now(),
+	    #{update_by},
+	    now(),
+	    #{group_id},
+	    #{work_type}
+	  )
+	</insert>
+	
+	<update id="opEmp" parameterType="java.util.Map">
+	   update s_employee    set status=#{status} where id=#{id}
+	</update>
+	
+	<update id="opAuto" parameterType="java.util.Map">
+	   update wo_group_member set is_auto_allct=#{status} where employee_id =#{id} AND group_id =#{groupId}
+	</update>
+	
+	<select id="checkCountEmp" parameterType="java.util.Map"  resultType="java.util.Map">
+	   select count(1) as ct,t.name  from s_employee t where t.username=(select s.username from s_employee s where s.id=#{id}) and status=1
+	</select>
+	
+	<select id="getGroupData" parameterType="Object"  resultType="java.util.Map">
+	  select 
+		  id,
+		  group_code,
+		  group_name,
+		  group_type,
+		  error_flag,
+		  if_Share,
+		  instruction,
+		  status,
+		  email,
+		  is_wo_email
+	 from tb_shop_group t
+	 where t.id=#{id} 	 and t.status=1
+	</select>
+	
+	<delete id= "delBatchWorkPower" parameterType= "Object" >
+		delete from tb_shop_group_work_power where id in 
+		<foreach collection= "array" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	    	#{item }  
+	   	</foreach> 
+	</delete>
+	
+	<delete id= "delBatchStorePower" parameterType= "Object" >
+		delete from tb_shop_group_store_power where id in 
+		<foreach collection= "array" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	    	#{item }  
+	   	</foreach> 
+	</delete>
+	
+	
+	<select id="getIdByUsername" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			id from s_employee
+		WHERE
+			username=#{username}
+	</select>
+	<select id="getCountByEmpNum" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT
+			count(1) from s_employee
+		WHERE
+			employee_number=#{employee_number}
+	</select>
+	
+	<insert id="addWoGroupMember"  parameterType="com.bt.lmis.model.WoGroupMember">
+		INSERT INTO wo_group_member (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			group_id,
+			employee_id,
+			is_auto_allct
+		)
+		VALUES
+			(UUID(),
+			now(),
+			#{createby},
+			now(),
+			#{updateby},
+			#{groupId},
+			#{employeeId},
+			#{isAutoAllct}
+			)
+	</insert>
+	
+	<insert id="addEmployee"  useGeneratedKeys="true" keyProperty="empid" parameterType="com.bt.lmis.model.StoreEmployee">
+		INSERT INTO s_employee (
+			employee_number,
+			username,
+			name,
+			password,
+			email,
+			iphone,
+			status,
+			createtime,
+			createby,
+			updatetime,
+			updateby,
+			project_id,
+			token
+		)
+		VALUES
+			(
+			#{employee_number},
+			#{username},
+			#{name},
+			'E10ADC3949BA59ABBE56E057F20F883E',
+			#{email},
+			#{iphone},
+			1,
+			now(),
+			#{createby},
+			now(),
+			#{createby},
+			'STORE_CUSTOME',
+			1
+			)
+	</insert>
+	
+	<insert id="addEmpRole"  parameterType="java.lang.Integer">
+		INSERT INTO sr_employee_role (
+			 employeeid,
+          		roleid
+		)
+		VALUES(
+			#{empid},
+          	16  
+			)
+	</insert>
+	<select id="getCountByUserId" parameterType="com.bt.lmis.model.WoGroupMember" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			wo_group_member
+		WHERE
+			employee_id = #{employeeId}
+		AND group_id = #{groupId}
+	</select>
+	
+	
+	
+	<select id="queryTeamIdById" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT
+			group_id
+		FROM
+			wo_group_member
+		WHERE
+			employee_id = #{empid}
+	</select>
+	
+	<select id="queryCurrentGroupByWoId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			current_processor_group
+		FROM
+			wo_store_master
+		WHERE
+			id=#{woId}
+	</select>
+	
+	<select id="getGroupTypeByUserIduserId" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT
+			g.group_type
+		FROM
+			wo_group_member w,tb_shop_group g
+		WHERE
+			w.group_id=g.id
+		AND
+			w.employee_id=#{userId}
+		AND
+			w.employee_id!=1
+				 and g.status=1
+		GROUP BY 
+			w.employee_id
+	</select>
+	<delete id="delEmp" parameterType="java.util.Map">
+			DELETE
+			FROM
+				wo_group_member
+			WHERE
+				group_id = #{groupId}
+			AND employee_id = #{id}
+	</delete>
+	<select id="getCodeByName" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			store_code
+		FROM
+			tb_store
+		WHERE
+			store_name=#{storeName}
+	</select>
+     <update id="switchShopGroup" parameterType="java.lang.String">
+		 update tb_shop_group set status=#{status} where id=#{id}
+	 </update>
+
+	<delete id="delWkType" parameterType="java.lang.String">
+		DELETE FROM tb_shop_group_work_power WHERE group_id=#{groupId}
+	</delete>
+</mapper>

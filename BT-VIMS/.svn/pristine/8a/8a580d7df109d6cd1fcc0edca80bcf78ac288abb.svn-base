@@ -1,0 +1,17 @@
+package com.bt.vims.utils;
+
+import java.io.IOException;
+
+public class ShellUtils {
+	public static int executeShell(String filePath,String printName) {
+		int success = 0;
+		String command = "/home/print.sh" +" "+filePath+ " " + printName;
+		try {
+		    success = Runtime.getRuntime().exec(command).waitFor();
+		} catch (InterruptedException | IOException e) {
+			e.printStackTrace();
+		}
+		return success;
+	}
+	
+}

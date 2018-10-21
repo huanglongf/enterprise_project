@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.BalanceErrorLogMapper" >
+	<resultMap id="BaseResultMap" type="com.bt.lmis.model.BalanceErrorLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="subject_code" property="subject_code" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contract_id" jdbcType="INTEGER" />
+    <result column="pro_result_flag" property="pro_result_flag" jdbcType="VARCHAR" />
+    <result column="pro_result_info" property="pro_result_info" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="error_type" property="error_type" jdbcType="VARCHAR" />
+    <result column="default1" property="default1" jdbcType="VARCHAR" />
+    <result column="default2" property="default2" jdbcType="VARCHAR" />
+    <result column="create_by" property="create_by" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+  </resultMap>
+	<insert id= "addBalanceErrorLog" parameterType= "com.bt.lmis.model.BalanceErrorLog" >
+		insert into tb_settle_error_result
+		(
+			subject_code,
+			contract_id,
+			pro_result_flag,
+			pro_result_info,
+			remark,
+			<if test="error_type != null and error_type != ''">
+				error_type,
+			</if>
+			default1,
+			default2,
+			create_by,
+			create_time
+			
+		) values (
+			#{subject_code },
+			#{contract_id },
+			#{pro_result_flag },
+			#{pro_result_info },
+			#{remark },
+			<if test="error_type != null and error_type != ''">
+				#{error_type },
+			</if>
+			#{default1 },
+			#{default2 },
+			'SYSTEM',
+			now()
+			
+		)
+	</insert>
+	<sql id="Base_Column_List" >
+	    id, subject_code, contract_id, pro_result_flag, pro_result_info, remark, error_type, 
+	    default1, default2, create_by, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_settle_error_result
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPram" resultType="java.util.HashMap" parameterType="com.bt.lmis.balance.controller.form.BalanceErrorLogParam" >
+		    SELECT
+			a.pro_result_info,
+			a.contract_name,
+			b.*
+		FROM
+			(
+				SELECT
+					c.*, d.contract_name
+				FROM
+					(
+						SELECT
+							subject_code,
+							pro_result_info,
+							contract_id
+						FROM
+							tb_settle_error_result
+						WHERE 1=1
+							and error_type = #{error_type }
+					) c
+				LEFT JOIN tb_contract_basicinfo d ON c.contract_id = d.id
+			) a
+		INNER JOIN (
+			SELECT
+				cost_center,
+				store_code,
+				store_name,
+				warehouse_code,
+				warehouse,
+				transport_code,
+				transport_name,
+				delivery_order,
+				epistatic_order,
+				order_type,
+				convert(express_number using utf8) as express_number,
+				transport_direction,
+				itemtype_code,
+				itemtype_name,
+				transport_time,
+				collection_on_delivery,
+				order_amount,
+				sku_number,
+				weight,
+				length,
+				width,
+				higth,
+				volumn,
+				delivery_address,
+				province,
+				city,
+				state,
+				street,
+				detail_address,
+				CASE insurance_flag
+			WHEN 1 THEN
+				"是"
+			WHEN 0 THEN
+				"否"
+			ELSE
+				""
+			END AS insurance_flag,
+			CASE cod_flag
+		WHEN 1 THEN
+			"是"
+		WHEN 0 THEN
+			"否"
+		ELSE
+			""
+		END AS cod_flag
+		FROM
+			tb_warehouse_express_data
+		WHERE 1=1
+			<if test="cost_center != null and cost_center != ''">
+				and cost_center = #{cost_center }
+			</if>
+			<if test="store_name != null and store_name != ''">
+				and store_name = #{store_name }
+			</if>
+			<if test="warehouse != null and warehouse != ''">
+				and warehouse = #{warehouse }
+			</if>
+			<if test="transport_name != null and transport_name != ''">
+				and transport_name = #{transport_name }
+			</if>
+			<if test="itemtype_name != null and itemtype_name != ''">
+				and itemtype_name = #{itemtype_name }
+			</if>
+			<if test="express_number != null and express_number != ''">
+				and express_number = #{express_number }
+			</if>
+			<if test="epistatic_order != null and epistatic_order != ''">
+				and epistatic_order = #{epistatic_order }
+			</if>
+			<if test="delivery_address != null and delivery_address != ''">
+				and delivery_address = #{delivery_address }
+			</if>
+			<if test="province != null and province != ''">
+				and province = #{province }
+			</if>
+			<if test="city != null and city != ''">
+				and city = #{city }
+			</if>
+			<if test="state != null and state != ''">
+				and state = #{state }
+			</if>
+			<if test="startTime != null and startTime != ''">
+				<![CDATA[ and transport_time >= #{startTime } ]]>
+			</if>
+			<if test="endTime != null and endTime != ''">
+				<![CDATA[ and transport_time <= #{endTime } ]]>
+			</if>
+			<if test="error_type == 1">
+				and settle_flag = 2
+			</if>
+			<if test="error_type == 4">
+				and settle_client_flag = 2
+			</if>
+		) b ON a.subject_code = b.express_number
+		ORDER BY
+			a.pro_result_info,
+			a.contract_name,
+			b.store_code,
+			b.warehouse_code,
+			b.transport_code,
+			b.itemtype_code,
+			b.delivery_address,
+			b.province,
+			b.city,
+			b.state
+		limit #{firstResult }, #{maxResult }
+    
+  </select>
+  <select id="queryExport" resultType="java.util.HashMap" parameterType="com.bt.lmis.model.YFSettlementVo" >
+		   SELECT
+			a.pro_result_info as 处理结果信息,
+			a.contract_name as 合同名称,
+			b.cost_center as 成本中心,
+			b.store_code as 店铺编码,
+			b.store_name as 店铺名称,
+			b.warehouse_code as 仓库编码,
+			b.warehouse as 仓库名称,
+			b.transport_code as 承运商代码,
+			b.transport_name as 承运商,
+			b.delivery_order as 平台订单号,
+			b.epistatic_order as 前置单据号,
+			b.order_type as 订单类型,
+			b.express_number as 运单号,
+			CASE transport_direction 
+				WHEN 1 THEN
+					"反向"
+				WHEN 0 THEN
+					"正向"
+				ELSE
+					""
+			END AS 运输方向,
+			b.itemtype_code as 产品类型代码,
+			b.itemtype_name as 产品类型名称,
+			b.transport_time as 订单生成时间,
+			b.collection_on_delivery as 代收货款金额,
+			b.order_amount as 订单金额,
+			b.sku_number as 耗材SKU编码,
+			b.weight as 实际重量,
+			b.length as 长,
+			b.width as 宽,
+			b.higth as 高,
+			b.volumn as 体积,
+			b.delivery_address as 始发地,
+			b.province as 省,
+			b.city as 市,
+			b.state as 区,
+			b.street as 街道,
+			b.detail_address as 详细地址,
+			CASE insurance_flag
+				WHEN 1 THEN
+					"是"
+				WHEN 0 THEN
+					"否"
+				ELSE
+					""
+				END AS 是否保价,
+			CASE cod_flag
+				WHEN 1 THEN
+					"是"
+				WHEN 0 THEN
+					"否"
+				ELSE
+					""
+			END AS 是否cod
+		FROM
+			(
+				SELECT
+					c.*, d.contract_name
+				FROM
+					(
+						SELECT
+							subject_code,
+							pro_result_info,
+							contract_id
+						FROM
+							tb_settle_error_result
+						WHERE 1=1
+							and error_type = #{errorType}
+					) c
+				LEFT JOIN tb_contract_basicinfo d ON c.contract_id = d.id
+			) a
+		INNER JOIN (
+			SELECT
+				cost_center,
+				store_code,
+				store_name,
+				warehouse_code,
+				warehouse,
+				transport_code,
+				transport_name,
+				delivery_order,
+				epistatic_order,
+				order_type,
+				convert(express_number using utf8) as express_number,
+				transport_direction,
+				itemtype_code,
+				itemtype_name,
+				transport_time,
+				collection_on_delivery,
+				order_amount,
+				sku_number,
+				weight,
+				length,
+				width,
+				higth,
+				volumn,
+				delivery_address,
+				province,
+				city,
+				state,
+				street,
+				detail_address,
+				CASE insurance_flag
+			WHEN 1 THEN
+				"是"
+			WHEN 0 THEN
+				"否"
+			ELSE
+				""
+			END AS insurance_flag,
+			CASE cod_flag
+		WHEN 1 THEN
+			"是"
+		WHEN 0 THEN
+			"否"
+		ELSE
+			""
+		END AS cod_flag
+		FROM
+			tb_warehouse_express_data
+		WHERE 1=1
+			<if test="costCenter != null and costCenter != ''">
+				and cost_center = #{costCenter }
+			</if>
+			<if test="storeName != null and storeName != ''">
+				and store_name = #{storeName }
+			</if>
+			<if test="warehouse != null and warehouse != ''">
+				and warehouse = #{warehouse }
+			</if>
+			<if test="transportName != null and transportName != ''">
+				and transport_name = #{transportName }
+			</if>
+			<if test="itemtypeName != null and itemtypeName != ''">
+				and itemtype_name = #{itemtypeName }
+			</if>
+			<if test="expressNumber != null and expressNumber != ''">
+				and express_number = #{expressNumber }
+			</if>
+			<if test="epistaticOrder != null and epistaticOrder != ''">
+				and epistatic_order = #{epistaticOrder }
+			</if>
+			<if test="deliveryAddress != null and deliveryAddress != ''">
+				and delivery_address = #{deliveryAddress }
+			</if>
+			<if test="province != null and province != ''">
+				and province = #{province }
+			</if>
+			<if test="city != null and city != ''">
+				and city = #{city }
+			</if>
+			<if test="state != null and state != ''">
+				and state = #{state }
+			</if>
+			<if test="startTime != null and startTime != ''">
+				<![CDATA[ and transport_time >= #{startTime } ]]>
+			</if>
+			<if test="endTime != null and endTime != ''">
+				<![CDATA[ and transport_time <= #{endTime } ]]>
+			</if>
+			<if test="errorType == 1">
+				and settle_flag = 2
+			</if>
+			<if test="errorType == 4">
+				and settle_client_flag = 2
+			</if>
+		) b ON a.subject_code = b.express_number
+		ORDER BY
+			a.pro_result_info,
+			a.contract_name,
+			b.store_code,
+			b.warehouse_code,
+			b.transport_code,
+			b.itemtype_code,
+			b.delivery_address,
+			b.province,
+			b.city,
+			b.state
+    
+  </select>
+  <select id="totalCount" resultType="int" parameterType="com.bt.lmis.balance.controller.form.BalanceErrorLogParam" >
+		    SELECT
+			count(1)
+		FROM
+			(
+				SELECT
+					c.*, d.contract_name
+				FROM
+					(
+						SELECT
+							subject_code,
+							pro_result_info,
+							contract_id
+						FROM
+							tb_settle_error_result
+						WHERE 1=1
+							and error_type = #{error_type }
+					) c
+				LEFT JOIN tb_contract_basicinfo d ON c.contract_id = d.id
+			) a
+		INNER JOIN (
+			SELECT
+				cost_center,
+				store_code,
+				store_name,
+				warehouse_code,
+				warehouse,
+				transport_code,
+				transport_name,
+				delivery_order,
+				epistatic_order,
+				order_type,
+				express_number,
+				transport_direction,
+				itemtype_code,
+				itemtype_name,
+				transport_time,
+				collection_on_delivery,
+				order_amount,
+				sku_number,
+				weight,
+				length,
+				width,
+				higth,
+				volumn,
+				delivery_address,
+				province,
+				city,
+				state,
+				street,
+				detail_address,
+				CASE insurance_flag
+			WHEN 1 THEN
+				"是"
+			WHEN 0 THEN
+				"否"
+			ELSE
+				""
+			END AS insurance_flag,
+			CASE cod_flag
+		WHEN 1 THEN
+			"是"
+		WHEN 0 THEN
+			"否"
+		ELSE
+			""
+		END AS cod_flag
+		FROM
+			tb_warehouse_express_data
+		WHERE 1=1
+			<if test="cost_center != null and cost_center != ''">
+				and cost_center = #{cost_center }
+			</if>
+			<if test="store_name != null and store_name != ''">
+				and store_name = #{store_name }
+			</if>
+			<if test="warehouse != null and warehouse != ''">
+				and warehouse = #{warehouse }
+			</if>
+			<if test="transport_name != null and transport_name != ''">
+				and transport_name = #{transport_name }
+			</if>
+			<if test="itemtype_name != null and itemtype_name != ''">
+				and itemtype_name = #{itemtype_name }
+			</if>
+			<if test="express_number != null and express_number != ''">
+				and express_number = #{express_number }
+			</if>
+			<if test="epistatic_order != null and epistatic_order != ''">
+				and epistatic_order = #{epistatic_order }
+			</if>
+			<if test="delivery_address != null and delivery_address != ''">
+				and delivery_address = #{delivery_address }
+			</if>
+			<if test="province != null and province != ''">
+				and province = #{province }
+			</if>
+			<if test="city != null and city != ''">
+				and city = #{city }
+			</if>
+			<if test="state != null and state != ''">
+				and state = #{state }
+			</if>
+			<if test="startTime != null and startTime != ''">
+				<![CDATA[ and transport_time >= #{startTime } ]]>
+			</if>
+			<if test="endTime != null and endTime != ''">
+				<![CDATA[ and transport_time <= #{endTime } ]]>
+			</if>
+			<if test="error_type == 1">
+				and settle_flag = 2
+			</if>
+			<if test="error_type == 4">
+				and settle_client_flag = 2
+			</if>
+		) b ON a.subject_code = b.express_number
+  </select>
+  <select id="getCount" resultType="int" parameterType="com.bt.lmis.model.YFSettlementVo" >
+		    SELECT
+			count(1)
+		FROM
+			(
+				SELECT
+					c.*, d.contract_name
+				FROM
+					(
+						SELECT
+							subject_code,
+							pro_result_info,
+							contract_id
+						FROM
+							tb_settle_error_result
+						WHERE 1=1
+							and error_type = #{errorType }
+					) c
+				LEFT JOIN tb_contract_basicinfo d ON c.contract_id = d.id
+			) a
+		INNER JOIN (
+			SELECT
+				cost_center,
+				store_code,
+				store_name,
+				warehouse_code,
+				warehouse,
+				transport_code,
+				transport_name,
+				delivery_order,
+				epistatic_order,
+				order_type,
+				express_number,
+				transport_direction,
+				itemtype_code,
+				itemtype_name,
+				transport_time,
+				collection_on_delivery,
+				order_amount,
+				sku_number,
+				weight,
+				length,
+				width,
+				higth,
+				volumn,
+				delivery_address,
+				province,
+				city,
+				state,
+				street,
+				detail_address,
+				CASE insurance_flag
+			WHEN 1 THEN
+				"是"
+			WHEN 0 THEN
+				"否"
+			ELSE
+				""
+			END AS insurance_flag,
+			CASE cod_flag
+		WHEN 1 THEN
+			"是"
+		WHEN 0 THEN
+			"否"
+		ELSE
+			""
+		END AS cod_flag
+		FROM
+			tb_warehouse_express_data
+		WHERE 1=1
+			<if test="costCenter != null and costCenter != ''">
+				and cost_center = #{costCenter }
+			</if>
+			<if test="storeName != null and storeName != ''">
+				and store_name = #{storeName }
+			</if>
+			<if test="warehouse != null and warehouse != ''">
+				and warehouse = #{warehouse }
+			</if>
+			<if test="transportName != null and transportName != ''">
+				and transport_name = #{transportName }
+			</if>
+			<if test="itemtypeName != null and itemtypeName != ''">
+				and itemtype_name = #{itemtypeName }
+			</if>
+			<if test="expressNumber != null and expressNumber != ''">
+				and express_number = #{expressNumber }
+			</if>
+			<if test="epistaticOrder != null and epistaticOrder != ''">
+				and epistatic_order = #{epistaticOrder }
+			</if>
+			<if test="deliveryAddress != null and deliveryAddress != ''">
+				and delivery_address = #{deliveryAddress }
+			</if>
+			<if test="province != null and province != ''">
+				and province = #{province }
+			</if>
+			<if test="city != null and city != ''">
+				and city = #{city }
+			</if>
+			<if test="state != null and state != ''">
+				and state = #{state }
+			</if>
+			<if test="startTime != null and startTime != ''">
+				<![CDATA[ and transport_time >= #{startTime } ]]>
+			</if>
+			<if test="endTime != null and endTime != ''">
+				<![CDATA[ and transport_time <= #{endTime } ]]>
+			</if>
+			<if test="errorType == 1">
+				and settle_flag = 2
+			</if>
+			<if test="errorType == 4">
+				and settle_client_flag = 2
+			</if>
+		) b ON a.subject_code = b.express_number
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_settle_error_result
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.model.BalanceErrorLog" >
+    update tb_settle_error_result
+    <set >
+      <if test="subjectCode != null" >
+        subject_code = #{subject_code,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        contract_id = #{contract_id,jdbcType=INTEGER},
+      </if>
+      <if test="proResultFlag != null" >
+        pro_result_flag = #{pro_result_flag,jdbcType=VARCHAR},
+      </if>
+      <if test="proResultInfo != null" >
+        pro_result_info = #{pro_result_info,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="errorType != null" >
+        error_type = #{error_type,jdbcType=VARCHAR},
+      </if>
+      <if test="default1 != null" >
+        default1 = #{default1,jdbcType=VARCHAR},
+      </if>
+      <if test="default2 != null" >
+        default2 = #{default2,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{create_by,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>   

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.OrderMapper" >
+	<select id="countData" parameterType="Object" resultType="Integer">
+		select
+			count(0)
+		from
+			jk_settle_order
+		where
+			bat_id = #{bat_id }
+		<if test="pro_flag != null and pro_flag !=''">
+			and pro_flag = #{pro_flag }
+		</if>
+	</select>
+	<delete id="del" parameterType="Object">
+		delete from jk_settle_order where bat_id = #{bat_id }
+	</delete>
+	<select id="getBatIds" parameterType="Object" resultType="Integer">
+		select
+			distinct bat_id
+		from
+			jk_settle_order
+		where
+			1 = 1
+		<if test="bat_id != null">
+			and bat_id = #{bat_id }
+		</if>
+		order by bat_id desc
+	</select>
+	<select id="getBatId" resultType="Integer">
+		select
+			max(bat_id)
+		from
+			jk_settle_order
+	</select>
+	<insert id="insertRawData" parameterType="com.bt.lmis.model.Order" useGeneratedKeys="true" keyProperty="id">
+		insert into jk_settle_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			bat_id,
+			<if test="store_code != null and store_code != ''">
+				store_code,
+			</if>
+			<if test="store_name != null and store_name != ''">
+				store_name,
+			</if>
+			<if test="warehouse_code != null and warehouse_code != ''">
+				warehouse_code,
+			</if>
+			<if test="warehouse_name != null and warehouse_name != ''">
+				warehouse_name,
+			</if>
+			<if test="transport_code != null and transport_code != ''">
+				transport_code,
+			</if>
+			<if test="transport_name != null and transport_name != ''">
+				transport_name,
+			</if>
+			<if test="delivery_order != null and delivery_order != ''">
+				delivery_order,
+			</if>
+			<if test="epistatic_order != null and epistatic_order != ''">
+				epistatic_order,
+			</if>
+			<if test="order_type != null and order_type != ''">
+				order_type,
+			</if>
+			<if test="express_number != null and express_number != ''">
+				express_number,
+			</if>
+			<if test="transport_direction != null and transport_direction != ''">
+				transport_direction,
+			</if>
+			<if test="itemtype_code != null and itemtype_code != ''">
+				itemtype_code,
+			</if>
+			<if test="itemtype_name != null and itemtype_name != ''">
+				itemtype_name,
+			</if>
+			<if test="transport_time != null and transport_time != ''">
+				transport_time,
+			</if>
+			<if test="collection_on_delivery != null and collection_on_delivery != ''">
+				collection_on_delivery,
+			</if>
+			<if test="order_amount != null and order_amount != ''">
+				order_amount,
+			</if>
+			<if test="sku_number != null and sku_number != ''">
+				sku_number,
+			</if>
+			<if test="weight != null and weight != ''">
+				weight,
+			</if>
+			<if test="length != null and length != ''">
+				length,
+			</if>
+			<if test="width != null and width != ''">
+				width,
+			</if>
+			<if test="higth != null and higth != ''">
+				higth,
+			</if>
+			<if test="volumn != null and volumn != ''">
+				volumn,
+			</if>
+			<if test="delivery_address != null and delivery_address != ''">
+				delivery_address,
+			</if>
+			<if test="province != null and province != ''">
+				province,
+			</if>
+			<if test="city != null and city != ''">
+				city,
+			</if>
+			<if test="state != null and state != ''">
+				state,
+			</if>
+			<if test="insurance_flag != null and insurance_flag != ''">
+				insurance_flag,
+			</if>
+			<if test="cod_flag != null and cod_flag != ''">
+				cod_flag,
+			</if>
+			<if test="shiptoname != null and shiptoname != ''">
+				shiptoname,
+			</if>
+			<if test="phone != null and phone != ''">
+				phone,
+			</if>
+			<if test="address != null and address != ''">
+				address,
+			</if>
+			<if test="express_time != null and express_time != ''">
+				express_time,
+			</if>
+			<if test="check_time != null and check_time != ''">
+				check_time,
+			</if>
+			<if test="weight_time != null and weight_time != ''">
+				weight_time,
+			</if>
+			<if test="create_date != null and create_date != ''">
+				create_date,
+			</if>
+			<if test="operation_time != null and operation_time != ''">
+				operation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{bat_id, jdbcType=INTEGER },
+			<if test="store_code != null and store_code != ''">
+				#{store_code, jdbcType=VARCHAR },
+			</if>
+			<if test="store_name != null and store_name != ''">
+				#{store_name, jdbcType=VARCHAR },
+			</if>
+			<if test="warehouse_code != null and warehouse_code != ''">
+				#{warehouse_code, jdbcType=VARCHAR },
+			</if>
+			<if test="warehouse_name != null and warehouse_name != ''">
+				#{warehouse_name, jdbcType=VARCHAR },
+			</if>
+			<if test="transport_code != null and transport_code != ''">
+				#{transport_code, jdbcType=VARCHAR },
+			</if>
+			<if test="transport_name != null and transport_name != ''">
+				#{transport_name, jdbcType=VARCHAR },
+			</if>
+			<if test="delivery_order != null and delivery_order != ''">
+				#{delivery_order, jdbcType=VARCHAR },
+			</if>
+			<if test="epistatic_order != null and epistatic_order != ''">
+				#{epistatic_order, jdbcType=VARCHAR },
+			</if>
+			<if test="order_type != null and order_type != ''">
+				#{order_type, jdbcType=VARCHAR },
+			</if>
+			<if test="express_number != null and express_number != ''">
+				#{express_number, jdbcType=VARCHAR },
+			</if>
+			<if test="transport_direction != null and transport_direction != ''">
+				#{transport_direction, jdbcType=VARCHAR },
+			</if>
+			<if test="itemtype_code != null and itemtype_code != ''">
+				#{itemtype_code, jdbcType=VARCHAR },
+			</if>
+			<if test="itemtype_name != null and itemtype_name != ''">
+				#{itemtype_name, jdbcType=VARCHAR },
+			</if>
+			<if test="transport_time != null and transport_time != ''">
+				#{transport_time, jdbcType=DATE },
+			</if>
+			<if test="collection_on_delivery != null and collection_on_delivery != ''">
+				#{collection_on_delivery, jdbcType=DECIMAL },
+			</if>
+			<if test="order_amount != null and order_amount != ''">
+				#{order_amount, jdbcType=DECIMAL },
+			</if>
+			<if test="sku_number != null and sku_number != ''">
+				#{sku_number, jdbcType=VARCHAR },
+			</if>
+			<if test="weight != null and weight != ''">
+				#{weight, jdbcType=DECIMAL },
+			</if>
+			<if test="length != null and length != ''">
+				#{length, jdbcType=DECIMAL },
+			</if>
+			<if test="width != null and width != ''">
+				#{width, jdbcType=DECIMAL },
+			</if>
+			<if test="higth != null and higth != ''">
+				#{higth, jdbcType=DECIMAL },
+			</if>
+			<if test="volumn != null and volumn != ''">
+				#{volumn, jdbcType=DECIMAL },
+			</if>
+			<if test="delivery_address != null and delivery_address != ''">
+				#{delivery_address, jdbcType=VARCHAR },
+			</if>
+			<if test="province != null and province != ''">
+				#{province, jdbcType=VARCHAR },
+			</if>
+			<if test="city != null and city != ''">
+				#{city, jdbcType=VARCHAR },
+			</if>
+			<if test="state != null and state != ''">
+				#{state, jdbcType=VARCHAR },
+			</if>
+			<if test="insurance_flag != null and insurance_flag != ''">
+				#{insurance_flag, jdbcType=INTEGER },
+			</if>
+			<if test="cod_flag != null and cod_flag != ''">
+				#{cod_flag, jdbcType=INTEGER },
+			</if>
+			<if test="shiptoname != null and shiptoname != ''">
+				#{shiptoname, jdbcType=VARCHAR },
+			</if>
+			<if test="phone != null and phone != ''">
+				#{phone, jdbcType=VARCHAR },
+			</if>
+			<if test="address != null and address != ''">
+				#{address, jdbcType=VARCHAR },
+			</if>
+			<if test="express_time != null and express_time != ''">
+				#{express_time, jdbcType=DATE },
+			</if>
+			<if test="check_time != null and check_time != ''">
+				#{check_time, jdbcType=DATE },
+			</if>
+			<if test="weight_time != null and weight_time != ''">
+				#{weight_time, jdbcType=DATE },
+			</if>
+			<if test="create_date != null and create_date != ''">
+				#{create_date, jdbcType=DATE },
+			</if>
+			<if test="operation_time != null and operation_time != ''">
+				#{operation_time, jdbcType=DATE },
+			</if>
+		</trim>
+	</insert>
+</mapper>   

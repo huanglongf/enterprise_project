@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TotalTrayMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.TotalTray" >
+	<result column="stt_id" property="stt_id"/>
+	<result column="stt_cb_id" property="stt_cb_id"/>
+	<result column="stt_section" property="stt_section"/>
+	<result column="stt_price" property="stt_price"/>
+	<result column="stt_price_unit" property="stt_price_unit"/>
+	<result column="stt_status" property="stt_status"/>
+</resultMap>
+       
+<!-- ssc_total_tray table all fields -->
+<sql id="Base_Column_List" >
+	 stt_id,stt_cb_id,stt_section,stt_price,stt_price_unit,stt_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="stt_id != null" >
+	    and stt_id =  #{stt_id}
+	</if>
+	<if test="stt_cb_id != null" >
+	    and stt_cb_id =  #{stt_cb_id}
+	</if>
+	 	<if test="stt_section != null and stt_section != ''" >
+	    and stt_section =  #{stt_section}
+	</if>
+	 	<if test="stt_price != null and stt_price != ''" >
+	    and stt_price =  #{stt_price}
+	</if>
+	<if test="stt_price_unit != null" >
+	    and stt_price_unit =  #{stt_price_unit}
+	</if>
+	<if test="stt_status != null" >
+	    and stt_status =  #{stt_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入超过托盘数结算表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.TotalTray" >
+  insert into ssc_total_tray(stt_id,stt_cb_id,stt_section,stt_price,stt_price_unit,stt_status)
+ values(#{stt_id},#{stt_cb_id},#{stt_section},#{stt_price},#{stt_price_unit},#{stt_status})
+</insert>
+
+<!-- 修改超过托盘数结算表-->  
+ <update id="update" parameterType="com.bt.lmis.model.TotalTray" >
+  update ssc_total_tray set stt_cb_id=#{stt_cb_id},stt_section=#{stt_section},stt_price=#{stt_price},stt_price_unit=#{stt_price_unit},stt_status=#{stt_status} where stt_id=#{stt_id}
+ </update>
+ 
+ <!-- 选择修改超过托盘数结算表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.TotalTray" >
+	update ssc_total_tray set 
+	<trim  suffixOverrides="," >
+	<if test="stt_cb_id != null  ">
+		stt_cb_id=#{stt_cb_id},
+	</if>
+	<if test="stt_section != null  and stt_section != '' ">
+		stt_section=#{stt_section},
+	</if>
+	<if test="stt_price != null  and stt_price != '' ">
+		stt_price=#{stt_price},
+	</if>
+	<if test="stt_price_unit != null  ">
+		stt_price_unit=#{stt_price_unit},
+	</if>
+	<if test="stt_status != null  ">
+		stt_status=#{stt_status},
+	</if>
+	</trim> where stt_id=#{stt_id}
+</update>
+
+<!-- 删除超过托盘数结算表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_total_tray where stt_id = #{stt_id}
+</update>
+<!-- 批量删除超过托盘数结算表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_total_tray where stt_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找超过托盘数结算表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_total_tray where stt_id = #{stt_id}
+</select>
+  	
+<!-- 超过托盘数结算表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.TotalTrayQueryParam">
+	select count(1) from ssc_total_tray 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的超过托盘数结算表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.TotalTrayQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_total_tray 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 超过托盘数结算表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.TotalTrayQueryParam">
+	select count(1) from ssc_total_tray 
+	<include refid="where_Clause"/>
+</select>
+  	
+
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_total_tray where stt_cb_id=#{cbid}
+</select>
+
+</mapper>   

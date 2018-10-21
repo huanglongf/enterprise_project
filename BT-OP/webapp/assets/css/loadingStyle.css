@@ -1,0 +1,22 @@
+.cover-bg {
+	display: none; 
+    position: absolute; 
+    top: 0%; 
+    left: 0%;  
+    width: 100%;
+	background-color: grey;  
+    z-index: 1001;
+    -moz-opacity: 0.6;
+    opacity: 0.6; 
+    filter: alpha(opacity=60);
+    
+}      
+        
+.loading-circle {
+	position: relative;
+	top: 35%;
+	-moz-opacity: 1;
+    opacity: 1;
+    filter: alpha(opacity=100);
+    
+}

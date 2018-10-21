@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.SummaryMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.StorageExpendituresDataSettlement" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="storage_fee" property="storage_fee"/>
+	<result column="remark" property="remark"/>
+	<result column="data_id" property="data_id"/>
+	<result column="operation_id" property="operation_id"/>
+	<result column="start_time" property="start_time"/>
+	<result column="store_name" property="store_name"/>
+	<result column="warehouse_name" property="warehouse_name"/>
+	<result column="area_name" property="area_name"/>
+	<result column="item_type" property="item_type"/>
+	<result column="storage_type" property="storage_type"/>
+	<result column="storage_acreage" property="storage_acreage"/>
+	<result column="acreage_unit" property="acreage_unit"/>
+	<result column="contract_name" property="contract_name"/>
+	<result column="contract_no" property="contract_no"/>
+	<result column="billing_cycle" property="billing_cycle"/>
+</resultMap>
+       
+<!-- s_summary table all fields -->
+<sql id="Base_Column_List" >
+	 id,cycle,type,subject,create_time,create_user,update_time,update_user,cb_id
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and a.id =  #{id}
+	</if>
+	<if test="storage_fee != null" >
+	    and a.storage_fee =  #{storage_fee}
+	</if>
+	 	<if test="remark != null and remark != ''" >
+	    and a.remark =  #{remark}
+	</if>
+	<if test="data_id != null" >
+	    and a.data_id =  #{data_id}
+	</if>
+	<if test="operation_id != null" >
+	    and a.operation_id =  #{operation_id}
+	</if>
+	<if test="start_time != null and end_time != null" >
+	    and a.start_time Between  #{start_time} and #{end_time}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and a.store_name =  #{store_name}
+	</if>
+	 	<if test="warehouse_name != null and warehouse_name != ''" >
+	    and a.warehouse_name =  #{warehouse_name}
+	</if>
+	 	<if test="area_name != null and area_name != ''" >
+	    and a.area_name =  #{area_name}
+	</if>
+	 	<if test="item_type != null and item_type != ''" >
+	    and item_type =  #{item_type}
+	</if>
+	<if test="storage_type != null" >
+	    and a.storage_type =  #{storage_type}
+	</if>
+	<if test="storage_acreage != null" >
+	    and a.storage_acreage =  #{storage_acreage}
+	</if>
+ 	<if test="contract_name != null and contract_name != ''" >
+	    and b.contract_name =  #{contract_name}
+	</if>
+ 	<if test="contract_no != null and contract_no != ''" >
+	    and b.contract_no =  #{contract_no}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入汇总表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.Summary" >
+  insert into s_summary(id,cycle,type,subject,create_time,create_user,update_time,update_user)
+ values(#{id},#{cycle},#{type},#{subject},#{create_time},#{create_user},#{update_time},#{update_user})
+</insert>
+
+<!-- 修改汇总表-->  
+ <update id="update" parameterType="com.bt.lmis.model.Summary" >
+  update s_summary set cycle=#{cycle},type=#{type},subject=#{subject},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改汇总表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.Summary" >
+	update s_summary set 
+	<trim  suffixOverrides="," >
+	<if test="cycle != null  and cycle != '' ">
+		cycle=#{cycle},
+	</if>
+	<if test="type != null  ">
+		type=#{type},
+	</if>
+	<if test="subject != null  ">
+		subject=#{subject},
+	</if>
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除汇总表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from s_summary where id = #{id}
+</update>
+<!-- 批量删除汇总表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from s_summary where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找汇总表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from s_summary where id = #{id}
+</select>
+  	
+<!-- 汇总表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.SummaryQueryParam">
+	select count(1) from s_summary 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的汇总表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.SummaryQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from s_summary 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 汇总表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.SummaryQueryParam">
+	select count(1) from s_summary 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的汇总表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.SummaryQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from s_summary 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="find" parameterType="com.bt.lmis.controller.form.StorageExpendituresDataSettlementQueryParam" resultType="com.bt.lmis.model.StorageExpendituresDataSettlement">
+		SELECT a.id,b.contract_name,b.contract_no,a.billing_cycle,a.create_time,a.create_user 
+		FROM tb_storage_data_group a
+		left join tb_contract_basicinfo b on a.contract_id=b.id 
+		<include refid="where_Clause"/>
+		order by a.id desc 
+		LIMIT #{firstResult}, #{maxResult}
+</select>  	
+<select id="countRecords" parameterType="com.bt.lmis.controller.form.StorageExpendituresDataSettlementQueryParam" resultType="java.lang.Integer">
+	SELECT COUNT(1) FROM lmis.tb_storage_data_group a
+		left join tb_contract_basicinfo b on a.contract_id=b.id 
+	<include refid="where_Clause"/>
+</select>
+</mapper>   

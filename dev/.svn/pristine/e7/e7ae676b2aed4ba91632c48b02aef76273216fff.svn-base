@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.AddressMapper">
+	<!-- Result Map -->
+	<select id="getXzTab" parameterType="java.util.HashMap">
+		select
+		t.`id`,
+		t.`create_time`,
+		t.`create_user`,
+		t.`update_time`,
+		t.`update_user`,
+		t.`internal`,
+		t.`internal_unit`,
+		t.`price`,
+		t.`price_unit`,
+		t.`table_id`
+		from tb_internal_price t
+		where t.id=#{id}
+	</select>
+	
+<!-- 	续重表格 -->
+<!-- 	公斤单价表格 -->
+<!--    立方单价 -->
+	<select id="getTabData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select
+		t.`id`,
+		t.`create_time`,
+		t.`create_user`,
+		t.`update_time`,
+		t.`update_user`,
+		t.`internal`,
+		t.`internal_unit`,
+		t.`price`,
+		t.`price_unit`,
+		t.`table_id`,
+		t.mark1,
+		t.args1,
+		t.mark2,
+		t.args2,
+		(select s.mark from section_mark s where s.section_id=mark1 limit  0,1) as mark_a,
+		(select s.mark from section_mark s where s.section_id=mark2 limit  0,1) as mark_b
+		from view_internal_price t
+		where t.table_id=#{table_id}
+	</select>	
+	
+<!-- 商品类型 -->
+  <select id="getGtTab" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    select 
+    t.id,
+    t.create_time,
+    t.create_user,
+    t.update_time,
+    t.update_user,
+    t.item_type,
+    t.price,
+    t.unit,
+    t.table_id
+    from tb_itemtype_price t
+    where t.table_id=#{table_id}
+  </select>
+
+  <update id="updateXzMainData" parameterType="java.util.HashMap" >
+    update 
+    tb_origin_desitination_paramlist
+    set
+    update_time=now(),
+    update_user=#{operate_user}
+    <if test="szxz_discount != null  and szxz_discount != '' ">
+     ,szxz_discount=#{szxz_discount}
+    </if>
+  <if test="szxz_sz != null  and szxz_sz != '' ">
+    ,szxz_sz=#{szxz_sz}
+  </if>  
+  <if test="szxz_price != null  and szxz_price != '' ">
+    ,szxz_price=#{szxz_price}
+  </if>
+  <if test="szxz_jpnum != null  and szxz_jpnum != '' ">
+    ,szxz_jpnum=#{szxz_jpnum}
+  </if>
+  <if test="ld_discount != null  and ld_discount != '' ">
+    ,ld_discount=#{ld_discount}
+  </if>  
+    <if test="good_type_discount != null  and good_type_discount != '' ">
+    ,good_type_discount=#{good_type_discount}
+  </if>  
+     <if test="ps_price != null  and ps_price != '' ">
+    ,ps_price=#{ps_price}
+  </if>   
+  <if test="szxz_switch != null  and szxz_switch != '' ">
+    ,szxz_switch=#{szxz_switch}
+  </if>  
+  
+  <if test="ld_switch != null  and ld_switch != '' ">
+    ,ld_switch=#{ld_switch}
+  </if>  
+  <if test="it_switch != null  and it_switch != '' ">
+    ,it_switch=#{it_switch}
+  </if>  
+  <if test="zc_switch != null  and zc_switch != '' ">
+    ,zc_switch=#{zc_switch}
+  </if>  
+   <if test="jf_weight != null  and jf_weight != '' ">
+    ,jf_weight=#{jf_weight}
+  </if>  
+   <if test="ps_unit != null  and ps_unit != '' ">
+    ,ps_unit=#{ps_unit}
+  </if>               
+  where 1=1
+  and id=#{id}
+  </update>
+  
+  <update id="updateTable" parameterType="java.util.HashMap">
+    update tb_internal_price
+    set
+    update_time=now(),
+    update_user=#{operate_user}
+    <if test="internal != null  and internal != '' ">
+     ,internal=#{internal}
+    </if>
+    <if test="internal_unit != null  and internal_unit != '' ">
+     ,internal_unit=#{internal_unit}
+    </if>
+    <if test="price != null  and price != '' ">
+     ,price=#{price}
+    </if>
+    <if test="price_unit != null  and price_unit != '' ">
+    ,price_unit=#{price_unit}
+    </if>
+    where id=#{id}
+  </update>
+
+  <update id="updateGtTable" parameterType="java.util.HashMap">
+    update tb_itemtype_price
+    set
+    update_time=now(),
+    update_user=#{operate_user}
+    <if test="item_type != null  and item_type != '' ">
+     ,item_type=#{item_type}
+    </if>
+    <if test="price != null  and price != '' ">
+     ,price=#{price}
+    </if>
+    <if test="unit != null  and unit != '' ">
+     ,unit=#{unit}
+    </if>
+    where id=#{id}
+  </update>
+ 
+   <update id="updateZcTable" parameterType="java.util.HashMap">
+    update tb_busprice
+    set
+    update_time=now(),
+    update_user=#{operate_user}
+    <if test="tb_busprice != null  and tb_busprice != '' ">
+     ,tb_busprice=#{tb_busprice}
+    </if>
+    <if test="bus_name != null  and bus_name != '' ">
+     ,bus_name=#{bus_name}
+    </if>
+    <if test="bus_volumn != null  and bus_volumn != '' ">
+     ,bus_volumn=#{bus_volumn}
+    </if>
+     <if test="bus_code != null  and bus_code != '' ">
+     ,bus_code=#{bus_code}
+    </if>   
+     <if test="busvolumn_unit != null  and busvolumn_unit != '' ">
+     ,busvolumn_unit=#{busvolumn_unit}
+    </if>
+     <if test="price != null  and price != '' ">
+     ,price=#{price}
+    </if>   
+     <if test="unit != null  and unit != '' ">
+     ,unit=#{unit}
+    </if>    
+    where id=#{id}
+  </update>
+   
+   	<delete id= "delTabData" parameterType= "java.util.HashMap" >
+    	delete from tb_internal_price where id= #{id }
+   	</delete>
+ 
+	<delete id= "delTabData_gt" parameterType= "java.util.HashMap" >
+    	delete from tb_itemtype_price where id= #{id }
+   	</delete>
+
+	<delete id= "delTabData_bs" parameterType= "java.util.HashMap" >
+		delete from tb_busprice where id= #{id }
+	</delete>
+         
+	<select id= "getBusTypeTab" parameterType= "java.util.HashMap" resultType= "java.util.HashMap" >
+  		select
+      		t.`id`, 
+	  		t.`create_time`, 
+	  		t.`create_user`, 
+		  	t.`update_time`,
+		  	t.`update_user`,
+		  	t.`bus_code`,
+		  	t.`bus_name`,
+		  	t.`bus_volumn`,
+		  	t.`busvolumn_unit`,
+		  	t.`price`,
+		  	t.`unit`,
+		  	t.`table_id`
+  		from view_bus_price t
+  		where t.table_id=#{table_id}
+  	</select>
+  	
+	<insert id= "add" parameterType= "java.util.HashMap" >
+		insert into tb_thread_test(name, age) values (#{name }, #{age })
+	</insert>
+	
+	
+
+	<update id= "updateErrorData" parameterType= "java.util.HashMap" >
+		update jk_settle_order set
+			delivery_address= #{delivery_address },
+		  	province= #{province },
+		  	city= #{city },
+		  	state= #{state },
+		  	address= #{detail_address },
+		  	pro_flag= 0
+	  	where id= #{id }
+	</update>
+	
+	<select id= "exportAddress" parameterType= "com.bt.lmis.controller.form.AddressQueryParam" resultType= "java.util.Map" >
+		SELECT
+			t.id AS id,
+			t.create_time AS create_time,
+			t.create_user AS create_user,
+			t.update_time AS update_time,
+			t.update_user AS update_user,
+			t.con_id AS con_id,
+			c.contract_name AS contract_name,
+			c.contract_version AS contract_version,
+			t.carrier_code AS carrier_code,
+			t.carrier_name AS carrier_name,
+			t.itemtype_code AS itemtype_code,
+			t.itemtype_name AS itemtype_name,
+			t.zh_price_tab_id AS zh_price_tab_id,
+			t.province_origin,
+			t.city_origin,
+			t.state_origin,
+			t.province_destination AS province_destination,
+			t.city_destination AS city_destination,
+			t.district_destination AS district_destination,
+			b.pricing_formula_name AS pricing_formula_name,
+			t.szxz_switch AS szxz_switch,
+			t.szxz_sz AS szxz_sz,
+			t.szxz_sz_unit AS szxz_sz_unit,
+			t.szxz_price AS szxz_price,
+			t.szxz_price_unit AS szxz_price_unit,
+			t.szxz_id AS szxz_id,
+			concat(ip.internal, ip.internal_unit) AS internal,
+			concat(ip.price, ip.price_unit) AS price,
+			t.szxz_jpnum AS szxz_jpnum,
+			t.szxz_discount AS szxz_discount,
+			t.ld_switch AS ld_switch,
+			t.weightprice_id AS weightprice_id,
+			t.volumprice_id AS volumprice_id,
+			t.ld_discount AS ld_discount,
+			t.zc_switch AS zc_switch,
+			t.bus_id AS bus_id,
+			t.it_switch AS it_switch,
+			t.it_id AS it_id,
+			t.good_type_discount AS good_type_discount,
+			t.ps_price AS ps_price,
+			t.ps_unit AS ps_unit,
+			t.jf_weight AS jf_weight,
+			case t.status
+			when 0 then "停用"
+			when 1 then "启用"
+			else "" end AS status,
+			t.low_weight,
+			t.low_price,
+			t.low_cubic
+		FROM 
+			tb_origin_desitination_paramlist t
+		INNER JOIN tb_contract_basicinfo c
+		ON c.id= t.con_id 
+		LEFT JOIN (
+			SELECT
+				contract_id AS con_id,
+				belong_to,
+				cat_type AS pricing_formula,
+				formula AS pricing_formula_name
+			FROM
+				wl_formula_td
+			WHERE
+				STATUS = 1
+			UNION
+				SELECT
+					con_id,
+					belong_to,
+					pricing_formula,
+					pricing_formula_name
+				FROM
+					ex_con_pricing_formula
+				WHERE
+					dFlag = 0
+		) b ON b.con_id= t.con_id
+		AND b.belong_to= t.carrier_code
+		AND b.pricing_formula= t.formula
+		LEFT JOIN tb_internal_price ip
+		ON ip.table_id= t.szxz_id
+		WHERE 1= 1
+		<if test= "contract_id != null and contract_id != -1" >
+			AND t.con_id= #{contract_id }
+		</if>
+		<if test= "carrier_code != null and carrier_code != ''" >
+			AND t.carrier_code= #{carrier_code }
+		</if>
+		<if test= "itemtype_code != null and itemtype_code != ''" >
+			AND t.itemtype_code= #{itemtype_code }
+		</if>
+		<if test= "origination != null and origination != ''" >
+			AND t.origination= #{origination }
+		</if>
+		<if test= "province_destination != null and province_destination != ''" >
+			AND t.province_destination= #{province_destination }
+		</if>
+		<if test= "city_destination != null and city_destination != ''" >
+			AND t.city_destination= #{city_destination }
+		</if>
+		<if test= "district_destination != null and district_destination != ''" >
+			AND t.district_destination= #{district_destination }
+		</if>
+		ORDER BY t.`update_time` DESC
+	</select>
+	
+	<select id= "getAddress" parameterType= "Integer" resultType= "java.util.HashMap">
+		select
+			t.`id`,
+			t.`create_time`,
+			t.`create_user`,
+			t.`update_time`,
+			t.`update_user`,
+			t.`con_id`,
+			t.contract_no,
+			t.contract_name,
+			t.`carrier_code`,
+		  	t.`carrier_name`,
+		  	t.`itemtype_code`,
+		  	t.`itemtype_name`,
+		  	t.zh_price_tab_id,
+		  	t.`province_destination`,
+		  	t.`city_destination`,
+		  	t.`district_destination`,
+		 	t.`formula`,
+		  	t.`szxz_switch`,
+		  	t.`szxz_sz`,
+		  	t.`szxz_sz_unit`,
+		  	t.`szxz_price`,
+		  	t.`szxz_price_unit`,
+		  	t.`szxz_id`,
+		  	t.`szxz_jpnum`,
+		  	t.`szxz_discount`,
+		  	t.`ld_switch`,
+		  	t.`weightprice_id`,
+		  	t.`volumprice_id`,
+		  	t.`ld_discount`,
+		  	t.`zc_switch`,
+		  	t.`bus_id`,
+		  	t.`it_switch`,
+		  	t.`it_id`,
+		  	t.good_type_discount,
+		  	t.ps_price,
+		  	t.ps_unit,
+		  	t.jf_weight,
+		  	t.status,
+          	t.low_weight,
+          	t.`origination`,
+          	t.formula_name ,
+          	t.`contract_version` ,
+          	t.low_price,
+          	t.low_cubic,
+          	t.province_origin,
+  			t.city_origin,
+  			t.state_origin
+        from
+        	view_address_param t
+        where
+        	t.id= #{id }
+	</select>
+	
+	<update id= "updateMainData" parameterType= "java.util.HashMap" >
+		update tb_origin_desitination_paramlist set status= #{status } where id= #{id }
+	</update>
+	
+	<delete id= "deleteBatch" parameterType= "Object" >
+		delete from tb_origin_desitination_paramlist where id in 
+		<foreach collection= "array" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	    	#{item }  
+	   	</foreach> 
+	</delete>
+	
+	<select id= "count" parameterType= "com.bt.lmis.controller.form.AddressQueryParam" resultType= "java.lang.Integer" >
+		SELECT
+			COUNT(1) cnt
+		FROM
+			tb_origin_desitination_paramlist t
+		INNER JOIN tb_contract_basicinfo c ON c.id= t.con_id 
+		where 1= 1
+		<if test= "contract_id != null and contract_id != -1" >
+			and t.con_id= #{contract_id }
+		</if>
+		<if test= "carrier_code != null and carrier_code != ''" >
+			AND t.carrier_code= #{carrier_code }
+		</if>
+		<if test= "itemtype_code != null and itemtype_code != ''" >
+			AND t.itemtype_code= #{itemtype_code }
+		</if>
+		<!--<if test= "origination != null and origination != ''" >-->
+			<!--and t.origination= #{origination }-->
+		<!--</if>-->
+		<if test= "province_destination != null and province_destination != ''" >
+			and t.province_destination= #{province_destination }
+		</if>
+		<if test= "city_destination != null and city_destination != ''" >
+			and t.city_destination= #{city_destination }
+		</if>
+		<if test= "district_destination != null and district_destination != ''" >
+			and t.district_destination= #{district_destination }
+		</if>
+		<if test= "province_origin != null and province_origin != ''" >
+			AND t.province_origin= #{province_origin }
+		</if>
+		<if test= "city_origin != null and city_origin != ''" >
+			AND t.city_origin= #{city_origin }
+		</if>
+		<if test= "state_origin != null and state_origin != ''" >
+			AND t.state_origin= #{state_origin }
+		</if>
+	</select>
+	
+	<select id= "query" parameterType= "com.bt.lmis.controller.form.AddressQueryParam" resultType= "java.util.HashMap" >
+		SELECT
+			t.id AS id,
+			t.create_time AS create_time,
+			t.create_user AS create_user,
+			t.update_time AS update_time,
+			t.update_user AS update_user,
+			t.con_id AS con_id,
+			c.contract_name AS contract_name,
+			c.contract_version AS contract_version,
+			t.carrier_code AS carrier_code,
+			t.carrier_name AS carrier_name,
+			t.itemtype_code AS itemtype_code,
+			t.itemtype_name AS itemtype_name,
+			t.zh_price_tab_id AS zh_price_tab_id,
+			t.province_destination AS province_destination,
+			t.city_destination AS city_destination,
+			t.district_destination AS district_destination,
+			b.pricing_formula_name AS pricing_formula_name,
+			t.szxz_switch AS szxz_switch,
+			t.szxz_sz AS szxz_sz,
+			t.szxz_sz_unit AS szxz_sz_unit,
+			t.szxz_price AS szxz_price,
+			t.szxz_price_unit AS szxz_price_unit,
+			t.szxz_id AS szxz_id,
+			concat(ip.internal, ip.internal_unit) AS internal,
+			concat(ip.price, ip.price_unit) AS price,
+			t.szxz_jpnum AS szxz_jpnum,
+			t.szxz_discount AS szxz_discount,
+			t.ld_switch AS ld_switch,
+			t.weightprice_id AS weightprice_id,
+			t.volumprice_id AS volumprice_id,
+			t.ld_discount AS ld_discount,
+			t.zc_switch AS zc_switch,
+			t.bus_id AS bus_id,
+			t.it_switch AS it_switch,
+			t.it_id AS it_id,
+			t.good_type_discount AS good_type_discount,
+			t.ps_price AS ps_price,
+			t.ps_unit AS ps_unit,
+			t.jf_weight AS jf_weight,
+			t.status AS status,
+			t.low_weight,
+			t.low_price,
+			t.low_cubic,
+			t.province_origin,
+			t.city_origin,
+			t.state_origin
+		FROM 
+			tb_origin_desitination_paramlist t
+		INNER JOIN tb_contract_basicinfo c
+		ON c.id= t.con_id 
+		LEFT JOIN (
+			SELECT
+				contract_id AS con_id,
+				belong_to,
+				cat_type AS pricing_formula,
+				formula AS pricing_formula_name
+			FROM
+				wl_formula_td
+			WHERE
+				STATUS = 1
+			UNION
+				SELECT
+					con_id,
+					belong_to,
+					pricing_formula,
+					pricing_formula_name
+				FROM
+					ex_con_pricing_formula
+				WHERE
+					dFlag = 0
+		) b ON b.con_id= t.con_id
+		AND b.belong_to= t.carrier_code
+		AND b.pricing_formula= t.formula
+		LEFT JOIN tb_internal_price ip
+		ON ip.table_id= t.szxz_id
+		WHERE 1= 1
+		<if test= "contract_id != null and contract_id != -1" >
+			AND t.con_id= #{contract_id }
+		</if>
+		<if test= "carrier_code != null and carrier_code != ''" >
+			AND t.carrier_code= #{carrier_code }
+		</if>
+		<if test= "itemtype_code != null and itemtype_code != ''" >
+			AND t.itemtype_code= #{itemtype_code }
+		</if>
+		<if test= "province_destination != null and province_destination != ''" >
+			AND t.province_destination= #{province_destination }
+		</if>
+		<if test= "city_destination != null and city_destination != ''" >
+			AND t.city_destination= #{city_destination }
+		</if>
+		<if test= "district_destination != null and district_destination != ''" >
+			AND t.district_destination= #{district_destination }
+		</if>
+		<if test= "province_origin != null and province_origin != ''" >
+			AND t.province_origin= #{province_origin }
+		</if>
+		<if test= "city_origin != null and city_origin != ''" >
+			AND t.city_origin= #{city_origin }
+		</if>
+		<if test= "state_origin != null and state_origin != ''" >
+			AND t.state_origin= #{state_origin }
+		</if>
+		ORDER BY t.`update_time` DESC
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	
+	
+	
+	<select id="findAllErrorData" parameterType="com.bt.lmis.controller.form.JkErrorQuery" resultType="java.util.HashMap">
+	  select 
+	      t.id,
+		  t.express_number,
+		  t.warehouse_code,
+		  t.warehouse_name,
+		  t.store_code,
+		  t.store_name,
+		  t.itemtype_code,
+		  t.itemtype_name,
+		  t.transport_code,
+		  t.transport_name,
+		  date_format(t.transport_time,'%Y-%m-%d %T') as transport_time,
+		  t.province,
+		  t.city,
+		  t.state,
+		  if(s.error_remark is null,t.pro_remark,s.error_remark) as pro_remark,
+		  t.delivery_address,
+		  t.address
+	 from jk_settle_order t left join jk_error_compared s 
+     on t.pro_remark like concat('%',s.error_msg,'%')
+	 where t.pro_flag not in(0,1,4)
+	      and t.express_number!='123456'
+	      <if test="express_number != null and express_number!= ''" >
+	       and t.express_number=#{express_number}
+	      </if>
+	      <if test="store_name != null and store_name !=''" >
+	       and t.store_name like concat('%',#{store_name},'%')
+	      </if>	      
+	      <if test="warehouse_name != null and warehouse_name !=''" >
+	      and t.warehouse_name like concat('%',#{warehouse_name},'%')
+	      </if>	
+	      <if test="end_province != null and end_province != ''" >
+	       and t.province like concat('%',#{end_province},'%')
+	      </if>
+	      <if test="end_city != null and end_city!= ''" >
+	     and t.city like concat('%',#{end_city},'%')
+	      </if>	
+	      <if test="end_state != null and end_state != ''" >
+	      and t.state  like concat('%',#{end_state},'%')
+	      </if>	  
+	      <if test="error_remark != null and error_remark!= ''" >
+	      and if(s.error_remark is null,t.pro_remark,s.error_remark)   like concat('%',#{error_remark},'%')
+	      </if>	 
+	      <if test="s_time != null and s_time !=''" >
+	       and date_format(t.transport_time,'%Y%m%d') &gt;= date_format(#{s_time},'%Y%m%d')
+	      </if>	
+	      <if test="e_time != null and e_time!=''" >
+	       and date_format(t.transport_time,'%Y%m%d') &lt;= date_format(#{e_time},'%Y%m%d')
+	      </if>		                           		      	      
+	 LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+	<select id="selectErrorCount" resultType="java.lang.Integer" parameterType="com.bt.lmis.controller.form.JkErrorQuery">
+		select
+		count(1) cnt
+		 from jk_settle_order t left join jk_error_compared s 
+	     on t.pro_remark like concat('%',s.error_msg,'%')
+		 where t.pro_flag not in(0,1,4)
+		   and t.express_number!='123456'
+	      <if test="express_number != null and express_number !=''" >
+	       and t.express_number=#{express_number}
+	      </if>
+	      <if test="store_name != null and store_name != ''" >
+	       and t.store_name like concat('%',#{store_name},'%')
+	      </if>	      
+	      <if test="warehouse_name != null and warehouse_name!=''" >
+	      and t.warehouse_name like concat('%',#{warehouse_name},'%')
+	      </if>	
+	      <if test="end_province != null and end_province!=''" >
+	       and t.province like concat('%',#{end_province},'%')
+	      </if>
+	      <if test="end_city != null and end_city != ''" >
+	     and t.city like concat('%',#{end_city},'%')
+	      </if>	
+	      <if test="end_state != null and end_state!=''" >
+	      and t.state  like concat('%',#{end_state},'%')
+	      </if>	  
+	      <if test="error_remark != null and error_remark != ''" >
+	      and if(s.error_remark is null,t.pro_remark,s.error_remark)   like concat('%',#{error_remark},'%')
+	      </if>	     
+	      <if test="s_time != null and s_time!=''" >
+	       and date_format(t.transport_time,'%Y%m%d') &gt;= date_format(#{s_time},'%Y%m%d')
+	      </if>	
+	      <if test="e_time != null and e_time!=''" >
+	       and date_format(t.transport_time,'%Y%m%d') &lt;= date_format(#{e_time},'%Y%m%d')
+	      </if>		      		
+	</select>
+	
+	
+	<select id="query_export"  parameterType="com.bt.lmis.controller.form.JkErrorQuery" resultType="java.util.HashMap">
+        select 	   
+			 t.id as "主键(请勿操作)",
+			 t.upper_id as "wms系统主键",
+			 t.store_code as '店铺编码',
+			 t.store_name as '店铺名称',
+			 t.warehouse_code as '仓库编码',
+			 t.warehouse_name as '仓库名称',
+			 t.transport_code as '承运商编码',
+			 t.transport_name as '承运商名称',
+			 t.delivery_order as '平台订单号',
+			 t.epistatic_order as '上位系统订单号',
+			 t.order_type "订单类型［作业单类型]",
+			 t.express_number "运单号",
+			 t.transport_direction "运输方向(0:正向(发货);1:逆向(退货))",
+			 t.itemtype_code "产品类型代码",
+			 t.itemtype_name "产品类型名称",
+			 t.transport_time "运单出库时间",
+			 t.collection_on_delivery as "代收货款金额",
+			 t.order_amount as "订单金额",
+			 t.sku_number as "耗材SKU编码",
+			 t.sku_qty as "商品数量",
+			 t.weight  as "实际重量",
+			 t.length as "长",
+			 t.width as "宽",
+			 t.higth as "高",
+			 t.volumn as "体积",
+			 t.delivery_address as "始发地",
+			 t.province as "目的地省份",
+			 t.city as "目的地城市",
+			 t.state as "目的地区县",
+			 t.insurance_flag as "是否报价(0：否；1：是)",
+			 t.cod_flag as "是否COD（0：否；1：是)",
+			 t.shiptoname as "收件人",
+			 t.phone as "联系电话",
+			 t.address as "详细地址",
+			 t.express_time as "快递交接时间",
+			 t.check_time as "复核时间",
+			 t.weight_time as "称重时间",
+			 if(s.error_remark is null,t.pro_remark,s.error_remark)  as '异常原因'
+			 from jk_settle_order t left join jk_error_compared s 
+		     on t.pro_remark like concat('%',s.error_msg,'%')
+			 where  t.pro_flag not in('0','1','4')
+			     and t.express_number!='123456'
+		 <if test="express_number != null and express_number !=''" >
+	       and t.express_number=#{express_number}
+	      </if>
+	      <if test="store_name != null and store_name != ''" >
+	       and t.store_name like concat('%',#{store_name},'%')
+	      </if>	      
+	      <if test="warehouse_name != null and warehouse_name!=''" >
+	      and t.warehouse_name like concat('%',#{warehouse_name},'%')
+	      </if>	
+	      <if test="end_province != null and end_province!=''" >
+	       and t.province like concat('%',#{end_province},'%')
+	      </if>
+	      <if test="end_city != null and end_city != ''" >
+	     and t.city like concat('%',#{end_city},'%')
+	      </if>	
+	      <if test="end_state != null and end_state!=''" >
+	      and t.state  like concat('%',#{end_state},'%')
+	      </if>	  
+	      <if test="error_remark != null and error_remark != ''" >
+	      and if(s.error_remark is null,t.pro_remark,s.error_remark)   like concat('%',#{error_remark},'%')
+	      </if>
+	      <if test="s_time != null and s_time !=''" >
+	       and date_format(t.transport_time,'%Y%m%d') &gt;= date_format(#{s_time},'%Y%m%d')
+	      </if>	
+	      <if test="e_time != null and e_time!=''" >
+	       and date_format(t.transport_time,'%Y%m%d') &lt;= date_format(#{e_time},'%Y%m%d')
+	      </if>		      	 
+	</select>
+	
+	<select id="getImportMainInfo" parameterType="com.bt.lmis.controller.form.JkErrorQuery"  resultType="com.bt.lmis.model.ErrorAddress">
+       select 
+		   t.bat_id,
+		   max(t.create_date) as create_date,
+		   (select e.name from s_employee e where e.username=t.create_by) as create_by,
+		   count(1) as init_count,
+		   ifnull(sum(t.is_complete=1),0) as success_count,
+		   ifnull(sum(t.is_complete=0),0) as error_count,
+		   if(t.pro_flag!=0,'是','否') as trans_flag
+		   from jk_order_error_temporary t
+		   group by t.bat_id
+		   order by t.create_date desc
+	   limit #{firstResult},#{maxResult}
+	</select>
+	
+	<select id="getImportMainInfoCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	   select count(1)
+	   from (
+		   select 
+		   t.bat_id,
+		   t.create_by
+		   from jk_order_error_temporary t
+		   group by t.bat_id
+	   ) as c
+	</select>
+	
+	
+	<insert id="insertOrder"  parameterType="java.util.List">
+		insert into jk_order_error_temporary(
+			id,
+			upper_id,
+			bat_id,
+			store_code,
+			store_name,
+			warehouse_code,
+			warehouse_name,
+			transport_code,
+			transport_name,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			express_number,
+			transport_direction,
+			itemtype_code,
+			itemtype_name,
+			transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			sku_qty,
+			weight,
+			length,
+			width,
+			higth,
+			volumn,
+			delivery_address,
+			province,
+			city,
+			state,
+			insurance_flag,
+			cod_flag,
+			shiptoname,
+			phone,
+			address,
+			express_time,
+			check_time,
+			weight_time,
+			create_by
+		)values
+		<foreach collection="list" item="obj" index="index" separator=",">
+		(
+		    #{obj.id},
+		    #{obj.upper_id},
+		    #{obj.bat_id},
+			#{obj.store_code},
+			#{obj.store_name},
+			#{obj.warehouse_code},
+			#{obj.warehouse_name},
+			#{obj.transport_code},
+			#{obj.transport_name},
+			#{obj.delivery_order},
+			#{obj.epistatic_order},
+			#{obj.order_type},
+			#{obj.express_number},
+			#{obj.transport_direction},
+			#{obj.itemtype_code},
+			#{obj.itemtype_name},
+			#{obj.transport_time},
+			#{obj.collection_on_delivery},
+			#{obj.order_amount},
+			#{obj.sku_number},
+			#{obj.sku_qty},
+			#{obj.weight},
+			#{obj.length},
+			#{obj.width},
+			#{obj.higth},
+			#{obj.volumn},
+			#{obj.delivery_address},
+			#{obj.province},
+			#{obj.city},
+			#{obj.state},
+			#{obj.insurance_flag},
+			#{obj.cod_flag},
+			#{obj.shiptoname},
+			#{obj.phone},
+			#{obj.address},
+			#{obj.express_time},
+			#{obj.check_time},
+			#{obj.weight_time},
+			#{obj.create_by}
+		)
+		</foreach>
+	</insert>
+	
+	<update id="update_iscomplete" parameterType="java.util.Map">
+	   update jk_order_error_temporary 
+	          set  is_complete=1
+	      where bat_id=#{bat_id}
+	</update>
+	
+	 <select id="transDataPro" parameterType="java.util.HashMap" resultType="java.util.HashMap" statementType="CALLABLE">
+		  {call pro_jk_data_order_temporary(
+			  #{bat_id,jdbcType=VARCHAR,mode=IN},
+			  #{out_result,jdbcType=VARCHAR,mode=OUT},
+			  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+	
+		<delete id="deleteImport" parameterType="java.lang.String" >
+	    delete from jk_order_error_temporary
+	    where bat_id = #{bat_id,jdbcType=VARCHAR}
+  	</delete>
+  	
+  	<select id="findAllDetailData" parameterType="java.lang.String" resultType="java.util.Map">
+  	   select 
+			t.id,
+			t.upper_id,
+			t.bat_id,
+			t.store_code,
+			t.store_name,
+			t.warehouse_code,
+			t.warehouse_name,
+			t.transport_code,
+			t.transport_name,
+			t.delivery_order,
+			t.epistatic_order,
+			t.order_type,
+			t.express_number,
+			t.transport_direction,
+			t.itemtype_code,
+			t.itemtype_name,
+			t.transport_time,
+			t.collection_on_delivery,
+			t.order_amount,
+			t.sku_number,
+			t.sku_qty,
+			t.qty,
+			t.weight,
+			t.length,
+			t.width,
+			t.higth,
+			t.volumn,
+			t.delivery_address,
+			t.province,
+			t.city,
+			t.state,
+			t.insurance_flag,
+			t.cod_flag,
+			t.shiptoname,
+			t.phone,
+			t.address,
+			t.express_time,
+			t.check_time,
+			t.weight_time,
+			t.create_date,
+			t.operation_time,
+			t.is_transferring,
+			t.is_complete,
+			t.pro_flag,
+	        if(s.error_remark is null,t.pro_remark,s.error_remark) as "pro_remark",
+			t.create_by
+   from jk_order_error_temporary t left join jk_error_compared s 
+      on t.pro_remark like concat('%',s.error_msg,'%')
+   where  t.bat_id=#{bat_id}	   
+         <if test="express_number != null and express_number !=''" >
+	       and t.express_number=#{express_number}
+	      </if>
+	      <if test="store_name != null and store_name != ''" >
+	       and t.store_name like concat('%',#{store_name},'%')
+	      </if>	      
+	      <if test="warehouse_name != null and warehouse_name!=''" >
+	      and t.warehouse_name like concat('%',#{warehouse_name},'%')
+	      </if>	
+	      <if test="end_province != null and end_province!=''" >
+	       and t.province like concat('%',#{end_province},'%')
+	      </if>
+	      <if test="end_city != null and end_city != ''" >
+	     and t.city like concat('%',#{end_city},'%')
+	      </if>	
+	      <if test="end_state != null and end_state!=''" >
+	      and t.state  like concat('%',#{end_state},'%')
+	      </if>	  
+	      <if test="error_remark != null and error_remark != ''" >
+	      and if(s.error_remark is null,t.pro_remark,s.error_remark)   like concat('%',#{error_remark},'%')
+	      </if>	    
+   LIMIT #{firstResult }, #{maxResult }
+  	</select>
+  	
+  	<select id="selectDetailCount" parameterType="com.bt.lmis.model.ErrorAddress" resultType="java.lang.Integer">
+  	  select 
+			count(1)
+   from jk_order_error_temporary t left join jk_error_compared s 
+      on t.pro_remark like concat('%',s.error_msg,'%')
+   where  t.bat_id=#{bat_id}	   
+         <if test="express_number != null and express_number !=''" >
+	       and t.express_number=#{express_number}
+	      </if>
+	      <if test="store_name != null and store_name != ''" >
+	       and t.store_name like concat('%',#{store_name},'%')
+	      </if>	      
+	      <if test="warehouse_name != null and warehouse_name!=''" >
+	      and t.warehouse_name like concat('%',#{warehouse_name},'%')
+	      </if>	
+	      <if test="end_province != null and end_province!=''" >
+	       and t.province like concat('%',#{end_province},'%')
+	      </if>
+	      <if test="end_city != null and end_city != ''" >
+	     and t.city like concat('%',#{end_city},'%')
+	      </if>	
+	      <if test="end_state != null and end_state!=''" >
+	      and t.state  like concat('%',#{end_state},'%')
+	      </if>	  
+	      <if test="error_remark != null and error_remark != ''" >
+	      and if(s.error_remark is null,t.pro_remark,s.error_remark)   like concat('%',#{error_remark},'%')
+	      </if>	    
+  	</select>
+  	
+  	
+  	<select id="exportData" parameterType="com.bt.lmis.model.ErrorAddress"  resultType="java.util.HashMap">
+  	  select 	   
+			 t.id as "主键(请勿操作)",
+			 t.upper_id as "wms系统主键",
+			 t.store_code as '店铺编码',
+			 t.store_name as '店铺名称',
+			 t.warehouse_code as '仓库编码',
+			 t.warehouse_name as '仓库名称',
+			 t.transport_code as '承运商编码',
+			 t.transport_name as '承运商名称',
+			 t.delivery_order as '平台订单号',
+			 t.epistatic_order as '上位系统订单号',
+			 t.order_type "订单类型［作业单类型]",
+			 t.express_number "运单号",
+			 t.transport_direction "运输方向(0:正向(发货);1:逆向(退货))",
+			 t.itemtype_code "产品类型代码",
+			 t.itemtype_name "产品类型名称",
+			 t.transport_time "运单出库时间",
+			 t.collection_on_delivery as "代收货款金额",
+			 t.order_amount as "订单金额",
+			 t.sku_number as "耗材SKU编码",
+			 t.sku_qty as "商品数量",
+			 t.weight  as "实际重量",
+			 t.length as "长",
+			 t.width as "宽",
+			 t.higth as "高",
+			 t.volumn as "体积",
+			 t.delivery_address as "始发地",
+			 t.province as "目的地省份",
+			 t.city as "目的地城市",
+			 t.state as "目的地区县",
+			 t.insurance_flag as "是否报价(0：否；1：是)",
+			 t.cod_flag as "是否COD（0：否；1：是)",
+			 t.shiptoname as "收件人",
+			 t.phone as "联系电话",
+			 t.address as "详细地址",
+			 t.express_time as "快递交接时间",
+			 t.check_time as "复核时间",
+			 t.weight_time as "称重时间",
+			 if(s.error_remark is null,t.pro_remark,s.error_remark)  as '异常原因'
+			 from jk_order_error_temporary t left join jk_error_compared s 
+		     on t.pro_remark like concat('%',s.error_msg,'%')
+			 where t.pro_flag not in('0','1','4')
+         <if test="express_number != null and express_number !=''" >
+	       and t.express_number=#{express_number}
+	      </if>
+	      <if test="store_name != null and store_name != ''" >
+	       and t.store_name like concat('%',#{store_name},'%')
+	      </if>	      
+	      <if test="warehouse_name != null and warehouse_name!=''" >
+	      and t.warehouse_name like concat('%',#{warehouse_name},'%')
+	      </if>	
+	      <if test="end_province != null and end_province!=''" >
+	       and t.province like concat('%',#{end_province},'%')
+	      </if>
+	      <if test="end_city != null and end_city != ''" >
+	     and t.city like concat('%',#{end_city},'%')
+	      </if>	
+	      <if test="end_state != null and end_state!=''" >
+	      and t.state  like concat('%',#{end_state},'%')
+	      </if>	  
+	      <if test="error_remark != null and error_remark != ''" >
+	      and if(s.error_remark is null,t.pro_remark,s.error_remark)   like concat('%',#{error_remark},'%')
+	      </if>	    	
+  	 </select>
+  	 
+  	 <select id="getErrorCount"  resultType="java.lang.Integer">
+  	   select count(1) from jk_settle_order t where t.pro_flag=3
+  	 </select>
+  	 
+  	 <select id="getErrorData" parameterType="java.util.Map" resultType="java.util.Map">
+  	   select 
+  	    t.id,
+  	    replace(t.address," ","") as address
+  	    from jk_settle_order t 
+  	    where t.pro_flag=3
+  	    limit #{start_size},#{pageSize}
+  	 </select>
+  	 
+  	 <update id="update_data" parameterType="java.util.Map">
+  	   update  jk_settle_order
+  	    set province=#{province},
+  	          city=#{city},
+  	          state=#{district},
+  	          pro_flag=0
+  	  where id=#{id}
+  	 </update>
+  	 
+  	<select id="transDataPro_add" parameterType="java.util.HashMap" resultType="java.util.HashMap" statementType="CALLABLE">
+		  {call pro_jk_data_order_all(
+			  #{id,jdbcType=VARCHAR,mode=IN},
+			  #{out_result,jdbcType=VARCHAR,mode=OUT},
+			  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+
+
+  <insert id="add_error_address" parameterType="com.bt.lmis.model.JkErrorAddressBean" >
+    insert into tb_error_location_correct
+    (
+      error_area_name,
+      real_area_name,
+      area_level
+    )
+    values(
+     #{error_area_name},
+     #{real_area_name},
+     #{area_level}
+    )
+  </insert>
+  
+  <select id="get_if_exist_address" parameterType="com.bt.lmis.model.JkErrorAddressBean" resultType="java.lang.Integer">
+     select ifnull(count(1),0) from tb_error_location_correct t
+     where t.error_area_name=#{error_area_name}
+         and t.area_level=#{area_level}
+  </select>
+  
+  <select id="get_address_exist_system"  parameterType="java.util.Map"  resultType="java.util.Map">
+     select 
+      t.id,
+      t.area_name,
+      t.area_code,
+      t.level,
+      t.pid
+    from tb_area t
+    where t.level=#{level}
+   <if test="id != null and id != ''" >
+     t.pid=#{id}
+   </if>
+   <if test="area_name != null and area_name != ''" >
+     t.area_name=#{area_name}
+   </if>   
+  </select>
+</mapper>   

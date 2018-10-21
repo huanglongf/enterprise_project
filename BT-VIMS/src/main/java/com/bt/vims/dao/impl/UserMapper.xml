@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.vims.dao.UserMapper">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.bt.vims.model.User">
+		<result column="id" property="id" />
+		<result column="username" property="username" />
+		<result column="name" property="name" />
+		<result column="password" property="password" />
+		<result column="company_code" property="company_code" />
+		<result column="active" property="active" />
+		<result column="department_code" property="department_code" />
+		<result column="telephone" property="telephone" />
+		<result column="name" property="name" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,username,password,company_code,active,department_code,telephone,name
+	</sql>
+
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="username != null and username != ''">
+				and username = #{username}
+			</if>
+			<if test="password != null and password != ''">
+				and password = #{password}
+			</if>
+			<if test="company_code != null and company_code != ''">
+				and company_code = #{company_code}
+			</if>
+			<if test="active != null and active != ''">
+				and active = #{active}
+			</if>
+			<if test="department_code != null and department_code != ''">
+				and department_code = #{department_code}
+			</if>
+			<if test="telephone != null and telephone != ''">
+				and telephone = #{telephone}
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause_like">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="username != null and username != ''">
+				and username like CONCAT('%', #{username}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%', #{name}, '%')
+			</if>
+		</trim>
+
+	</sql>
+
+
+	<!-- 依据主键查找运维人员 -->
+	<select id="query_user_by_id" resultMap="BaseResultMap" parameterType="Object">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			s_user 
+		where 
+			id = #{id}
+	</select>
+
+
+	<!-- 登陆验证 -->
+	<select id="login_check" parameterType="com.bt.vims.model.User" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+			s_user
+		where
+			username=#{username} and password=#{password}
+	</select>
+
+</mapper>   

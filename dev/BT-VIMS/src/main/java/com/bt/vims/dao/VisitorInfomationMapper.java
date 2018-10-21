@@ -1,0 +1,90 @@
+package com.bt.vims.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.bt.vims.model.VisitorInfomation;
+import com.bt.vims.page.QueryParameter;
+
+public interface VisitorInfomationMapper {
+	
+	/** 
+	* @Title: save 
+	* @Description: TODO(访客记录新增) 
+	* @param @param vi    设定文件 
+	* @return void    返回类型 
+	* @throws 
+	*/
+	public void save(VisitorInfomation vi);
+	
+	/** 
+	* @Title: update 
+	* @Description: TODO(访客记录更新) 
+	* @param @param vi    设定文件 
+	* @return void    返回类型 
+	* @throws 
+	*/
+	public void update(VisitorInfomation vi);
+	
+	/** 
+	* @Title: query_all 
+	* @Description: TODO(查询访客记录) 
+	* @param @return    设定文件 
+	* @return List<VisitorInfomation>    返回类型 
+	* @throws 
+	*/
+	public List<VisitorInfomation> query_all(VisitorInfomation vi);
+
+	public List<Map<String, Object>> query_check_log(@Param("username")String username);
+	
+	/** 
+	* @Title: query_by_id 
+	* @Description: TODO(根据ID查询) 
+	* @param @param id
+	* @param @return    设定文件 
+	* @return VisitorInfomation    返回类型 
+	* @throws 
+	*/
+	public List<VisitorInfomation> query_by_data(@Param("data")String data);
+	
+	/** 
+	* @Title: query_host 
+	* @Description: TODO(查询拜访人记录) 
+	* @param @return    设定文件 
+	* @return List<VisitorInfomation>    返回类型 
+	* @throws 
+	*/
+	public List<Map<String, Object>> query_host();
+	
+	/** 
+	* @Title: query 
+	* @Description: TODO(根据条件查询) 
+	* @param @param vi
+	* @param @return    设定文件 
+	* @return List<VisitorInfomation>    返回类型 
+	* @throws 
+	*/
+	public List<VisitorInfomation> query(VisitorInfomation vi);
+	
+	public List<VisitorInfomation> getDetailInfo(QueryParameter queryParameter);
+	public Integer getDetailInfoCount(QueryParameter queryParameter);
+	public List<?> getExcelInfo(Map<String, Object> param);
+	
+	/**
+	 * 批量插入访客信息进入主表
+	 * @param visitorInfomations（PEPPER访客信息）
+	 * @return 插入成功的id
+	 */
+	public int insertMainInfor(List<VisitorInfomation> visitorInfomations);
+	
+	/**
+	 * 查询当天的访客记录数(用作编号的递增)
+	 * @param vi
+	 * @return
+	 */
+	public Integer columnTheDay(VisitorInfomation vi);
+	
+	
+}

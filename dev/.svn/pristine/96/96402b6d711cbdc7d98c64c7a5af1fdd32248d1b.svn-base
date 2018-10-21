@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.ReportRegionMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.workOrder.bean.ReportRegion" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="from_year" property="fromYear" jdbcType="INTEGER" />
+    <result column="from_month" property="fromMonth" jdbcType="INTEGER" />
+    <result column="from_day" property="fromDay" jdbcType="INTEGER" />
+    <result column="to_year" property="toYear" jdbcType="INTEGER" />
+    <result column="to_month" property="toMonth" jdbcType="INTEGER" />
+    <result column="to_day" property="toDay" jdbcType="INTEGER" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, from_year, from_month, from_day, to_year, to_month, to_day, create_user, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from report_region
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from report_region
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.workOrder.bean.ReportRegion" >
+    insert into report_region (id, from_year, from_month, 
+      from_day, to_year, to_month, 
+      to_day, create_user, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{fromYear,jdbcType=INTEGER}, #{fromMonth,jdbcType=INTEGER}, 
+      #{fromDay,jdbcType=INTEGER}, #{toYear,jdbcType=INTEGER}, #{toMonth,jdbcType=INTEGER}, 
+      #{toDay,jdbcType=INTEGER}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.workOrder.bean.ReportRegion" >
+    insert into report_region
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fromYear != null" >
+        from_year,
+      </if>
+      <if test="fromMonth != null" >
+        from_month,
+      </if>
+      <if test="fromDay != null" >
+        from_day,
+      </if>
+      <if test="toYear != null" >
+        to_year,
+      </if>
+      <if test="toMonth != null" >
+        to_month,
+      </if>
+      <if test="toDay != null" >
+        to_day,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="fromYear != null" >
+        #{fromYear,jdbcType=INTEGER},
+      </if>
+      <if test="fromMonth != null" >
+        #{fromMonth,jdbcType=INTEGER},
+      </if>
+      <if test="fromDay != null" >
+        #{fromDay,jdbcType=INTEGER},
+      </if>
+      <if test="toYear != null" >
+        #{toYear,jdbcType=INTEGER},
+      </if>
+      <if test="toMonth != null" >
+        #{toMonth,jdbcType=INTEGER},
+      </if>
+      <if test="toDay != null" >
+        #{toDay,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.workOrder.bean.ReportRegion" >
+    update report_region
+    <set >
+      <if test="fromYear != null" >
+        from_year = #{fromYear,jdbcType=INTEGER},
+      </if>
+      <if test="fromMonth != null" >
+        from_month = #{fromMonth,jdbcType=INTEGER},
+      </if>
+      <if test="fromDay != null" >
+        from_day = #{fromDay,jdbcType=INTEGER},
+      </if>
+      <if test="toYear != null" >
+        to_year = #{toYear,jdbcType=INTEGER},
+      </if>
+      <if test="toMonth != null" >
+        to_month = #{toMonth,jdbcType=INTEGER},
+      </if>
+      <if test="toDay != null" >
+        to_day = #{toDay,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.workOrder.bean.ReportRegion" >
+    update report_region
+    set from_year = #{fromYear,jdbcType=INTEGER},
+      from_month = #{fromMonth,jdbcType=INTEGER},
+      from_day = #{fromDay,jdbcType=INTEGER},
+      to_year = #{toYear,jdbcType=INTEGER},
+      to_month = #{toMonth,jdbcType=INTEGER},
+      to_day = #{toDay,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

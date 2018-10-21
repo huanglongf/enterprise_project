@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.WoPersonalReportMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.workOrder.bean.WoPersonalReport" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="report_time" property="reportTime" jdbcType="VARCHAR" />
+    <result column="emp_id" property="empId" jdbcType="INTEGER" />
+    <result column="emp_name" property="empName" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="group_name" property="groupName" jdbcType="VARCHAR" />
+    <result column="personal_get_num" property="personalGetNum" jdbcType="INTEGER" />
+    <result column="personal_process_num" property="personalProcessNum" jdbcType="INTEGER" />
+    <result column="personal_multiple_processing_num" property="personalMultipleProcessingNum" jdbcType="INTEGER" />
+    <result column="personal_forword_num" property="personalForwordNum" jdbcType="INTEGER" />
+    <result column="personal_unprocess_num" property="personalUnprocessNum" jdbcType="INTEGER" />
+    <result column="personal_over_num" property="personalOverNum" jdbcType="INTEGER" />
+    <result column="personal_response_time" property="personalResponseTime" jdbcType="INTEGER" />
+    <result column="group_count" property="groupCount" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, emp_id, emp_name, group_id, group_name, personal_get_num, personal_process_num, 
+    personal_multiple_processing_num, personal_forword_num, personal_unprocess_num, personal_over_num, 
+    personal_response_time,group_count,report_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wo_personal_report
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wo_personal_report
+  </select>
+  <insert id="insert" parameterType="com.bt.workOrder.bean.WoPersonalReport" >
+    insert into wo_personal_report
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="empId != null" >
+        emp_id,
+      </if>
+      <if test="empName != null" >
+        emp_name,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="groupName != null" >
+        group_name,
+      </if>
+      <if test="personalGetNum != null" >
+        personal_get_num,
+      </if>
+      <if test="personalProcessNum != null" >
+        personal_process_num,
+      </if>
+      <if test="personalMultipleProcessingNum != null" >
+        personal_multiple_processing_num,
+      </if>
+      <if test="personalForwordNum != null" >
+        personal_forword_num,
+      </if>
+      <if test="personalUnprocessNum != null" >
+        personal_unprocess_num,
+      </if>
+      <if test="personalOverNum != null" >
+        personal_over_num,
+      </if>
+      <if test="personalResponseTime != null" >
+        personal_response_time,
+      </if>
+      <if test="groupCount != null" >
+        group_count,
+      </if>
+      <if test="reportTime != null" >
+        report_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="empId != null" >
+        #{empId,jdbcType=INTEGER},
+      </if>
+      <if test="empName != null" >
+        #{empName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="groupName != null" >
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="personalGetNum != null" >
+        #{personalGetNum,jdbcType=INTEGER},
+      </if>
+      <if test="personalProcessNum != null" >
+        #{personalProcessNum,jdbcType=INTEGER},
+      </if>
+      <if test="personalMultipleProcessingNum != null" >
+        #{personalMultipleProcessingNum,jdbcType=INTEGER},
+      </if>
+      <if test="personalForwordNum != null" >
+        #{personalForwordNum,jdbcType=INTEGER},
+      </if>
+      <if test="personalUnprocessNum != null" >
+        #{personalUnprocessNum,jdbcType=INTEGER},
+      </if>
+      <if test="personalOverNum != null" >
+        #{personalOverNum,jdbcType=INTEGER},
+      </if>
+      <if test="personalResponseTime != null" >
+        #{personalResponseTime,jdbcType=INTEGER},
+      </if>
+      <if test="groupCount != null" >
+        #{groupCount,jdbcType=INTEGER},
+      </if>
+      <if test="reportTime != null" >
+        #{reportTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="getProcessPG" resultType="java.util.HashMap" parameterType="java.lang.String">
+    select 
+    create_by as pid,
+    create_by_display as pname,
+    create_by_group as gid,
+    create_by_group_display as gname
+    from wo_process_log
+    where DATE_FORMAT(create_time, "%Y-%m-%d") = #{date}
+    group by create_by,create_by_group
+  </select>
+  <select id="getRecievePG" resultType="java.util.HashMap" parameterType="java.lang.String">
+    select 
+    recieve_by as pid,
+    recieve_by_display as pname,
+    recieve_by_group as gid,
+    recieve_by_group_display as gname
+    from wo_process_log
+    where DATE_FORMAT(create_time, "%Y-%m-%d") = #{date}
+    group by recieve_by,recieve_by_group
+  </select>
+  <select id="getGroupCount" resultType="int">
+    SELECT COUNT(1) from (
+		SELECT * from wo_group_member WHERE 
+		group_id=#{group} 
+		and employee_id !="1"
+		GROUP BY employee_id) a
+  </select>
+  <select id="getWoCount" resultType="java.util.HashMap" parameterType="java.lang.String">
+		SELECT wo_store_id,create_time from wo_process_log WHERE 
+		1=1
+		<if test="type==1">
+		and create_by=#{person}
+		and create_by_group=#{group}
+		</if>
+		<if test="type==2">
+		and recieve_by=#{person}
+		and recieve_by_group=#{group}
+		</if>
+		and action = #{action}
+		and  DATE_FORMAT(create_time, "%Y-%m-%d") = #{date}
+		GROUP BY wo_store_id
+  </select>
+  <select id="getPersonalMultipleProcessingNum" resultType="int" parameterType="java.lang.String">
+   	select count(1) from (
+		SELECT COUNT(wo_store_id),wo_store_id
+		from wo_process_log 
+		WHERE 
+		1=1
+		and create_by=#{person}
+		and create_by_group=#{group}
+		and action = "REPLY"
+		and  DATE_FORMAT(create_time, "%Y-%m-%d") = #{date}
+		GROUP BY wo_store_id HAVING COUNT(wo_store_id)>1
+	) a
+  </select>
+  
+  <select id="getPersonalUnprocessNum" resultType="int" parameterType="java.lang.String">
+	SELECT COUNT(1)
+		from wo_store_master 
+		WHERE 1=1
+		and current_processor=#{person} 
+		and current_processor_group=#{group}
+		AND wo_status=0
+  </select>
+  
+  <select id="getNewLog" resultType="java.util.HashMap" parameterType="java.lang.String">
+	SELECT * from wo_process_log 
+		WHERE 1=1
+		AND create_time > #{createTime}
+		AND wo_store_id = #{woId}
+		ORDER BY create_time ASC
+		LIMIT 1
+  </select>
+  
+  <select id="search" resultType="java.util.HashMap" parameterType="com.bt.common.controller.param.Parameter">
+	SELECT
+		<if test="param.tableName == 'wo_personal_report'">
+			emp_name as personal_emp_name,
+			<!-- group_name as personal_group_name, -->
+			SUM(personal_get_num) as personal_get_num,
+			SUM(personal_process_num) as personal_process_num,
+			SUM(personal_multiple_processing_num) as personal_multiple_processing_num,
+			SUM(personal_forword_num) as personal_forword_num,
+			SUM(personal_unprocess_num) as personal_unprocess_num,
+			SUM(personal_over_num) as personal_over_num,
+			CAST(SUM(personal_over_num)/SUM(personal_process_num)*100 as DECIMAL(18,2)) as personal_over_rate,
+			CAST(SUM(personal_response_time)/${param.timeLine} as DECIMAL(18,2)) as personal_response_time
+		</if>
+		<if test="param.tableName == 'wo_group_report'">
+			<!-- emp_name as group_emp_name, -->
+			group_name as group_group_name,
+			CAST(SUM(personal_get_num)/group_count as DECIMAL(18,2)) as group_get_num,
+			CAST(SUM(personal_process_num)/group_count as DECIMAL(18,2)) as group_process_num,
+			CAST(SUM(personal_multiple_processing_num)/group_count as DECIMAL(18,2)) as group_multiple_processing_num,
+			CAST(SUM(personal_forword_num)/group_count as DECIMAL(18,2)) as group_forword_num,
+			CAST(SUM(personal_unprocess_num)/${param.timeLine}/group_count as DECIMAL(18,2)) as group_unprocess_num,
+			CAST(SUM(personal_over_num)/group_count as DECIMAL(18,2)) as group_over_num,
+			CAST(SUM(personal_over_num)/SUM(personal_process_num)*100 as DECIMAL(18,2)) as group_over_rate,
+			CAST(SUM(personal_response_time)/${param.timeLine}/group_count as DECIMAL(18,2)) as group_response_time
+		</if>
+	FROM wo_personal_report
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<if test="param.create_time != null and param.create_time != ''">
+			AND TO_DAYS(report_time) &gt;= TO_DAYS(#{param.create_time_start })
+			AND TO_DAYS(report_time) &lt;= TO_DAYS(#{param.create_time_end })
+		</if>
+		<if test="param.group_name != null and param.group_name != ''">
+			AND group_name LIKE CONCAT("%", #{param.group_name }, "%")
+		</if>
+		<if test="param.emp_name != null and param.emp_name != ''">
+			AND emp_name LIKE CONCAT("%", #{param.emp_name }, "%")
+		</if>
+	</trim>
+	<if test="param.tableName == 'wo_personal_report'">
+		GROUP BY emp_id
+	</if>
+	<if test="param.tableName == 'wo_group_report'">
+		GROUP BY group_id
+	</if>
+	<if test="param.sortColumn != null and param.sortColumn != ''">
+		ORDER BY ${param.sortColumn } ${param.sort }
+	</if>
+	<if test="param.sortColumn == null or param.sortColumn == ''">
+		ORDER BY emp_id
+	</if>
+	LIMIT #{firstResult }, #{maxResult }
+  </select>
+  
+  <select id="exportReport" resultType="java.util.HashMap" parameterType="com.bt.common.controller.param.Parameter">
+	SELECT
+		<if test="param.tableName == 'wo_personal_report'">
+			emp_name as personal_emp_name,
+			<!-- group_name as personal_group_name, -->
+			SUM(personal_get_num) as personal_get_num,
+			SUM(personal_process_num) as personal_process_num,
+			SUM(personal_multiple_processing_num) as personal_multiple_processing_num,
+			SUM(personal_forword_num) as personal_forword_num,
+			SUM(personal_unprocess_num) as personal_unprocess_num,
+			SUM(personal_over_num) as personal_over_num,
+			CAST(SUM(personal_over_num)/SUM(personal_process_num)*100 as DECIMAL(18,2)) as personal_over_rate,
+			CAST(SUM(personal_response_time)/${param.timeLine} as DECIMAL(18,2)) as personal_response_time
+		</if>
+		<if test="param.tableName == 'wo_group_report'">
+			<!-- emp_name as group_emp_name, -->
+			group_name as group_group_name,
+			CAST(SUM(personal_get_num)/group_count as DECIMAL(18,2)) as group_get_num,
+			CAST(SUM(personal_process_num)/group_count as DECIMAL(18,2)) as group_process_num,
+			CAST(SUM(personal_multiple_processing_num)/group_count as DECIMAL(18,2)) as group_multiple_processing_num,
+			CAST(SUM(personal_forword_num)/group_count as DECIMAL(18,2)) as group_forword_num,
+			CAST(SUM(personal_unprocess_num)/${param.timeLine}/group_count as DECIMAL(18,2)) as group_unprocess_num,
+			CAST(SUM(personal_over_num)/group_count as DECIMAL(18,2)) as group_over_num,
+			CAST(SUM(personal_over_num)/SUM(personal_process_num)*100 as DECIMAL(18,2)) as group_over_rate,
+			CAST(SUM(personal_response_time)/${param.timeLine}/group_count as DECIMAL(18,2)) as group_response_time
+		</if>
+	FROM wo_personal_report
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<if test="param.create_time != null and param.create_time != ''">
+			AND TO_DAYS(report_time) &gt;= TO_DAYS(#{param.create_time_start })
+			AND TO_DAYS(report_time) &lt;= TO_DAYS(#{param.create_time_end })
+		</if>
+		<if test="param.group_name != null and param.group_name != ''">
+			AND group_name LIKE CONCAT("%", #{param.group_name }, "%")
+		</if>
+		<if test="param.emp_name != null and param.emp_name != ''">
+			AND emp_name LIKE CONCAT("%", #{param.emp_name }, "%")
+		</if>
+	</trim>
+	<if test="param.tableName == 'wo_personal_report'">
+		GROUP BY emp_id
+	</if>
+	<if test="param.tableName == 'wo_group_report'">
+		GROUP BY group_id
+	</if>
+	<if test="param.sortColumn != null and param.sortColumn != ''">
+		ORDER BY ${param.sortColumn } ${param.sort }
+	</if>
+	<if test="param.sortColumn == null or param.sortColumn == ''">
+		ORDER BY emp_id
+	</if>
+  </select>
+  
+  <select id="countSearch" resultType="int" parameterType="com.bt.common.controller.param.Parameter">
+	SELECT
+		count(1)
+	FROM
+	(
+	SELECT
+		count(1)
+	FROM wo_personal_report
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<if test="param.create_time != null and param.create_time != ''">
+			AND TO_DAYS(report_time) &gt;= TO_DAYS(#{param.create_time_start })
+			AND TO_DAYS(report_time) &lt;= TO_DAYS(#{param.create_time_end })
+		</if>
+		<if test="param.group_name != null and param.group_name != ''">
+			AND group_name LIKE CONCAT("%", #{param.group_name }, "%")
+		</if>
+		<if test="param.emp_name != null and param.emp_name != ''">
+			AND emp_name LIKE CONCAT("%", #{param.emp_name }, "%")
+		</if>
+	</trim>
+	<if test="param.tableName == 'wo_personal_report'">
+		GROUP BY emp_id
+	</if>
+	<if test="param.tableName == 'wo_group_report'">
+		GROUP BY group_id
+	</if>
+	) a
+  </select>
+  <delete id="deleteByReportTime">
+  	delete FROM wo_personal_report WHERE report_time = #{date}
+  </delete>
+</mapper>

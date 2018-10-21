@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.OperationfeeDataDetailMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.OperationfeeDataDetail" >
+	<result column="id" property="id"/>
+	<result column="op_id" property="op_id"/>
+	<result column="bat_id" property="bat_id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="order_type" property="order_type"/>
+	<result column="operation_time" property="operation_time"/>
+	<result column="store_name" property="store_name"/>
+	<result column="job_orderno" property="job_orderno"/>
+	<result column="related_orderno" property="related_orderno"/>
+	<result column="job_type" property="job_type"/>
+	<result column="storaggelocation_code" property="storaggelocation_code"/>
+	<result column="in_num" property="in_num"/>
+	<result column="out_num" property="out_num"/>
+	<result column="item_number" property="item_number"/>
+	<result column="sku_number" property="sku_number"/>
+	<result column="art_no" property="art_no"/>
+	<result column="item_name" property="item_name"/>
+	<result column="item_size" property="item_size"/>
+	<result column="inventory_status" property="inventory_status"/>
+	<result column="operator" property="operator"/>
+	<result column="store_id" property="store_id"/>
+	<result column="settle_flag" property="settle_flag"/>
+	<result column="platform_order" property="platform_order"/>
+	<result column="warehouse_type" property="warehouse_type"/>
+	<result column="warehouse_name" property="warehouse_name"/>
+	<result column="warehouse_code" property="warehouse_code"/>
+	<result column="brand_docking_code" property="brand_docking_code"/>
+	<result column="barcode" property="barcode"/>
+	<result column="epistatic_order" property="epistatic_order"/>
+	<result column="park_code" property="park_code"/>
+	<result column="park_name" property="park_name"/>
+	<result column="park_cost_center" property="park_cost_center"/>
+	<result column="sku_count" property="sku_count"/>
+</resultMap>
+
+<resultMap id="BaseResultMaps" type="com.bt.lmis.balance.model.OperationfeeDataDetail" >
+	<result column="id" property="id"/>
+	<result column="op_id" property="op_id"/>
+	<result column="bat_id" property="bat_id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="order_type" property="order_type"/>
+	<result column="operation_time" property="operation_time"/>
+	<result column="store_name" property="store_name"/>
+	<result column="job_orderno" property="job_orderno"/>
+	<result column="related_orderno" property="related_orderno"/>
+	<result column="job_type" property="job_type"/>
+	<result column="storaggelocation_code" property="storaggelocation_code"/>
+	<result column="in_num" property="in_num"/>
+	<result column="out_num" property="out_num"/>
+	<result column="item_number" property="item_number"/>
+	<result column="sku_number" property="sku_number"/>
+	<result column="art_no" property="art_no"/>
+	<result column="item_name" property="item_name"/>
+	<result column="item_size" property="item_size"/>
+	<result column="inventory_status" property="inventory_status"/>
+	<result column="operator" property="operator"/>
+	<result column="store_id" property="store_id"/>
+	<result column="settle_flag" property="settle_flag"/>
+	<result column="platform_order" property="platform_order"/>
+	<result column="warehouse_type" property="warehouse_type"/>
+	<result column="warehouse_name" property="warehouse_name"/>
+	<result column="warehouse_code" property="warehouse_code"/>
+	<result column="ctnum" property="ctnum"/>
+</resultMap>
+    
+<!-- tb_operationfee_data_detail table all fields -->
+<sql id="Base_Column_List" >
+	 id,bat_id,warehouse_type,warehouse_name,warehouse_code,brand_docking_code,barcode,epistatic_order,create_time,create_user,update_time,update_user,order_type,operation_time,store_name,job_orderno,related_orderno,platform_order,job_type,storaggelocation_code,in_num,out_num,item_number,sku_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,expenses,type,park_code,park_name,park_cost_center
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="order_type != null and order_type != ''" >
+	    and order_type in ( ${order_type})
+	</if>
+	<if test="operation_time != null" >
+	    and operation_time =  #{operation_time}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	 	<if test="job_orderno != null and job_orderno != ''" >
+	    and job_orderno =  #{job_orderno}
+	</if>
+	 	<if test="related_orderno != null and related_orderno != ''" >
+	    and related_orderno =  #{related_orderno}
+	</if>
+	 	<if test="job_type != null and job_type != ''" >
+	    and job_type in (${job_type})
+	</if>
+	 	<if test="storaggelocation_code != null and storaggelocation_code != ''" >
+	    and storaggelocation_code =  #{storaggelocation_code}
+	</if>
+	<if test="in_num != null" >
+	    and in_num =  #{in_num}
+	</if>
+	<if test="out_num != null" >
+	    and out_num =  #{out_num}
+	</if>
+	 	<if test="item_number != null and item_number != ''" >
+	    and item_number =  #{item_number}
+	</if>
+	 	<if test="sku_number != null and sku_number != ''" >
+	    and sku_number =  #{sku_number}
+	</if>
+	 	<if test="art_no != null and art_no != ''" >
+	    and art_no =  #{art_no}
+	</if>
+	 	<if test="item_name != null and item_name != ''" >
+	    and item_name =  #{item_name}
+	</if>
+	 	<if test="item_size != null and item_size != ''" >
+	    and item_size =  #{item_size}
+	</if>
+	 	<if test="inventory_status != null and inventory_status != ''" >
+	    and inventory_status =  #{inventory_status}
+	</if>
+	 	<if test="operator != null and operator != ''" >
+	    and operator =  #{operator}
+	</if>
+	<if test="store_id != null" >
+	    and store_id =  #{store_id}
+	</if>
+	<if test="settle_flag != null" >
+	    and settle_flag =  #{settle_flag}
+	</if>
+</trim>
+</sql>
+   
+
+<sql id="where_Clause_up">
+where 1=1
+<trim  suffixOverrides="," >
+ 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+ 	<if test="job_type != null and job_type != ''" >
+	    and job_type in (${job_type})
+	</if>
+	<if test="settle_flag != null" >
+	    and settle_flag =  #{settle_flag}
+	</if>
+</trim>
+</sql>
+
+
+<sql id="where_Clause_adv">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="order_type != null and order_type != ''" >
+	    and order_type =#{order_type}
+	</if>
+	<if test="operation_time != null" >
+	    and operation_time =  #{operation_time}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	 	<if test="job_orderno != null and job_orderno != ''" >
+	    and job_orderno =  #{job_orderno}
+	</if>
+	 	<if test="related_orderno != null and related_orderno != ''" >
+	    and related_orderno =  #{related_orderno}
+	</if>
+	 	<if test="storaggelocation_code != null and storaggelocation_code != ''" >
+	    and storaggelocation_code =  #{storaggelocation_code}
+	</if>
+	<if test="in_num != null" >
+	    and in_num =  #{in_num}
+	</if>
+	<if test="out_num != null" >
+	    and out_num =  #{out_num}
+	</if>
+	 	<if test="item_number != null and item_number != ''" >
+	    and item_number =  #{item_number}
+	</if>
+	 	<if test="sku_number != null and sku_number != ''" >
+	    and sku_number =  #{sku_number}
+	</if>
+	 	<if test="art_no != null and art_no != ''" >
+	    and art_no =  #{art_no}
+	</if>
+	 	<if test="item_name != null and item_name != ''" >
+	    and item_name =  #{item_name}
+	</if>
+	 	<if test="item_size != null and item_size != ''" >
+	    and item_size =  #{item_size}
+	</if>
+	 	<if test="inventory_status != null and inventory_status != ''" >
+	    and inventory_status =  #{inventory_status}
+	</if>
+	 	<if test="operator != null and operator != ''" >
+	    and operator =  #{operator}
+	</if>
+	<if test="store_id != null" >
+	    and store_id =  #{store_id}
+	</if>
+	<if test="settle_flag != null" >
+	    and settle_flag =  #{settle_flag}
+	</if>
+	<if test="begin_operation_time != null and begin_operation_time != ''">
+	 and  operation_time &gt;#{begin_operation_time}
+	</if>
+	<if test="end_operation_time != null and end_operation_time != ''">
+	 and  operation_time &lt;#{end_operation_time}
+	</if>
+	<if test="epistatic_order != null and epistatic_order != ''">
+	 and  epistatic_order =#{epistatic_order}
+	</if>
+	<if test="warehouse_code != null and warehouse_code != ''" >
+	    and warehouse_code =  #{warehouse_code}
+	</if>
+	<if test="platform_order != null and platform_order != ''" >
+	    and platform_order =  #{platform_order}
+	</if>
+	<if test="job_type != null and job_type != ''" >
+	    and job_type =  #{job_type}
+	</if>
+</trim>
+</sql>
+
+<!-- 插入操作费明细数据 -->
+<insert id="insert" parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail" >
+  insert into tb_operationfee_data_detail(op_id,bat_id,warehouse_type,warehouse_name,warehouse_code,brand_docking_code,barcode,epistatic_order,create_time,create_user,update_time,update_user,order_type,operation_time,store_name,job_orderno,related_orderno,platform_order,job_type,storaggelocation_code,in_num,out_num,item_number,sku_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,expenses,type,park_code,park_name,park_cost_center)
+ values(#{op_id},#{bat_id},#{warehouse_type},#{warehouse_name},#{warehouse_code},#{brand_docking_code},#{barcode},#{epistatic_order},now(),#{create_user},now(),#{update_user},#{order_type},#{operation_time},#{store_name},#{job_orderno},#{related_orderno},#{platform_order},#{job_type},#{storaggelocation_code},#{in_num},#{out_num},#{item_number},#{sku_number},#{art_no},#{item_name},#{item_size},#{inventory_status},#{operator},#{store_id},#{settle_flag},#{expenses},#{type},#{park_code},#{park_name},#{park_cost_center})
+</insert>
+
+<!-- 修改操作费明细数据-->  
+ <update id="update" parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail" >
+  update tb_operationfee_data_detail set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},settle_flag=#{settle_flag} where id=#{id}
+ </update>
+ 
+ <update id="updates" parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail" >
+  update tb_operationfee_data_detail set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},order_type=#{order_type},operation_time=#{operation_time},store_name=#{store_name},job_orderno=#{job_orderno},related_orderno=#{related_orderno},job_type=#{job_type},storaggelocation_code=#{storaggelocation_code},item_number=#{item_number},sku_number=#{sku_number},art_no=#{art_no},item_name=#{item_name},item_size=#{item_size},inventory_status=#{inventory_status},operator=#{operator},store_id=#{store_id},settle_flag=#{settle_flag} where id=#{id}
+ </update>
+ 
+ 
+ <!-- 选择修改操作费明细数据-->
+<update id="updateBySelective" parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail" >
+	update tb_operationfee_data_detail set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="order_type != null  and order_type != '' ">
+		order_type=#{order_type},
+	</if>
+	<if test="operation_time != null  ">
+		operation_time=#{operation_time},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="job_orderno != null  and job_orderno != '' ">
+		job_orderno=#{job_orderno},
+	</if>
+	<if test="related_orderno != null  and related_orderno != '' ">
+		related_orderno=#{related_orderno},
+	</if>
+	<if test="job_type != null  and job_type != '' ">
+		job_type=#{job_type},
+	</if>
+	<if test="storaggelocation_code != null  and storaggelocation_code != '' ">
+		storaggelocation_code=#{storaggelocation_code},
+	</if>
+	<if test="in_num != null  ">
+		in_num=#{in_num},
+	</if>
+	<if test="out_num != null  ">
+		out_num=#{out_num},
+	</if>
+	<if test="item_number != null  and item_number != '' ">
+		item_number=#{item_number},
+	</if>
+	<if test="sku_number != null  and sku_number != '' ">
+		sku_number=#{sku_number},
+	</if>
+	<if test="art_no != null  and art_no != '' ">
+		art_no=#{art_no},
+	</if>
+	<if test="item_name != null  and item_name != '' ">
+		item_name=#{item_name},
+	</if>
+	<if test="item_size != null  and item_size != '' ">
+		item_size=#{item_size},
+	</if>
+	<if test="inventory_status != null  and inventory_status != '' ">
+		inventory_status=#{inventory_status},
+	</if>
+	<if test="operator != null  and operator != '' ">
+		operator=#{operator},
+	</if>
+	<if test="store_id != null  ">
+		store_id=#{store_id},
+	</if>
+	<if test="settle_flag != null  ">
+		settle_flag=#{settle_flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除操作费明细数据 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_operationfee_data_detail where id = #{id}
+</update>
+<!-- 批量删除操作费明细数据 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_operationfee_data_detail where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找操作费明细数据 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_operationfee_data_detail where id = #{id}
+</select>
+  	
+<!-- 操作费明细数据 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.PerationfeeDataQueryParam">
+	select count(1) from tb_operationfee_data_detail 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的操作费明细数据集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.PerationfeeDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operationfee_data_detail 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 操作费明细数据总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.PerationfeeDataQueryParam">
+	select count(1) from tb_operationfee_data_detail 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的操作费明细数据集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.PerationfeeDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operationfee_data_detail 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="findByEntity" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operationfee_data_detail 
+	<include refid="where_Clause"/>
+</select>
+
+<select id="countByEntitySE" resultType="java.lang.Integer">
+	select count(1) tb_operationfee_data_detail 
+		<include refid="where_Clause"/>
+	   	<if test="start_time != null and end_time != null" >
+		    and TO_DAYS(operation_time) >= TO_DAYS(#{start_time})
+		    and TO_DAYS(#{end_time}) >= TO_DAYS(operation_time) 
+		</if>
+		and warehouse_code != 'SHWH215'
+</select>
+
+<select id="findByEntitySE" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select 
+		<include refid="Base_Column_List"/>
+	from 
+		tb_operationfee_data_detail 
+		<include refid="where_Clause"/>
+	   	<if test="start_time != null and end_time != null" >
+		    and TO_DAYS(operation_time) >= TO_DAYS(#{start_time})
+		    and TO_DAYS(#{end_time}) >= TO_DAYS(operation_time) 
+		</if>
+		and warehouse_code != 'SHWH215'
+	<if test="firstResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+</select>
+
+
+<select id="findByEntityGroupBySKU" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select 
+	 id,create_time,create_user,update_time,update_user,order_type,operation_time,store_name,job_orderno,related_orderno,job_type,storaggelocation_code,item_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,sku_number,sum(in_num) as in_num,sum(out_num) as out_num 
+	from tb_operationfee_data_detail 
+	<include refid="where_Clause"/>
+	group by sku_number
+	order by id;
+</select>
+<select id="countByEntityGroupBySKUStartEnd" resultType="java.lang.Integer"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select count(1) from (
+		select 
+		 sku_number 
+		from tb_operationfee_data_detail 
+			<include refid="where_Clause"/>
+		   	<if test="start_time != null and end_time != null" >
+			    and TO_DAYS(operation_time) >= TO_DAYS(#{start_time})
+			    and TO_DAYS(#{end_time}) >= TO_DAYS(operation_time) 
+			</if>
+			and warehouse_code != 'SHWH215'
+		group by sku_number
+	) tt
+</select>
+<select id="findByEntityGroupBySKUStartEnd" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select 
+		id,create_time,create_user,update_time,update_user,order_type,operation_time,store_name,job_orderno,related_orderno,job_type,storaggelocation_code,item_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,sku_number,sum(in_num) as in_num,sum(out_num) as out_num 
+	from 
+		tb_operationfee_data_detail x
+		<include refid="where_Clause"/>
+	   	<if test="start_time != null and end_time != null" >
+		    and TO_DAYS(operation_time) >= TO_DAYS(#{start_time})
+		    and TO_DAYS(#{end_time}) >= TO_DAYS(operation_time) 
+		</if>
+		and warehouse_code != 'SHWH215'
+		group by sku_number
+		order by id
+	<if test="firstResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+</select>
+
+<select id="findByEntityOrderNo" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select 
+	 id,create_time,create_user,update_time,update_user,order_type,operation_time,store_name,job_orderno,related_orderno,job_type,storaggelocation_code,item_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,sku_number,sum(in_num) as in_num,sum(out_num) as out_num 
+	from tb_operationfee_data_detail 
+	<include refid="where_Clause"/>
+	group by job_orderno
+	order by id;
+</select>
+
+<select id="countByEntityOrderNoSE" resultType="java.lang.Integer"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select count(1) from (
+		select 
+		 x.job_orderno 
+		from tb_operationfee_data_detail x
+		<include refid="where_Clause"/>
+	   	<if test="start_time != null and end_time != null" >
+		    and TO_DAYS(operation_time) >= TO_DAYS(#{start_time})
+		    and TO_DAYS(#{end_time}) >= TO_DAYS(operation_time) 
+		</if>
+		and warehouse_code != 'SHWH215'
+		group by x.job_orderno
+	) tt
+</select>
+
+<select id="findByEntityOrderNoSE" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select 
+	 id,create_time,create_user,update_time,update_user,order_type,operation_time,store_name,job_orderno,related_orderno,job_type,storaggelocation_code,item_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,sku_number,sum(in_num) as in_num,sum(out_num) as out_num 
+	from tb_operationfee_data_detail x
+	<include refid="where_Clause"/>
+   	<if test="start_time != null and end_time != null" >
+	    and TO_DAYS(operation_time) >= TO_DAYS(#{start_time})
+	    and TO_DAYS(#{end_time}) >= TO_DAYS(operation_time) 
+	</if>
+	and warehouse_code != 'SHWH215'
+	group by x.job_orderno
+	order by x.id;
+</select>
+
+<select id="findByEntityGroupByOutNum" resultMap="BaseResultMaps"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+<!-- 	select  -->
+<!-- 		id,create_time,create_user,update_time,update_user,order_type,operation_time, -->
+<!-- 		store_name,job_orderno,related_orderno,job_type,storaggelocation_code,item_number, -->
+<!-- 		art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,sku_number,in_num,out_num,count(1) as ctnum -->
+<!-- 	from tb_operationfee_data_detail  -->
+<!-- 	<include refid="where_Clause"/> -->
+<!-- 	group by out_num -->
+	select *,count(1) as ctnum from 
+	(
+		select 
+			id,create_time,create_user,update_time,update_user,order_type,operation_time,
+			store_name,job_orderno,related_orderno,job_type,storaggelocation_code,item_number,
+			art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,sku_number,sum(in_num) as in_num,sum(out_num) as out_num
+		from tb_operationfee_data_detail where 
+			job_type in (${job_type})
+	        and store_name = #{store_name}
+	        and settle_flag = #{settle_flag}
+	    <if test="start_time != null and end_time != null" >
+		    and year(operation_time)=#{start_time}
+		    and month(operation_time)=#{end_time}
+		</if>
+	    group by 
+			job_orderno
+		order by id
+	) as o 
+	group by o.out_num 
+	order by id;
+</select>
+
+<select id="countByEntityGroupByOutNumSE" resultType="java.lang.Integer"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	select count(1) from (
+		select o.out_num from 
+		(
+			select 
+				sum(out_num) as out_num
+			from tb_operationfee_data_detail x
+			where job_type in (${job_type})
+	        and store_name = #{store_name}
+	        <!-- and settle_flag = #{settle_flag} -->
+		    <if test="start_time != null and end_time != null" >
+			    and TO_DAYS(operation_time) >= TO_DAYS(#{start_time})
+			    and TO_DAYS(#{end_time}) >= TO_DAYS(operation_time) 
+			</if>
+			and warehouse_code != 'SHWH215'
+		    group by x.job_orderno
+		) as o 
+		group by o.out_num 
+	) tt
+</select>
+
+<select id="findByEntityGroupByOutNumSE" resultMap="BaseResultMaps"  parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+		select *,count(1) as ctnum from 
+		(
+			select id,create_time,create_user,update_time,update_user,order_type,operation_time,
+						store_name,job_orderno,related_orderno,job_type,storaggelocation_code,item_number,
+						art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,sku_number,
+						sum(in_num) as in_num,sum(out_num) as out_num
+			 from tb_operationfee_data_detail x
+				where job_type in (${job_type})
+		        and store_name = #{store_name}
+		        <!-- and settle_flag = #{settle_flag} -->
+			    <if test="start_time != null and end_time != null" >
+				    and TO_DAYS(operation_time) >= TO_DAYS(#{start_time})
+				    and TO_DAYS(#{end_time}) >= TO_DAYS(operation_time) 
+				</if>
+				and warehouse_code != 'SHWH215'
+		    group by x.job_orderno
+		) as o 
+		group by o.out_num 
+		order by id
+	<if test="firstResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+</select>
+
+
+<select id="findByEntityGroupBySKUYM" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+		id,create_time,create_user,update_time,update_user,order_type,DATE_FORMAT(operation_time,"%Y-%m-%d") as operation_time,store_name,job_orderno,related_orderno,
+		job_type,storaggelocation_code,item_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,
+		sku_number,sum(in_num) as in_num,sum(out_num) as out_num,count(1) sku_count 
+	from (
+		select 
+			id,create_time,create_user,update_time,update_user,order_type,DATE_FORMAT(operation_time,"%Y-%m-%d") as operation_time,store_name,job_orderno,related_orderno,
+			job_type,storaggelocation_code,item_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,
+			sku_number,sum(in_num) as in_num,sum(out_num) as out_num 
+		from tb_operationfee_data_detail  
+		where 
+			store_name=#{store_name}
+			and job_type in (${job_type})
+			and year(operation_time)=${yy}
+			and month(operation_time)=${mm}
+		group by DATE_FORMAT(operation_time,"%Y-%m-%d"),sku_number
+	) a
+	group by a.operation_time
+</select>
+<select id="countByEntityGroupBySKUSE" resultType="java.lang.Integer">
+	select count(1) from (
+		select 
+			a.operation_time 
+		from (
+			select 
+				DATE_FORMAT(operation_time,"%Y-%m-%d") as operation_time,
+				sku_number
+			from 
+				tb_operationfee_data_detail  x
+			where 
+				store_name=#{store_name}
+				and job_type in (${job_type})
+				and TO_DAYS(operation_time) >= TO_DAYS(#{fromDate})
+				and TO_DAYS(#{toDate}) >= TO_DAYS(operation_time)
+				and warehouse_code != 'SHWH215'
+			group by DATE_FORMAT(x.operation_time,"%Y-%m-%d"),x.sku_number
+		) a
+		group by a.operation_time
+	) tt
+</select>
+<select id="findByEntityGroupBySKUSE" resultMap="BaseResultMap"  parameterType="Object">
+	
+		select 
+			id,create_time,create_user,update_time,update_user,order_type,a.operation_time,store_name,job_orderno,related_orderno,
+			job_type,storaggelocation_code,item_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,
+			sku_number,sum(in_num) as in_num,sum(out_num) as out_num,count(1) sku_count 
+		from (
+			select id,create_time,create_user,update_time,update_user,order_type,DATE_FORMAT(operation_time,"%Y-%m-%d") as operation_time,store_name,job_orderno,related_orderno,
+				job_type,storaggelocation_code,item_number,art_no,item_name,item_size,inventory_status,operator,store_id,settle_flag,
+				sku_number,sum(in_num) as in_num,sum(out_num) as out_num 
+				from 
+					tb_operationfee_data_detail x
+				where 
+					store_name=#{store_name}
+					and job_type in (${job_type})
+					and TO_DAYS(operation_time) >= TO_DAYS(#{fromDate})
+					and TO_DAYS(#{toDate}) >= TO_DAYS(operation_time)
+					and warehouse_code != 'SHWH215'
+				group by DATE_FORMAT(x.operation_time,"%Y-%m-%d"),x.sku_number
+		) a
+		group by a.operation_time
+	<if test="firstResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+</select>
+
+<update id="update_settleflag" parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	update tb_operationfee_data_detail set settle_flag=1 <include refid="where_Clause_up"/>
+</update>
+
+<update id="update_settleflag_zero" parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	update tb_operationfee_data_detail set settle_flag=0 <include refid="where_Clause_up"/>
+</update>
+
+<update id="update_settleflags" parameterType="com.bt.lmis.balance.model.OperationfeeDataDetail">
+	update tb_operationfee_data_detail set settle_flag=1 <include refid="where_Clause_up"/>
+</update>
+<select id='getPageData' parameterType='com.bt.lmis.controller.form.OperationfeeDataDetailQueryParam' resultType='java.util.HashMap'>
+select   id,
+    primary_id,
+    bat_id,
+    create_time,
+    create_user,
+    update_time,
+    update_user,
+    order_type,
+    DATE_FORMAT(operation_time,'%Y-%m-%d %H:%i:%s') AS operation_time,
+    store_name,
+    job_orderno,
+    related_orderno,
+    platform_order,
+    job_type,
+    storaggelocation_code,
+    in_num,
+    out_num,
+    item_number,
+    sku_number,
+    art_no,
+    item_name,
+    item_size,
+    inventory_status,
+    operator,
+    warehouse_type,
+    warehouse_name,
+    warehouse_code,
+    store_id,
+    settle_flag,
+    brand_docking_code,
+    barcode,
+    epistatic_order,
+    park_code,
+    park_name,
+    park_cost_center  from 
+tb_operationfee_data
+<include refid="where_Clause_adv"/>
+<if test="maxResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+</select>
+<select id='getCount' parameterType='com.bt.lmis.controller.form.OperationfeeDataDetailQueryParam' resultType='java.lang.Integer'>
+select  count(1) from 
+tb_operationfee_data
+<include refid="where_Clause_adv"/>
+
+</select>
+<select id="getListMap" parameterType='com.bt.lmis.controller.form.OperationfeeDataDetailQueryParam' resultType='java.util.HashMap'>
+select  id,
+    primary_id,
+    bat_id,
+    create_time,
+    create_user,
+    update_time,
+    update_user,
+    order_type,
+    DATE_FORMAT(operation_time,'%Y-%m-%d %H:%i:%s') AS operation_time,
+    store_name,
+    job_orderno,
+    related_orderno,
+    platform_order,
+    job_type,
+    storaggelocation_code,
+    in_num,
+    out_num,
+    item_number,
+    sku_number,
+    art_no,
+    item_name,
+    item_size,
+    inventory_status,
+    operator,
+    warehouse_type,
+    warehouse_name,
+    warehouse_code,
+    store_id,
+    settle_flag,
+    brand_docking_code,
+    barcode,
+    epistatic_order,
+    park_code,
+    park_name,
+    park_cost_center  
+
+
+ from 
+tb_operationfee_data
+<include refid="where_Clause_adv"/>
+</select>
+
+</mapper>   

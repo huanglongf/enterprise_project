@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.workOrder.dao.WkLevelMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.workOrder.model.WkLevel" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="name" property="name"/>
+	<result column="code" property="code"/>
+	<result column="sort" property="sort"/>
+</resultMap>
+       
+<!-- wk_level table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,name,code,sort
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="name != null and name != ''" >
+	    and name =  #{name}
+	</if>
+	 	<if test="code != null and code != ''" >
+	    and code =  #{code}
+	</if>
+	<if test="sort != null" >
+	    and sort =  #{sort}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入工单级别 -->
+<insert id="insert" parameterType="com.bt.workOrder.model.WkLevel" >
+  insert into wk_level(id,create_time,create_user,update_time,update_user,name,code,sort)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{name},#{code},#{sort})
+</insert>
+
+<!-- 修改工单级别-->  
+ <update id="update" parameterType="com.bt.workOrder.model.WkLevel" >
+  update wk_level set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},name=#{name},code=#{code},sort=#{sort} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改工单级别-->
+<update id="updateBySelective" parameterType="com.bt.workOrder.model.WkLevel" >
+	update wk_level set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="name != null  and name != '' ">
+		name=#{name},
+	</if>
+	<if test="code != null  and code != '' ">
+		code=#{code},
+	</if>
+	<if test="sort != null  ">
+		sort=#{sort},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除工单级别 -->
+<update id="delete" parameterType="Object">
+	delete 	 from wk_level where id = #{id}
+</update>
+<!-- 批量删除工单级别 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from wk_level where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找工单级别 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from wk_level where id = #{id}
+</select>
+  	
+<!-- 工单级别 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.workOrder.controller.form.WkLevelQueryParam">
+	select count(1) from wk_level 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的工单级别集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.workOrder.controller.form.WkLevelQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from wk_level 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 工单级别总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.workOrder.controller.form.WkLevelQueryParam">
+	select count(1) from wk_level 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的工单级别集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.workOrder.controller.form.WkLevelQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from wk_level 
+	<include refid="where_Clause"/>
+</select>
+  	
+<select id="findAllData" resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+	 SELECT 
+    a.name AS type_name,
+    a.code AS type_code,
+    c.name AS level_name,
+    c.code AS level_code,
+    c.sort AS sort,
+    b.wk_timeout as timeout
+FROM
+    wk_type a,
+    wk_order_type b,
+    wk_level c
+WHERE
+    a.code = b.wk_type
+        AND b.level = c.code
+        and a.flag=1
+        and b.status=1
+        and c.flag=1
+      <if test="wk_type != null and wk_type != ''" >
+     and a.code= #{wk_type}
+    </if>  
+     <if test="level != null and level != ''" >
+     and b.level= #{level}
+    </if>  
+    <if test="orderBy != null and orderBy != ''">
+     #{orderBy} 
+    </if>
+       
+</select>  	
+  	
+  	
+<select id='findLevelUpLevel' parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+SELECT 
+    a.name as level_name,
+    a.code as level_code,
+    a.sort as sort,
+    b.wk_type as wk_type,
+    b.wk_timeout as wk_timeout,
+    b.wk_standard
+FROM
+    wk_level a,wk_order_type b
+WHERE
+     a.code=b.level 
+     and a.flag=1
+     and b.status=1
+     <if test="flag != null and flag != ''">
+       and a.flag=#{flag}
+     </if>
+     <if test="wk_type != null and wk_type != ''">
+       and b.wk_type=#{wk_type}
+     </if>
+    and sort &gt; (SELECT 
+            sort
+        FROM
+            wk_level
+        WHERE
+            code = #{code})
+LIMIT 0 , 1
+
+</select> 
+<select id='findLevelUp_level_ADV'  parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+SELECT 
+    (SELECT 
+            level
+        FROM
+            (SELECT 
+                a.*, a.wk_timeout * 60000 AS timeout
+            FROM
+                wk_order_type a
+            WHERE
+                wk_type = #{wk_type} AND status = 1
+            ORDER BY wk_timeout) a
+        WHERE
+            a.timeout &gt; #{timeout}
+        LIMIT 0 , 1) AS level_up,
+    (SELECT 
+            level
+        FROM
+            (SELECT                 
+                a.*, a.wk_timeout * 60000 AS timeout
+            FROM
+                wk_order_type a
+            WHERE
+                wk_type = #{wk_type} AND status = 1
+            ORDER BY wk_timeout DESC) a
+        WHERE
+            a.timeout &lt; #{timeout}
+        LIMIT 0 , 1) level_down
+</select>
+	
+<select id="hasPowerToOpera"  parameterType="java.util.HashMap"  resultType="java.lang.Integer">
+  select  count(1) from   
+  s_employee_in_group  a, 
+  wo_group_workPower  b
+where 
+  a.group=b.group  
+  and a.employee=#{processor} 
+  and b.wo_type=#{wo_type} 
+  and b.wo_level=#{wo_level} 
+  and b.carrier=#{carrier}
+</select>	 
+
+<select id="getTimeSlotNow"  parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+SELECT 
+    *
+FROM
+    (SELECT 
+        CONCAT('2017-03-04 ', tb.begin) AS begin,
+            CONCAT('2017-03-04 ', tb.end) AS end
+    FROM
+        lmis_test.wo_worktime_slot tb) a
+WHERE
+    begin &lt; = #{time}
+        AND end &gt; #{time}
+</select>	
+
+<select id='selectWoWorktimeSpecial' parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+SELECT 
+    *
+FROM
+    wo_worktime_special
+    where 1=1
+    <if test="dateLike != null  and dateLike != '' ">
+		start_time like #{dateLike}
+	</if>
+	  <if test="orderBy != null  and orderBy != '' ">
+		 #{orderBy}
+	</if>
+</select>
+<select id='selectWoWorktimeCommon' parameterType="java.util.HashMap"  resultType="java.util.HashMap">
+SELECT 
+    *
+FROM
+    wo_worktime_common
+    where 1=1
+    <if test="del_flag != null  and del_flag != '' ">
+		and del_flag =#{del_flag}
+	</if>
+    <if test="orderBy != null  and orderBy != '' ">
+		 #{orderBy}
+	</if>
+</select>
+</mapper>   

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.InsuranceECMapper" >
+	<resultMap type= "com.bt.lmis.model.InsuranceRedisBean" id= "insuranceRedisBean" >
+		<result column= "redis_key" property= "key" />
+		<collection column= "redis_key" select="get" property="value" javaType="ArrayList" ofType="com.bt.lmis.model.InsuranceEC" />
+	</resultMap>
+	<select id= "get" parameterType="String" resultType= "com.bt.lmis.model.InsuranceEC" >
+		select
+			belong_to,
+			ladder_type,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge_percent,
+			charge_percent_uom,
+			charge,
+			charge_uom
+		from
+			ex_con_insurance
+		where
+			dFlag= 0
+		and
+			CONCAT(
+				"IEC",
+				con_id,
+				belong_to,
+				CASE WHEN product_type IS NULL OR product_type = "" THEN "" ELSE product_type END
+				)= #{redis_key }
+		order by num_1
+	</select>
+	<select id= "loadInsurance" resultMap= "insuranceRedisBean" >
+		select
+			DISTINCT CONCAT(
+				"IEC",
+				con_id,
+				belong_to,
+				CASE WHEN product_type IS NULL OR product_type = "" THEN "" ELSE product_type END
+				) AS redis_key
+		from
+			ex_con_insurance
+		where
+			dFlag= 0
+	</select>
+	<select id= "findInsuranceByProType" parameterType= "java.util.HashMap" resultType= "com.bt.lmis.model.InsuranceEC" >
+		select
+			id,
+			con_id,
+	    	belong_to,
+			product_type,
+			ladder_type,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge_percent,
+			charge_percent_uom,
+			charge,
+			charge_uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from ex_con_insurance
+		where
+			dFlag= 0
+		and
+			con_id= #{con_id }
+		and 
+			belong_to= #{belong_to }
+		<if test= "product_type != null and product_type != ''" >
+		and (product_type= #{product_type } or product_type= 'ALL')
+		</if>
+		order by num_1
+	</select>
+	<delete id= "deleteIEC" parameterType= "Object" >
+		delete from ex_con_insurance where con_id = #{con_id } and belong_to = #{belong_to }
+	</delete>
+	<update id= "delIEC" parameterType= "Object" >
+		update ex_con_insurance set dFlag = 1 where id = #{id }
+	</update>
+	<select id= "selectAllIEC" parameterType= "Object" resultType= "java.util.HashMap" >
+		select
+			a.id,
+			con_id,
+	    	belong_to,
+			product_type,
+			b.product_type_name as product_type_name,
+			ladder_type,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge_percent,
+			charge_percent_uom,
+			charge,
+			charge_uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from ex_con_insurance a
+		left join(
+			select 
+				vendor_code,
+				product_type_code,
+				product_type_name
+			from tb_transport_product_type
+		) b on a.belong_to = b.vendor_code 
+		and a.product_type = b.product_type_code
+		where
+			dFlag = 0
+		and
+			con_id = #{con_id}
+		and 
+			belong_to = #{belong_to}
+		order by product_type, num_1
+	</select>
+	<select id= "selectRegion" parameterType= "java.util.HashMap" resultType= "java.util.HashMap" >
+		select
+			compare_1,num_1,compare_2,num_2
+		from
+			ex_con_insurance
+		where
+			dFlag = 0
+	    and 
+	    	con_id = #{con_id}
+	    and 
+	    	belong_to = #{belong_to}
+	    <if test= "product_type != null and product_type !=''" >
+		and 
+			product_type = #{product_type}
+		</if>
+	    and 
+	    	ladder_type = #{ladder_type}
+		order by num_1
+	</select>
+	<select id= "findAllOrNot" parameterType= "Object" resultType= "Integer" >
+		select
+			count(1)
+		from
+			ex_con_insurance
+		where
+			dFlag= 0
+		and
+		    product_type= 'ALL'
+		and 
+			con_id= #{con_id }
+		and 
+	    	belong_to= #{belong_to }
+	</select>
+	<select id= "judgeUnique" parameterType= "java.util.HashMap" resultType= "Integer" >
+		select count(1)
+		from ex_con_insurance
+		<where>
+			dFlag= 0
+	    and 
+	    	con_id= #{con_id }
+	    and 
+	    	belong_to= #{belong_to }
+	 	<if test="product_type != null and product_type != ''" >
+		    and product_type= #{product_type }
+		</if>
+		<if test="ladder_type != null and ladder_type != ''" >
+		    and ladder_type= #{ladder_type }
+		</if>
+		</where>
+	</select>
+	<insert id= "addInsuranceEC" parameterType= "com.bt.lmis.model.InsuranceEC" >
+		insert into ex_con_insurance
+		(
+			con_id,
+			belong_to,
+			product_type,
+			ladder_type,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge_percent,
+			charge_percent_uom,
+			charge,
+			charge_uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		) values (
+			#{con_id },
+			#{belong_to },
+			#{product_type },
+			#{ladder_type },
+			#{charge_min_flag },
+			#{charge_min },
+			#{charge_min_uom },
+			#{compare_1 },
+			#{num_1 },
+			#{uom_1 },
+			#{rel },
+			#{compare_2 },
+			#{num_2 },
+			#{uom_2 },
+			#{charge_percent },
+			#{charge_percent_uom },
+			#{charge },
+			#{charge_uom },
+			#{create_by },
+			now(),
+			#{create_by },
+			now()
+		)	
+	</insert>
+</mapper>   

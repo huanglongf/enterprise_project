@@ -1,0 +1,33 @@
+package com.bt.vims.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.bt.vims.model.VisitorInfomation;
+
+/**
+ * 读取访客数据信息接口类
+ * @author liuqingqiang 
+ * @date 2018-05-11
+ * @version V1.0
+ */
+@Service
+public interface VimsDataService{
+    
+    /**
+     * 响应客户端
+     * @return 返回处理信息给予客户端
+     */
+    public Map<String, Object> responseSocket(String sign , String bodyParam, Map<String, Object> clientMap);
+    
+    
+    /**
+     * 调用打印机接口
+     * @param visitorInfomations （访客信息集合）
+     * @return （打印成功或失败信息）
+     */
+    public Map<String, Object> callPrintInterface(List<VisitorInfomation> visitorInfomations);
+
+}

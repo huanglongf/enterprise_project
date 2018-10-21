@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.WaybillDiscountExMapper" > 
+	<resultMap id="ProductTypeMap" type="com.bt.lmis.model.TotalFreightDiscount" >
+		<result column="id" property="id"/>
+		<result column="create_by" property="create_by"/>
+		<result column="create_time" property="create_time"/>
+		<result column="update_by" property="update_by"/>
+		<result column="update_time" property="update_time"/>
+		<result column="con_id" property="con_id"/>
+		<result column="belong_to" property="belong_to"/>
+		<result column="product_type" property="product_type"/>
+		<result column="compare_1" property="compare_1"/>
+		<result column="num_1" property="num_1"/>
+		<result column="uom_1" property="uom_1"/>
+		<result column="rel" property="rel"/>
+		<result column="compare_2" property="compare_2"/>
+		<result column="num_2" property="num_2"/>
+		<result column="uom_2" property="uom_2"/>
+		<result column="discount" property="discount"/>
+		<result column="discount_uom" property="discount_uom"/>
+		<result column="dFlag" property="dFlag"/>
+	</resultMap>
+	<select id="selectRegion" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select 
+			compare_1,num_1,compare_2,num_2
+		from 
+			ex_con_waybill_discount
+		where 
+			1=1
+		and 
+			dFlag = true
+	    and 
+	    	con_id = #{con_id}
+		and
+			belong_to = #{belong_to}
+		<if test="product_type != null and product_type !=''">
+		and 
+			product_type = #{product_type}
+		</if>
+		order by num_1
+	</select>
+	<delete id= "deleteWD" parameterType= "Object">
+		delete from ex_con_waybill_discount where con_id = #{con_id } and belong_to = #{belong_to }
+	</delete>
+	<update id= "delWD" parameterType= "Object" >
+		update ex_con_waybill_discount set dFlag = false where id = #{id}
+	</update>
+	<select id="findAllOrNot" parameterType="Object" resultType="Integer">
+		select 
+			count(1)
+		from 
+			ex_con_waybill_discount
+		where
+			1 = 1
+		and 
+			dFlag = true
+		and
+		    product_type = 'ALL'
+		and 
+			con_id = #{con_id}
+		and
+			belong_to = #{belong_to}
+	</select>
+	<select id="selectAllWD" parameterType="Object" resultType="java.util.HashMap">
+		select
+			a.id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			con_id,
+			belong_to,
+			product_type,
+			b.product_type_name as product_type_name,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			discount,
+			discount_uom
+		from 
+			ex_con_waybill_discount a
+		left join(
+			select 
+				vendor_code,
+				product_type_code,
+				product_type_name
+			from 
+				tb_transport_product_type
+		) b on a.belong_to = b.vendor_code 
+		and a.product_type = b.product_type_code
+		where
+			1=1
+		and
+			dFlag = true
+		and
+			con_id = #{con_id}
+		and
+			belong_to = #{belong_to}
+		<if test="product_type != null and product_type != ''">
+		and (
+			product_type = #{product_type} or product_type = 'ALL'
+		)
+		</if>
+		order by product_type, num_1
+	</select>
+	<select id="judgeUnique" parameterType="java.util.HashMap" resultType="Integer">
+		select 
+			count(1)
+		from 
+			ex_con_waybill_discount
+		<where>
+			1 = 1
+		and 
+			dFlag = true
+	    and 
+	    	con_id = #{con_id}
+		and
+			belong_to = #{belong_to}
+	 	<if test="product_type != null and product_type != ''" >
+		    and product_type = #{product_type}
+		</if>
+		</where>
+	</select>
+	<insert id="addWaybillDiscount" parameterType="com.bt.lmis.model.WaybillDiscountEx"  useGeneratedKeys="true" keyProperty="id">
+		insert into ex_con_waybill_discount
+		(
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			con_id,
+			belong_to,
+			product_type,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			discount,
+			discount_uom
+		)values(
+			#{create_by },
+			now(),
+			#{create_by },
+			now(),
+			#{con_id },
+			#{belong_to },
+			#{product_type },
+			#{compare_1 },
+			#{num_1 },
+			#{uom_1 },
+			#{rel },
+			#{compare_2 },
+			#{num_2 },
+			#{uom_2 },
+			#{discount },
+			#{discount_uom }
+		)	
+	</insert>
+</mapper>   

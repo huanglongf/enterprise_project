@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.AleamountDataMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.AleamountData" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="saleorder_id" property="saleorder_id"/>
+	<result column="company_name" property="company_name"/>
+	<result column="company_code" property="company_code"/>
+	<result column="store_code" property="store_code"/>
+	<result column="store_name" property="store_name"/>
+	<result column="salesource_code" property="salesource_code"/>
+	<result column="salesource_name" property="salesource_name"/>
+	<result column="platform_orderno" property="platform_orderno"/>
+	<result column="oms_orderno" property="oms_orderno"/>
+	<result column="order_cost" property="order_cost"/>
+	<result column="audit_cost" property="audit_cost"/>
+	<result column="audit_status" property="audit_status"/>
+	<result column="ordertype_code" property="ordertype_code"/>
+	<result column="ordertype" property="ordertype"/>
+	<result column="saletype_code" property="saletype_code"/>
+	<result column="saletype_name" property="saletype_name"/>
+	<result column="orderdate" property="orderdate"/>
+	<result column="orderstatus_code" property="orderstatus_code"/>
+	<result column="orderstatus" property="orderstatus"/>
+	<result column="linetype_code" property="linetype_code"/>
+	<result column="linetype" property="linetype"/>
+	<result column="salemode" property="salemode"/>
+	<result column="outbound_date" property="outbound_date"/>
+	<result column="item_number" property="item_number"/>
+	<result column="qty" property="qty"/>
+	<result column="rrp_cost" property="rrp_cost"/>
+	<result column="tax_price" property="tax_price"/>
+	<result column="taxtype_code" property="taxtype_code"/>
+	<result column="notax_price" property="notax_price"/>
+	<result column="tax" property="tax"/>
+	<result column="goods_orderno" property="goods_orderno"/>
+</resultMap>
+       
+<!-- tb_saleamount_data table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,saleorder_id,company_name,company_code,store_code,store_name,salesource_code,salesource_name,platform_orderno,oms_orderno,order_cost,audit_cost,audit_status,ordertype_code,ordertype,saletype_code,saletype_name,orderdate,orderstatus_code,orderstatus,linetype_code,linetype,salemode,outbound_date,item_number,qty,rrp_cost,tax_price,taxtype_code,notax_price,tax,goods_orderno
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="saleorder_id != null and saleorder_id != ''" >
+	    and saleorder_id =  #{saleorder_id}
+	</if>
+	 	<if test="company_name != null and company_name != ''" >
+	    and company_name =  #{company_name}
+	</if>
+	 	<if test="company_code != null and company_code != ''" >
+	    and company_code =  #{company_code}
+	</if>
+	 	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	 	<if test="salesource_code != null and salesource_code != ''" >
+	    and salesource_code =  #{salesource_code}
+	</if>
+	 	<if test="salesource_name != null and salesource_name != ''" >
+	    and salesource_name =  #{salesource_name}
+	</if>
+	 	<if test="platform_orderno != null and platform_orderno != ''" >
+	    and platform_orderno =  #{platform_orderno}
+	</if>
+	 	<if test="oms_orderno != null and oms_orderno != ''" >
+	    and oms_orderno =  #{oms_orderno}
+	</if>
+	<if test="order_cost != null" >
+	    and order_cost =  #{order_cost}
+	</if>
+	<if test="audit_cost != null" >
+	    and audit_cost =  #{audit_cost}
+	</if>
+	 	<if test="audit_status != null and audit_status != ''" >
+	    and audit_status =  #{audit_status}
+	</if>
+	 	<if test="ordertype_code != null and ordertype_code != ''" >
+	    and ordertype_code =  #{ordertype_code}
+	</if>
+	 	<if test="ordertype != null and ordertype != ''" >
+	    and ordertype =  #{ordertype}
+	</if>
+	 	<if test="saletype_code != null and saletype_code != ''" >
+	    and saletype_code =  #{saletype_code}
+	</if>
+	 	<if test="saletype_name != null and saletype_name != ''" >
+	    and saletype_name =  #{saletype_name}
+	</if>
+	<if test="orderdate != null" >
+	    and orderdate =  #{orderdate}
+	</if>
+	 	<if test="orderstatus_code != null and orderstatus_code != ''" >
+	    and orderstatus_code =  #{orderstatus_code}
+	</if>
+	 	<if test="orderstatus != null and orderstatus != ''" >
+	    and orderstatus =  #{orderstatus}
+	</if>
+	 	<if test="linetype_code != null and linetype_code != ''" >
+	    and linetype_code =  #{linetype_code}
+	</if>
+	 	<if test="linetype != null and linetype != ''" >
+	    and linetype =  #{linetype}
+	</if>
+	 	<if test="salemode != null and salemode != ''" >
+	    and salemode =  #{salemode}
+	</if>
+	<if test="outbound_date != null" >
+	    and outbound_date =  #{outbound_date}
+	</if>
+	 	<if test="item_number != null and item_number != ''" >
+	    and item_number =  #{item_number}
+	</if>
+	<if test="qty != null" >
+	    and qty =  #{qty}
+	</if>
+	<if test="rrp_cost != null" >
+	    and rrp_cost =  #{rrp_cost}
+	</if>
+	<if test="tax_price != null" >
+	    and tax_price =  #{tax_price}
+	</if>
+	 	<if test="taxtype_code != null and taxtype_code != ''" >
+	    and taxtype_code =  #{taxtype_code}
+	</if>
+	<if test="notax_price != null" >
+	    and notax_price =  #{notax_price}
+	</if>
+	<if test="tax != null" >
+	    and tax =  #{tax}
+	</if>
+	 	<if test="goods_orderno != null and goods_orderno != ''" >
+	    and goods_orderno =  #{goods_orderno}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入操作费明细数据 -->
+<insert id="insert" parameterType="com.bt.lmis.model.AleamountData" >
+  insert into tb_saleamount_data(id,create_time,create_user,update_time,update_user,saleorder_id,company_name,company_code,store_code,store_name,salesource_code,salesource_name,platform_orderno,oms_orderno,order_cost,audit_cost,audit_status,ordertype_code,ordertype,saletype_code,saletype_name,orderdate,orderstatus_code,orderstatus,linetype_code,linetype,salemode,outbound_date,item_number,qty,rrp_cost,tax_price,taxtype_code,notax_price,tax,goods_orderno)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{saleorder_id},#{company_name},#{company_code},#{store_code},#{store_name},#{salesource_code},#{salesource_name},#{platform_orderno},#{oms_orderno},#{order_cost},#{audit_cost},#{audit_status},#{ordertype_code},#{ordertype},#{saletype_code},#{saletype_name},#{orderdate},#{orderstatus_code},#{orderstatus},#{linetype_code},#{linetype},#{salemode},#{outbound_date},#{item_number},#{qty},#{rrp_cost},#{tax_price},#{taxtype_code},#{notax_price},#{tax},#{goods_orderno})
+</insert>
+
+<!-- 修改操作费明细数据-->  
+ <update id="update" parameterType="com.bt.lmis.model.AleamountData" >
+  update tb_saleamount_data set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},saleorder_id=#{saleorder_id},company_name=#{company_name},company_code=#{company_code},store_code=#{store_code},store_name=#{store_name},salesource_code=#{salesource_code},salesource_name=#{salesource_name},platform_orderno=#{platform_orderno},oms_orderno=#{oms_orderno},order_cost=#{order_cost},audit_cost=#{audit_cost},audit_status=#{audit_status},ordertype_code=#{ordertype_code},ordertype=#{ordertype},saletype_code=#{saletype_code},saletype_name=#{saletype_name},orderdate=#{orderdate},orderstatus_code=#{orderstatus_code},orderstatus=#{orderstatus},linetype_code=#{linetype_code},linetype=#{linetype},salemode=#{salemode},outbound_date=#{outbound_date},item_number=#{item_number},qty=#{qty},rrp_cost=#{rrp_cost},tax_price=#{tax_price},taxtype_code=#{taxtype_code},notax_price=#{notax_price},tax=#{tax},goods_orderno=#{goods_orderno} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改操作费明细数据-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.AleamountData" >
+	update tb_saleamount_data set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="saleorder_id != null  and saleorder_id != '' ">
+		saleorder_id=#{saleorder_id},
+	</if>
+	<if test="company_name != null  and company_name != '' ">
+		company_name=#{company_name},
+	</if>
+	<if test="company_code != null  and company_code != '' ">
+		company_code=#{company_code},
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="salesource_code != null  and salesource_code != '' ">
+		salesource_code=#{salesource_code},
+	</if>
+	<if test="salesource_name != null  and salesource_name != '' ">
+		salesource_name=#{salesource_name},
+	</if>
+	<if test="platform_orderno != null  and platform_orderno != '' ">
+		platform_orderno=#{platform_orderno},
+	</if>
+	<if test="oms_orderno != null  and oms_orderno != '' ">
+		oms_orderno=#{oms_orderno},
+	</if>
+	<if test="order_cost != null  ">
+		order_cost=#{order_cost},
+	</if>
+	<if test="audit_cost != null  ">
+		audit_cost=#{audit_cost},
+	</if>
+	<if test="audit_status != null  and audit_status != '' ">
+		audit_status=#{audit_status},
+	</if>
+	<if test="ordertype_code != null  and ordertype_code != '' ">
+		ordertype_code=#{ordertype_code},
+	</if>
+	<if test="ordertype != null  and ordertype != '' ">
+		ordertype=#{ordertype},
+	</if>
+	<if test="saletype_code != null  and saletype_code != '' ">
+		saletype_code=#{saletype_code},
+	</if>
+	<if test="saletype_name != null  and saletype_name != '' ">
+		saletype_name=#{saletype_name},
+	</if>
+	<if test="orderdate != null  ">
+		orderdate=#{orderdate},
+	</if>
+	<if test="orderstatus_code != null  and orderstatus_code != '' ">
+		orderstatus_code=#{orderstatus_code},
+	</if>
+	<if test="orderstatus != null  and orderstatus != '' ">
+		orderstatus=#{orderstatus},
+	</if>
+	<if test="linetype_code != null  and linetype_code != '' ">
+		linetype_code=#{linetype_code},
+	</if>
+	<if test="linetype != null  and linetype != '' ">
+		linetype=#{linetype},
+	</if>
+	<if test="salemode != null  and salemode != '' ">
+		salemode=#{salemode},
+	</if>
+	<if test="outbound_date != null  ">
+		outbound_date=#{outbound_date},
+	</if>
+	<if test="item_number != null  and item_number != '' ">
+		item_number=#{item_number},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="rrp_cost != null  ">
+		rrp_cost=#{rrp_cost},
+	</if>
+	<if test="tax_price != null  ">
+		tax_price=#{tax_price},
+	</if>
+	<if test="taxtype_code != null  and taxtype_code != '' ">
+		taxtype_code=#{taxtype_code},
+	</if>
+	<if test="notax_price != null  ">
+		notax_price=#{notax_price},
+	</if>
+	<if test="tax != null  ">
+		tax=#{tax},
+	</if>
+	<if test="goods_orderno != null  and goods_orderno != '' ">
+		goods_orderno=#{goods_orderno},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除操作费明细数据 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_saleamount_data where id = #{id}
+</update>
+<!-- 批量删除操作费明细数据 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_saleamount_data where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找操作费明细数据 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_saleamount_data where id = #{id}
+</select>
+  	
+<!-- 操作费明细数据 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AleamountDataQueryParam">
+	select count(1) from tb_saleamount_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的操作费明细数据集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AleamountDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_saleamount_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 操作费明细数据总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AleamountDataQueryParam">
+	select count(1) from tb_saleamount_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的操作费明细数据集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AleamountDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_saleamount_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

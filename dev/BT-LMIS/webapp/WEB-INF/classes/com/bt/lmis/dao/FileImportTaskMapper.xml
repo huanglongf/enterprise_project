@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.dao.FileImportTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.model.FileImportTask" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+    <result column="success_sum" property="successSum" jdbcType="INTEGER" />
+    <result column="business_type" property="businessType" jdbcType="VARCHAR" />
+    <result column="business_group" property="businessGroup" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="result_file_path" property="resultFilePath" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultMapQuery" type="com.bt.lmis.controller.form.FileImportTaskQueryParam" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+    <result column="success_sum" property="successSum" jdbcType="INTEGER" />
+    <result column="business_type" property="businessType" jdbcType="VARCHAR" />
+    <result column="business_group" property="businessGroup" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="result_file_path" property="resultFilePath" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, file_name, total_count, success_sum, business_type, business_group, status,
+    del_flag,result_file_path, create_time, create_user, update_time, update_user
+  </sql>
+  <sql id="where_sql">
+  	where 
+  		del_flag = 0
+  		<if test="id != null and id != ''">
+  			and id = #{id}
+  		</if>
+  		<if test="businessType != null and businessType != ''">
+  			and business_type = #{businessType}
+  		</if>
+  		<if test="businessGroup != null and businessGroup != ''">
+  			and business_group = #{businessGroup}
+  		</if>
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_file_import_task
+    where id = #{id,jdbcType=VARCHAR} and del_flag = 0
+  </select>
+  
+  <select id="getByQueryParam" resultMap="BaseResultMapQuery"
+  						parameterType="com.bt.lmis.controller.form.FileImportTaskQueryParam" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_file_import_task
+    <include refid="where_sql" />
+  </select>
+  
+  <select id="getList" resultMap="BaseResultMapQuery"
+  						parameterType="com.bt.lmis.controller.form.FileImportTaskQueryParam" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_file_import_task
+    <include refid="where_sql" />
+    order by create_time desc
+	limit #{firstResult }, #{maxResult }
+  </select>
+  
+  <select id="findOrderConvertResultList" resultType="com.bt.lmis.api.model.Order_test"
+  						parameterType="com.bt.lmis.controller.form.FileImportTaskQueryParam" >
+    select 
+    	*
+    from jk_settle_order
+    where 
+    	bat_id = #{bat_id}
+    	and pro_flag in ('2','3')
+    order by id
+    <if test="firstResult != null and maxResult != null">
+		limit #{firstResult }, #{maxResult }
+    </if>
+  </select>
+  
+  <select id="callConvertOrder" parameterType="java.util.Map" statementType="CALLABLE">
+    {
+    	call pro_jk_data_order_real(
+   		  #{bat_id,jdbcType=VARCHAR,mode=IN},
+          #{out_result,jdbcType=VARCHAR,mode=OUT},
+          #{out_result_reason,jdbcType=VARCHAR,mode=OUT}
+    	)
+    }
+  </select>
+  
+  <select id="getListCount" resultType="java.lang.Integer" 
+  						parameterType="com.bt.lmis.controller.form.FileImportTaskQueryParam" >
+    select 
+    	count(1)
+    from tb_file_import_task
+    <include refid="where_sql" />
+  </select>
+  
+  <select id="checkTaskCount" resultType="java.lang.Integer">
+    select 
+    	count(1)
+    from tb_file_import_task
+    where status = '2'
+  </select>
+  
+  <update id="deleteByPrimaryKey" parameterType="com.bt.lmis.model.FileImportTask" >
+    update tb_file_import_task set del_flag = 1,update_time = #{updateTime},
+    update_user = #{updateUser}
+    where id = #{id,jdbcType=VARCHAR} and (status = 2 or status = 1  or status = 0 )
+  </update>
+  <insert id="insert" parameterType="com.bt.lmis.model.FileImportTask" >
+    insert into tb_file_import_task (id, file_name, total_count, 
+      success_sum, business_type, business_group, status, 
+      result_file_path, del_flag,
+      create_time, create_user, 
+      update_time, update_user)
+    values (#{id,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, 
+      #{successSum,jdbcType=INTEGER}, #{businessType,jdbcType=VARCHAR}, #{businessGroup,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, 
+      #{resultFilePath,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.model.FileImportTask" >
+    insert into tb_file_import_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="totalCount != null" >
+        total_count,
+      </if>
+      <if test="successSum != null" >
+        success_sum,
+      </if>
+      <if test="businessType != null" >
+        business_type,
+      </if>
+      <if test="businessGroup != null" >
+        business_group,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="resultFilePath != null" >
+        result_file_path,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCount != null" >
+        #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="successSum != null" >
+        #{successSum,jdbcType=INTEGER},
+      </if>
+      <if test="businessType != null" >
+        #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessGroup != null" >
+        #{businessGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="resultFilePath != null" >
+        #{resultFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="convertOrderAddExcel" parameterType="com.bt.lmis.api.model.Order_test">
+  	insert into jk_settle_order (
+  		upper_id,
+		bat_id,
+		store_code,
+		store_name,
+		warehouse_code,
+		warehouse_name,
+		transport_code,
+		transport_name,
+		delivery_order,
+		epistatic_order,
+		order_type,
+		express_number,
+		transport_direction,
+		itemtype_code,
+		itemtype_name,
+		transport_time,
+		collection_on_delivery,
+		order_amount,
+		sku_number,
+		qty,
+		weight,
+		length,
+		width,
+		higth,
+		volumn,
+		delivery_address,
+		province,
+		city,
+		state,
+		insurance_flag,
+		cod_flag,
+		shiptoname,
+		phone,
+		address,
+		express_time,
+		check_time,
+		weight_time,
+		create_date,
+		platform_pay_time,
+		platform_order_time,
+		k_flag,
+		operation_time,
+		is_complete,
+		platform_mark,
+		<if test="settle_flag != null">
+			settle_flag,
+		</if>
+		province_origin,
+		city_origin,
+		state_origin
+  	) values (
+  		#{upper_id},
+		#{bat_id},
+		#{store_code},
+		#{store_name},
+		#{warehouse_code},
+		#{warehouse_name},
+		#{transport_code},
+		#{transport_name},
+		#{delivery_order},
+		#{epistatic_order},
+		#{order_type},
+		#{express_number},
+		#{transport_direction},
+		#{itemtype_code},
+		#{itemtype_name},
+		#{transport_time},
+		#{collection_on_delivery},
+		#{order_amount},
+		#{sku_number},
+		#{qty},
+		#{weight},
+		#{length},
+		#{width},
+		#{higth},
+		#{volumn},
+		#{delivery_address},
+		#{province},
+		#{city},
+		#{state},
+		#{insurance_flag},
+		#{cod_flag},
+		#{shiptoname},
+		#{phone},
+		#{address},
+		#{express_time},
+		#{check_time},
+		#{weight_time},
+		now(),
+		#{platform_pay_time},
+		#{platform_order_time},
+		#{k_flag},
+		#{operation_time},
+		#{is_complete},
+		#{platform_mark},
+		<if test="settle_flag != null">
+			#{settle_flag},
+		</if>
+		#{province_origin},
+		#{city_origin},
+		#{state_origin}
+  	)
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.model.FileImportTask" >
+    update tb_file_import_task
+    <set >
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalCount != null" >
+        total_count = #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="successSum != null" >
+        success_sum = #{successSum,jdbcType=INTEGER},
+      </if>
+      <if test="businessType != null" >
+        business_type = #{businessType,jdbcType=VARCHAR},
+      </if>
+      <if test="businessGroup != null" >
+        business_group = #{businessGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="resultFilePath != null" >
+        result_file_path = #{resultFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.model.FileImportTask" >
+    update tb_file_import_task
+    set file_name = #{fileName,jdbcType=VARCHAR},
+      total_count = #{totalCount,jdbcType=INTEGER},
+      success_sum = #{successSum,jdbcType=INTEGER},
+      business_type = #{businessType,jdbcType=VARCHAR},
+      business_group = #{businessGroup,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      result_file_path = #{resultFilePath,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateJkSettleOrder" parameterType="com.bt.lmis.model.ExpressRawData">
+  	update jk_settle_order
+  	set 
+  		<if test="length != null">
+  			length = #{length},
+  		</if>
+  		<if test="width != null">
+  			width = #{width},
+  		</if>
+  		<if test="higth">
+  			higth = #{higth},
+  		</if>
+  		<if test="volumn">
+  			volumn = #{volumn},
+  		</if>
+  		<if test="weight">
+  			weight = #{weight},
+  		</if>
+  		pro_flag = 0
+  	where
+  		express_number = #{express_number}
+  		and pro_flag in ('2','3')
+  </update>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+	<aop:aspectj-autoproxy/>
+	<context:annotation-config/>
+	<context:component-scan base-package="com.jumbo.wms.manager,com.jumbo.task" />
+	<bean class="com.jumbo.wms.aop.TimeInvokeWarning" />
+	<!-- AF 库存调整失败订单重复执行 -->
+	<bean id="daemonTask" class="com.jumbo.task.DaemonTask" />
+	<bean id="inventoryOccupyThreadPool"
+		class="com.jumbo.wms.newInventoryOccupy.InventoryOccupyThreadPool" />
+	<bean id="staInventoryOcpThreadPool"
+		class="com.jumbo.wms.newInventoryOccupy.StaInventoryOcpThreadPool" />
+	<bean id="createStaTask" class="com.jumbo.task.CreateStaTask" />
+	<bean id="order2WmsTask" class="com.jumbo.task.Order2WmsTask" />
+	<bean id="setTransNoTask" class="com.jumbo.task.SetTransNoTask" />
+	<bean id="inventoryTransactionToOmsTask" class="com.jumbo.task.InventoryTransactionToOmsTask"/>
+	<bean id="parcelInfoTask" class="com.jumbo.task.pms.ParcelInfoTask"/>
+	<bean id="expressTask" class="com.jumbo.task.ExpressTask"/>
+	<!--IDS  -->
+	<bean id="iDSInterfaceDaemonTask" class="com.jumbo.task.IDSInterfaceDaemonTask" />
+	<bean id="msgUnLockedTask" class="com.jumbo.task.MsgUnLockedTask"/>
+	<bean id="bocDaemonTask" class="com.jumbo.task.BocDaemonTask"  />	
+	<bean id="taskCreateStaPac" class="com.jumbo.task.TaskCreateStaPac" />
+	<bean id="AutoOutboundTask" class="com.jumbo.task.AutoOutboundTask"  />	
+	
+	<!-- 主要定时任务归总接口 -->
+    <bean id="wmsTaskInterface" class="com.jumbo.wms.task.impl.WmsTaskImpl" />
+	<!-- 定时任务 -->
+    <bean id="addLogManager" class="com.baozun.scm.baseservice.task.runcontrol.AddLogManagerImpl"/>
+    <bean id="componentRegistry" class="com.baozun.scm.baseservice.task.util.ComponentRegistry" />
+    
+    <bean id="wms3UpperCommonTriggerManager" class="com.baozun.scm.upperservice.wms3.task.Wms3UpperCommonTriggerManagerImpl" />
+	<bean id="agvSkuToHabTask" class="com.jumbo.task.AgvSkuToHabTask" />
+	<bean id="agvInBoundToHabTask" class="com.jumbo.task.AgvInBoundToHabTask" />
+	<bean id="odoInboundCreateStaTask" class="com.jumbo.task.OdoInboundCreateStaTask" />
+	<bean id="inventoryStatusChangeToOmsTask" class="com.jumbo.task.InventoryStatusChangeToOmsTask" />
+
+	<bean id="staCartonInfoTask" class="com.jumbo.task.StaCartonInfoTask" />
+</beans>
+

@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.common.dao.PosWhsInventoryMapper">
+<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc" id="PosWhsSurplusScMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="schedule_date" property="scheduleDate" jdbcType="VARCHAR" />
+		<result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+		<result column="sku_type" property="skuType" jdbcType="VARCHAR" />
+		<result column="sc_max" property="scMax" jdbcType="INTEGER" />
+		<result column="sc_init" property="scInit" jdbcType="INTEGER" />
+		<result column="planned_out" property="plannedOut" jdbcType="INTEGER" />
+		<result column="planned_in_po" property="plannedInPo" jdbcType="INTEGER" />
+		<result column="surplus" property="surplus" jdbcType="INTEGER" />
+		<result column="surplus_plus" property="surplusPlus" jdbcType="INTEGER" />
+		<result column="in_jobs_max" property="inJobsMax" jdbcType="INTEGER" />
+		<result column="in_jobs_enable" property="inJobsEnable" jdbcType="INTEGER" />
+		<result column="in_enable" property="inEnable" jdbcType="INTEGER" />
+		<result column="in_enable_plus" property="inEnablePlus" jdbcType="INTEGER" />
+		<result column="final_inventory" property="finalInventory" jdbcType="INTEGER" />
+		<result column="date_id" property="dateId" jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="inventoryCount" parameterType="java.util.List"
+		resultType="java.util.Map" timeout="60">
+		SELECT
+		count(1) as qty,
+		warehouse_code as whs_code,
+		bu_type
+		FROM
+		lmis_pe.jk_settle_storage
+		WHERE
+		start_time=#{startTime}
+		AND
+		warehouse_code IN
+		(
+		<foreach collection="list" item="list" separator=",">
+			#{list.whs_code}
+		</foreach>
+		)
+		and bu_type is not null
+		GROUP BY
+		warehouse_code,bu_type
+	</select>
+	<update id="updateScInit" parameterType="java.util.Map">
+		update
+		pos_whs_surplus_sc set update_time=now(),sc_init=#{qty} where
+		whs_code=#{whs_code} and
+		sku_type=#{bu_type} and date_id =
+		date_format(now(),'%Y-%m-%d')
+	</update>
+	<select id="findWhs" parameterType="java.util.List" resultType="java.util.Map">
+		select * from pos_whs
+		where is_po_allocate='1' and is_deleted='0' and is_disabled='0'
+	</select>
+
+	<insert id="insertWhsInventory" parameterType="java.util.List">
+		INSERT INTO pos_int_inventory (id, date_id,
+		num,
+		whs_code,
+		bu) VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.qty},
+				#{obj.whs_code},
+				#{obj.sku_type}
+			</trim>
+		</foreach>
+	</insert>
+
+	<select id="selectInventory" resultType="java.util.Map">
+		select * from
+		pos_whs_inventory where current_date=DATE_FORMAT(now(),'%Y-%m-%d')
+	</select>
+
+
+	<insert id="insertSurplus" parameterType="java.util.Map">
+		INSERT INTO
+		`lmis_pos`.`pos_whs_surplus_sc`
+		(
+		`id`,
+		`create_time`,
+		`create_by`,
+		`update_time`,
+		`update_by`,
+		`is_deleted`,
+		`is_disabled`,
+		`version`,
+		`pwr_org`,
+		`schedule_date`,
+		`sc_max`,
+		`in_jobs_max`,
+		`sc_init`,
+		`planned_out`,
+		<!-- `planned_in_po`, -->
+		<!-- `surplus`, `in_jobs_enable`, -->
+		`whs_code`,
+		`sku_type`,
+		`date_id`)
+		SELECT
+		uuid(),
+		now(),
+		'1',
+		now(),
+		'1',
+		0,
+		0,
+		0,
+		0,
+		a.`日期`,
+		a.max_num,
+		if(a.`in_man` is null,0,a.`in_man`),
+		0,
+		if(a.`out_num` is null,0,a.`out_num`),
+		<!--SUM(a.`po_planed_in`) AS 'po_planed_in', abs(CAST(a.`in_man` as signed) 
+			- cast(a.`out_num` as signed)) AS 'in_out_num', -->
+<!-- 		if(a.`in_man` is null,0,a.`in_man`)- SUM(IF(a.`po_planed_in` IS NULL,0,a.`po_planed_in`)) as '作业能力',
+ -->		a.whs_code,
+		#{bu},
+		date_format(now(),'%Y-%m-%d')
+		FROM
+		(SELECT
+		d.date_val AS '日期',
+		CASE
+		WHEN
+		#{bu} = '20' THEN a.sc_max_shoe
+		WHEN #{bu} =
+		'10' THEN a.sc_max_dress
+		WHEN #{bu} = '30'
+		THEN a.sc_max_accessory
+		END AS 'max_num',
+		a.whs_code,
+		b.in_jobs_max
+		'in_man',
+		CASE
+		WHEN #{bu} = '20' THEN c.planned_out_shoe
+		WHEN #{bu} = '10' THEN c.planned_out_address
+		WHEN #{bu} =
+		'30' THEN
+		c.planned_out_accessory
+		END AS 'out_num',
+		e.qty
+		AS 'po_planed_in',
+		e.bu
+		FROM
+		pos_date_temp d
+		LEFT JOIN lmis_pos.pos_whs a
+		ON 1 = 1
+		LEFT JOIN
+		pos_whs_schedule b ON d.date_val = b.schedule_date AND b.whs_code =
+		a.whs_code
+		LEFT JOIN pos_whs_out_plan c ON d.date_val= c.schedule_date
+		AND a.whs_code = c.whs_code
+		LEFT JOIN pos_whs_allocate
+		e ON a.whs_code =
+		e.whs_code
+		AND d.date_val =
+		e.crd
+		and e.bu = #{bu}
+		and a.is_deleted='0' and a.is_disabled='0'
+		and b.is_deleted='0' and b.is_disabled='0'
+		and c.is_deleted='0' and c.is_disabled='0'
+		and e.is_deleted='0' and e.is_disabled='0'
+		) a
+		GROUP BY a.`日期` ,
+		a.`whs_code` , a.bu
+	</insert>
+
+<update id="updateSc" timeout="120" parameterType="String">
+UPDATE pos_whs_surplus_sc a , (SELECT 
+            SUM(b.qty) as num,b.whs_code,b.bu,b.crd
+        FROM
+            pos_whs_allocate b
+       		where b.is_deleted='0' and b.is_disabled='0'
+              group by b.whs_code,b.bu,b.crd) b
+SET 
+    a.planned_in_po =b.num
+        where   a.date_id = #{date}
+        and b.whs_code=a.whs_code
+        and b.bu=a.sku_type
+        and b.crd=a.schedule_date;
+</update>
+
+	<update id="updateSurplus" parameterType="java.util.Map">
+		update
+		pos_whs_surplus_sc
+		set update_time=now(),
+		surplus=if(sc_max is null,0,sc_max)-if(sc_init is null,0,sc_init)+if(planned_out is null,0,planned_out)-if(planned_in_po
+		is null,0,planned_in_po),
+		in_jobs_enable=if(in_jobs_max is null,0,in_jobs_max)-if(planned_in_po is null,0,planned_in_po),
+		in_enable=if((if(sc_max is null,0,sc_max)-if(sc_init is null,0,sc_init)+if(planned_out is null,0,planned_out)-if(planned_in_po
+		is null,0,planned_in_po))>(if(in_jobs_max is null,0,in_jobs_max)-if(planned_in_po
+		is null,0,planned_in_po)),(if(in_jobs_max is null,0,in_jobs_max)-if(planned_in_po
+		is null,0,planned_in_po)),(if(sc_max is null,0,sc_max)-if(sc_init is null,0,sc_init)+if(planned_out is null,0,planned_out)-if(planned_in_po
+		is null,0,planned_in_po)))
+		where
+		whs_code=#{whs_code}
+		and sku_type=#{bu_type} and
+		date_format(date_id,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
+		and
+		date_format(schedule_date,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d');
+	</update>
+
+	<update id="updateEnable" parameterType="java.util.Map">
+		update
+		pos_whs_surplus_sc
+		set update_time=now(),
+		in_enable=if(if(surplus is null,0,surplus)>if(in_jobs_enable is null,0,in_jobs_enable),if(in_jobs_enable is null,0,in_jobs_enable),if(surplus is null,0,surplus)),
+		final_inventory=if(sc_init is
+		null,0,sc_init)-if(planned_out is null,0,planned_out)+if(planned_in_po
+		is null,0,planned_in_po),
+		surplus_plus=if(sc_max is
+		null,0,sc_max)-if(sc_init is
+		null,0,sc_init)+if(planned_out is null,0,planned_out)-if(planned_in_po
+		is null,0,planned_in_po)
+		where
+		whs_code=#{whs_code}
+		and
+		sku_type=#{bu_type} and
+		date_format(date_id,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
+		and
+		schedule_date=date_format(now(),'%Y-%m-%d')
+	</update>
+	<update id="updateEnablePlus" parameterType="java.util.Map">
+		update
+		pos_whs_surplus_sc
+		set update_time=now(),
+		in_enable_plus=if(if(surplus_plus is null,0,surplus_plus)>if(in_jobs_enable is null,0,in_jobs_enable),if(in_jobs_enable is null,0,in_jobs_enable),if(surplus_plus is null,0,surplus_plus))
+		where
+		whs_code=#{whs_code} and sku_type=#{bu_type} and
+		date_format(date_id,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
+	</update>
+
+	<select id="selectFinalInventoryByDate" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		select * from pos_whs_surplus_sc
+		where
+		whs_code=#{whs_code}
+		and
+		sku_type=#{bu_type}
+		and
+		date_format(schedule_date,'%Y-%m-%d')=date_format(date_add(now(),interval
+		#{date} day),'%Y-%m-%d')
+		and  date_format(date_id,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
+	</select>
+
+	<select id="selectEnablePlus" resultType="java.util.Map">
+		SELECT
+		SUM(in_enable_plus) as pluSum,
+		whs_code,
+		sku_type
+		FROM
+		pos_whs_surplus_sc
+		WHERE
+		date_format(date_id,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
+		<![CDATA[
+		AND  date_format(schedule_date,'%Y-%m-%d') <= date_format(now(),'%Y-%m-%d') group by whs_code,sku_type ]]>
+	</select>
+	<select id="selectByCode" resultType="java.util.Map"
+		parameterType="java.util.Map">
+		select * from pos_whs_out_plan where
+		whs_code=#{whs_code} and
+		schedule_date=date_format(now(),'%Y-%m-%d')
+	</select>
+
+	<update id="updateScInitByCodeAndBu" parameterType="java.util.Map">
+		update
+		pos_whs_surplus_sc set
+		sc_init=#{final_inventory},update_time=now(),
+		in_jobs_enable=if(in_jobs_max is null,0,in_jobs_max)-if(planned_in_po is null,0,planned_in_po),
+		surplus=if(planned_out is null,0,planned_out)-if(planned_in_po is null,0,planned_in_po),
+		final_inventory=#{final_inventory}-if(planned_out is
+		null,0,planned_out)+if(planned_in_po is null,0,planned_in_po),
+		in_enable_plus=if(if(sc_max is
+		null,0,sc_max)-if(sc_init is
+		null,0,sc_init)+if(planned_out is null,0,planned_out)-if(planned_in_po
+		is null,0,planned_in_po)>in_jobs_enable,in_jobs_enable,if(sc_max is
+		null,0,sc_max)-if(sc_init is
+		null,0,sc_init)+if(planned_out is null,0,planned_out)-if(planned_in_po
+		is null,0,planned_in_po)),
+		surplus_plus=if(sc_max is
+		null,0,sc_max)-if(sc_init is
+		null,0,sc_init)+if(planned_out is null,0,planned_out)-if(planned_in_po
+		is null,0,planned_in_po)
+		where
+		whs_code=#{whs_code} and sku_type=#{sku_type}
+		and
+		date_format(schedule_date,'%Y-%m-%d')=date_format(date_add(now(),interval
+		#{date} day),'%Y-%m-%d')
+	</update>
+	<update id="updateScInEnable" parameterType="java.util.Map">
+		update
+		pos_whs_surplus_sc set
+		in_enable=if(if(surplus is null,0,surplus)>if(in_jobs_enable is null,0,in_jobs_enable),if(in_jobs_enable is null,0,in_jobs_enable),if(surplus is null,0,surplus))
+		where
+		whs_code=#{whs_code} and sku_type=#{sku_type}
+		and
+		date_format(schedule_date,'%Y-%m-%d')=date_format(date_add(now(),interval
+		#{date} day),'%Y-%m-%d')
+	</update>
+
+	<delete id="deleteTodaysTemp">
+		delete from
+		pos_whs_surplus_sc
+		where
+		date_id=date_format(now(),'%Y-%m-%d')
+	</delete>
+
+	<select id="selectDateArray" resultType="java.util.Map">
+		select distinct date_val
+		from pos_date_temp where date_val>=date_format(now(),'%Y-%m-%d')
+	</select>
+	<select id="selectDateMin" resultType="String">
+		SELECT
+		MIN(a.tt)
+		FROM
+		(SELECT
+		MAX(schedule_date) AS tt
+		FROM
+		pos_whs_out_plan UNION ALL SELECT
+		MAX(schedule_date) AS tt
+		FROM
+		pos_whs_schedule) a;
+	</select>
+
+	<insert id="insertDateToTemp" parameterType="java.util.Map">
+		insert into pos_date_temp(bat_id,date_val)
+		values
+		<foreach collection="list" item="li" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+			UUID(),
+			#{li.dates}
+			</trim>
+		</foreach>
+	</insert>
+	<delete id="deleteDateTemp">
+		delete from pos_date_temp
+	</delete>
+	<delete id="deleteScTemp">
+		delete from pos_whs_surplus_sc_temp
+	</delete>
+	
+	<select id="selectScGroupCodeAndBu" resultMap="PosWhsSurplusScMap">
+		select * from pos_whs_surplus_sc
+	where schedule_date = date_format(now(),'%Y-%m-%d')
+	and date_id = date_format(now(),'%Y-%m-%d')
+	and is_deleted='0' and is_disabled='0'
+	GROUP BY
+		whs_code,sku_type 
+	</select>
+	
+	<update id="updateScIntVal" >
+	update pos_whs_surplus_sc s,pos_whs_surplus_sc_temp t set 
+s.sc_init=t.sc_init,
+s.surplus=t.surplus,
+s.surplus_plus=t.surplus_plus,
+s.in_jobs_enable=t.in_jobs_enable,
+s.in_enable=t.in_enable,
+s.in_enable_plus=t.in_enable_plus,
+s.final_inventory=t.final_inventory
+where s.id=t.id
+	</update>
+	
+	
+	<select id="selectScByCodeOrderSchedule" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc" resultMap="PosWhsSurplusScMap">
+	select * from pos_whs_surplus_sc where  is_deleted='0' and is_disabled='0' and
+	whs_code=#{whsCode} and  sku_type=#{skuType} and date_id=#{dateId} order by schedule_date
+	</select>
+	
+	
+	<insert id="InsertScIntVal" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		insert into pos_whs_surplus_sc_temp(id,planned_in_po,schedule_date,whs_code,sku_type,sc_init,surplus,surplus_plus,in_jobs_enable,in_enable,in_enable_plus,final_inventory)
+		values
+		<foreach collection="list" item="obj" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+			#{obj.id},
+			#{obj.plannedInPo},
+			#{obj.scheduleDate},
+			#{obj.whsCode},
+			#{obj.skuType},
+			#{obj.scInit},
+			#{obj.surplus},
+			#{obj.surplusPlus},
+			#{obj.inJobsEnable},
+			#{obj.inEnable},
+			#{obj.inEnablePlus},
+			#{obj.finalInventory}
+			</trim>
+		</foreach>
+	</insert>
+	
+	
+	<update id="updatestorageBuType" parameterType="String" timeout="300">
+	update
+	lmis_pe.jk_settle_storage jss
+	left join lmis_pos.pos_sku_base psb on psb.`code` = jss.sku_code
+	set
+	jss.bu_type = psb.bu_type
+	where
+	jss.bu_type is null
+	and jss.start_time=#{startTime}
+	</update>
+	<select id="selectFtpDownLoad" parameterType="java.util.Map" resultType="java.util.Map">
+	select * from lmis_pe.s_sftp_download where remark=#{remark1} and flag=#{flag}
+	</select>
+	<select id="selectWhsSurplusSign" parameterType="java.util.Map" resultType="java.util.Map">
+	select * from pos_whs_surplus_sign where date_format(date,'%Y-%m-%d')=#{remark} and sign=#{flag}
+	</select>
+	
+	<insert id="insertWhsSurplusSign">
+	insert into pos_whs_surplus_sign(id,date,sign) values(UUID(),now(),true);
+	</insert>
+	
+	<update id="updateWhsSurplusSign" parameterType="String">
+		UPDATE pos_whs_surplus_sign
+			SET sign = 0
+			WHERE
+				date LIKE #{date}
+	</update>
+	<update id="updatePlanInPo">
+		UPDATE pos_whs_surplus_sc s,
+ (
+	SELECT
+		sum(t.planned_in_po) plan_in_po,
+		t.whs_code,
+		t.schedule_date
+	FROM
+		pos_whs_surplus_sc_temp t
+	GROUP BY
+		t.whs_code,
+		t.schedule_date
+) t
+SET s.in_jobs_enable = s.in_jobs_max - t.plan_in_po,
+in_enable_plus = if((s.in_jobs_max - t.plan_in_po)>surplus_plus,surplus_plus,(s.in_jobs_max - t.plan_in_po)),
+in_enable = if((s.in_jobs_max - t.plan_in_po)>surplus,surplus,(s.in_jobs_max - t.plan_in_po))
+WHERE
+	s.whs_code = t.whs_code
+AND s.schedule_date = t.schedule_date
+	</update>
+</mapper>

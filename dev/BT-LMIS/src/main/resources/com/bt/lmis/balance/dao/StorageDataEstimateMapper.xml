@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.balance.dao.StorageDataEstimateMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.StorageDataEstimate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contractId" jdbcType="INTEGER" />
+    <result column="fixed_qty" property="fixedQty" jdbcType="INTEGER" />
+    <result column="fixed_unit" property="fixedUnit" jdbcType="VARCHAR" />
+    <result column="fixed_cost" property="fixedCost" jdbcType="DECIMAL" />
+    <result column="fixed_comment" property="fixedComment" jdbcType="VARCHAR" />
+    <result column="tray_qty" property="trayQty" jdbcType="INTEGER" />
+    <result column="tray_qtyunit" property="trayQtyunit" jdbcType="VARCHAR" />
+    <result column="tray_cost" property="trayCost" jdbcType="DECIMAL" />
+    <result column="tray_comment" property="trayComment" jdbcType="VARCHAR" />
+    <result column="area_qty" property="areaQty" jdbcType="DECIMAL" />
+    <result column="area_costunit" property="areaCostunit" jdbcType="VARCHAR" />
+    <result column="area_cost" property="areaCost" jdbcType="DECIMAL" />
+    <result column="area_comment" property="areaComment" jdbcType="VARCHAR" />
+    <result column="piece_qty" property="pieceQty" jdbcType="DECIMAL" />
+    <result column="piece_unit" property="pieceUnit" jdbcType="VARCHAR" />
+    <result column="piece_cost" property="pieceCost" jdbcType="DECIMAL" />
+    <result column="piece_comment" property="pieceComment" jdbcType="VARCHAR" />
+    <result column="ssc_id" property="sscId" jdbcType="INTEGER" />
+    <result column="batch_number" property="batchNumber" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, create_user, update_time, update_user, contract_id, 
+    fixed_qty, fixed_unit, fixed_cost, fixed_comment, tray_qty, tray_qtyunit, tray_cost, 
+    tray_comment, area_qty, area_costunit, area_cost, area_comment, piece_qty, piece_unit, 
+    piece_cost, piece_comment, ssc_id, batch_number
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from bal_storage_data_estimate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bal_storage_data_estimate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.balance.model.StorageDataEstimate" >
+    insert into bal_storage_data_estimate (id, create_time, create_user, 
+      update_time, update_user, contract_id, 
+      fixed_qty, fixed_unit, 
+      fixed_cost, fixed_comment, tray_qty, 
+      tray_qtyunit, tray_cost, tray_comment, 
+      area_qty, area_costunit, area_cost, 
+      area_comment, piece_qty, piece_unit, 
+      piece_cost, piece_comment, ssc_id, batch_number
+      )
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{contractId,jdbcType=INTEGER}, 
+      #{fixedQty,jdbcType=INTEGER}, #{fixedUnit,jdbcType=VARCHAR}, 
+      #{fixedCost,jdbcType=DECIMAL}, #{fixedComment,jdbcType=VARCHAR}, #{trayQty,jdbcType=INTEGER}, 
+      #{trayQtyunit,jdbcType=VARCHAR}, #{trayCost,jdbcType=DECIMAL}, #{trayComment,jdbcType=VARCHAR}, 
+      #{areaQty,jdbcType=DECIMAL}, #{areaCostunit,jdbcType=VARCHAR}, #{areaCost,jdbcType=DECIMAL}, 
+      #{areaComment,jdbcType=VARCHAR}, #{pieceQty,jdbcType=DECIMAL}, #{pieceUnit,jdbcType=VARCHAR}, 
+      #{pieceCost,jdbcType=DECIMAL}, #{pieceComment,jdbcType=VARCHAR}, #{sscId,jdbcType=INTEGER}, 
+      #{batchNumber,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.balance.model.StorageDataEstimate" >
+    insert into bal_storage_data_estimate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="fixedQty != null" >
+        fixed_qty,
+      </if>
+      <if test="fixedUnit != null" >
+        fixed_unit,
+      </if>
+      <if test="fixedCost != null" >
+        fixed_cost,
+      </if>
+      <if test="fixedComment != null" >
+        fixed_comment,
+      </if>
+      <if test="trayQty != null" >
+        tray_qty,
+      </if>
+      <if test="trayQtyunit != null" >
+        tray_qtyunit,
+      </if>
+      <if test="trayCost != null" >
+        tray_cost,
+      </if>
+      <if test="trayComment != null" >
+        tray_comment,
+      </if>
+      <if test="areaQty != null" >
+        area_qty,
+      </if>
+      <if test="areaCostunit != null" >
+        area_costunit,
+      </if>
+      <if test="areaCost != null" >
+        area_cost,
+      </if>
+      <if test="areaComment != null" >
+        area_comment,
+      </if>
+      <if test="pieceQty != null" >
+        piece_qty,
+      </if>
+      <if test="pieceUnit != null" >
+        piece_unit,
+      </if>
+      <if test="pieceCost != null" >
+        piece_cost,
+      </if>
+      <if test="pieceComment != null" >
+        piece_comment,
+      </if>
+      <if test="sscId != null" >
+        ssc_id,
+      </if>
+      <if test="batchNumber != null" >
+        batch_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="fixedQty != null" >
+        #{fixedQty,jdbcType=INTEGER},
+      </if>
+      <if test="fixedUnit != null" >
+        #{fixedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="fixedCost != null" >
+        #{fixedCost,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedComment != null" >
+        #{fixedComment,jdbcType=VARCHAR},
+      </if>
+      <if test="trayQty != null" >
+        #{trayQty,jdbcType=INTEGER},
+      </if>
+      <if test="trayQtyunit != null" >
+        #{trayQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="trayCost != null" >
+        #{trayCost,jdbcType=DECIMAL},
+      </if>
+      <if test="trayComment != null" >
+        #{trayComment,jdbcType=VARCHAR},
+      </if>
+      <if test="areaQty != null" >
+        #{areaQty,jdbcType=DECIMAL},
+      </if>
+      <if test="areaCostunit != null" >
+        #{areaCostunit,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCost != null" >
+        #{areaCost,jdbcType=DECIMAL},
+      </if>
+      <if test="areaComment != null" >
+        #{areaComment,jdbcType=VARCHAR},
+      </if>
+      <if test="pieceQty != null" >
+        #{pieceQty,jdbcType=DECIMAL},
+      </if>
+      <if test="pieceUnit != null" >
+        #{pieceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="pieceCost != null" >
+        #{pieceCost,jdbcType=DECIMAL},
+      </if>
+      <if test="pieceComment != null" >
+        #{pieceComment,jdbcType=VARCHAR},
+      </if>
+      <if test="sscId != null" >
+        #{sscId,jdbcType=INTEGER},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.balance.model.StorageDataEstimate" >
+    update bal_storage_data_estimate
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="fixedQty != null" >
+        fixed_qty = #{fixedQty,jdbcType=INTEGER},
+      </if>
+      <if test="fixedUnit != null" >
+        fixed_unit = #{fixedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="fixedCost != null" >
+        fixed_cost = #{fixedCost,jdbcType=DECIMAL},
+      </if>
+      <if test="fixedComment != null" >
+        fixed_comment = #{fixedComment,jdbcType=VARCHAR},
+      </if>
+      <if test="trayQty != null" >
+        tray_qty = #{trayQty,jdbcType=INTEGER},
+      </if>
+      <if test="trayQtyunit != null" >
+        tray_qtyunit = #{trayQtyunit,jdbcType=VARCHAR},
+      </if>
+      <if test="trayCost != null" >
+        tray_cost = #{trayCost,jdbcType=DECIMAL},
+      </if>
+      <if test="trayComment != null" >
+        tray_comment = #{trayComment,jdbcType=VARCHAR},
+      </if>
+      <if test="areaQty != null" >
+        area_qty = #{areaQty,jdbcType=DECIMAL},
+      </if>
+      <if test="areaCostunit != null" >
+        area_costunit = #{areaCostunit,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCost != null" >
+        area_cost = #{areaCost,jdbcType=DECIMAL},
+      </if>
+      <if test="areaComment != null" >
+        area_comment = #{areaComment,jdbcType=VARCHAR},
+      </if>
+      <if test="pieceQty != null" >
+        piece_qty = #{pieceQty,jdbcType=DECIMAL},
+      </if>
+      <if test="pieceUnit != null" >
+        piece_unit = #{pieceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="pieceCost != null" >
+        piece_cost = #{pieceCost,jdbcType=DECIMAL},
+      </if>
+      <if test="pieceComment != null" >
+        piece_comment = #{pieceComment,jdbcType=VARCHAR},
+      </if>
+      <if test="sscId != null" >
+        ssc_id = #{sscId,jdbcType=INTEGER},
+      </if>
+      <if test="batchNumber != null" >
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.balance.model.StorageDataEstimate" >
+    update bal_storage_data_estimate
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      contract_id = #{contractId,jdbcType=INTEGER},
+      fixed_qty = #{fixedQty,jdbcType=INTEGER},
+      fixed_unit = #{fixedUnit,jdbcType=VARCHAR},
+      fixed_cost = #{fixedCost,jdbcType=DECIMAL},
+      fixed_comment = #{fixedComment,jdbcType=VARCHAR},
+      tray_qty = #{trayQty,jdbcType=INTEGER},
+      tray_qtyunit = #{trayQtyunit,jdbcType=VARCHAR},
+      tray_cost = #{trayCost,jdbcType=DECIMAL},
+      tray_comment = #{trayComment,jdbcType=VARCHAR},
+      area_qty = #{areaQty,jdbcType=DECIMAL},
+      area_costunit = #{areaCostunit,jdbcType=VARCHAR},
+      area_cost = #{areaCost,jdbcType=DECIMAL},
+      area_comment = #{areaComment,jdbcType=VARCHAR},
+      piece_qty = #{pieceQty,jdbcType=DECIMAL},
+      piece_unit = #{pieceUnit,jdbcType=VARCHAR},
+      piece_cost = #{pieceCost,jdbcType=DECIMAL},
+      piece_comment = #{pieceComment,jdbcType=VARCHAR},
+      ssc_id = #{sscId,jdbcType=INTEGER},
+      batch_number = #{batchNumber,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

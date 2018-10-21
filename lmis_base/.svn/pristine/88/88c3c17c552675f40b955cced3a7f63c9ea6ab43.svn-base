@@ -1,0 +1,100 @@
+package com.lmis.setup.constant.service.impl;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.constant.LBASEConstant;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.setup.constant.dao.SetupConstantMapper;
+import com.lmis.setup.constant.model.SetupConstant;
+import com.lmis.setup.constant.service.SetupConstantServiceInterface;
+
+/**
+ * @author daikaihua
+ * @date 2017年11月28日
+ * @todo TODO
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class SetupConstantServiceImpl<T extends SetupConstant> implements SetupConstantServiceInterface<T>{
+
+	@Autowired
+	private SetupConstantMapper<T> setupConstantMapper;
+	
+	@Autowired
+	private HttpSession session;
+	
+	@Override
+	public LmisResult<T> queryPage(T t, LmisPageObject pageObject) throws Exception {
+		Page<T> page = PageHelper.startPage(pageObject.getPageNum(), pageObject.getPageSize());
+			
+        // PageHelper会自动拦截到下面这查询sql
+		setupConstantMapper.retrieve(t);
+		
+		// 封装返回页面参数对象
+		LmisResult<T> lmisResult = new LmisResult<T>();
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		lmisResult.setMetaAndData(page.toPageInfo());
+		// 封装返回页面参数对象
+		return lmisResult;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<T> addSetupConstant(T t) throws Exception {
+			
+		// 唯一校验
+		if(!ObjectUtils.isNull(setupConstantMapper.retrieve((T) new SetupConstant(t.getId(), false, t.getConstantCode())))) throw new Exception("常量编号已经存在，不能新增");
+		
+		t.setCreateBy(session.getAttribute("lmisUserId").toString());
+		t.setPwrOrg(session.getAttribute("lmisUserOrg").toString());
+		
+		// 新增操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, setupConstantMapper.create(t));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<T> updateSetupConstant(T t) throws Exception {
+			
+		//存在校验
+		if(ObjectUtils.isNull(setupConstantMapper.retrieve((T) new SetupConstant(t.getId(), false, t.getConstantCode())))) throw new Exception("常量编号不存在，不能修改");
+		
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		//修改操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, setupConstantMapper.updateRecord(t));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<T> deleteSetupConstant(T t) throws Exception {
+			
+		//存在校验
+		if(ObjectUtils.isNull(setupConstantMapper.retrieve((T) new SetupConstant(t.getId(), false, t.getConstantCode())))) throw new Exception("常量编号不存在，不能删除");
+		
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		// 删除操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, setupConstantMapper.logicalDelete(t));
+	}
+
+	@Override
+	public LmisResult<T> checkSetupConstant(T t) throws Exception {
+		List<T> result = setupConstantMapper.retrieve(t);
+		if(ObjectUtils.isNull(result)) throw new Exception(LBASEConstant.EBASE000007);
+		if(result.size() != 1) throw new Exception(LBASEConstant.EBASE000008);
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, result.get(0));
+	}
+
+}

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.CarrierFeeEstimateMapper">
+	<resultMap type="com.bt.lmis.balance.model.CarrierFeeFlag" id="cffMap">
+		<result property="id" column="id" />
+		<result property="createTime" column="create_time" />
+		<result property="createBy" column="create_by" />
+		<result property="updateTime" column="update_time" />
+		<result property="updateBy" column="update_by" />
+		<result property="contractId" column="con_id" />
+		<result property="totalFreightDiscountFlag" column="totalFreightDiscount_flag" />
+		<result property="managementFeeFlag" column="managementFee_flag" />
+	</resultMap>
+	<resultMap type="com.bt.lmis.balance.model.TotalFreightDiscountDomainModel" id="tfddmMap">
+		<result property="ladderType" column="ladder_type" />
+		<result property="insuranceContain" column="insurance_contain" />
+		<result property="compare1" column="compare_1" />
+		<result property="num1" column="num_1" />
+		<result property="compare2" column="compare_2" />
+		<result property="num2" column="num_2" />
+		<result property="domainValue" column="discount" />
+	</resultMap>
+	<resultMap type="com.bt.lmis.balance.model.ManagementFeeDomainModel" id="mfdmMap">
+		<result property="freight" column="freight" />
+		<result property="insurance" column="insurance" />
+		<result property="specialService" column="special_service" />
+		<result property="cod" column="cod" />
+		<result property="delegatedPickup" column="delegated_pickup" />
+		<result property="ladderType" column="ladder_type" />
+		<result property="compare1" column="compare_1" />
+		<result property="num1" column="num_1" />
+		<result property="compare2" column="compare_2" />
+		<result property="num2" column="num_2" />
+		<result property="domainValue" column="charge_percent" />
+	</resultMap>
+	<select id="ensureCarrierFeeFlag" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="cffMap">
+		SELECT
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			con_id,
+			totalFreightDiscount_flag,
+			managementFee_flag
+		FROM tb_carrier_fee_flag
+		WHERE con_id=#{contract.id }
+	</select>
+	<select id="distinguishManagementFee" parameterType="com.bt.lmis.balance.model.EstimateParam" resultType="Integer">
+		SELECT COUNT(1)
+		FROM tb_carrier_management
+		WHERE dFlag=0
+		AND con_id=#{contract.id }
+		AND belong_to="ALL"
+	</select>
+	<select id="ensureExpressFreightEstimateSummary" parameterType="com.bt.lmis.balance.model.EstimateParam" resultType="com.bt.lmis.balance.model.ExpressFreightSummary">
+		SELECT
+			<if test="param.summaryFlow == 'customization'">
+				express,
+			</if>
+			SUM(order_num) AS orderNum,
+			SUM(total_freight) AS totalFreight,
+			SUM(total_insurance) AS totalInsurance
+		FROM bal_estimate_express_freight
+		WHERE batch_number=#{batchNumber }
+		AND contract_id=#{contract.id }
+		<if test="param.summaryFlow == 'customization'">
+			GROUP BY express
+		</if>
+	</select>
+	<select id="ensureTotalFreightDiscountDomain" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="tfddmMap">
+		SELECT
+			ladder_type,
+			compare_1,
+			num_1,
+			compare_2,
+			num_2,
+			discount,
+			insurance_contain
+		FROM ex_con_total_freight_discount
+		WHERE dFlag = 0
+		AND con_id = #{contract.id }
+		ORDER BY num_1
+	</select>
+	<select id="ensureManagementFeeDomain" parameterType="com.bt.lmis.balance.model.EstimateParam" resultMap="mfdmMap">
+		SELECT
+			freight,
+			insurance,
+			special_service,
+			cod,
+			delegated_pickup,
+			ladder_type,
+			compare_1,
+			num_1,
+			compare_2,
+			num_2,
+			charge_percent
+		FROM tb_carrier_management
+		WHERE dFlag = 0
+		AND con_id = #{contract.id }
+		<if test="param.summaryFlow == 'customization'">
+			and belong_to = #{param.express }
+		</if>
+		ORDER BY 
+			freight,
+			insurance,
+			special_service,
+			cod,
+			delegated_pickup,
+			ladder_type,
+			num_1
+	</select>
+	<insert id="addCarrierFeeEstimate" parameterType="com.bt.lmis.balance.model.EstimateParam">
+		INSERT INTO bal_estimate_carrier_fee (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			batch_number,
+			contract_id,
+			balance_subject,
+			subject_type,
+			carrier,
+			fee_type,
+			fee
+			
+		) VALUES (
+			UUID(),
+			now(),
+			'ESTIMATE-SYSTEM',
+			now(),
+			'ESTIMATE-SYSTEM',
+			#{batchNumber },
+			#{contract.id },
+			#{contract.contractOwner },
+			#{contract.contractType },
+			#{param.express },
+			#{param.feeType },
+			#{param.fee }
+			
+		)
+	</insert>
+</mapper>

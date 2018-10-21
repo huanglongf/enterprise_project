@@ -1,0 +1,124 @@
+package com.baozun.easytask.util;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+public final class ExportExcelUtils {
+	private static final String[] sheetNames = new String[] {"订单发货状态","订单发货流向","每日发货效率"};
+	private static final String[] stateHeaders = new String[] {"始发地","物理仓","店铺","快递","发货订单数","揽件订单数","签收订单数"};
+	private static final String[] flowHeaders = new String[] {"始发地","物理仓-园区","物理仓-库区","快递","省","市","发货订单数","揽件订单数","签收订单数"};
+	private static final String[] efficiencyHeaders = new String[] {"发货日期","发货时间","始发地","物理仓-库区","店铺","快递","发货订单数","揽件订单数"};
+	private static final String[][] Headers = new String[][] {stateHeaders,flowHeaders,efficiencyHeaders};
+	/**
+	 * 
+	 * @param list 源数据
+	 * @param sheetName sheet名字
+	 * @return File 返回execl文件
+	 * @throws Exception  传入的list为null时，抛出异常。
+	 */
+	public  static String exportExcel(List<List<List<Object>>> list,String sheetName) throws Exception {
+		   File file = null;
+		   XSSFWorkbook workbook = new XSSFWorkbook();
+			if(list.size() > 0 && !list.isEmpty()) {
+				for(int i=0;i<3;i++) {
+					file = produceExcel(i,sheetNames[i],list.get(i),sheetName,Headers[i],workbook);
+				}	
+			}else {
+				throw new Exception("集合list不能为空");
+			}
+			workbook.close();
+			return file.getPath();
+		}
+	
+	/**
+	 *
+	 * @param sheetNum   sheet数目
+	 * @param sheetTitle sheet标题
+	 * @param result     数据源
+	 * @param sheetName  execule的名称
+	 * @param workbook 
+	 * @return
+	 * @throws IOException 
+	 */
+	@SuppressWarnings("unchecked")  
+	private static File produceExcel(int sheetNum,  
+        String sheetTitle, List<List<Object>> result,String sheetName,String[] headers, XSSFWorkbook workbook) throws IOException  {
+		String fileName = sheetName + ".xlsx";
+       // 生成一个表格  
+       XSSFSheet sheet = workbook.createSheet();  
+       workbook.setSheetName(sheetNum,sheetTitle);  
+       // 设置表格默认列宽度为20个字节  
+       sheet.setDefaultColumnWidth((short)20);  
+       // 生成一个样式  
+       XSSFCellStyle style = workbook.createCellStyle();  
+       // 设置这些样式  
+       style.setFillForegroundColor(HSSFColor.PALE_BLUE.index);  
+       style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);  
+       style.setBorderBottom(HSSFCellStyle.BORDER_THIN);  
+       style.setBorderLeft(HSSFCellStyle.BORDER_THIN);  
+       style.setBorderRight(HSSFCellStyle.BORDER_THIN);  
+       style.setBorderTop(HSSFCellStyle.BORDER_THIN);  
+       style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  
+       // 生成一个字体  
+       XSSFFont font = workbook.createFont();  
+       font.setColor(HSSFColor.BLACK.index);  
+       font.setFontHeightInPoints((short) 12);  
+       font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);  
+       // 把字体应用到当前的样式  
+       style.setFont(font);  
+       // 指定当单元格内容显示不下时自动换行  
+       style.setWrapText(true);  
+       // 产生表格标题行  
+       XSSFRow row = sheet.createRow(0);  
+       for (int i = 0; i < headers.length; i++) {  
+           XSSFCell cell = row.createCell((short) i);      
+           cell.setCellStyle(style);  
+           HSSFRichTextString text = new HSSFRichTextString(headers[i]);  
+           cell.setCellValue(text.toString());  
+       }
+       // 遍历集合数据，产生数据行  
+       if (result != null) {  
+           int index = 1;  
+           for (List<Object> m : result) {  
+               row = sheet.createRow(index);  
+               int cellIndex = 0;  
+               for (Object str : m) {  
+                   XSSFCell cell = row.createCell((short) cellIndex);  
+                   cell.setCellValue(str.toString());  
+                   cellIndex++;  
+               }  
+               index++;  
+           }  
+       }
+        OutputStream out = new FileOutputStream(new File(fileName));
+		workbook.write(out);
+		out.close();
+		return new File(fileName);
+   }
+   
+}

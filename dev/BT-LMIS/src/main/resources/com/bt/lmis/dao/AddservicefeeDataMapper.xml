@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.AddservicefeeDataMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.AddservicefeeData" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="cost_code" property="cost_code"/>
+	<result column="cost_name" property="cost_name"/>
+	<result column="system_warehousename" property="system_warehousename"/>
+	<result column="numer" property="numer"/>
+	<result column="date" property="date"/>
+	<result column="area_code" property="area_code"/>
+	<result column="area" property="area"/>
+	<result column="warehouse_id" property="warehouse_id"/>
+	<result column="physical_warehouse" property="physical_warehouse"/>
+	<result column="department" property="department"/>
+	<result column="store_id" property="store_id"/>
+	<result column="store_name" property="store_name"/>
+	<result column="addservice_code" property="addservice_code"/>
+	<result column="addservice_name" property="addservice_name"/>
+	<result column="service_instruction" property="service_instruction"/>
+	<result column="wmsaddservice_order" property="wmsaddservice_order"/>
+	<result column="unit" property="unit"/>
+	<result column="qty" property="qty"/>
+	<result column="price" property="price"/>
+	<result column="store_applicant" property="store_applicant"/>
+	<result column="warehouse_confirmer" property="warehouse_confirmer"/>
+	<result column="remark" property="remark"/>
+	<result column="settle_flag" property="settle_flag"/>
+</resultMap>
+<!-- tb_addservicefee_data table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,cost_code,cost_name,system_warehousename,numer,date,area_code,area,warehouse_id,physical_warehouse,department,store_id,store_name,addservice_code,addservice_name,service_instruction,wmsaddservice_order,unit,qty,price,store_applicant,warehouse_confirmer,remark,settle_flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="cost_code != null and cost_code != ''" >
+	    and cost_code =  #{cost_code}
+	</if>
+	 	<if test="cost_name != null and cost_name != ''" >
+	    and cost_name =  #{cost_name}
+	</if>
+	 	<if test="system_warehousename != null and system_warehousename != ''" >
+	    and system_warehousename =  #{system_warehousename}
+	</if>
+	<if test="numer != null" >
+	    and numer =  #{numer}
+	</if>
+	<if test="date != null" >
+	    and date =  #{date}
+	</if>
+	 	<if test="area_code != null and area_code != ''" >
+	    and area_code =  #{area_code}
+	</if>
+	 	<if test="area != null and area != ''" >
+	    and area =  #{area}
+	</if>
+	 	<if test="warehouse_id != null and warehouse_id != ''" >
+	    and warehouse_id =  #{warehouse_id}
+	</if>
+	 	<if test="physical_warehouse != null and physical_warehouse != ''" >
+	    and physical_warehouse =  #{physical_warehouse}
+	</if>
+	 	<if test="department != null and department != ''" >
+	    and department =  #{department}
+	</if>
+	<if test="store_id != null" >
+	    and store_id =  #{store_id}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	 	<if test="addservice_code != null and addservice_code != ''" >
+	    and addservice_code =  #{addservice_code}
+	</if>
+	 	<if test="addservice_name != null and addservice_name != ''" >
+	    and addservice_name =  #{addservice_name}
+	</if>
+	 	<if test="service_instruction != null and service_instruction != ''" >
+	    and service_instruction =  #{service_instruction}
+	</if>
+	 	<if test="wmsaddservice_order != null and wmsaddservice_order != ''" >
+	    and wmsaddservice_order =  #{wmsaddservice_order}
+	</if>
+	 	<if test="unit != null and unit != ''" >
+	    and unit =  #{unit}
+	</if>
+	<if test="qty != null" >
+	    and qty =  #{qty}
+	</if>
+	<if test="price != null" >
+	    and price =  #{price}
+	</if>
+	 	<if test="store_applicant != null and store_applicant != ''" >
+	    and store_applicant =  #{store_applicant}
+	</if>
+	 	<if test="warehouse_confirmer != null and warehouse_confirmer != ''" >
+	    and warehouse_confirmer =  #{warehouse_confirmer}
+	</if>
+	 	<if test="remark != null and remark != ''" >
+	    and remark =  #{remark}
+	</if>
+	<if test="settle_flag != null" >
+	    and settle_flag =  #{settle_flag}
+	</if>
+	<if test="start_time != null" >
+	    and DATE_FORMAT(create_time,"%Y-%m-%d") <![CDATA[  >=#{start_time}  ]]>  
+	</if>
+	<if test="end_time != null" >
+	    and DATE_FORMAT(create_time,"%Y-%m-%d")  <![CDATA[  <= #{end_time}  ]]>   
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入增值服务费原始数据 -->
+<insert id="insert" parameterType="com.bt.lmis.model.AddservicefeeData" >
+  insert into tb_addservicefee_data(id,create_time,create_user,update_time,update_user,cost_code,cost_name,system_warehousename,numer,date,area_code,area,warehouse_id,physical_warehouse,department,store_id,store_name,addservice_code,addservice_name,service_instruction,wmsaddservice_order,unit,qty,price,store_applicant,warehouse_confirmer,remark,settle_flag)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{cost_code},#{cost_name},#{system_warehousename},#{numer},#{date},#{area_code},#{area},#{warehouse_id},#{physical_warehouse},#{department},#{store_id},#{store_name},#{addservice_code},#{addservice_name},#{service_instruction},#{wmsaddservice_order},#{unit},#{qty},#{price},#{store_applicant},#{warehouse_confirmer},#{remark},#{settle_flag})
+</insert>
+
+<!-- 修改增值服务费原始数据-->  
+ <update id="update" parameterType="com.bt.lmis.model.AddservicefeeData" >
+  update tb_addservicefee_data set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},cost_code=#{cost_code},cost_name=#{cost_name},system_warehousename=#{system_warehousename},numer=#{numer},date=#{date},area_code=#{area_code},area=#{area},warehouse_id=#{warehouse_id},physical_warehouse=#{physical_warehouse},department=#{department},store_id=#{store_id},store_name=#{store_name},addservice_code=#{addservice_code},addservice_name=#{addservice_name},service_instruction=#{service_instruction},wmsaddservice_order=#{wmsaddservice_order},unit=#{unit},qty=#{qty},price=#{price},store_applicant=#{store_applicant},warehouse_confirmer=#{warehouse_confirmer},remark=#{remark},settle_flag=#{settle_flag} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改增值服务费原始数据-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.AddservicefeeData" >
+	update tb_addservicefee_data set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="cost_code != null  and cost_code != '' ">
+		cost_code=#{cost_code},
+	</if>
+	<if test="cost_name != null  and cost_name != '' ">
+		cost_name=#{cost_name},
+	</if>
+	<if test="system_warehousename != null  and system_warehousename != '' ">
+		system_warehousename=#{system_warehousename},
+	</if>
+	<if test="numer != null  ">
+		numer=#{numer},
+	</if>
+	<if test="date != null  ">
+		date=#{date},
+	</if>
+	<if test="area_code != null  and area_code != '' ">
+		area_code=#{area_code},
+	</if>
+	<if test="area != null  and area != '' ">
+		area=#{area},
+	</if>
+	<if test="warehouse_id != null  and warehouse_id != '' ">
+		warehouse_id=#{warehouse_id},
+	</if>
+	<if test="physical_warehouse != null  and physical_warehouse != '' ">
+		physical_warehouse=#{physical_warehouse},
+	</if>
+	<if test="department != null  and department != '' ">
+		department=#{department},
+	</if>
+	<if test="store_id != null  ">
+		store_id=#{store_id},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="addservice_code != null  and addservice_code != '' ">
+		addservice_code=#{addservice_code},
+	</if>
+	<if test="addservice_name != null  and addservice_name != '' ">
+		addservice_name=#{addservice_name},
+	</if>
+	<if test="service_instruction != null  and service_instruction != '' ">
+		service_instruction=#{service_instruction},
+	</if>
+	<if test="wmsaddservice_order != null  and wmsaddservice_order != '' ">
+		wmsaddservice_order=#{wmsaddservice_order},
+	</if>
+	<if test="unit != null  and unit != '' ">
+		unit=#{unit},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="store_applicant != null  and store_applicant != '' ">
+		store_applicant=#{store_applicant},
+	</if>
+	<if test="warehouse_confirmer != null  and warehouse_confirmer != '' ">
+		warehouse_confirmer=#{warehouse_confirmer},
+	</if>
+	<if test="remark != null  and remark != '' ">
+		remark=#{remark},
+	</if>
+	<if test="settle_flag != null  ">
+		settle_flag=#{settle_flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除增值服务费原始数据 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_addservicefee_data where id = #{id}
+</update>
+<!-- 批量删除增值服务费原始数据 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_addservicefee_data where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找增值服务费原始数据 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_addservicefee_data where id = #{id}
+</select>
+  	
+<!-- 增值服务费原始数据 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AddservicefeeDataQueryParam">
+	select count(1) from tb_addservicefee_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的增值服务费原始数据集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AddservicefeeDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_addservicefee_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 增值服务费原始数据总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AddservicefeeDataQueryParam">
+	select count(1) from tb_addservicefee_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的增值服务费原始数据集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AddservicefeeDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_addservicefee_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<!-- 根据条件查询增值服务费原始数据 -->
+<select id="findByAll"  resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.AddservicefeeData">
+	select 
+		<include refid="Base_Column_List"/>
+	from tb_addservicefee_data 
+	<include refid="where_Clause"/>
+</select>
+
+<!-- 根据条件查询增值服务费原始数据 -->
+<select id="findBySection"  resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.AddservicefeeData">
+	select 
+		<include refid="Base_Column_List"/>
+	from tb_addservicefee_data 
+	<include refid="where_Clause"/>
+</select>
+
+<select id="findGroupByServiceName"  resultType="java.util.HashMap" parameterType="com.bt.lmis.model.AddservicefeeData">
+	SELECT addservice_name FROM tb_addservicefee_data 
+	<if test="start_time!=null and end_time!=null">
+	where DATE_FORMAT(create_time,"%Y-%m-%d") <![CDATA[  >= #{start_time} ]]> 
+	and DATE_FORMAT(create_time,"%Y-%m-%d") <![CDATA[  <= #{end_time} ]]> 
+	</if>
+	group by addservice_name
+</select>
+
+<update id="update_settleFlag" parameterType="Object">
+	update tb_addservicefee_data set settle_flag=1 where id=#{id}
+</update>
+<update id="update_settleFlagToZero">
+	update tb_addservicefee_data set settle_flag=0 where store_name=#{store_name} and date <![CDATA[  >= #{start_time} ]]> and date <![CDATA[  <= #{end_time} ]]> 
+</update>
+</mapper>   

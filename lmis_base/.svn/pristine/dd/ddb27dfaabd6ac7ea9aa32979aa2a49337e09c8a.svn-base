@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.jbasis.client.dao.JbasisClientMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.client.model.JbasisClient" id="JbasisClientMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="client_code" property="clientCode" jdbcType="VARCHAR" />
+		<result column="client_name" property="clientName" jdbcType="VARCHAR" />
+		<result column="client_type" property="clientType" jdbcType="VARCHAR" />
+		<result column="settlement_method" property="settlementMethod" jdbcType="VARCHAR" />
+		<result column="contact" property="contact" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="company" property="company" jdbcType="VARCHAR" />
+		<result column="invoice_type" property="invoiceType" jdbcType="VARCHAR" />
+		<result column="invoice_info" property="invoiceInfo" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="validity" property="validity" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.client.model.ViewJbasisClient" id="ViewJbasisClientMap">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="is_disabled_display" property="isDisabledDisplay" jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+		<result column="client_code" property="clientCode" jdbcType="VARCHAR" />
+		<result column="client_name" property="clientName" jdbcType="VARCHAR" />
+		<result column="client_type" property="clientType" jdbcType="VARCHAR" />
+		<result column="client_type_display" property="clientTypeDisplay" jdbcType="VARCHAR" />
+		<result column="settlement_method" property="settlementMethod" jdbcType="VARCHAR" />
+		<result column="settlement_method_display" property="settlementMethodDisplay" jdbcType="VARCHAR" />
+		<result column="contact" property="contact" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="company" property="company" jdbcType="VARCHAR" />
+		<result column="invoice_type" property="invoiceType" jdbcType="VARCHAR" />
+		<result column="invoice_type_display" property="invoiceTypeDisplay" jdbcType="VARCHAR" />
+		<result column="invoice_info" property="invoiceInfo" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="validity" property="validity" jdbcType="VARCHAR" />
+		<result column="validity_display" property="validityDisplay" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		pwr_org,
+		version,
+		client_code,
+		client_name,
+		client_type,
+		settlement_method,
+		contact,
+		phone,
+		address,
+		company,
+		invoice_type,
+		invoice_info,
+		remark,
+		validity
+	</sql>
+	<sql id="ViewJbasisClient_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		is_disabled_display,
+		version,
+		pwr_org,
+		client_code,
+		client_name,
+		client_type,
+		client_type_display,
+		settlement_method,
+		settlement_method_display,
+		contact,
+		phone,
+		address,
+		company,
+		invoice_type,
+		invoice_type_display,
+		invoice_info,
+		remark,
+		validity,
+		validity_display
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			pwr_org,
+			version,
+			client_code,
+			client_name,
+			client_type,
+			settlement_method,
+			contact,
+			phone,
+			address,
+			company,
+			invoice_type,
+			invoice_info,
+			remark,
+			validity
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.jbasis.client.model.JbasisClient">
+		INSERT INTO jbasis_client
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{clientCode, jdbcType=VARCHAR},
+			#{clientName, jdbcType=VARCHAR},
+			#{clientType, jdbcType=VARCHAR},
+			#{settlementMethod, jdbcType=VARCHAR},
+			#{contact, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{address, jdbcType=VARCHAR},
+			#{company, jdbcType=VARCHAR},
+			#{invoiceType, jdbcType=VARCHAR},
+			#{invoiceInfo, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR},
+			#{validity, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO jbasis_client
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.clientCode, jdbcType=VARCHAR},
+				#{obj.clientName, jdbcType=VARCHAR},
+				#{obj.clientType, jdbcType=VARCHAR},
+				#{obj.settlementMethod, jdbcType=VARCHAR},
+				#{obj.contact, jdbcType=VARCHAR},
+				#{obj.phone, jdbcType=VARCHAR},
+				#{obj.address, jdbcType=VARCHAR},
+				#{obj.company, jdbcType=VARCHAR},
+				#{obj.invoiceType, jdbcType=VARCHAR},
+				#{obj.invoiceInfo, jdbcType=VARCHAR},
+				#{obj.remark, jdbcType=VARCHAR},
+				#{obj.validity, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.jbasis.client.model.JbasisClient" resultMap="JbasisClientMap">
+		SELECT <include refid="Base_Column_List" /> FROM jbasis_client
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="clientCode!=null and clientCode!=''">
+	            AND client_code = #{clientCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="clientName!=null and clientName!=''">
+	            AND client_name = #{clientName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="clientType!=null and clientType!=''">
+	            AND client_type = #{clientType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="settlementMethod!=null and settlementMethod!=''">
+	            AND settlement_method = #{settlementMethod, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            AND contact = #{contact, jdbcType=VARCHAR}
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            AND phone = #{phone, jdbcType=VARCHAR}
+	        </if>
+	        <if test="address!=null and address!=''">
+	            AND address = #{address, jdbcType=VARCHAR}
+	        </if>
+	        <if test="company!=null and company!=''">
+	            AND company = #{company, jdbcType=VARCHAR}
+	        </if>
+	        <if test="invoiceType!=null and invoiceType!=''">
+	            AND invoice_type = #{invoiceType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="invoiceInfo!=null and invoiceInfo!=''">
+	            AND invoice_info = #{invoiceInfo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="remark!=null and remark!=''">
+	            AND remark = #{remark, jdbcType=VARCHAR}
+	        </if>
+	        <if test="validity!=null and validity!=''">
+	            AND validity = #{validity, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<select id="retrieveViewJbasisClient" parameterType="com.lmis.jbasis.client.model.ViewJbasisClient" resultMap="ViewJbasisClientMap">
+		SELECT <include refid="ViewJbasisClient_Column_List" /> FROM view_jbasis_client
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabledDisplay!=null and isDisabledDisplay!=''">
+	            AND is_disabled_display = #{isDisabledDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="clientCode!=null and clientCode!=''">
+	            AND client_code = #{clientCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="clientName!=null and clientName!=''">
+	            AND client_name = #{clientName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="clientType!=null and clientType!=''">
+	            AND client_type = #{clientType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="clientTypeDisplay!=null and clientTypeDisplay!=''">
+	            AND client_type_display = #{clientTypeDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="settlementMethod!=null and settlementMethod!=''">
+	            AND settlement_method = #{settlementMethod, jdbcType=VARCHAR}
+	        </if>
+	        <if test="settlementMethodDisplay!=null and settlementMethodDisplay!=''">
+	            AND settlement_method_display = #{settlementMethodDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            AND contact = #{contact, jdbcType=VARCHAR}
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            AND phone = #{phone, jdbcType=VARCHAR}
+	        </if>
+	        <if test="address!=null and address!=''">
+	            AND address = #{address, jdbcType=VARCHAR}
+	        </if>
+	        <if test="company!=null and company!=''">
+	            AND company = #{company, jdbcType=VARCHAR}
+	        </if>
+	        <if test="invoiceType!=null and invoiceType!=''">
+	            AND invoice_type = #{invoiceType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="invoiceTypeDisplay!=null and invoiceTypeDisplay!=''">
+	            AND invoice_type_display = #{invoiceTypeDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="invoiceInfo!=null and invoiceInfo!=''">
+	            AND invoice_info = #{invoiceInfo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="remark!=null and remark!=''">
+	            AND remark = #{remark, jdbcType=VARCHAR}
+	        </if>
+	        <if test="validity!=null and validity!=''">
+	            AND validity = #{validity, jdbcType=VARCHAR}
+	        </if>
+	        <if test="validityDisplay!=null and validityDisplay!=''">
+	            AND validity_display = #{validityDisplay, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.jbasis.client.model.JbasisClient">
+		UPDATE jbasis_client
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="clientCode!=null and clientCode!=''">
+	            client_code = #{clientCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="clientName!=null and clientName!=''">
+	            client_name = #{clientName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="clientType!=null and clientType!=''">
+	            client_type = #{clientType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="settlementMethod!=null and settlementMethod!=''">
+	            settlement_method = #{settlementMethod, jdbcType=VARCHAR},
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            contact = #{contact, jdbcType=VARCHAR},
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            phone = #{phone, jdbcType=VARCHAR},
+	        </if>
+	        <if test="address!=null and address!=''">
+	            address = #{address, jdbcType=VARCHAR},
+	        </if>
+	        <if test="company!=null and company!=''">
+	            company = #{company, jdbcType=VARCHAR},
+	        </if>
+	        <if test="invoiceType!=null and invoiceType!=''">
+	            invoice_type = #{invoiceType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="invoiceInfo!=null and invoiceInfo!=''">
+	            invoice_info = #{invoiceInfo, jdbcType=VARCHAR},
+	        </if>
+	        <if test="remark!=null and remark!=''">
+	            remark = #{remark, jdbcType=VARCHAR},
+	        </if>
+	        <if test="validity!=null and validity!=''">
+	            validity = #{validity, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.jbasis.client.model.JbasisClient">
+		UPDATE jbasis_client
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	client_code = #{clientCode, jdbcType=VARCHAR},
+        	client_name = #{clientName, jdbcType=VARCHAR},
+        	client_type = #{clientType, jdbcType=VARCHAR},
+        	settlement_method = #{settlementMethod, jdbcType=VARCHAR},
+        	contact = #{contact, jdbcType=VARCHAR},
+        	phone = #{phone, jdbcType=VARCHAR},
+        	address = #{address, jdbcType=VARCHAR},
+        	company = #{company, jdbcType=VARCHAR},
+        	invoice_type = #{invoiceType, jdbcType=VARCHAR},
+        	invoice_info = #{invoiceInfo, jdbcType=VARCHAR},
+        	remark = #{remark, jdbcType=VARCHAR},
+        	validity = #{validity, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.jbasis.client.model.JbasisClient">
+		UPDATE jbasis_client
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.jbasis.client.model.JbasisClient">
+		UPDATE jbasis_client
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.jbasis.client.model.JbasisClient">
+		DELETE FROM jbasis_client
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</delete>
+</mapper>

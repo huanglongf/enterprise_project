@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.wms.dao.UserMapper">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.bt.wms.model.User">
+		<result column="id" property="id" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="container_code" property="container_code" />
+		<result column="localhost_code" property="localhost_code" />
+		<result column="opertion_type" property="opertion_type" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,username,password,container_code,localhost_code,opertion_type
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="username != null and username != ''">
+				and username = #{username}
+			</if>
+			<if test="password != null and password != ''">
+				and password = #{password}
+			</if>
+			<if test="container_code != null and container_code != ''">
+				and container_code = #{container_code}
+			</if>
+			<if test="localhost_code != null and localhost_code != ''">
+				and localhost_code = #{localhost_code}
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause_like">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="username != null and username != ''">
+				and username like CONCAT('%', #{username}, '%')
+			</if>
+		</trim>
+
+	</sql>
+
+	<!-- 依据主键查找运维人员 -->
+	<select id="query_user_by_id" resultMap="BaseResultMap" parameterType="Object">
+		select
+			<include refid="Base_Column_List" />
+		from 
+			s_employee 
+		where 
+			id = #{id}
+	</select>
+
+	<!-- 登陆验证 -->
+	<select id="login_check" parameterType="com.bt.wms.model.User" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from
+			s_employee
+		where
+			username=#{username} and password=#{password}
+	</select>
+	
+	<!-- 修改用户信息 -->
+	<update id="update" parameterType="com.bt.wms.model.User" >
+  		update s_employee set  
+ 			id=#{id}
+		<if test="container_code != null and container_code != ''">
+  			,container_code=#{container_code} 
+		</if>
+		<if test="localhost_code != null and localhost_code != ''">
+  			,localhost_code=#{localhost_code} 
+		</if>
+		<if test="opertion_type != null and opertion_type != ''">
+  			,opertion_type=#{opertion_type} 
+		</if>
+  		where id=#{id}
+	</update>
+
+</mapper>   

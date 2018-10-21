@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.AllSingltTrayMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.AllSingltTray" >
+	<result column="sast_id" property="sast_id"/>
+	<result column="sast_cb_id" property="sast_cb_id"/>
+	<result column="sast_section" property="sast_section"/>
+	<result column="sast_price" property="sast_price"/>
+	<result column="sast_price_unit" property="sast_price_unit"/>
+	<result column="sast_status" property="sast_status"/>
+</resultMap>
+       
+<!-- ssc_all_singlt_tray table all fields -->
+<sql id="Base_Column_List" >
+	 sast_id,sast_cb_id,sast_section,sast_price,sast_price_unit,sast_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="sast_id != null" >
+	    and sast_id =  #{sast_id}
+	</if>
+	<if test="sast_cb_id != null" >
+	    and sast_cb_id =  #{sast_cb_id}
+	</if>
+	 	<if test="sast_section != null and sast_section != ''" >
+	    and sast_section =  #{sast_section}
+	</if>
+	 	<if test="sast_price != null and sast_price != ''" >
+	    and sast_price =  #{sast_price}
+	</if>
+	<if test="sast_price_unit != null" >
+	    and sast_price_unit =  #{sast_price_unit}
+	</if>
+	<if test="sast_status != null" >
+	    and sast_status =  #{sast_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入总占用托盘数反推表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.AllSingltTray" >
+  insert into ssc_all_singlt_tray(sast_id,sast_cb_id,sast_section,sast_price,sast_price_unit,sast_status)
+ values(#{sast_id},#{sast_cb_id},#{sast_section},#{sast_price},#{sast_price_unit},#{sast_status})
+</insert>
+
+<!-- 修改总占用托盘数反推表-->  
+ <update id="update" parameterType="com.bt.lmis.model.AllSingltTray" >
+  update ssc_all_singlt_tray set sast_cb_id=#{sast_cb_id},sast_section=#{sast_section},sast_price=#{sast_price},sast_price_unit=#{sast_price_unit},sast_status=#{sast_status} where sast_id=#{sast_id}
+ </update>
+ 
+ <!-- 选择修改总占用托盘数反推表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.AllSingltTray" >
+	update ssc_all_singlt_tray set 
+	<trim  suffixOverrides="," >
+	<if test="sast_cb_id != null  ">
+		sast_cb_id=#{sast_cb_id},
+	</if>
+	<if test="sast_section != null  and sast_section != '' ">
+		sast_section=#{sast_section},
+	</if>
+	<if test="sast_price != null  and sast_price != '' ">
+		sast_price=#{sast_price},
+	</if>
+	<if test="sast_price_unit != null  ">
+		sast_price_unit=#{sast_price_unit},
+	</if>
+	<if test="sast_status != null  ">
+		sast_status=#{sast_status},
+	</if>
+	</trim> where sast_id=#{sast_id}
+</update>
+
+<!-- 删除总占用托盘数反推表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_all_singlt_tray where sast_id = #{sast_id}
+</update>
+<!-- 批量删除总占用托盘数反推表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_all_singlt_tray where sast_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找总占用托盘数反推表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_all_singlt_tray where sast_id = #{sast_id}
+</select>
+  	
+<!-- 总占用托盘数反推表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AllSingltTrayQueryParam">
+	select count(1) from ssc_all_singlt_tray 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的总占用托盘数反推表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AllSingltTrayQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_all_singlt_tray 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 总占用托盘数反推表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AllSingltTrayQueryParam">
+	select count(1) from ssc_all_singlt_tray 
+	<include refid="where_Clause"/>
+</select>
+  	
+
+
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_all_singlt_tray where sast_cb_id=#{cbid}
+</select>
+  	
+</mapper>   

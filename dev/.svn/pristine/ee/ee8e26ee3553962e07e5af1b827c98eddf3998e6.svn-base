@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.WarehouseAreaMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.WarehouseArea" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="warehouse_id" property="warehouse_id"/>
+	<result column="area_code" property="area_code"/>
+	<result column="area_name" property="area_name"/>
+	<result column="area_typeid" property="area_typeid"/>
+	<result column="validity" property="validity"/>
+</resultMap>
+       
+<!-- tb_warehouse_area table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,warehouse_id,area_code,area_name,area_typeid,validity
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="warehouse_id != null" >
+	    and warehouse_id =  #{warehouse_id}
+	</if>
+	 	<if test="area_code != null and area_code != ''" >
+	    and area_code =  #{area_code}
+	</if>
+	 	<if test="area_name != null and area_name != ''" >
+	    and area_name =  #{area_name}
+	</if>
+	<if test="area_typeid != null" >
+	    and area_typeid =  #{area_typeid}
+	</if>
+	<if test="validity != null" >
+	    and validity =  #{validity}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入仓库区域表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.WarehouseArea" >
+  insert into tb_warehouse_area(id,create_time,create_user,update_time,update_user,warehouse_id,area_code,area_name,area_typeid,validity)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{warehouse_id},#{area_code},#{area_name},#{area_typeid},#{validity})
+</insert>
+
+<!-- 修改仓库区域表-->  
+ <update id="update" parameterType="com.bt.lmis.model.WarehouseArea" >
+  update tb_warehouse_area set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},warehouse_id=#{warehouse_id},area_code=#{area_code},area_name=#{area_name},area_typeid=#{area_typeid},validity=#{validity} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改仓库区域表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.WarehouseArea" >
+	update tb_warehouse_area set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="warehouse_id != null  ">
+		warehouse_id=#{warehouse_id},
+	</if>
+	<if test="area_code != null  and area_code != '' ">
+		area_code=#{area_code},
+	</if>
+	<if test="area_name != null  and area_name != '' ">
+		area_name=#{area_name},
+	</if>
+	<if test="area_typeid != null  ">
+		area_typeid=#{area_typeid},
+	</if>
+	<if test="validity != null  ">
+		validity=#{validity},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除仓库区域表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_warehouse_area where id = #{id}
+</update>
+<!-- 批量删除仓库区域表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_warehouse_area where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找仓库区域表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_warehouse_area where id = #{id}
+</select>
+  	
+<!-- 仓库区域表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.WarehouseAreaQueryParam">
+	select count(1) from tb_warehouse_area 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的仓库区域表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.WarehouseAreaQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_warehouse_area 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 仓库区域表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.WarehouseAreaQueryParam">
+	select count(1) from tb_warehouse_area 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的仓库区域表集合 -->
+<select id="findByWhid" resultMap="BaseResultMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_warehouse_area 
+	where warehouse_id=#{id}
+</select>
+  	
+</mapper>   

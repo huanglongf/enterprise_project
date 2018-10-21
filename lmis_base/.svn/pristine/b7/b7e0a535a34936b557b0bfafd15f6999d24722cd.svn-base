@@ -1,0 +1,110 @@
+package com.lmis.setup.pageElement.service;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.setup.pageElement.model.SetupPageElement;
+import com.lmis.setup.pageLayout.service.SetupPageLayoutServiceInterface;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class SetupPageElementServiceInterfaceTest {
+	
+	private static Log log = LogFactory.getLog(SetupPageElementServiceInterfaceTest.class);
+	
+	@Autowired
+	SetupPageElementServiceInterface<SetupPageElement> setupPageElementService;
+	
+	@Autowired
+	ObjectMapper mapper;
+	
+	@Value("${base.page.pageNum}")
+    int defPageNum;
+
+    @Value("${base.page.pageSize}")
+    int defPageSize;
+	
+	@Test
+	public void testSelectSetupPageLayoutDynamic() throws Exception {
+		// 公共传参获取查询页面布局
+		/*log.info("testing testSelectSetupPageLayoutDynamic()...");
+		DynamicSqlParam<SetupPageElement> dynamicSqlParam = new DynamicSqlParam<SetupPageElement>();
+		dynamicSqlParam.setLayoutId("P_YMBJ_P02");
+		String queryJsonStr = "[{\"elementId\":\"P_YMBJ_P01_E01\",\"value\":\"BIS_MANAGE_METER\"}]";
+		dynamicSqlParam.setIsDeleted(false);
+		dynamicSqlParam.setElements(queryJsonStr);
+		LmisPageObject pageObject = new LmisPageObject();
+		pageObject.setDefaultPage(defPageNum,defPageSize);
+		LmisResult<?> result = setupPageElementService.executeSelect(dynamicSqlParam, pageObject);
+		assertNotNull("failure - result is null", result);
+		assertTrue("failure - result is not right", result.getCode().equals(LmisConstant.RESULT_CODE_SUCCESS));
+		log.info("testing testSelectSetupPageLayoutDynamic() end: " + mapper.writeValueAsString(result));*/
+	}
+	
+	@Transactional  
+    @Rollback(true)
+	@Test
+	public void testAddSetupPageElementDynamic() throws Exception {
+		// 公共传参新增页面元素
+		/*log.info("testing testAddSetupPageElementDynamic()...");
+		DynamicSqlParam<SetupPageElement> dynamicSqlParam = new DynamicSqlParam<SetupPageElement>();
+		dynamicSqlParam.setLayoutId("P_YMBJ_ADDELE_P01");
+		String jsonStr = "[{\"elementId\":\"P_YMBJ_ADDELE_P01_E01\",\"value\":\"P4\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E02\",\"value\":\"测试元素3\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E03\",\"value\":\"C_S_RIKI_0_T_1\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E04\",\"value\":\"100\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E05\",\"value\":\"10%\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E07\",\"value\":\"10\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E09\",\"value\":\"h_e_input\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E13\",\"value\":\"bt_right\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E21\",\"value\":\"0\"}]";
+		dynamicSqlParam.setElements(jsonStr);
+		LmisResult<?> result = setupPageElementService.executeInsert(dynamicSqlParam);
+		assertTrue("failure - result is not right", result.getCode().equals(LmisConstant.RESULT_CODE_SUCCESS));*/
+		
+	}
+	
+	@Transactional  
+    @Rollback(true)
+	@Test
+	public void testUpdateSetupPageElementDynamic() throws Exception {
+		// 公共传参修改页面元素
+		/*log.info("testing testUpdateSetupPageElementDynamic()...");
+		DynamicSqlParam<SetupPageElement> dynamicSqlParam = new DynamicSqlParam<SetupPageElement>();
+		dynamicSqlParam.setLayoutId("P_YMBJ_ADDELE_P01");
+		dynamicSqlParam.setId("306f4a71-6338-11e8-9d0d-005056954f8e");
+		String jsonStr ="[{\"elementId\":\"P_YMBJ_ADDELE_P01_E01\",\"value\":\"P3\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E02\",\"value\":\"测试元素3\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E03\",\"value\":\"C_S_RIKI_0_T_1\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E04\",\"value\":100},{\"elementId\":\"P_YMBJ_ADDELE_P01_E05\",\"value\":\"10%\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E07\",\"value\":\"10\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E09\",\"value\":\"h_e_input\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E13\",\"value\":\"bt_right\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E21\",\"value\":\"0\"}]";
+		dynamicSqlParam.setElements(jsonStr);
+		LmisResult<?> result = setupPageElementService.executeUpdate(dynamicSqlParam);
+		assertTrue("failure - result is not right", result.getCode().equals(LmisConstant.RESULT_CODE_SUCCESS));*/
+		
+	}
+	
+	
+	@Test
+	public void testCheckSetupPageElement() throws Exception {
+		// 公共传参查看页面元素
+		/*log.info("testing testUpdateSetupPageElementDynamic()...");
+		DynamicSqlParam<SetupPageElement> dynamicSqlParam = new DynamicSqlParam<SetupPageElement>();
+		dynamicSqlParam.setLayoutId("P_YMBJ_ADDELE_P01");
+		dynamicSqlParam.setId("306f4a71-6338-11e8-9d0d-005056954f8e");
+		String jsonStr ="[{\"elementId\":\"P_YMBJ_ADDELE_P01_E01\",\"value\":\"P3\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E02\",\"value\":\"测试元素3\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E03\",\"value\":\"C_S_RIKI_0_T_1\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E04\",\"value\":100},{\"elementId\":\"P_YMBJ_ADDELE_P01_E05\",\"value\":\"10%\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E07\",\"value\":\"10\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E09\",\"value\":\"h_e_input\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E13\",\"value\":\"bt_right\"},{\"elementId\":\"P_YMBJ_ADDELE_P01_E21\",\"value\":\"0\"}]";
+		dynamicSqlParam.setElements(jsonStr);
+		LmisResult<?> result = setupPageElementService.executeUpdate(dynamicSqlParam);
+		assertTrue("failure - result is not right", result.getCode().equals(LmisConstant.RESULT_CODE_SUCCESS));*/
+		
+	}
+	
+	
+}

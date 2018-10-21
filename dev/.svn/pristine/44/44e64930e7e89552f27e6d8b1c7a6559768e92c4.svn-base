@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.OrderDetailMapper" >
+	<select id="countData" parameterType="Object" resultType="Integer">
+		select
+			count(0)
+		from
+			jk_settle_order_detail
+		where
+			bat_id = #{bat_id }
+		<if test="pro_flag != null and pro_flag !=''">
+			and pro_flag = #{pro_flag }
+		</if>
+	</select>
+	<delete id="del" parameterType="Object">
+		delete from jk_settle_order_detail where bat_id = #{bat_id }
+	</delete>
+	<select id="getBatIds" parameterType="Object" resultType="Integer">
+		select
+			distinct bat_id
+		from
+			jk_settle_order_detail
+		where
+			1 = 1
+		<if test="bat_id != null">
+			and bat_id = #{bat_id }
+		</if>
+		order by bat_id desc
+	</select>
+	<select id="getBatId" resultType="Integer">
+		select
+			max(bat_id)
+		from
+			jk_settle_order_detail
+	</select>
+	<insert id="insertRawData" parameterType="com.bt.lmis.model.OrderDetail" useGeneratedKeys="true" keyProperty="id">
+		insert into jk_settle_order_detail
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			bat_id,
+			<if test="express_number != null and express_number != ''">
+				express_number,
+			</if>
+			<if test="sku_number != null and sku_number != ''">
+				sku_number,
+			</if>
+			<if test="barcode != null and barcode != ''">
+				barcode,
+			</if>
+			<if test="item_name != null and item_name != ''">
+				item_name,
+			</if>
+			<if test="extend_pro != null and extend_pro != ''">
+				extend_pro,
+			</if>
+			<if test="qty != null and qty != ''">
+				qty,
+			</if>
+			<if test="create_date != null and create_date != ''">
+				create_date,
+			</if>
+			<if test="operation_time != null and operation_time != ''">
+				operation_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			#{bat_id, jdbcType=INTEGER },
+			<if test="express_number != null and express_number != ''">
+				#{express_number, jdbcType=VARCHAR },
+			</if>
+			<if test="sku_number != null and sku_number != ''">
+				#{sku_number, jdbcType=VARCHAR },
+			</if>
+			<if test="barcode != null and barcode != ''">
+				#{barcode, jdbcType=VARCHAR },
+			</if>
+			<if test="item_name != null and item_name != ''">
+				#{item_name, jdbcType=VARCHAR },
+			</if>
+			<if test="extend_pro != null and extend_pro != ''">
+				#{extend_pro, jdbcType=VARCHAR },
+			</if>
+			<if test="qty != null and qty != ''">
+				#{qty, jdbcType=INTEGER },
+			</if>
+			<if test="create_date != null and create_date != ''">
+				#{create_date, jdbcType=DATE },
+			</if>
+			<if test="operation_time != null and operation_time != ''">
+				#{operation_time, jdbcType=DATE },
+			</if>
+		</trim>
+	</insert>
+</mapper>   

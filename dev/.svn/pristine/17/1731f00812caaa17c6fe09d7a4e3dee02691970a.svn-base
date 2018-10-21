@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.dao.WareParkMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.model.WarePark" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="park_code" property="parkCode" jdbcType="VARCHAR" />
+    <result column="park_name" property="parkName" jdbcType="VARCHAR" />
+    <result column="park_cost_center" property="parkCostCenter" jdbcType="VARCHAR" />
+    <result column="show_st_re_flag" property="showStReFlag" jdbcType="VARCHAR" />
+    <result column="show_by_cp_flag" property="showByCpFlag" jdbcType="VARCHAR" />
+    <result column="ware_flag" property="wareFlag" jdbcType="VARCHAR" />
+    <result column="dis_flag" property="disFlag" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultQueryMap" type="com.bt.lmis.controller.form.WareParkQueryParam" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="park_code" property="parkCode" jdbcType="VARCHAR" />
+    <result column="park_name" property="parkName" jdbcType="VARCHAR" />
+    <result column="park_cost_center" property="parkCostCenter" jdbcType="VARCHAR" />
+    <result column="show_st_re_flag" property="showStReFlag" jdbcType="VARCHAR" />
+    <result column="show_by_cp_flag" property="showByCpFlag" jdbcType="VARCHAR" />
+    <result column="ware_flag" property="wareFlag" jdbcType="VARCHAR" />
+    <result column="dis_flag" property="disFlag" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    twp.id, twp.park_code, twp.park_name, twp.park_cost_center, twp.show_st_re_flag, twp.show_by_cp_flag, 
+    twp.ware_flag, twp.dis_flag, twp.remark, twp.create_time, twp.create_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultQueryMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_ware_park twp
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    DELETE twp,
+	 twr
+	FROM
+		tb_ware_park twp
+	LEFT JOIN tb_ware_relation twr ON twp.id = twr.park_id
+	WHERE
+	twp.id =#{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.model.WarePark" >
+    insert into tb_ware_park (id, park_code, park_name, 
+      park_cost_center, show_st_re_flag, show_by_cp_flag, 
+      twp.ware_flag, twp.dis_flag,remark, create_time, create_user
+      )
+    values (#{id,jdbcType=VARCHAR}, #{parkCode,jdbcType=VARCHAR}, #{parkName,jdbcType=VARCHAR}, 
+      #{parkCostCenter,jdbcType=VARCHAR}, #{showStReFlag,jdbcType=VARCHAR}, #{showByCpFlag,jdbcType=VARCHAR}, 
+      #{wareFlag,jdbcType=VARCHAR}, #{disFlag,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.model.WarePark" >
+    insert into tb_ware_park
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="parkCode != null" >
+        park_code,
+      </if>
+      <if test="parkName != null" >
+        park_name,
+      </if>
+      <if test="parkCostCenter != null" >
+        park_cost_center,
+      </if>
+      <if test="showStReFlag != null" >
+        show_st_re_flag,
+      </if>
+      <if test="showByCpFlag != null" >
+        show_by_cp_flag,
+      </if>
+      <if test="wareFlag != null" >
+        ware_flag,
+      </if>
+      <if test="disFlag != null" >
+        dis_flag,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCode != null" >
+        #{parkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null" >
+        #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCostCenter != null" >
+        #{parkCostCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="showStReFlag != null" >
+        #{showStReFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="showByCpFlag != null" >
+        #{showByCpFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="wareFlag != null" >
+        #{wareFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="disFlag != null" >
+        #{disFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.model.WarePark" >
+    update tb_ware_park
+    <set >
+      <if test="parkCode != null" >
+        park_code = #{parkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null" >
+        park_name = #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCostCenter != null" >
+        park_cost_center = #{parkCostCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="showStReFlag != null" >
+        show_st_re_flag = #{showStReFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="showByCpFlag != null" >
+        show_by_cp_flag = #{showByCpFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="wareFlag != null" >
+        ware_flag = #{wareFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="disFlag != null" >
+        dis_flag = #{disFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.model.WarePark" >
+    update tb_ware_park
+    set park_code = #{parkCode,jdbcType=VARCHAR},
+      park_name = #{parkName,jdbcType=VARCHAR},
+      park_cost_center = #{parkCostCenter,jdbcType=VARCHAR},
+      show_st_re_flag = #{showStReFlag,jdbcType=VARCHAR},
+      show_by_cp_flag = #{showByCpFlag,jdbcType=VARCHAR},
+      ware_flag = #{wareFlag,jdbcType=VARCHAR},
+      dis_flag = #{disFlag,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <sql id="query_sql_where">
+  	where 1=1
+  		<if test="parkName != null and parkName != ''">
+  			and twp.park_name like concat('%',#{parkName},'%')
+  		</if>
+  		<if test="parkCode != null and parkCode != ''">
+  			and twp.park_code like concat('%',#{parkCode},'%')
+  		</if>
+  </sql>
+  
+  <select id="exportList" parameterType="com.bt.lmis.controller.form.WareParkQueryParam" resultType="java.util.HashMap">
+  	select 
+  		tw.warehouse_code 仓库编码,
+  		tw.warehouse_name 仓库名称,
+  		ts.store_code 店铺编码,
+  		ts.store_name 店铺名称,
+  		ts.cost_center 店铺成本中心,
+  		tc.client_name 品牌名称,
+		twp.park_code 园区编码,
+		twp.park_name 园区名称,
+		twp.park_cost_center 园区成本中心,
+		twp.show_st_re_flag 是否出具店铺收入,
+		twp.show_by_cp_flag 是否由物流部出具品牌账单,
+		twp.ware_flag 仓,
+		twp.dis_flag 配,
+		twp.remark 备注
+  	from
+  		tb_ware_park twp
+  	left join tb_ware_relation twr on twp.id = twr.park_id
+  	left join tb_warehouse tw on twr.warehouse_code = tw.warehouse_code
+  	left join tb_store ts on twr.store_code = ts.store_code
+  	left join tb_client tc on twr.client_id = tc.id
+  	<include refid="query_sql_where"/>
+  </select>
+  
+  <select id="findAll" parameterType="com.bt.lmis.controller.form.WareParkQueryParam" resultMap="BaseResultQueryMap">
+  	select 
+  		<include refid="Base_Column_List"/>
+  	from
+  		tb_ware_park twp
+  	<include refid="query_sql_where"/>
+	limit #{firstResult }, #{maxResult }
+  </select>
+  
+  <select id="countAll" parameterType="com.bt.lmis.controller.form.WareParkQueryParam" resultType="java.lang.Integer">
+  	select 
+  		count(1)
+  	from
+  		tb_ware_park twp
+  	<include refid="query_sql_where"/>
+  </select>
+  
+  <select id="checkWareParkParam" parameterType="com.bt.lmis.model.WarePark" resultType="java.util.Map">
+  	select
+  		sum(if(park_code =#{parkCode},1,0)) parkCodeResult,
+  		sum(if(park_name =#{parkName},1,0)) parkNameResult,
+  		sum(if(park_cost_center =#{parkCostCenter},1,0)) parkCostCenterResult
+  	from
+  		tb_ware_park twp
+  	where
+  		(park_code = #{parkCode} or park_name = #{parkName} or park_cost_center = #{parkCostCenter})
+  		<if test="id != null and id != ''">
+  			and twp.id != #{id}
+  		</if>
+  </select>
+  
+  <select id="getBySelective" parameterType="com.bt.lmis.controller.form.WareParkQueryParam" resultMap="BaseResultQueryMap">
+	select 
+		<include refid="Base_Column_List"/>
+  	from
+  		tb_ware_park twp
+	where 1=1
+  		<if test="parkName != null and parkName != ''">
+  			and twp.park_name = #{parkName}
+  		</if>
+  		<if test="parkCode != null and parkCode != ''">
+  			and twp.park_code = #{parkCode}
+  		</if>
+  		<if test="parkCostCenter != null and parkCostCenter != ''">
+  			and twp.park_cost_center= #{parkCostCenter}
+  		</if>
+  </select>
+  
+  
+  
+</mapper>

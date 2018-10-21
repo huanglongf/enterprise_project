@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpressReturnStorageMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.ExpressReturnStorage" >
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="warehouse_code" property="warehouse_code" jdbcType="VARCHAR"/>
+	<result column="warehouse_name" property="warehouse_name" jdbcType="VARCHAR"/>
+	<result column="job_no" property="job_no" jdbcType="VARCHAR"/>
+	<result column="job_type" property="job_type" jdbcType="VARCHAR"/>
+	<result column="store_code" property="store_code" jdbcType="VARCHAR"/>
+	<result column="store_name" property="store_name" jdbcType="VARCHAR"/>
+	<result column="related_no" property="related_no" jdbcType="VARCHAR"/>
+	<result column="waybill" property="waybill" jdbcType="VARCHAR"/>
+	<result column="re_epistatic_order" property="re_epistatic_order" jdbcType="VARCHAR"/>
+	<result column="platform_no" property="platform_no" jdbcType="VARCHAR"/>
+	<result column="re_province" property="re_province" jdbcType="VARCHAR"/>
+	<result column="re_city" property="re_city" jdbcType="VARCHAR"/>
+	<result column="re_state" property="re_state" jdbcType="VARCHAR"/>
+	<result column="re_weight" property="re_weight" jdbcType="DECIMAL"/>
+	<result column="re_length" property="re_length" jdbcType="DECIMAL"/>
+	<result column="re_width" property="re_width" jdbcType="DECIMAL"/>
+	<result column="re_higth" property="re_higth" jdbcType="DECIMAL"/>
+	<result column="re_volumn" property="re_volumn" jdbcType="DECIMAL"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+	<result column="finish_time" property="finish_time" jdbcType="TIMESTAMP"/>
+	<result column="plan_qty" property="plan_qty" jdbcType="INTEGER"/>
+	<result column="actual_qty" property="actual_qty" jdbcType="INTEGER"/>
+	<result column="batch_number" property="batch_number" jdbcType="VARCHAR"/>
+	<result column="state" property="state" jdbcType="VARCHAR"/>
+	<result column="transport_code" property="transport_code" jdbcType="VARCHAR"/>
+	<result column="transport_name" property="transport_name" jdbcType="VARCHAR"/>
+	<result column="itemtype_code" property="itemtype_code" jdbcType="VARCHAR"/>
+	<result column="itemtype_name" property="itemtype_name" jdbcType="VARCHAR"/>
+	<result column="refuse_reason" property="refuse_reason" jdbcType="VARCHAR"/>
+	<result column="physical_warehouse" property="physical_warehouse" jdbcType="VARCHAR"/>
+	<result column="return_order" property="return_order" jdbcType="VARCHAR"/>
+	<result column="create_user" property="create_user" jdbcType="VARCHAR"/>
+	<result column="deblock_user" property="deblock_user" jdbcType="VARCHAR"/>
+	<result column="remark" property="remark" jdbcType="VARCHAR"/>
+</resultMap>
+       
+<!-- tb_express_return_storage table all fields -->
+<sql id="Base_Column_List" >
+	  id,
+	  warehouse_code,
+	  warehouse_name,
+	  job_no,
+	  job_type,
+	  store_code,
+	  store_name,
+	  related_no,
+	  waybill,
+	  re_epistatic_order,
+	  platform_no,
+	  re_province,
+	  re_city,
+	  re_state,
+	  re_weight,
+	  re_length,
+	  re_width,
+	  re_higth,
+	  re_volumn,
+	  create_time,
+	  finish_time,
+	  plan_qty,
+	  actual_qty,
+	  batch_number,
+	  state,
+	  transport_code,
+	  transport_name,
+	  itemtype_code,
+	  itemtype_name,
+	  refuse_reason,
+	  physical_warehouse,
+	  return_order,
+	  create_user,
+	  deblock_user,
+	  remark
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="warehouse_code != null and warehouse_code != ''" >
+	    and warehouse_code =  #{warehouse_code}
+	</if>
+	<if test="warehouse_name != null and warehouse_name != ''" >
+	    and warehouse_name =  #{warehouse_name}
+	</if>
+	<if test="job_no != null and job_no != ''" >
+	    and job_no =  #{job_no}
+	</if>
+	<if test="job_type != null and job_type != ''" >
+	    and job_type =  #{job_type}
+	</if>
+	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	<if test="related_no != null and related_no != ''" >
+	    and related_no =  #{related_no}
+	</if>
+	<if test="waybill != null and waybill != ''" >
+	    and waybill =  #{waybill}
+	</if>
+	<if test="re_epistatic_order != null and re_epistatic_order != ''" >
+	    and re_epistatic_order =  #{re_epistatic_order}
+	</if>
+	<if test="re_province != null and re_province != ''" >
+	    and re_province =  #{re_province}
+	</if>
+	<if test="re_city != null and re_city != ''" >
+	    and re_city =  #{re_city}
+	</if>
+	<if test="re_state != null and re_state != ''" >
+	    and re_state =  #{re_state}
+	</if>
+	<if test="re_weight != null" >
+	    and re_weight =  #{re_weight}
+	</if>
+	<if test="re_length != null" >
+	    and re_length =  #{re_length}
+	</if>
+	<if test="re_width != null" >
+	    and re_width =  #{re_width}
+	</if>
+	<if test="re_higth != null" >
+	    and re_higth =  #{re_higth}
+	</if>
+	<if test="re_volumn != null" >
+	    and re_volumn =  #{re_volumn}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	<if test="finish_time != null" >
+	    and finish_time =  #{finish_time}
+	</if>
+	<if test="plan_qty != null" >
+	    and plan_qty =  #{plan_qty}
+	</if>
+	<if test="actual_qty != null" >
+	    and actual_qty =  #{actual_qty}
+	</if>
+	<if test="batch_number != null" >
+	    and batch_number =  #{batch_number}
+	</if>
+	 	<if test="state != null and state != ''" >
+	    and state =  #{state}
+	</if>
+	 	<if test="transport_code != null and transport_code != ''" >
+	    and transport_code =  #{transport_code}
+	</if>
+	 	<if test="transport_name != null and transport_name != ''" >
+	    and transport_name =  #{transport_name}
+	</if>
+	 	<if test="itemtype_code != null and itemtype_code != ''" >
+	    and itemtype_code =  #{itemtype_code}
+	</if>
+	 	<if test="itemtype_name != null and itemtype_name != ''" >
+	    and itemtype_name =  #{itemtype_name}
+	</if>
+	 	<if test="refuse_reason != null and refuse_reason != ''" >
+	    and refuse_reason =  #{refuse_reason}
+	</if>
+	 	<if test="physical_warehouse != null and physical_warehouse != ''" >
+	    and physical_warehouse =  #{physical_warehouse}
+	</if>
+	 	<if test="return_order != null and return_order != ''" >
+	    and return_order =  #{return_order}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	 	<if test="deblock_user != null and deblock_user != ''" >
+	    and deblock_user =  #{deblock_user}
+	</if>
+	 	<if test="remark != null and remark != ''" >
+	    and remark =  #{remark}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入退货入库 -->
+<insert id="insert" parameterType="com.bt.lmis.model.ExpressReturnStorage" >
+  insert into tb_express_return_storage(id,warehouse_code,warehouse_name,job_no,job_type,store_code,store_name,related_no,waybill,re_epistatic_order,re_province,re_city,re_state,re_weight,re_length,re_width,re_higth,re_volumn,create_time,finish_time,plan_qty,actual_qty,batch_number,state,transport_code,transport_name,itemtype_code,itemtype_name,refuse_reason,physical_warehouse,return_order,create_user,deblock_user,remark)
+ values(#{id},#{warehouse_code},#{warehouse_name},#{job_no},#{job_type},#{store_code},#{store_name},#{related_no},#{waybill},#{re_epistatic_order},#{re_province},#{re_city},#{re_state},#{re_weight},#{re_length},#{re_width},#{re_higth},#{re_volumn},#{create_time},#{finish_time},#{plan_qty},#{actual_qty},#{batch_number},#{state},#{transport_code},#{transport_name},#{itemtype_code},#{itemtype_name},#{refuse_reason},#{physical_warehouse},#{return_order},#{create_user},#{deblock_user},#{remark})
+</insert>
+
+<!-- 修改退货入库-->  
+ <update id="update" parameterType="com.bt.lmis.model.ExpressReturnStorage" >
+  update tb_express_return_storage set warehouse_code=#{warehouse_code},warehouse_name=#{warehouse_name},job_no=#{job_no},job_type=#{job_type},store_code=#{store_code},store_name=#{store_name},related_no=#{related_no},waybill=#{waybill},re_epistatic_order=#{re_epistatic_order},re_province=#{re_province},re_city=#{re_city},re_state=#{re_state},re_weight=#{re_weight},re_length=#{re_length},re_width=#{re_width},re_higth=#{re_higth},re_volumn=#{re_volumn},create_time=#{create_time},finish_time=#{finish_time},plan_qty=#{plan_qty},actual_qty=#{actual_qty},batch_number=#{batch_number},state=#{state},transport_code=#{transport_code},transport_name=#{transport_name},itemtype_code=#{itemtype_code},itemtype_name=#{itemtype_name},refuse_reason=#{refuse_reason},physical_warehouse=#{physical_warehouse},return_order=#{return_order},create_user=#{create_user},deblock_user=#{deblock_user},remark=#{remark} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改退货入库-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.ExpressReturnStorage" >
+	update tb_express_return_storage set 
+	<trim  suffixOverrides="," >
+	<if test="warehouse_code != null  and warehouse_code != '' ">
+		warehouse_code=#{warehouse_code},
+	</if>
+	<if test="warehouse_name != null  and warehouse_name != '' ">
+		warehouse_name=#{warehouse_name},
+	</if>
+	<if test="job_no != null  and job_no != '' ">
+		job_no=#{job_no},
+	</if>
+	<if test="job_type != null  and job_type != '' ">
+		job_type=#{job_type},
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="related_no != null  and related_no != '' ">
+		related_no=#{related_no},
+	</if>
+	<if test="waybill != null  ">
+		waybill=#{waybill},
+	</if>
+	<if test="re_epistatic_order != null  and re_epistatic_order != '' ">
+		re_epistatic_order=#{re_epistatic_order},
+	</if>
+	<if test="re_province != null  and re_province != '' ">
+		re_province=#{re_province},
+	</if>
+	<if test="re_city != null  and re_city != '' ">
+		re_city=#{re_city},
+	</if>
+	<if test="re_state != null  and re_state != '' ">
+		re_state=#{re_state},
+	</if>
+	<if test="re_weight != null  ">
+		re_weight=#{re_weight},
+	</if>
+	<if test="re_length != null  ">
+		re_length=#{re_length},
+	</if>
+	<if test="re_width != null  ">
+		re_width=#{re_width},
+	</if>
+	<if test="re_higth != null  ">
+		re_higth=#{re_higth},
+	</if>
+	<if test="re_volumn != null  ">
+		re_volumn=#{re_volumn},
+	</if>
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="finish_time != null  ">
+		finish_time=#{finish_time},
+	</if>
+	<if test="plan_qty != null  ">
+		plan_qty=#{plan_qty},
+	</if>
+	<if test="actual_qty != null  ">
+		actual_qty=#{actual_qty},
+	</if>
+	<if test="batch_number != null  ">
+		batch_number=#{batch_number},
+	</if>
+	<if test="state != null  and state != '' ">
+		state=#{state},
+	</if>
+	<if test="transport_code != null  and transport_code != '' ">
+		transport_code=#{transport_code},
+	</if>
+	<if test="transport_name != null  and transport_name != '' ">
+		transport_name=#{transport_name},
+	</if>
+	<if test="itemtype_code != null  and itemtype_code != '' ">
+		itemtype_code=#{itemtype_code},
+	</if>
+	<if test="itemtype_name != null  and itemtype_name != '' ">
+		itemtype_name=#{itemtype_name},
+	</if>
+	<if test="refuse_reason != null  and refuse_reason != '' ">
+		refuse_reason=#{refuse_reason},
+	</if>
+	<if test="physical_warehouse != null  and physical_warehouse != '' ">
+		physical_warehouse=#{physical_warehouse},
+	</if>
+	<if test="return_order != null  and return_order != '' ">
+		return_order=#{return_order},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="deblock_user != null  and deblock_user != '' ">
+		deblock_user=#{deblock_user},
+	</if>
+	<if test="remark != null  and remark != '' ">
+		remark=#{remark},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除退货入库 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_express_return_storage where id = #{id}
+</update>
+<!-- 批量删除退货入库 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_express_return_storage where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找退货入库 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_express_return_storage where id = #{id}
+</select>
+  	
+<!-- 退货入库 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.ExpressReturnStorageQueryParam">
+	select count(1) from tb_express_return_storage 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的退货入库集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.ExpressReturnStorageQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_express_return_storage 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 退货入库总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.ExpressReturnStorageQueryParam">
+	select count(1) from tb_express_return_storage 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的退货入库集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.ExpressReturnStorageQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_express_return_storage 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+ <select id='getPageData'  parameterType="com.bt.lmis.controller.form.ExpressReturnStorageQueryParam" resultType='java.util.HashMap'>
+ select 
+ id,
+warehouse_code,
+warehouse_name,
+job_no,
+job_type,
+store_code,
+store_name,
+related_no,
+waybill,
+re_epistatic_order,
+re_province,
+re_city,
+re_state,
+re_weight,
+re_length,
+re_width,
+re_higth,
+re_volumn,
+ifnull(DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s'),'') as create_time,
+ifnull(DATE_FORMAT(finish_time,'%Y-%m-%d %H:%i:%s'),'') as finish_time,
+plan_qty,
+actual_qty,
+batch_number,
+state,
+transport_code,
+transport_name,
+itemtype_code,
+itemtype_name,
+refuse_reason,
+physical_warehouse,
+return_order,
+create_user,
+deblock_user,
+remark,
+out_order
+ from tb_express_return_storage 
+ <include refid="where_Clause"/>
+   <if test="end_finish_time != null and end_finish_time!=''" >
+	    and finish_time &lt;=  #{end_finish_time}
+	</if>
+	  <if test="start_finish_time != null and start_finish_time!=''" >
+	    and finish_time &gt;=  #{start_finish_time}
+	</if>
+ LIMIT #{firstResult}, #{maxResult} ;
+ </select> 	
+ 
+ <select id="getPageDataCount"  parameterType="com.bt.lmis.controller.form.ExpressReturnStorageQueryParam"  resultType='java.lang.Integer'>
+ select  
+   count(1)
+ from tb_express_return_storage 
+ <include refid="where_Clause"/>
+     <if test="end_finish_time != null and end_finish_time!=''" >
+	    and finish_time &lt;=  #{end_finish_time}
+	</if>
+	  <if test="start_finish_time != null and start_finish_time!=''" >
+	    and finish_time &gt;=  #{start_finish_time}
+	</if>
+ </select>
+
+	<!-- begin -->
+	<!-- 查询退货入库list -->
+	<select id="queryList" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.ExpressReturnStorageQueryParam">
+		select
+		<include refid="Base_Column_List"/>
+		from tb_express_return_storage
+		<include refid="where_Clause"/>
+	</select>
+	<!-- end -->
+</mapper>   

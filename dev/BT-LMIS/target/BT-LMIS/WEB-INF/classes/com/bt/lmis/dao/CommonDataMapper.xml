@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.CommonDataMapper">
+<!-- 查询快递承运商信息 -->
+   <select id="getTransportData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+     select 
+          t.id as id,
+          t.transport_code as 'key',
+          t.transport_name as 'value'
+     from tb_transport_vendor t 
+    where 1=1
+      and  t.validity=1
+      and  t.transport_type=1
+      <if test="transportName != null  and transportName != '' ">
+      and  t.transport_name like concat('%',#{transportName},'%')
+      </if> 
+      
+   </select>
+   
+<!--   物流商产品类型  -->
+   <select id="getProductTypeData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+      select 
+         t.id as id,
+         t.product_type_code as 'key',
+         t.product_type_name as 'value'
+       from tb_transport_product_type t
+      where 1=1
+        and t.status=1
+        and t.vendor_code=#{transportCode}
+      <if test="productTypeName != null  and productTypeName != '' ">
+      and  t.product_type_name like concat('%',#{productTypeName},'%')
+      </if>         
+   </select>
+   
+   
+<!--    省市区查询 -->
+
+  <select id="getAreaData" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+    select 
+         t.area_code as 'key',
+         t.area_name as 'value'
+    from tb_area t
+    where 1=1
+      and t.pid=0
+  <if test="areaName != null  and areaName != '' ">     
+      and t.area_name like concat('%',#{areaName},'%')
+  </if>
+  </select>
+  
+<!--预警类型 -->
+	<select id="getWarnMainData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	   select 
+	       t.id as id,
+	       t.warningtype_code as 'key',
+	       t.warningtype_name as 'value'
+	    from er_warninginfo_maintain_master t
+	    where 1=1
+	    <if test="warningtypeName != null  and warningtypeName != '' ">  
+	     and t.warningtype_name like concat('%',#{warningtypeName},'%')
+	    </if>
+	</select>
+<!-- 预警级别 -->
+    <select id="getWarnDetailData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+      select 
+       t.levelup_level as 'key',
+       t.levelup_level as 'value'
+       from er_warninglevel_list t
+       where 1=1
+         and t.dl_flag='1'
+         and t.warningtype_code=#{paramCode}
+    </select>
+    
+      	<select id="get_business_code" parameterType="java.util.HashMap" resultType="java.util.HashMap" statementType="CALLABLE">
+		  {call pro_generate_business_code(
+			  #{business_type,jdbcType=VARCHAR,mode=IN},
+			  #{serial_code,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+</mapper>   

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.basis.dao.StoreManagerMapper">
+	<select id="listStoreView" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			tb_store.id,
+			tb_store.create_time,
+			b.name as create_user,
+			tb_store.update_time,
+			c.name  as update_user,
+			tb_store.cost_center,
+			tb_store.store_code,
+			tb_store.store_name,
+			tb_client.client_name,
+			CASE tb_store.store_type
+			WHEN '0' THEN 'A类'
+			WHEN '1' THEN 'B类'
+			WHEN '2' THEN '其它'
+			ELSE '' END AS store_type,
+			CASE tb_store.settlement_method
+			WHEN 0 THEN '代销'
+			WHEN 1 THEN '结算经销'
+			WHEN 2 THEN '付款经销'
+			ELSE '' END AS settlement_method,
+			tb_store.contact,
+			tb_store.phone,
+			tb_store.address,
+			tb_store.company,
+			CASE tb_store.invoice_type
+			WHEN '0' THEN '手写发票'
+			WHEN '1' THEN '机打发票'
+			WHEN '2' THEN '普通发票'
+			WHEN '3' THEN '增值税发票'
+			WHEN '4' THEN '其他'
+			ELSE '' END AS invoice_type,
+			tb_store.invoice_info,
+			tb_store.remark,
+			CASE tb_store.wo_flag
+			WHEN '0' THEN '否'
+			WHEN '1' THEN '是'
+			ELSE '' END AS wo_flag,
+			CASE tb_store.validity
+			WHEN 0 THEN '无效'
+			WHEN 1 THEN '有效'
+			ELSE '' END AS validity
+		FROM tb_store
+		LEFT JOIN tb_client
+		ON tb_store.client_id = tb_client.id
+		left join  s_employee b on tb_store.create_user=b.username
+		left join  s_employee c on tb_store.create_user=c.username
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.costCenterQuery!=null and param.costCenterQuery!=''">
+				tb_store.cost_center LIKE CONCAT("%",#{param.costCenterQuery },"%")
+			</if>
+			<if test="param.storeCodeQuery!=null and param.storeCodeQuery!=''">
+				AND tb_store.store_code LIKE CONCAT("%",#{param.storeCodeQuery },"%")
+			</if>
+			<if test="param.storeNameQuery!=null and param.storeNameQuery!=''">
+				AND tb_store.store_name LIKE CONCAT("%",#{param.storeNameQuery },"%")
+			</if>
+			<if test="param.ownedCustomerQuery!=null and param.ownedCustomerQuery!=''">
+				AND tb_store.client_id=#{param.ownedCustomerQuery }
+			</if>
+			<if test="param.storeTypeQuery!=null and param.storeTypeQuery!=''">
+				AND tb_store.store_type=#{param.storeTypeQuery }
+			</if>
+			<if test="param.settlementMethodQuery!=null and param.settlementMethodQuery!=''">
+				AND tb_store.settlement_method=#{param.settlementMethodQuery }
+			</if>
+			<if test="param.contactQuery!=null and param.contactQuery!=''">
+				AND tb_store.contact LIKE CONCAT("%",#{param.contactQuery },"%")
+			</if>
+			<if test="param.phoneQuery!=null and param.phoneQuery!=''">
+				AND tb_store.phone LIKE CONCAT("%",#{param.phoneQuery },"%")
+			</if>
+			<if test="param.addressQuery!=null and param.addressQuery!=''">
+				AND tb_store.address LIKE CONCAT("%",#{param.addressQuery },"%")
+			</if>
+			<if test="param.companyQuery!=null and param.companyQuery!=''">
+				AND tb_store.company LIKE CONCAT("%",#{param.companyQuery },"%")
+			</if>
+			<if test="param.invoiceTypeQuery!=null and param.invoiceTypeQuery!=''">
+				AND tb_store.invoice_type=#{param.invoiceTypeQuery }
+			</if>
+			<if test="param.invoiceInfoQuery!=null and param.invoiceInfoQuery!=''">
+				AND tb_store.invoice_info LIKE CONCAT("%",#{param.invoiceInfoQuery },"%")
+			</if>
+			<if test="param.woFlagQuery!=null and param.woFlagQuery!=''">
+				AND tb_store.wo_flag=#{param.woFlagQuery }
+			</if>
+			<if test="param.validityQuery!=null and param.validityQuery!=''">
+				AND tb_store.validity=#{param.validityQuery }
+			</if>
+		</trim>
+		ORDER BY tb_store.update_time DESC
+		<if test="firstResult!=null and firstResult!=''">
+		LIMIT #{firstResult }, #{maxResult }
+		</if>
+	</select>
+	
+	
+	
+	
+	
+	
+	<select id="countStoreView" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT COUNT(1) FROM tb_store
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.costCenterQuery!=null and param.costCenterQuery!=''">
+				AND tb_store.cost_center LIKE CONCAT("%",#{param.costCenterQuery },"%")
+			</if>
+			<if test="param.storeCodeQuery!=null and param.storeCodeQuery!=''">
+				AND tb_store.store_code LIKE CONCAT("%",#{param.storeCodeQuery },"%")
+			</if>
+			<if test="param.storeNameQuery!=null and param.storeNameQuery!=''">
+				AND tb_store.store_name LIKE CONCAT("%",#{param.storeNameQuery },"%")
+			</if>
+			<if test="param.ownedCustomerQuery!=null and param.ownedCustomerQuery!=''">
+				AND tb_store.client_id=#{param.ownedCustomerQuery }
+			</if>
+			<if test="param.storeTypeQuery!=null and param.storeTypeQuery!=''">
+				AND tb_store.store_type=#{param.storeTypeQuery }
+			</if>
+			<if test="param.settlementMethodQuery!=null and param.settlementMethodQuery!=''">
+				AND tb_store.settlement_method=#{param.settlementMethodQuery }
+			</if>
+			<if test="param.contactQuery!=null and param.contactQuery!=''">
+				AND tb_store.contact LIKE CONCAT("%",#{param.contactQuery },"%")
+			</if>
+			<if test="param.phoneQuery!=null and param.phoneQuery!=''">
+				AND tb_store.phone LIKE CONCAT("%",#{param.phoneQuery },"%")
+			</if>
+			<if test="param.addressQuery!=null and param.addressQuery!=''">
+				AND tb_store.address LIKE CONCAT("%",#{param.addressQuery },"%")
+			</if>
+			<if test="param.companyQuery!=null and param.companyQuery!=''">
+				AND tb_store.company LIKE CONCAT("%",#{param.companyQuery },"%")
+			</if>
+			<if test="param.invoiceTypeQuery!=null and param.invoiceTypeQuery!=''">
+				AND tb_store.invoice_type=#{param.invoiceTypeQuery }
+			</if>
+			<if test="param.invoiceInfoQuery!=null and param.invoiceInfoQuery!=''">
+				AND tb_store.invoice_info LIKE CONCAT("%",#{param.invoiceInfoQuery },"%")
+			</if>
+			<if test="param.woFlagQuery!=null and param.woFlagQuery!=''">
+				AND tb_store.wo_flag=#{param.woFlagQuery }
+			</if>
+			<if test="param.validityQuery!=null and param.validityQuery!=''">
+				AND tb_store.validity=#{param.validityQuery }
+			</if>
+		</trim>
+	</select>
+	<select id="getStore" parameterType="int" resultType="com.bt.lmis.basis.model.Store">
+		SELECT
+			id,
+			create_time AS createTime,
+			create_user AS createUser,
+			update_time AS updateTime,
+			update_user AS updateUser,
+			client_id AS clientId,
+			cost_center AS costCenter,
+			store_code AS storeCode,
+			store_name AS storeName,
+			store_type AS storeType,
+			settlement_method AS settlementMethod,
+			contact,
+			phone,
+			address,
+			company,
+			invoice_type AS invoiceType,
+			invoice_info AS invoiceInfo,
+			remark,
+			validity,
+			wo_flag AS woFlag,
+			storebj
+		FROM tb_store
+		WHERE id = #{id }
+	</select>
+	<select id="countStoreCode" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT id FROM tb_store 
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.storeCode != null and param.storeCode != ''">
+				store_code = #{param.storeCode }
+			</if>
+		</trim>
+	</select>
+	<select id="countStoreName" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT id FROM tb_store 
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.storeName != null and param.storeName != ''">
+				store_name = #{param.storeName }
+			</if>
+		</trim>
+	</select>
+	<insert id="insert" parameterType="com.bt.common.controller.param.Parameter">
+		INSERT INTO tb_store (
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			<if test="param.clientId != null and param.clientId != ''">
+				client_id,
+			</if>
+			cost_center,
+			store_code,
+			store_name,
+			store_type,
+			settlement_method,
+			contact,
+			phone,
+			address,
+			company,
+			invoice_type,
+			invoice_info,
+			remark,
+			validity,
+			wo_flag,
+		    storebj
+			
+		) VALUES (
+			now(),
+			#{currentAccount.id },
+			now(),
+			#{currentAccount.id },
+			<if test="param.clientId != null and param.clientId != ''">
+				#{param.clientId },
+			</if>
+			#{param.costCenter },
+			#{param.storeCode },
+			#{param.storeName },
+			#{param.storeType },
+			#{param.settlementMethod },
+			#{param.contact },
+			#{param.phone },
+			#{param.address },
+			#{param.company },
+			#{param.invoiceType },
+			#{param.invoiceInfo },
+			#{param.remark },
+			#{param.validity },
+			#{param.woFlag },
+		    #{param.storebj }
+
+		)
+	</insert>
+	<update id="update" parameterType="com.bt.common.controller.param.Parameter">
+		UPDATE tb_store
+		SET update_time=now(),
+			update_user=#{currentAccount.id },
+			<if test="param.clientId != null and param.clientId != ''">
+				client_id=#{param.clientId },
+			</if>
+			<if test="param.clientId == null or param.clientId == ''">
+				client_id=null,
+			</if>
+			cost_center=#{param.costCenter },
+			store_code=#{param.storeCode },
+			store_name=#{param.storeName },
+			store_type=#{param.storeType },
+			settlement_method=#{param.settlementMethod },
+			contact=#{param.contact },
+			phone=#{param.phone },
+			address=#{param.address },
+			company=#{param.company },
+			invoice_type=#{param.invoiceType },
+			invoice_info=#{param.invoiceInfo },
+			remark=#{param.remark },
+			validity=#{param.validity },
+			wo_flag=#{param.woFlag },
+		    storebj = #{param.storebj }
+		WHERE id=#{param.id }
+	</update>
+	<delete id="del" parameterType="Object">
+		DELETE FROM tb_store
+		WHERE id IN 
+		<foreach collection="array" item="id" index="index" open="(" separator="," close=")">  
+	       	#{id }
+	   	</foreach>
+	</delete>
+	
+	<select id="selectByStroeName" parameterType="java.lang.String" resultType="com.bt.lmis.basis.model.Store">
+		SELECT
+			id,
+			create_time AS createTime,
+			create_user AS createUser,
+			update_time AS updateTime,
+			update_user AS updateUser,
+			client_id AS clientId,
+			cost_center AS costCenter,
+			store_code AS storeCode,
+			store_name AS storeName,
+			store_type AS storeType,
+			settlement_method AS settlementMethod,
+			contact,
+			phone,
+			address,
+			company,
+			invoice_type AS invoiceType,
+			invoice_info AS invoiceInfo,
+			remark,
+			validity,
+			wo_flag AS woFlag
+		FROM tb_store
+		WHERE store_name = #{storeName }
+	</select>
+	<select id="findAll"  resultType="com.bt.lmis.basis.model.Store">
+		SELECT
+			id,
+			create_time AS createTime,
+			create_user AS createUser,
+			update_time AS updateTime,
+			update_user AS updateUser,
+			client_id AS clientId,
+			cost_center AS costCenter,
+			store_code AS storeCode,
+			store_name AS storeName,
+			store_type AS storeType,
+			settlement_method AS settlementMethod,
+			contact,
+			phone,
+			address,
+			company,
+			invoice_type AS invoiceType,
+			invoice_info AS invoiceInfo,
+			remark,
+			validity,
+			wo_flag AS woFlag,
+			storebj
+		FROM tb_store
+	</select>
+	<select id="selectByStoreCode"  resultType="com.bt.lmis.basis.model.Store">
+		SELECT
+			id,
+			create_time AS createTime,
+			create_user AS createUser,
+			update_time AS updateTime,
+			update_user AS updateUser,
+			client_id AS clientId,
+			cost_center AS costCenter,
+			store_code AS storeCode,
+			store_name AS storeName,
+			store_type AS storeType,
+			settlement_method AS settlementMethod,
+			contact,
+			phone,
+			address,
+			company,
+			invoice_type AS invoiceType,
+			invoice_info AS invoiceInfo,
+			remark,
+			validity,
+			wo_flag AS woFlag
+		FROM tb_store 
+		WHERE store_code = #{storeCode }
+	</select>
+	<insert id="addStoreTransport" parameterType="java.util.List">
+		insert into tb_store_transport(
+		id,store_code,transport_code,create_time,create_by,storebj
+		)VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				#{obj.store_code},
+				#{obj.transport_code},
+				NOW(),
+				#{obj.create_by},
+				#{obj.storebj}
+			</trim>
+		</foreach>
+	</insert>
+	<select id="selectTransportByStoreCode" resultType="java.util.Map" parameterType="java.lang.String">
+		select * from tb_store_transport where store_code=#{storeCode}
+	</select>
+	<delete id="deleteByStoreCode" parameterType="java.lang.String">
+		delete from tb_store_transport where store_code=#{storeCode}
+	</delete>
+</mapper>

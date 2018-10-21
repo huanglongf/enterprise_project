@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.PackageCharageEstimateMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.PackageCharageEstimate" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="batch_number" property="batch_number"/>
+	<result column="cbid" property="cbid"/>
+	<result column="client_code" property="client_code"/>
+	<result column="client_name" property="client_name"/>
+	<result column="dbf_qty" property="dbf_qty"/>
+	<result column="bjf_qty" property="bjf_qty"/>
+	<result column="bjf_price" property="bjf_price"/>
+	<result column="total_price" property="total_price"/>
+	<result column="dbf_price" property="dbf_price"/>
+</resultMap>
+       
+<!-- bal_package_charage_estimate table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,batch_number,cbid,client_code,client_name,dbf_qty,bjf_qty,bjf_price,total_price,dbf_price
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="batch_number != null and batch_number != ''" >
+	    and batch_number =  #{batch_number}
+	</if>
+	 	<if test="cbid != null and cbid != ''" >
+	    and cbid =  #{cbid}
+	</if>
+	 	<if test="client_code != null and client_code != ''" >
+	    and client_code =  #{client_code}
+	</if>
+	 	<if test="client_name != null and client_name != ''" >
+	    and client_name =  #{client_name}
+	</if>
+	 	<if test="dbf_qty != null and dbf_qty != ''" >
+	    and dbf_qty =  #{dbf_qty}
+	</if>
+	<if test="bjf_qty != null" >
+	    and bjf_qty =  #{bjf_qty}
+	</if>
+	 	<if test="bjf_price != null and bjf_price != ''" >
+	    and bjf_price =  #{bjf_price}
+	</if>
+	 	<if test="total_price != null and total_price != ''" >
+	    and total_price =  #{total_price}
+	</if>
+	 	<if test="dbf_price != null and dbf_price != ''" >
+	    and dbf_price =  #{dbf_price}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入打包费预估数据 -->
+<insert id="insert" parameterType="com.bt.lmis.balance.model.PackageCharageEstimate" >
+  insert into bal_package_charage_estimate(id,create_time,create_user,update_time,update_user,batch_number,cbid,client_code,client_name,dbf_qty,bjf_qty,bjf_price,total_price,dbf_price)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{batch_number},#{cbid},#{client_code},#{client_name},#{dbf_qty},#{bjf_qty},#{bjf_price},#{total_price},#{dbf_price})
+</insert>
+
+<!-- 修改打包费预估数据-->  
+ <update id="update" parameterType="com.bt.lmis.balance.model.PackageCharageEstimate" >
+  update bal_package_charage_estimate set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},batch_number=#{batch_number},cbid=#{cbid},client_code=#{client_code},client_name=#{client_name},dbf_qty=#{dbf_qty},bjf_qty=#{bjf_qty},bjf_price=#{bjf_price},total_price=#{total_price},dbf_price=#{dbf_price} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改打包费预估数据-->
+<update id="updateBySelective" parameterType="com.bt.lmis.balance.model.PackageCharageEstimate" >
+	update bal_package_charage_estimate set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="batch_number != null  and batch_number != '' ">
+		batch_number=#{batch_number},
+	</if>
+	<if test="cbid != null  and cbid != '' ">
+		cbid=#{cbid},
+	</if>
+	<if test="client_code != null  and client_code != '' ">
+		client_code=#{client_code},
+	</if>
+	<if test="client_name != null  and client_name != '' ">
+		client_name=#{client_name},
+	</if>
+	<if test="dbf_qty != null  and dbf_qty != '' ">
+		dbf_qty=#{dbf_qty},
+	</if>
+	<if test="bjf_qty != null  ">
+		bjf_qty=#{bjf_qty},
+	</if>
+	<if test="bjf_price != null  and bjf_price != '' ">
+		bjf_price=#{bjf_price},
+	</if>
+	<if test="total_price != null  and total_price != '' ">
+		total_price=#{total_price},
+	</if>
+	<if test="dbf_price != null  and dbf_price != '' ">
+		dbf_price=#{dbf_price},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除打包费预估数据 -->
+<update id="delete" parameterType="Object">
+	delete 	 from bal_package_charage_estimate where id = #{id}
+</update>
+<!-- 批量删除打包费预估数据 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from bal_package_charage_estimate where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找打包费预估数据 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from bal_package_charage_estimate where id = #{id}
+</select>
+  	
+<!-- 打包费预估数据 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.balance.controller.form.PackageCharageEstimateQueryParam">
+	select count(1) from bal_package_charage_estimate 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的打包费预估数据集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.controller.form.PackageCharageEstimateQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from bal_package_charage_estimate 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 打包费预估数据总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.balance.controller.form.PackageCharageEstimateQueryParam">
+	select count(1) from bal_package_charage_estimate 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的打包费预估数据集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.controller.form.PackageCharageEstimateQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from bal_package_charage_estimate 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

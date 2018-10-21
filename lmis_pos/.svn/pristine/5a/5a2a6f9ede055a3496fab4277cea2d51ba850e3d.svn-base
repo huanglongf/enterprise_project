@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.crdOut.dao.PosCrdOutMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject"
+		id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.crdOut.model.PosCrdOut" id="PosCrdOutMap"
+		extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="crd_out" property="crdOut" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		DATE_FORMAT(crd_out,'%Y-%m-%d') as crd_out
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			crd_out
+		</trim>
+	</sql>
+	<!-- 插入数据 -->
+	<insert id="create" parameterType="com.lmis.pos.crdOut.model.PosCrdOut">
+		INSERT INTO pos_crd_out
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{crdOut, jdbcType=TIMESTAMP},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_crd_out
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy,
+				jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.crdOut, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<!-- 查询数据 -->
+	<select id="retrieve" parameterType="com.lmis.pos.crdOut.model.PosCrdOut" resultMap="PosCrdOutMap">
+		SELECT <include refid="Base_Column_List" /> FROM pos_crd_out WHERE is_deleted = 0 order by id desc
+	</select>
+	<!-- 查询重复日期数据 -->
+	<select id="retrieveRepeatDate" parameterType="com.lmis.pos.crdOut.model.PosCrdOut" resultMap="PosCrdOutMap">
+		SELECT id,DATE_FORMAT(crd_out,'%Y-%m-%d') as crd_out FROM pos_crd_out WHERE is_deleted = 0 
+		<if test="crdOut != null">
+			and crd_out=#{crdOut, jdbcType=VARCHAR}
+		</if>
+		order by id desc
+	</select>
+	<update id="update" parameterType="com.lmis.pos.crdOut.model.PosCrdOut">
+		UPDATE pos_crd_out
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="isDeleted!=null">
+				is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+			</if>
+			<if test="isDisabled!=null">
+				is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+			</if>
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+			<if test="crdOut!=null and crdOut!=''">
+				crd_out = #{crdOut, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+		</trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.crdOut.model.PosCrdOut">
+		UPDATE pos_crd_out
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+			crd_out = #{crdOut, jdbcType=VARCHAR},
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+		</trim>
+	</update>
+	<!-- 逻辑删除 -->
+	<update id="logicalDelete" parameterType="com.lmis.pos.crdOut.model.PosCrdOut">
+		UPDATE pos_crd_out
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.crdOut.model.PosCrdOut">
+		UPDATE pos_crd_out
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="isDisabled!=null">
+				is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+			</if>
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+		</trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.crdOut.model.PosCrdOut">
+		DELETE FROM pos_crd_out
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+
+
+	<!-- 自定义sql -->
+
+	<select id="getPosCrdOutByDate" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT
+		count(1)
+		FROM
+		pos_crd_out
+		WHERE
+		is_deleted = 0
+		AND is_disabled = 0
+		and crd_out=#{date}
+	</select>
+</mapper>

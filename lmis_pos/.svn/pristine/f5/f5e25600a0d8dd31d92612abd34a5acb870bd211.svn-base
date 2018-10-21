@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>hello spring boot</title>
+</head>
+<body>
+    <p><h5><label th:text="#{welcome}"></label></h5></p><br>
+	<a href="http://localhost:8011/demo/setZh"><label th:text="#{china}"></a><br>
+	<a href="http://localhost:8011/demo/setEn"><label th:text="#{english}"></a><br>
+</body>
+</html>

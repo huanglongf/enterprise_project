@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.tools.compareData.dao.CompareDataMapper" >
+    
+	 <select id="queryCompareTask" resultType= "java.util.Map" parameterType= "com.bt.common.controller.param.Parameter" >
+		select
+		    id,
+			task_code,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') as create_time,
+			pack_name,
+			collect_name,
+			pack_num,
+			collect_num,
+			DATE_FORMAT(compare_time,'%Y-%m-%d %H:%i:%S') as compare_time,
+			status
+		from
+			tls_whs_task
+		<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+		<if test="param.sortColumn == null or param.sortColumn == ''">
+			ORDER BY create_time desc
+		</if>
+		LIMIT ${firstResult}, ${maxResult}
+	</select>
+	
+	<select id="countCompareTask" resultType= "java.lang.Integer" parameterType= "com.bt.common.controller.param.Parameter" >
+		select
+		count(1)
+		
+		from
+			tls_whs_task
+	</select>
+	<insert id="addCompareTask" parameterType="com.bt.lmis.tools.compareData.model.WhsTask">
+		INSERT INTO 
+			tls_whs_task (
+			id, 
+			task_code,
+			create_time, 
+			create_by,
+			update_time,
+			update_by,
+			status, 
+			pack_name, 
+			collect_name, 
+			pack_num, 
+			collect_num)
+		VALUES (
+				UUID(),
+				#{taskCode, jdbcType=VARCHAR},
+				NOW(),
+				#{createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{updateBy, jdbcType=VARCHAR},
+				#{status, jdbcType=VARCHAR},
+				#{packName, jdbcType=VARCHAR},
+				#{collectName, jdbcType=VARCHAR},
+				#{packNum, jdbcType=VARCHAR},
+				#{collectNum, jdbcType=VARCHAR}
+				)
+
+
+	</insert>
+	<insert id="createBatchPackData" parameterType="java.util.List">
+		INSERT INTO 
+			tls_whs_pack_data (
+				id,
+				create_time,
+				create_by,
+				update_time,
+				update_by,
+				task_code,
+				carton_no,
+				article,
+				size,
+				act_size,
+				qty,
+				status
+			)
+		VALUES 
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.create_by, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.update_by, jdbcType=VARCHAR},
+				#{obj.task_code, jdbcType=VARCHAR},
+				#{obj.CartonNo, jdbcType=VARCHAR},
+				#{obj.Article, jdbcType=VARCHAR},
+				#{obj.Size, jdbcType=INTEGER},
+				#{obj.act_size, jdbcType=VARCHAR},
+				#{obj.Qty, jdbcType=VARCHAR},
+				#{obj.status, jdbcType=VARCHAR}
+			</trim>
+		</foreach>
+	</insert>
+	<insert id="createBatchCollectData" parameterType="java.util.List">
+		INSERT INTO 
+			tls_whs_collect_data (
+				id,
+				create_time,
+				create_by,
+				update_time,
+				update_by,
+				task_code,
+				carton_no,
+				eancode,
+				article,
+				size,
+				act_size,
+				qty,
+				status
+			)
+		VALUES 
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.create_by, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.update_by, jdbcType=VARCHAR},
+				#{obj.task_code, jdbcType=VARCHAR},
+				#{obj.CartonNo, jdbcType=VARCHAR},
+				#{obj.Eancode, jdbcType=VARCHAR},
+				#{obj.article, jdbcType=VARCHAR},
+				#{obj.size, jdbcType=INTEGER},
+				#{obj.act_size, jdbcType=VARCHAR},
+				#{obj.Qty, jdbcType=VARCHAR},
+				#{obj.status, jdbcType=VARCHAR}
+			</trim>
+		</foreach>
+	</insert>
+	
+
+	<insert id="createBatchPackCollectData" parameterType="java.util.List">
+	INSERT INTO
+	tls_whs_pack_collect_data
+	(id,
+	create_time,
+	create_by,
+	update_time,
+	update_by,
+	task_code,
+	pack_carton_no,
+	pack_article,
+	pack_size,
+	pack_act_size,
+	pack_qty,
+	collect_carton_no,
+	collect_eancode,
+	collect_article,
+	collect_size,
+	collect_act_size,
+	collect_qty,
+	collect_status,
+	compare_result,
+	differences_num,
+	difference_reason
+	)
+	VALUES 
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.updateBy, jdbcType=VARCHAR},
+				#{obj.taskCode, jdbcType=VARCHAR},
+				#{obj.packCartonNo, jdbcType=VARCHAR},
+				#{obj.packArticle, jdbcType=VARCHAR},
+				#{obj.packSize, jdbcType=INTEGER},
+				#{obj.packActSize, jdbcType=VARCHAR},
+				#{obj.packQty, jdbcType=VARCHAR},
+				#{obj.collectCartonNo, jdbcType=VARCHAR},
+				#{obj.collectEancode, jdbcType=VARCHAR},
+				#{obj.collectArticle, jdbcType=VARCHAR},
+				#{obj.collectSize, jdbcType=VARCHAR},
+				#{obj.collectActSize, jdbcType=VARCHAR},
+				#{obj.collectQty, jdbcType=VARCHAR},
+				#{obj.collectStatus, jdbcType=VARCHAR},
+				#{obj.compareResult, jdbcType=VARCHAR},
+				#{obj.differencesNum, jdbcType=VARCHAR},
+				#{obj.differenceReason, jdbcType=VARCHAR}
+			</trim>
+		</foreach>
+	</insert>
+	<delete id="deleteCompareTaskById" parameterType="java.lang.String">
+		delete from tls_whs_task where id = #{id,jdbcType=VARCHAR}
+	</delete>
+
+	<select id="comparedNoSize" resultType= "com.bt.lmis.tools.compareData.model.WhsPackCollectData" parameterType= "java.util.Map" >
+		SELECT
+			#{empName} createBy,
+			#{empName} updateBy,
+			p.task_code taskCode,
+			p.carton_no packCartonNo,
+			p.article packArticle,
+			p.size packSize,
+			p.act_size packActSize,
+			p.qty packQty,
+			c.carton_no collectCartonNo,
+			c.eancode collectEancode,
+			c.article collectArticle,
+			c.size collectSize,
+			c.act_size collectActSize,
+			c.qty collectQty,
+			c. STATUS collectStatus,
+			"成功" compareResult,
+			"0" differencesNum,
+			"亚欧码" differenceReason
+		FROM
+			tls_whs_pack_data p,
+			tls_whs_collect_data c
+		WHERE
+			p.task_code = c.task_code
+		AND p.carton_no = c.carton_no
+		AND p.article = c.article
+		AND p.act_size = c.act_size
+		AND p.qty = c.qty
+		AND p.size != c.act_size
+		AND p.task_code = #{taskCode}
+		AND c.`status` = '解析成功'
+	</select>
+
+	<select id="comparedSize" resultType= "com.bt.lmis.tools.compareData.model.WhsPackCollectData" parameterType= "java.util.Map" >
+		SELECT
+			#{empName} createBy,
+			#{empName} updateBy,
+			p.task_code taskCode,
+			p.carton_no packCartonNo,
+			p.article packArticle,
+			p.size packSize,
+			p.act_size packActSize,
+			p.qty packQty,
+			c.carton_no collectCartonNo,
+			c.eancode collectEancode,
+			c.article collectArticle,
+			c.size collectSize,
+			c.act_size collectActSize,
+			c.qty collectQty,
+			c. STATUS collectStatus,
+			"成功" compareResult,
+			"0" differencesNum,
+			"" differenceReason
+		FROM
+			tls_whs_pack_data p,
+			tls_whs_collect_data c
+		WHERE
+			p.task_code = c.task_code
+		AND p.carton_no = c.carton_no
+		AND p.article = c.article
+		AND p.act_size = c.act_size
+		AND p.qty = c.qty
+		AND p.size = c.act_size
+		AND p.task_code = #{taskCode}
+		AND c.`status` = '解析成功'
+	</select>
+
+	<select id="comparedNoQtyNoSize" resultType= "com.bt.lmis.tools.compareData.model.WhsPackCollectData" parameterType= "java.util.Map" >
+		SELECT
+			#{empName} createBy,
+			#{empName} updateBy,
+			p.task_code taskCode,
+			p.carton_no packCartonNo,
+			p.article packArticle,
+			p.size packSize,
+			p.act_size packActSize,
+			p.qty packQty,
+			c.carton_no collectCartonNo,
+			c.eancode collectEancode,
+			c.article collectArticle,
+			c.size collectSize,
+			c.act_size collectActSize,
+			c.qty collectQty,
+			c. STATUS collectStatus,
+			"失败" compareResult,
+			"装箱qty - 采集qty" differencesNum,
+			"亚欧码" differenceReason
+		FROM
+			tls_whs_pack_data p,
+			tls_whs_collect_data c
+		WHERE
+			p.task_code = c.task_code
+		AND p.carton_no = c.carton_no
+		AND p.article = c.article
+		AND p.act_size = c.act_size
+		AND p.qty != c.qty
+		AND p.size != c.act_size
+		AND p.task_code = #{taskCode}
+		AND c.`status` = '解析成功'
+	</select>
+
+	<select id="comparedNoQtySize" resultType= "com.bt.lmis.tools.compareData.model.WhsPackCollectData" parameterType= "java.util.Map" >
+		SELECT
+			#{empName} createBy,
+			#{empName} updateBy,
+			p.task_code taskCode,
+			p.carton_no packCartonNo,
+			p.article packArticle,
+			p.size packSize,
+			p.act_size packActSize,
+			p.qty packQty,
+			c.carton_no collectCartonNo,
+			c.eancode collectEancode,
+			c.article collectArticle,
+			c.size collectSize,
+			c.act_size collectActSize,
+			c.qty collectQty,
+			c. STATUS collectStatus,
+			"失败" compareResult,
+			"装箱qty - 采集qty" differencesNum,
+			"" differenceReason
+		FROM
+			tls_whs_pack_data p,
+			tls_whs_collect_data c
+		WHERE
+			p.task_code = c.task_code
+		AND p.carton_no = c.carton_no
+		AND p.article = c.article
+		AND p.act_size = c.act_size
+		AND p.qty != c.qty
+		AND p.size = c.act_size
+		AND p.task_code = #{taskCode}
+		AND c.`status` = '解析成功'
+	</select>
+
+	<select id="findCollectByTaskCode" resultType= "com.bt.lmis.tools.compareData.model.WhsCollectData" parameterType= "java.lang.String" >
+		SELECT
+			id,
+			create_time createTime,
+			create_by createBy,
+			update_time updateTime,
+			update_by updateBy,
+			task_code taskCode,
+			carton_no cartonNo,
+			eancode,
+			article,
+			size,
+			act_size actSize,
+			SUM(qty) qty,
+			`status`
+		FROM
+			tls_whs_collect_data
+		WHERE
+			task_code = #{taskCode}
+		AND `status` = '解析成功'
+		GROUP BY carton_no ,eancode
+
+	</select>
+
+	<select id="findPackByTaskCode" resultType= "com.bt.lmis.tools.compareData.model.WhsPackData" parameterType= "java.lang.String" >
+		SELECT
+			id,
+			create_time createTime,
+			create_by createBy,
+			update_time updateTime,
+			update_by updateBy,
+			task_code taskCode,
+			carton_no cartonNo,
+			article,
+			size,
+			act_size actSize,
+			qty,
+			`status`
+		FROM
+			tls_whs_pack_data
+		WHERE
+			task_code = #{taskCode};
+	</select>
+
+
+	<update id="updateTaskByTaskCode" parameterType= "com.bt.lmis.tools.compareData.model.WhsTask" >
+		UPDATE tls_whs_task
+			SET compare_time = NOW(),
+			 status = '已对比',
+			 update_by = #{updateBy},
+			 update_time = NOW()
+			WHERE
+				task_code = #{taskCode};
+	</update>
+
+	<select id="findTaskByTaskCode" resultType= "com.bt.lmis.tools.compareData.model.WhsTask" parameterType= "java.lang.String" >
+		SELECT
+			id,
+			create_time createTime,
+			create_by createBy,
+			update_time updateTime,
+			update_by updateBy,
+			task_code taskCode,
+			`status`,
+			pack_name packName,
+			collect_name collectName,
+			pack_num packNum,
+			collect_num collectNum,
+			compare_time compareTime
+		FROM
+			tls_whs_task
+		WHERE
+			task_code = #{taskCode};
+	</select>
+	
+	
+	<select id="exportCollectPackData" resultType= "java.util.Map" parameterType= "java.lang.String" >
+		SELECT
+			task_code 任务编号,
+			pack_carton_no 装箱cartonNo,
+			pack_article 装箱article,
+			pack_size 装箱size,
+			pack_act_size 装箱actSize,
+			FLOOR(pack_qty) 装箱qty,
+			collect_carton_no 采集cartonNo,
+			collect_eancode 采集eancode,
+			collect_article 采集article,
+			collect_size 采集size,
+			collect_act_size 采集actSize,
+			FLOOR(collect_qty) 采集qty,
+			collect_status 采集status,
+			compare_result 对比结果,
+			differences_num 差异数,
+			difference_reason 差异原因
+		FROM
+			tls_whs_pack_collect_data
+		WHERE
+			task_code = #{taskCode}
+	</select>
+	
+	
+
+	<select id="selectFromWms" parameterType="java.util.List" resultType= "java.util.Map">
+		select style,size,bar_code from t_wh_sku where bar_code in (
+		<foreach collection="list" item="obj" index="index" separator=",">
+			#{obj, jdbcType=VARCHAR}
+		</foreach>
+		)
+
+	</select>
+	
+	<select id="findErrorCollectByTaskCode" resultType= "com.bt.lmis.tools.compareData.model.WhsPackCollectData" parameterType= "java.util.Map" >
+		SELECT
+			#{empName} createBy,
+			#{empName} updateBy,
+			c.carton_no collectCartonNo,
+			c.eancode collectEancode,
+			c.article collectArticle,
+			c.size collectSize,
+			c.act_size collectActSize,
+			c.qty collectQty,
+			c. STATUS collectStatus,
+			c.task_code taskCode,
+			"失败" compareResult,
+			"" differencesNum,
+			"采集数据解析 Article、Size失败" differenceReason
+		FROM
+			tls_whs_collect_data c
+		WHERE
+			c. STATUS = "解析失败"
+		AND c.task_code = #{taskCode};
+	</select>
+	
+	<delete id="deletePackDataByTaskCode" parameterType="java.lang.String">
+		delete from tls_whs_pack_data where task_code=#{taskCode}
+	</delete>
+	<delete id="deleteCollectDataByTaskCode" parameterType="java.lang.String">
+		delete from tls_whs_collect_data where task_code=#{taskCode}
+	</delete>
+	<delete id="deleteTaskByTaskCode" parameterType="java.lang.String">
+		delete from tls_whs_task where task_code=#{taskCode}
+	</delete>
+</mapper>

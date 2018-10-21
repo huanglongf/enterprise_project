@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.PackageChargeLadderMapper" >
+	<resultMap id="PackageChargeMap" type="com.bt.lmis.model.PackagePriceLadder" >
+		<result column="id" property="id"/>
+		<result column="con_id" property="con_id"/>
+		<result column="return_flag" property="return_flag"/>
+		<result column="insurance" property="insurance"/>
+		<result column="charge_percent" property="charge_percent"/>
+		<result column="charge_percent_uom" property="charge_percent_uom"/>
+		<result column="charge_min_flag" property="charge_min_flag"/>
+		<result column="charge_min" property="charge_min"/>
+		<result column="charge_min_uom" property="charge_min_uom"/>
+		<result column="compare_1" property="compare_1"/>
+		<result column="num_1" property="num_1"/>
+		<result column="uom_1" property="uom_1"/>
+		<result column="rel" property="rel"/>
+		<result column="compare_2" property="compare_2"/>
+		<result column="num_2" property="num_2"/>
+		<result column="uom_2" property="uom_2"/>
+		<result column="charge" property="charge"/>
+		<result column="charge_uom" property="charge_uom"/>
+		<result column="dFlag" property="dFlag"/>
+		<result column="create_by" property="create_by"/>
+		<result column="create_time" property="create_time"/>
+		<result column="update_by" property="update_by"/>
+		<result column="update_time" property="update_time"/>
+	</resultMap>
+	<update id="delLadder" parameterType="Object">
+		update ssc_package_price_ladder 
+		set dFlag = 1,
+			update_by=#{update_by},
+			update_time=now()
+		where 
+			id = #{id}
+	</update>
+	<select id="findById" resultType="com.bt.lmis.model.PackagePriceLadder" parameterType="Object">
+		select
+			id,
+			con_id,
+			return_flag,
+			insurance,
+			charge_percent,
+			charge_percent_uom,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge,
+			charge_uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ssc_package_price_ladder
+		where 
+			id = #{id};
+	</select>
+	<select id="loadRecords" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		select
+			id,
+			con_id,
+			return_flag,
+			insurance,
+			charge_percent,
+			charge_percent_uom,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge,
+			charge_uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from
+			ssc_package_price_ladder
+		where
+			1=1
+		and
+			dFlag = 0
+		and 
+			con_id = #{con_id}
+		and
+			return_flag = #{return_flag}
+		and
+			insurance = #{insurance}
+		order by num_1
+	</select>
+	<update id="updatePackageChargeLadder" parameterType="com.bt.lmis.model.PackagePriceLadder">
+		update ssc_package_price_ladder
+		set charge_percent=#{charge_percent},
+			charge_percent_uom=#{charge_percent_uom},
+			charge_min_flag=#{charge_min_flag},
+			charge_min=#{charge_min},
+			charge_min_uom=#{charge_min_uom},
+			update_by=#{update_by},
+			update_time=now()
+		where id=#{id}
+	</update>
+	<insert id="addPackageChargeLadder" parameterType="com.bt.lmis.model.PackagePriceLadder" useGeneratedKeys="true" keyProperty="id">
+		insert into ssc_package_price_ladder
+		(
+			con_id,
+			return_flag,
+			insurance,
+			charge_percent,
+			charge_percent_uom,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			compare_1,
+			num_1,
+			uom_1,
+			rel,
+			compare_2,
+			num_2,
+			uom_2,
+			charge,
+			charge_uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		) values (
+			#{con_id},
+			#{return_flag},
+			#{insurance},
+			#{charge_percent},
+			#{charge_percent_uom},
+			#{charge_min_flag},
+			#{charge_min},
+			#{charge_min_uom},
+			#{compare_1},
+			#{num_1},
+			#{uom_1},
+			#{rel},
+			#{compare_2},
+			#{num_2},
+			#{uom_2},
+			#{charge},
+			#{charge_uom},
+			#{create_by},
+			now(),
+			#{create_by},
+			now()
+		)
+	</insert>
+	<select id="findLadder" parameterType="java.util.HashMap" resultType="Integer">
+		select 
+			count(1)
+		from
+			ssc_package_price_ladder
+		where
+			1=1
+		and
+			dFlag = 0
+		and
+			con_id = #{con_id}
+		and
+			return_flag = #{return_flag}
+		and
+			insurance = #{insurance}
+	</select>
+</mapper>   

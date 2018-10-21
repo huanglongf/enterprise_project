@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.MenuMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.Menu" >
+	<result column="id" property="id"/>
+	<result column="name" property="name"/>
+	<result column="url" property="url"/>
+	<result column="remarks" property="remarks"/>
+	<result column="icon" property="icon"/>
+	<result column="sort" property="sort"/>
+	<result column="node" property="node"/>
+	<result column="pid" property="pid"/>
+	<result column="flag" property="flag"/>
+</resultMap>
+       
+<!-- s_employee table all fields -->
+<sql id="Base_Column_List" >
+	 id,name,url,remarks,icon,sort,node,pid,status,flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+ 		<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	 	<if test="name != null and name != ''" >
+	    and name =  #{name}
+	</if>
+	 	<if test="url != null and url != ''" >
+	    and url =  #{url}
+	</if>
+	 	<if test="icon != null and icon != ''" >
+	    and icon =  #{icon}
+	</if>
+</trim>
+</sql>
+   
+<!-- 查询条件 -->
+<sql id="where_Clause_like">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	 	<if test="name != null and name != ''" >
+	    and name like CONCAT('%', #{name}, '%')
+	</if>
+	 	<if test="icon != null and icon != ''" >
+	    and icon like CONCAT('%', #{icon}, '%')
+	</if>
+	 	<if test="url != null and url != ''" >
+	    and url like CONCAT('%', #{url}, '%')
+	</if>
+</trim>
+
+</sql>
+<!-- 插入运维人员 -->
+<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.Menu" >
+  insert into s_menu(name,url,remarks,icon,sort,node,pid,status,flag)
+ values(#{name},#{url},#{remarks},#{icon},#{sort},#{node},#{pid},1,#{flag})
+</insert>
+
+<!-- 修改运维人员-->  
+ <update id="update" parameterType="com.bt.lmis.model.Menu" >
+  update s_menu set name=#{name},url=#{url},remarks=#{remarks},icon=#{icon},sort=#{sort},node=#{node},pid=#{pid} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改运维人员-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.Menu" >
+	update s_menu set 
+	<trim  suffixOverrides="," >
+	<if test="name != null  and name != '' ">
+		name=#{name},
+	</if>
+	<if test="url != null  and url != '' ">
+		url=#{url},
+	</if>
+	<if test="remarks != null  and remarks != '' ">
+		remarks=#{remarks},
+	</if>
+	<if test="icon != null  and icon != '' ">
+		icon=#{icon},
+	</if>
+	<if test="sort != null  and sort != '' ">
+		sort=#{sort},
+	</if>
+	<if test="node != null  and node != '' ">
+		node=#{node},
+	</if>
+	<if test="pid != null  and pid != '' ">
+		pid=#{pid},
+	</if>
+	<if test="flag != null  and flag != '' ">
+		flag=#{flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除运维人员 -->
+<update id="delete" parameterType="Object">
+	delete from s_menu where id = #{id}
+</update>
+
+<!-- 批量删除运维人员 -->
+<delete id="batchDelete" parameterType="Object">
+	delete from s_menu where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找运维人员 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from s_menu where id = #{id}
+</select>
+
+<!-- 根据菜单ID修改菜单状态 （0停用1启用）-->
+<update id="upStatus" parameterType="Object">
+	update s_menu set status=#{status} where id = #{id}
+</update>
+
+<!-- 根据条件获取菜单 -->
+<select id="getMenuTree" resultType="java.util.HashMap" parameterType="com.bt.lmis.model.Menu">
+	select 
+		id,name,url,remarks,icon,sort,node,pid,status,flag
+	from s_menu where pid=#{displaypid} 
+	<if test="name != null  and name != '' ">
+		and name like CONCAT('%', #{name}, '%')
+	</if>
+	<if test="url != null  and url != '' ">
+		and  url like CONCAT('%', #{url}, '%')
+	</if>
+	<if test="icon != null  and icon != '' ">
+		and icon like CONCAT('%', #{icon}, '%')
+	</if>
+	<if test="remarks != null  and remarks != '' ">
+		and remarks like CONCAT('%', #{remarks}, '%')
+	</if>
+		order by sort asc;
+</select>
+
+<!-- 根据角色获取菜单 -->
+<select id="getMenu" resultType="java.util.HashMap" parameterType="com.bt.lmis.model.Menu">
+	select 
+		m.id as id,m.name as name ,m.pid as pId
+	from s_menu m 
+	where 1=1
+	<if test="flag != null  and flag != '' ">
+		and flag=#{flag}
+	</if> 
+	 order by m.sort asc;
+</select>
+
+<!-- 根据角色获取菜单 -->
+<select id="getRoleMenuTree" resultType="java.util.HashMap" parameterType="Object">
+	select menuid from sr_menu_role  where 1=1 and roleid=#{roleid} 
+</select>
+</mapper>   

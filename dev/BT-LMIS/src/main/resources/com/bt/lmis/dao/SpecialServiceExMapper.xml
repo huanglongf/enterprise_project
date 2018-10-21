@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.lmis.dao.SpecialServiceExMapper" >
+	<resultMap type= "com.bt.lmis.model.SpecialServiceRedisBean" id= "specialServiceRedisBean" >
+		<result column= "redis_key" property="key" />
+		<result column= "cod_charge_method" property="value.cod_charge_method" />
+		<result column= "charge_min_flag" property="value.charge_min_flag" />
+		<result column= "charge_min" property="value.charge_min" />
+		<result column= "charge_min_uom" property="value.charge_min_uom" />
+		<result column= "percent" property="value.percent" />
+		<result column= "percent_uom" property="value.percent_uom" />
+		<result column= "accurate_decimal_place" property="value.accurate_decimal_place" />
+		<result column= "param_1" property="value.param_1" />
+		<result column= "param_1_uom" property="value.param_1_uom" />
+		<result column= "charge_1" property="value.charge_1" />
+		<result column= "charge_1_uom" property="value.charge_1_uom" />
+		<result column= "delegated_pickup" property="value.delegated_pickup" />
+		<result column= "delegated_pickup_uom" property="value.delegated_pickup_uom" />
+	</resultMap>
+	<select id= "get" parameterType= "String" resultType= "com.bt.lmis.model.SpecialServiceEx" >
+		SELECT
+			cod_charge_method,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			percent,
+			percent_uom,
+			accurate_decimal_place,
+			param_1,
+			param_1_uom,
+			charge_1,
+			charge_1_uom,
+			delegated_pickup,
+			delegated_pickup_uom
+		FROM
+			ex_con_special_service
+		WHERE
+			dFlag= true
+		AND
+			CONCAT("SSE", con_id, belong_to)= #{key }
+	</select>
+	<select id= "loadSSE" resultMap= "specialServiceRedisBean" >
+		SELECT
+			CONCAT("SSE", con_id, belong_to) AS redis_key,
+			cod_charge_method,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			percent,
+			percent_uom,
+			accurate_decimal_place,
+			param_1,
+			param_1_uom,
+			charge_1,
+			charge_1_uom,
+			delegated_pickup,
+			delegated_pickup_uom
+		FROM
+			ex_con_special_service
+		WHERE
+			dFlag= true
+	</select>
+	<delete id= "delSSE" parameterType= "Object">
+		delete from ex_con_special_service where con_id = #{con_id } and belong_to = #{belong_to }
+	</delete>
+	<select id= "findRecord" parameterType= "Object" resultType= "com.bt.lmis.model.SpecialServiceEx" >
+		select 
+			id,
+			con_id,
+			belong_to,
+			cod_charge_method,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			percent,
+			percent_uom,
+			accurate_decimal_place,
+			param_1,
+			param_1_uom,
+			charge_1,
+			charge_1_uom,
+			delegated_pickup,
+			delegated_pickup_uom,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		from ex_con_special_service
+		where
+			dFlag= true
+		and 
+			con_id= #{con_id }
+		and
+			belong_to= #{belong_to }
+	</select>
+	<update id= "updateSSEx" parameterType= "Object" >
+		update ex_con_special_service
+		<set>
+			<if test="sSE.cod_charge_method != null">cod_charge_method=#{sSE.cod_charge_method },</if>
+			<if test="sSE.charge_min_flag != null">charge_min_flag=#{sSE.charge_min_flag },</if>
+			<if test="sSE.charge_min != null or cod == true">charge_min=#{sSE.charge_min },</if>
+			<if test="sSE.charge_min_uom != null or cod == true">charge_min_uom=#{sSE.charge_min_uom },</if>
+			<if test="sSE.percent != null">percent=#{sSE.percent },</if>
+			<if test="sSE.percent_uom != null">percent_uom=#{sSE.percent_uom },</if>
+			<if test="sSE.accurate_decimal_place != null">accurate_decimal_place=#{sSE.accurate_decimal_place },</if>
+			<if test="sSE.param_1 != null">param_1=#{sSE.param_1 },</if>
+			<if test="sSE.param_1_uom != null">param_1_uom=#{sSE.param_1_uom },</if>
+			<if test="sSE.charge_1 != null">charge_1=#{sSE.charge_1 },</if>
+			<if test="sSE.charge_1_uom != null">charge_1_uom=#{sSE.charge_1_uom },</if>
+			<if test="sSE.delegated_pickup != null">delegated_pickup=#{sSE.delegated_pickup },</if>
+			<if test="sSE.delegated_pickup_uom != null">delegated_pickup_uom=#{sSE.delegated_pickup_uom },</if>
+			<if test="sSE.dFlag != null">dFlag=#{sSE.dFlag },</if>
+			update_by=#{sSE.update_by },
+			update_time=now()
+		</set>
+		where id = #{sSE.id }
+	</update>
+	<insert id= "addSSEx" parameterType= "com.bt.lmis.model.SpecialServiceEx" useGeneratedKeys= "true" keyProperty= "id" >
+		insert into ex_con_special_service
+		(
+			con_id,
+			belong_to,
+			cod_charge_method,
+			charge_min_flag,
+			charge_min,
+			charge_min_uom,
+			percent,
+			percent_uom,
+			accurate_decimal_place,
+			param_1,
+			param_1_uom,
+			charge_1,
+			charge_1_uom,
+			delegated_pickup,
+			delegated_pickup_uom,
+			dFlag,
+			create_by,
+			create_time,
+			update_by,
+			update_time
+		) values (
+			#{con_id },
+			#{belong_to },
+			#{cod_charge_method },
+			#{charge_min_flag },
+			#{charge_min },
+			#{charge_min_uom },
+			#{percent },
+			#{percent_uom },
+			#{accurate_decimal_place },
+			#{param_1 },
+			#{param_1_uom },
+			#{charge_1 },
+			#{charge_1_uom },
+			#{delegated_pickup },
+			#{delegated_pickup_uom },
+			true,
+			#{create_by },
+			now(),
+			#{create_by },
+			now()
+		)
+	</insert>
+</mapper>   

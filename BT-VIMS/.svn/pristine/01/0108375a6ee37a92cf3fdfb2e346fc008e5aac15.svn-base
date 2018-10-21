@@ -1,0 +1,71 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE HTML>
+<html>
+<%@ include file="yuriy.jsp" %>
+<head>
+	<style type="text/css">
+	.td_cs1{
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		text-align: center;
+	}
+	</style>
+</head>
+<div>
+<div  class="title_div" id="sc_title" style="width: 100%;">		
+<table class="table table-striped" style="table-layout: fixed;">
+	<thead>
+	  		<tr>
+	                        <th class="td_cs1">编号</th>
+	                        <th class="td_cs1">访客类型</th>
+				         	<th class="td_cs1">来访人</th>
+				         	<th class="td_cs1">联系电话</th>
+				         	<th class="td_cs1">拜访人</th>
+				         	<th class="td_cs1">拜访人公司</th>
+				         	<th class="td_cs1">拜访人数</th>
+				         	<th class="td_cs1">车牌号</th>
+				         	<th class="td_cs1">到访地点</th>
+				         	<th class="td_cs1" style="">到访时间</th>
+				         	<th class="td_cs1">离去时间</th>
+				         	<th class="td_cs1">当前状态</th>
+				         	<th class="td_cs1">操作</th>
+			</tr>
+	</thead>
+</table>
+</div>	
+<div class= "tree_div" ></div>	  		
+<div class="content_div" id="bodys" onscroll="init_td('sc_title','bodys')">
+   <table class="table table-striped" style="table-layout: fixed;width: 99%;">	 		
+		  		<tbody>
+		  			<c:forEach items="${pageView.records}" var="vi">
+		  			<tr>
+		  			       <td class="td_cs1">${vi.data}</td>
+		  			       <td class="td_cs1">
+		  			       	<c:if test="${vi.visitorType == '01'}">个体</c:if>
+		  			       	<c:if test="${vi.visitorType == '02'}">团体</c:if>
+		  			       </td>
+					       <td class="td_cs1">${vi.visitor_name}</td>
+					       <td class="td_cs1">${vi.visitor_phone}</td>
+					       <td class="td_cs1">${vi.host}</td>
+					       <td class="td_cs1">${vi.visitor_company_name}</td>
+					       <td class="td_cs1">${vi.visitorNum}</td>
+					       <td class="td_cs1">${vi.license_plate_number}</td>
+					       <td class="td_cs1">${vi.checkInPlcae}</td>
+					       <td class="td_cs"><fmt:formatDate value="${vi.check_in_time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+					       <td class="td_cs"><fmt:formatDate value="${vi.check_out_time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+					       <td class="td_cs1">${vi.check_state}</td>
+					       <td class="td_cs1">
+					          <c:if test="${vi.check_state=='[已离开]'}">已签退</c:if>
+					          <c:if test="${vi.check_state=='[已到访]'}"><a  href="javascript.void();" onclick="out('${vi.id}');">[签退]</a>&nbsp; </c:if>
+				              /&nbsp;<a href="javascript.void();" onclick="pt('${vi.data}');">[打印]</a>
+				           </td>
+			  		</tr>
+			  		</c:forEach>
+		  		</tbody>
+			</table>
+		</div>
+	<div style="margin-right: 5%;margin-top:20px;margin-bottom: 10%;">${pageView.pageView}</div>
+	</div>
+</html>	
+		

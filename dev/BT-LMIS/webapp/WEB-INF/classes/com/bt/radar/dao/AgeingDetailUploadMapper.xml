@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.radar.dao.AgeingDetailUploadMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.radar.model.AgeingDetailUpload" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ageing_id" property="ageingId" jdbcType="VARCHAR" />
+    <result column="bat_id" property="batId" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="total_number" property="totalNumber" jdbcType="INTEGER" />
+    <result column="error_number" property="errorNumber" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ageing_id, bat_id, flag,create_time,create_user,update_time,update_user,total_number,error_number,file_name
+  </sql>
+  <sql id="where_Clause">
+	where 1=1
+	<trim  suffixOverrides="," >
+ 		<if test="id != null and id != ''" >
+    		and id =  #{id}
+	</if>
+	<if test="createTime != null and createTime != ''" >
+    		and create_time =  #{createTime}
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		and create_user =  #{createUser}
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		and update_time =  #{updateTime}
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		and update_user =  #{updateUser}
+	</if>
+ 		<if test="ageingId != null and ageingId != ''" >
+    		and ageing_id =  #{ageingId}
+	</if>
+ 		<if test="batId != null and batId != ''" >
+    		and bat_id =  #{batId}
+	</if>
+ 		<if test="flag != null and flag != ''" >
+    		and flag =  #{flag}
+	</if>
+ 		<if test="errorNumber != null and errorNumber != ''" >
+    		and error_number =  #{errorNumber}
+	</if>
+ 		<if test="totalNumber != null and totalNumber != ''" >
+    		and total_number =  #{totalNumber}
+	</if>
+	</trim>
+	</sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail_upload
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from er_ageing_detail_upload
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.radar.model.AgeingDetailUpload" >
+    insert into er_ageing_detail_upload (ageing_id, bat_id,total_number,error_number,flag,create_time,file_name,create_user,update_time,update_user)
+    values (#{ageingId,jdbcType=VARCHAR}, #{batId,jdbcType=VARCHAR},#{totalNumber,jdbcType=INTEGER},#{errorNumber,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{fileName,jdbcType=TIMESTAMP},
+      #{createUser,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP},
+      #{updateUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.radar.model.AgeingDetailUpload" >
+    insert into er_ageing_detail_upload
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		create_time,
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		create_user,
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		update_time,
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		update_user,
+	</if>
+      <if test="ageingId != null" >
+        ageing_id,
+      </if>
+      <if test="batId != null" >
+        bat_id,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="errorNumber != null" >
+        error_number,
+      </if>
+      <if test="totalNumber != null" >
+        total_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		#{createTime},
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		#{createUser},
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		#{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		#{updateUser},
+	</if>
+      <if test="ageingId != null" >
+        #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="batId != null" >
+        #{batId,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="errorNumber != null" >
+        #{error_number,jdbcType=INTEGER},
+      </if>
+      <if test="totalNumber != null" >
+        #{total_number,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.radar.model.AgeingDetailUpload" >
+    update er_ageing_detail_upload
+    <set >
+      <if test="ageingId != null" >
+        ageing_id = #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="batId != null" >
+        bat_id = #{batId,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		 create_time =  #{createTime},
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		 create_user =  #{createUser},
+	</if>
+ 		<if test="totalNumber != null and totalNumber != ''" >
+    		 total_number =  #{totalNumber},
+	</if>
+ 		<if test="errorNumber != null and errorNumber != ''" >
+    		 error_number =  #{errorNumber},
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		 update_time =  #{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		 update_user =  #{updateUser},
+	</if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.radar.model.AgeingDetailUpload" >
+    update er_ageing_detail_upload
+    set ageing_id = #{ageingId,jdbcType=VARCHAR},
+      bat_id = #{batId,jdbcType=VARCHAR},
+      create_time= #{createTime,jdbcType=TIMESTAMP},
+      create_user=#{createUser,jdbcType=VARCHAR},
+      update_time =#{updateTime,jdbcType=TIMESTAMP},
+      update_user=#{updateUser,jdbcType=VARCHAR},
+      error_number=#{errorNumber,jdbcType=VARCHAR},
+      total_number=#{totalNumber,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="queryAgeingDetailUpload" resultMap="BaseResultMap" parameterType="com.bt.radar.model.AgeingDetailUpload" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail_upload
+    <include refid="where_Clause" />
+    ORDER BY create_time DESC
+	LIMIT #{firstResult }, #{maxResult }
+  </select>
+  
+   <select id="countAllAgeingDetailUpload" resultType="java.lang.Integer" parameterType="com.bt.radar.model.AgeingDetailUpload" >
+    select count(1) 
+    from er_ageing_detail_upload
+    <include refid="where_Clause" />
+  </select>
+</mapper>

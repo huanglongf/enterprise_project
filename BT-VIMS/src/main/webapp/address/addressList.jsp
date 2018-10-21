@@ -1,0 +1,361 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<!DOCTYPE HTML>
+<html>
+	<%@ include file="yuriy.jsp" %>
+	<!-- css -->
+		<link rel="stylesheet" href="<%=basePath %>css/ui-dialog.css">
+		<link rel="stylesheet" href="<%=basePath %>assets/css/font-awesome.min.css" />
+	    <link rel="stylesheet" href="<%=basePath %>assets/css/ace-fonts.css" />
+		<link rel="stylesheet" href="<%=basePath %>assets/css/ace.min.css" />
+		<link rel="stylesheet" href="<%=basePath %>assets/css/ace-rtl.min.css" />
+		<link rel="stylesheet" href="<%=basePath %>assets/css/ace-skins.min.css" />	
+		<link rel="stylesheet" href="<%=basePath %>/css/button.css" />	
+        <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<%=basePath %>/css/jquery.mobile-1.3.2.min.css">
+        <link type= "text/css" href="<%=basePath %>css/table.css" rel= "stylesheet" />	
+        <link href="<%=basePath %>css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="<%=basePath %>css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+		<!-- js -->
+		<script src="<%=basePath %>js/jquery-1.8.3.min.js"></script>
+		<script src="<%=basePath %>js/jquery.mobile-1.3.2.min.js"></script>
+		<script type= "text/javascript" src= "<%=basePath %>js/common_view.js" ></script>
+		<script type="text/javascript" src="<%=basePath %>js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="<%=basePath %>js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+		<script src="<%=basePath %>js/dialog.js"></script>
+		<script src="<%=basePath %>js/dialog-min.js"></script>
+		
+	<style>
+	 .fixed_div{
+            position:fixed;
+            left:0px;
+            bottom:0px;
+            width:100%;
+            height:40px;
+        }
+        input[type="checkbox"]{
+	  		display: inline-block; 
+	  		width: 25px;
+	  		height: 20px;
+			-webkit-appearance: none; 
+			-moz-appearance: none; 
+			appearance: none; 
+			background: #fff;
+			border-radius: 3px;
+			border: 1px solid #888;
+			vertical-align:middle;
+			position: relative;
+		}
+		input[type="checkbox"]:checked{ 
+		  background: url("${root}img/dg.jpg") no-repeat;
+		  background-size: 100% 100%;
+		  border: none;
+		}
+       
+	</style>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>宝尊电商-地址信息列表</title>
+	</head>
+
+	<body>
+			  
+	<div data-role="page" id="pageone" style="vertical-align:middle;" align="center">
+			<div data-role="header" data-theme="b" >
+				<div style="height: 60px;">
+					<div style="display: inline;float: left;"><h3>&nbsp;&nbsp;[Visitor information management system]访客信息管理系统</h3></div>
+					<div style="display: inline;float: right;margin-right: 10px;"><img alt="log" src="${root}img/baozun.png" style="height: 60px;width: 160px;"></div>
+					<div style="display: inline;float: right;margin-right: 10px;margin-top: 25px;">欢迎,${session_user.name}｜<a href="javascript:void();" onclick="out_login();">[退出]</a></div>
+				</div>
+			</div>
+	<div style="float:left; width:98%;">	
+ 		<div style="float: left;width:100%;">		
+		<form class="form-search" id="queryform">
+	  <table style="width:100%;">
+	     <tr>
+	        <td style="float: left; margin-left: 100px; font-size: 20px;">地址名称:</td>
+	        <td width="5%" align="left"><input type="text" autofocus="autofocus" name="addressName" id="addressName" class="span2 search-query"></td>
+	     </tr>
+	     <tr>
+	        <td width="5%"><div style="width:30%;float: left;margin-left: 100px;"><button type="button" onclick="pageJump()">查询</button></div></td>
+	        <td width="5%"><div style="width:30%;float: left;margin-left: 100px;"><button type="button" onclick="addInfor()">新增</button></div></td>
+	        <td width="5%"><div style="width:30%;float: left;margin-left: 100px;"><button type="button" onclick="updateInfor()">修改</button></div></td>
+	        <td width="5%"><div style="width:30%;float: left;margin-left: 100px;"><button type="button" onclick="deleteInfor()">删除</button></div></td>
+	     </tr>
+	  </table>
+		</form>
+   </div>
+     <div>
+		<div class="title_div" id="sc_title" style="width: 100%;">
+			<table class="table table-striped" style="table-layout: fixed;">
+				<thead>
+					<tr>
+						<th class="td_cs">选择</th>
+						<th class="td_cs">序号</th>
+						<th class="td_cs">地址编码</th>
+						<th class="td_cs">地址名称</th>
+						<th class="td_cs">打印机名称</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<div class="tree_div"></div>
+		<div class="content_div" id="bodys"
+			onscroll="init_td('sc_title','bodys')">
+			<table class="table table-striped"
+				style="table-layout: fixed; width: 99%;" id = "one">
+				<tbody>
+					<c:forEach items="${pageView.records}" var="address">
+						<tr>
+							<td class="td_cs"><input type="checkbox" name="checkboxId" id="${address.id}"/></td>
+							<td class="td_cs">${address.id}</td>
+							<td class="td_cs" title="${address.addressCode}">
+								<c:if test="${fn:length(address.addressCode)>15 }">
+									${fn:substring(address.addressCode,0,15) }...
+								</c:if>
+								<c:if test="${fn:length(address.addressCode)<=15 }">
+									${address.addressCode}
+								</c:if>
+							</td>
+							<td class="td_cs" title="${address.addressName}">
+								<c:if test="${fn:length(address.addressName)>15 }">
+									${fn:substring(address.addressName,0,15) }...
+								</c:if>
+								<c:if test="${fn:length(address.addressName)<=15 }">
+									${address.addressName}
+								</c:if>
+							</td>
+							<td class="td_cs" title="${address.printerIp}">
+								<c:if test="${fn:length(address.printerIp)>15 }">
+									${fn:substring(address.printerIp,0,15) }...
+								</c:if>
+								<c:if test="${fn:length(address.printerIp)<=15 }">
+									${address.printerIp}
+								</c:if>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+		<div style="margin-right: 5%; margin-top: 20px; margin-bottom: 10%;" id = "page">${pageView.pageView}</div>
+	</div>
+	<div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
+			    <div data-role="navbar" data-iconpos="left">
+			      <ul>
+			        <li><a href="javascript.void();" onclick="main_list();" data-icon="home">主&nbsp;&nbsp;&nbsp;&nbsp;页</a></li>
+			        <li><a href="javascript.void();" onclick="sign()" data-icon="check">签&nbsp;&nbsp;&nbsp;&nbsp;入</a></li>
+			        <li><a href="javascript.void();" onclick="sign_out();" data-icon="info">签&nbsp;&nbsp;&nbsp;&nbsp;出</a></li>
+			        <li><a href="javascript.void();" onclick="detailed_list()" data-icon="info">查&nbsp;看&nbsp;记&nbsp;录</a></li>
+			      </ul>
+			    </div>
+	</div>
+</div>
+</body>
+	<script type="text/javascript">
+  	function sign_out() {
+  		window.location.href="${root}control/mainController/sign_out.do";
+  	}
+  	function detailed_list() {
+  		window.location.href="${root}control/mainController/detailed_list.do";
+  	}
+  	function main_list() {
+  		window.location.href="${root}control/mainController/main_list.do";
+  	}
+  	function out_login() {
+  		window.location.href="${root}control/userController/outLogin.do";
+  	}
+  	function sign() {
+  		window.location.href="${root}control/mainController/sign.do";
+  	}
+  	/** 新增地址信息方法**/
+  	function addInfor(){
+  		window.location.href="${root}control/addressControl/addInfor.do";
+  	}
+  	
+  	/** 验证修改时勾选的数据 **/
+    function valiteCheck() {
+		if($("input[name='checkboxId']:checked").size() == 0) {
+			showModal("请勾选一条数据进行修改！",null);
+			return false;
+  		}
+		if($("input[name='checkboxId']:checked").length > 1){
+			$(this).removeAttr("checked");
+			showModal("只能修改一条数据！",null);
+			return false;
+		}
+		return true;
+	}
+  	
+  	/** 修改地址信息方法 **/
+  	function updateInfor() {
+  		if(!valiteCheck()){
+  			return;
+  		}
+  		var id_array = "";
+  		$('input[name="checkboxId"]:checked').each(function(){  
+  			id_array = $(this).attr("id"); //获取选中复选框的id属性值
+  		});
+  		 window.location.href="${root}control/addressControl/updatePage.do?id="+id_array;
+	}
+  	
+  	/** 删除地址信息方法 **/
+  	function deleteInfor() {
+  		if($("input[name='checkboxId']:checked").size() == 0) {
+			showModal("请勾选一条数据进行删除！",null);
+			return;
+  		}
+  		/* var checkIds = GetCookie("ArticleId"); */
+  		var id_array = new Array();
+  		 $('input[name="checkboxId"]:checked').each(function(){  
+  		    id_array.push($(this).attr("id"));//向数组中添加id元素  
+  		});
+  		showModal01("确认删除吗？",function(){
+  			$.ajax({
+  	    		type : "POST",
+  	    		url : "${root}control/addressControl/deleteAddressInfor.do",  
+  	    		data : {
+  	    			"idArray" : id_array
+  	    			},
+  	    		dataType: "json",
+  	    		traditional: true,//这里设置为true,解决后台数组传递自动加[]
+  	    		success : function(data) {
+  	    			if (data.msg == "success") {
+  					    showModal("删除成功！",function(){
+  					    	window.location.href="${root}control/addressControl/addressList.do";
+  					    });
+  					}
+  	    			if(data.msg == 'error'){
+  						showModal("删除失败！",null);
+  					}
+  	    		}
+  	    	});
+  		});
+	}
+  	
+  	
+  	/** 分页及拼接表格方法 **/
+  	function pageJump() {
+  		if($("#addressName").val().length > 50){
+  			showModal("地址名称不能超过50！", null);
+  			return;
+  		}
+		var addressName = $("#addressName").val();
+  	  	url='${root}control/addressControl/pageList.do?startRow='+$("#startRow").val()+'&endRow='+$("#endRow").val()+"&page="+$("#pageIndex").val()+"&pageSize="+$("#pageSize").val();
+        var param = "&addressName="+addressName;
+        	$.ajax({
+        		type : "POST",
+        		url : url,  
+        		data : param,
+        		dataType: "json",  
+        		success : function(data) {
+        			if (data.records.length != 0) {
+    				    $("#page").html(data.pageView);
+    					var cit = $('#one');
+    					if (cit.size() > 0) {
+    						cit.find("tr").remove();
+    						var x = addTable(data.records);
+    						cit.append(x);
+    					}
+    				} else {
+    					var cit = $('#one');
+    					cit.find("tr").remove();
+    					$("#page").html(data.pageView);
+    				}
+        		}
+        	});
+        	
+ 	}
+  	
+  	/* 动态的为表格添加一行 */
+	function addTable(objs) {
+		var x = "";
+		$.each(objs, function(m, obj) {
+			x += '<tr>';
+		    x += '<td class="td_cs"><input type="checkbox" name="checkboxId" id="'+ obj.id +'"/></td>'; 
+			x += '<td class="td_cs">' + (obj.id == undefined ? " " : obj.id) + '</td>';
+			x += '<td class="td_cs">' + (obj.addressCode == undefined ? " " : obj.addressCode) + '</td>';
+			x += '<td class="td_cs">' + (obj.addressName == undefined ? " " : obj.addressName) + '</td>';
+			x += '<td class="td_cs">' + (obj.printerIp == undefined ? " " : obj.printerIp) + '</td>';
+			x += '</tr>';
+		})
+		return x;
+	}
+  	
+  	function showModal(content,ofunc) {
+  		if(ofunc == null || ofunc == ""){
+  			var ofunc = function(){};
+  		}
+  		
+  		var d = dialog({
+  			title : '提示',
+  			content : content,
+  			lock : true,
+  			ok : ofunc
+  		});
+  		d.showModal();
+  	}
+  	
+  	function showModal01(content,ofunc) {
+  		if(ofunc == null || ofunc == ""){
+  			var ofunc = function(){};
+  		}
+  		
+  		var d = dialog({
+  			title : '提示',
+  			content : content,
+  			lock : true,
+  			ok : ofunc,
+  			cancel : function () {}
+  		});
+  		d.showModal();
+  	}
+  	
+ /*  //得到选中复选框值
+     
+    function SetArticleId(o, i) { 
+       if (o.checked) {
+        AddCookie(i)
+      }
+      else {
+        RemoveCookie(i)
+      } 
+    }
+	
+	function AddCookie(i) {
+      d = GetCookie("ArticleId");
+      if (d == "") d = "";
+      if (d.indexOf("," + i + ",") == -1) {
+            d += i + ",";
+            SetCookie("ArticleId", d);
+      } 
+    }
+  
+    function RemoveCookie(i) {
+      d = GetCookie("ArticleId");
+      var reg = new RegExp("\\," + i + "\\,");
+      if (reg.test(d)) {
+        d = d.replace(reg, ",");  
+        SetCookie("ArticleId", d);
+      }     
+    } 
+     
+    function SetCookie(name, value) {
+      document.cookie = name + "=" + escape(value); 
+    }
+    function GetCookie(name) {
+      if (document.cookie.length > 0) {
+        c_start = document.cookie.indexOf(name + "=");
+        if (c_start != -1) {
+          c_start = c_start + name.length + 1;
+          c_end = document.cookie.indexOf(";", c_start);
+          if (c_end == -1) c_end = document.cookie.length;
+          return unescape(document.cookie.substring(c_start, c_end));
+        }
+      }
+      return "";
+    } */
+  	
+  	
+	</script>
+</html>

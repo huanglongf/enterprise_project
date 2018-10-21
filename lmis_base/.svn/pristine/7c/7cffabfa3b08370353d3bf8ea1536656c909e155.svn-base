@@ -1,0 +1,266 @@
+package com.lmis.basis.orgStaff.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.basis.orgStaff.dao.BasisOrgStaffMapper;
+import com.lmis.basis.orgStaff.model.BasisOrgStaff;
+import com.lmis.basis.orgStaff.model.ViewBasisOrgStaff;
+import com.lmis.basis.orgStaff.service.BasisOrgStaffServiceInterface;
+import com.lmis.basis.staff.dao.BasisStaffMapper;
+import com.lmis.basis.staff.model.BasisStaff;
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.common.dynamicSql.service.DynamicSqlServiceInterface;
+import com.lmis.constant.LBASEConstant;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.sys.org.dao.SysOrgMapper;
+import com.lmis.sys.org.model.SysOrg;
+
+/** 
+ * @ClassName: BasisOrgStaffServiceImpl
+ * @Description: TODO(成本中心与员工关系业务层实现类)
+ * @author codeGenerator
+ * @date 2018-01-24 10:05:26
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class BasisOrgStaffServiceImpl<T extends BasisOrgStaff> implements BasisOrgStaffServiceInterface<T> {
+	
+	@Resource(name="dynamicSqlServiceImpl")
+	DynamicSqlServiceInterface<BasisOrgStaff> dynamicSqlService;
+	@Autowired
+	private BasisOrgStaffMapper<T> basisOrgStaffMapper;
+	
+	@Autowired
+	private BasisStaffMapper<BasisStaff> basisStaffMapper;
+	
+	@Autowired
+	private SysOrgMapper<SysOrg> sysOrgMapper;
+	
+	@Autowired
+	private HttpSession session;
+
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		return dynamicSqlService.executeSelect(dynamicSqlParam, pageObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		LmisResult<?> _lmisResult = dynamicSqlService.executeSelect(dynamicSqlParam);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(_lmisResult.getCode())) return _lmisResult;
+		List<Map<String, Object>> result =  (List<Map<String, Object>>) _lmisResult.getData();
+		if(ObjectUtils.isNull(result)) throw new Exception(LBASEConstant.EBASE000007);
+		if(result.size() != 1) throw new Exception(LBASEConstant.EBASE000008);
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, result.get(0));
+	}
+
+	@Override
+	public LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+			
+		// TODO(业务校验)
+		
+		// 插入操作
+		return dynamicSqlService.executeInsert(dynamicSqlParam);
+	}
+
+	@Override
+	public LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+			
+		// TODO(业务校验)
+		// 更新操作
+		return dynamicSqlService.executeUpdate(dynamicSqlParam);
+	}
+
+	@Override
+	public LmisResult<?> deleteBasisOrgStaff(T t) throws Exception {
+		List<T> orgStaff = basisOrgStaffMapper.retrieve(t);
+		if(orgStaff.size()<0) throw new Exception(LBASEConstant.EBASE000007);
+		
+		BasisStaff staff = new  BasisStaff();
+		//清除员工绑定组织机构
+		staff.setStaffCode(orgStaff.get(0).getStaffCode());
+		staff.setIsDeleted(false);
+		List<BasisStaff> staffList = basisStaffMapper.retrieve(staff);
+		//if(staffList.size()!=1) throw new Exception("查无员工");
+		if(staffList.size()>0) {
+			BasisStaff s = staffList.get(0);
+			s.setOrgId(null);
+			s.setUpdateBy(session.getAttribute("lmisUserId").toString());
+			basisStaffMapper.updateRecord(s);
+		}
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		// 删除操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, basisOrgStaffMapper.logicalDelete(t));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> addBasisOrgStaff(List<BasisOrgStaff> orgStaffList) throws Exception {
+		LmisResult<?> lmisResult = new LmisResult<T>();
+		for (BasisOrgStaff t : orgStaffList) {
+			if(ObjectUtils.isNull(t.getOrgId()) || ObjectUtils.isNull(t.getStaffCode()))throw new Exception(LBASEConstant.EBASE000066);
+				
+			//唯一校验
+			BasisOrgStaff checkOrgStaff=new BasisOrgStaff();
+			checkOrgStaff.setIsDeleted(false);
+			checkOrgStaff.setStaffCode(t.getStaffCode());
+			//checkOrgStaff.setOrgId(t.getOrgId());
+			if(basisOrgStaffMapper.retrieve((T) checkOrgStaff).size()>0) throw new Exception(LBASEConstant.EBASE000033);
+			
+			//级联添加
+			BasisStaff staff=new BasisStaff();
+			staff.setStaffCode(t.getStaffCode());
+			staff.setIsDeleted(false);
+			staff.setIsDisabled(false);
+			List<BasisStaff> staffList = basisStaffMapper.retrieve(staff);
+			if(staffList.size()!=1) throw new Exception(LBASEConstant.EBASE000079);
+			BasisStaff updateStaff = staffList.get(0);
+			updateStaff.setOrgId(t.getOrgId());
+			updateStaff.setUpdateBy(session.getAttribute("lmisUserId").toString());
+			basisStaffMapper.update(updateStaff);
+			
+			/*//判断此员工是否为成本中心负责人
+			SysOrg org=new SysOrg();
+			org.setIsDeleted(false);
+			org.setOrgId(t.getOrgId());
+			org.setOrgBy(t.getStaffCode());
+
+			List<SysOrg> orgList = sysOrgMapper.retrieve(org);
+
+			if(orgList.size()>0) {
+				BasisOrgStaff updateOrgStaff=new BasisOrgStaff();
+				updateOrgStaff.setIsDeleted(false);
+				updateOrgStaff.setOrgId(t.getOrgId());
+				updateOrgStaff.setIsMajor(true);
+				basisOrgStaffMapper.update((T) updateOrgStaff);
+				t.setIsMajor(true);
+			}else {
+				t.setIsMajor(false);
+			}
+			*/
+			//创建人
+			t.setCreateBy(session.getAttribute("lmisUserId").toString());
+			//更新人
+			t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+			//所属机构
+			t.setPwrOrg(session.getAttribute("lmisUserOrg").toString());
+		}
+
+		// 插入操作
+		basisOrgStaffMapper.createBatch((List<T>) orgStaffList);
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		return lmisResult;
+	}
+
+	@Override
+	public LmisResult<?> updateBasisOrgStaff(T t) throws Exception {
+		LmisResult<?> lmisResult = new LmisResult<T>();
+		//存在校验
+		/*BasisOrgStaff checkOrgStaff=new BasisOrgStaff();
+		checkOrgStaff.setIsDeleted(false);
+		checkOrgStaff.setOrgId(t.getOrgId());
+		checkOrgStaff.setStaffCode(t.getStaffCode());
+		if(basisOrgStaffMapper.retrieve((T) checkOrgStaff).size()==0) throw new Exception("当前职级编码不存在");
+		
+		
+		//判断此员工是否为成本中心负责人
+		SysOrg org=new SysOrg();
+		org.setIsDeleted(false);
+		org.setOrgId(t.getOrgId());
+		org.setOrgBy(t.getStaffCode());
+		
+		List<SysOrg> orgList = sysOrgMapper.retrieve(org);
+		
+		if(orgList.size()>0) {
+			BasisOrgStaff updateOrgStaff=new BasisOrgStaff();
+			updateOrgStaff.setIsDeleted(false);
+			updateOrgStaff.setOrgId(t.getOrgId());
+			updateOrgStaff.setIsMajor(true);
+			basisOrgStaffMapper.update((T) updateOrgStaff);
+			t.setIsMajor(true);
+		}else {
+			return null;
+		}*/
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		
+		basisOrgStaffMapper.update(t);
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		return lmisResult;
+	}
+
+	@Override
+	public LmisResult<?> selectBasisOrgStaff(ViewBasisOrgStaff t) throws Exception {
+		
+		LmisResult<?> lmisResult = new LmisResult<T>();
+		t.setIsDeleted(false);
+		List<ViewBasisOrgStaff> orgStaffList = basisOrgStaffMapper.retrieveViewBasisOrgStaff(t);
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		lmisResult.setData(orgStaffList);
+		return lmisResult;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> clearBasisOrgStaff(BasisOrgStaff basisOrgStaff) throws Exception {
+		LmisResult<?> lmisResult = new LmisResult<T>();
+		basisOrgStaff.setIsDeleted(false);
+		List<T> orgStaffList = basisOrgStaffMapper.retrieve((T) basisOrgStaff);
+		BasisStaff staff = new  BasisStaff();
+		for (T t : orgStaffList) {
+			//清除员工绑定组织机构
+			staff.setStaffCode(t.getStaffCode());
+			staff.setIsDeleted(false);
+			List<BasisStaff> staffList = basisStaffMapper.retrieve(staff);
+			//if(staffList.size()!=1) throw new Exception("查无员工");
+			if(staffList.size()>0) {
+				BasisStaff s = staffList.get(0);
+				s.setOrgId(null);
+				s.setUpdateBy(session.getAttribute("lmisUserId").toString());
+				basisStaffMapper.updateRecord(s);
+			}
+			
+			t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+			basisOrgStaffMapper.logicalDelete(t);
+		}
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		return lmisResult;
+	}
+
+	@Override
+	public LmisResult<?> checkSysOrg(SysOrg sysOrg) throws Exception {
+		LmisResult<?> lmisResult = new LmisResult<T>();
+		List<SysOrg> orgList = sysOrgMapper.retrieve(sysOrg);
+		if(ObjectUtils.isNull(orgList.size()!=1)) throw new Exception(LBASEConstant.EBASE000007);
+		SysOrg org = orgList.get(0);
+		lmisResult.setData(org);
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		return lmisResult;
+	}
+
+	@Override
+	public LmisResult<?> findOrgStaffByOrgId(ViewBasisOrgStaff basisOrgStaff) throws Exception {
+		
+		if(ObjectUtils.isNull(basisOrgStaff.getOrgId())) throw new Exception(LBASEConstant.EBASE000066);
+		basisOrgStaff.setIsDeleted(false);
+		List<ViewBasisOrgStaff> orgStaffList = basisOrgStaffMapper.retrieveViewBasisOrgStaff(basisOrgStaff);
+		return new LmisResult<List<ViewBasisOrgStaff>>(LmisConstant.RESULT_CODE_SUCCESS,orgStaffList);
+	}
+
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.WaybillZdMapper" > 
+	<!-- Result Map-->
+	<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.WaybillZd" >
+		<result column="id" property="id"/>
+		<result column="order_id" property="orderId"/>
+		<result column="waybill" property="waybill"/>
+		<result column="mail_zdno" property="mailZdno"/>
+		<result column="create_time" property="create_time"/>
+		<result column="print_code" property="printCode"/>
+		<result column="ordinal" property="ordinal"/>
+		<result column="total" property="total"/>
+	</resultMap>
+ 
+	<insert id="insert" parameterType="com.bt.orderPlatform.model.WaybillZd"  >
+	  insert into tb_waybill_zd(create_time,order_id,waybill,mail_zdno,print_code,ordinal,total)
+	  values(now(),#{orderId},#{waybill},#{mailZdno},#{printCode},#{ordinal},#{total})
+	</insert>
+	
+	 
+	<select id="selectByOrderId"  resultMap="BaseResultMap" >
+		select * from tb_waybill_zd where order_id = #{order_id} order by ordinal 
+	</select>
+
+</mapper>   

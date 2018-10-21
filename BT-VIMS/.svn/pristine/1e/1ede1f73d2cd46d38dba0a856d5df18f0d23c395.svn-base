@@ -1,0 +1,105 @@
+package com.bt.vims.utils;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.ServiceUI;
+import javax.print.SimpleDoc;
+import javax.print.attribute.DocAttributeSet;
+import javax.print.attribute.HashDocAttributeSet;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.swing.JFileChooser;
+
+import org.apache.log4j.Logger;
+import com.bt.vims.model.Visitors;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+/**
+ * 
+ * @author lsh11036+李京功
+ *
+ */
+public final class PrintUtil {
+	private static final Logger logger = Logger.getLogger(PrintUtil.class);
+	/**
+	 * 建立打印连接和打印 
+	 * @param  filePath  .jspert文件路径
+	 * @param  printName  打印机名称
+	 * @param  list       
+	 * @return print_flag 0:代表失败,1:代表成功。
+	 */
+     public static int printConnection(String filePath,String printName,List<Visitors> list) {
+    	 int print_flag = 0; 
+ 		try {	
+ 			filePath = jsperChangePdf(list,filePath);
+ 			String command = "/home/print.sh" +" "+filePath+ " " + printName;
+ 			//调用Linux中的shell打印脚本
+ 		    Runtime.getRuntime().exec(command).waitFor();
+ 		    print_flag = 1;
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+ 			logger.error(e.getMessage());
+ 		}
+	     return print_flag;
+	}
+
+    /**
+     * 
+     * 把jasper文件转换成pdf文件
+     * @param path
+     * @return
+     * @throws JRException 
+     * @throws Exception
+     */
+   public static String jsperChangePdf(List<Visitors> list,String path) throws JRException { 
+	   JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(path); 
+       path = path.split("\\.")[0]+".pdf";
+       Map<String, Object> parameters = new HashMap<String, Object>();  
+	   JRDataSource jrDataSource_common = new JRBeanCollectionDataSource(list);
+       JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,jrDataSource_common);
+       //进行预浏览
+       //JasperViewer.viewReport(jasperPrint,false);    
+       JasperExportManager.exportReportToPdfFile(jasperPrint,path);
+	   return path;			
+	}
+   
+   /*public static void main(String[] args) {
+    	List<Visitors> list = new ArrayList<Visitors>();
+		for(int i=1;i<=4;i++) {
+			 Visitors visitor = new Visitors();
+	         visitor.setHost("李京功"+i);
+	         visitor.setVisitor_name("宝尊集团"+i);
+	         visitor.setVisitor_date("5月16日");
+	         visitor.setVisitor_year("2018");
+	         list.add(visitor);
+		}
+		int  print_flag = PrintUtil.printConnection("D:\\home\\来访者.jasper","myprint",list);
+		System.out.println(print_flag);
+	}*/
+   
+}

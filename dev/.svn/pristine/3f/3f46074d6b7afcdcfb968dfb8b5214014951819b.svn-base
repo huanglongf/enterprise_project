@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TransSettleMapper" > 
+
+ <select id="carriageContract" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   select * from tb_contract_basicinfo t where t.contract_type=2 and t.validity=1
+ </select>
+ 
+  <select id="storeContract" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   select * from tb_contract_basicinfo t where t.contract_type=3 and t.validity=1
+ </select>
+ 
+  <select id="customerContract" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   select * from tb_contract_basicinfo t where t.contract_type=4 and t.validity=1
+ </select>
+
+<!--找到所有昨天需要结算的承运商数据 -->
+  <select id="carriageSettleEveryDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    select * from view_trans_settle_carrier t  where t.contract_id=#{id}
+  </select>
+ 
+<!--找到所有需要结算的店铺数据-->
+  <select id="storeSettleEveryDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    select * from view_trans_settle_store t where t.contract_id=#{id}
+  </select>
+ 
+<!--找到所有需要结算的客户数据 -->
+  <select id="customerSettleEveryDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   select * from view_trans_settle_customer t where t.contract_id=#{id}
+  </select>
+ 
+ <select id="getFormula" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+   select * from view_address_param p  where p.con_id=#{id} and p.carrier_code=#{carrierCode}limit 0,1
+ </select>
+ 
+ 
+ 
+    <select id="carriageSettlePz" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_wl_fare_settle_pz(
+                                  #{bill_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_type,jdbcType=VARCHAR,mode=IN},
+                                  #{low_weight,jdbcType=VARCHAR,mode=IN},
+                                  #{weightprice_id,jdbcType=VARCHAR,mode=IN},
+                                  #{volumprice_id,jdbcType=VARCHAR,mode=IN},
+                                  #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select> 
+
+    <select id="carriageSettleXz" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_wl_fare_settle_xz(
+                                  #{bill_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_type,jdbcType=VARCHAR,mode=IN},
+                                  #{low_weight,jdbcType=VARCHAR,mode=IN},
+                                  #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select> 
+    
+    <select id="carriageSettleGj" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_wl_fare_settle_gj(
+                                  #{bill_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_type,jdbcType=VARCHAR,mode=IN},
+                                  #{low_weight,jdbcType=VARCHAR,mode=IN},
+                                  #{weightprice_id,jdbcType=VARCHAR,mode=IN},
+                                  #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select> 
+ 
+     <select id="carriageSettleGt" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_wl_fare_settle_gt(
+                                 #{contract_id,jdbcType=VARCHAR,mode=IN},
+                                 #{contract_type,jdbcType=VARCHAR,mode=IN},
+                                 #{contract_ower,jdbcType=VARCHAR,mode=IN},
+                                 #{bill_id,jdbcType=VARCHAR,mode=IN},
+                                 #{order_code,jdbcType=VARCHAR,mode=IN},
+                                 #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                 #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select> 
+        
+     
+     <select id="carriageSettleBj" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_wl_fare_settle_bj(
+                                  #{bill_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_type,jdbcType=VARCHAR,mode=IN},
+                                  #{transport_code,jdbcType=VARCHAR,mode=IN},
+                                  #{product_type_code,jdbcType=VARCHAR,mode=IN},
+                                  #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select> 
+
+
+     <select id="carriageSettleGl" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_wl_fare_settle_gl(
+                                  #{bill_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_id,jdbcType=VARCHAR,mode=IN},
+                                  #{contract_type,jdbcType=VARCHAR,mode=IN},
+                                  #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select> 
+    
+     <select id="carriageSettleTf" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_wl_fare_settle_tf(
+                                   #{bill_id,jdbcType=VARCHAR,mode=IN},
+                                   #{contract_id,jdbcType=VARCHAR,mode=IN},
+                                   #{contract_type,jdbcType=VARCHAR,mode=IN},
+                                   #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                   #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select> 
+               
+     <select id="updateSettleInfo" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >
+     
+           {call pro_trans_carrier_end(
+                                   #{expressno,jdbcType=VARCHAR,mode=IN},
+                                   #{contract_id,jdbcType=VARCHAR,mode=IN},
+                                   #{low_price,jdbcType=VARCHAR,mode=IN},
+                                   #{settle_flag,jdbcType=VARCHAR,mode=IN},
+                                   #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                   #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+                                   
+
+      </select>   
+      
+      <insert id="insertResultInfo" parameterType="java.util.HashMap">
+        insert into tb_settle_error_result
+        (
+        subject_code,
+        contract_id,
+        pro_result_info,
+        create_time
+        )values(
+        #{expressno},
+        #{contract_id},
+        #{resultInfo},
+        now()
+        )
+      </insert>       
+      
+      <update id="updateLogisInfo" parameterType="java.util.HashMap">
+               update 
+               tb_logistics_standard_data
+          set 
+          <choose>
+           <when test="contract_type ==2">
+               settle_flag_trans=#{settle_flag}
+           </when>
+           <when test="contract_type ==3">
+               settle_flag_shop=#{settle_flag}
+           </when>
+           <when test="contract_type ==4">
+               settle_flag_customer=#{settle_flag}
+           </when>   
+           </choose>                   
+        where  id=#{bill_id}
+      </update>                    
+               
+           
+  <!--承运商结算汇总  -->
+    <select id="transPool" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_trans_carrier_pool(
+                                   #{out_result,jdbcType=VARCHAR,mode=OUT},
+                                   #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select>                 
+               
+               
+		<select id="getGtSetContract" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		       select c.id as contract_param,
+		              c.contract_owner,
+		              c.contract_type,
+		              date_sub(now(),interval 1 day) as settle_date
+		      from tb_contract_basicinfo c  
+		      WHERE c.settle_date=(DATE_FORMAT(NOW(),'%d')-1)
+		        and c.contract_type=#{contract_type}
+		</select>
+ 
+ <select id="getSettleDataForGt" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    select 
+     t.contract_id,
+     t.order_code,
+     t.bill_id
+    from view_trans_settle_carrier_gt t
+    where t.contract_id=#{contract_id}
+ </select>
+ 
+
+ 
+   <!--商品类型结算汇总  -->
+    <select id="goodsPoolPro" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_goods_pool(
+                           #{contract_param,jdbcType=VARCHAR,mode=IN},
+                           #{contract_type,jdbcType=VARCHAR,mode=IN},
+                           #{out_result,jdbcType=VARCHAR,mode=OUT},
+                           #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select>    
+    
+    
+        <select id="customerPool" parameterType="java.util.HashMap" statementType="CALLABLE"   resultType="java.util.HashMap" >  
+      {call pro_trans_customer_pool(
+                           #{out_result,jdbcType=VARCHAR,mode=OUT},
+                           #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+    </select>   
+                 
+</mapper>   

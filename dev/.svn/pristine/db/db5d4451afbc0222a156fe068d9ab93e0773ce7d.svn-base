@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.wms.dao.RecordMapper">
+
+	<resultMap id="BaseResultMap" type="com.bt.wms.model.Container">
+		<result column="id" property="id" />
+		<result column="container_code" property="container_code" />
+		<result column="container_name" property="container_name" />
+		<result column="type" property="type" />
+		<result column="num" property="num" />
+		<result column="bat_id" property="bat_id" />
+		<result column="emp_id" property="emp_id" />
+	</resultMap>
+	
+	<resultMap id="LowerResultMap" type="com.bt.wms.model.LowerRecord">
+		<result column="id" property="id" />
+		<result column="create_time" property="create_time" />
+		<result column="create_user" property="create_user" />
+		<result column="container_code" property="container_code" />
+		<result column="location" property="location" />
+		<result column="num" property="num" />
+		<result column="sku" property="sku" />
+		<result column="bat_id" property="bat_id" />
+	</resultMap>
+
+	<resultMap id="UpperResultMap" type="com.bt.wms.model.UpperRecord">
+		<result column="id" property="id" />
+		<result column="create_time" property="create_time" />
+		<result column="create_user" property="create_user" />
+		<result column="container_code" property="container_code" />
+		<result column="location" property="location" />
+		<result column="num" property="num" />
+		<result column="sku" property="sku" />
+		<result column="bat_id" property="bat_id" />
+	</resultMap>
+	
+	
+	<resultMap id="cutResultMap" type="com.bt.wms.model.Cut">
+		<result column="sku" property="sku" />
+		<result column="cut" property="cut" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id,container_code,container_name,type,num,bat_id,emp_id,lower_bat_id
+	</sql>
+
+	<sql id="Lower_Column_List">
+		id,create_time,create_user,container_code,location,num,bat_id,sku
+	</sql>
+	
+	<sql id="Upper_Column_List">
+		id,create_time,create_user,container_code,location,num,bat_id,sku
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="container_code != null and container_code != ''">
+	  			and container_code=#{container_code} 
+			</if>
+			<if test="emp_id != null and emp_id != ''">
+	  			and emp_id=#{emp_id}
+			</if>
+			<if test="id != null and id != 0">
+	  			and id=#{id}
+			</if>
+		</trim>
+	</sql>
+	
+	<sql id="where_lower_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="create_user != null and create_user != ''">
+	  			and create_user=#{create_user} 
+			</if>
+			<if test="container_code != null and container_code != ''">
+	  			and container_code=#{container_code}
+			</if>
+			<if test="location != null and location != ''">
+	  			and location=#{location}
+			</if>
+			<if test="bat_id != null and bat_id != ''">
+	  			and bat_id=#{bat_id}
+			</if>
+			<if test="sku != null and sku != ''">
+	  			and sku=#{sku}
+			</if>
+		</trim>
+	</sql>
+	
+	<sql id="where_upper_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="create_user != null and create_user != ''">
+	  			and create_user=#{create_user} 
+			</if>
+			<if test="container_code != null and container_code != ''">
+	  			and container_code=#{container_code}
+			</if>
+			<if test="location != null and location != ''">
+	  			and location=#{location}
+			</if>
+			<if test="bat_id != null and bat_id != ''">
+	  			and bat_id=#{bat_id}
+			</if>
+			<if test="sku != null and sku != ''">
+	  			and sku=#{sku}
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause_like">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="username != null and username != ''">
+				and username like CONCAT('%', #{username}, '%')
+			</if>
+		</trim>
+
+	</sql>
+
+	<!-- 查询容器信息 -->
+	<select id="findByContainerCode" parameterType="com.bt.wms.model.Container" resultMap="BaseResultMap">
+		select 
+			<include refid="Base_Column_List" /> 
+		from container
+		<include refid="where_Clause"></include>
+	</select>
+	
+	<!-- 插入容器信息 -->
+	<insert id="insertContainer" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.wms.model.Container" >
+		insert into container(
+			container_code,container_name,type,num,bat_id,emp_id,lower_bat_id
+		) values(
+			#{container_code},#{container_name},#{type},#{num},#{bat_id},#{emp_id},#{lower_bat_id}
+		)
+	</insert>
+	
+	<!-- 修改容器信息 -->
+	<update id="updateContainer" parameterType="com.bt.wms.model.Container">
+  		update container set  
+ 			id=#{id}
+		<if test="type != null">
+  			,type=#{type} 
+		</if>
+		<if test="num != null">
+  			,num=#{num} 
+		</if>
+		<if test="bat_id != null">
+  			,bat_id=#{bat_id} 
+		</if>
+		<if test="emp_id != null">
+  			,emp_id=#{emp_id} 
+		</if>
+		<if test="lower_bat_id != null">
+  			,lower_bat_id=#{lower_bat_id} 
+		</if>
+  		where id=#{id}
+	</update>
+
+	<!--新增下架记录查询 -->
+	<insert id="insertLower" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.wms.model.LowerRecord">
+		insert into lower_record(create_time,create_user,container_code,location,num,bat_id,sku)
+		values(#{create_time},#{create_user},#{container_code},#{location},#{num},#{bat_id},#{sku})
+	</insert>
+	
+	<!-- 查询下架记录 -->
+	<select id="findByLowerRecord"  parameterType="com.bt.wms.model.LowerRecord" resultMap="LowerResultMap">
+		select 
+			<include refid="Lower_Column_List" /> 
+		from lower_record
+		<include refid="where_lower_Clause"></include>
+	</select>
+	
+	<!--新增上架记录查询 -->
+	<insert id="insertUpper" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.wms.model.UpperRecord">
+		insert into upper_record(create_time,create_user,container_code,location,num,bat_id,sku)
+		values(#{create_time},#{create_user},#{container_code},#{location},#{num},#{bat_id},#{sku})
+	</insert>
+	
+	<insert id="insertUppers" parameterType="java.util.List">
+        insert into upper_record(create_time,create_user,container_code,location,num,bat_id,sku)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.create_time},#{item.create_user},#{item.container_code},#{item.location},#{item.num},#{item.bat_id},#{item.sku})
+        </foreach>
+    </insert>
+	
+	<insert id="insertLowers" parameterType="java.util.List">
+        insert into lower_record(create_time,create_user,container_code,location,num,bat_id,sku)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.create_time},#{item.create_user},#{item.container_code},#{item.location},#{item.num},#{item.bat_id},#{item.sku})
+        </foreach>
+    </insert>
+	
+	<!-- 查询上架记录 -->
+	<select id="findByUpperRecord"  parameterType="com.bt.wms.model.UpperRecord" resultMap="UpperResultMap">
+		select 
+			<include refid="Upper_Column_List" /> 
+		from upper_record
+		<include refid="where_upper_Clause"></include>
+	</select>
+	
+	<!--查询SKU下架数量 -->
+	<select id="findLowerRecordNumber" resultMap="cutResultMap" parameterType="Object">
+		select 
+			a.sku,(a.cut-(CASE WHEN b.cut is null THEN 0 ELSE b.cut END)) as cut
+		from (SELECT sku,count(1) cut FROM lower_record where bat_id=#{lower_bat_id} and sku=#{sku} group by sku) a
+	left join (SELECT sku,count(1) cut FROM upper_record where bat_id=#{upper_bat_id} group by sku) b on a.sku=b.sku
+	</select>
+	
+	<!-- 查询数据总行 -->
+	<select id= "countContainer" resultType= "java.lang.Integer"  parameterType= "com.bt.wms.model.ContainerQueryParam" >
+		select count(1) cnt from container where 1=1
+		<if test="type != null and type != ''">
+  			and type in (${type}) 
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+	</select>
+	
+	<!-- 满足条件的客户表集合 -->
+	<select id= "queryContainer" resultType= "java.util.Map"  parameterType= "com.bt.wms.model.ContainerQueryParam" >
+		SELECT 
+			c.id,c.container_code, c.type,c.num,e.username
+		FROM 
+			container c
+			left join s_employee e on c.emp_id=e.username
+		where 1=1
+		<if test="type != null and type != ''">
+  			and c.type in (${type}) 
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and c.container_code=#{container_code}
+		</if>
+		ORDER BY id 
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	
+	<select id= "queryC" resultType= "java.util.Map"  parameterType= "Object" >
+		SELECT
+			c.id,
+			c.container_code as code, 
+			case c.type when 1 then '释放' when 2 then '下架中' when 3 then '下架完成' when 4 then '上架中' end  as type,
+			c.num as num,
+			e.username as user
+		FROM container c
+		left join s_employee e on c.emp_id=e.username
+		where 1=1
+		<if test="code != null and code != ''">
+  			and c.container_code=#{code}
+		</if>
+		<if test="type != null and type != ''">
+  			and c.type=#{type}
+		</if>
+		ORDER BY id 
+	</select>
+	
+	<select id= "queryB" resultType= "java.util.Map"  parameterType= "Object" >
+		select * from (SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'下架' as type FROM lower_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="stime != null and stime != ''">
+  			and create_time>=#{stime} 
+		</if>
+		<if test="etime != null and etime != ''">
+  			and create_time&lt;=#{etime}
+		</if>
+		union
+		SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'上架' as type FROM upper_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="stime != null and stime != ''">
+  			and create_time>=#{stime} 
+		</if>
+		<if test="etime != null and etime != ''">
+  			and create_time&lt;=#{etime}
+		</if>) a
+		where 1=1
+		<if test="type != null and type == '上架'">
+  			and a.type='上架'
+		</if> 
+		<if test="type != null and type == '下架'">
+  			and a.type='下架'
+		</if> 
+		order by a.create_time desc
+	</select>
+	
+	<select id="queryRecord" resultType= "java.util.Map"  parameterType= "com.bt.wms.model.RecordQueryParam">
+		select * from (SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'下架' as type FROM lower_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="create_time_s != null and create_time_e != ''">
+  			and create_time>=#{create_time_s} 
+		</if>
+		<if test="create_time_e != null and create_time_e != ''">
+  			and create_time&lt;=#{create_time_e}
+		</if>
+		
+		union
+		SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'上架' as type FROM upper_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="create_time_s != null and create_time_e != ''">
+  			and create_time>=#{create_time_s} 
+		</if>
+		<if test="create_time_e != null and create_time_e != ''">
+  			and create_time&lt;=#{create_time_e}
+		</if>) a
+		where 1=1
+		<if test="type != null and type == '上架'">
+  			and a.type='上架'
+		</if> 
+		<if test="type != null and type == '下架'">
+  			and a.type='下架'
+		</if> 
+		order by a.create_time desc
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	
+	
+	<select id="countRecord"  resultType= "java.lang.Integer"  parameterType= "com.bt.wms.model.RecordQueryParam">
+		select count(1) from (SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'上架' as type FROM lower_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="create_time_s != null and create_time_e != ''">
+  			and create_time>=#{create_time_s} 
+		</if>
+		<if test="create_time_e != null and create_time_e != ''">
+  			and create_time&lt;=#{create_time_e}
+		</if>
+		union
+		SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'下架' as type FROM upper_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="create_time_s != null and create_time_e != ''">
+  			and create_time>=#{create_time_s} 
+		</if>
+		<if test="create_time_e != null and create_time_e != ''">
+  			and create_time&lt;=#{create_time_e}
+		</if>) a
+		where 1=1
+		<if test="type != null and type == '上架'">
+  			and a.type='上架'
+		</if> 
+		<if test="type != null and type == '下架'">
+  			and a.type='下架'
+		</if> 
+	</select>
+	
+	<select id= "queryD" resultType= "java.util.Map"  parameterType= "Object" >
+	select *,count(1) as cut from (SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'下架' as type FROM lower_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="stime != null and stime != ''">
+  			and create_time>=#{stime} 
+		</if>
+		<if test="etime != null and etime != ''">
+  			and create_time&lt;=#{etime}
+		</if>
+		
+		union
+		SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'上架' as type FROM upper_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="stime != null and stime != ''">
+  			and create_time>=#{stime} 
+		</if>
+		<if test="etime != null and etime != ''">
+  			and create_time&lt;=#{etime}
+		</if>
+		) a
+		where 1=1
+		<if test="type != null and type == '上架'">
+  			and a.type='上架'
+		</if> 
+		<if test="type != null and type == '下架'">
+  			and a.type='下架'
+		</if> 
+		group by bat_id,container_code,location,sku
+		order by a.create_time desc
+	</select>
+	
+	
+	<select id= "queryE" resultType= "java.util.Map"  parameterType= "Object" >
+	select id,create_time,create_user,container_code,sku,num from error_log
+		where 1=1
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if> 
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if> 
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if> 
+		<if test="stime != null and stime != ''">
+  			and create_time>=#{stime} 
+		</if>
+		<if test="etime != null and etime != ''">
+  			and create_time&lt;=#{etime}
+		</if>
+	</select>
+	
+	<select id="queryRecordCut" resultType= "java.util.Map"  parameterType= "com.bt.wms.model.RecordQueryParam">
+		select *,count(1) as cut from (SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'下架' as type FROM lower_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="create_time_s != null and create_time_e != ''">
+  			and create_time>=#{create_time_s} 
+		</if>
+		<if test="create_time_e != null and create_time_e != ''">
+  			and create_time&lt;=#{create_time_e}
+		</if>
+		
+		union
+		SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'上架' as type FROM upper_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="create_time_s != null and create_time_e != ''">
+  			and create_time>=#{create_time_s} 
+		</if>
+		<if test="create_time_e != null and create_time_e != ''">
+  			and create_time&lt;=#{create_time_e}
+		</if>
+		) a
+		where 1=1
+		<if test="type != null and type == '上架'">
+  			and a.type='上架'
+		</if> 
+		<if test="type != null and type == '下架'">
+  			and a.type='下架'
+		</if> 
+		group by bat_id,container_code,location,sku
+		order by a.create_time desc
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	
+	
+	<select id="countRecordCut" resultType= "java.lang.Integer"  parameterType= "com.bt.wms.model.RecordQueryParam">
+		select count(1) from (select * from (SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'下架' as type FROM lower_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="create_time_s != null and create_time_e != null">
+  			and (create_time>=#{create_time_s} and create_time&lt;=#{create_time_e})
+		</if>
+		union
+		SELECT id,create_time,create_user,container_code,location,num,bat_id,sku,'上架' as type  FROM upper_record 
+		where 1=1
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if>
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if>
+		<if test="location != null and location != ''">
+  			and location=#{location}
+		</if>
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if>
+		<if test="create_time_s != null and create_time_e != null">
+  			and (create_time>=#{create_time_s} and create_time&lt;=#{create_time_e})
+		</if>) a group by a.bat_id) b
+		
+		where 1=1
+		<if test="type != null and type == '上架'">
+  			and b.type='上架'
+		</if> 
+		<if test="type != null and type == '下架'">
+  			and b.type='下架'
+		</if> 
+		order by b.create_time desc
+	</select>
+	
+	<select id="queryCY" resultType= "java.util.Map"  parameterType="Object">
+		select sku,count(1) as cut,a.container_code from (select * from container where id=#{id}) a
+		left join (select * from lower_record ) b on a.bat_id=b.bat_id group by sku;
+	</select>
+	
+	
+	<select id="queryLCY" resultType= "java.util.Map"  parameterType="Object">
+		select sku,count(1) as cut,a.container_code from (select * from container where id=#{id}) a
+		left join (select * from lower_record ) b on a.lower_bat_id=b.bat_id group by sku;
+	</select>
+	
+	<select id="query_lower_cy" resultType= "java.util.Map"  parameterType="Object">
+		select b.sku,count(1) as cut from (select * from container where id=#{id}) a 
+		left join (select * from lower_record ) b on b.bat_id=a.lower_bat_id where b.sku is not null group by sku;
+	</select>
+	
+	<select id="query_upper_cy" resultType= "java.util.Map"  parameterType="Object">
+		select d.sku,count(1) as cut from (select * from container where id=#{id}) c
+		left join  (select * from upper_record ) d on c.bat_id=d.bat_id where d.sku is not null group by sku;
+	</select>
+	
+	<insert id="insertlog" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.wms.model.ErrorLog">
+		insert into error_log(create_time,create_user,container_code,sku,num,localhost_code)
+		values(#{create_time},#{create_user},#{container_code},#{sku},#{num},#{localhost_code})
+	</insert>
+	
+	<select id="query_log" resultType= "java.util.Map"  parameterType= "com.bt.wms.model.ErrorLogQueryParam">
+		select id,create_time,create_user,container_code,sku,num from error_log
+		where 1=1
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if> 
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if> 
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if> 
+		<if test="create_time_s != null and create_time_e != ''">
+  			and create_time>=#{create_time_s} 
+		</if>
+		<if test="create_time_e != null and create_time_e != ''">
+  			and create_time&lt;=#{create_time_e}
+		</if>
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	
+	<select id="countLog" resultType= "java.lang.Integer"  parameterType= "com.bt.wms.model.ErrorLogQueryParam">
+		select count(1) from error_log
+		where 1=1
+		<if test="container_code != null and container_code != ''">
+  			and container_code=#{container_code}
+		</if> 
+		<if test="create_user != null and create_user != ''">
+  			and create_user=#{create_user}
+		</if> 
+		<if test="sku != null and sku != ''">
+  			and sku=#{sku}
+		</if> 
+		<if test="create_time_s != null and create_time_e != ''">
+  			and create_time>=#{create_time_s} 
+		</if>
+		<if test="create_time_e != null and create_time_e != ''">
+  			and create_time&lt;=#{create_time_e}
+		</if>
+	</select>
+</mapper>   

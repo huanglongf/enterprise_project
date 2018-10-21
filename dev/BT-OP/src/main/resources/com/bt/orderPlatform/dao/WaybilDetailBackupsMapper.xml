@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.WaybilDetailBackupsMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.WaybilDetailBackups" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="status" property="status"/>
+	<result column="order_id" property="order_id"/>
+	<result column="sku_code" property="sku_code"/>
+	<result column="sku_name" property="sku_name"/>
+	<result column="qty" property="qty"/>
+	<result column="weight" property="weight"/>
+	<result column="volumn" property="volumn"/>
+	<result column="amount" property="amount"/>
+	<result column="serial_number" property="serial_number"/>
+	<result column="describe" property="describe"/>
+</resultMap>
+       
+<!-- tb_waybil_detail_backups table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,status,order_id,sku_code,sku_name,qty,weight,volumn,amount,serial_number,describe
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="status != null and status != ''" >
+	    and status =  #{status}
+	</if>
+	 	<if test="order_id != null and order_id != ''" >
+	    and order_id =  #{order_id}
+	</if>
+	 	<if test="sku_code != null and sku_code != ''" >
+	    and sku_code =  #{sku_code}
+	</if>
+	 	<if test="sku_name != null and sku_name != ''" >
+	    and sku_name =  #{sku_name}
+	</if>
+	<if test="qty != null" >
+	    and qty =  #{qty}
+	</if>
+	<if test="weight != null" >
+	    and weight =  #{weight}
+	</if>
+	<if test="volumn != null" >
+	    and volumn =  #{volumn}
+	</if>
+	<if test="amount != null" >
+	    and amount =  #{amount}
+	</if>
+	 	<if test="serial_number != null and serial_number != ''" >
+	    and serial_number =  #{serial_number}
+	</if>
+	 	<if test="describe != null and describe != ''" >
+	    and describe =  #{describe}
+	</if>
+</trim>
+</sql>
+   
+<insert id="insertwmd" parameterType="com.bt.orderPlatform.model.WaybilMasterDetail" >
+  insert into tb_waybil_detail_backups(id,create_time,create_user,update_time,update_user,status,order_id,sku_code,sku_name,qty,weight,volumn,amount)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{status},#{order_id},#{sku_code},#{sku_name},#{qty},#{weight},#{volumn},
+ #{amount})
+</insert>
+
+
+<insert id="insertList" parameterType="java.util.List" >
+  insert into tb_waybil_detail_backups(id,create_time,create_user,update_time,update_user,status,order_id,sku_code,sku_name,qty,weight,volumn,amount)
+ values
+  <foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.id},#{item.create_time},#{item.create_user},#{item.update_time},#{item.update_user},#{item.status},#{item.order_id},#{item.sku_code},#{item.sku_name},#{item.qty},#{item.weight},#{item.volumn},
+ #{item.amount}) 
+    </foreach>  
+</insert>
+
+<!-- 插入ftp上传文件名 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.WaybilDetailBackups" >
+  insert into tb_waybil_detail_backups(id,create_time,create_user,update_time,update_user,status,order_id,sku_code,sku_name,qty,weight,volumn,amount,serial_number,describe)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{status},#{order_id},#{sku_code},#{sku_name},#{qty},#{weight},#{volumn},#{amount},#{serial_number},#{describe})
+</insert>
+
+<!-- 修改ftp上传文件名-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.WaybilDetailBackups" >
+  update tb_waybil_detail_backups set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},status=#{status},order_id=#{order_id},sku_code=#{sku_code},sku_name=#{sku_name},qty=#{qty},weight=#{weight},volumn=#{volumn},amount=#{amount},serial_number=#{serial_number},describe=#{describe} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改ftp上传文件名-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.WaybilDetailBackups" >
+	update tb_waybil_detail_backups set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="order_id != null  and order_id != '' ">
+		order_id=#{order_id},
+	</if>
+	<if test="sku_code != null  and sku_code != '' ">
+		sku_code=#{sku_code},
+	</if>
+	<if test="sku_name != null  and sku_name != '' ">
+		sku_name=#{sku_name},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="weight != null  ">
+		weight=#{weight},
+	</if>
+	<if test="volumn != null  ">
+		volumn=#{volumn},
+	</if>
+	<if test="amount != null  ">
+		amount=#{amount},
+	</if>
+	<if test="serial_number != null  and serial_number != '' ">
+		serial_number=#{serial_number},
+	</if>
+	<if test="describe != null  and describe != '' ">
+		describe=#{describe},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除ftp上传文件名 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_waybil_detail_backups where id = #{id}
+</update>
+<!-- 批量删除ftp上传文件名 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_waybil_detail_backups where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找ftp上传文件名 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_waybil_detail_backups where id = #{id}
+</select>
+  	
+<!-- ftp上传文件名 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.WaybilDetailBackupsQueryParam">
+	select count(1) from tb_waybil_detail_backups 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的ftp上传文件名集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.WaybilDetailBackupsQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_waybil_detail_backups 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 ftp上传文件名总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.WaybilDetailBackupsQueryParam">
+	select count(1) from tb_waybil_detail_backups 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的ftp上传文件名集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.WaybilDetailBackupsQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_waybil_detail_backups 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

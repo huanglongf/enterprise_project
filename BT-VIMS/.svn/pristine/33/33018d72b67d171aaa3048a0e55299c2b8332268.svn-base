@@ -1,0 +1,117 @@
+package com.bt.vims.service.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import com.bt.vims.dao.VisitorInfomationMapper;
+import com.bt.vims.model.VisitorInfomation;
+import com.bt.vims.model.Visitors;
+import com.bt.vims.page.QueryParameter;
+import com.bt.vims.page.QueryResult;
+import com.bt.vims.service.VisitorInfomationService;
+import com.bt.vims.utils.DateUtil;
+import com.bt.vims.utils.PrintUtil;
+import com.bt.vims.utils.SessionUtils;
+
+import common.Contents;
+
+@Service
+@Transactional
+public class VisitorInfomationServiceImpl implements VisitorInfomationService {
+
+	@Autowired
+	private VisitorInfomationMapper mapper;
+
+	@Override
+	public void save(VisitorInfomation vi) {
+		mapper.save(vi);
+	}
+
+	@Override
+	public void update(VisitorInfomation vi) {
+		mapper.update(vi);
+	}
+
+	@Override
+	public List<VisitorInfomation> query_all(VisitorInfomation vi) {
+		return mapper.query_all(vi);
+	}
+
+	@Override
+	public VisitorInfomation query_by_data(String data) {
+		return mapper.query_by_data(data).get(0);
+	}
+
+	@Override
+	public List<Map<String, Object>> query_host() {
+		return mapper.query_host();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public QueryResult<VisitorInfomation> findAllData(QueryParameter qr) {
+		QueryResult<VisitorInfomation> queryResult = new QueryResult<VisitorInfomation>();
+		queryResult.setResultlist(mapper.getDetailInfo(qr));
+		queryResult.setTotalrecord(mapper.getDetailInfoCount(qr));
+		System.out.println(queryResult.getResultlist().size());
+		return queryResult;
+	}
+
+	@Override
+	public List<VisitorInfomation> query(VisitorInfomation vi) {
+		return mapper.query(vi);
+	}
+
+	@Override
+	public List<?> getDetailData(Map<String, Object> param) {
+		return mapper.getExcelInfo(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> query_check_log(String username) {
+		return mapper.query_check_log(username);
+	}
+
+	@Override
+	public int toNewPrinter(String data, HttpServletRequest request) {
+		String printerIp = Contents.PRINTER_NAME; // 打印机名称(初始值设置默认打印机名称：myprint)
+		List<VisitorInfomation> visitorInfomations = mapper.query_by_data(data);
+		List<Visitors> visitorLists = new ArrayList<>();
+		Visitors visitors = new Visitors();
+		int printFlag = 0;
+		if (visitorInfomations != null && visitorInfomations.size() > 0) {
+			VisitorInfomation visitorInfomation = visitorInfomations.get(0);
+			String vistorType = visitorInfomation.getVisitorType();
+			if (Contents.INDIVIDUAL.equals(vistorType)) { // 访客姓名设值
+				visitors.setVisitor_name(visitorInfomation.getVisitor_name());
+			} else {
+				visitors.setVisitor_name(visitorInfomation.getVisitor_company_name());
+			}
+			visitors.setHost(visitorInfomation.getHost()); // 设值被拜访人
+			visitors.setContent(visitorInfomation.getContent()); // 拜访事由
+			String dateParam = DateUtil.convertToString(new Date(), DateUtil.YMD8); // 转换年月日
+			visitors.setVisitor_year(dateParam.substring(0, 4)); // 截取年
+			visitors.setVisitor_date(dateParam.substring(5)); // 截取月日
+			visitors.setVisitor_type(visitorInfomation.getVisitorType()); // 访问类型
+			visitors.setVisitorNum(visitorInfomation.getVisitorNum()); // 访问人数
+			visitorLists.add(visitors);
+			String addressInfor = (String) SessionUtils.getAttr(request, "addressInfor");
+			if (!StringUtils.isEmpty(addressInfor)) { // 取seesion中的打印机名称
+				String[] AddressInfor = addressInfor.split("\\——");
+				printerIp = AddressInfor[2];
+				printFlag = PrintUtil.printConnection(printerIp, visitorLists); // 调用打印机接口
+			}
+		}
+		return printFlag;
+	}
+
+}

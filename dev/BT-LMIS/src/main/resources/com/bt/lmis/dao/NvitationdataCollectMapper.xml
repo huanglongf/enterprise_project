@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.NvitationdataCollectMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.NvitationdataCollect" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="contract_id" property="contract_id"/>
+	<result column="billing_cycle" property="billing_cycle"/>
+	<result column="sku_type" property="sku_type"/>
+	<result column="qty" property="qty"/>
+	<result column="qty_unit" property="qty_unit"/>
+	<result column="fee" property="fee"/>
+	<result column="fee_unit" property="fee_unit"/>
+	<result column="total_amount" property="total_amount"/>
+	<result column="totalamount_unit" property="totalamount_unit"/>
+</resultMap>
+       
+<!-- tb_invitationdata_collect table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,contract_id,billing_cycle,sku_type,qty,qty_unit,fee,fee_unit,total_amount,totalamount_unit
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="contract_id != null" >
+	    and contract_id =  #{contract_id}
+	</if>
+	<if test="billing_cycle != null" >
+	    and billing_cycle =  #{billing_cycle}
+	</if>
+	 	<if test="sku_type != null and sku_type != ''" >
+	    and sku_type =  #{sku_type}
+	</if>
+	<if test="qty != null" >
+	    and qty =  #{qty}
+	</if>
+	 	<if test="qty_unit != null and qty_unit != ''" >
+	    and qty_unit =  #{qty_unit}
+	</if>
+	<if test="fee != null" >
+	    and fee =  #{fee}
+	</if>
+	 	<if test="fee_unit != null and fee_unit != ''" >
+	    and fee_unit =  #{fee_unit}
+	</if>
+	<if test="total_amount != null" >
+	    and total_amount =  #{total_amount}
+	</if>
+	 	<if test="totalamount_unit != null and totalamount_unit != ''" >
+	    and totalamount_unit =  #{totalamount_unit}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入耗材费明细数据汇总 -->
+<insert id="insert" parameterType="com.bt.lmis.model.NvitationdataCollect" >
+  insert into tb_invitationdata_collect(id,create_time,create_user,update_time,update_user,contract_id,billing_cycle,sku_type,qty,qty_unit,fee,fee_unit,total_amount,totalamount_unit)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{contract_id},#{billing_cycle},#{sku_type},#{qty},#{qty_unit},#{fee},#{fee_unit},#{total_amount},#{totalamount_unit})
+</insert>
+
+<!-- 修改耗材费明细数据汇总-->  
+ <update id="update" parameterType="com.bt.lmis.model.NvitationdataCollect" >
+  update tb_invitationdata_collect set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},contract_id=#{contract_id},billing_cycle=#{billing_cycle},sku_type=#{sku_type},qty=#{qty},qty_unit=#{qty_unit},fee=#{fee},fee_unit=#{fee_unit},total_amount=#{total_amount},totalamount_unit=#{totalamount_unit} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改耗材费明细数据汇总-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.NvitationdataCollect" >
+	update tb_invitationdata_collect set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="contract_id != null  ">
+		contract_id=#{contract_id},
+	</if>
+	<if test="billing_cycle != null  ">
+		billing_cycle=#{billing_cycle},
+	</if>
+	<if test="sku_type != null  and sku_type != '' ">
+		sku_type=#{sku_type},
+	</if>
+	<if test="qty != null  ">
+		qty=#{qty},
+	</if>
+	<if test="qty_unit != null  and qty_unit != '' ">
+		qty_unit=#{qty_unit},
+	</if>
+	<if test="fee != null  ">
+		fee=#{fee},
+	</if>
+	<if test="fee_unit != null  and fee_unit != '' ">
+		fee_unit=#{fee_unit},
+	</if>
+	<if test="total_amount != null  ">
+		total_amount=#{total_amount},
+	</if>
+	<if test="totalamount_unit != null  and totalamount_unit != '' ">
+		totalamount_unit=#{totalamount_unit},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除耗材费明细数据汇总 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_invitationdata_collect where id = #{id}
+</update>
+<!-- 批量删除耗材费明细数据汇总 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_invitationdata_collect where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找耗材费明细数据汇总 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_invitationdata_collect where id = #{id}
+</select>
+  	
+<!-- 耗材费明细数据汇总 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.NvitationdataCollectQueryParam">
+	select count(1) from tb_invitationdata_collect 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的耗材费明细数据汇总集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.NvitationdataCollectQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitationdata_collect 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 耗材费明细数据汇总总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.NvitationdataCollectQueryParam">
+	select count(1) from tb_invitationdata_collect 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的耗材费明细数据汇总集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.NvitationdataCollectQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitationdata_collect 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="findByCBIDACYCLE" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.NvitationdataCollect">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitationdata_collect 
+	<include refid="where_Clause"/>
+</select>	
+<delete id='delete_by_cond' parameterType="com.bt.lmis.model.NvitationdataCollect">
+delete from  tb_invitationdata_collect 
+where  contract_id=#{contract_id}
+	<if test="billing_cycle != null and billing_cycle != ''" >
+   and billing_cycle = #{billing_cycle}
+    </if>
+      <if test="sku_type != null and sku_type != ''" >
+   and sku_type = #{sku_type}
+    </if>
+</delete>  	
+</mapper>   

@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.EmployeeMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.Employee" >
+	<result column="id" property="id"/>
+	<result column="employee_number" property="employee_number"/>
+	<result column="username" property="username"/>
+	<result column="password" property="password"/>
+	<result column="name" property="name"/>
+	<result column="email" property="email"/>
+	<result column="iphone" property="iphone"/>
+	<result column="status" property="status"/>
+	<result column="createtime" property="createtime"/>
+	<result column="createby" property="createby"/>
+	<result column="updatetime" property="updatetime"/>
+	<result column="updateby" property="updateby"/>
+	<result column="project_id" property="project_id"/>
+	<result column="token" property="token"/>
+	<result column="teamId" property="teamId"/>
+	<result column="tmp_status" property="tmpStatus"/>
+	<result column="is_wo_email" property="isWoEmail"/>
+	
+	<!-- <result column="team_id" property="team_id"/>  -->
+</resultMap>
+       
+<!-- s_employee table all fields -->
+<sql id="Base_Column_List" >
+	 id,employee_number,username,name,password,email,iphone,status,createtime,createby,updatetime,updateby,project_id,tmp_status,is_wo_email <!-- ,team_id --> 
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+ 		<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="employee_number != null and employee_number != ''" >
+	    and employee_number =  #{employee_number}
+	</if>
+	 	<if test="username != null and username != ''" >
+	    and username =  #{username}
+	</if>
+	 	<if test="password != null and password != ''" >
+	    and password =  #{password}
+	</if>
+	 	<if test="name != null and name != ''" >
+	    and name =  #{name}
+	</if>
+	 	<if test="email != null and email != ''" >
+	    and email =  #{email}
+	</if>
+	 	<if test="iphone != null and iphone != ''" >
+	    and iphone =  #{iphone}
+	</if>
+	<if test="status != null and status != ''" >
+	    and status =  #{status}
+	</if>
+	<if test="project_id != null and project_id != ''" >
+	    and project_id =  #{project_id}
+	</if>
+</trim>
+</sql>
+   
+<!-- 查询条件 -->
+<sql id="where_Clause_like">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="employee_number != null and employee_number != ''" >
+	    and employee_number =  #{employee_number}
+	</if>
+	 	<if test="username != null and username != ''" >
+	    and username like CONCAT('%', #{username}, '%')
+	</if>
+	 	<if test="name != null and name != ''" >
+	    and name like CONCAT('%', #{name}, '%')
+	</if>
+	 	<if test="email != null and email != ''" >
+	    and email =  #{email}
+	</if>
+	 	<if test="iphone != null and iphone != ''" >
+	    and iphone =  #{iphone}
+	</if>
+</trim>
+
+</sql>
+<!-- 插入运维人员 -->
+<insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.bt.lmis.model.Employee" >
+  insert into s_employee(id,employee_number,username,password,name,email,iphone,status,createtime,createby,project_id,token)
+ values(#{id},#{employee_number},#{username},#{password},#{name},#{email},#{iphone},#{status},now(),#{createby},#{project_id},#{token})
+</insert>
+
+<!-- 插入用户角色 -->
+<insert id="insertER" parameterType="com.bt.lmis.model.Employee" >
+  insert into sr_employee_role(employeeid,roleid) values(#{employeeid},#{roleid})
+</insert>
+
+<!-- 修改运维人员-->  
+ <update id="update" parameterType="com.bt.lmis.model.Employee" >
+  update s_employee set employee_number=#{employee_number},username=#{username},name=#{name},email=#{email},iphone=#{iphone},updatetime=now(),updateby=#{updateby},project_id=#{project_id} 
+  <if test="password != null  and password != '' ">
+  ,password=#{password}
+  </if>
+  where id=#{id}
+ </update>
+ 
+ <!-- 选择修改运维人员-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.Employee" >
+	update s_employee set 
+	<trim  suffixOverrides="," >
+	<if test="employee_number != null  and employee_number != '' ">
+		employee_number=#{employee_number},
+	</if>
+	<if test="username != null  and username != '' ">
+		username=#{username},
+	</if>
+	<if test="password != null  and password != '' ">
+		password=#{password},
+	</if>
+	<if test="name != null  and name != '' ">
+		name=#{name},
+	</if>
+	<if test="email != null  and email != '' ">
+		email=#{email},
+	</if>
+	<if test="iphone != null  and iphone != '' ">
+		iphone=#{iphone},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="updateby != null  and updateby != '' ">
+		updateby=#{updateby},
+	</if>
+	<if test="updatetime != null  and updatetime != '' ">
+		updatetime=#{updatetime},
+	</if>
+	<if test="project_id != null  and project_id != '' ">
+		project_id=#{project_id},
+	</if>
+	</trim> where id=#{id}
+</update>
+<update id="updateProfile" parameterType="com.bt.lmis.model.Employee" >
+	update s_employee set 
+		name=#{name},
+		email=#{email},
+		is_wo_email=#{isWoEmail}
+	where id=#{id}
+</update>
+
+<!-- 删除运维人员 -->
+<update id="delete" parameterType="Object">
+	delete from s_employee where id = #{id}
+</update>
+
+<!-- 批量删除运维人员 -->
+<delete id="batchDelete" parameterType="Object">
+	delete from s_employee where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+
+<!-- 根据用户ID删除用户角色 -->
+<delete id="delER" parameterType="Object">
+	delete from sr_employee_role where employeeid = #{id}
+</delete>
+ 
+
+<!-- 依据主键查找运维人员 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from s_employee where id = #{id}
+</select>
+
+<select id="selectER"  resultMap="BaseResultMap" parameterType="Object">
+	select r.id,r.name from sr_employee_role er
+	left join s_role r on r.id=er.roleid where er.employeeid = #{id}
+</select>  	
+  	
+<!-- 依据主键查找运维人员 -->
+<select id="findEmpById" resultType="java.util.HashMap" parameterType="Object" >
+	select <include refid="Base_Column_List" /> 
+	 from s_employee where id = #{id}
+</select>
+
+<select id="findEMR" resultType="java.util.HashMap" parameterType="Object" >
+	select m.name as mname,m.id mpid from s_role r
+		left join sr_menu_role mr on mr.roleid=r.id
+		left join s_menu m on m.id=mr.menuid
+		left join sr_employee_role er on er.roleid=mr.roleid
+		left join s_employee e on e.id=er.employeeid
+	where 1=1
+		and m.flag=1 and e.id=#{id} 
+		and m.status=1
+		order by m.sort asc
+</select>
+  	
+ <select id="findMenu" resultType="java.util.HashMap" parameterType="Object" >
+	select 
+	 concat('menu_',menu_code) as 'key',
+	 menu_code as 'value'
+	 from tb_menu_role t
+	where 1=1
+	    and  t.emp_id=#{id} 
+	     and t.flag=1
+</select> 	
+  	
+<!-- 根据用户名和密码查找 -->
+<select id="loginCheck" parameterType="com.bt.lmis.model.Employee" resultMap="BaseResultMap">
+			SELECT
+				 e.id,
+				 e.employee_number,
+				 e.username,
+				 e.name,
+				 e.password,
+				 e.email,
+				 e.iphone,
+				 e.status,
+				 e.createtime,
+				 e.createby,
+				 e.updatetime,
+				 e.updateby,
+				 e.project_id,
+				 e.tmp_status,
+				 e.is_wo_email,
+				 c.teamId
+				
+				FROM
+				s_employee e ,(
+					SELECT
+						group_concat(w.group_id) AS teamId
+					FROM
+						wo_group_member w,
+						s_employee s
+					WHERE
+						w.employee_id=s.id
+					AND 
+						username = #{username} ) c
+				WHERE
+				 username = #{username}
+</select>
+
+
+<!-- 根据用户ID获取用户菜单 -->
+<select id="getMenuTree" resultType="java.util.HashMap" parameterType="Object">
+	select e.id,e.name,e.url,e.node,e.pid,e.icon,e.sort,e.remarks from s_employee as a
+	left join sr_employee_role as b on a.id=b.employeeid 
+	left join s_role as c on c.id=b.roleid
+	left join sr_menu_role d on c.id=d.roleid
+	left join s_menu e on e.id=d.menuid
+	where 1=1 and a.id=#{id} and e.pid=#{pid} and flag=0
+	and e.status=1
+	order by e.sort asc;
+</select>
+
+<!-- 根据ID查询菜单 -->
+<select id="findMenuById" resultType="java.util.HashMap" parameterType="Object">
+	select id,name,url,node,pid,remarks,icon,sort from s_menu where 1=1 and id=#{id} and status=1
+</select>
+
+
+<select id="getEmployee" resultType="java.util.HashMap" parameterType="com.bt.lmis.model.Employee">
+	select 
+	 id,
+	 employee_number,
+	 username,
+	 name,
+	 password,
+	 email,
+	 iphone,
+	 status,
+	 date_format(createtime,'%Y-%m-%d') as createtime
+	 from s_employee 
+	 where 1=1
+	 <if test="employee_number != null  and employee_number != '' ">
+		and employee_number like CONCAT('%', #{employee_number}, '%')
+	</if>
+	 <if test="name != null  and name != '' ">
+		and name like CONCAT('%', #{name}, '%')
+	</if>
+	<if test="username != null  and username != '' ">
+		and  username like CONCAT('%', #{username}, '%')
+	</if>
+	<if test="iphone != null  and iphone != '' ">
+		and iphone like CONCAT('%', #{iphone}, '%')
+	</if>
+	<if test="email != null  and email != '' ">
+		and email like CONCAT('%', #{email}, '%')
+	</if>
+</select>
+
+<!-- 根据菜单ID修改菜单状态 （0停用1启用）-->
+<update id="upStatus" parameterType="Object">
+	update s_employee set status=#{status} where id = #{id}
+</update>
+
+<!-- 登录用户名唯一校验 -->
+<select id="checkUser" parameterType="com.bt.lmis.model.Employee" resultType="java.lang.Long">
+   select count(1) from s_employee t where t.username=#{username}
+</select>
+
+<select id="checkEmployeeNumber" parameterType="com.bt.lmis.model.Employee" resultType="Integer">
+   select count(1) from s_employee where employee_number=#{employee_number}
+</select>
+<select id="selectByEmployeeNumber" resultType="com.bt.lmis.model.Employee" parameterType="Object">
+	select
+		<include refid="Base_Column_List"></include>
+	from
+		s_employee
+	where
+		employee_number = #{employee_number}
+</select>
+<select id="selectByUserName" resultType="com.bt.lmis.model.Employee" parameterType="Object">
+	select
+		<include refid="Base_Column_List"></include>
+	from
+		s_employee
+	where
+		username = #{username}
+</select>
+
+
+<select id="findByPro" resultType="com.bt.lmis.model.Employee" parameterType="Object">
+	select
+		<include refid="Base_Column_List"></include>
+	from
+		s_employee
+	where
+		project_id=#{project_id}
+</select>
+
+<select id="getEmpByEmail" resultType="com.bt.lmis.model.Employee" parameterType="java.lang.String">
+	select
+		*
+	from
+		s_employee
+	where
+		email=#{email}
+		and status=1
+</select>
+<select id="getCountByEmail" resultType="java.lang.Integer" parameterType="java.lang.String">
+	select
+		count(1)
+	from
+		s_employee
+	where
+		email=#{email}
+</select>
+<select id="getByEmailNoId" resultType="java.lang.Integer" parameterType="java.lang.String">
+	select
+		count(1)
+	from
+		s_employee
+	where
+		email=#{email}
+		and id != #{id}
+</select>
+
+<update id="update_token_mark" parameterType="java.util.Map">
+   update s_employee set token=#{token} where id=#{emp_id}
+</update>
+
+<update id="updatePW" parameterType="com.bt.lmis.model.Employee">
+   update s_employee set tmp_status=#{tmpStatus},password=#{password} where id=#{id}
+</update>
+
+<select id="get_token_mark" parameterType="java.util.Map" resultType="java.util.Map">
+   select t.token from s_employee t where t.id=#{emp_id}
+</select>
+</mapper>   

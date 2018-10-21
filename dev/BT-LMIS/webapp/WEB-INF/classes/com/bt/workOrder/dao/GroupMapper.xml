@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.workOrder.dao.GroupMapper" >
+	<select id= "getCarrierPowerId" parameterType= "com.bt.workOrder.model.GroupWorkPower" resultType= "String" >
+		SELECT id FROM wo_group_workPower WHERE dFlag= 1 AND group= #{group } AND store= #{carrier }
+	</select>
+	<select id= "judgeCarrierExistOrNot" parameterType= "com.bt.workOrder.model.GroupWorkPower" resultType= "Integer" >
+		SELECT count(1) FROM wo_group_workPower WHERE dFlag= 1 AND group= #{group } AND carrier= #{carrier }
+	</select>
+	<select id= "getStorePowerId" parameterType= "com.bt.workOrder.model.GroupStorePower" resultType= "String" >
+		SELECT id FROM wo_group_storePower WHERE dFlag= 1 AND group= #{group } AND store= #{store }
+	</select>
+	<select id= "judgeStoreExistOrNot" parameterType= "com.bt.workOrder.model.GroupStorePower" resultType= "Integer" >
+		SELECT count(1) FROM wo_group_storePower WHERE dFlag= 1 AND group= #{group } AND store= #{store }
+	</select>
+	<select id= "getCarrier" resultType= "java.util.Map" >
+		SELECT transport_code, transport_name FROM tb_transport_vendor WHERE validity= 1
+	</select>
+	<select id= "getStore" resultType= "java.util.Map" >
+		SELECT store_code, store_name FROM tb_store WHERE validity= 1
+	</select>
+	<update id= "updateWorkPower" parameterType= "com.bt.workOrder.model.GroupWorkPower" >
+		UPDATE wo_group_workPower
+		<trim prefix= "SET" suffixOverrides= "," >
+			update_by= #{update_by },
+			update_time= now(),
+			<if test= "carrier != null and carrier != ''" >
+	            carrier= #{carrier },
+	        </if>
+			<if test= "wo_type != null and wo_type != ''" >
+	            wo_type= #{wo_type },
+	        </if>
+			<if test= "wo_level != null and wo_level != ''" >
+	            wo_level= #{wo_level },
+	        </if>
+	        <if test= "dFlag != null" >
+	            dFlag= #{dFlag },
+	        </if>
+	    </trim>     
+	    WHERE id= #{id };
+	</update>
+	<insert id="insertGE" parameterType= "Object">
+		INSERT INTO s_employee_in_group (employee, s_employee_in_group.group, create_by, create_time, update_by, update_time) VALUES (#{employee},#{group},#{create_by},now(),#{update_by},now());
+	</insert>
+	
+	<select id="selectGE" resultType="java.util.HashMap"  parameterType= "Object">
+		select * from s_employee_in_group where s_employee_in_group.group=#{group}
+	</select>
+	
+	<select id="selectGroup" resultType="java.util.HashMap"  parameterType= "Object">
+		select * from s_group where id=#{id}
+	</select>
+	
+	<select id="checkEMP" resultType="java.util.HashMap"  parameterType= "Object">
+		select c.name,b.group_name from s_employee_in_group a
+		left join s_group b on a.group=b.id
+		left join s_employee c on c.id=a.employee
+		where a.employee in (${ids}) and a.group != #{group}
+	</select>
+	
+	<select id="getWKEMP" resultType="java.util.HashMap"  parameterType= "Object">
+		select a.id as aid,b.id as bid,a.name as name from (select id,name from s_employee where project_id='workorder') a
+		left join (select * from s_employee_in_group where s_employee_in_group.group=#{group}) b on b.employee=a.id
+		left join (select * from s_group) c on c.id=b.group
+	</select>
+	
+	<insert id= "addWorkPower" parameterType= "com.bt.workOrder.model.GroupWorkPower" >
+		INSERT INTO wo_group_workPower (
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+		  	group,
+			wo_type,
+			wo_level,
+			carrier,
+			remark
+			
+		) VALUES (
+			#{id },
+			#{create_by },
+		 	now(),
+		 	#{create_by },
+		 	now(),
+		 	#{group },
+		 	#{wo_type },
+		 	#{wo_level },
+	 		#{carrier },
+		 	#{remark }
+		 	
+	 	);
+	</insert>
+	<update id= "updateStorePower" parameterType= "com.bt.workOrder.model.GroupStorePower" >
+		UPDATE wo_group_storePower
+		<trim prefix= "SET" suffixOverrides= "," >
+			update_by= #{update_by },
+			update_time= now(),
+	        <if test= "selfwarehouse != null" >
+	            selfwarehouse= #{selfwarehouse },
+	        </if>
+	        <if test= "outsourcedwarehouse != null" >
+	            outsourcedwarehouse= #{outsourcedwarehouse },
+	        </if>
+	        <if test= "store != null and store != ''" >
+	            store= #{store },
+	        </if>
+	        <if test= "dFlag != null" >
+	            dFlag= #{dFlag },
+	        </if>
+	    </trim>     
+	    WHERE id= #{id };
+	</update>
+	<insert id= "addStorePower" parameterType= "com.bt.workOrder.model.GroupStorePower" >
+		INSERT INTO wo_group_storePower (
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+		  	group,
+			selfwarehouse,
+			outsourcedwarehouse,
+			store,
+			remark
+			
+		) VALUES (
+			#{id },
+			#{create_by },
+		 	now(),
+		 	#{create_by },
+		 	now(),
+		 	#{group },
+		 	#{selfwarehouse },
+		 	#{outsourcedwarehouse },
+	 		#{store },
+		 	#{remark }
+		 	
+	 	);
+	</insert>
+	<select id= "queryWorkPower" parameterType= "Integer" resultType= "java.util.Map" >
+		SELECT
+			wo_group_workPower.id,
+			tb_transport_vendor.transport_name AS carrier
+		FROM wo_group_workPower
+		LEFT JOIN tb_transport_vendor
+		ON wo_group_workPower.carrier= tb_transport_vendor.transport_code
+		WHERE dFlag= 1 AND wo_group_workPower.group= #{group }
+	</select>
+	<select id= "queryStorePower" parameterType= "Integer" resultType= "java.util.Map" >
+		SELECT
+			wo_group_storePower.id,
+			tb_store.store_name AS store,
+			CASE selfwarehouse
+			WHEN 1 THEN "包含"
+			WHEN 0 THEN "不包含"
+			ELSE "" END AS selfwarehouse,
+			CASE outsourcedwarehouse
+			WHEN 1 THEN "包含"
+			WHEN 0 THEN "不包含"
+			ELSE "" END AS outsourcedwarehouse
+		FROM wo_group_storePower
+		LEFT JOIN tb_store
+		ON wo_group_storePower.store= tb_store.store_code
+		WHERE dFlag= 1 AND wo_group_storePower.group= #{group }
+	</select>
+	<select id= "judgeSubordinateGroupOrNot" parameterType= "Integer" resultType= "Integer" >
+		SELECT count(1) FROM s_group WHERE id= #{id } AND superior= #{superior }
+	</select>
+	<select id= "getSubordinateGroups" parameterType= "Object" resultType= "Integer" >
+		SELECT id FROM s_group
+		WHERE superior IN
+		<foreach collection= "list" item= "superior" index= "index" open= "(" close= ")" separator= "," >
+	    	#{superior }  
+	   	</foreach>
+	</select>
+	<insert id= "add" parameterType= "com.bt.workOrder.model.Group" >
+		INSERT INTO s_group (
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+		  	group_code,
+			group_name,
+			superior,
+			remark
+			
+		) VALUES (
+			#{create_by },
+		 	now(),
+		 	#{create_by },
+		 	now(),
+		 	#{group_code },
+		 	#{group_name },
+		 	#{superior },
+		 	#{remark }
+		 	
+	 	);
+	</insert>
+	<update id= "update" parameterType= "com.bt.workOrder.model.Group" >
+		UPDATE s_group
+		<trim prefix= "SET" suffixOverrides= "," >
+			update_by= #{update_by },
+			update_time= now(),
+	        <if test= "group_code != null and group_code != ''" >
+	            group_code= #{group_code },
+	        </if>
+	        <if test= "group_name != null and group_name != ''" >
+	            group_name= #{group_name },
+	        </if>
+	        <if test= "superior != null" >
+	            superior= #{superior },
+	        </if>
+	        <if test= "remark != null and remark != ''" >
+	            remark= #{remark },
+	        </if>
+	        <if test= "status != null" >
+	            status= #{status },
+	        </if>
+	        <if test= "dFlag != null" >
+	            dFlag= #{dFlag },
+	        </if>
+	    </trim>     
+	    WHERE id= #{id };
+	</update>
+	<delete id= "batchDelete" parameterType= "Object" >
+		UPDATE s_group
+		SET dFlag = 0 
+		WHERE id in 
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+	       	#{item}  
+	   	</foreach> 
+	</delete>
+	
+	<delete id="deleteGE" parameterType= "Object">
+		delete from s_employee_in_group where s_employee_in_group.group=#{group}
+	</delete>
+	
+	<select id= "selectById"  resultType= "com.bt.workOrder.model.Group" >
+		SELECT 
+			id,
+			create_by,
+			DATE_FORMAT(create_time, '%Y-%m-%d %T') as create_time,
+			update_by,
+			DATE_FORMAT(update_time, '%Y-%m-%d %T') as update_time,
+			group_code,
+			group_name,
+			superior,
+			remark,
+			status,
+			dFlag
+		FROM s_group
+		where id= #{id}
+	</select>
+	<select id= "query" resultType= "java.util.Map" parameterType= "com.bt.workOrder.controller.param.GroupQueryParam" >
+		SELECT
+			a.id,
+			a.create_by,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d %T') as create_time,
+			a.update_by,
+			DATE_FORMAT(a.update_time, '%Y-%m-%d %T') as update_time,
+			a.group_code,
+			a.group_name,
+			b.group_name AS superior,
+			a.remark,
+			a.status,
+			a.dFlag
+		FROM s_group a
+		LEFT JOIN wo_group b
+		ON a.superior = b.id
+		<trim prefix= "WHERE" prefixOverrides= "AND|OR" >
+			a.dFlag = true
+	        <if test= "group_code != null and group_code != ''" >
+	            AND a.group_code LIKE CONCAT(CONCAT('%', #{group_code }), '%')
+	        </if>
+	       	<if test= "group_name != null and group_name!= ''" >
+	            AND a.group_name LIKE CONCAT(CONCAT('%', #{group_name }), '%')   
+	        </if>
+	        <if test= "superior != null" >
+	        	AND a.superior = #{superior }
+	        </if>
+	        <if test= "status != null" >
+	        	AND a.status = #{status }
+	        </if>
+	        <if test= "dFlag != null" >
+	        	AND a.dFlag = #{dFlag }
+	        </if>
+	    </trim>
+		ORDER BY update_time desc
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+	<select id= "count" resultType= "Integer" parameterType= "com.bt.workOrder.controller.param.GroupQueryParam" >
+		SELECT count(1) FROM s_group
+		<trim prefix= "WHERE" prefixOverrides= "AND|OR" >
+			dFlag = true
+	        <if test= "group_code != null and group_code != ''" >
+	            AND group_code LIKE CONCAT(CONCAT('%', #{group_code }), '%')
+	        </if>
+	       	<if test= "group_name != null and group_name!= ''" >
+	            AND group_name LIKE CONCAT(CONCAT('%', #{group_name }), '%')   
+	        </if>
+	        <if test= "superior != null" >
+	        	AND superior = #{superior }
+	        </if>
+	        <if test= "status != null" >
+	        	AND status = #{status }
+	        </if>
+	        <if test= "dFlag != null" >
+	        	AND dFlag = #{dFlag }
+	        </if>
+	    </trim>     
+	</select>
+	<select id= "checkNameExist" resultType= "Integer" parameterType= "Object" >
+		SELECT count(1) FROM s_group WHERE dFlag = 1 AND group_name= #{group_name }
+	</select>
+	<select id= "checkCodeExist" resultType= "Integer" parameterType= "Object" >
+		SELECT count(1) FROM s_group WHERE dFlag = 1 AND group_code = #{group_code}
+	</select>
+	<select id= "selectByName" resultType= "com.bt.workOrder.model.Group" parameterType= "Object" >
+		SELECT
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			group_code,
+			group_name,
+			superior,
+			remark,
+			status,
+			dFlag
+		FROM s_group
+		WHERE dFlag= 1
+		AND	group_name= #{group_name }
+	</select>
+	<select id= "selectByCode" resultType= "com.bt.workOrder.model.Group" parameterType= "Object" >
+		SELECT
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			group_code,
+			group_name,
+			superior,
+			autoAllocFlag,
+			remark,
+			status,
+			dFlag
+		FROM s_group
+		WHERE dFlag= 1
+		AND	group_code= #{group_code }
+	</select>
+	<select id= "findAllGroups" resultType= "com.bt.workOrder.model.Group" >
+		SELECT * FROM s_group 
+		WHERE dFlag= 1
+		AND	status= 1
+		ORDER BY update_time DESC
+	</select>
+	
+	<select id= "getStorePowerById" parameterType= "Object" resultType= "com.bt.workOrder.model.GroupStorePower" >
+		SELECT
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			wo_group_storePower.group,
+			selfwarehouse,
+			outsourcedwarehouse,
+			store,
+			dFlag
+		FROM wo_group_storePower
+		WHERE id= #{id }
+	</select>
+	
+    <delete id="delEmpGroup" parameterType="java.util.HashMap">
+		delete from s_employee_in_group where s_employee_in_group.group= #{id}
+	</delete>
+	
+	
+   <select id="getSrorePage" parameterType="com.bt.lmis.model.StoreBean" resultType="java.util.HashMap">
+		select
+			wo_group_storePower.id,
+			wo_group_storePower.create_by,
+			wo_group_storePower.create_time,
+			wo_group_storePower.update_by,
+			wo_group_storePower.update_time,
+			wo_group_storePower.group,
+			tb_store.store_code,
+			if(wo_group_storePower.selfwarehouse,'是','不是') as selfwarehouse,
+<!-- 			wo_group_storePower.selfwarehouse, -->
+<!-- 			wo_group_storePower.outsourcedwarehouse, -->
+			if(wo_group_storePower.outsourcedwarehouse,'是','不是') as outsourcedwarehouse,
+			wo_group_storePower.store,
+			tb_store.store_name
+			from wo_group_storePower,tb_store 
+			where 1=1
+			and wo_group_storePower.store = tb_store.store_code
+			and wo_group_storePower.group=#{g_id}
+		ORDER BY wo_group_storePower.create_time DESC
+    	LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+	<select id="selectStoreCount" parameterType="com.bt.lmis.model.StoreBean" resultType="java.lang.Integer">
+     select  count(1)
+     from  wo_group_storePower,tb_store 
+     where 1=1
+			and wo_group_storePower.store = tb_store.store_code
+			and wo_group_storePower.group=#{g_id}
+	</select>
+		
+	<insert id='addBatchStore'  parameterType="java.util.ArrayList">
+	insert into wo_group_storePower
+		(
+		id,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		wo_group_storePower.group,
+		selfwarehouse,
+		outsourcedwarehouse,
+		store		
+		)
+		values
+		 <foreach collection="list" item="obj" index="index" separator="," > 
+		(
+		uuid(),
+		#{obj.create_by, jdbcType=VARCHAR},
+		now(),
+		#{obj.update_by, jdbcType=VARCHAR},
+		now(),
+		#{obj.group, jdbcType=VARCHAR},
+		#{obj.selfwarehouse, jdbcType=VARCHAR},
+		#{obj.outsourcedwarehouse, jdbcType=VARCHAR},
+		#{obj.store, jdbcType=VARCHAR}
+		)
+	</foreach>
+	</insert>
+
+	<select id="isQaById" parameterType="java.lang.String" resultType="java.util.HashMap">
+			SELECT
+			d.qaid,
+			c.id as eid
+			FROM
+			s_employee c,
+			(
+			SELECT
+			a.id as qaid,
+			b.employee
+
+			FROM
+			s_group a,
+			s_employee_in_group b
+			WHERE
+			a.is_qa = 1
+			AND a.id = b.`group`
+			) d
+			WHERE
+			c.id = #{id,jdbcType=VARCHAR}
+			AND c.id = d.employee
+			AND c.project_id = 'workorder'
+	</select>
+</mapper>   

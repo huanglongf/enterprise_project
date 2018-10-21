@@ -1,0 +1,116 @@
+package com.lmis.setup.pageLayout.service;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.setup.pageElement.model.SetupPageElement;
+import com.lmis.setup.pageLayout.model.SetupPageLayout;
+import com.lmis.setup.pageLayout.service.SetupPageLayoutServiceInterface;
+
+import junit.framework.Assert;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class SetupPageLayoutServiceInterfaceTest {
+	
+	private static Log log = LogFactory.getLog(SetupPageLayoutServiceInterfaceTest.class);
+	
+	@Autowired
+	SetupPageLayoutServiceInterface<SetupPageLayout> setupPageLayoutService;
+	
+	@Autowired
+	ObjectMapper mapper;
+	
+	@Value("${base.page.pageNum}")
+    int defPageNum;
+
+    @Value("${base.page.pageSize}")
+    int defPageSize;
+	
+	@Test
+	public void testSelectSetupPageLayoutDynamic() throws Exception {
+		// 公共传参获取查询页面布局
+		/*log.info("testing testSelectSetupPageLayoutDynamic()...");
+		DynamicSqlParam<SetupPageLayout> dynamicSqlParam = new DynamicSqlParam<SetupPageLayout>();
+		dynamicSqlParam.setLayoutId("P_YMBJ_P02");
+		String queryJsonStr = "[{\"elementId\":\"P_YMBJ_P01_E01\",\"value\":\"BIS_MANAGE_METER\"}]";
+		dynamicSqlParam.setIsDeleted(false);
+		dynamicSqlParam.setElements(queryJsonStr);
+		LmisPageObject pageObject = new LmisPageObject();
+		pageObject.setDefaultPage(defPageNum,defPageSize);
+		LmisResult<?> result = setupPageLayoutService.executeSelect(dynamicSqlParam, pageObject);
+		assertNotNull("failure - result is null", result);
+		assertTrue("failure - result is not right", result.getCode().equals(LmisConstant.RESULT_CODE_SUCCESS));
+		log.info("testing testSelectSetupPageLayoutDynamic() end: " + mapper.writeValueAsString(result));*/
+	}
+	
+	@Transactional  
+    @Rollback(true)
+	@Test
+	public void testAddSetupPageLayoutDynamic() throws Exception {
+		// 公共传参新增页面布局
+		/*log.info("testing testAddSetupPageLayoutDynamic()...");
+		DynamicSqlParam<SetupPageLayout> dynamicSqlParam = new DynamicSqlParam<SetupPageLayout>();
+		dynamicSqlParam.setLayoutId("P_YMBJ_ADD_P01");
+		String jsonStr = "[{\"elementId\":\"P_YMBJ_ADD_P01_E01\",\"value\":\"C_S_RIKI_003\"},{\"elementId\":\"P_YMBJ_ADD_P01_E02\",\"value\":\"C_S_RIKI_0\"},{\"elementId\":\"P_YMBJ_ADD_P01_E03\",\"value\":\"测试布局2\"},{\"elementId\":\"P_YMBJ_ADD_P01_E04\",\"value\":\"30\"},{\"elementId\":\"P_YMBJ_ADD_P01_E05\",\"value\":\"100%\"},{\"elementId\":\"P_YMBJ_ADD_P01_E07\",\"value\":\"100%\"},{\"elementId\":\"P_YMBJ_ADD_P01_E09\",\"value\":\"layout_a\"},{\"elementId\":\"P_YMBJ_ADD_P01_E11\",\"value\":\"0\"},{\"elementId\":\"P_YMBJ_ADD_P01_E12\",\"value\":\"0\"},{\"elementId\":\"P_YMBJ_ADD_P01_E13\",\"value\":\"0\"},{\"elementId\":\"P_YMBJ_ADD_P01_E14\",\"value\":\"0\"}]";
+		dynamicSqlParam.setIsDeleted(false);
+		dynamicSqlParam.setElements(jsonStr);
+		LmisResult<?> result = setupPageLayoutService.executeInsert(dynamicSqlParam);
+		assertNotNull("failure - result is null", result);
+		assertTrue("failure - result is not right", result.getCode().equals(LmisConstant.RESULT_CODE_SUCCESS));
+		
+		log.info("testing testAddSetupPageLayoutDynamic() end: " + mapper.writeValueAsString(result));*/
+	}
+	
+	@Transactional  
+    @Rollback(true)
+	@Test
+	public void testUpdateSetupPageLayoutDynamic() throws Exception {
+		// 公共传参修改页面布局
+		/*log.info("testing testUpdateSetupPageLayoutDynamic()...");
+		DynamicSqlParam<SetupPageLayout> dynamicSqlParam = new DynamicSqlParam<SetupPageLayout>();
+		dynamicSqlParam.setLayoutId("P_YMBJ_ADD_P01");
+		String jsonStr = "[{\"elementId\":\"P_YMBJ_ADD_P01_E01\",\"value\":\"0501\"},{\"elementId\":\"P_YMBJ_ADD_P01_E02\",\"value\":\"BIS_MANAGE_METER\"},{\"elementId\":\"P_YMBJ_ADD_P01_E03\",\"value\":\"阿斯蒂芬收到\"},{\"elementId\":\"P_YMBJ_ADD_P01_E04\",\"value\":2001},{\"elementId\":\"P_YMBJ_ADD_P01_E05\",\"value\":\"1058%\"},{\"elementId\":\"P_YMBJ_ADD_P01_E07\",\"value\":\"5000px\"},{\"elementId\":\"P_YMBJ_ADD_P01_E09\",\"value\":\"layout_b\"},{\"elementId\":\"P_YMBJ_ADD_P01_E11\",\"value\":\"1\"},{\"elementId\":\"P_YMBJ_ADD_P01_E12\",\"value\":\"0\"},{\"elementId\":\"P_YMBJ_ADD_P01_E13\",\"value\":\"0\"},{\"elementId\":\"P_YMBJ_ADD_P01_E14\",\"value\":\"0\"}]";
+		dynamicSqlParam.setIsDeleted(false);
+		dynamicSqlParam.setElements(jsonStr);
+		dynamicSqlParam.setId("993f182c-484e-11e8-bd1b-005056952d2b");
+		
+		LmisResult<?> result = setupPageLayoutService.executeUpdate(dynamicSqlParam);
+		assertNotNull("failure - result is null", result);
+		assertTrue("failure - result is not right", result.getCode().equals(LmisConstant.RESULT_CODE_SUCCESS));
+		
+		log.info("testing testUpdateSetupPageLayoutDynamic() end: " + mapper.writeValueAsString(result));*/
+	}
+	
+	@Test
+	public void testCheckLayout() throws Exception {
+		/*DynamicSqlParam<SetupPageLayout> dynamicSqlParam = new DynamicSqlParam<SetupPageLayout>();
+		dynamicSqlParam.setLayoutId("P_YMBJ_ADD_P01");
+		dynamicSqlParam.setId("3e5e07cc-62e8-11e8-9d0d-005056954f8e");
+		setupPageLayoutService.executeSelect(dynamicSqlParam);*/
+	}
+}

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.WoWaybillMasterMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.workOrder.bean.WoWaybillMaster" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="cost_center" property="costCenter" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="warehouse" property="warehouse" jdbcType="VARCHAR" />
+    <result column="transport_code" property="transportCode" jdbcType="VARCHAR" />
+    <result column="transport_name" property="transportName" jdbcType="VARCHAR" />
+    <result column="delivery_order" property="deliveryOrder" jdbcType="VARCHAR" />
+    <result column="epistatic_order" property="epistaticOrder" jdbcType="VARCHAR" />
+    <result column="order_type" property="orderType" jdbcType="VARCHAR" />
+    <result column="transport_direction" property="transportDirection" jdbcType="VARCHAR" />
+    <result column="itemtype_code" property="itemtypeCode" jdbcType="VARCHAR" />
+    <result column="itemtype_name" property="itemtypeName" jdbcType="VARCHAR" />
+    <result column="transport_time" property="transportTime" jdbcType="TIMESTAMP" />
+    <result column="collection_on_delivery" property="collectionOnDelivery" jdbcType="DECIMAL" />
+    <result column="order_amount" property="orderAmount" jdbcType="DECIMAL" />
+    <result column="sku_number" property="skuNumber" jdbcType="VARCHAR" />
+    <result column="qty" property="qty" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="length" property="length" jdbcType="DECIMAL" />
+    <result column="width" property="width" jdbcType="DECIMAL" />
+    <result column="higth" property="higth" jdbcType="DECIMAL" />
+    <result column="volumn" property="volumn" jdbcType="DECIMAL" />
+    <result column="delivery_address" property="deliveryAddress" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="street" property="street" jdbcType="VARCHAR" />
+    <result column="detail_address" property="detailAddress" jdbcType="VARCHAR" />
+    <result column="shiptoname" property="shiptoname" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="insurance_flag" property="insuranceFlag" jdbcType="BIT" />
+    <result column="cod_flag" property="codFlag" jdbcType="BIT" />
+    <result column="dFlag" property="dflag" jdbcType="INTEGER" />
+    <result column="k_flag" property="kFlag" jdbcType="VARCHAR" />
+    <result column="platform_order_time" property="platformOrderTime" jdbcType="TIMESTAMP" />
+    <result column="platform_pay_time" property="platformPayTime" jdbcType="TIMESTAMP" />
+    <result column="park_code" property="parkCode" jdbcType="VARCHAR" />
+    <result column="park_name" property="parkName" jdbcType="VARCHAR" />
+    <result column="park_cost_center" property="parkCostCenter" jdbcType="VARCHAR" />
+    <result column="province_origin" property="provinceOrigin" jdbcType="VARCHAR" />
+    <result column="city_origin" property="cityOrigin" jdbcType="VARCHAR" />
+    <result column="state_origin" property="stateOrigin" jdbcType="VARCHAR" />
+    <result column="express_number" property="expressNumber" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, create_user, update_time, update_user, cost_center, store_code, 
+    store_name, warehouse_code, warehouse, transport_code, transport_name, delivery_order, 
+    epistatic_order, order_type, transport_direction, itemtype_code, itemtype_name, transport_time, 
+    collection_on_delivery, order_amount, sku_number, qty, weight, length, width, higth, 
+    volumn, delivery_address, province, city, state, street, detail_address, shiptoname, 
+    phone, insurance_flag, cod_flag, dFlag, k_flag, platform_order_time, platform_pay_time, 
+    park_code, park_name, park_cost_center, province_origin, city_origin, state_origin,express_number
+  </sql>
+  <select id="search" resultType="java.util.HashMap" parameterType="com.bt.common.controller.param.Parameter">
+	SELECT
+		*,
+		CONVERT (express_number USING utf8) as waybill,
+		CASE insurance_flag
+		WHEN 0 THEN '否'  
+		WHEN 1 THEN '是'
+		ELSE insurance_flag
+		END AS insurance_flag_display,
+		CASE cod_flag
+		WHEN 0 THEN '是'  
+		WHEN 1 THEN '否'
+		ELSE cod_flag
+		END AS cod_flag_display
+	FROM wo_waybill_master
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<if test="param.create_time != null and param.create_time != ''">
+			AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{param.create_time_start })
+			AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{param.create_time_end })
+		</if>
+		<if test="param.express_number != null and param.express_number != '' and param.express_number != 'null'">
+			AND express_number LIKE CONCAT("%", #{param.express_number }, "%")
+		</if>
+		<if test="param.store_name != null and param.store_name != '' and param.store_name != 'null'">
+			AND store_name LIKE CONCAT("%", #{param.store_name }, "%")
+		</if>
+		<if test="param.warehouse != null and param.warehouse != '' and param.warehouse != 'null'">
+			AND warehouse LIKE CONCAT("%", #{param.warehouse }, "%")
+		</if>
+		<if test="param.transport_name != null and param.transport_name != '' and param.transport_name != 'null'">
+			AND transport_name LIKE CONCAT("%", #{param.transport_name }, "%")
+		</if>
+		<if test="param.itemtype_name != null and param.itemtype_name != '' and param.itemtype_name != 'null'">
+			AND itemtype_name LIKE CONCAT("%", #{param.itemtype_name }, "%")
+		</if>
+		<if test="param.epistatic_order != null and param.epistatic_order != '' and param.epistatic_order != 'null'">
+			AND epistatic_order LIKE CONCAT("%", #{param.epistatic_order }, "%")
+		</if>
+		<if test="param.delivery_order != null and param.delivery_order != '' and param.delivery_order != 'null'">
+			AND delivery_order LIKE CONCAT("%", #{param.delivery_order }, "%")
+		</if>
+		<if test="param.cod_flag != null and param.cod_flag != '' and param.cod_flag != 'null'">
+			AND cod_flag = #{param.cod_flag }
+		</if>
+	</trim>
+	<if test="param.sortColumn != null and param.sortColumn != ''">
+		ORDER BY ${param.sortColumn } ${param.sort }
+	</if>
+	<if test="param.sortColumn == null or param.sortColumn == ''">
+		ORDER BY transport_time DESC
+	</if>
+	LIMIT #{firstResult }, #{maxResult }
+  </select>
+  <select id="countSearch" resultType="int" parameterType="com.bt.common.controller.param.Parameter">
+	SELECT
+		count(1)
+	FROM wo_waybill_master
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		<if test="param.create_time != null and param.create_time != ''">
+			AND TO_DAYS(transport_time) &gt;= TO_DAYS(#{param.create_time_start })
+			AND TO_DAYS(transport_time) &lt;= TO_DAYS(#{param.create_time_end })
+		</if>
+		<if test="param.express_number != null and param.express_number != '' and param.express_number != 'null'">
+			AND express_number LIKE CONCAT("%", #{param.express_number }, "%")
+		</if>
+		<if test="param.store_name != null and param.store_name != '' and param.store_name != 'null'">
+			AND store_name LIKE CONCAT("%", #{param.store_name }, "%")
+		</if>
+		<if test="param.warehouse != null and param.warehouse != '' and param.warehouse != 'null'">
+			AND warehouse LIKE CONCAT("%", #{param.warehouse }, "%")
+		</if>
+		<if test="param.transport_name != null and param.transport_name != '' and param.transport_name != 'null'">
+			AND transport_name LIKE CONCAT("%", #{param.transport_name }, "%")
+		</if>
+		<if test="param.itemtype_name != null and param.itemtype_name != '' and param.itemtype_name != 'null'">
+			AND itemtype_name LIKE CONCAT("%", #{param.itemtype_name }, "%")
+		</if>
+		<if test="param.epistatic_order != null and param.epistatic_order != '' and param.epistatic_order != 'null'">
+			AND epistatic_order LIKE CONCAT("%", #{param.epistatic_order }, "%")
+		</if>
+		<if test="param.delivery_order != null and param.delivery_order != '' and param.delivery_order != 'null'">
+			AND delivery_order LIKE CONCAT("%", #{param.delivery_order }, "%")
+		</if>
+		<if test="param.cod_flag != null and param.cod_flag != '' and param.cod_flag != 'null'">
+			AND cod_flag = #{param.cod_flag }
+		</if>
+	</trim>
+  </select>
+  <select id="getWarehouseName" resultType="java.lang.String">
+  	SELECT warehouse_name FROM `tb_warehouse`
+  </select>
+  <select id="getStoreName" resultType="java.lang.String">
+  	SELECT store_name FROM `tb_store`
+  </select>
+  <select id="getTransportName" resultType="java.lang.String">
+  	SELECT transport_name FROM `tb_transport_vendor`
+  </select>
+</mapper>

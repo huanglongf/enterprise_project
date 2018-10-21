@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.WarehouseMapper">
+	<insert id="add" parameterType="com.bt.lmis.model.Warehouse" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_warehouse
+		(
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+		    warehouse_code,
+			warehouse_name,
+			province,
+			city,
+			state,
+			street,
+			address,
+			contact,
+			phone,
+			warehouse_type, 
+			validity,
+			province_name,
+			city_name,
+			state_name,
+			street_name,
+			need_balance
+		)values(
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{warehouse_code },
+			#{warehouse_name },
+			#{province },
+			#{city },
+			#{state },
+			#{street },
+			#{address },
+			#{contact },
+			#{phone },
+			#{warehouse_type },
+			1,
+			#{province_name},
+			#{city_name},
+			#{state_name},
+			#{street_name},
+			#{need_balance}
+		)
+	</insert>
+	<select id="getByCondition" parameterType="com.bt.lmis.model.Warehouse" resultType="com.bt.lmis.model.Warehouse">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+		    warehouse_code,
+			warehouse_name,
+			province,
+			city,
+			state,
+			street,
+			address,
+			contact,
+			phone,
+			warehouse_type, 
+			validity,
+			need_balance
+		from
+			tb_warehouse
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id != null">
+				AND id = #{id }
+			</if>
+			<if test="warehouse_code != null and warehouse_code != ''">
+				AND warehouse_code = #{warehouse_code }
+			</if>
+			<if test="warehouse_name != null and warehouse_name != ''">
+				AND warehouse_name = #{warehouse_name }
+			</if>
+			<if test="province != null">
+				AND province = #{province }
+			</if>
+			<if test="city != null">
+				AND city = #{city }
+			</if>
+			<if test="state != null">
+				AND state = #{state }
+			</if>
+			<if test="street != null">
+				AND street = #{street }
+			</if>
+			<if test="address != null and address != ''">
+				AND address = #{address }
+			</if>
+			<if test="contact != null and contact != ''">
+				AND contact = #{contact }
+			</if>
+			<if test="phone != null and phone != ''">
+				AND phone = #{phone }
+			</if>
+			<if test="warehouse_type != null and warehouse_type != ''">
+				AND warehouse_type = #{warehouse_type }
+			</if>
+			<if test="validity != null">
+				AND validity = #{validity }
+			</if>
+   		</trim>
+	</select> 
+	<update id="update" parameterType="com.bt.lmis.model.Warehouse">
+		update tb_warehouse
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="warehouse_code != null and warehouse_code != ''">
+				warehouse_code = #{warehouse_code },
+			</if>
+			<if test="warehouse_name != null and warehouse_name != ''">
+				warehouse_name = #{warehouse_name },
+			</if>
+			<if test="province != null">
+				province = #{province },
+			</if>
+			<if test="city != null or warehouse_code != null">
+				city = #{city },
+			</if>
+			<if test="state != null or warehouse_code != null">
+				state = #{state },
+			</if>
+			<if test="street != null or warehouse_code != null">
+				street = #{street },
+			</if>
+			<if test="(address != null and address != '') or warehouse_code != null">
+				address = #{address },
+			</if>
+			<if test="(contact != null and contact != '') or warehouse_code != null">
+				contact = #{contact },
+			</if>
+			<if test="(phone != null and phone != '') or warehouse_code != null">
+				phone = #{phone },
+			</if>
+			<if test="warehouse_type != null and warehouse_type != ''">
+				warehouse_type = #{warehouse_type },
+			</if>
+			<if test="validity != null">
+				validity = #{validity },
+			</if>
+			<if test="province_name != null and province_name != ''">
+				province_name = #{province_name },
+			</if>
+			<if test="city_name != null and city_name != ''" >
+				city_name = #{city_name },
+			</if>
+			<if test="state_name != null and state_name != ''">
+				state_name = #{state_name },
+			</if>
+			<if test="street_name != null and street_name != ''">
+				street_name = #{street_name },
+			</if>
+			<if test="need_balance != null">
+				need_balance = #{need_balance },
+			</if>
+		</trim>
+		where id = #{id }
+	</update>
+	<select id="countList" parameterType="com.bt.lmis.controller.form.WarehouseQueryParam" resultType="java.lang.Integer">
+		select
+			count(1) cnt
+		from 
+			tb_warehouse t
+		where 1 = 1
+		<if test="warehouse_name != null  and warehouse_name != '' ">
+	  		and warehouse_name like concat('%', #{warehouse_name}, '%')
+	  	</if>
+	</select>
+	<select id="listAllWarehouse" parameterType="com.bt.lmis.controller.form.WarehouseQueryParam" resultType="java.util.HashMap">
+		select
+			a.id,
+			a.create_time,
+			b.name as create_user,
+			a.update_time,
+			c.name as update_user,
+		    a.warehouse_code,
+			a.warehouse_name,
+			a.province_name,
+			a.city_name ,
+			a.state_name,
+			a.street_name,
+			a.address,
+			a.contact,
+			a.phone,
+			case a.warehouse_type when 0 then '自营' else '外包' end as warehouse_type, 
+			a.validity,
+			case a.need_balance when 0 then '否' else '是' end as need_balance
+		from
+			tb_warehouse  a left join s_employee b on a.create_user=b.username left join
+			s_employee c on a.update_user=c.username
+		where  1=1
+	  	<if test="warehouse_name != null  and warehouse_name != '' ">
+	  		and warehouse_name like concat('%', #{warehouse_name}, '%')
+	  	</if>
+	  	order by update_time desc
+	 	limit #{firstResult}, #{maxResult}
+	</select>
+	<select id="findAll" resultType="java.util.Map">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+		    warehouse_code,
+			warehouse_name,
+			province,
+			city,
+			state,
+			street,
+			address,
+			contact,
+			phone,
+			warehouse_type, 
+			validity
+		from
+			tb_warehouse
+		where
+			validity = 1
+	</select>
+	<select id="selectByWarehouseName" resultType="com.bt.lmis.model.Warehouse">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+		    warehouse_code,
+			warehouse_name,
+			province,
+			city,
+			state,
+			street,
+			address,
+			contact,
+			phone,
+			warehouse_type, 
+			validity
+		from
+			tb_warehouse
+		where  1=1 
+			warehouse_name=#{warehouseName}
+	</select>
+	<select id="selectByWarehouseCode" resultType="com.bt.lmis.model.Warehouse">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+		    warehouse_code,
+			warehouse_name,
+			province,
+			city,
+			state,
+			street,
+			address,
+			contact,
+			phone,
+			warehouse_type, 
+			validity
+		from
+			tb_warehouse
+		where
+			warehouse_code=#{warehouseCode}
+	</select>
+	<select id='download' parameterType="com.bt.lmis.controller.form.WarehouseQueryParam" resultType="java.util.HashMap">
+		select
+			a.id,
+			a.create_time,
+			b.name as create_user,
+			a.update_time,
+			c.name as update_user,
+		    a.warehouse_code,
+			a.warehouse_name,
+			a.province_name as province,
+			a.city_name as city,
+			a.state_name as state,
+			a.street_name as street,
+			a.address,
+			a.contact,
+			a.phone,
+			case a.warehouse_type when 0 then '自营' else '外包' end as warehouse_type, 
+			a.validity,
+			case when a.need_balance='0' then '否' else '是' end as need_balance  
+		from
+			tb_warehouse  a left join s_employee b on a.create_user=b.username left join
+			s_employee c on a.update_user=c.username
+		where  1=1
+		<if test="warehouse_name != null  and warehouse_name != '' ">
+		and	a.warehouse_name=#{warehouse_name}
+	  </if>
+	   and a.validity=1;
+	</select>
+	
+</mapper>   

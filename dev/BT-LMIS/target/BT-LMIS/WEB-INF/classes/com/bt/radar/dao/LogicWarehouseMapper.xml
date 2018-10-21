@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.LogicWarehouseMapper" >
+	<select id="selectRecords" parameterType="com.bt.radar.model.LogicWarehouse" resultType="com.bt.radar.model.LogicWarehouse">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			warehouse_code,
+			warehouse_name,
+			province,
+			city,
+			state,
+			street,
+			address,
+			contact,
+			phone,
+			warehouse_type,
+			validity
+		from
+			tb_warehouse
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id != null and id != ''">
+				AND id = #{id }
+			</if>
+			<if test="warehouse_code != null and warehouse_code != ''">
+				AND warehouse_code = #{warehouse_code }
+			</if>
+			<if test="warehouse_name != null and warehouse_name != ''">
+				AND warehouse_name = #{warehouse_name }
+			</if>
+			<if test="province != null and province != ''">
+				AND province = #{province }
+			</if>
+			<if test="city != null and city != ''">
+				AND city = #{city }
+			</if>
+			<if test="state != null and state != ''">
+				AND state = #{state }
+			</if>
+			<if test="street != null and street != ''">
+				AND street = #{street }
+			</if>
+			<if test="address != null and address != ''">
+				AND address = #{address }
+			</if>
+			<if test="contact != null and contact != ''">
+				AND contact = #{contact }
+			</if>
+			<if test="phone != null and phone != ''">
+				AND phone = #{phone }
+			</if>
+			<if test="warehouse_type != null and warehouse_type != ''">
+				AND warehouse_type = #{warehouse_type }
+			</if>
+			<if test="validity != null and validity != ''">
+				AND validity = #{validity }
+			</if>
+	   	</trim>
+	</select>
+</mapper>   

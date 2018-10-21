@@ -1,0 +1,2508 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.WorkOrderPlatformStoreMapper">
+	<select id="search" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			id,
+			DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+			create_by,
+			create_by_display,
+			create_by_group,
+			create_by_group_display,
+			update_time,
+			update_by,
+			wo_no,
+			wo_status,
+			CASE wo_status
+			WHEN 0 THEN '未处理'
+			WHEN 1 THEN '已处理'
+			WHEN 2 THEN '已完结'
+			WHEN 3 THEN '已取消'
+			ELSE '' END AS wo_status_display,
+			CASE follow_up_flag
+			WHEN 0 THEN '未跟进'
+			WHEN 1 THEN '跟进中'
+			ELSE '' END AS follow_up_flag,
+			CASE process_department
+			WHEN 0 THEN '物流中心'
+			WHEN 1 THEN '销售运营部'
+			ELSE '' END AS process_department,
+			CASE error_flag
+			WHEN 0 THEN '否'
+			WHEN 1 THEN '是'
+			ELSE '' END AS error_flag,
+			related_number,
+			problem_store_display,
+			expectation_process_time,
+			operation_system,
+			title,
+			wo_type_re_display,
+			owner_display,
+			owner_group_display,
+			submit_flag,
+			CASE submit_flag
+			WHEN 0 THEN '未提交'
+			WHEN 1 THEN '已提交'
+			ELSE '' END AS submit_flag_display,
+			wo_type,
+			wo_type_display,
+			error_type,
+			error_type_display,
+			issue_description,
+			CASE platform_number
+			WHEN 0 THEN ''
+			WHEN -99999 THEN ''
+			ELSE platform_number END AS platform_number,
+			CASE waybill
+			WHEN 0 THEN ''
+			WHEN -99999 THEN ''
+			ELSE waybill END AS waybill,
+			current_processor,
+			current_processor_display,
+			current_processor_group,
+			current_processor_group_display,
+			DATE_FORMAT(last_process_time, '%Y-%m-%d %H:%i:%s') AS last_process_time,
+			last_process_info,
+			CASE WHEN over_time IS NULL AND submit_flag = 0 THEN ''
+			WHEN over_time IS NULL AND submit_flag = 1 THEN ROUND((TO_SECONDS(now()) - TO_SECONDS(create_time))/60)
+			ELSE ROUND((TO_SECONDS(over_time) - TO_SECONDS(create_time))/60) END AS processing_time,
+			CASE accessory
+			WHEN '' THEN '无'
+			ELSE '有' END AS accessory,
+			version
+		FROM wo_store_master
+		<if test="param.tabNo == 3 or param.tabNo == 4">
+			<!-- 我已处理 -->
+			INNER JOIN (
+				SELECT DISTINCT wo_store_id
+				FROM wo_process_log
+				WHERE create_by = #{currentAccount.id }
+				AND processed = 1
+			) log ON wo_store_master.id = log.wo_store_id
+		</if>
+		<if test="param.tabNo == 7 or param.tabNo == 8">
+			<!-- 组已处理 -->
+			INNER JOIN (
+				SELECT DISTINCT wo_store_id
+				FROM wo_process_log
+				WHERE create_by_group in (${currentAccount.teamId })
+				AND processed = 1
+			) log ON wo_store_master.id = log.wo_store_id
+		</if>
+		<if test="param.tabNo == 12">
+			<!-- 组已处理 -->
+			INNER JOIN (
+				SELECT DISTINCT wo_store_id
+				FROM wo_process_log
+				WHERE create_by_group in (${currentAccount.teamId })
+			) log ON wo_store_master.id = log.wo_store_id
+		</if>
+		
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.tabNo == 1">
+				<!-- 我创建的 -->
+				AND create_by = #{currentAccount.id }
+			</if>
+			<if test="param.tabNo == 2">
+				<!-- 我未处理 -->
+				AND current_processor = #{currentAccount.id }
+				AND wo_status = 0
+			</if>
+			<if test="param.tabNo == 3">
+				<!-- 我已处理 -->
+				<!-- AND current_processor = #{currentAccount.id } -->
+				AND wo_status != 2
+			</if>
+			<if test="param.tabNo == 4">
+				<!-- 我已完结 -->
+				<!-- AND current_processor = #{currentAccount.id } -->
+				AND wo_status = 2
+			</if>
+			<if test="param.tabNo == 5">
+			    <!-- 组创建的 -->
+				AND create_by_group in (${currentAccount.teamId })
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 6">
+				<!-- 组未处理 -->
+				AND current_processor_group in (${currentAccount.teamId })
+				AND wo_status = 0
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 7">
+				<!-- 组已处理 -->
+				<!-- AND current_processor_group in (${currentAccount.teamId }) -->
+				AND wo_status != 2
+			</if>
+			<if test="param.tabNo == 8">
+				<!-- 组已完结 -->
+				<!-- AND current_processor_group in (${currentAccount.teamId }) -->
+				AND wo_status = 2
+			</if>
+			<if test="param.tabNo == 9">
+				<!-- 我跟进的 -->
+				AND current_processor = #{currentAccount.id }
+				AND follow_up_flag = 1
+			</if>
+			<if test="param.tabNo == 10">
+				<!-- 部门未分配 -->
+				AND (current_processor is null
+				OR current_processor = "")
+				AND (current_processor_group is null
+				OR current_processor_group = "")
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 11">
+				<!-- 部门所有的 -->
+				AND process_department = 1
+				AND submit_flag = 1
+			</if>
+			<if test="param.create_time != null and param.create_time != ''">
+				AND TO_DAYS(create_time) &gt;= TO_DAYS(#{param.create_time_start })
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{param.create_time_end })
+			</if>
+			<if test="param.create_by_group_display != null and param.create_by_group_display != ''">
+				AND create_by_group_display LIKE CONCAT("%", #{param.create_by_group_display }, "%")
+			</if>
+			<if test="param.create_by_display != null and param.create_by_display != ''">
+				AND create_by_display LIKE CONCAT("%", #{param.create_by_display }, "%")
+			</if>
+			<if test="param.wo_no != null and param.wo_no != ''">
+				AND wo_no LIKE CONCAT("%", #{param.wo_no }, "%")
+			</if>
+			<if test="param.wo_status_display != null and param.wo_status_display != ''">
+				AND wo_status = #{param.wo_status_display }
+			</if>
+			<if test="param.wo_type_display != null and param.wo_type_display != ''">
+				AND wo_type = #{param.wo_type_display }
+			</if>
+			<if test="param.error_type_display != null and param.error_type_display != ''">
+				AND error_type = #{param.error_type_display }
+			</if>
+			<if test="param.current_processor_group_display != null and param.current_processor_group_display != ''">
+				AND current_processor_group_display LIKE CONCAT("%", #{param.current_processor_group_display }, "%")
+			</if>
+			<if test="param.current_processor_display != null and param.current_processor_display != ''">
+				AND current_processor_display LIKE CONCAT("%", #{param.current_processor_display }, "%")
+			</if>
+			<if test="param.last_process_time != null and param.last_process_time != ''">
+				AND TO_DAYS(last_process_time) &gt;= TO_DAYS(#{param.last_process_time_start })
+				AND TO_DAYS(last_process_time) &lt;= TO_DAYS(#{param.last_process_time_end })
+			</if>
+			<if test="param.platform_number != null and param.platform_number != ''">
+				AND platform_number LIKE CONCAT("%", #{param.platform_number }, "%")
+			</if>
+			<if test="param.waybill != null and param.waybill != ''">
+				AND waybill LIKE CONCAT("%", #{param.waybill }, "%")
+			</if>
+			<if test="param.follow_up_flag != null and param.follow_up_flag != ''">
+				AND follow_up_flag = #{param.follow_up_flag }
+			</if>
+			<if test="param.owner_display != null and param.owner_display != ''">
+				AND owner_display LIKE CONCAT("%", #{param.owner_display }, "%")
+			</if>
+			<if test="param.owner_group_display != null and param.owner_group_display != ''">
+				AND owner_group_display LIKE CONCAT("%", #{param.owner_group_display }, "%")
+			</if>
+			<if test="param.process_department != null and param.process_department != ''">
+				AND process_department = #{param.process_department}
+			</if>
+			<if test="param.title != null and param.title != ''">
+				AND title LIKE CONCAT("%", #{param.title }, "%")
+			</if>
+			<if test="param.issue_description != null and param.issue_description != ''">
+				AND issue_description LIKE CONCAT("%", #{param.issue_description }, "%")
+			</if>
+			<if test="param.related_number != null and param.related_number != ''">
+				AND related_number LIKE CONCAT("%", #{param.related_number }, "%")
+			</if>
+			<if test="param.operation_system != null and param.operation_system != ''">
+				AND operation_system LIKE CONCAT("%", #{param.operation_system},"%")
+			</if>
+			<if test="param.problem_store_display != null and param.problem_store_display != ''">
+				AND problem_store LIKE CONCAT("%", #{param.problem_store_display }, "%")
+			</if>
+			<if test="param.isProcing != null and param.isProcing != '' and param.isProcing==1">
+				AND (wo_status=0 OR wo_status=1)
+			</if>
+			<if test="param.isProcing != null and param.isProcing != '' and param.isProcing==0">
+				AND (wo_status=2 OR wo_status=3)
+			</if>
+		</trim>
+		<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+		<if test="param.sortColumn == null or param.sortColumn == ''">
+			ORDER BY update_time DESC
+		</if>
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id="countSearch" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT COUNT(1)
+		FROM wo_store_master
+		<if test="param.tabNo == 3 or param.tabNo == 4">
+			<!-- 我已处理 -->
+			INNER JOIN (
+				SELECT DISTINCT wo_store_id
+				FROM wo_process_log
+				WHERE create_by = #{currentAccount.id }
+				AND processed = 1
+			) log ON wo_store_master.id = log.wo_store_id
+		</if>
+		<if test="param.tabNo == 7 or param.tabNo == 8 or param.tabNo == 12">
+			<!-- 组已处理 -->
+			INNER JOIN (
+				SELECT DISTINCT wo_store_id
+				FROM wo_process_log
+				WHERE create_by_group in (${currentAccount.teamId })
+				AND processed = 1
+			) log ON wo_store_master.id = log.wo_store_id
+		</if>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.tabNo == 1">
+				<!-- 我创建的 -->
+				AND create_by = #{currentAccount.id }
+			</if>
+			<if test="param.tabNo == 2">
+				<!-- 我未处理 -->
+				AND current_processor = #{currentAccount.id }
+				AND wo_status = 0
+			</if>
+			<if test="param.tabNo == 3">
+				<!-- 我已处理 -->
+				<!-- AND current_processor = #{currentAccount.id } -->
+				AND wo_status != 2
+			</if>
+			<if test="param.tabNo == 4">
+				<!-- 我已完结 -->
+				<!-- AND current_processor = #{currentAccount.id } -->
+				AND wo_status = 2
+			</if>
+			<if test="param.tabNo == 5">
+			    <!-- 组创建的 -->
+				AND create_by_group in (${currentAccount.teamId })
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 6">
+				<!-- 组未处理 -->
+				AND current_processor_group in (${currentAccount.teamId })
+				AND wo_status = 0
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 7">
+				<!-- 组已处理 -->
+				<!-- AND current_processor_group in (${currentAccount.teamId }) -->
+				AND wo_status != 2
+			</if>
+			<if test="param.tabNo == 8">
+				<!-- 组已完结 -->
+				<!-- AND current_processor_group in (${currentAccount.teamId }) -->
+				AND wo_status = 2
+			</if>
+			<if test="param.tabNo == 9">
+				<!-- 我跟进的 -->
+				AND current_processor = #{currentAccount.id }
+				AND follow_up_flag = 1
+			</if>
+			<if test="param.tabNo == 10">
+				<!-- 组未分配 -->
+				AND (current_processor is null or current_processor="")
+				AND (current_processor_group is null or current_processor_group="")
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 11">
+				AND process_department = 1
+				AND submit_flag = 1
+			</if>
+			<if test="param.create_time != null and param.create_time != ''">
+				AND TO_DAYS(create_time) &gt;= TO_DAYS(#{param.create_time_start })
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{param.create_time_end })
+			</if>
+			<if test="param.create_by_group_display != null and param.create_by_group_display != ''">
+				AND create_by_group_display LIKE CONCAT("%", #{param.create_by_group_display }, "%")
+			</if>
+			<if test="param.create_by_display != null and param.create_by_display != ''">
+				AND create_by_display LIKE CONCAT("%", #{param.create_by_display }, "%")
+			</if>
+			<if test="param.wo_no != null and param.wo_no != ''">
+				AND wo_no LIKE CONCAT("%", #{param.wo_no }, "%")
+			</if>
+			<if test="param.wo_status_display != null and param.wo_status_display != ''">
+				AND wo_status = #{param.wo_status_display }
+			</if>
+			<if test="param.wo_type_display != null and param.wo_type_display != ''">
+				AND wo_type = #{param.wo_type_display }
+			</if>
+			<if test="param.error_type_display != null and param.error_type_display != ''">
+				AND error_type = #{param.error_type_display }
+			</if>
+			<if test="param.current_processor_group_display != null and param.current_processor_group_display != ''">
+				AND current_processor_group_display LIKE CONCAT("%", #{param.current_processor_group_display }, "%")
+			</if>
+			<if test="param.current_processor_display != null and param.current_processor_display != ''">
+				AND current_processor_display LIKE CONCAT("%", #{param.current_processor_display }, "%")
+			</if>
+			<if test="param.last_process_time != null and param.last_process_time != ''">
+				AND TO_DAYS(last_process_time) &gt;= TO_DAYS(#{param.last_process_time_start })
+				AND TO_DAYS(last_process_time) &lt;= TO_DAYS(#{param.last_process_time_end })
+			</if>
+			<if test="param.platform_number != null and param.platform_number != ''">
+				AND platform_number LIKE CONCAT("%", #{param.platform_number }, "%")
+			</if>
+			<if test="param.waybill != null and param.waybill != ''">
+				AND waybill LIKE CONCAT("%", #{param.waybill }, "%")
+			</if>
+			<if test="param.follow_up_flag != null and param.follow_up_flag != ''">
+				AND follow_up_flag = #{param.follow_up_flag }
+			</if>
+			<if test="param.owner_display != null and param.owner_display != ''">
+				AND owner_display LIKE CONCAT("%", #{param.owner_display }, "%")
+			</if>
+			<if test="param.owner_group_display != null and param.owner_group_display != ''">
+				AND owner_group_display LIKE CONCAT("%", #{param.owner_group_display }, "%")
+			</if>
+			<if test="param.process_department != null and param.process_department != ''">
+				AND process_department = #{param.process_department}
+			</if>
+			<if test="param.title != null and param.title != ''">
+				AND title LIKE CONCAT("%", #{param.title }, "%")
+			</if>
+			<if test="param.related_number != null and param.related_number != ''">
+				AND related_number LIKE CONCAT("%", #{param.related_number }, "%")
+			</if>
+			<if test="param.issue_description != null and param.issue_description != ''">
+				AND issue_description LIKE CONCAT("%", #{param.issue_description }, "%")
+			</if>
+			<if test="param.operation_system != null and param.operation_system != ''">
+				AND operation_system LIKE CONCAT("%", #{param.operation_system},"%")
+			</if>
+			<if test="param.problem_store_display != null and param.problem_store_display != ''">
+				AND problem_store LIKE CONCAT("%", #{param.problem_store_display }, "%")
+			</if>
+			<if test="param.isProcing != null and param.isProcing != '' and param.isProcing==1">
+				AND (wo_status=0 OR wo_status=1)
+			</if>
+			<if test="param.isProcing != null and param.isProcing != '' and param.isProcing==0">
+				AND (wo_status=2 OR wo_status=3)
+			</if>
+		</trim>
+	</select>
+	<select id="listWoType" resultType="java.util.Map">
+		SELECT code, name FROM wk_type WHERE share_flag = '1'
+	</select>
+	<select id="countCurrentCreate" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT COUNT(1) FROM wo_store_master
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			create_by = #{currentAccount.id }
+			<if test="param.startDate != null and param.startDate != ''">
+				AND TO_DAYS(create_time) &gt;= TO_DAYS(#{param.startDate })
+			</if>
+			<if test="param.endDate != null and param.endDate != ''">
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{param.endDate })
+			</if>
+		</trim>
+	</select>
+	<select id="countcountCurrentProcessed" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT COUNT(1) FROM wo_store_master
+		INNER JOIN (
+			SELECT DISTINCT wo_store_id
+			FROM wo_process_log
+			WHERE create_by = #{currentAccount.id }
+			AND processed = 1
+			<if test="param.startDate != null and param.startDate != ''">
+				AND TO_DAYS(wo_process_log.create_time) &gt;= TO_DAYS(#{param.startDate })
+			</if>
+			<if test="param.endDate != null and param.endDate != ''">
+				AND TO_DAYS(wo_process_log.create_time) &lt;= TO_DAYS(#{param.endDate })
+			</if>
+		) log ON wo_store_master.id = log.wo_store_id
+	</select>
+	<select id="countCurrentOver" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT COUNT(1) FROM wo_store_master
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			wo_status = 2
+			AND current_processor = #{currentAccount.id }
+			<if test="param.startDate != null and param.startDate != ''">
+				AND TO_DAYS(over_time) &gt;= TO_DAYS(#{param.startDate })
+			</if>
+			<if test="param.endDate != null and param.endDate != ''">
+				AND TO_DAYS(over_time) &lt;= TO_DAYS(#{param.endDate })
+			</if>
+		</trim>
+	</select>
+	<select id="countCurrentUnprocessed" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT COUNT(1) FROM wo_store_master
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			wo_status = 0
+			AND current_processor = #{currentAccount.id }
+		</trim>
+	</select>
+	<select id="listCurrentCreate" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			DATE_FORMAT(create_time, '%Y-%m-%d') AS date,
+			COUNT(1) AS num
+		FROM wo_store_master
+		WHERE
+	 		create_by = #{currentAccount.id }
+			AND TO_DAYS(create_time) &gt;= TO_DAYS(date_sub(now(),interval 6 day))
+			AND TO_DAYS(create_time) &lt;= TO_DAYS(now())
+		 GROUP BY DATE_FORMAT(create_time, '%Y-%m-%d')
+	</select>
+	<select id="listCurrentOver" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			DATE_FORMAT(over_time, '%Y-%m-%d') AS date,
+			COUNT(1) AS num
+		FROM wo_store_master
+		WHERE
+		 	wo_status = 2
+			AND current_processor = #{currentAccount.id }
+			AND TO_DAYS(over_time) &gt;= TO_DAYS(date_sub(now(),interval 6 day))
+			AND TO_DAYS(over_time) &lt;= TO_DAYS(now())
+		 GROUP BY DATE_FORMAT(over_time, '%Y-%m-%d')
+	</select>
+	<select id="getWorkOrderStoreById" parameterType="String" resultType="com.bt.workOrder.model.WorkOrderStore">
+		SELECT
+			id,
+			create_time AS createTime,
+			create_by AS createBy,
+			create_by_display AS createByDisplay,
+			create_by_group AS createByGroup,
+			create_by_group_display AS createByGroupDisplay,
+			update_time AS updateTime,
+			update_by AS updateBy,
+			wo_no AS woNo,
+			wo_status AS woStatus,
+			submit_flag AS submitFlag,
+			follow_up_flag AS followUpFlag,
+			error_flag AS errorFlag,
+			process_department AS processDepartment,
+			wo_type AS woType,
+			wo_type_display AS woTypeDisplay,
+			wo_type_re AS woTypeRe,
+			wo_type_re_display AS woTypeReDisplay,
+			error_type AS errorType,
+			error_type_display AS errorTypeDisplay,
+			title,
+			problem_store AS problemStore,
+			problem_store_display AS problemStoreDisplay,
+			
+			CASE platform_number
+			WHEN 0 THEN ''
+			WHEN -99999 THEN ''
+			ELSE platform_number END AS platformNumber,
+			CASE waybill
+			WHEN 0 THEN ''
+			WHEN -99999 THEN ''
+			ELSE waybill END AS waybill,
+			
+			related_number AS relatedNumber,
+			expectation_process_time AS expectationProcessTime,
+			operation_system AS operationSystem,
+			issue_description AS issueDescription,
+			owner,
+			owner_display AS ownerDisplay,
+			owner_group AS ownerGroup,
+			owner_group_display AS ownerGroupDisplay,
+			current_processor AS currentProcessor,
+			current_processor_display AS currentProcessorDisplay,
+			current_processor_group AS currentProcessorGroup,
+			current_processor_group_display AS currentProcessorGroupDisplay,
+			last_process_time AS lastProcessTime,
+			last_process_info AS lastProcessInfo,
+			over_time AS overTime,
+			accessory,
+			related_wo_no AS relatedWoNo,
+			version
+		FROM wo_store_master
+		WHERE id = #{id }
+	</select>
+	
+	<select id="getWOSStoreById" parameterType="String" resultType="java.util.Map">
+		SELECT
+			w.id,
+			w.error_flag AS errorFlag,
+			w.wo_type AS woType,
+			w.version AS version,
+			w.problem_store AS storeCode,
+			w.current_processor AS current_processor,
+			w.current_processor_group AS current_processor_group
+		FROM wo_store_master w
+		WHERE w.id = #{woId }
+	</select>
+	
+	
+	<select id="getCurGroupById" parameterType="String" resultType="java.util.Map">
+	
+		SELECT
+			current_processor AS current_processor,
+			current_processor_group groupId,
+			current_processor_group_display groupName,
+			version
+		FROM
+			wo_store_master
+		WHERE
+			id = #{woId }
+	</select>
+	
+	
+	<select id="listOrderByOrderNo" parameterType="String" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.platform_no,
+			CONVERT (a.express_number USING utf8) AS waybill,
+			a.express_code,
+			tb_transport_vendor.transport_name AS logistics_provider,
+			a.shiptoname,
+			a.phone
+		FROM
+			(
+				SELECT
+					wo_waybill_master.id,
+					wo_waybill_master.delivery_order AS platform_no,
+					wo_waybill_master.express_number,
+					wo_waybill_master.transport_code AS express_code,
+					wo_waybill_master.shiptoname,
+					wo_waybill_master.phone
+				FROM
+					wo_waybill_master
+				WHERE
+					wo_waybill_master.delivery_order = #{orderNo }
+				OR wo_waybill_master.express_number = #{orderNo }
+			) a
+		LEFT JOIN tb_transport_vendor ON tb_transport_vendor.transport_code = a.express_code
+	</select>
+	<select id="getOrderById" parameterType="String" resultType="java.util.Map">
+		SELECT
+			wo_waybill_master.warehouse_code,
+			tb_warehouse.warehouse_name,
+			wo_waybill_master.store_code,
+			tb_store.store_name,
+			wo_waybill_master.transport_code AS express_code,
+			tb_transport_vendor.transport_name,
+			CONVERT(wo_waybill_master.express_number USING utf8) AS waybill,
+			wo_waybill_master.delivery_order AS platform_no,
+			wo_waybill_master.shiptoname,
+			wo_waybill_master.phone,
+			wo_waybill_master.detail_address AS address
+		FROM wo_waybill_master
+		LEFT JOIN tb_warehouse ON tb_warehouse.warehouse_code = wo_waybill_master.warehouse_code
+		LEFT JOIN tb_store ON tb_store.store_code = wo_waybill_master.store_code
+		LEFT JOIN tb_transport_vendor ON tb_transport_vendor.transport_code = wo_waybill_master.transport_code
+		WHERE wo_waybill_master.id = #{id }
+	</select>
+	<select id="listOrderDetailByWaybill" parameterType="String" resultType="java.util.Map">
+		SELECT
+			sku_number,
+			barcode,
+			item_name,
+			extend_pro,
+			qty
+		FROM er_expressinfo_detail
+		WHERE waybill = #{waybill }
+	</select>
+	<select id="listWoOrderByWoId" parameterType="String" resultType="java.util.Map">
+		SELECT
+			id,
+			platform_number AS platform_no,
+			waybill,
+			logistics_provider_name AS logistics_provider,
+			receipt AS shiptoname,
+			contact_method AS phone
+		FROM wo_order
+		WHERE wo_store_id = #{woId }
+	</select>
+	<select id="getWoOrderById" parameterType="String" resultType="java.util.Map">
+		SELECT
+			warehouse_name,
+			store_name,
+			logistics_provider_name AS transport_name,
+			waybill,
+			platform_number AS platform_no,
+			receipt AS shiptoname,
+			contact_method AS phone,
+			detailed_address AS address
+		FROM wo_order
+		WHERE id = #{id }
+	</select>
+	<select id="listOrderDetailByWoOrderId" parameterType="String" resultType="java.util.Map">
+		SELECT
+			id,
+			sku_number,
+			bar_code AS barcode,
+			sku_name AS item_name,
+			extended_attribute AS extend_pro,
+			sku_num AS qty
+		FROM wo_order_detail
+		WHERE wo_order_id = #{woOrederId }
+	</select>
+	<select id="getStoreById" parameterType="String" resultType="java.util.Map">
+		SELECT
+			id,
+			group_code AS groupCode,
+			group_name AS groupName,
+			group_type AS groupType,
+			if_Share AS ifShare,
+			error_flag AS errorFlag,
+			status
+		FROM tb_shop_group
+		WHERE id = #{id } and status=1
+	</select>
+	<select id="getWoTypeName" parameterType="String" resultType="String">
+		SELECT name FROM wk_type WHERE code = #{code }
+	</select>
+	<select id="getErrorTypeName" parameterType="String" resultType="String">
+		SELECT type_name FROM wo_error_type WHERE id = #{id }
+	</select>
+	<select id="listOrderById" resultType="java.util.Map" parameterType="Object">
+		SELECT
+			wo_waybill_master.warehouse_code,
+			tb_warehouse.warehouse_name,
+			wo_waybill_master.store_code,
+			tb_store.store_name,
+			wo_waybill_master.transport_code AS logistics_provider_code,
+			tb_transport_vendor.transport_name AS logistics_provider_name,
+			CONVERT(wo_waybill_master.express_number USING utf8) AS waybill,
+			wo_waybill_master.delivery_order AS platform_number,
+			wo_waybill_master.shiptoname AS receipt,
+			wo_waybill_master.phone AS contact_method,
+			wo_waybill_master.detail_address AS detailed_address
+		FROM wo_waybill_master
+		LEFT JOIN tb_warehouse ON tb_warehouse.warehouse_code = wo_waybill_master.warehouse_code
+		LEFT JOIN tb_store ON tb_store.store_code = wo_waybill_master.store_code
+		LEFT JOIN tb_transport_vendor ON tb_transport_vendor.transport_code = wo_waybill_master.transport_code
+		WHERE wo_waybill_master.id IN
+		<foreach collection= "array" item= "id" index= "index" open= "(" separator= "," close= ")" >  
+	       	#{id }
+	   	</foreach>
+</select>
+	<select id="getInitialLevel" parameterType="Object" resultType="java.util.Map">
+		SELECT
+			code, name
+		FROM
+			wk_level
+		WHERE
+			sort = (
+				SELECT
+					MIN(wk_level.sort)
+				FROM
+					(
+						SELECT
+							LEVEL
+						FROM
+							wk_order_type
+						WHERE
+							STATUS = 1
+						AND wk_type = #{wk_type }
+					) a
+				LEFT JOIN wk_level ON a. LEVEL = wk_level.CODE
+			)
+	</select>
+	<!--     转发流程  likun 20170826 -->
+	<update id="up_store_master" parameterType="java.util.Map">
+	   update wo_store_master
+	    set 
+	     wo_status='0',
+	     current_processor=#{current_processor},
+	     current_processor_display=#{current_processor_display}
+	     last_process_time=#{last_process_time},
+	     last_process_info=#{last_process_info},
+	     accessory=#{accessory},
+	     version=#{version}
+	    where id=#{wo_id}
+	</update>
+	<insert id="addWorkOrder" parameterType="com.bt.workOrder.model.WorkOrderStore">
+		INSERT INTO wo_store_master (
+			id,
+			create_time,
+			create_by,
+			create_by_display,
+			create_by_group,
+			create_by_group_display,
+			update_time,
+			update_by,
+			wo_no,
+			wo_status,
+			submit_flag,
+			<if test="woType != null and woType != ''">
+				wo_type,
+			</if>
+			<if test="woTypeDisplay != null and woTypeDisplay != ''">
+				wo_type_display,
+			</if>
+			<if test="errorType != null and errorType != ''">
+				error_type,
+			</if>
+			<if test="errorTypeDisplay != null and errorTypeDisplay != ''">
+				error_type_display,
+			</if>
+			<if test="issueDescription != null and issueDescription != ''">
+				issue_description,
+			</if>
+			<if test="platformNumber != null and platformNumber != ''">
+				platform_number,
+			</if>
+			<if test="waybill != null and waybill != ''">
+				waybill,
+			</if>
+			<if test="followUpFlag != null and followUpFlag != ''">
+				follow_up_flag,
+			</if>
+			<if test="errorFlag != null and errorFlag != ''">
+				error_flag,
+			</if>
+			<!-- <if test="processDepartment != null and processDepartment != ''"> -->
+				process_department,
+			<!-- </if> -->
+			<if test="relatedNumber != null and relatedNumber != ''">
+				related_number,
+			</if>
+			<if test="problemStore != null and problemStore != ''">
+				problem_store,
+			</if>
+			<if test="problemStoreDisplay != null and problemStoreDisplay != ''">
+				problem_store_display,
+			</if>
+			<if test="expectationProcessTime != null and expectationProcessTime != ''">
+				expectation_process_time,
+			</if>
+			<if test="operationSystem != null and operationSystem != ''">
+				operation_system,
+			</if>
+			<if test="title != null and title != ''">
+				title,
+			</if>
+			<if test="woTypeRe != null and woTypeRe != ''">
+				wo_type_re,
+			</if>
+			<if test="woTypeReDisplay != null and woTypeReDisplay != ''">
+				wo_type_re_display,
+			</if>
+			<if test="submitFlag == 1">
+				current_processor,
+				current_processor_display,
+				current_processor_group,
+				current_processor_group_display,
+				last_process_time,
+				owner,
+				owner_display,
+				owner_group,
+				owner_group_display,
+			</if>
+			accessory,
+			related_wo_no,
+			split_to
+		) VALUES (
+			#{id },
+			now(),
+			#{createBy },
+			#{createByDisplay },
+			#{createByGroup },
+			#{createByGroupDisplay },
+			now(),
+			#{createBy },
+			#{woNo },
+			#{woStatus },
+			#{submitFlag },
+			<if test="woType != null and woType != ''">
+				#{woType },
+			</if>
+			<if test="woTypeDisplay != null and woTypeDisplay != ''">
+				#{woTypeDisplay },
+			</if>
+			<if test="errorType != null and errorType != ''">
+				#{errorType },
+			</if>
+			<if test="errorTypeDisplay != null and errorTypeDisplay != ''">
+				#{errorTypeDisplay },
+			</if>
+			<if test="issueDescription != null and issueDescription != ''">
+				#{issueDescription },
+			</if>
+			<if test="platformNumber != null and platformNumber != ''">
+				#{platformNumber },
+			</if>
+			<if test="waybill != null and waybill != ''">
+				#{waybill },
+			</if>
+			<if test="followUpFlag != null and followUpFlag != ''">
+				#{followUpFlag },
+			</if>
+			<if test="errorFlag != null and errorFlag != ''">
+				#{errorFlag},
+			</if>
+			<!-- <if test="processDepartment != null and processDepartment != ''"> -->
+				#{processDepartment},
+			<!-- </if> -->
+			<if test="relatedNumber != null and relatedNumber != ''">
+				#{relatedNumber},
+			</if>
+			<if test="problemStore != null and problemStore != ''">
+				#{problemStore},
+			</if>
+			<if test="problemStoreDisplay != null and problemStoreDisplay != ''">
+				#{problemStoreDisplay},
+			</if>
+			<if test="expectationProcessTime != null and expectationProcessTime != ''">
+				#{expectationProcessTime},
+			</if>
+			<if test="operationSystem != null and operationSystem != ''">
+				#{operationSystem},
+			</if>
+			<if test="title != null and title != ''">
+				#{title},
+			</if>
+			<if test="woTypeRe != null and woTypeRe != ''">
+				#{woTypeRe},
+			</if>
+			<if test="woTypeReDisplay != null and woTypeReDisplay != ''">
+				#{woTypeReDisplay},
+			</if>
+			<if test="submitFlag == 1">
+				#{currentProcessor },
+				#{currentProcessorDisplay },
+				#{currentProcessorGroup },
+				#{currentProcessorGroupDisplay },
+				#{lastProcessTime },
+				#{owner},
+				#{ownerDisplay},
+				#{ownerGroup},
+				#{ownerGroupDisplay},
+			</if>
+			#{accessory },
+			#{relatedWoNo },
+			#{splitTo}
+		)
+	</insert>
+	<insert id="addWorkOrderProcessLog" parameterType="com.bt.workOrder.model.WoProcessLog">
+		INSERT INTO wo_process_log (
+			id,
+			create_time,
+			create_by,
+			create_by_display,
+			create_by_group,
+			create_by_group_display,
+			update_time,
+			update_by,
+			wo_store_id,
+			wo_location_node,
+			action,
+			log,
+			processed,
+			sort,
+			recieve_by,
+		   recieve_by_display,
+		   recieve_by_group,
+		   recieve_by_group_display
+		) VALUES (
+			#{id},
+			now(),
+			#{createBy },
+			#{createByDisplay },
+			#{createByGroup },
+			#{createByGroupDisplay },
+			now(),
+			#{createBy },
+			#{woStoreId },
+			#{woLocationNode },
+			#{action },
+			#{log },
+			#{processed },
+			#{sort },
+			#{recieveBy},
+		  #{recieveByDisplay},
+		  #{recieveByGroup},
+		  #{recieveByGroupDisplay}
+		)
+	</insert>
+	<insert id="addWoOrder" parameterType="java.util.List">
+		INSERT INTO wo_order (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			wo_store_id,
+			warehouse_code,
+			warehouse_name,
+			store_code,
+			store_name,
+			logistics_provider_code,
+			logistics_provider_name,
+			waybill,
+			platform_number,
+			receipt,
+			contact_method,
+			detailed_address
+		) VALUES
+		<foreach collection="list" item="order" index="index" separator=",">
+			(
+			#{order.id },
+			now(),
+			#{order.create_by },
+			now(),
+			#{order.create_by },
+			#{order.wo_store_id },
+			#{order.warehouse_code },
+			#{order.warehouse_name },
+			#{order.store_code },
+			#{order.store_name },
+			#{order.logistics_provider_code },
+			#{order.logistics_provider_name },
+			#{order.waybill },
+			#{order.platform_number },
+			#{order.receipt },
+			#{order.contact_method },
+			#{order.detailed_address }
+			)
+		</foreach>
+	</insert>
+	<insert id="addWoOrderDetail" parameterType="java.util.List">
+		INSERT INTO wo_order_detail (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			wo_store_id,
+			wo_order_id,
+			sku_number,
+			bar_code,
+			sku_name,
+			extended_attribute,
+			sku_num
+		) VALUES
+		<foreach collection="list" item="orderDetail" index="index" separator=",">
+			(
+			#{orderDetail.id },
+			now(),
+			#{orderDetail.create_by },
+			now(),
+			#{orderDetail.create_by },
+			#{orderDetail.wo_store_id },
+			#{orderDetail.wo_order_id },
+			#{orderDetail.sku_number },
+			#{orderDetail.barcode },
+			#{orderDetail.item_name },
+			#{orderDetail.extend_pro },
+			#{orderDetail.qty }
+			)
+		</foreach>
+	</insert>
+	<delete id="delTempWorkOrder" parameterType="String">
+		DELETE FROM wo_store_master WHERE id = #{woId }
+	</delete>
+	<delete id="delWoOrderByWoId" parameterType="String">
+		DELETE FROM wo_order WHERE wo_store_id = #{woId }
+	</delete>
+	<delete id="delWoOrderDetailByWoId" parameterType="String">
+		DELETE FROM wo_order_detail WHERE wo_store_id = #{woId }
+	</delete>
+	<update id="updateWorkOrder" parameterType="com.bt.workOrder.model.WorkOrderStore">
+		UPDATE wo_store_master
+		SET update_time = now(),
+		update_by = #{updateBy },
+		<if test="woStatus == 1">
+			wo_status = #{woStatus },
+		</if>
+		<if test="submitFlag == 1">
+			submit_flag = #{submitFlag  },
+		</if>
+		<if test="followUpFlag != null">
+			follow_up_flag = #{followUpFlag  },
+		</if>
+		<if test="errorFlag == 1">
+			error_flag = #{errorFlag  },
+		</if>
+		process_department = #{processDepartment },
+		wo_type = #{woType },
+		wo_type_display = #{woTypeDisplay },
+		<if test="errorType != null and errorType != ''">
+			error_type = #{errorType },
+		</if>
+		<if test="errorTypeDisplay != null and errorTypeDisplay != ''">
+			error_type_display = #{errorTypeDisplay },
+		</if>
+		<if test="title != null and title != ''">
+			title = #{title },
+		</if>
+		<if test="problemStore != null and problemStore != ''">
+			problem_store = #{problemStore },
+		</if>
+		<if test="problemStoreDisplay != null and problemStoreDisplay != ''">
+			problem_store_display = #{problemStoreDisplay },
+		</if>
+		<if test="platformNumber != null and platformNumber != ''">
+			platform_number = #{platformNumber },
+		</if>
+		<if test="waybill != null and waybill != ''">
+			waybill = #{waybill },
+		</if>
+		<if test="relatedNumber != null and relatedNumber != ''">
+			related_number = #{relatedNumber },
+		</if>
+		<if test="expectationProcessTime != null and expectationProcessTime != ''">
+			expectation_process_time = #{expectationProcessTime },
+		</if>
+		<if test="operationSystem != null and operationSystem != ''">
+			operation_system = #{operationSystem },
+		</if>
+		<if test="relatedWoNo != null">
+			related_wo_no = #{relatedWoNo },
+		</if>
+		issue_description = #{issueDescription },
+		<if test="submitFlag == 1">
+			owner = #{owner},
+			owner_display = #{ownerDisplay},
+			owner_group = #{ownerGroup},
+			owner_group_display = #{ownerGroupDisplay},
+			current_processor = #{currentProcessor },
+			current_processor_display = #{currentProcessorDisplay },
+			current_processor_group = #{currentProcessorGroup },
+			current_processor_group_display = #{currentProcessorGroupDisplay },
+			last_process_time = #{lastProcessTime },
+		</if>
+		accessory = #{accessory },
+		version = version + 1
+		WHERE id = #{id } AND version = #{version }
+	</update>
+	<update id="updateWoStoreMaster" parameterType="com.bt.workOrder.model.WorkOrderStore" >
+		update wo_store_master
+		<set>
+		  <if test="createTime != null" >
+		    create_time = #{createTime,jdbcType=TIMESTAMP},
+		  </if>
+		  <if test="createBy != null" >
+		    create_by = #{createBy,jdbcType=VARCHAR},
+		  </if>
+		  <if test="createByDisplay != null" >
+		    create_by_display = #{createByDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="createByGroup != null" >
+		    create_by_group = #{createByGroup,jdbcType=INTEGER},
+		  </if>
+		  <if test="createByGroupDisplay != null" >
+		    create_by_group_display = #{createByGroupDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="updateTime != null" >
+		    update_time = #{updateTime,jdbcType=TIMESTAMP},
+		  </if>
+		  <if test="updateBy != null" >
+		    update_by = #{updateBy,jdbcType=VARCHAR},
+		  </if>
+		  <if test="woNo != null" >
+		    wo_no = #{woNo,jdbcType=VARCHAR},
+		  </if>
+		  <if test="woStatus != null" >
+		    wo_status = #{woStatus,jdbcType=INTEGER},
+		  </if>
+		  <if test="submitFlag != null" >
+		    submit_flag = #{submitFlag,jdbcType=BIT},
+		  </if>
+		  <if test="woType != null" >
+		    wo_type = #{woType,jdbcType=VARCHAR},
+		  </if>
+		  <if test="woTypeDisplay != null" >
+		    wo_type_display = #{woTypeDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="errorType != null" >
+		    error_type = #{errorType,jdbcType=INTEGER},
+		  </if>
+		  <if test="errorTypeDisplay != null" >
+		    error_type_display = #{errorTypeDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="platformNumber != null" >
+		    platform_number = #{platformNumber,jdbcType=VARCHAR},
+		  </if>
+		  <if test="waybill != null" >
+		    waybill = #{waybill,jdbcType=VARCHAR},
+		  </if>
+		  <if test="owner != null" >
+		    owner = #{owner,jdbcType=VARCHAR},
+		  </if>
+		  <if test="ownerDisplay != null" >
+		    owner_display = #{ownerDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="ownerGroup != null" >
+		    owner_group = #{ownerGroup,jdbcType=VARCHAR},
+		  </if>
+		  <if test="ownerGroupDisplay != null" >
+		    owner_group_display = #{ownerGroupDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="currentProcessor != null" >
+		  	<if test="currentProcessor ==''" >
+		    	current_processor = NULL,
+		    </if>
+		    <if test="currentProcessor !=''" >
+		    	current_processor = #{currentProcessor,jdbcType=VARCHAR},
+		    </if>
+		    
+		  </if>
+		  <if test="currentProcessorDisplay != null" >
+		  
+		  	<if test="currentProcessorDisplay ==''" >
+		    	current_processor_display = NULL,
+		    </if>
+		    <if test="currentProcessorDisplay !=''" >
+		    	current_processor_display = #{currentProcessorDisplay,jdbcType=VARCHAR},
+		    </if>
+		  </if>
+		  <if test="currentProcessorGroup != null" >
+		  	<if test="currentProcessorGroup ==''" >
+		    	current_processor_group = NULL,
+		    </if>
+		    <if test="currentProcessorGroup !=''" >
+		    	current_processor_group = #{currentProcessorGroup,jdbcType=INTEGER},
+		    </if>
+		  </if>
+		  <if test="currentProcessorGroupDisplay != null" >
+		  	<if test="currentProcessorGroupDisplay ==''" >
+		    	current_processor_group_display = NULL,
+		    </if>
+		    <if test="currentProcessorGroupDisplay !=''" >
+		    	current_processor_group_display = #{currentProcessorGroupDisplay,jdbcType=VARCHAR},
+		    </if>
+		  </if>
+		  <if test="lastProcessTime != null" >
+		    last_process_time = #{lastProcessTime,jdbcType=TIMESTAMP},
+		  </if>
+		  <if test="overTime != null" >
+		    over_time = #{overTime,jdbcType=TIMESTAMP},
+		  </if>
+		  <if test="issueDescription != null" >
+		    issue_description = #{issueDescription,jdbcType=LONGVARCHAR},
+		  </if>
+		  <if test="lastProcessInfo != null" >
+		    last_process_info = #{lastProcessInfo,jdbcType=LONGVARCHAR},
+		  </if>
+		  <if test="accessory != null" >
+		    accessory = #{accessory,jdbcType=LONGVARCHAR},
+		  </if>
+		  <if test="followUpFlag != null" >
+		    follow_up_flag = #{followUpFlag,jdbcType=INTEGER},
+		  </if>
+		  <if test="errorFlag != null" >
+		    error_flag = #{errorFlag,jdbcType=INTEGER},
+		  </if>
+		  <if test="processDepartment != null" >
+		    process_department = #{processDepartment,jdbcType=INTEGER},
+		  </if>
+		  <if test="relatedNumber != null" >
+		    related_number = #{relatedNumber,jdbcType=VARCHAR},
+		  </if>
+		  <if test="problemStore != null" >
+		    problem_store = #{problemStore,jdbcType=VARCHAR},
+		  </if>
+		  <if test="problemStoreDisplay != null" >
+		    problem_store_display = #{problemStoreDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="expectationProcessTime != null" >
+		    expectation_process_time = #{expectationProcessTime,jdbcType=TIMESTAMP},
+		  </if>
+		  <if test="operationSystem != null" >
+		    operation_system = #{operationSystem,jdbcType=VARCHAR},
+		  </if>
+		  <if test="title != null" >
+		    title = #{title,jdbcType=VARCHAR},
+		  </if>
+		  <if test="woTypeRe != null" >
+		    wo_type_re = #{woTypeRe,jdbcType=VARCHAR},
+		  </if>
+		  <if test="woTypeReDisplay != null" >
+		    wo_type_re_display = #{woTypeReDisplay,jdbcType=VARCHAR},
+		  </if>
+		  version = version + 1
+		</set>
+		where id = #{id,jdbcType=VARCHAR} and version = #{version}
+	</update>
+	<update id="updateWo" parameterType="com.bt.workOrder.model.WorkOrderStore" >
+		update wo_store_master
+		<set>
+		  <if test="updateTime != null" >
+		    update_time = #{updateTime,jdbcType=TIMESTAMP},
+		  </if>
+		  <if test="updateBy != null" >
+		    update_by = #{updateBy,jdbcType=VARCHAR},
+		  </if>
+		  <if test="woStatus != null" >
+		    wo_status = #{woStatus,jdbcType=INTEGER},
+		  </if>
+		  <if test="woType != null" >
+		    wo_type = #{woType,jdbcType=VARCHAR},
+		  </if>
+		  <if test="woTypeDisplay != null" >
+		    wo_type_display = #{woTypeDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="errorType != null" >
+		    error_type = #{errorType,jdbcType=INTEGER},
+		  </if>
+		  <if test="errorTypeDisplay != null" >
+		    error_type_display = #{errorTypeDisplay,jdbcType=VARCHAR},
+		  </if>
+		  <if test="currentProcessor != null" >
+		  	<if test="currentProcessor ==''" >
+		    	current_processor = NULL,
+		    </if>
+		    <if test="currentProcessor !=''" >
+		    	current_processor = #{currentProcessor,jdbcType=VARCHAR},
+		    </if>
+		  </if>
+		  <if test="currentProcessorDisplay != null" >
+		  	<if test="currentProcessorDisplay ==''" >
+		    	current_processor_display = NULL,
+		    </if>
+		    <if test="currentProcessorDisplay !=''" >
+		    	current_processor_display = #{currentProcessorDisplay,jdbcType=VARCHAR},
+		    </if>
+		  </if>
+		  <if test="currentProcessorGroup != null" >
+		  	<if test="currentProcessorGroup ==''" >
+		    	current_processor_group = NULL,
+		    </if>
+		    <if test="currentProcessorGroup !=''" >
+		    	current_processor_group = #{currentProcessorGroup,jdbcType=INTEGER},
+		    </if>
+		  </if>
+		  <if test="currentProcessorGroupDisplay != null" >
+		  	<if test="currentProcessorGroupDisplay ==''" >
+		    	current_processor_group_display = NULL,
+		    </if>
+		    <if test="currentProcessorGroupDisplay !=''" >
+		    	current_processor_group_display = #{currentProcessorGroupDisplay,jdbcType=VARCHAR},
+		    </if>
+		  </if>
+		  <if test="lastProcessTime != null" >
+		    last_process_time = #{lastProcessTime,jdbcType=TIMESTAMP},
+		  </if>
+		  <if test="lastProcessInfo != null" >
+		    last_process_info = #{lastProcessInfo,jdbcType=LONGVARCHAR},
+		  </if>
+		  <if test="processDepartment != null" >
+		    process_department = #{processDepartment,jdbcType=INTEGER},
+		  </if>
+		  version = version + 1
+		</set>
+		where id = #{id,jdbcType=VARCHAR} and version = #{version}
+	</update>
+	<update id="updateWoStoreMasterSplitTo" parameterType="com.bt.workOrder.model.WorkOrderStore" >
+		update wo_store_master
+		set
+		version = version + 1,
+		split_to = #{splitTo}
+		where id = #{id,jdbcType=VARCHAR} and version = #{version}
+	</update>
+	
+	<update id="updateWSMCurrent" parameterType="com.bt.workOrder.model.WorkOrderStore" >
+		update wo_store_master
+		<set>
+			<if test="updateTime != null" >
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null" >
+				update_by = #{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="followUpFlag != null" >
+				follow_up_flag = #{followUpFlag,jdbcType=INTEGER},
+			</if>
+			<if test="errorFlag == 1">
+				error_flag = #{errorFlag  },
+			</if>
+			<if test="woStatus != null" >
+				wo_status = #{woStatus,jdbcType=INTEGER},
+			</if>
+			<if test="lastProcessInfo != null" >
+				last_process_info = #{lastProcessInfo,jdbcType=LONGVARCHAR},
+			</if>
+			current_processor = #{currentProcessor,jdbcType=VARCHAR},
+			current_processor_display = #{currentProcessorDisplay,jdbcType=VARCHAR},
+			current_processor_group = #{currentProcessorGroup,jdbcType=INTEGER},
+			current_processor_group_display = #{currentProcessorGroupDisplay,jdbcType=VARCHAR},
+			<if test="lastProcessTime != null" >
+			  last_process_time = #{lastProcessTime,jdbcType=TIMESTAMP},
+			</if>
+			version = version + 1
+		</set>
+		where id = #{id,jdbcType=VARCHAR} and version = #{version}
+	</update>
+	
+	<insert id="addStoreProcessLog" parameterType="com.bt.workOrder.model.WoProcessLog" >
+		INSERT INTO wo_process_log
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				id,
+		  	</if>
+		  	<if test="createTime != null" >
+		    	create_time,
+		  	</if>
+		  	<if test="createBy != null" >
+		    	create_by,
+		  	</if>
+		  	<if test="createByDisplay != null" >
+		    	create_by_display,
+		  	</if>
+			<if test="createByGroup != null" >
+			  	create_by_group,
+			</if>
+			<if test="createByGroupDisplay != null" >
+			  	create_by_group_display,
+			</if>
+			<if test="updateTime != null" >
+			  	update_time,
+			</if>
+			<if test="updateBy != null" >
+			  	update_by,
+			</if>
+			<if test="woStoreId != null" >
+			 	wo_store_id,
+			</if>
+			<if test="woLocationNode != null" >
+			  	wo_location_node,
+			</if>
+			<if test="action != null" >
+			  	action,
+			</if>
+			<if test="processed != null" >
+			  	processed,
+			</if>
+			<if test="sort != null" >
+			  	sort,
+			</if>
+			<if test="log != null" >
+			  	log,
+			</if>
+			<if test="recieveBy != null" >
+			  	recieve_by,
+			</if>
+			<if test="recieveByDisplay != null" >
+			  	recieve_by_display,
+			</if>
+			<if test="recieveByGroup != null" >
+			  	recieve_by_group,
+			</if>
+			<if test="recieveByGroupDisplay != null" >
+			  	recieve_by_group_display,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+		    	#{id,jdbcType=VARCHAR},
+		  	</if>
+			<if test="createTime != null" >
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null" >
+			  	#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="createByDisplay != null" >
+			  	#{createByDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="createByGroup != null" >
+			  	#{createByGroup,jdbcType=INTEGER},
+			</if>
+			<if test="createByGroupDisplay != null" >
+			  	#{createByGroupDisplay,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null" >
+			  	#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null" >
+			  	#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="woStoreId != null" >
+			  	#{woStoreId,jdbcType=VARCHAR},
+			</if>
+			<if test="woLocationNode != null" >
+			  	#{woLocationNode,jdbcType=VARCHAR},
+			</if>
+			<if test="action != null" >
+			  	#{action,jdbcType=VARCHAR},
+			</if>
+			<if test="processed != null" >
+			  	#{processed,jdbcType=BIT},
+			</if>
+			<if test="sort != null" >
+			  	#{sort,jdbcType=BIGINT},
+			</if>
+			<if test="log != null" >
+			  	#{log,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="recieveBy != null" >
+			  	#{recieveBy},
+			</if>
+			<if test="recieveByDisplay != null" >
+			  	#{recieveByDisplay},
+			</if>
+			<if test="recieveByGroup != null" >
+			  	#{recieveByGroup},
+			</if>
+			<if test="recieveByGroupDisplay != null" >
+			  	#{recieveByGroupDisplay},
+			</if>
+		</trim>
+	</insert>
+	<insert id="addProcessRecord" parameterType="com.bt.workOrder.model.WoProcessRecord" >
+		INSERT INTO wo_process_record
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				id,
+			</if>
+			<if test="createTime != null" >
+			  	create_time,
+			</if>
+			<if test="createBy != null" >
+			  	create_by,
+			</if>
+			<if test="updateTime != null" >
+			  	update_time,
+			</if>
+			<if test="updateBy != null" >
+			  	update_by,
+			</if>
+			<if test="woStoreLogId != null" >
+			  	wo_store_log_id,
+			</if>
+			<if test="processRemark != null" >
+			  	process_remark,
+			</if>
+			<if test="accessory != null" >
+			  	accessory,
+			</if>
+			<if test="woTypeRe != null" >
+			  	wo_type_re,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="id != null" >
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null" >
+			  	#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createBy != null" >
+			  	#{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null" >
+			  	#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateBy != null" >
+			  	#{updateBy,jdbcType=VARCHAR},
+			</if>
+			<if test="woStoreLogId != null" >
+			  	#{woStoreLogId,jdbcType=VARCHAR},
+			</if>
+			<if test="processRemark != null" >
+			  	#{processRemark,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="accessory != null" >
+			  	#{accessory,jdbcType=LONGVARCHAR},
+			</if>
+			<if test="woTypeRe != null" >
+			  	#{woTypeRe,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="getWorkOrdersByWoNo" parameterType="String" resultType="com.bt.workOrder.model.WorkOrder">
+		SELECT
+			id,
+			create_time AS createTime,
+			create_by AS createBy,
+			update_time AS updateTime,
+			update_by AS updateBy,
+			wo_alloc_status AS woAllocStatus,
+			wo_process_status AS woProcessStatus,
+			wo_source AS woSource,
+			wo_no AS woNo,
+			wo_type AS woType,
+			wo_level AS woLevel,
+			exception_type AS exceptionType,
+			carrier AS carriers,
+			express_number AS expressNumber,
+			warehouse AS warehouses,
+			transport_time AS transportTime,
+			store AS stores,
+			platform_number AS platformNumber,
+			related_number AS relatedNumber,
+			order_amount AS orderAmount,
+			logistics_status AS logisticsStatus,
+			warning_type AS warningType,
+			warning_level AS warningLevel,
+			recipient AS recipient,
+			phone AS phone,
+			address AS address,
+			query_person AS queryPerson,
+			allocated_by AS allocatedBy,
+			allocated_by_display AS allocatedByDisplay,
+			processor AS processor,
+			processor_display AS processorDisplay,
+			process_content AS processContent,
+			pause_reason AS pauseReason,
+			level_alter_reason AS levelAlterReason,
+			estimated_time_of_completion AS estimatedTimeOfCompletion,
+			standard_manhours AS standardManhours,
+			process_start_point AS processStartPoint,
+			actual_manhours AS actualManhours,
+			cal_date,
+			watched
+		FROM wo_master
+		WHERE wo_no = #{woNo}
+	</select>
+	<update id="addOperationFileName" parameterType="com.bt.workOrder.model.Operation">
+		UPDATE wo_operation_detail
+		SET
+			update_by= #{update_by },
+			update_time= now(),
+			column_value = CONCAT(column_value,#{column_value})
+		WHERE wo_id= #{wo_id } AND wo_type= #{wo_type } AND column_code= #{column_code }
+	</update>
+	<update id="updateWorkOrderLd" parameterType="com.bt.workOrder.model.WorkOrder">
+		update wo_master set
+		update_time = now(),
+		update_by = #{updateBy},
+		wo_process_status = #{woProcessStatus},
+		wo_process_status_display = #{woProcessStatusDisplay},
+		process_start_point = #{processStartPoint},
+		actual_manhours = #{actualManhours},
+		terminal_time = #{terminalTime}
+		where id = #{id}
+	</update>
+  	<insert id="addWorkOrderEvent" parameterType="com.bt.workOrder.model.WorkOrderEventMonitor">
+		INSERT INTO wo_event_monitor(
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			wo_id,
+			sort,
+			event,
+			event_status,
+			event_description,
+			outManhours,
+			remark
+		) VALUES (
+			#{id },
+			now(),
+			#{create_by },
+			now(),
+			#{create_by },
+			#{wo_id },
+			#{sort },
+			#{event },
+			#{event_status },
+			#{event_description },
+			#{outManhours },
+			#{remark }
+		);
+	</insert>
+	<select id="getEmpNameById"  parameterType="Integer" resultType="String">
+		SELECT name FROM s_employee where id = #{id}
+	</select>
+	<select id="getEmailById"  parameterType="String" resultType="String">
+		SELECT email FROM s_employee where id = #{id} and is_wo_email=1
+	</select>
+	<select id="listErrorTypeByWoType" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT id, type_name
+		FROM wo_error_type
+		WHERE wk_type = #{param.woType }
+		<if test="param.status != null and param.status != ''">
+			AND status = #{param.status }
+		</if>
+	</select>
+	<select id="listWoTypeByDepartment" parameterType="int" resultType="java.util.Map">
+		SELECT code,name FROM `wk_type`
+		where flag = "1"
+		and share_flag = "1"
+		<if test="so_flag != null and so_flag!=''">
+			AND so_flag = #{so_flag}
+		</if>
+	</select>
+	<select id="listOrderByPlatformNumberOrWaybill" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			wo_waybill_master.warehouse_code,
+			tb_warehouse.warehouse_name,
+			wo_waybill_master.store_code,
+			tb_store.store_name,
+			wo_waybill_master.transport_code AS logistics_provider_code,
+			tb_transport_vendor.transport_name AS logistics_provider_name,
+			CONVERT(wo_waybill_master.express_number USING utf8) AS waybill,
+			wo_waybill_master.delivery_order AS platform_number,
+			wo_waybill_master.shiptoname AS receipt,
+			wo_waybill_master.phone AS contact_method,
+			wo_waybill_master.detail_address AS detailed_address
+		FROM wo_waybill_master
+		LEFT JOIN tb_warehouse ON tb_warehouse.warehouse_code = wo_waybill_master.warehouse_code
+		LEFT JOIN tb_store ON tb_store.store_code = wo_waybill_master.store_code
+		LEFT JOIN tb_transport_vendor ON tb_transport_vendor.transport_code = wo_waybill_master.transport_code
+		WHERE wo_waybill_master.delivery_order = #{param.platformNumber }
+		<if test="param.waybill != null and param.waybill != ''">
+			AND wo_waybill_master.express_number = #{param.waybill }
+		</if>
+	</select>
+	<select id="getEnclosureByWKID" parameterType="String" resultType="java.util.Map">
+		SELECT
+			wo_process_log.log as log,
+			wo_process_record.process_remark  as process_remark,
+			wo_process_record.accessory as accessory
+		FROM
+			wo_process_log
+		LEFT JOIN wo_process_record ON wo_process_record.wo_store_log_id = wo_process_log.id
+		WHERE wo_process_log.wo_store_id = #{id}
+		ORDER BY wo_process_log.sort DESC
+	</select>
+	<select id="exportWorkOrder" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			id,
+			DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+			create_by,
+			create_by_display,
+			create_by_group,
+			create_by_group_display,
+			update_time,
+			update_by,
+			wo_no,
+			wo_status,
+			CASE wo_status
+			WHEN 0 THEN '未处理'
+			WHEN 1 THEN '已处理'
+			WHEN 2 THEN '已完结'
+			WHEN 2 THEN '已取消'
+			ELSE '' END AS wo_status_display,
+			submit_flag,
+			CASE submit_flag
+			WHEN 0 THEN '未提交'
+			WHEN 1 THEN '已提交'
+			ELSE '' END AS submit_flag_display,
+			CASE follow_up_flag
+			WHEN 0 THEN '未跟进'
+			WHEN 1 THEN '跟进中'
+			ELSE '' END AS follow_up_flag,
+			CASE process_department
+			WHEN 0 THEN '物流中心'
+			WHEN 1 THEN '销售运营部'
+			ELSE '' END AS process_department,
+			CASE error_flag
+			WHEN 0 THEN '否'
+			WHEN 1 THEN '是'
+			ELSE '' END AS error_flag,
+			related_number,
+			problem_store_display,
+			expectation_process_time,
+			operation_system,
+			title,
+			wo_type_re_display,
+			owner_display,
+			owner_group_display,
+			wo_type,
+			wo_type_display,
+			error_type,
+			error_type_display,
+			issue_description,
+			CASE platform_number
+			WHEN 0 THEN ''
+			WHEN -99999 THEN ''
+			ELSE platform_number END AS platform_number,
+			CASE waybill
+			WHEN 0 THEN ''
+			WHEN -99999 THEN ''
+			ELSE waybill END AS waybill,
+			current_processor,
+			current_processor_display,
+			current_processor_group,
+			current_processor_group_display,
+			DATE_FORMAT(last_process_time, '%Y-%m-%d %H:%i:%s') AS last_process_time,
+			last_process_info,
+			CASE WHEN over_time IS NULL AND submit_flag = 0 THEN ''
+			WHEN over_time IS NULL AND submit_flag = 1 THEN ROUND((TO_SECONDS(now()) - TO_SECONDS(create_time))/60)
+			ELSE ROUND((TO_SECONDS(over_time) - TO_SECONDS(create_time))/60) END AS processing_time,
+			CASE accessory
+			WHEN '' THEN '无'
+			ELSE '有' END AS accessory,
+			version
+		FROM wo_store_master
+		<if test="param.tabNo == 3 or param.tabNo == 4">
+			<!-- 我已处理 -->
+			INNER JOIN (
+				SELECT DISTINCT wo_store_id
+				FROM wo_process_log
+				WHERE create_by = #{currentAccount.id }
+				AND processed = 1
+			) log ON wo_store_master.id = log.wo_store_id
+		</if>
+		<if test="param.tabNo == 7 or param.tabNo == 8 or param.tabNo == 12">
+			<!-- 组已处理 -->
+			INNER JOIN (
+				SELECT DISTINCT wo_store_id
+				FROM wo_process_log
+				WHERE create_by_group in (${currentAccount.teamId })
+				AND processed = 1
+			) log ON wo_store_master.id = log.wo_store_id
+		</if>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.tabNo == 1">
+				<!-- 我创建的 -->
+				AND create_by = #{currentAccount.id }
+			</if>
+			<if test="param.tabNo == 2">
+				<!-- 我未处理 -->
+				AND current_processor = #{currentAccount.id }
+				AND wo_status = 0
+			</if>
+			<if test="param.tabNo == 3">
+				<!-- 我已处理 -->
+				<!-- AND current_processor = #{currentAccount.id } -->
+				AND wo_status != 2
+			</if>
+			<if test="param.tabNo == 4">
+				<!-- 我已完结 -->
+				<!-- AND current_processor = #{currentAccount.id } -->
+				AND wo_status = 2
+			</if>
+			<if test="param.tabNo == 5">
+			    <!-- 组创建的 -->
+				AND create_by_group in (${currentAccount.teamId })
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 6">
+				<!-- 组未处理 -->
+				AND current_processor_group in (${currentAccount.teamId })
+				AND wo_status = 0
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 7">
+				<!-- 组已处理 -->
+				<!-- AND current_processor_group in (${currentAccount.teamId }) -->
+				AND wo_status != 2
+			</if>
+			<if test="param.tabNo == 8">
+				<!-- 组已完结 -->
+				<!-- AND current_processor_group in (${currentAccount.teamId }) -->
+				AND wo_status = 2
+			</if>
+			<if test="param.tabNo == 9">
+				<!-- 我跟进的 -->
+				AND current_processor = #{currentAccount.id }
+				AND follow_up_flag = 1
+			</if>
+			<if test="param.tabNo == 10">
+				<!-- 组未分配 -->
+				AND (current_processor is null
+				OR current_processor = "")
+				AND (current_processor_group is null
+				OR current_processor_group = "")
+				AND submit_flag = 1
+			</if>
+			<if test="param.tabNo == 11">
+				AND process_department = 1
+				AND submit_flag = 1
+			</if>
+			<if test="param.create_time != null and param.create_time != ''">
+				AND TO_DAYS(create_time) &gt;= TO_DAYS(#{param.create_time_start })
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{param.create_time_end })
+			</if>
+			<if test="param.create_by_group_display != null and param.create_by_group_display != ''">
+				AND create_by_group_display LIKE CONCAT("%", #{param.create_by_group_display }, "%")
+			</if>
+			<if test="param.create_by_display != null and param.create_by_display != ''">
+				AND create_by_display LIKE CONCAT("%", #{param.create_by_display }, "%")
+			</if>
+			<if test="param.wo_no != null and param.wo_no != ''">
+				AND wo_no LIKE CONCAT("%", #{param.wo_no }, "%")
+			</if>
+			<if test="param.wo_status_display != null and param.wo_status_display != ''">
+				AND wo_status = #{param.wo_status_display }
+			</if>
+			<if test="param.wo_type_display != null and param.wo_type_display != ''">
+				AND wo_type = #{param.wo_type_display }
+			</if>
+			<if test="param.error_type_display != null and param.error_type_display != ''">
+				AND error_type = #{param.error_type_display }
+			</if>
+			<if test="param.current_processor_group_display != null and param.current_processor_group_display != ''">
+				AND current_processor_group_display LIKE CONCAT("%", #{param.current_processor_group_display }, "%")
+			</if>
+			<if test="param.current_processor_display != null and param.current_processor_display != ''">
+				AND current_processor_display LIKE CONCAT("%", #{param.current_processor_display }, "%")
+			</if>
+			<if test="param.last_process_time != null and param.last_process_time != ''">
+				AND TO_DAYS(last_process_time) &gt;= TO_DAYS(#{param.last_process_time_start })
+				AND TO_DAYS(last_process_time) &lt;= TO_DAYS(#{param.last_process_time_end })
+			</if>
+			<if test="param.platform_number != null and param.platform_number != ''">
+				AND platform_number LIKE CONCAT("%", #{param.platform_number }, "%")
+			</if>
+			<if test="param.waybill != null and param.waybill != ''">
+				AND waybill LIKE CONCAT("%", #{param.waybill }, "%")
+			</if>
+			<if test="param.issue_description != null and param.issue_description != ''">
+				AND issue_description LIKE CONCAT("%", #{param.issue_description }, "%")
+			</if>
+			<if test="param.follow_up_flag != null and param.follow_up_flag != ''">
+				AND follow_up_flag = #{param.follow_up_flag }
+			</if>
+			<if test="param.owner_display != null and param.owner_display != ''">
+				AND owner_display LIKE CONCAT("%", #{param.owner_display }, "%")
+			</if>
+			<if test="param.owner_group_display != null and param.owner_group_display != ''">
+				AND owner_group_display LIKE CONCAT("%", #{param.owner_group_display }, "%")
+			</if>
+			<if test="param.process_department != null and param.process_department != ''">
+				AND process_department = #{param.process_department}
+			</if>
+			<if test="param.title != null and param.title != ''">
+				AND title LIKE CONCAT("%", #{param.title }, "%")
+			</if>
+			<if test="param.related_number != null and param.related_number != ''">
+				AND related_number LIKE CONCAT("%", #{param.related_number }, "%")
+			</if>
+			<if test="param.operation_system != null and param.operation_system != ''">
+				AND operation_system LIKE CONCAT("%", #{param.operation_system},"%")
+			</if>
+			<if test="param.problem_store_display != null and param.problem_store_display != ''">
+				AND problem_store LIKE CONCAT("%", #{param.problem_store_display }, "%")
+			</if>
+			<if test="param.isProcing != null and param.isProcing != '' and param.isProcing==1">
+				AND (wo_status=0 OR wo_status=1)
+			</if>
+			<if test="param.isProcing != null and param.isProcing != '' and param.isProcing==0">
+				AND (wo_status=2 OR wo_status=3)
+			</if>
+		</trim>
+		<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+	</select>
+	<select id="judgeSOReplyOrNot" parameterType="Object" resultType="int">
+		SELECT COUNT(1) FROM wo_process_log
+		WHERE wo_store_id = #{woId }
+		AND wo_location_node = "SO"
+		AND action = "REPLY" 
+	</select>
+	
+	<select id="findGroupByTypeAndStore" parameterType="java.util.Map" resultType="java.lang.String">
+	
+			SELECT
+				g.id id
+			FROM
+				tb_shop_group g,
+				tb_shop_group_store_power s,
+				tb_shop_group_work_power w
+			WHERE
+				g.id = s.`group`
+			AND g.id = w.group_id
+			AND s.store = #{storeCode }
+			AND w.work_type = #{woTypeCode }
+			AND g.status = 1
+			AND g.error_flag = #{errorFlag }
+			AND g.group_type = 1
+		
+	</select>
+	
+	
+	
+	<select id="getEmpIdByCur" parameterType="java.util.List" resultType="java.util.Map">
+	
+			SELECT
+				s.id empId,s.name empName
+			FROM
+				s_employee s
+			LEFT JOIN wo_store_master w ON s.id = w.current_processor
+			WHERE
+				s.id IN 
+				<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+			 		#{item }  
+				</foreach>
+			AND (
+				wo_status = 0
+				OR ISNULL(wo_status)
+			)
+			GROUP BY
+				s.id
+			ORDER BY
+				COUNT(current_processor)
+	
+	</select>
+	
+	
+	<select id="getMinCountGroup" parameterType="java.util.List" resultType="java.util.Map">
+			SELECT
+				t.id groupId,t.group_name groupName
+			FROM
+				tb_shop_group t
+			LEFT JOIN wo_store_master w ON t.id = w.current_processor_group
+			WHERE
+				t.id IN
+				<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+			 		#{item }  
+				</foreach>
+			AND (
+				wo_status = 0
+				OR ISNULL(wo_status)
+			)
+		   and t.status=1
+			GROUP BY
+				t.id
+			ORDER BY
+				COUNT(current_processor_group)
+	</select>
+	
+	
+	
+	
+	<select id= "getEmpByGroup" parameterType= "java.util.List" resultType="java.lang.String">
+			SELECT
+				w.employee_id
+			FROM
+				wo_group_member w,
+				s_employee s
+			WHERE
+				w.employee_id = s.id
+			AND w.group_id IN 
+				<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+			 		#{item }  
+				</foreach>
+			AND w.employee_id != 1
+			AND w.is_auto_allct = 1
+			AND s.`status` = 1
+			GROUP BY
+				w.employee_id
+	</select>
+	
+	<select id= "getGroupIdByEmp" parameterType= "java.util.Map" resultType="java.lang.String">
+			SELECT
+				m.group_id
+			FROM
+				tb_shop_group g,
+				tb_shop_group_store_power s,
+				tb_shop_group_work_power w,
+				wo_group_member m
+			WHERE
+				g.id = s.`group`
+			AND g.id = w.group_id
+			AND s.store = #{storeCode }
+			AND w.work_type = #{woTypeCode }
+			AND g.status = 1
+			AND g.error_flag = #{errorFlag }
+			AND g.group_type = 1
+			AND g.id = m.group_id
+			AND m.employee_id = #{empId}
+			AND m.is_auto_allct = 1
+	</select>
+	
+	
+	<select id= "getGroupNameById" parameterType= "java.lang.String" resultType="java.lang.String">
+			SELECT
+				group_name
+			FROM
+				tb_shop_group
+			WHERE
+				id = #{id} and status=1
+	</select>
+	<select id= "getTeamEmailById" parameterType= "java.lang.String" resultType="java.lang.String">
+			SELECT
+				email
+			FROM
+				tb_shop_group
+			WHERE
+				id = #{id}
+			and is_wo_email=1 and status=1
+	</select>
+	
+	
+	
+	<select id= "getAutoGroup" parameterType= "java.util.List" resultType="java.util.Map">
+		SELECT
+			g.id groupId,
+			g.groupName groupName,
+			g.c / t.c min
+		FROM
+			(
+				SELECT
+					current_processor_group id,
+					current_processor_group_display groupName,
+					COUNT(1) c
+				FROM
+					wo_store_master
+				WHERE
+					current_processor_group IN 
+					<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+		    			#{item }  
+		   			</foreach>
+		   		AND
+		   			wo_status = 0
+				GROUP BY
+					current_processor_group
+				ORDER BY 
+					c
+			) g,
+			(
+				SELECT
+				 w.group_id id,
+				 COUNT(1) c
+				FROM
+					s_employee e,
+					wo_group_member w
+				WHERE
+					e.id = w.employee_id
+				AND w.group_id IN 
+					<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+    					#{item }  
+   					</foreach>
+				GROUP BY
+					w.group_id
+			) t
+		WHERE
+			g.id = t.id
+		ORDER BY 
+			min
+	</select>
+	
+	
+	<select id= "getCountByGroupId" parameterType= "java.lang.Integer" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			wo_store_master
+		WHERE
+			current_processor_group = #{groupId }
+		AND 
+			wo_status = 0
+	</select>
+	
+	<select id= "getCountByempId" parameterType= "java.lang.Integer" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			wo_store_master
+		WHERE
+			current_processor = #{empid }
+		AND 
+			wo_status = 0
+	</select>
+	
+	<select id="getEmpIdByTeamId"  parameterType="java.lang.Integer"  resultType="java.lang.String">
+       
+       SELECT
+			s.id
+		FROM
+			s_employee s ,wo_group_member w
+		WHERE
+			w.employee_id=s.id
+		AND
+			w.group_id = #{groupId }
+		AND
+			w.is_auto_allct='1'
+		AND
+			s.status = 1
+       
+	</select>
+	
+	<select id="getempIdsByCuPrGroup" resultType="java.util.Map" parameterType="String">
+		
+		SELECT
+			current_processor empId,
+			current_processor_display empName
+		FROM
+			wo_store_master
+		WHERE
+			current_processor_group = #{groupId }
+		GROUP BY
+			current_processor
+	
+	</select>
+	<select id= "getAutoEmp" parameterType= "java.util.List" resultType="java.util.Map">
+	
+		SELECT
+			g.empid  empId,
+			e.`name` empName,
+			MIN(c)
+			
+		FROM
+			(
+				SELECT
+					current_processor empid,
+					COUNT(1) c
+				FROM
+					wo_store_master
+				WHERE
+					current_processor IN 
+						<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+			    			#{item }  
+			   			</foreach>
+			   	AND 
+					wo_status = 0
+				GROUP BY
+					current_processor
+				ORDER BY 
+					c
+			) g,
+			(
+				SELECT
+					id,
+					`name`
+				FROM
+					s_employee
+					) e
+		WHERE
+			g.empid = e.id
+	</select>
+		
+	
+	<select id="getDepartmentByGroup" parameterType="String" resultType="String">
+		SELECT tb_store.store_name
+		FROM (SELECT store FROM tb_shop_group_store_power WHERE tb_shop_group_store_power.group = #{groupId } LIMIT 1) a
+		LEFT JOIN tb_store 
+		ON a.store = tb_store.store_code
+	</select>
+	
+	
+	<select id="findWorkStoreByCur" resultType="String">
+		SELECT
+			id
+		FROM
+			wo_store_master
+		WHERE
+			(ISNULL(current_processor)
+		OR  
+			current_processor="")
+		AND
+			(ISNULL(current_processor_group)
+		OR 
+			current_processor_group="")
+		AND 
+			submit_flag = 1
+		AND 
+			wo_status = 0
+	</select>
+	
+	
+	<select id="findWoIdByEmp" resultType="String">
+		SELECT
+			id
+		FROM
+			wo_store_master
+		WHERE
+			(current_processor_group IS NOT NULL
+		AND  
+			current_processor_group!="")
+		AND
+			(ISNULL(current_processor)
+		OR 
+			current_processor="")
+		AND 
+			submit_flag = 1
+		AND 
+			wo_status = 0
+	</select>
+	
+	
+	 <select id="getSubmitLogByWoId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			create_time,create_by_display
+		FROM
+			wo_process_log
+		WHERE
+			wo_store_id = #{woId }
+		AND action = 'SUBMIT'
+	</select>
+	
+	 <select id="getRecordByWoId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			create_time,
+			create_by_display,
+			create_by_group_display,
+			create_by_department_display,
+			follow_up_record
+		FROM
+			wo_follow_up_record
+		WHERE
+			wo_store_id=#{woId}
+		ORDER BY
+			update_time
+	</select>  
+	<select id="getLogRecordByWoId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			l.create_time,
+			l.create_by_display,
+			r.process_remark,
+			r.accessory
+		FROM
+			wo_process_log l,
+			wo_process_record r
+		WHERE
+			l.id = r.wo_store_log_id
+		AND wo_store_id = #{woId}
+		ORDER BY
+			l.update_time
+	</select> 
+	
+	<select id="findStroeCodeByGroupID" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			store
+		FROM
+			tb_shop_group_store_power
+		WHERE
+			dFlag = 1
+		AND
+			`group` = #{teamId}
+	</select> 
+	
+	
+	<select id="findGroupListByTeamid" parameterType="String" resultType="java.util.Map">
+		SELECT
+			id groupId,
+			group_name groupNmae
+		FROM
+			tb_shop_group
+		WHERE
+			id IN (${teamId})
+		AND `status` = 1
+	</select>
+	<select id="selectMasterById" parameterType="String" resultType="java.util.HashMap">
+		SELECT
+			*
+		FROM
+			wo_store_master
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="getAllCount" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			iProcessed.count iProcessed,
+			groupProcessed.count groupProcessed,
+			iCreate.count iCreate,
+			iNotProcessed.count iNotProcessed,
+			iEnd.count iEnd,
+			iFollowUp.count iFollowUp,
+			groupCreate.count groupCreate,
+			groupNotProcessed.count groupNotProcessed,
+			groupEnd.count groupEnd,
+			unallocated.count unallocated,
+			allCount.count allCount,
+			groupAllCount.count groupAllCount
+		FROM
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				INNER JOIN (
+					SELECT DISTINCT
+						wo_store_id
+					FROM
+						wo_process_log
+					WHERE
+						create_by = #{currentAccount.id }
+					AND processed = 1
+				) log ON wo_store_master.id = log.wo_store_id
+				where wo_status != 2
+			) iProcessed,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				INNER JOIN (
+					SELECT DISTINCT
+						wo_store_id
+					FROM
+						wo_process_log
+					WHERE
+						create_by_group IN (${currentAccount.teamId})
+					AND processed = 1
+				) log ON wo_store_master.id = log.wo_store_id
+				where wo_status != 2
+			) groupProcessed,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				WHERE
+					create_by = #{currentAccount.id }
+			) iCreate,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				WHERE
+					current_processor = #{currentAccount.id }
+				AND wo_status = 0
+			) iNotProcessed,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				INNER JOIN (
+					SELECT DISTINCT wo_store_id
+					FROM wo_process_log
+					WHERE create_by = #{currentAccount.id }
+					AND processed = 1
+				) log ON wo_store_master.id = log.wo_store_id
+				WHERE
+					<!-- current_processor = #{currentAccount.id }
+				AND --> wo_status = 2
+			) iEnd,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				WHERE
+					current_processor = #{currentAccount.id }
+				AND follow_up_flag = 1
+			) iFollowUp,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				WHERE
+					create_by_group IN (${currentAccount.teamId })
+					AND submit_flag = 1
+			) groupCreate,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				WHERE
+					current_processor_group IN (${currentAccount.teamId })
+				AND wo_status = 0
+			) groupNotProcessed,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				INNER JOIN (
+					SELECT DISTINCT wo_store_id
+					FROM wo_process_log
+					WHERE create_by_group in (${currentAccount.teamId })
+					AND processed = 1
+				) log ON wo_store_master.id = log.wo_store_id
+				WHERE
+					<!-- current_processor_group IN (${currentAccount.teamId })
+				AND --> wo_status = 2
+			) groupEnd,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				WHERE
+					<!-- 部门未分配 -->
+					 (current_processor is null or current_processor="")
+					AND (current_processor_group is null or current_processor_group="")
+					AND submit_flag = 1
+			) unallocated,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+				WHERE
+					<!-- 部门所有的 -->
+					process_department = 1
+				AND submit_flag = 1
+			) allCount,
+			(
+				SELECT
+					COUNT(1) count
+				FROM
+					wo_store_master
+					<!-- 组所有的 -->
+				INNER JOIN (
+					SELECT DISTINCT
+						wo_store_id
+					FROM
+						wo_process_log
+					WHERE
+						create_by_group IN (${currentAccount.teamId})
+				) log ON wo_store_master.id = log.wo_store_id
+					
+			) groupAllCount
+	</select>
+	
+	<select id="getWorkOrderByWoNo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		 SELECT
+			id,
+			wo_no
+		FROM
+			wo_store_master
+		WHERE
+			submit_flag = 1
+			and wo_no like CONCAT("%", #{woNo}, "%")
+  </select>
+	<select id="getWOByWoNoNoId" parameterType="java.lang.String" resultType="java.util.HashMap">
+		 SELECT
+			id,
+			wo_no
+		FROM
+			wo_store_master
+		WHERE
+			submit_flag = 1
+			and wo_no like CONCAT("%", #{woNo}, "%")
+			and id != #{woId}
+  </select>
+	<select id="getIdByWoNos" parameterType="java.lang.String" resultType="java.util.HashMap">
+		 SELECT
+			id,
+			wo_no
+		FROM
+			wo_store_master
+		WHERE
+			wo_no in (${woNos})
+  </select>
+  <select id="getIdByWoNo" parameterType="java.lang.String" resultType="java.lang.String">
+		 SELECT
+			id
+		FROM
+			wo_store_master
+		WHERE
+			wo_no = #{woNo}
+  </select>
+  <select id="getWOByWoNo" parameterType="java.lang.String" resultType="java.util.HashMap">
+		 SELECT
+			*
+		FROM
+			wo_store_master
+		WHERE
+			wo_no = #{woNo}
+  </select>
+  
+  <select id="getGroupTypeById" parameterType="java.lang.String" resultType="int">
+		 SELECT
+			group_type
+		FROM
+			tb_shop_group
+		WHERE
+			id = #{id} and status=1
+  </select>
+  <select id="getSplitList" parameterType="java.lang.String" resultType="java.util.HashMap">
+		 SELECT
+			*
+		FROM
+			wo_store_master
+		WHERE
+			wo_no like CONCAT("%", #{woNo}, "%")
+		ORDER BY wo_no
+  </select>
+  <select id="getWoNoLikeCount" parameterType="java.lang.String" resultType="int">
+		 SELECT
+			count(1)
+		FROM
+			wo_store_master
+		WHERE
+			wo_no like CONCAT(#{woNo}, "%")
+  </select>
+  <select id="getStoreNameByCode" parameterType="java.lang.String" resultType="java.lang.String">
+		 SELECT
+			store_name
+		FROM
+			tb_store
+		WHERE
+			store_code = #{store_code}
+  </select>
+</mapper>

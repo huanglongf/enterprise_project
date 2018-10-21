@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.BuspriceMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.Busprice" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="bus_code" property="bus_code"/>
+	<result column="bus_name" property="bus_name"/>
+	<result column="bus_volumn" property="bus_volumn"/>
+	<result column="busvolumn_unit" property="busvolumn_unit"/>
+	<result column="price" property="price"/>
+	<result column="unit" property="unit"/>
+	<result column="table_id" property="table_id"/>
+</resultMap>
+       
+<!-- tb_busprice table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,bus_code,bus_name,bus_volumn,busvolumn_unit,price,unit,table_id
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="bus_code != null and bus_code != ''" >
+	    and bus_code =  #{bus_code}
+	</if>
+	 	<if test="bus_name != null and bus_name != ''" >
+	    and bus_name =  #{bus_name}
+	</if>
+	<if test="bus_volumn != null" >
+	    and bus_volumn =  #{bus_volumn}
+	</if>
+	 	<if test="busvolumn_unit != null and busvolumn_unit != ''" >
+	    and busvolumn_unit =  #{busvolumn_unit}
+	</if>
+	<if test="price != null" >
+	    and price =  #{price}
+	</if>
+	 	<if test="unit != null and unit != ''" >
+	    and unit =  #{unit}
+	</if>
+	<if test="table_id != null" >
+	    and table_id =  #{table_id}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入整车报价维护表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.Busprice" >
+  insert into tb_busprice(id,create_time,create_user,update_time,update_user,bus_code,bus_name,bus_volumn,busvolumn_unit,price,unit,table_id)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{bus_code},#{bus_name},#{bus_volumn},#{busvolumn_unit},#{price},#{unit},#{table_id})
+</insert>
+
+<!-- 修改整车报价维护表-->  
+ <update id="update" parameterType="com.bt.lmis.model.Busprice" >
+  update tb_busprice set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},bus_code=#{bus_code},bus_name=#{bus_name},bus_volumn=#{bus_volumn},busvolumn_unit=#{busvolumn_unit},price=#{price},unit=#{unit},table_id=#{table_id} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改整车报价维护表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.Busprice" >
+	update tb_busprice set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="bus_code != null  and bus_code != '' ">
+		bus_code=#{bus_code},
+	</if>
+	<if test="bus_name != null  and bus_name != '' ">
+		bus_name=#{bus_name},
+	</if>
+	<if test="bus_volumn != null  ">
+		bus_volumn=#{bus_volumn},
+	</if>
+	<if test="busvolumn_unit != null  and busvolumn_unit != '' ">
+		busvolumn_unit=#{busvolumn_unit},
+	</if>
+	<if test="price != null  ">
+		price=#{price},
+	</if>
+	<if test="unit != null  and unit != '' ">
+		unit=#{unit},
+	</if>
+	<if test="table_id != null  ">
+		table_id=#{table_id},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除整车报价维护表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_busprice where id = #{id}
+</update>
+<!-- 批量删除整车报价维护表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_busprice where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找整车报价维护表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_busprice where id = #{id}
+</select>
+  	
+<!-- 整车报价维护表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.BuspriceQueryParam">
+	select count(1) from tb_busprice 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的整车报价维护表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.BuspriceQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_busprice 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 整车报价维护表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.BuspriceQueryParam">
+	select count(1) from tb_busprice 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的整车报价维护表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.BuspriceQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_busprice 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+<delete id='deleteByTbId' parameterType='Object'>
+   delete from tb_busprice where table_id=${table_id}
+</delete>
+
+  	
+</mapper>   

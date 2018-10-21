@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.OriginDesitinationParamlistMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.OriginDesitinationParamlist" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="con_id" property="con_id"/>
+	<result column="carrier_code" property="carrier_code"/>
+	<result column="carrier_name" property="carrier_name"/>
+	<result column="itemtype_code" property="itemtype_code"/>
+	<result column="itemtype_name" property="itemtype_name"/>
+	<result column="country_destination" property="country_destination"/>
+	<result column="province_destination" property="province_destination"/>
+	<result column="city_destination" property="city_destination"/>
+	<result column="district_destination" property="district_destination"/>
+	<result column="formula" property="formula"/>
+	<result column="szxz_switch" property="szxz_switch"/>
+	<result column="szxz_sz" property="szxz_sz"/>
+	<result column="szxz_sz_unit" property="szxz_sz_unit"/>
+	<result column="szxz_price" property="szxz_price"/>
+	<result column="szxz_price_unit" property="szxz_price_unit"/>
+	<result column="szxz_id" property="szxz_id"/>
+	<result column="szxz_jpnum" property="szxz_jpnum"/>
+	<result column="szxz_discount" property="szxz_discount"/>
+	<result column="ld_switch" property="ld_switch"/>
+	<result column="weightprice_id" property="weightprice_id"/>
+	<result column="volumprice_id" property="volumprice_id"/>
+	<result column="ld_discount" property="ld_discount"/>
+	<result column="zc_switch" property="zc_switch"/>
+	<result column="bus_id" property="bus_id"/>
+	<result column="it_switch" property="it_switch"/>
+	<result column="it_id" property="it_id"/>
+	<result column="status" property="status"/>
+	<result column="zh_price_tab_id" property="zh_price_tab_id"/>
+	<result column="ps_price" property="ps_price"/>
+	<result column="ps_unit" property="ps_unit"/>
+	<result column="good_type_discount" property="good_type_discount"/>
+	<result column="jf_weight" property="jf_weight"/>
+	<result column="jf_unit" property="jf_unit"/>
+	<result column="province_origin" property="province_origin"/>
+	<result column="city_origin" property="city_origin"/>
+	<result column="state_origin" property="state_origin"/>
+</resultMap>
+       
+<!-- tb_origin_desitination_paramlist table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,con_id,carrier_code,carrier_name,itemtype_code,itemtype_name,province_origin,city_origin,state_origin,country_destination,province_destination,city_destination,district_destination,formula,szxz_switch,szxz_sz,szxz_sz_unit,szxz_price,szxz_price_unit,szxz_id,szxz_jpnum,szxz_discount,ld_switch,weightprice_id,volumprice_id,ld_discount,zc_switch,bus_id,it_switch,it_id,status,zh_price_tab_id,ps_price,ps_unit,good_type_discount,jf_weight,jf_unit
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="con_id != null" >
+	    and con_id =  #{con_id}
+	</if>
+	 	<if test="carrier_code != null and carrier_code != ''" >
+	    and carrier_code =  #{carrier_code}
+	</if>
+	 	<if test="carrier_name != null and carrier_name != ''" >
+	    and carrier_name =  #{carrier_name}
+	</if>
+	 	<if test="itemtype_code != null and itemtype_code != ''" >
+	    and itemtype_code =  #{itemtype_code}
+	</if>
+	 	<if test="itemtype_name != null and itemtype_name != ''" >
+	    and itemtype_name =  #{itemtype_name}
+	</if>
+	 	<if test="province_origin != null and province_origin != ''" >
+	    and province_origin =  #{province_origin}
+	</if>
+		<if test="city_origin != null and city_origin != ''" >
+	    and city_origin =  #{city_origin}
+	</if>
+		<if test="state_origin != null and state_origin != ''" >
+	    and state_origin =  #{state_origin}
+	</if>
+	 	<if test="country_destination != null and country_destination != ''" >
+	    and country_destination =  #{country_destination}
+	</if>
+	 	<if test="province_destination != null and province_destination != ''" >
+	    and province_destination =  #{province_destination}
+	</if>
+	 	<if test="city_destination != null and city_destination != ''" >
+	    and city_destination =  #{city_destination}
+	</if>
+	 	<if test="district_destination != null and district_destination != ''" >
+	    and district_destination =  #{district_destination}
+	</if>
+	<if test="formula != null" >
+	    and formula =  #{formula}
+	</if>
+	<if test="szxz_switch != null" >
+	    and szxz_switch =  #{szxz_switch}
+	</if>
+	<if test="szxz_sz != null" >
+	    and szxz_sz =  #{szxz_sz}
+	</if>
+	 	<if test="szxz_sz_unit != null and szxz_sz_unit != ''" >
+	    and szxz_sz_unit =  #{szxz_sz_unit}
+	</if>
+	<if test="szxz_price != null" >
+	    and szxz_price =  #{szxz_price}
+	</if>
+	 	<if test="szxz_price_unit != null and szxz_price_unit != ''" >
+	    and szxz_price_unit =  #{szxz_price_unit}
+	</if>
+	<if test="szxz_id != null" >
+	    and szxz_id =  #{szxz_id}
+	</if>
+	<if test="szxz_jpnum != null" >
+	    and szxz_jpnum =  #{szxz_jpnum}
+	</if>
+	<if test="szxz_discount != null" >
+	    and szxz_discount =  #{szxz_discount}
+	</if>
+	<if test="ld_switch != null" >
+	    and ld_switch =  #{ld_switch}
+	</if>
+	<if test="weightprice_id != null" >
+	    and weightprice_id =  #{weightprice_id}
+	</if>
+	<if test="volumprice_id != null" >
+	    and volumprice_id =  #{volumprice_id}
+	</if>
+	<if test="ld_discount != null" >
+	    and ld_discount =  #{ld_discount}
+	</if>
+	<if test="zc_switch != null" >
+	    and zc_switch =  #{zc_switch}
+	</if>
+	<if test="bus_id != null" >
+	    and bus_id =  #{bus_id}
+	</if>
+	<if test="it_switch != null" >
+	    and it_switch =  #{it_switch}
+	</if>
+	<if test="it_id != null" >
+	    and it_id =  #{it_id}
+	</if>
+	<if test="status != null" >
+	    and status =  #{status}
+	</if>
+	<if test="zh_price_tab_id != null" >
+	    and zh_price_tab_id =  #{zh_price_tab_id}
+	</if>
+	<if test="ps_price != null" >
+	    and ps_price =  #{ps_price}
+	</if>
+	 	<if test="ps_unit != null and ps_unit != ''" >
+	    and ps_unit =  #{ps_unit}
+	</if>
+	<if test="good_type_discount != null" >
+	    and good_type_discount =  #{good_type_discount}
+	</if>
+	<if test="jf_weight != null" >
+	    and jf_weight =  #{jf_weight}
+	</if>
+	 	<if test="jf_unit != null and jf_unit != ''" >
+	    and jf_unit =  #{jf_unit}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入始发目的地参数表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.OriginDesitinationParamlist" >
+  insert into tb_origin_desitination_paramlist(id,create_time,create_user,update_time,update_user,con_id,carrier_code,carrier_name,itemtype_code,itemtype_name,province_origin,city_origin,state_origin,country_destination,province_destination,city_destination,district_destination,formula,szxz_switch,szxz_sz,szxz_sz_unit,szxz_price,szxz_price_unit,szxz_id,szxz_jpnum,szxz_discount,ld_switch,weightprice_id,volumprice_id,ld_discount,zc_switch,bus_id,it_switch,it_id,status,zh_price_tab_id,ps_price,ps_unit,good_type_discount,jf_weight,jf_unit,low_weight,low_price,low_cubic)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{con_id},#{carrier_code},#{carrier_name},#{itemtype_code},#{itemtype_name},#{province_origin},#{city_origin},#{state_origin},#{country_destination},#{province_destination},#{city_destination},#{district_destination},#{formula},#{szxz_switch},#{szxz_sz},#{szxz_sz_unit},#{szxz_price},#{szxz_price_unit},#{szxz_id},#{szxz_jpnum},#{szxz_discount},#{ld_switch},#{weightprice_id},#{volumprice_id},#{ld_discount},#{zc_switch},#{bus_id},#{it_switch},#{it_id},#{status},#{zh_price_tab_id},#{ps_price},#{ps_unit},#{good_type_discount},#{jf_weight},#{jf_unit},#{low_weight},#{low_price},#{low_cubic})
+</insert>
+
+<!-- 修改始发目的地参数表-->  
+ <update id="update" parameterType="com.bt.lmis.model.OriginDesitinationParamlist" >
+  update tb_origin_desitination_paramlist set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},con_id=#{con_id},carrier_code=#{carrier_code},carrier_name=#{carrier_name},itemtype_code=#{itemtype_code},itemtype_name=#{itemtype_name},province_origin=#{province_origin},city_origin=#{city_origin},state_origin=#{state_origin},country_destination=#{country_destination},province_destination=#{province_destination},city_destination=#{city_destination},district_destination=#{district_destination},formula=#{formula},szxz_switch=#{szxz_switch},szxz_sz=#{szxz_sz},szxz_sz_unit=#{szxz_sz_unit},szxz_price=#{szxz_price},szxz_price_unit=#{szxz_price_unit},szxz_id=#{szxz_id},szxz_jpnum=#{szxz_jpnum},szxz_discount=#{szxz_discount},ld_switch=#{ld_switch},weightprice_id=#{weightprice_id},volumprice_id=#{volumprice_id},ld_discount=#{ld_discount},zc_switch=#{zc_switch},bus_id=#{bus_id},it_switch=#{it_switch},it_id=#{it_id},status=#{status},zh_price_tab_id=#{zh_price_tab_id},ps_price=#{ps_price},ps_unit=#{ps_unit},good_type_discount=#{good_type_discount},jf_weight=#{jf_weight},jf_unit=#{jf_unit} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改始发目的地参数表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.OriginDesitinationParamlist" >
+	update tb_origin_desitination_paramlist set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="con_id != null  ">
+		con_id=#{con_id},
+	</if>
+	<if test="carrier_code != null  and carrier_code != '' ">
+		carrier_code=#{carrier_code},
+	</if>
+	<if test="carrier_name != null  and carrier_name != '' ">
+		carrier_name=#{carrier_name},
+	</if>
+	<if test="itemtype_code != null  and itemtype_code != '' ">
+		itemtype_code=#{itemtype_code},
+	</if>
+	<if test="itemtype_name != null  and itemtype_name != '' ">
+		itemtype_name=#{itemtype_name},
+	</if>
+	<if test="province_origin != null  and province_origin != '' ">
+		province_origin=#{province_origin},
+	</if>
+		<if test="city_origin != null  and city_origin != '' ">
+		city_origin=#{city_origin},
+	</if>
+		<if test="state_origin != null  and state_origin != '' ">
+		state_origin=#{state_origin},
+	</if>
+	<if test="country_destination != null  and country_destination != '' ">
+		country_destination=#{country_destination},
+	</if>
+	<if test="province_destination != null  and province_destination != '' ">
+		province_destination=#{province_destination},
+	</if>
+	<if test="city_destination != null  and city_destination != '' ">
+		city_destination=#{city_destination},
+	</if>
+	<if test="district_destination != null  and district_destination != '' ">
+		district_destination=#{district_destination},
+	</if>
+	<if test="formula != null  ">
+		formula=#{formula},
+	</if>
+	<if test="szxz_switch != null  ">
+		szxz_switch=#{szxz_switch},
+	</if>
+	<if test="szxz_sz != null  ">
+		szxz_sz=#{szxz_sz},
+	</if>
+	<if test="szxz_sz_unit != null  and szxz_sz_unit != '' ">
+		szxz_sz_unit=#{szxz_sz_unit},
+	</if>
+	<if test="szxz_price != null  ">
+		szxz_price=#{szxz_price},
+	</if>
+	<if test="szxz_price_unit != null  and szxz_price_unit != '' ">
+		szxz_price_unit=#{szxz_price_unit},
+	</if>
+	<if test="szxz_id != null  ">
+		szxz_id=#{szxz_id},
+	</if>
+	<if test="szxz_jpnum != null  ">
+		szxz_jpnum=#{szxz_jpnum},
+	</if>
+	<if test="szxz_discount != null  ">
+		szxz_discount=#{szxz_discount},
+	</if>
+	<if test="ld_switch != null  ">
+		ld_switch=#{ld_switch},
+	</if>
+	<if test="weightprice_id != null  ">
+		weightprice_id=#{weightprice_id},
+	</if>
+	<if test="volumprice_id != null  ">
+		volumprice_id=#{volumprice_id},
+	</if>
+	<if test="ld_discount != null  ">
+		ld_discount=#{ld_discount},
+	</if>
+	<if test="zc_switch != null  ">
+		zc_switch=#{zc_switch},
+	</if>
+	<if test="bus_id != null  ">
+		bus_id=#{bus_id},
+	</if>
+	<if test="it_switch != null  ">
+		it_switch=#{it_switch},
+	</if>
+	<if test="it_id != null  ">
+		it_id=#{it_id},
+	</if>
+	<if test="status != null  ">
+		status=#{status},
+	</if>
+	<if test="zh_price_tab_id != null  ">
+		zh_price_tab_id=#{zh_price_tab_id},
+	</if>
+	<if test="ps_price != null  ">
+		ps_price=#{ps_price},
+	</if>
+	<if test="ps_unit != null  and ps_unit != '' ">
+		ps_unit=#{ps_unit},
+	</if>
+	<if test="good_type_discount != null  ">
+		good_type_discount=#{good_type_discount},
+	</if>
+	<if test="jf_weight != null  ">
+		jf_weight=#{jf_weight},
+	</if>
+	<if test="jf_unit != null  and jf_unit != '' ">
+		jf_unit=#{jf_unit},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除始发目的地参数表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_origin_desitination_paramlist where id = #{id}
+</update>
+<!-- 批量删除始发目的地参数表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_origin_desitination_paramlist where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找始发目的地参数表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_origin_desitination_paramlist where id = #{id}
+</select>
+  	
+<!-- 始发目的地参数表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.OriginDesitinationParamlistQueryParam">
+	select count(1) from tb_origin_desitination_paramlist 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的始发目的地参数表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.OriginDesitinationParamlistQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_origin_desitination_paramlist 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 始发目的地参数表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.OriginDesitinationParamlistQueryParam">
+	select count(1) from tb_origin_desitination_paramlist 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的始发目的地参数表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.OriginDesitinationParamlistQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_origin_desitination_paramlist 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+  <select id='selectCounts' parameterType="java.util.HashMap"
+		resultType="java.util.HashMap">
+	   select 
+  case  when  max(table_id) is null then 0 else max(table_id) end table_id
+ from tb_internal_price
+	</select>
+	
+
+	<select id='getInfoByNmTESt' 
+	parameterType="java.util.HashMap"
+	resultType='java.util.HashMap'>
+	    SELECT 
+	    b.id contract_id,
+      a.transport_code as transport_code,
+      c.product_type_code product_type_code,
+      c.product_type_name product_type_name,
+      a.transport_type
+	    FROM tb_transport_vendor  a,
+       tb_contract_basicinfo  b,
+       tb_transport_product_type c
+        where a.validity= b.validity='1'
+       and  c.vendor_code=a.transport_code  
+       and a.transport_code=b.contract_owner   
+        <if test="transport_name != null  and transport_name != '' ">
+          and  a.transport_name=#{transport_name}
+       </if>
+       <if test="product_type_name != null  and product_type_name != '' ">
+           and  c.product_type_name=#{product_type_name}
+       </if>
+	</select>
+	
+	
+	<select id='getInfoAndTypeIsNull' 
+	parameterType="java.util.HashMap"
+	resultType='java.util.HashMap'>
+	    SELECT 
+      a.transport_code as transport_code,
+      transport_type
+	    FROM tb_transport_vendor  a
+        where a.validity='1' 
+        <if test="transport_name != null  and transport_name != '' ">
+          and  a.transport_name=#{transport_name}
+       </if>
+	</select>
+	
+	<select id='findTableIdByTBNm' parameterType='java.util.HashMap'  statementType="STATEMENT" resultType='java.util.HashMap'>
+	   SELECT 
+     case  when  max(table_id) is null then 0 else max(table_id) end table_id from
+     `tb_busprice`;
+	</select>
+	
+	<select id='isExisitRecord' parameterType='java.util.HashMap'   resultType='java.lang.Integer'>
+	  select  count(1) 
+	      FROM tb_origin_desitination_paramlist B ,tb_contract_basicinfo A
+          WHERE  
+                 A.validity=1 
+                 and A.id=B.con_id 
+                 and B.status=1 
+                 and B.carrier_name=#{carrier_name}
+            <if test="province_origin != null">
+				<if test="province_origin != '' ">
+					and B.province_origin=#{province_origin}
+				</if>
+				<if test="province_origin == '' ">
+					and (B.province_origin is null or  B.province_origin='')
+				</if>
+            </if>
+            <if test="city_origin != null">
+				<if test="city_origin != '' ">
+					and B.city_origin=#{city_origin}
+				</if>
+				<if test="city_origin == '' ">
+					and (B.city_origin is null or  B.city_origin='')
+				</if>
+			</if>
+            <if test="state_origin != null">
+				<if test="state_origin != '' ">
+					and B.state_origin=#{state_origin}
+				</if>
+				<if test="state_origin == '' ">
+					and (B.state_origin is null or  B.state_origin='')
+				</if>
+			</if>
+			<if test="product_type_name != null  and product_type_name != '' ">
+                 and B.itemtype_name=#{product_type_name}
+            </if>
+			<if test="contract_name != null  and contract_name != '' ">
+                 and A.contract_name=#{contract_name}
+			</if>
+			<if test="province_destination != null  and province_destination != '' ">
+				<if test="province_destination != '' ">
+					and B.province_destination=#{province_destination}
+				</if>
+				<if test="province_destination == '' ">
+					and (B.province_destination is null or  B.province_destination='')
+				</if>
+			</if>
+			<if test="city_destination != null  and city_destination != '' ">
+				<if test="city_destination != '' ">
+					and B.city_destination=#{city_destination}
+				</if>
+				<if test="city_destination == '' ">
+					and (B.city_destination is null or  B.city_destination='')
+				</if>
+			</if>
+			<if test="district_destination != null">
+				<if test="district_destination != '' ">
+					and B.district_destination=#{district_destination}
+				</if>
+				<if test="district_destination == '' ">
+					and (B.district_destination is null or  B.district_destination='')
+				</if>
+			</if>
+	</select> 
+	<select id='findContract' parameterType='java.util.HashMap'   resultType='java.util.HashMap'>
+	  select  contract_name,id as con_id,contract_owner
+	      FROM tb_contract_basicinfo
+          WHERE validity=1 
+                 <if test="contract_name != null  and contract_name != '' ">
+                and   contract_name=#{contract_name}
+                 </if> 
+                 
+	</select> 
+	<select id='findClient' parameterType='java.util.HashMap'   resultType='java.util.HashMap'>
+	  select  client_name
+	      FROM tb_client
+          WHERE 
+                 <if test="client_name != null  and client_name != '' ">
+                  client_name=#{client_name}
+                 </if> 
+                 
+	</select> 
+	<select id='findStore' parameterType='java.util.HashMap'   resultType='java.util.HashMap'>
+	  select  store_name
+	      FROM tb_store
+          WHERE 
+                 <if test="store_name != null  and store_name != '' ">
+                  store_name=#{store_name}
+                 </if> 
+	</select> 
+	
+	
+	<select id='getInfoByNm' 
+	parameterType="java.util.HashMap"
+	resultType='java.util.HashMap'>
+	    SELECT 
+      a.transport_code as transport_code,
+      c.product_type_code product_type_code,
+      c.product_type_name product_type_name,
+      a.transport_type
+	    FROM tb_transport_vendor  a,
+       tb_transport_product_type c
+        where a.validity= '1'
+       and  c.vendor_code=a.transport_code  
+        <if test="transport_name != null  and transport_name != '' ">
+          and  a.transport_name=#{transport_name}
+       </if>
+       <if test="product_type_name != null  and product_type_name != '' ">
+           and  c.product_type_name=#{product_type_name}
+       </if>
+	</select>
+	
+	<select id='TRUNCATE'   resultType='java.util.HashMap'>
+	 TRUNCATE TABLE  tb_address_param_check;
+	</select> 
+	
+	
+	<insert id="insertCheck" parameterType="java.util.HashMap" >
+  insert into tb_address_param_check(name,version,row_no)
+ values(#{name},#{version},#{row_no});
+</insert>
+
+  <select id='getSame'   resultType='java.util.HashMap'>
+select name,row_no from tb_address_param_check where name in(
+SELECT name FROM `tb_address_param_check` group  by name,version having count(1)>1) order by name
+	</select>
+	
+	<select id='checkCTF'   resultType='java.util.HashMap' parameterType="java.util.HashMap">
+	select  c.con_id,
+	        c.pricing_formula,
+	        b.transport_code,
+	        b.transport_name,
+	        a.contract_name from 
+            tb_contract_basicinfo a,
+            tb_transport_vendor b,
+            ex_con_pricing_formula c 
+        where 
+          a.id=c.con_id 
+          AND b.transport_code=c.belong_to 
+          <if test="transport_name != null  and transport_name != '' ">
+           and  b.transport_name=#{transport_name}
+          </if>
+           <if test="contract_name != null  and contract_name != '' ">
+           and  a.contract_name=#{contract_name}
+          </if>
+          <if test="pricing_formula != null  and pricing_formula != '' ">
+           and  c.pricing_formula=#{pricing_formula}
+          </if>
+          
+          and b.transport_type=1
+          and c.dFlag=0 
+          and a.validity=1 
+          and b.validity=1
+	</select>
+	
+		<select id='checkWLCTF'   resultType='java.util.HashMap' parameterType="java.util.HashMap">
+	select  c.contract_id,
+	        c.cat_type,
+	        b.transport_code,
+	        b.transport_name,
+	        a.contract_name from 
+            tb_contract_basicinfo a,
+            tb_transport_vendor b,
+            wl_formula_td c 
+        where 
+          a.id=c.contract_id 
+          AND b.transport_code=c.belong_to 
+           <if test="transport_name != null  and transport_name != '' ">
+           and  b.transport_name=#{transport_name}
+          </if>
+           <if test="contract_name != null  and contract_name != '' ">
+           and  a.contract_name=#{contract_name}
+          </if>
+          <if test="cat_type != null  and cat_type != '' ">
+           and  c.cat_type=#{cat_type}
+          </if>
+            and b.transport_code=0
+            and a.validity=1 
+            and b.validity=1 
+            and c.status=1
+	</select>
+	
+</mapper>   

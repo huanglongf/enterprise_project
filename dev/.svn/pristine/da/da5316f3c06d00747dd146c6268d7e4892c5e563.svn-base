@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ServiceMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.Services" >
+	<result column="id" property="id"/>
+	<result column="service_name" property="service_name"/>
+	<result column="service_mac" property="service_mac"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="heart_beat" property="heart_beat"/>
+</resultMap>
+       
+<!-- s_service table all fields -->
+<sql id="Base_Column_List" >
+	 id,service_name,service_mac,create_time,create_user,update_time,update_user,heart_beat
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	 	<if test="service_name != null and service_name != ''" >
+	    and service_name =  #{service_name}
+	</if>
+	 	<if test="service_mac != null and service_mac != ''" >
+	    and service_mac =  #{service_mac}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="heart_beat != null" >
+	    and heart_beat =  #{heart_beat}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入服务器 -->
+<insert id="insert" parameterType="com.bt.lmis.model.Services" >
+  insert into s_service(id,service_name,service_mac,create_time,create_user,update_time,update_user,heart_beat)
+ values(#{id},#{service_name},#{service_mac},#{create_time},#{create_user},#{update_time},#{update_user},#{heart_beat})
+</insert>
+
+<!-- 修改服务器-->  
+ <update id="update" parameterType="com.bt.lmis.model.Services" >
+  update s_service set service_name=#{service_name},service_mac=#{service_mac},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},heart_beat=#{heart_beat} where id=#{id}
+ </update>
+  	
+<!-- 满足条件的服务器集合 -->
+<select id="findByMac" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.Services">
+	select  <include refid="Base_Column_List"/> from s_service 
+	<include refid="where_Clause"/>
+</select>
+  	
+</mapper>   

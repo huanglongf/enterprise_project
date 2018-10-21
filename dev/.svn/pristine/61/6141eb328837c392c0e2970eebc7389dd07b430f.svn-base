@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ExpressbillMasterhxMapper">
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.bt.lmis.model.ExpressbillMasterhx">
+				<result column="id" property="id" />
+				<result column="create_time" property="create_time" />
+				<result column="create_user" property="create_user" />
+				<result column="update_time" property="update_time" />
+				<result column="update_user" property="update_user" />
+				<result column="bill_name" property="bill_name" />
+				<result column="bill_num" property="bill_num" />
+				<result column="status" property="status" />
+				<result column="express_code" property="express_code" />
+				<result column="con_id" property="con_id" />
+				<result column="billingCycle" property="billingCycle" />
+				<result column="remarks" property="remarks" />
+				<result column="file_path" property="file_path" />
+				<result column="username" property="username" />
+			</resultMap>
+
+	<!-- tb_expressbill_masterhx table all fields -->
+	<sql id="Base_Column_List">
+		id,create_time,create_user,update_time,update_user,bill_name,bill_num,status,express_code,con_id,billingCycle,remarks,file_path
+	</sql>
+
+
+	<!-- 查询条件 -->
+	<sql id="where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+						<if test="id != null">
+						and id = #{id}
+						</if>
+						<if test="create_time != null">
+						and create_time = #{create_time}
+						</if>
+						<if test="create_user != null and create_user != ''">
+						and create_user = #{create_user}
+						</if>
+						<if test="update_time != null">
+						and update_time = #{update_time}
+						</if>
+						<if test="update_user != null and update_user != ''">
+						and update_user = #{update_user}
+						</if>
+						<if test="bill_name != null and bill_name != ''">
+						and bill_name = #{bill_name}
+						</if>
+						<if test="bill_num != null">
+						and bill_num = #{bill_num}
+						</if>
+						<if test="status != null and status != ''">
+						and status = #{status}
+						</if>
+						<if test="express_code != null and express_code != ''">
+						and express_code = #{express_code}
+						</if>
+						<if test="con_id != null">
+						and con_id = #{con_id}
+						</if>
+						<if test="billingCycle != null and billingCycle != ''">
+						and billingCycle = #{billingCycle}
+						</if>
+						<if test="remarks != null and remarks != ''">
+						and remarks = #{remarks}
+						</if>
+						<if test="file_path != null and file_path != ''">
+						and file_path = #{file_path}
+						</if>
+			</trim>
+	</sql>
+
+
+	<!-- 插入核销的账单表 -->
+	<insert id="insert" parameterType="com.bt.lmis.model.ExpressbillMasterhx">
+		insert into tb_expressbill_masterhx(id,file_path,create_time,create_user,update_time,update_user,bill_name,bill_num,status,express_code,con_id,billingCycle,remarks,master_id)
+ values(#{id},
+ #{file_path},
+ #{create_time},
+ #{create_user},#{update_time},#{update_user},#{bill_name},#{bill_num},#{status},#{express_code},#{con_id},#{billingCycle},#{remarks},#{master_id})
+	</insert>
+
+	<!-- 修改核销的账单表 -->
+	<update id="update" parameterType="com.bt.lmis.model.ExpressbillMasterhx">
+		update tb_expressbill_masterhx set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},bill_name=#{bill_name},bill_num=#{bill_num},status=#{status},express_code=#{express_code},con_id=#{con_id},billingCycle=#{billingCycle},remarks=#{remarks} where id=#{id}
+	</update>
+	
+	
+	<update id="updateById">
+		update tb_expressbill_masterhx set file_path=#{file_path}  where id=#{id}
+	</update>
+
+	<!-- 选择修改核销的账单表 -->
+	<update id="updateBySelective" parameterType="com.bt.lmis.model.ExpressbillMasterhx">
+		update tb_expressbill_masterhx set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="bill_name != null  and bill_name != '' ">
+		bill_name=#{bill_name},
+	</if>
+	<if test="bill_num != null  ">
+		bill_num=#{bill_num},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="express_code != null  and express_code != '' ">
+		express_code=#{express_code},
+	</if>
+	<if test="con_id != null  ">
+		con_id=#{con_id},
+	</if>
+	<if test="billingCycle != null  and billingCycle != '' ">
+		billingCycle=#{billingCycle},
+	</if>
+	<if test="file_path != null  and file_path != '' ">
+		file_path=#{file_path},
+	</if>
+	<if test="remarks != null  and remarks != '' ">
+		remarks=#{remarks},
+	</if>
+	</trim> where id=#{id}
+	</update>
+
+	<!-- 删除核销的账单表 -->
+	<update id="delete" parameterType="Object">
+		delete 	 from tb_expressbill_masterhx where id = #{id}
+	</update>
+	<!-- 批量删除核销的账单表 -->
+	<delete id="batchDelete" parameterType="Object">
+		delete 	 from tb_expressbill_masterhx where id in 
+		<foreach collection="array" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 依据主键查找核销的账单表 -->
+	<select id="selectById" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> 
+	 from tb_expressbill_masterhx where id = #{id}
+	</select>
+	
+	<select id="selectByExpressbillMasterhxId" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" /> 
+	 from tb_expressbill_masterhx where id = #{id}
+	</select>
+
+	<!-- 核销的账单表 列表总数 为分页组件使用 -->
+	<select id="pageTotalRecord" resultType="java.lang.Long"
+		parameterType="com.bt.lmis.controller.form.ExpressbillMasterhxQueryParam">
+		select count(1) from tb_expressbill_masterhx
+		<include refid="where_Clause" />
+	</select>
+
+	<!-- 分页中的核销的账单表集合，为分页组件使用 -->
+	<select id="pageData" resultMap="BaseResultMap"
+		parameterType="com.bt.lmis.controller.form.ExpressbillMasterhxQueryParam">
+		select
+		<include refid="Base_Column_List" />
+		from tb_expressbill_masterhx
+		<include refid="where_Clause" />
+		<if test="orderCondition != null and orderCondition != ''">
+			${orderCondition}
+		</if>
+		${queryCondition}
+	</select>
+
+
+	<!--依据条件统计 核销的账单表总数 -->
+	<select id="count" resultType="java.lang.Long"
+		parameterType="com.bt.lmis.controller.form.ExpressbillMasterhxQueryParam">
+		select count(1) from tb_expressbill_masterhx
+		<include refid="where_Clause" />
+	</select>
+
+	<!-- 满足条件的核销的账单表集合 -->
+	<select id="findAll" resultMap="BaseResultMap"
+		parameterType="com.bt.lmis.controller.form.ExpressbillMasterhxQueryParam">
+		SELECT 
+    a.*, b.username
+FROM
+    tb_expressbill_masterhx a
+        LEFT JOIN
+    (SELECT 
+        username, id
+    FROM
+        s_employee
+    WHERE
+        status = 1) b ON a.create_user = b.id
+         where 1=1
+          <if test="master_id != null and master_id != ''">
+			and master_id=#{master_id}
+		</if>
+         
+		 <if test="maxResult != null and maxResult != ''">
+			LIMIT #{firstResult}, #{maxResult}
+		</if>
+	</select>
+      <select id='countNum' parameterType="com.bt.lmis.controller.form.ExpressbillMasterhxQueryParam" resultType='java.lang.Integer'>
+   select count(1) from 
+   tb_expressbill_masterhx
+   <include refid="where_Clause" />
+   </select>
+   
+   <update id='updateByIdClose' parameterType="Object">
+   update tb_expressbill_masterhx 
+   set status=1,
+       update_time=now(),
+       update_user=#{user}
+   where id=#{id};
+   </update>
+
+   <delete id='deleteID' parameterType='java.lang.Integer'>
+   delete from 
+      tb_expressbill_masterhx
+    where id= #{id};
+   </delete>
+
+</mapper>   

@@ -1,0 +1,21 @@
+.pinal-left{
+	float: left;
+	/* height: 500px;
+	min-height: 400px;
+	min-width: 100px;
+	text-align: center; 
+	border-right: 1px #CCCCCC solid; */
+}
+
+.pinal-right{
+	float: left;
+	/* height: 500px;
+	min-height: 400px;
+	min-width: 200px; */
+}
+
+.tab-panel-body{
+	/* width: 100%;
+	height: 434px; */
+	overflow: auto;
+}

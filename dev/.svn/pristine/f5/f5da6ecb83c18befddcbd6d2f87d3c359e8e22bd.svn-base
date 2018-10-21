@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ValueAddedServiceDetailMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.ValueAddedServiceDetail" >
+	<result column="vasd_id" property="vasd_id"/>
+	<result column="vasd_tab_id" property="vasd_tab_id"/>
+	<result column="vasd_section" property="vasd_section"/>
+	<result column="vasd_section_unit" property="vasd_section_unit"/>
+	<result column="vasd_value" property="vasd_value"/>
+	<result column="vasd_value_unit" property="vasd_value_unit"/>
+</resultMap>
+       
+<!-- vas_value_added_service_detail table all fields -->
+<sql id="Base_Column_List" >
+	 vasd_id,vasd_tab_id,vasd_section,vasd_section_unit,vasd_value,vasd_value_unit
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="vasd_id != null and vasd_id != ''" >
+	    and vasd_id =  #{vasd_id}
+	</if>
+	 	<if test="vasd_tab_id != null and vasd_tab_id != ''" >
+	    and vasd_tab_id =  #{vasd_tab_id}
+	</if>
+	 	<if test="vasd_section != null and vasd_section != ''" >
+	    and vasd_section =  #{vasd_section}
+	</if>
+	 	<if test="vasd_section_unit != null and vasd_section_unit != ''" >
+	    and vasd_section_unit =  #{vasd_section_unit}
+	</if>
+	 	<if test="vasd_value != null and vasd_value != ''" >
+	    and vasd_value =  #{vasd_value}
+	</if>
+	 	<if test="vasd_value_unit != null and vasd_value_unit != ''" >
+	    and vasd_value_unit =  #{vasd_value_unit}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入增值服务费阶梯数据 -->
+<insert id="insert" parameterType="com.bt.lmis.model.ValueAddedServiceDetail" >
+  insert into vas_value_added_service_detail(vasd_id,vasd_tab_id,vasd_section,vasd_section_unit,vasd_value,vasd_value_unit)
+ values(#{vasd_id},#{vasd_tab_id},#{vasd_section},#{vasd_section_unit},#{vasd_value},#{vasd_value_unit})
+</insert>
+
+<!-- 修改增值服务费阶梯数据-->  
+ <update id="update" parameterType="com.bt.lmis.model.ValueAddedServiceDetail" >
+  update vas_value_added_service_detail set vasd_tab_id=#{vasd_tab_id},vasd_section=#{vasd_section},vasd_section_unit=#{vasd_section_unit},vasd_value=#{vasd_value},vasd_value_unit=#{vasd_value_unit} where vasd_id=#{vasd_id}
+ </update>
+ 
+ <!-- 选择修改增值服务费阶梯数据-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.ValueAddedServiceDetail" >
+	update vas_value_added_service_detail set 
+	<trim  suffixOverrides="," >
+	<if test="vasd_tab_id != null  and vasd_tab_id != '' ">
+		vasd_tab_id=#{vasd_tab_id},
+	</if>
+	<if test="vasd_section != null  and vasd_section != '' ">
+		vasd_section=#{vasd_section},
+	</if>
+	<if test="vasd_section_unit != null  and vasd_section_unit != '' ">
+		vasd_section_unit=#{vasd_section_unit},
+	</if>
+	<if test="vasd_value != null  and vasd_value != '' ">
+		vasd_value=#{vasd_value},
+	</if>
+	<if test="vasd_value_unit != null  and vasd_value_unit != '' ">
+		vasd_value_unit=#{vasd_value_unit},
+	</if>
+	</trim> where vasd_id=#{vasd_id}
+</update>
+
+<!-- 删除增值服务费阶梯数据 -->
+<update id="delete" parameterType="Object">
+	delete 	 from vas_value_added_service_detail where vasd_id = #{vasd_id}
+</update>
+<!-- 批量删除增值服务费阶梯数据 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from vas_value_added_service_detail where vasd_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找增值服务费阶梯数据 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from vas_value_added_service_detail where vasd_id = #{vasd_id}
+</select>
+  	
+<!-- 增值服务费阶梯数据 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.ValueAddedServiceDetailQueryParam">
+	select count(1) from vas_value_added_service_detail 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的增值服务费阶梯数据集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.ValueAddedServiceDetailQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from vas_value_added_service_detail 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 增值服务费阶梯数据总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.ValueAddedServiceDetailQueryParam">
+	select count(1) from vas_value_added_service_detail 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的增值服务费阶梯数据集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.ValueAddedServiceDetailQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from vas_value_added_service_detail 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from vas_value_added_service_detail where vasd_tab_id=#{cbid}
+	order by vasd_id asc
+</select>
+
+</mapper>   

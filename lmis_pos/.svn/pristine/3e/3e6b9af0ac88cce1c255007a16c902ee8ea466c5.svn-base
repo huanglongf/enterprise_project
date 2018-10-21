@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.whsSurplusSc.dao.PosWhsSurplusScMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc" id="PosWhsSurplusScMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="schedule_date" property="scheduleDate" jdbcType="VARCHAR" />
+		<result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+		<result column="sku_type" property="skuType" jdbcType="VARCHAR" />
+		<result column="sc_max" property="scMax" jdbcType="INTEGER" />
+		<result column="sc_init" property="scInit" jdbcType="INTEGER" />
+		<result column="planned_out" property="plannedOut" jdbcType="INTEGER" />
+		<result column="planned_in_po" property="plannedInPo" jdbcType="INTEGER" />
+		<result column="surplus" property="surplus" jdbcType="INTEGER" />
+		<result column="surplus_plus" property="surplusPlus" jdbcType="INTEGER" />
+		<result column="in_jobs_max" property="inJobsMax" jdbcType="INTEGER" />
+		<result column="in_jobs_enable" property="inJobsEnable" jdbcType="INTEGER" />
+		<result column="in_enable" property="inEnable" jdbcType="INTEGER" />
+		<result column="in_enable_plus" property="inEnablePlus" jdbcType="INTEGER" />
+		<result column="final_inventory" property="finalInventory" jdbcType="INTEGER" />
+		<result column="date_id" property="dateId" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		schedule_date,
+		whs_code,
+		sku_type,
+		sc_max,
+		sc_init,
+		planned_out,
+		planned_in_po,
+		surplus,
+		surplus_plus,
+		in_jobs_max,
+		in_jobs_enable,
+		in_enable,
+		in_enable_plus,
+		final_inventory,
+		date_id
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			schedule_date,
+			whs_code,
+			sku_type,
+			sc_max,
+			sc_init,
+			planned_out,
+			planned_in_po,
+			surplus,
+			surplus_plus,
+			in_jobs_max,
+			in_jobs_enable,
+			in_enable,
+			in_enable_plus,
+			final_inventory,
+			date_id
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		INSERT INTO pos_whs_surplus_sc
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{scheduleDate, jdbcType=VARCHAR},
+			#{whsCode, jdbcType=VARCHAR},
+			#{skuType, jdbcType=VARCHAR},
+			#{scMax, jdbcType=INTEGER},
+			#{scInit, jdbcType=INTEGER},
+			#{plannedOut, jdbcType=INTEGER},
+			#{plannedInPo, jdbcType=INTEGER},
+			#{surplus, jdbcType=INTEGER},
+			#{surplusPlus, jdbcType=INTEGER},
+			#{inJobsMax, jdbcType=INTEGER},
+			#{inJobsEnable, jdbcType=INTEGER},
+			#{inEnable, jdbcType=INTEGER},
+			#{inEnablePlus, jdbcType=INTEGER},
+			#{finalInventory, jdbcType=INTEGER},
+			#{dateId, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_whs_surplus_sc
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.scheduleDate, jdbcType=VARCHAR},
+				#{obj.whsCode, jdbcType=VARCHAR},
+				#{obj.skuType, jdbcType=VARCHAR},
+				#{obj.scMax, jdbcType=INTEGER},
+				#{obj.scInit, jdbcType=INTEGER},
+				#{obj.plannedOut, jdbcType=INTEGER},
+				#{obj.plannedInPo, jdbcType=INTEGER},
+				#{obj.surplus, jdbcType=INTEGER},
+				#{obj.surplusPlus, jdbcType=INTEGER},
+				#{obj.inJobsMax, jdbcType=INTEGER},
+				#{obj.inJobsEnable, jdbcType=INTEGER},
+				#{obj.inEnable, jdbcType=INTEGER},
+				#{obj.inEnablePlus, jdbcType=INTEGER},
+				#{obj.finalInventory, jdbcType=INTEGER},
+				#{obj.dateId, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<sql id="sql_where">
+		WHERE 1=1
+        <if test="id!=null and id!=''">
+            AND id = #{id, jdbcType=VARCHAR}
+        </if>
+        <if test="createTime!=null">
+            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+        </if>
+        <if test="createBy!=null and createBy!=''">
+            AND create_by = #{createBy, jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime!=null">
+            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateBy!=null and updateBy!=''">
+            AND update_by = #{updateBy, jdbcType=VARCHAR}
+        </if>
+        <if test="isDeleted!=null">
+            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+        </if>
+        <if test="isDisabled!=null">
+            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+        </if>
+        <if test="version!=null">
+            AND version = #{version, jdbcType=INTEGER}
+        </if>
+        <if test="pwrOrg!=null and pwrOrg!=''">
+            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+        </if>
+        <if test="scheduleDate!=null and scheduleDate!=''">
+        </if>
+		<if test="needScheduleDateRight == null or needScheduleDateRight == false">
+	        <if test="scheduleDate!=null and scheduleDate!=''">
+            	AND schedule_date = #{scheduleDate, jdbcType=VARCHAR}
+	        </if>
+		</if>
+        <if test="whsCode!=null and whsCode!=''">
+            AND whs_code = #{whsCode, jdbcType=VARCHAR}
+        </if>
+        <if test="skuType!=null and skuType!=''">
+            AND sku_type = #{skuType, jdbcType=VARCHAR}
+        </if>
+        <if test="scMax!=null">
+            AND sc_max = #{scMax, jdbcType=INTEGER}
+        </if>
+        <if test="scInit!=null">
+            AND sc_init = #{scInit, jdbcType=INTEGER}
+        </if>
+        <if test="plannedOut!=null">
+            AND planned_out = #{plannedOut, jdbcType=INTEGER}
+        </if>
+        <if test="plannedInPo!=null">
+            AND planned_in_po = #{plannedInPo, jdbcType=INTEGER}
+        </if>
+        <if test="surplus!=null">
+            AND surplus = #{surplus, jdbcType=INTEGER}
+        </if>
+        <if test="surplusPlus!=null">
+            AND surplus_plus = #{surplusPlus, jdbcType=INTEGER}
+        </if>
+        <if test="inJobsMax!=null">
+            AND in_jobs_max = #{inJobsMax, jdbcType=INTEGER}
+        </if>
+        <if test="inJobsEnable!=null">
+            AND in_jobs_enable = #{inJobsEnable, jdbcType=INTEGER}
+        </if>
+        <if test="inEnable!=null">
+            AND in_enable = #{inEnable, jdbcType=INTEGER}
+        </if>
+        <if test="inEnablePlus!=null">
+            AND in_enable_plus = #{inEnablePlus, jdbcType=INTEGER}
+        </if>
+        <if test="finalInventory!=null">
+            AND final_inventory = #{finalInventory, jdbcType=INTEGER}
+        </if>
+        <if test="dateId!=null and dateId!=''">
+            AND date_id = #{dateId, jdbcType=VARCHAR}
+        </if>
+	</sql>
+	<select id="retrieve" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc" resultMap="PosWhsSurplusScMap">
+		SELECT 
+			<include refid="Base_Column_List" /> 
+		FROM pos_whs_surplus_sc
+		<include refid="sql_where"/>
+		ORDER BY date_id DESC
+	</select>
+	<select id="retrieveByOther" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc" resultMap="PosWhsSurplusScMap">
+		SELECT 
+			<include refid="Base_Column_List" /> 
+		FROM pos_whs_surplus_sc
+		<include refid="sql_where"/>
+		<if test="needScheduleDateRight != null and needScheduleDateRight == true">
+	        <if test="scheduleDate!=null and scheduleDate!=''">
+				AND schedule_date > #{scheduleDate, jdbcType=VARCHAR}
+	        </if>
+		</if>
+		ORDER BY date_id DESC
+	</select>
+	<update id="update" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		UPDATE pos_whs_surplus_sc
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="scheduleDate!=null and scheduleDate!=''">
+	            schedule_date = #{scheduleDate, jdbcType=VARCHAR},
+	        </if>
+	        <if test="whsCode!=null and whsCode!=''">
+	            whs_code = #{whsCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="skuType!=null and skuType!=''">
+	            sku_type = #{skuType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="scMax!=null">
+	            sc_max = #{scMax, jdbcType=INTEGER},
+	        </if>
+	        <if test="scInit!=null">
+	            sc_init = #{scInit, jdbcType=INTEGER},
+	        </if>
+	        <if test="plannedOut!=null">
+	            planned_out = #{plannedOut, jdbcType=INTEGER},
+	        </if>
+	        <if test="plannedInPo!=null">
+	            planned_in_po = #{plannedInPo, jdbcType=INTEGER},
+	        </if>
+	        <if test="surplus!=null">
+	            surplus = #{surplus, jdbcType=INTEGER},
+	        </if>
+	        <if test="surplusPlus!=null">
+	            surplus_plus = #{surplusPlus, jdbcType=INTEGER},
+	        </if>
+	        <if test="inJobsMax!=null">
+	            in_jobs_max = #{inJobsMax, jdbcType=INTEGER},
+	        </if>
+	        <if test="inJobsEnable!=null">
+	            in_jobs_enable = #{inJobsEnable, jdbcType=INTEGER},
+	        </if>
+	        <if test="inEnable!=null">
+	            in_enable = #{inEnable, jdbcType=INTEGER},
+	        </if>
+	        <if test="inEnablePlus!=null">
+	            in_enable_plus = #{inEnablePlus, jdbcType=INTEGER},
+	        </if>
+	        <if test="finalInventory!=null">
+	            final_inventory = #{finalInventory, jdbcType=INTEGER},
+	        </if>
+	        <if test="dateId!=null and dateId!=''">
+	            date_id = #{dateId, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		UPDATE pos_whs_surplus_sc
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	schedule_date = #{scheduleDate, jdbcType=VARCHAR},
+        	whs_code = #{whsCode, jdbcType=VARCHAR},
+        	sku_type = #{skuType, jdbcType=VARCHAR},
+        	sc_max = #{scMax, jdbcType=INTEGER},
+        	sc_init = #{scInit, jdbcType=INTEGER},
+        	planned_out = #{plannedOut, jdbcType=INTEGER},
+        	planned_in_po = #{plannedInPo, jdbcType=INTEGER},
+        	surplus = #{surplus, jdbcType=INTEGER},
+        	surplus_plus = #{surplusPlus, jdbcType=INTEGER},
+        	in_jobs_max = #{inJobsMax, jdbcType=INTEGER},
+        	in_jobs_enable = #{inJobsEnable, jdbcType=INTEGER},
+        	in_enable = #{inEnable, jdbcType=INTEGER},
+        	in_enable_plus = #{inEnablePlus, jdbcType=INTEGER},
+        	final_inventory = #{finalInventory, jdbcType=INTEGER},
+        	date_id = #{dateId, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		UPDATE pos_whs_surplus_sc
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		UPDATE pos_whs_surplus_sc
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		DELETE FROM pos_whs_surplus_sc
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</delete>
+	<update id="updatePlannedInAbilityForFirstDay" 
+		parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		UPDATE 
+			pos_whs_surplus_sc
+		SET
+			planned_in_po = #{plannedInPo},
+			surplus = sc_max-sc_init+planned_out-#{plannedInPo},
+			surplus_plus = sc_max-sc_init+planned_out-#{plannedInPo},
+			in_jobs_enable = in_jobs_max-#{plannedInPo},
+			in_enable = if((sc_max-sc_init+planned_out-#{plannedInPo})>(in_jobs_max-#{plannedInPo}),(in_jobs_max-#{plannedInPo}),(sc_max-sc_init+planned_out-#{plannedInPo})),
+			in_enable_plus = if((sc_max-sc_init+planned_out-#{plannedInPo})>(in_jobs_max-#{plannedInPo}),(in_jobs_max-#{plannedInPo}),(sc_max-sc_init+planned_out-#{plannedInPo})),
+			final_inventory = sc_init-planned_out+#{plannedInPo},
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE
+			id = #{id}
+		AND schedule_date = #{scheduleDate}
+		AND whs_code = #{whsCode}
+		AND sku_type = #{skuType}
+	</update>
+	<update id="updatePlannedInAbilityForOtherDay"
+		parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		UPDATE 
+			pos_whs_surplus_sc
+		SET
+			planned_in_po = #{plannedInPo},
+			surplus = planned_out-#{plannedInPo},
+			surplus_plus = sc_max-sc_init+planned_out-#{plannedInPo},
+			in_jobs_enable = in_jobs_max-#{plannedInPo},
+			in_enable = if((planned_out-#{plannedInPo})>(in_jobs_max-#{plannedInPo}),(in_jobs_max-#{plannedInPo}),(planned_out-#{plannedInPo})),
+			in_enable_plus = if((sc_max-sc_init+planned_out-#{plannedInPo})>(in_jobs_max-#{plannedInPo}),(in_jobs_max-#{plannedInPo}),(sc_max-sc_init+planned_out-#{plannedInPo})),
+			final_inventory = sc_init-planned_out+#{plannedInPo},
+			update_by = #{updateBy},
+			update_time = #{updateTime}
+		WHERE
+			id = #{id}
+		AND schedule_date = #{scheduleDate}
+		AND whs_code = #{whsCode}
+		AND sku_type = #{skuType}
+	</update>
+	<update id="updatePlannedInAbilityForDayRight"
+		parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		UPDATE 
+			pos_whs_surplus_sc
+		SET
+			in_enable_plus = if((sc_max-sc_init+planned_out-#{plannedInPo})>in_jobs_max,in_jobs_max-planned_in_po,(sc_max-sc_init+planned_out-planned_in_po-#{plannedInPo})),
+			sc_init = sc_init + #{plannedInPo},				
+			surplus_plus = surplus_plus - #{plannedInPo},			
+			final_inventory = final_inventory + #{plannedInPo},
+			update_by = #{updateBy},
+			update_time = #{updateTime} 	
+		WHERE
+			TO_DAYS(schedule_date) > TO_DAYS(#{scheduleDate})
+		AND whs_code = #{whsCode}
+		AND sku_type = #{skuType}
+		AND date_id = #{dateId}
+	</update>
+	<update id="flushThisWhsOtherBuThisDayInJobsEnable"
+		parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		UPDATE 
+			pos_whs_surplus_sc
+		SET
+			in_jobs_enable = #{inJobsEnable},
+			in_enable = if(surplus > #{inJobsEnable},#{inJobsEnable},surplus),
+			in_enable_plus = if(surplus_plus > #{inJobsEnable},#{inJobsEnable},surplus_plus)
+		WHERE
+			whs_code = #{whsCode}
+		AND schedule_date = #{scheduleDate}
+		AND date_id = #{dateId}
+		AND sku_type != #{skuType}
+	</update>
+	
+	
+	<!-- 自定义sql -->
+	<select id="getPosWhsSurplusScInfo" parameterType="java.lang.String" resultType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusSc">
+		SELECT <include refid="Base_Column_List" /> FROM pos_whs_surplus_sc
+		WHERE
+		is_deleted = 0
+		AND is_disabled = 0
+		AND date_id = #{dateid}
+		AND sku_type = #{type}
+		AND whs_code = #{whscode}
+	</select>
+	
+	
+	<select id="selectPosWhsSurplusScList" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusScByDate"
+		resultType="java.util.Map">
+		select
+		id,
+		date_format(update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+		date_format(schedule_date,'%Y-%m-%d') as schedule_date,
+		whs_code,
+		(select
+		whs_name from pos_whs
+		where
+		whs_code=pos_whs_surplus_sc.whs_code) as
+		whs_name,
+		(case sku_type when
+		'20' then '鞋' when '10' then '服饰' when '30' then '配件' end) as
+		sku_type,
+		sc_max,
+		sc_init,
+		planned_out,
+		planned_in_po,
+		surplus,
+		surplus_plus,
+		in_jobs_max,
+		in_jobs_enable,
+		in_enable,
+		in_enable_plus,
+		final_inventory,
+		date_id
+		from pos_whs_surplus_sc
+	where 1=1
+			<if test="whsCode!=null and whsCode!=''">
+				AND whs_code = #{whsCode, jdbcType=VARCHAR}
+			</if>
+			<if test="skuType!=null and skuType!=''">
+				AND sku_type = #{skuType, jdbcType=VARCHAR}
+			</if>
+			<if test="dateId!=null and dateId!=''">
+				AND date_format(date_id,'%Y-%m-%d') = #{dateId, jdbcType=VARCHAR}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				AND date_format(schedule_date,'%Y-%m-%d') >= #{startDate, jdbcType=VARCHAR}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+			<![CDATA[
+				AND date_format(schedule_date,'%Y-%m-%d') <= #{endDate, jdbcType=VARCHAR}]]>
+			</if>
+		order by
+		whs_Code,sku_type,schedule_date desc
+	</select>
+	<select id="selectPosWhsSurplusSumBySku" parameterType="com.lmis.pos.whsSurplusSc.model.PosWhsSurplusScByDate"
+		resultType="java.util.Map">
+		SELECT
+		sum(
+		CASE sku_type
+		WHEN '20' THEN
+		in_enable
+		END
+		) as shoe,
+		sum(
+		CASE sku_type
+		WHEN '10' THEN
+		in_enable
+		END
+		) as dress,
+		sum(
+		CASE sku_type
+		WHEN '30' THEN
+		in_enable
+		END
+		) as accessory
+		FROM
+		pos_whs_surplus_sc
+		where 1=1
+		<if test="whsCode!=null and whsCode!=''">
+			AND whs_code = #{whsCode, jdbcType=VARCHAR}
+		</if>
+		<if test="skuType!=null and skuType!=''">
+			AND sku_type = #{skuType, jdbcType=VARCHAR}
+		</if>
+		<if test="dateId!=null and dateId!=''">
+				AND date_format(date_id,'%Y-%m-%d') = #{dateId, jdbcType=VARCHAR}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				AND date_format(schedule_date,'%Y-%m-%d') >= #{startDate, jdbcType=VARCHAR}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+			<![CDATA[
+				AND date_format(schedule_date,'%Y-%m-%d') <= #{endDate, jdbcType=VARCHAR}]]>
+			</if>
+
+	</select>
+</mapper>

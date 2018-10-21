@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.WaybillMasterBackupsMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.WaybillMasterBackups" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="waybill" property="waybill"/>
+	<result column="from_orgnization" property="from_orgnization"/>
+	<result column="to_orgnization" property="to_orgnization"/>
+	<result column="status" property="status"/>
+	<result column="producttype_code" property="producttype_code"/>
+	<result column="producttype_name" property="producttype_name"/>
+	<result column="to_phone" property="to_phone"/>
+	<result column="to_contacts" property="to_contacts"/>
+	<result column="to_address" property="to_address"/>
+	<result column="from_address" property="from_address"/>
+	<result column="from_province" property="from_province"/>
+	<result column="from_city" property="from_city"/>
+	<result column="from_state" property="from_state"/>
+	<result column="from_street" property="from_street"/>
+	<result column="order_time" property="order_time"/>
+	<result column="route_status" property="route_status"/>
+	<result column="total_qty" property="total_qty"/>
+	<result column="total_weight" property="total_weight"/>
+	<result column="total_volumn" property="total_volumn"/>
+	<result column="total_amount" property="total_amount"/>
+	<result column="from_contacts" property="from_contacts"/>
+	<result column="order_id" property="order_id"/>
+	<result column="to_province" property="to_province"/>
+	<result column="to_city" property="to_city"/>
+	<result column="to_state" property="to_state"/>
+	<result column="to_street" property="to_street"/>
+	<result column="from_phone" property="from_phone"/>
+	<result column="is_auto_bill" property="is_auto_bill"/>
+	<result column="payment" property="payment"/>
+	<result column="express_code" property="express_code"/>
+	<result column="from_num" property="from_num"/>
+	<result column="to_num" property="to_num"/>
+	<result column="cargo_type" property="cargo_type"/>
+	<result column="memo" property="memo"/>
+	<result column="submit_date" property="submit_date"/>
+	<result column="submit_time" property="submit_time"/>
+	<result column="customer_source" property="customer_source"/>
+	<result column="customer_phone" property="customer_phone"/>
+	<result column="to_phone2" property="to_phone2"/>
+	<result column="customer_number" property="customer_number"/>
+	<result column="mark_destination" property="mark_destination"/>
+	<result column="package_code" property="package_code"/>
+	<result column="package_name" property="package_name"/>
+	<result column="start_date" property="start_date"/>
+	<result column="to_province_code" property="to_province_code"/>
+	<result column="to_city_code" property="to_city_code"/>
+	<result column="to_state_code" property="to_state_code"/>
+	<result column="from_province_code" property="from_province_code"/>
+	<result column="from_city_code" property="from_city_code"/>
+	<result column="from_state_code" property="from_state_code"/>
+	<result column="from_orgnization_code" property="from_orgnization_code"/>
+	<result column="express_name" property="express_name"/>
+	<result column="print_code" property="print_code"/>
+	<result column="print_time" property="print_time"/>
+	<result column="amount_flag" property="amount_flag"/>
+	<result column="sendcode" property="sendcode"/>
+	<result column="is_docall" property="is_docall"/>
+	<result column="cost_center" property="cost_center"/>
+	<result column="pay_path" property="pay_path"/>
+	<result column="store_code" property="store_code"/>
+</resultMap>
+       
+<!-- tb_waybill_master_backups table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,waybill,from_orgnization,to_orgnization,status,producttype_code,producttype_name,to_phone,to_contacts,to_address,from_address,from_province,from_city,from_state,from_street,order_time,route_status,total_qty,total_weight,total_volumn,total_amount,from_contacts,order_id,to_province,to_city,to_state,to_street,from_phone,is_auto_bill,payment,express_code,from_num,to_num,cargo_type,memo,submit_date,submit_time,customer_source,customer_phone,to_phone2,customer_number,mark_destination,package_code,package_name,start_date,to_province_code,to_city_code,to_state_code,from_province_code,from_city_code,from_state_code,from_orgnization_code,express_name,print_code,print_time,amount_flag,sendcode,is_docall,cost_center,pay_path,store_code
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="waybill != null and waybill != ''" >
+	    and waybill =  #{waybill}
+	</if>
+	 	<if test="from_orgnization != null and from_orgnization != ''" >
+	    and from_orgnization =  #{from_orgnization}
+	</if>
+	 	<if test="to_orgnization != null and to_orgnization != ''" >
+	    and to_orgnization =  #{to_orgnization}
+	</if>
+	 	<if test="status != null and status != ''" >
+	    and status =  #{status}
+	</if>
+	 	<if test="producttype_code != null and producttype_code != ''" >
+	    and producttype_code =  #{producttype_code}
+	</if>
+	 	<if test="producttype_name != null and producttype_name != ''" >
+	    and producttype_name =  #{producttype_name}
+	</if>
+	 	<if test="to_phone != null and to_phone != ''" >
+	    and to_phone =  #{to_phone}
+	</if>
+	 	<if test="to_contacts != null and to_contacts != ''" >
+	    and to_contacts =  #{to_contacts}
+	</if>
+	 	<if test="to_address != null and to_address != ''" >
+	    and to_address =  #{to_address}
+	</if>
+	 	<if test="from_address != null and from_address != ''" >
+	    and from_address =  #{from_address}
+	</if>
+	 	<if test="from_province != null and from_province != ''" >
+	    and from_province =  #{from_province}
+	</if>
+	 	<if test="from_city != null and from_city != ''" >
+	    and from_city =  #{from_city}
+	</if>
+	 	<if test="from_state != null and from_state != ''" >
+	    and from_state =  #{from_state}
+	</if>
+	 	<if test="from_street != null and from_street != ''" >
+	    and from_street =  #{from_street}
+	</if>
+	<if test="order_time != null" >
+	    and order_time =  #{order_time}
+	</if>
+	 	<if test="route_status != null and route_status != ''" >
+	    and route_status =  #{route_status}
+	</if>
+	<if test="total_qty != null" >
+	    and total_qty =  #{total_qty}
+	</if>
+	<if test="total_weight != null" >
+	    and total_weight =  #{total_weight}
+	</if>
+	<if test="total_volumn != null" >
+	    and total_volumn =  #{total_volumn}
+	</if>
+	<if test="total_amount != null" >
+	    and total_amount =  #{total_amount}
+	</if>
+	 	<if test="from_contacts != null and from_contacts != ''" >
+	    and from_contacts =  #{from_contacts}
+	</if>
+	 	<if test="order_id != null and order_id != ''" >
+	    and order_id =  #{order_id}
+	</if>
+	 	<if test="to_province != null and to_province != ''" >
+	    and to_province =  #{to_province}
+	</if>
+	 	<if test="to_city != null and to_city != ''" >
+	    and to_city =  #{to_city}
+	</if>
+	 	<if test="to_state != null and to_state != ''" >
+	    and to_state =  #{to_state}
+	</if>
+	 	<if test="to_street != null and to_street != ''" >
+	    and to_street =  #{to_street}
+	</if>
+	 	<if test="from_phone != null and from_phone != ''" >
+	    and from_phone =  #{from_phone}
+	</if>
+	 	<if test="is_auto_bill != null and is_auto_bill != ''" >
+	    and is_auto_bill =  #{is_auto_bill}
+	</if>
+	 	<if test="payment != null and payment != ''" >
+	    and payment =  #{payment}
+	</if>
+	 	<if test="express_code != null and express_code != ''" >
+	    and express_code =  #{express_code}
+	</if>
+	 	<if test="from_num != null and from_num != ''" >
+	    and from_num =  #{from_num}
+	</if>
+	 	<if test="to_num != null and to_num != ''" >
+	    and to_num =  #{to_num}
+	</if>
+	 	<if test="cargo_type != null and cargo_type != ''" >
+	    and cargo_type =  #{cargo_type}
+	</if>
+	 	<if test="memo != null and memo != ''" >
+	    and memo =  #{memo}
+	</if>
+	<if test="submit_date != null" >
+	    and submit_date =  #{submit_date}
+	</if>
+	<if test="submit_time != null" >
+	    and submit_time =  #{submit_time}
+	</if>
+	 	<if test="customer_source != null and customer_source != ''" >
+	    and customer_source =  #{customer_source}
+	</if>
+	 	<if test="customer_phone != null and customer_phone != ''" >
+	    and customer_phone =  #{customer_phone}
+	</if>
+	 	<if test="to_phone2 != null and to_phone2 != ''" >
+	    and to_phone2 =  #{to_phone2}
+	</if>
+	 	<if test="customer_number != null and customer_number != ''" >
+	    and customer_number =  #{customer_number}
+	</if>
+	 	<if test="mark_destination != null and mark_destination != ''" >
+	    and mark_destination =  #{mark_destination}
+	</if>
+	 	<if test="package_code != null and package_code != ''" >
+	    and package_code =  #{package_code}
+	</if>
+	 	<if test="package_name != null and package_name != ''" >
+	    and package_name =  #{package_name}
+	</if>
+	 	<if test="start_date != null and start_date != ''" >
+	    and start_date =  #{start_date}
+	</if>
+	 	<if test="to_province_code != null and to_province_code != ''" >
+	    and to_province_code =  #{to_province_code}
+	</if>
+	 	<if test="to_city_code != null and to_city_code != ''" >
+	    and to_city_code =  #{to_city_code}
+	</if>
+	 	<if test="to_state_code != null and to_state_code != ''" >
+	    and to_state_code =  #{to_state_code}
+	</if>
+	 	<if test="from_province_code != null and from_province_code != ''" >
+	    and from_province_code =  #{from_province_code}
+	</if>
+	 	<if test="from_city_code != null and from_city_code != ''" >
+	    and from_city_code =  #{from_city_code}
+	</if>
+	 	<if test="from_state_code != null and from_state_code != ''" >
+	    and from_state_code =  #{from_state_code}
+	</if>
+	 	<if test="from_orgnization_code != null and from_orgnization_code != ''" >
+	    and from_orgnization_code =  #{from_orgnization_code}
+	</if>
+	 	<if test="express_name != null and express_name != ''" >
+	    and express_name =  #{express_name}
+	</if>
+	 	<if test="print_code != null and print_code != ''" >
+	    and print_code =  #{print_code}
+	</if>
+	<if test="print_time != null" >
+	    and print_time =  #{print_time}
+	</if>
+	 	<if test="amount_flag != null and amount_flag != ''" >
+	    and amount_flag =  #{amount_flag}
+	</if>
+	 	<if test="sendcode != null and sendcode != ''" >
+	    and sendcode =  #{sendcode}
+	</if>
+	 	<if test="is_docall != null and is_docall != ''" >
+	    and is_docall =  #{is_docall}
+	</if>
+	 	<if test="cost_center != null and cost_center != ''" >
+	    and cost_center =  #{cost_center}
+	</if>
+	 	<if test="pay_path != null and pay_path != ''" >
+	    and pay_path =  #{pay_path}
+	</if>
+	 	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+</trim>
+</sql>
+
+
+<insert id="insertWaybilMaster" parameterType="com.bt.orderPlatform.model.WaybilMasterDetail" >
+  insert into tb_waybill_master_backups(
+	id,
+	create_time,
+	create_user,
+	update_time,
+	update_user,
+	waybill,
+	from_orgnization,
+	to_orgnization,
+	status,
+	producttype_code,
+	producttype_name,
+	to_phone,
+	to_contacts,
+	to_address,
+	from_address,
+	from_province,
+	from_city,
+	from_state,
+	from_street,
+	order_time,
+	route_status,
+	total_qty,
+	total_weight,
+	total_volumn,
+	total_amount,
+	from_contacts,
+	order_id,
+	to_province,
+	to_city,
+	to_state,
+	to_street,
+	from_phone,
+	is_auto_bill,
+	payment,
+	express_code,
+	to_phone2,
+	customer_phone,
+	customer_source,
+	submit_time,
+	submit_date,
+	memo,
+	cargo_type,
+	to_num,
+	from_num,
+		mark_destination,
+  package_name,
+  package_code,
+  to_province_code,
+  to_city_code,
+  to_state_code,
+  from_province_code,
+  from_city_code,
+  from_state_code,
+  from_orgnization_code,
+  express_name,
+  print_code,
+  print_time,
+  amount_flag,
+  sendcode,
+  is_docall,
+  cost_center,
+  pay_path,
+  store_code,
+	customer_number
+	)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},
+ #{waybill},#{from_orgnization},#{to_orgnization},#{status},#{producttype_code},
+ #{producttype_name},#{to_phone},#{to_contacts},#{to_address},#{from_address},
+ #{from_province},#{from_city},#{from_state},#{from_street},#{order_time},#{route_status},
+ #{total_qty},#{total_weight},#{total_volumn},#{total_amount},#{from_contacts},
+ #{order_id},#{to_province},#{to_city},#{to_state},#{to_street},#{from_phone},#{is_auto_bill},#{payment},#{express_code},#{to_phone2},
+ #{customer_phone},#{customer_source},#{submit_time},#{submit_date},#{memo},
+ #{cargo_type},#{to_num},#{from_num},
+   #{mark_destination},
+ #{package_name},
+ #{package_code},
+ #{to_province_code},
+ #{to_city_code},
+ #{to_state_code},
+ #{from_province_code},
+ #{from_city_code},
+ #{from_state_code},
+ #{from_orgnization_code},
+ #{express_name},
+ #{print_code},
+ #{print_time},
+ #{amount_flag},
+ #{sendcode},
+ #{is_docall},
+ #{cost_center},
+ #{pay_path},
+ #{store_code},
+ #{customer_number})
+</insert>   
+
+
+
+<!-- 插入运单备份表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.WaybillMaster" >
+  insert into tb_waybill_master_backups(id,create_time,create_user,cost_center,pay_path,update_time,update_user,waybill,from_orgnization,to_orgnization,status,producttype_code,producttype_name,to_phone,to_contacts,to_address,from_address,from_province,from_city,from_state,from_street,order_time,route_status,total_qty,total_weight,total_volumn,total_amount,from_contacts,order_id,to_province,to_city,to_state,to_street,from_phone,is_auto_bill,payment,express_code,from_num,to_num,cargo_type,memo,submit_date,submit_time,customer_source,customer_phone,to_phone2,customer_number,mark_destination,package_code,package_name,to_province_code,to_city_code,to_state_code,from_province_code,from_city_code,from_state_code,from_orgnization_code,express_name,print_code,print_time,amount_flag,
+  sendcode,
+  store_code,
+  is_docall)
+ values(#{id},#{create_time},#{create_user},#{cost_center},#{pay_path},#{update_time},#{update_user},#{waybill},#{from_orgnization},#{to_orgnization},#{status},#{producttype_code},#{producttype_name},#{to_phone},#{to_contacts},#{to_address},#{from_address},#{from_province},#{from_city},#{from_state},#{from_street},#{order_time},#{route_status},#{total_qty},#{total_weight},#{total_volumn},#{total_amount},#{from_contacts},#{order_id},#{to_province},#{to_city},#{to_state},#{to_street},#{from_phone},#{isAutoBill},#{payment},#{expressCode},#{from_num},#{to_num},#{cargo_type},#{memo},#{submit_date},#{submit_time},#{customer_source},#{customer_phone},#{to_phone2},#{customer_number},#{mark_destination},#{package_code},#{package_name},#{to_province_code},#{to_city_code},#{to_state_code},#{from_province_code},#{from_city_code},#{from_state_code},#{from_orgnization_code},#{express_name},#{print_code},#{print_time},#{amount_flag},
+ #{sendcode},
+ #{store_code},
+ #{is_docall})
+</insert>
+
+<update id="updatewmd" parameterType="com.bt.orderPlatform.model.WaybillMaster" >
+  update tb_waybill_master_backups set total_qty=#{total_qty},total_weight=#{total_weight},total_volumn=#{total_volumn},total_amount=#{total_amount}
+  ,cost_center=#{cost_center},
+  store_code=#{store_code},
+  pay_path=#{pay_path} where id=#{id}
+ </update>
+
+
+<!-- 修改运单备份表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.WaybillMasterBackups" >
+  update tb_waybill_master_backups set create_time=#{create_time},
+  create_user=#{create_user},
+  store_code=#{store_code},
+  update_time=#{update_time},update_user=#{update_user},waybill=#{waybill},from_orgnization=#{from_orgnization},to_orgnization=#{to_orgnization},status=#{status},producttype_code=#{producttype_code},producttype_name=#{producttype_name},to_phone=#{to_phone},to_contacts=#{to_contacts},to_address=#{to_address},from_address=#{from_address},from_province=#{from_province},from_city=#{from_city},from_state=#{from_state},from_street=#{from_street},order_time=#{order_time},route_status=#{route_status},total_qty=#{total_qty},total_weight=#{total_weight},total_volumn=#{total_volumn},total_amount=#{total_amount},from_contacts=#{from_contacts},order_id=#{order_id},to_province=#{to_province},to_city=#{to_city},to_state=#{to_state},to_street=#{to_street},from_phone=#{from_phone},is_auto_bill=#{is_auto_bill},payment=#{payment},express_code=#{express_code},from_num=#{from_num},to_num=#{to_num},cargo_type=#{cargo_type},memo=#{memo},submit_date=#{submit_date},submit_time=#{submit_time},customer_source=#{customer_source},customer_phone=#{customer_phone},to_phone2=#{to_phone2},customer_number=#{customer_number},mark_destination=#{mark_destination},package_code=#{package_code},package_name=#{package_name},start_date=#{start_date},to_province_code=#{to_province_code},to_city_code=#{to_city_code},to_state_code=#{to_state_code},from_province_code=#{from_province_code},from_city_code=#{from_city_code},from_state_code=#{from_state_code},from_orgnization_code=#{from_orgnization_code},express_name=#{express_name},print_code=#{print_code},print_time=#{print_time},amount_flag=#{amount_flag},sendcode=#{sendcode},is_docall=#{is_docall},cost_center=#{cost_center},pay_path=#{pay_path} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改运单备份表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.WaybillMasterBackups" >
+	update tb_waybill_master_backups set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="waybill != null  and waybill != '' ">
+		waybill=#{waybill},
+	</if>
+	<if test="from_orgnization != null  and from_orgnization != '' ">
+		from_orgnization=#{from_orgnization},
+	</if>
+	<if test="to_orgnization != null  and to_orgnization != '' ">
+		to_orgnization=#{to_orgnization},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="producttype_code != null  and producttype_code != '' ">
+		producttype_code=#{producttype_code},
+	</if>
+	<if test="producttype_name != null  and producttype_name != '' ">
+		producttype_name=#{producttype_name},
+	</if>
+	<if test="to_phone != null  and to_phone != '' ">
+		to_phone=#{to_phone},
+	</if>
+	<if test="to_contacts != null  and to_contacts != '' ">
+		to_contacts=#{to_contacts},
+	</if>
+	<if test="to_address != null  and to_address != '' ">
+		to_address=#{to_address},
+	</if>
+	<if test="from_address != null  and from_address != '' ">
+		from_address=#{from_address},
+	</if>
+	<if test="from_province != null  and from_province != '' ">
+		from_province=#{from_province},
+	</if>
+	<if test="from_city != null  and from_city != '' ">
+		from_city=#{from_city},
+	</if>
+	<if test="from_state != null  and from_state != '' ">
+		from_state=#{from_state},
+	</if>
+	<if test="from_street != null  and from_street != '' ">
+		from_street=#{from_street},
+	</if>
+	<if test="order_time != null  ">
+		order_time=#{order_time},
+	</if>
+	<if test="route_status != null  and route_status != '' ">
+		route_status=#{route_status},
+	</if>
+	<if test="total_qty != null  ">
+		total_qty=#{total_qty},
+	</if>
+	<if test="total_weight != null  ">
+		total_weight=#{total_weight},
+	</if>
+	<if test="total_volumn != null  ">
+		total_volumn=#{total_volumn},
+	</if>
+	<if test="total_amount != null  ">
+		total_amount=#{total_amount},
+	</if>
+	<if test="from_contacts != null  and from_contacts != '' ">
+		from_contacts=#{from_contacts},
+	</if>
+	<if test="order_id != null  and order_id != '' ">
+		order_id=#{order_id},
+	</if>
+	<if test="to_province != null  and to_province != '' ">
+		to_province=#{to_province},
+	</if>
+	<if test="to_city != null  and to_city != '' ">
+		to_city=#{to_city},
+	</if>
+	<if test="to_state != null  and to_state != '' ">
+		to_state=#{to_state},
+	</if>
+	<if test="to_street != null  and to_street != '' ">
+		to_street=#{to_street},
+	</if>
+	<if test="from_phone != null  and from_phone != '' ">
+		from_phone=#{from_phone},
+	</if>
+	<if test="is_auto_bill != null  and is_auto_bill != '' ">
+		is_auto_bill=#{is_auto_bill},
+	</if>
+	<if test="payment != null  and payment != '' ">
+		payment=#{payment},
+	</if>
+	<if test="express_code != null  and express_code != '' ">
+		express_code=#{express_code},
+	</if>
+	<if test="from_num != null  and from_num != '' ">
+		from_num=#{from_num},
+	</if>
+	<if test="to_num != null  and to_num != '' ">
+		to_num=#{to_num},
+	</if>
+	<if test="cargo_type != null  and cargo_type != '' ">
+		cargo_type=#{cargo_type},
+	</if>
+	<if test="memo != null  and memo != '' ">
+		memo=#{memo},
+	</if>
+	<if test="submit_date != null  ">
+		submit_date=#{submit_date},
+	</if>
+	<if test="submit_time != null  ">
+		submit_time=#{submit_time},
+	</if>
+	<if test="customer_source != null  and customer_source != '' ">
+		customer_source=#{customer_source},
+	</if>
+	<if test="customer_phone != null  and customer_phone != '' ">
+		customer_phone=#{customer_phone},
+	</if>
+	<if test="to_phone2 != null  and to_phone2 != '' ">
+		to_phone2=#{to_phone2},
+	</if>
+	<if test="customer_number != null  and customer_number != '' ">
+		customer_number=#{customer_number},
+	</if>
+	<if test="mark_destination != null  and mark_destination != '' ">
+		mark_destination=#{mark_destination},
+	</if>
+	<if test="package_code != null  and package_code != '' ">
+		package_code=#{package_code},
+	</if>
+	<if test="package_name != null  and package_name != '' ">
+		package_name=#{package_name},
+	</if>
+	<if test="start_date != null  and start_date != '' ">
+		start_date=#{start_date},
+	</if>
+	<if test="to_province_code != null  and to_province_code != '' ">
+		to_province_code=#{to_province_code},
+	</if>
+	<if test="to_city_code != null  and to_city_code != '' ">
+		to_city_code=#{to_city_code},
+	</if>
+	<if test="to_state_code != null  and to_state_code != '' ">
+		to_state_code=#{to_state_code},
+	</if>
+	<if test="from_province_code != null  and from_province_code != '' ">
+		from_province_code=#{from_province_code},
+	</if>
+	<if test="from_city_code != null  and from_city_code != '' ">
+		from_city_code=#{from_city_code},
+	</if>
+	<if test="from_state_code != null  and from_state_code != '' ">
+		from_state_code=#{from_state_code},
+	</if>
+	<if test="from_orgnization_code != null  and from_orgnization_code != '' ">
+		from_orgnization_code=#{from_orgnization_code},
+	</if>
+	<if test="express_name != null  and express_name != '' ">
+		express_name=#{express_name},
+	</if>
+	<if test="print_code != null  and print_code != '' ">
+		print_code=#{print_code},
+	</if>
+	<if test="print_time != null  ">
+		print_time=#{print_time},
+	</if>
+	<if test="amount_flag != null  and amount_flag != '' ">
+		amount_flag=#{amount_flag},
+	</if>
+	<if test="sendcode != null  and sendcode != '' ">
+		sendcode=#{sendcode},
+	</if>
+	<if test="is_docall != null  and is_docall != '' ">
+		is_docall=#{is_docall},
+	</if>
+	<if test="cost_center != null  and cost_center != '' ">
+		cost_center=#{cost_center},
+	</if>
+	<if test="pay_path != null  and pay_path != '' ">
+		pay_path=#{pay_path}
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code}
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除运单备份表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_waybill_master_backups where id = #{id}
+</update>
+<!-- 批量删除运单备份表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_waybill_master_backups where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找运单备份表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_waybill_master_backups where id = #{id}
+</select>
+  	
+<!-- 运单备份表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.WaybillMasterBackupsQueryParam">
+	select count(1) from tb_waybill_master_backups 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的运单备份表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.WaybillMasterBackupsQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_waybill_master_backups 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 运单备份表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.WaybillMasterBackupsQueryParam">
+	select count(1) from tb_waybill_master_backups 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的运单备份表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.WaybillMasterBackupsQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_waybill_master_backups 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

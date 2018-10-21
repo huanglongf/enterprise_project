@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.AllTrayMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.AllTray" >
+	<result column="sat_id" property="sat_id"/>
+	<result column="sat_cb_id" property="sat_cb_id"/>
+	<result column="sat_section" property="sat_section"/>
+	<result column="sat_price" property="sat_price"/>
+	<result column="sat_price_unit" property="sat_price_unit"/>
+	<result column="sat_status" property="sat_status"/>
+</resultMap>
+       
+<!-- ssc_all_tray table all fields -->
+<sql id="Base_Column_List" >
+	 sat_id,sat_cb_id,sat_section,sat_price,sat_price_unit,sat_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="sat_id != null" >
+	    and sat_id =  #{sat_id}
+	</if>
+	<if test="sat_cb_id != null" >
+	    and sat_cb_id =  #{sat_cb_id}
+	</if>
+	 	<if test="sat_section != null and sat_section != ''" >
+	    and sat_section =  #{sat_section}
+	</if>
+	 	<if test="sat_price != null and sat_price != ''" >
+	    and sat_price =  #{sat_price}
+	</if>
+	<if test="sat_price_unit != null" >
+	    and sat_price_unit =  #{sat_price_unit}
+	</if>
+	<if test="sat_status != null" >
+	    and sat_status =  #{sat_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入总占用托盘数结算表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.AllTray" >
+  insert into ssc_all_tray(sat_id,sat_cb_id,sat_section,sat_price,sat_price_unit,sat_status)
+ values(#{sat_id},#{sat_cb_id},#{sat_section},#{sat_price},#{sat_price_unit},#{sat_status})
+</insert>
+
+<!-- 修改总占用托盘数结算表-->  
+ <update id="update" parameterType="com.bt.lmis.model.AllTray" >
+  update ssc_all_tray set sat_cb_id=#{sat_cb_id},sat_section=#{sat_section},sat_price=#{sat_price},sat_price_unit=#{sat_price_unit},sat_status=#{sat_status} where sat_id=#{sat_id}
+ </update>
+ 
+ <!-- 选择修改总占用托盘数结算表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.AllTray" >
+	update ssc_all_tray set 
+	<trim  suffixOverrides="," >
+	<if test="sat_cb_id != null  ">
+		sat_cb_id=#{sat_cb_id},
+	</if>
+	<if test="sat_section != null  and sat_section != '' ">
+		sat_section=#{sat_section},
+	</if>
+	<if test="sat_price != null  and sat_price != '' ">
+		sat_price=#{sat_price},
+	</if>
+	<if test="sat_price_unit != null  ">
+		sat_price_unit=#{sat_price_unit},
+	</if>
+	<if test="sat_status != null  ">
+		sat_status=#{sat_status},
+	</if>
+	</trim> where sat_id=#{sat_id}
+</update>
+
+<!-- 删除总占用托盘数结算表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_all_tray where sat_id = #{sat_id}
+</update>
+<!-- 批量删除总占用托盘数结算表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_all_tray where sat_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找总占用托盘数结算表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_all_tray where sat_id = #{sat_id}
+</select>
+  	
+<!-- 总占用托盘数结算表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AllTrayQueryParam">
+	select count(1) from ssc_all_tray 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的总占用托盘数结算表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.AllTrayQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_all_tray 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 总占用托盘数结算表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.AllTrayQueryParam">
+	select count(1) from ssc_all_tray 
+	<include refid="where_Clause"/>
+</select>
+  	
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_all_tray where sat_cb_id=#{cbid}
+</select>
+  	
+</mapper>   

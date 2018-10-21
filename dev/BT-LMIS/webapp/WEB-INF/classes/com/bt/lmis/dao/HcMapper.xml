@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.HcMapper" > 
+<!-- Result Map-->
+  <insert id="saveData" parameterType="java.util.HashMap">
+     insert into hc_main
+     (
+     hc_no,
+     hc_name,
+     hc_unit,
+     cat_type,
+     cat_type_name,
+     hc_price,
+     price_unit,
+     bill_num,
+     create_user,
+     create_date,
+     contract_id,
+     hc_type
+     )values(
+     #{hc_no},
+     #{hc_name},
+     #{hc_unit},
+     #{cat_type},
+     #{cat_type_name},
+     #{hc_price},
+     #{price_unit},
+     #{bill_num},
+     #{create_user},
+     #{create_date},
+     #{contract_id},
+     #{HC_TYPE}
+     )
+  </insert>  	
+  
+  <select id="checkData" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    select t.id from hc_main t 
+    where 
+    1=1
+    and t.hc_name=#{hc_name}
+    and t.hc_type=#{HC_TYPE}
+    and t.hc_no=#{hc_no}
+    and t.contract_id=#{contract_id}
+  </select>
+  
+  <select id="getTable" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+    select 
+    t.id,
+    t.hc_no,
+    t.hc_name,
+    t.hc_unit,
+    t.cat_type,
+    t.cat_type_name,
+    t.hc_price,
+    t.price_unit,
+    t.bill_num,
+    t.create_user,
+    t.create_date,
+    t.contract_id,
+	(CASE t.hc_type
+         WHEN '1' THEN '主材'
+         WHEN '2' THEN '辅材'
+	ELSE '未知' END) as hc_type
+    from hc_main t
+    where t.contract_id=#{contract_id}
+  </select>
+  
+  <delete id="delTable" parameterType="java.util.HashMap">
+    delete from hc_main
+    where id=#{id}
+  </delete>
+</mapper>   

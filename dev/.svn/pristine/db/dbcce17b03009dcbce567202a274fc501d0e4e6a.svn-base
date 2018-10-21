@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.balance.dao.InvitationdataEstimateMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.InvitationdataEstimate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contractId" jdbcType="INTEGER" />
+    <result column="batch_number" property="batchNumber" jdbcType="VARCHAR" />
+    <result column="sku_type" property="skuType" jdbcType="VARCHAR" />
+    <result column="qty" property="qty" jdbcType="DECIMAL" />
+    <result column="qty_unit" property="qtyUnit" jdbcType="VARCHAR" />
+    <result column="fee" property="fee" jdbcType="DECIMAL" />
+    <result column="fee_unit" property="feeUnit" jdbcType="VARCHAR" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="totalamount_unit" property="totalamountUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, create_user, update_time, update_user, contract_id, batch_number, 
+    sku_type, qty, qty_unit, fee, fee_unit, total_amount, totalamount_unit
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from bal_invitationdata_estimate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bal_invitationdata_estimate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.balance.model.InvitationdataEstimate" >
+    insert into bal_invitationdata_estimate (id, create_time, create_user, 
+      update_time, update_user, contract_id, 
+      batch_number, sku_type, qty, 
+      qty_unit, fee, fee_unit, 
+      total_amount, totalamount_unit)
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{contractId,jdbcType=INTEGER}, 
+      #{batchNumber,jdbcType=VARCHAR}, #{skuType,jdbcType=VARCHAR}, #{qty,jdbcType=DECIMAL}, 
+      #{qtyUnit,jdbcType=VARCHAR}, #{fee,jdbcType=DECIMAL}, #{feeUnit,jdbcType=VARCHAR}, 
+      #{totalAmount,jdbcType=DECIMAL}, #{totalamountUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.balance.model.InvitationdataEstimate" >
+    insert into bal_invitationdata_estimate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="batchNumber != null" >
+        batch_number,
+      </if>
+      <if test="skuType != null" >
+        sku_type,
+      </if>
+      <if test="qty != null" >
+        qty,
+      </if>
+      <if test="qtyUnit != null" >
+        qty_unit,
+      </if>
+      <if test="fee != null" >
+        fee,
+      </if>
+      <if test="feeUnit != null" >
+        fee_unit,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="totalamountUnit != null" >
+        totalamount_unit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null" >
+        #{skuType,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null" >
+        #{qty,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyUnit != null" >
+        #{qtyUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="fee != null" >
+        #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="feeUnit != null" >
+        #{feeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalamountUnit != null" >
+        #{totalamountUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.balance.model.InvitationdataEstimate" >
+    update bal_invitationdata_estimate
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="batchNumber != null" >
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="skuType != null" >
+        sku_type = #{skuType,jdbcType=VARCHAR},
+      </if>
+      <if test="qty != null" >
+        qty = #{qty,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyUnit != null" >
+        qty_unit = #{qtyUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="fee != null" >
+        fee = #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="feeUnit != null" >
+        fee_unit = #{feeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="totalamountUnit != null" >
+        totalamount_unit = #{totalamountUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.balance.model.InvitationdataEstimate" >
+    update bal_invitationdata_estimate
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      contract_id = #{contractId,jdbcType=INTEGER},
+      batch_number = #{batchNumber,jdbcType=VARCHAR},
+      sku_type = #{skuType,jdbcType=VARCHAR},
+      qty = #{qty,jdbcType=DECIMAL},
+      qty_unit = #{qtyUnit,jdbcType=VARCHAR},
+      fee = #{fee,jdbcType=DECIMAL},
+      fee_unit = #{feeUnit,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      totalamount_unit = #{totalamountUnit,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

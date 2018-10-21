@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.TransportVenderMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.TransportVender" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="express_name" property="express_name"/>
+	<result column="express_code" property="express_code"/>
+	<result column="status" property="status"/>
+	<result column="phone" property="phone"/>
+	<result column="contacts" property="contacts"/>
+	<result column="is_docall" property="is_docall"/>
+</resultMap>
+       
+<!-- tb_transport_vendor table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,express_name,express_code,status,phone,contacts,is_docall
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="express_name != null and express_name != ''" >
+	    and express_name =  #{express_name}
+	</if>
+	 	<if test="express_code != null and express_code != ''" >
+	    and express_code =  #{express_code}
+	</if>
+	 	<if test="status != null and status != ''" >
+	    and status =  #{status}
+	</if>
+	 	<if test="phone != null and phone != ''" >
+	    and phone =  #{phone}
+	</if>
+	 	<if test="contacts != null and contacts != ''" >
+	    and contacts =  #{contacts}
+	</if>
+	 	<if test="is_docall != null and is_docall != ''" >
+	    and is_docall =  #{is_docall}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入快递信息表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.TransportVender" >
+  insert into tb_transport_vendor(id,
+  create_time,
+  is_docall,
+  create_user,update_time,update_user,express_name,express_code,status,phone,contacts)
+ values(uuid(),
+ #{create_time},
+ #{is_docall},
+ #{create_user},#{update_time},#{update_user},#{express_name},#{express_code},#{status},#{phone},#{contacts})
+</insert>
+
+<!-- 修改快递信息表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.TransportVender" >
+  update tb_transport_vendor set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},express_name=#{express_name},express_code=#{express_code},status=#{status},
+  phone=#{phone},
+  is_docall=#{is_docall},
+  contacts=#{contacts} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改快递信息表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.TransportVender" >
+	update tb_transport_vendor set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="express_name != null  and express_name != '' ">
+		express_name=#{express_name},
+	</if>
+	<if test="express_code != null  and express_code != '' ">
+		express_code=#{express_code},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="phone != null  and phone != '' ">
+		phone=#{phone},
+	</if>
+	<if test="is_docall != null  and is_docall != '' ">
+		is_docall=#{is_docall},
+	</if>
+	<if test="contacts != null  and contacts != '' ">
+		contacts=#{contacts},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+
+<update id="updateTransportVender" parameterType="com.bt.orderPlatform.controller.form.TransportVenderQueryParam">
+	update tb_transport_vendor set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="express_name != null  and express_name != '' ">
+		express_name=#{express_name},
+	</if>
+	<if test="is_docall != null  and is_docall != '' ">
+		is_docall=#{is_docall},
+	</if>
+	<if test="express_code != null  and express_code != '' ">
+		express_code=#{express_code},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="phone != null  and phone != '' ">
+		phone=#{phone},
+	</if>
+	<if test="contacts != null  and contacts != '' ">
+		contacts=#{contacts},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除快递信息表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_transport_vendor where id = #{id}
+</update>
+<!-- 批量删除快递信息表 -->
+<delete id="batchDelete" parameterType="java.util.ArrayList">
+	delete 	 from tb_transport_vendor where id in 
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找快递信息表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_transport_vendor where id = #{id}
+</select>
+
+
+<select id="selectByProducttype_code"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_transport_vendor where express_code = #{express_code}
+</select>
+
+<select id="selectByProducttype_name"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_transport_vendor where express_name = #{express_name} and express_code in (${express_code})
+</select>
+  	
+<!-- 快递信息表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.TransportVenderQueryParam">
+	select count(1) from tb_transport_vendor 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的快递信息表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.TransportVenderQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_transport_vendor 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 快递信息表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.TransportVenderQueryParam">
+	select count(1) from tb_transport_vendor 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的快递信息表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.TransportVenderQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_transport_vendor 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+    
+</select>
+
+<select id='getVender'  parameterType="com.bt.orderPlatform.controller.form.TransportVenderQueryParam"  resultMap="BaseResultMap" >
+   select 
+	<include refid="Base_Column_List"/>
+	from tb_transport_vendor 
+	<include refid="where_Clause"/>
+</select>
+
+
+<select id='getAllVender'  resultMap="BaseResultMap" >
+   select 
+	<include refid="Base_Column_List"/>
+	from tb_transport_vendor 
+	 where  express_code in (${carrier}) 
+</select>
+
+<select id='pageDataInfo'  parameterType="com.bt.orderPlatform.controller.form.TransportVenderQueryParam"  resultMap="BaseResultMap" >
+   select 
+	<include refid="Base_Column_List"/>
+	from tb_transport_vendor 
+	<include refid="where_Clause"/>
+	 LIMIT #{firstResult}, #{maxResult} ;
+</select>
+
+</mapper>   

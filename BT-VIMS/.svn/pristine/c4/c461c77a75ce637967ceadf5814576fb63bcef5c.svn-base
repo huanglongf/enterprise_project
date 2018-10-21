@@ -1,0 +1,187 @@
+package com.bt.vims.utils;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.ServiceUI;
+import javax.print.SimpleDoc;
+import javax.print.attribute.DocAttributeSet;
+import javax.print.attribute.HashDocAttributeSet;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.swing.JFileChooser;
+
+import org.apache.log4j.Logger;
+import com.bt.vims.model.Visitors;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+/**
+ * 
+ * @author lsh11036+李京功
+ *
+ */
+public final class PrintUtil {
+	private static final Logger logger = Logger.getLogger(PrintUtil.class);
+	private static final String linuxUrl = "/home/file/vims_file/general/";
+	private static final String interviewUrl = "/home/file/vims_file/general/jasper/interview.png";
+	private static final String visitUrl = "/home/file/vims_file/general/jasper/visit.png";
+	/**
+	 * 建立打印连接和打印 
+	 * @param  printName  打印机名称
+	 * @param  list       
+	 * @return print_flag 0:代表失败,1:代表成功。
+	 */
+     public static int printConnection(String printName,List<Visitors> list) {
+    	int print_flag = 0;
+ 		try {
+			List<Visitors> list1 = new ArrayList<Visitors>();
+			List<Visitors> list2 = new ArrayList<Visitors>();
+ 			for(Visitors visitors : list) {
+ 				if("面试".equals(visitors.getContent())) {
+ 					Visitors visitors1 = new Visitors();
+ 					visitors1.setHost(visitors.getHost());
+ 					visitors1.setVisitor_name(visitors.getVisitor_name());
+ 					visitors1.setVisitor_date(visitors.getVisitor_date());
+ 					visitors1.setVisitor_year(visitors.getVisitor_year());
+ 					visitors1.setContent(visitors.getContent());
+ 				    visitors1.setImage_url(interviewUrl);
+ 					list1.add(visitors1);
+ 				}else{
+ 					Visitors visitors2 = new Visitors();
+ 					visitors2.setHost(visitors.getHost());
+ 					visitors2.setVisitor_name(visitors.getVisitor_name());
+ 					visitors2.setVisitor_date(visitors.getVisitor_date());
+ 					visitors2.setVisitor_year(visitors.getVisitor_year());
+ 					visitors2.setVisitor_type(visitors.getVisitor_type());
+ 					visitors2.setContent(visitors.getContent());
+ 				    visitors2.setImage_url(visitUrl);
+ 					list2.add(visitors2);
+ 				}
+ 			}
+ 			jsperChangePdf(printName,list1,"面试");
+ 			jsperChangePdf(printName,list2,"访客");
+ 		    print_flag = 1;
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+ 			logger.error(e.getMessage());
+ 		}
+	     return print_flag;
+	}
+    
+    /**
+     * 选择不同的.jasper模板
+     * @param printName
+     * @param list
+     * @param content
+     * @throws Exception
+     */
+   private  static void jsperChangePdf(String printName,List<Visitors> list, String content) throws Exception{
+		   if("面试".equals(content) ) {
+			   String path = linuxUrl + "jasper/interview.jasper";
+			   conversion(path,printName,list);
+		   }else if("访客".equals(content)){
+			   List<Visitors> list1 = new ArrayList<Visitors>();
+			   List<Visitors> list2 = new ArrayList<Visitors>();
+			   for(Visitors visitor : list) {
+				    if("01".equals(visitor.getVisitor_type())) {
+				    	Visitors visitors1 = new Visitors();
+				    	 visitors1.setHost(visitor.getHost());
+		 				 visitors1.setVisitor_name(visitor.getVisitor_name());
+		 				 visitors1.setVisitor_date(visitor.getVisitor_date());
+		 				 visitors1.setVisitor_year(visitor.getVisitor_year());
+		 				 visitors1.setImage_url(visitor.getImage_url());
+		 				 list1.add(visitors1);
+				    } else if("02".equals(visitor.getVisitor_type())) {
+				    	 Visitors visitors2 = new Visitors();
+				    	 visitors2.setHost(visitor.getHost());
+		 				 visitors2.setVisitor_name(visitor.getVisitor_name());
+		 				 visitors2.setVisitor_date(visitor.getVisitor_date());
+		 				 visitors2.setVisitor_year(visitor.getVisitor_year());
+		 				 visitors2.setImage_url(visitor.getImage_url());
+		 				 list2.add(visitors2);
+				    }
+			   }
+			   String path = linuxUrl + "jasper/visit.jasper";
+			   conversion(path,printName,list1);
+			   groupVisitors(path,printName,list2);
+		   }		   		           		
+	}
+   
+     /**
+      * 把团体jasper文件转换成pdf文
+      * @param path
+      * @param printName
+      * @param list
+      * @throws JRException
+     * @throws IOException 
+     * @throws InterruptedException 
+      */
+     private static void groupVisitors(String path,String printName,List<Visitors> list) throws JRException, InterruptedException, IOException {
+    	   Map<String, Object> parameters = new HashMap<String, Object>();
+		   JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(path);
+		   JRDataSource jrDataSource_common =  new JRBeanCollectionDataSource(list);
+		   path = linuxUrl+"jasper/"+"2.pdf";
+		   JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,jrDataSource_common);
+	       //进行预浏览
+	       //JasperViewer.viewReport(jasperPrint,false);    
+	       JasperExportManager.exportReportToPdfFile(jasperPrint,path);
+	       executeShell(path,printName);
+     }
+	  /**
+		* 把jasper文件转换成pdf
+		* @param path
+		* @param printName
+		* @param list
+		* @throws JRException
+	 * @throws IOException 
+	 * @throws InterruptedException 
+		*/
+    private static void conversion(String path,String printName,List<Visitors> list) throws JRException, InterruptedException, IOException {
+    	   Map<String, Object> parameters = new HashMap<String, Object>();
+		   JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(path);
+		   JRDataSource jrDataSource_common =  new JRBeanCollectionDataSource(list);
+		   path = path.split("\\.")[0]+".pdf";
+		   JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters,jrDataSource_common);
+	       //进行预浏览
+	       //JasperViewer.viewReport(jasperPrint,false);    
+	       JasperExportManager.exportReportToPdfFile(jasperPrint,path);      
+	       executeShell(path,printName);
+    }
+     
+    /**
+     * 打印pdf文件
+     * @param filePath
+     * @param printName
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    private static void executeShell(String filePath,String printName) throws InterruptedException, IOException {
+		String command = "/home/print.sh" +" "+filePath+ " " + printName;
+        Runtime.getRuntime().exec(command).waitFor();	
+	   }
+	}

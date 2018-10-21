@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.CollectionMasterMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.CollectionMaster" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="cost_center" property="cost_center"/>
+	<result column="store_code" property="store_code"/>
+	<result column="warehouse_code" property="warehouse_code"/>
+	<result column="insurance_fee" property="insurance_fee"/>
+	<result column="service_fee" property="service_fee"/>
+	<result column="total" property="total"/>
+	<result column="master_id" property="master_id"/>
+</resultMap>
+       
+<!-- tb_collection_master table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,cost_center,store_code,warehouse_code,insurance_fee,service_fee,total,master_id
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="cost_center != null and cost_center != ''" >
+	    and cost_center =  #{cost_center}
+	</if>
+	 	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+	 	<if test="warehouse_code != null and warehouse_code != ''" >
+	    and warehouse_code =  #{warehouse_code}
+	</if>
+	<if test="insurance_fee != null" >
+	    and insurance_fee =  #{insurance_fee}
+	</if>
+	<if test="service_fee != null" >
+	    and service_fee =  #{service_fee}
+	</if>
+	<if test="total != null" >
+	    and total =  #{total}
+	</if>
+	<if test="master_id != null" >
+	    and master_id =  #{master_id}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入汇总明细表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.CollectionMaster" >
+  insert into tb_collection_master(id,create_time,create_user,update_time,update_user,cost_center,store_code,warehouse_code,insurance_fee,service_fee,total,master_id)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{cost_center},#{store_code},#{warehouse_code},#{insurance_fee},#{service_fee},#{total},#{master_id})
+</insert>
+
+<!-- 修改汇总明细表-->  
+ <update id="update" parameterType="com.bt.lmis.model.CollectionMaster" >
+  update tb_collection_master set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},cost_center=#{cost_center},store_code=#{store_code},warehouse_code=#{warehouse_code},insurance_fee=#{insurance_fee},service_fee=#{service_fee},total=#{total},master_id=#{master_id} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改汇总明细表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.CollectionMaster" >
+	update tb_collection_master set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="cost_center != null  and cost_center != '' ">
+		cost_center=#{cost_center},
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code},
+	</if>
+	<if test="warehouse_code != null  and warehouse_code != '' ">
+		warehouse_code=#{warehouse_code},
+	</if>
+	<if test="insurance_fee != null  ">
+		insurance_fee=#{insurance_fee},
+	</if>
+	<if test="service_fee != null  ">
+		service_fee=#{service_fee},
+	</if>
+	<if test="total != null  ">
+		total=#{total},
+	</if>
+	<if test="master_id != null  ">
+		master_id=#{master_id},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除汇总明细表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_collection_master where id = #{id}
+</update>
+<!-- 批量删除汇总明细表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_collection_master where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找汇总明细表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_collection_master where id = #{id}
+</select>
+<select id="getMaster"  resultType="java.util.Map" parameterType="java.util.Map">
+	select 
+		store AS store_code,
+		transport_warehouse AS warehouse_code,
+		cost_center,
+		sum(other_value_added_service_charges) AS service_fee,
+		sum(insurance_fee) AS insurance_fee, 
+		sum(total_charge) AS total
+	 from 
+		<if test="table_name != null and table_name != ''" >
+				${table_name }
+		</if>
+	WHERE
+		1=1
+		<if test="contract_owner != null and contract_owner != ''" >
+		AND
+			express_code = #{contract_owner }
+		</if>
+		<if test="account_id != null and account_id != ''" >
+		AND
+			account_id = #{account_id }
+		</if>
+	group by store,transport_warehouse,cost_center
+</select>
+<select id="getDetail"  resultType="java.util.Map" parameterType="java.util.Map">
+	select 
+		producttype_code,
+		count(1) AS sum,
+		sum(standard_freight-afterdiscount_freight) AS favourable_price,
+		sum(afterdiscount_freight*(1-discount)) AS favourable_price_total,
+		sum(standard_freight) AS freight
+	 from 
+		<if test="table_name != null and table_name != ''" >
+				${table_name }
+		</if>
+	WHERE
+		1=1
+		<if test="contract_owner != null and contract_owner != ''" >
+		AND
+			express_code = #{contract_owner }
+		</if>
+		<if test="account_id != null and account_id != ''" >
+		AND
+			account_id = #{account_id }
+		</if>
+		<if test="store_code != null and store_code != ''" >
+		AND
+			store = #{store_code }
+		</if>
+		<if test="store_code == null or store_code == ''" >
+		AND
+			store = "" OR store is null
+		</if>
+		<if test="warehouse_code != null and warehouse_code != ''" >
+		AND
+			transport_warehouse = #{warehouse_code }
+		</if>
+		<if test="warehouse_code == null and warehouse_code == ''" >
+		AND
+			transport_warehouse = "" or transport_warehouse is null
+		</if>
+		<if test="cost_center != null and cost_center != ''" >
+		AND
+			cost_center = #{cost_center }
+		</if>
+		<if test="cost_center == null and cost_center == ''" >
+		AND
+			cost_center = "" or cost_center is null
+		</if>
+	group by producttype_code
+</select>
+<select id="getDetailSF"  resultType="java.util.Map" parameterType="java.util.Map">
+	select 
+		producttype_code,
+		count(1) AS sum,
+		0.00 AS favourable_price,
+		sum(standard_freight*(1-discount)) AS favourable_price_total,
+		sum(standard_freight) AS freight
+	 from 
+		<if test="table_name != null and table_name != ''" >
+				${table_name }
+		</if>
+	WHERE
+		1=1
+		<if test="contract_owner != null and contract_owner != ''" >
+		AND
+			express_code = #{contract_owner }
+		</if>
+		<if test="account_id != null and account_id != ''" >
+		AND
+			account_id = #{account_id }
+		</if>
+		<if test="store_code != null and store_code != ''" >
+		AND
+			store = #{store_code }
+		</if>
+		<if test="store_code == null or store_code == ''" >
+		AND
+			store = "" OR store is null
+		</if>
+		<if test="warehouse_code != null and warehouse_code != ''" >
+		AND
+			transport_warehouse = #{warehouse_code }
+		</if>
+		<if test="warehouse_code == null and warehouse_code == ''" >
+		AND
+			transport_warehouse = "" or transport_warehouse is null
+		</if>
+		<if test="cost_center != null and cost_center != ''" >
+		AND
+			cost_center = #{cost_center }
+		</if>
+		<if test="cost_center == null and cost_center == ''" >
+		AND
+			cost_center = "" or cost_center is null
+		</if>
+	group by producttype_code
+</select>
+  	
+<!-- 汇总明细表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.CollectionMasterQueryParam">
+	select count(1) from tb_collection_master 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的汇总明细表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.CollectionMasterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_collection_master 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 汇总明细表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.CollectionMasterQueryParam">
+	select count(1) from tb_collection_master 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的汇总明细表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.CollectionMasterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_collection_master 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

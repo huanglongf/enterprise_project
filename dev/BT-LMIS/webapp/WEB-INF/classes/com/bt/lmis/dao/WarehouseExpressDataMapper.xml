@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.WarehouseExpressDataMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.WarehouseExpressData" >
+   <result property="express_number" column="express_number" javaType="string" jdbcType="VARBINARY"/>
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="insurance_flag" property="insurance_flag"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="transport_direction" property="transport_direction"/>
+	<result column="warehouse" property="warehouse"/>
+	<result column="delivery_address" property="delivery_address"/>
+	<result column="itemtype_code" property="itemtype_code"/>
+	<result column="itemtype_name" property="itemtype_name"/>
+	<result column="transport_code" property="transport_code"/>
+	<result column="transport_name" property="transport_name"/>
+	<result column="delivery_order" property="delivery_order"/>
+	<result column="transport_time" property="transport_time"/>
+	<result column="cost_center" property="cost_center"/>
+	<result column="store_code" property="store_code"/>
+	<result column="store_name" property="store_name"/>
+	<result column="weight" property="weight"/>
+	<result column="sku_number" property="sku_number"/>
+	<result column="length" property="length"/>
+	<result column="width" property="width"/>
+	<result column="higth" property="higth"/>
+	<result column="volumn" property="volumn"/>
+	<result column="order_amount" property="order_amount"/>
+	<result column="province" property="province"/>
+	<result column="city" property="city"/>
+	<result column="state" property="state"/>
+	<result column="street" property="street"/>
+	<result column="cod_flag" property="cod_flag"/>
+	<result column="balance_subject" property="balance_subject"/>
+	<result column="settle_flag" property="settle_flag"/>
+	<result column="dFlag" property="dFlag"/>
+	<result column="packing_charge_flag" property="packing_charge_flag"/>
+	<result column="operating_flag" property="operating_flag"/>
+	<result column="qty" property="qty"/>
+	<result column="hcf_settle_flag" property="hcf_settle_flag"/>
+	
+</resultMap>
+
+
+<resultMap id="BaseResultMap0" type="java.util.HashMap" >
+   <result property="express_number" column="express_number" javaType="string" jdbcType="VARBINARY"/>
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="insurance_flag" property="insurance_flag"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="transport_direction" property="transport_direction"/>
+	<result column="warehouse" property="warehouse"/>
+	<result column="delivery_address" property="delivery_address"/>
+	<result column="itemtype_code" property="itemtype_code"/>
+	<result column="itemtype_name" property="itemtype_name"/>
+	<result column="transport_code" property="transport_code"/>
+	<result column="transport_name" property="transport_name"/>
+	<result column="delivery_order" property="delivery_order"/>
+	<result column="transport_time" property="transport_time"/>
+	<result column="cost_center" property="cost_center"/>
+	<result column="store_code" property="store_code"/>
+	<result column="store_name" property="store_name"/>
+	<result column="weight" property="weight"/>
+	<result column="sku_number" property="sku_number"/>
+	<result column="length" property="length"/>
+	<result column="width" property="width"/>
+	<result column="higth" property="higth"/>
+	<result column="volumn" property="volumn"/>
+	<result column="order_amount" property="order_amount"/>
+	<result column="province" property="province"/>
+	<result column="city" property="city"/>
+	<result column="state" property="state"/>
+	<result column="street" property="street"/>
+	<result column="cod_flag" property="cod_flag"/>
+	<result column="balance_subject" property="balance_subject"/>
+	<result column="settle_flag" property="settle_flag"/>
+	<result column="dFlag" property="dFlag"/>
+	<result column="packing_charge_flag" property="packing_charge_flag"/>
+	<result column="operating_flag" property="operating_flag"/>
+	<result column="qty" property="qty"/>
+	<result column="hcf_settle_flag" property="hcf_settle_flag"/>
+	
+</resultMap>
+
+
+       
+<!-- tb_warehouse_express_data table all fields -->
+<sql id="Base_Column_List" >
+	 id,insurance_flag,qty,hcf_settle_flag,operating_flag,create_time,create_user,update_time,update_user,transport_direction,warehouse,delivery_address,itemtype_code,itemtype_name,transport_code,transport_name,delivery_order,DATE_FORMAT(transport_time,'%Y-%m-%d %H:%i:%s') as transport_time,express_number,cost_center,store_code,store_name,weight,sku_number,length,width,higth,volumn,order_amount,province,city,state,street,cod_flag,balance_subject,settle_flag,dFlag,packing_charge_flag,epistatic_order,order_type,collection_on_delivery
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	<if test="hcf_settle_flag != null" >
+	    and hcf_settle_flag =  #{hcf_settle_flag}
+	</if>
+	<if test="insurance_flag != null and insurance_flag != ''" >
+	    and insurance_flag =  #{insurance_flag}
+	</if>
+	<if test="start_time != null" >
+	    and DATE_FORMAT(create_time,"%Y-%m-%d") <![CDATA[  >=#{start_time}  ]]>  
+	</if>
+	<if test="end_time != null" >
+	    and DATE_FORMAT(create_time,"%Y-%m-%d")  <![CDATA[  <= #{end_time}  ]]>   
+	</if>
+	<if test="start_express_time != null and start_express_time != ''" >
+	     and transport_time&gt;=#{start_express_time}
+	</if>
+	<if test="end_express_time != null and end_express_time != ''" >
+	     and transport_time&lt;=#{end_express_time}
+	</if>
+ 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="transport_direction != null and transport_direction != ''" >
+	    and transport_direction =  #{transport_direction}
+	</if>
+	 	<if test="warehouse != null and warehouse != ''" >
+	    and warehouse =  #{warehouse}
+	</if>
+	 	<if test="delivery_address != null and delivery_address != ''" >
+	    and delivery_address =  #{delivery_address}
+	</if>
+	 	<if test="itemtype_code != null and itemtype_code != ''" >
+	    and itemtype_code =  #{itemtype_code}
+	</if>
+	 	<if test="itemtype_name != null and itemtype_name != ''" >
+	    and itemtype_name =  #{itemtype_name}
+	</if>
+	 	<if test="transport_code != null and transport_code != ''" >
+	    and transport_code =  #{transport_code}
+	</if>
+	 	<if test="transport_name != null and transport_name != ''" >
+	    and transport_name =  #{transport_name}
+	</if>
+	 	<if test="delivery_order != null and delivery_order != ''" >
+	    and delivery_order =  #{delivery_order}
+	</if>
+	<if test="transport_time != null" >
+	    and transport_time =  #{transport_time}
+	</if>
+	 	<if test="express_number != null and express_number != ''" >
+	    and express_number =  #{express_number}
+	</if>
+	 	<if test="cost_center != null and cost_center != ''" >
+	    and cost_center =  #{cost_center}
+	</if>
+	 	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	<if test="weight != null" >
+	    and weight =  #{weight}
+	</if>
+	 	<if test="sku_number != null and sku_number != ''" >
+	    and sku_number =  #{sku_number}
+	</if>
+	<if test="length != null" >
+	    and length =  #{length}
+	</if>
+	<if test="width != null" >
+	    and width =  #{width}
+	</if>
+	<if test="higth != null" >
+	    and higth =  #{higth}
+	</if>
+	<if test="volumn != null" >
+	    and volumn =  #{volumn}
+	</if>
+	<if test="order_amount != null" >
+	    and order_amount =  #{order_amount}
+	</if>
+	 	<if test="province != null and province != ''" >
+	    and province =  #{province}
+	</if>
+	 	<if test="city != null and city != ''" >
+	    and city =  #{city}
+	</if>
+	 	<if test="state != null and state != ''" >
+	    and state =  #{state}
+	</if>
+	 	<if test="street != null and street != ''" >
+	    and street =  #{street}
+	</if>
+	<if test="cod_flag != null" >
+	    and cod_flag =  #{cod_flag}
+	</if>
+	 	<if test="balance_subject != null and balance_subject != ''" >
+	    and balance_subject =  #{balance_subject}
+	</if>
+	<if test="settle_flag != null" >
+	    and settle_flag =  #{settle_flag}
+	</if>
+	<if test="dFlag != null" >
+	    and dFlag =  #{dFlag}
+	</if>
+ 	<if test="packing_charge_flag != null and packing_charge_flag != ''" >
+	    and packing_charge_flag =  #{packing_charge_flag}
+	</if>
+ 	<if test="operating_flag != null and operating_flag != ''" >
+	    and operating_flag =  #{operating_flag}
+	</if>
+	<if test="epistatic_order != null and epistatic_order != ''" >
+	    and  epistatic_order= #{epistatic_order}
+	</if>
+	<if test="warehouse_code != null and warehouse_code != ''" >
+	    and  warehouse_code= #{warehouse_code}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入快递原始数据表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.WarehouseExpressData" >
+  insert into tb_warehouse_express_data(id,insurance_flag,hcf_settle_flag,qty,operating_flag,create_time,create_user,update_time,update_user,transport_direction,warehouse,delivery_address,itemtype_code,itemtype_name,transport_code,transport_name,delivery_order,transport_time,express_number,cost_center,store_code,store_name,weight,sku_number,length,width,higth,volumn,order_amount,province,city,state,street,cod_flag,balance_subject,settle_flag,dFlag,packing_charge_flag)
+ values(#{id},#{insurance_flag},#{hcf_settle_flag},#{qty},#{operating_flag},#{create_time},#{create_user},#{update_time},#{update_user},#{transport_direction},#{warehouse},#{delivery_address},#{itemtype_code},#{itemtype_name},#{transport_code},#{transport_name},#{delivery_order},#{transport_time},#{express_number},#{cost_center},#{store_code},#{store_name},#{weight},#{sku_number},#{length},#{width},#{higth},#{volumn},#{order_amount},#{province},#{city},#{state},#{street},#{cod_flag},#{balance_subject},#{settle_flag},#{dFlag},#{packing_charge_flag})
+</insert>
+
+<!-- 修改快递原始数据表-->  
+ <update id="update" parameterType="com.bt.lmis.model.WarehouseExpressData" >
+  update tb_warehouse_express_data set hcf_settle_flag=#{hcf_settle_flag},create_time=#{create_time},insurance_flag=#{insurance_flag},qty=#{qty},operating_flag=#{operating_flag},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},transport_direction=#{transport_direction},warehouse=#{warehouse},delivery_address=#{delivery_address},itemtype_code=#{itemtype_code},itemtype_name=#{itemtype_name},transport_code=#{transport_code},transport_name=#{transport_name},delivery_order=#{delivery_order},transport_time=#{transport_time},express_number=#{express_number},cost_center=#{cost_center},store_code=#{store_code},store_name=#{store_name},weight=#{weight},sku_number=#{sku_number},length=#{length},width=#{width},higth=#{higth},volumn=#{volumn},order_amount=#{order_amount},province=#{province},city=#{city},state=#{state},street=#{street},cod_flag=#{cod_flag},balance_subject=#{balance_subject},settle_flag=#{settle_flag},dFlag=#{dFlag},packing_charge_flag=#{packing_charge_flag} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改快递原始数据表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.WarehouseExpressData" >
+	update tb_warehouse_express_data set 
+	<trim  suffixOverrides="," >
+	<if test="operating_flag != null   and operating_flag != '' ">
+		operating_flag=#{operating_flag},
+	</if>
+	<if test="qty != null   and qty != '' ">
+		qty=#{qty},
+	</if>
+	<if test="insurance_flag != null   and insurance_flag != '' ">
+		insurance_flag=#{insurance_flag},
+	</if>
+	<if test="hcf_settle_flag != null   and hcf_settle_flag != '' ">
+		hcf_settle_flag=#{hcf_settle_flag},
+	</if>
+	
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="transport_direction != null  and transport_direction != '' ">
+		transport_direction=#{transport_direction},
+	</if>
+	<if test="warehouse != null  and warehouse != '' ">
+		warehouse=#{warehouse},
+	</if>
+	<if test="delivery_address != null  and delivery_address != '' ">
+		delivery_address=#{delivery_address},
+	</if>
+	<if test="itemtype_code != null  and itemtype_code != '' ">
+		itemtype_code=#{itemtype_code},
+	</if>
+	<if test="itemtype_name != null  and itemtype_name != '' ">
+		itemtype_name=#{itemtype_name},
+	</if>
+	<if test="transport_code != null  and transport_code != '' ">
+		transport_code=#{transport_code},
+	</if>
+	<if test="transport_name != null  and transport_name != '' ">
+		transport_name=#{transport_name},
+	</if>
+	<if test="delivery_order != null  and delivery_order != '' ">
+		delivery_order=#{delivery_order},
+	</if>
+	<if test="transport_time != null  ">
+		transport_time=#{transport_time},
+	</if>
+	<if test="express_number != null  and express_number != '' ">
+		express_number=#{express_number},
+	</if>
+	<if test="cost_center != null  and cost_center != '' ">
+		cost_center=#{cost_center},
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="weight != null  ">
+		weight=#{weight},
+	</if>
+	<if test="sku_number != null  and sku_number != '' ">
+		sku_number=#{sku_number},
+	</if>
+	<if test="length != null  ">
+		length=#{length},
+	</if>
+	<if test="width != null  ">
+		width=#{width},
+	</if>
+	<if test="higth != null  ">
+		higth=#{higth},
+	</if>
+	<if test="volumn != null  ">
+		volumn=#{volumn},
+	</if>
+	<if test="order_amount != null  ">
+		order_amount=#{order_amount},
+	</if>
+	<if test="province != null  and province != '' ">
+		province=#{province},
+	</if>
+	<if test="city != null  and city != '' ">
+		city=#{city},
+	</if>
+	<if test="state != null  and state != '' ">
+		state=#{state},
+	</if>
+	<if test="street != null  and street != '' ">
+		street=#{street},
+	</if>
+	<if test="cod_flag != null  ">
+		cod_flag=#{cod_flag},
+	</if>
+	<if test="balance_subject != null  and balance_subject != '' ">
+		balance_subject=#{balance_subject},
+	</if>
+	<if test="settle_flag != null  ">
+		settle_flag=#{settle_flag},
+	</if>
+	<if test="dFlag != null  ">
+		dFlag=#{dFlag},
+	</if>
+	<if test="packing_charge_flag != null  and packing_charge_flag != '' ">
+		packing_charge_flag=#{packing_charge_flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除快递原始数据表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_warehouse_express_data where id = #{id}
+</update>
+<!-- 批量删除快递原始数据表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_warehouse_express_data where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找快递原始数据表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_warehouse_express_data where id = #{id}
+</select>
+  	
+<!-- 快递原始数据表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.WarehouseExpressDataQueryParam">
+	select count(1) from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的快递原始数据表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.WarehouseExpressDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 快递原始数据表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.WarehouseExpressDataQueryParam">
+	select count(1) from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+ <select id='getCount'  resultType="java.lang.Integer"  parameterType="com.bt.lmis.controller.form.WarehouseExpressDataQueryParam">
+ select count(1) from tb_warehouse_express_data
+ <include refid="where_Clause"/>
+ <if test='inClientParam !=null and inClientParam!=""'>
+	 and   ${inClientParam}
+	</if>
+ </select> 	
+  	
+<!-- 满足条件的快递原始数据表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.WarehouseExpressDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+	<if test='inClientParam !=null and inClientParam!=""'>
+	 and   ${inClientParam}
+	</if>
+	order by transport_time 
+	 LIMIT #{firstResult}, #{maxResult} 
+</select>
+
+<select id="findSection" resultMap="BaseResultMap"  parameterType="java.util.HashMap">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_warehouse_express_data 
+<!-- 	from tb_warehouse_express_data_backup20170531  -->
+	<include refid="where_Clause"/>
+	limit ${page},${page_size}
+</select>
+
+<select id="findAllMap" resultMap="BaseResultMap0"  parameterType="com.bt.lmis.controller.form.WarehouseExpressDataQueryParam">
+	select 
+	<include refid="Base_Column_List" /> 
+	from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+	<if test='inClientParam !=null and inClientParam!=""'>
+	 and   ${inClientParam}
+	</if>
+     order by transport_time 
+	 LIMIT #{firstResult}, #{maxResult} 
+	
+</select>
+
+
+<select id="queryAll"  resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.WarehouseExpressData">
+	select 
+		<include refid="Base_Column_List"/>
+	from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+	and year(transport_time)=${tstart_time}
+	and month(transport_time)=${tend_time}
+</select>
+
+
+
+<select id="countByEntitySE"  resultType="java.lang.Integer"  parameterType="com.bt.lmis.model.WarehouseExpressData">
+	select 
+		count(1)
+	from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+	and warehouse != '吴江麦考林Adidas样品仓'
+	and TO_DAYS(transport_time) >= TO_DAYS(#{tstart_time})
+	and TO_DAYS(#{tend_time}) >= TO_DAYS(transport_time) 
+</select>
+
+<select id="countAllSE"  resultType="java.lang.Integer"  parameterType="com.bt.lmis.model.WarehouseExpressData">
+	select 
+		count(1)
+	from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+	and warehouse != '吴江麦考林Adidas样品仓'
+	and TO_DAYS(transport_time) >= TO_DAYS(#{tstart_time})
+	and TO_DAYS(#{tend_time}) >= TO_DAYS(transport_time) 
+</select>
+<select id="queryAllSE"  resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.WarehouseExpressData">
+	select 
+		<include refid="Base_Column_List"/>
+	from tb_warehouse_express_data 
+	<include refid="where_Clause"/>
+	and warehouse != '吴江麦考林Adidas样品仓'
+	and TO_DAYS(transport_time) >= TO_DAYS(#{tstart_time})
+	and TO_DAYS(#{tend_time}) >= TO_DAYS(transport_time) 
+	<if test="firstResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+</select>
+<update id='update_Hcf_settle_flag'  parameterType="com.bt.lmis.model.WarehouseExpressData">
+update  tb_warehouse_express_data  set  hcf_settle_flag=0  
+	<include refid="where_Clause"/>
+</update>  	
+</mapper>   

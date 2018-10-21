@@ -1,0 +1,10 @@
+.lmis-panel {
+	overflow-x: hidden;
+	overflow-y: auto;
+	
+}
+
+.title_div {
+	margin-top: 0;
+	
+}

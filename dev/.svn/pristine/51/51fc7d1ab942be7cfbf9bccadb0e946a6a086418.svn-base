@@ -1,0 +1,81 @@
+####################################################
+##  Localhost                           ############
+##  config for the datasource of druid  ############
+####################################################
+driverClassName=com.mysql.jdbc.Driver
+validationQuery=SELECT 1
+
+###顺丰同城产品测试是 1 上线是3
+sftc_product_type=1
+##兼容/BT-OP##上线  UAT false 本地开发 true 
+app_filter_isdev=true
+#
+jdbc_url=jdbc:mysql://10.88.26.51:3306/blop_empolder_test?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+#jdbc_url=jdbc:mysql://10.7.46.56:3306/blop_empolder?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+#jdbc_url=jdbc:mysql://10.7.46.45:3306/blop_empolder?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+#jdbc_url=jdbc:mysql://127.0.0.1:3306/bz_op?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+jdbc_username=root
+#jdbc_password=baozun2017_test
+jdbc_password=baozun2017_test
+#jdbc_password=root
+
+#
+session_interval=1800
+bz_wsdl_url_sf_http=http://bsp-oisp.sf-express.com/bsp-oisp/sfexpressService
+wsdl_url_sf_http=http://bsp-ois.sf-express.com/bsp-ois/sfexpressService
+wsdl_url_sf=http://bsp-oisp.sf-express.com/bsp-oisp/ws/sfexpressService?wsdl
+checkword_sf=Mg6zqXQtmYNZj6x6KN6YfdES2678rXkb
+access_code_sf=baozun
+
+##wsdl_url_sf_test=https://bspoisp.sit.sf-express.com:11443/bsp-oisp/ws/sfexpressService?wsdl
+wsdl_url_sf_http_test=http://bspoisp.sit.sf-express.com:11080/bsp-oisp/sfexpressService
+wsdl_url_sf_test=http://bspoisp.sit.sf-express.com:11080/bsp-oisp/ws/sfexpressService?wsdl
+access_code_sf_test=BZXXT
+checkword_sf_test=eFoorpZ8yOnaFVJO
+
+#wsdl_url_sf_http_test=https://bspoisp.sit.sf-express.com:11443/bsp-oisp/sfexpressService
+wsdl_url_yl_test=http://210.22.91.77:24511/front_xgb/FrontService
+
+access_code_sf_place=shbz
+checkword_sf_place=I{ZhhYXZ9Q:4knfjf4QrIMOw9N:rhB;U
+
+
+wsdl_url_sf_http_xiaolu_test=http://bspoisp.sit.sf-express.com:11080/bsp-oisp/sfexpressService
+wsdl_url_sf_xiaolu_test=http://bspoisp.sit.sf-express.com:11080/bsp-oisp/ws/sfexpressService?wsdl
+access_code_sf_place_xiaolu_test=BZXC
+checkword_sf_xiaolu_test=O7CJEUGwncDYZ3Vz
+
+
+write_url=jdbc:mysql://10.88.26.51:3306/blop_empolder?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+#write_url=jdbc:mysql://10.7.46.56:3306/blop_empolder?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+#write_url=jdbc:mysql://127.0.0.1:3306/bz_op?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+#write_url=jdbc:mysql://10.7.46.47:3306/lmis_pe?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+write_username=root
+#write_password=baozun2017_test
+write_password=baozun2017_test
+#write_password=root
+
+
+tracking_type_sf=1
+## \u8DEF\u7531\u67E5\u8BE2\u7C7B\u522B\uFF1A
+## 1\uFF1A\u6807\u51C6\u8DEF\u7531\u67E5\u8BE2
+## 2\uFF1A\u5B9A\u5236\u8DEF\u7531\u67E5\u8BE2
+method_type_sf=1
+waybill_number_sf=10
+
+
+
+BALANCE_UPLOAD_WAYBILLMASTER_Linux=/home/op/balance/difference/uploadBill/
+BALANCE_UPLOAD_WAYBILLMASTER_Windows=C:\\op\\balance\\difference\\uploadBill\\
+
+
+
+COMMON_DOWNLOAD_Linux=/home/op_files/
+COMMON_DOWNLOAD_Windows=C:\\temp\\
+COMMON_DOWNLOAD_Linux_REPORT=/home/op_report/ireport/
+COMMON_DOWNLOAD_Linux_REPORT_FILE=/home/op_report/report_file/
+#
+COMMON_DOWNLOAD_MAP=/DownloadFile/
+
+#雷达接口查询路由信息
+sf_radar_url=http://10.7.46.45:8019/bt-ins//contr/radar/interfaceRouteinfo2/getRouteOP.do

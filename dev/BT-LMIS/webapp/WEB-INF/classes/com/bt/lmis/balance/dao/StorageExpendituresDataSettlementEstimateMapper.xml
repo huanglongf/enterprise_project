@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.balance.dao.StorageExpendituresDataSettlementEstimateMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.StorageExpendituresDataSettlementEstimate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+    <result column="storage_fee" property="storageFee" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="data_id" property="dataId" jdbcType="INTEGER" />
+    <result column="operation_id" property="operationId" jdbcType="INTEGER" />
+    <result column="start_time" property="startTime" jdbcType="DATE" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="item_type" property="itemType" jdbcType="VARCHAR" />
+    <result column="storage_type" property="storageType" jdbcType="INTEGER" />
+    <result column="storage_acreage" property="storageAcreage" jdbcType="DECIMAL" />
+    <result column="acreage_unit" property="acreageUnit" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contractId" jdbcType="INTEGER" />
+    <result column="batch_number" property="batchNumber" jdbcType="VARCHAR" />
+	<result column="acreage_size" property="acreageSize" jdbcType="DECIMAL" />
+	<result column="volume_size" property="volumeSize" jdbcType="DECIMAL" />
+	<result column="qty_size" property="qtySize" jdbcType="INTEGER" />
+	<result column="park_code" property="parkCode" jdbcType="VARCHAR" />
+	<result column="park_name" property="parkName" jdbcType="VARCHAR" />
+	<result column="park_cost_center" property="parkCostCenter" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, create_user, update_time, update_user, storage_fee, remark, data_id, 
+    operation_id, start_time, store_name, warehouse_name, warehouse_code, area_name, item_type, storage_type, 
+    storage_acreage, acreage_unit, contract_id, batch_number,acreage_size,volume_size,
+    qty_size,park_code,park_name,park_cost_center
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from bal_storage_expenditures_data_settlement_estimate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from bal_storage_expenditures_data_settlement_estimate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.balance.model.StorageExpendituresDataSettlementEstimate" >
+    insert into bal_storage_expenditures_data_settlement_estimate (id, create_time, create_user, 
+      update_time, update_user, storage_fee, 
+      remark, data_id, operation_id, 
+      start_time, store_name, warehouse_name, warehouse_code,
+      area_name, item_type, storage_type, 
+      storage_acreage, acreage_unit, contract_id, batch_number,acreage_size,volume_size,
+      qty_size,park_code,park_name,park_cost_center
+      )
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{storageFee,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{dataId,jdbcType=INTEGER}, #{operationId,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=DATE}, #{storeName,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, #{warehouseCode,jdbcType=VARCHAR}, 
+      #{areaName,jdbcType=VARCHAR}, #{itemType,jdbcType=VARCHAR}, #{storageType,jdbcType=INTEGER}, 
+      #{storageAcreage,jdbcType=DECIMAL}, #{acreageUnit,jdbcType=VARCHAR}, #{contractId,jdbcType=INTEGER}, 
+      #{batchNumber,jdbcType=VARCHAR},#{acreageSize,jdbcType=DECIMAL},#{volumeSize,jdbcType=DECIMAL},
+      #{qtySize,jdbcType=INTEGER},#{parkCode,jdbcType=VARCHAR},#{parkName,jdbcType=VARCHAR},
+      #{parkCostCenter,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.balance.model.StorageExpendituresDataSettlementEstimate" >
+    insert into bal_storage_expenditures_data_settlement_estimate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="storageFee != null" >
+        storage_fee,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="dataId != null" >
+        data_id,
+      </if>
+      <if test="operationId != null" >
+        operation_id,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="storeName != null" >
+        store_name,
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name,
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code,
+      </if>
+      <if test="areaName != null" >
+        area_name,
+      </if>
+      <if test="itemType != null" >
+        item_type,
+      </if>
+      <if test="storageType != null" >
+        storage_type,
+      </if>
+      <if test="storageAcreage != null" >
+        storage_acreage,
+      </if>
+      <if test="acreageUnit != null" >
+        acreage_unit,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="batchNumber != null" >
+        batch_number,
+      </if>
+      <if test="acreageSize != null" >
+        acreage_size,
+      </if>
+      <if test="volumeSize != null" >
+        volume_size,
+      </if>
+      <if test="qtySize != null" >
+        qty_size,
+      </if>
+      <if test="parkCode != null" >
+        park_code,
+      </if>
+      <if test="parkName != null" >
+        park_name,
+      </if>
+      <if test="parkCostCenter != null" >
+        park_cost_center,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="storageFee != null" >
+        #{storageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dataId != null" >
+        #{dataId,jdbcType=INTEGER},
+      </if>
+      <if test="operationId != null" >
+        #{operationId,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=DATE},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemType != null" >
+        #{itemType,jdbcType=VARCHAR},
+      </if>
+      <if test="storageType != null" >
+        #{storageType,jdbcType=INTEGER},
+      </if>
+      <if test="storageAcreage != null" >
+        #{storageAcreage,jdbcType=DECIMAL},
+      </if>
+      <if test="acreageUnit != null" >
+        #{acreageUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+		#{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="batchNumber != null" >
+        #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="acreageSize != null" >
+        #{acreageSize,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeSize != null" >
+        #{volumeSize,jdbcType=DECIMAL},
+      </if>
+      <if test="qtySize != null" >
+        #{qtySize,jdbcType=INTEGER},
+      </if>
+      <if test="parkCode != null" >
+        #{parkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null" >
+        #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCostCenter != null" >
+        #{parkCostCenter,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.balance.model.StorageExpendituresDataSettlementEstimate" >
+    update bal_storage_expenditures_data_settlement_estimate
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="storageFee != null" >
+        storage_fee = #{storageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dataId != null" >
+        data_id = #{dataId,jdbcType=INTEGER},
+      </if>
+      <if test="operationId != null" >
+        operation_id = #{operationId,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=DATE},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemType != null" >
+        item_type = #{itemType,jdbcType=VARCHAR},
+      </if>
+      <if test="storageType != null" >
+        storage_type = #{storageType,jdbcType=INTEGER},
+      </if>
+      <if test="storageAcreage != null" >
+        storage_acreage = #{storageAcreage,jdbcType=DECIMAL},
+      </if>
+      <if test="acreageUnit != null" >
+        acreage_unit = #{acreageUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=INTEGER},
+      </if>
+      <if test="batchNumber != null" >
+        batch_number = #{batchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="acreageSize != null" >
+        acreage_size = #{acreageSize,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeSize != null" >
+        volume_size = #{volumeSize,jdbcType=DECIMAL},
+      </if>
+      <if test="qtySize != null" >
+        qty_size = #{qtySize,jdbcType=INTEGER},
+      </if>
+      <if test="parkCode != null" >
+        park_code = #{parkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parkName != null" >
+        park_name = #{parkName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkCostCenter != null" >
+        park_cost_center = #{parkCostCenter,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.balance.model.StorageExpendituresDataSettlementEstimate" >
+    update bal_storage_expenditures_data_settlement_estimate
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      storage_fee = #{storageFee,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      data_id = #{dataId,jdbcType=INTEGER},
+      operation_id = #{operationId,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=DATE},
+      store_name = #{storeName,jdbcType=VARCHAR},
+      warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      area_name = #{areaName,jdbcType=VARCHAR},
+      item_type = #{itemType,jdbcType=VARCHAR},
+      storage_type = #{storageType,jdbcType=INTEGER},
+      storage_acreage = #{storageAcreage,jdbcType=DECIMAL},
+      acreage_unit = #{acreageUnit,jdbcType=VARCHAR},
+      contract_id = #{contractId,jdbcType=INTEGER},
+      batch_number = #{batchNumber,jdbcType=VARCHAR},
+      acreage_size = #{acreageSize,jdbcType=DECIMAL},
+      volume_size = #{volumeSize,jdbcType=DECIMAL},
+      qty_size = #{qtySize,jdbcType=INTEGER},
+      park_code = #{parkCode,jdbcType=VARCHAR},
+      park_name = #{parkName,jdbcType=VARCHAR},
+      park_cost_center = #{parkCostCenter,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="findBySEDS" resultMap="BaseResultMap" parameterType="com.bt.lmis.balance.model.StorageExpendituresDataSettlementEstimate" >
+  	select 
+    <include refid="Base_Column_List" />
+    from bal_storage_expenditures_data_settlement_estimate
+    where 1=1
+	<trim  suffixOverrides="," >
+		<if test="storageFee != null" >
+		    and storage_fee =  #{storageFee}
+		</if>
+			<if test="remark != null and remark != ''" >
+		    and remark =  #{remark}
+		</if>
+			<if test="contractId != null" >
+		    and contract_id =  #{contractId}
+		</if>
+			<if test="batchNumber != null and batchNumber != ''" >
+		    and batch_number =  #{batchNumber}
+		</if>
+		<if test="dataId != null" >
+		    and data_id =  #{data_id}
+		</if>
+		<if test="operationId != null" >
+		    and operation_id =  #{operation_id}
+		</if>
+			<if test="storeName != null and storeName != ''" >
+		    and store_name =  #{storeName}
+		</if>
+		<if test="startTimeStr != null and endTimeStr != null" >
+		    and TO_DAYS(start_time) >=  TO_DAYS(#{startTimeStr}) and TO_DAYS(start_time) &lt;= TO_DAYS(#{endTimeStr})
+		</if>
+			<if test="warehouseName != null and warehouseName != ''" >
+		    and warehouse_name =  #{warehouseName}
+		</if>
+			<if test="warehouseCode != null and warehouseCode != ''" >
+		    and warehouse_code =  #{warehouseCode}
+		</if>
+			<if test="areaName != null and areaName != ''" >
+		    and area_name =  #{areaName}
+		</if>
+			<if test="itemType != null and itemType != ''" >
+		    and item_type =  #{itemType}
+		</if>
+		<if test="storageType != null" >
+		    and storage_type =  #{storageType}
+		</if>
+		<if test="storageAcreage != null" >
+		    and storage_acreage =  #{storageAcreage}
+		</if>
+		<if test="acreageUnit != null and acreageUnit != ''" >
+		    and acreage_unit =  #{acreageUnit}
+		</if>
+		<if test="acreageSize != null" >
+		   and acreage_size = #{acreageSize,jdbcType=DECIMAL}
+		</if>
+		<if test="volumeSize != null" >
+		   and volume_size = #{volumeSize,jdbcType=DECIMAL}
+		</if>
+		<if test="qtySize != null" >
+		   and qty_size = #{qtySize,jdbcType=INTEGER}
+		</if>
+		<if test="parkCode != null" >
+		   and park_code = #{parkCode,jdbcType=VARCHAR}
+		</if>
+		<if test="parkName != null" >
+		   and park_name = #{parkName,jdbcType=VARCHAR}
+		</if>
+		<if test="parkCostCenter != null" >
+		   and park_cost_center = #{parkCostCenter,jdbcType=VARCHAR}
+		</if>
+	</trim>
+  </select>
+</mapper>

@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.balance.dao.ContractMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.Contract" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <!-- <result column="create_user" property="createUser" jdbcType="VARCHAR" /> -->
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <!-- <result column="update_user" property="updateUser" jdbcType="VARCHAR" /> -->
+    <result column="contract_no" property="contractNo" jdbcType="VARCHAR" />
+    <result column="contract_name" property="contractName" jdbcType="VARCHAR" />
+    <result column="contract_type" property="contractType" jdbcType="INTEGER" />
+    <result column="contract_owner" property="contractOwner" jdbcType="VARCHAR" />
+    <result column="contract_version" property="contractVersion" jdbcType="VARCHAR" />
+    <result column="contract_start" property="contractStart" jdbcType="DATE" />
+    <result column="contract_end" property="contractEnd" jdbcType="DATE" />
+    <result column="settle_date" property="settleDate" jdbcType="INTEGER" />
+    <result column="validity" property="validity" jdbcType="INTEGER" />
+   <!--  <result column="balanced" property="balanced" jdbcType="INTEGER" /> -->
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <!-- <result column="settlement_body" property="settlementBody" jdbcType="INTEGER" /> -->
+    <result column="distribution_unit" property="distributionUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, create_user, update_time, update_user, contract_no, contract_name, 
+    contract_type, contract_owner, contract_version, contract_start, contract_end, settle_date, 
+    validity, balanced, contact, tel, settlement_body,distribution_unit
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_contract_basicinfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_contract_basicinfo
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_contract_basicinfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.balance.model.Contract" >
+    insert into tb_contract_basicinfo (id, create_time, create_user, 
+      update_time, update_user, contract_no, 
+      contract_name, contract_type, contract_owner, 
+      contract_version, contract_start, contract_end, 
+      settle_date, validity, balanced, 
+      contact, tel, settlement_body,distribution_unit
+      )
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{contractNo,jdbcType=VARCHAR}, 
+      #{contractName,jdbcType=VARCHAR}, #{contractType,jdbcType=INTEGER}, #{contractOwner,jdbcType=VARCHAR}, 
+      #{contractVersion,jdbcType=VARCHAR}, #{contractStart,jdbcType=DATE}, #{contractEnd,jdbcType=DATE}, 
+      #{settleDate,jdbcType=INTEGER}, #{validity,jdbcType=INTEGER}, #{balanced,jdbcType=INTEGER}, 
+      #{contact,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{settlementBody,jdbcType=INTEGER},
+      #{distributionUnit,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.balance.model.Contract" >
+    insert into tb_contract_basicinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="contractNo != null" >
+        contract_no,
+      </if>
+      <if test="contractName != null" >
+        contract_name,
+      </if>
+      <if test="contractType != null" >
+        contract_type,
+      </if>
+      <if test="contractOwner != null" >
+        contract_owner,
+      </if>
+      <if test="contractVersion != null" >
+        contract_version,
+      </if>
+      <if test="contractStart != null" >
+        contract_start,
+      </if>
+      <if test="contractEnd != null" >
+        contract_end,
+      </if>
+      <if test="settleDate != null" >
+        settle_date,
+      </if>
+      <if test="validity != null" >
+        validity,
+      </if>
+      <if test="balanced != null" >
+        balanced,
+      </if>
+      <if test="contact != null" >
+        contact,
+      </if>
+      <if test="tel != null" >
+        tel,
+      </if>
+      <if test="settlementBody != null" >
+        settlement_body,
+      </if>
+      <if test="distributionUnit != null" >
+        distribution_unit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null" >
+        #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null" >
+        #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractType != null" >
+        #{contractType,jdbcType=INTEGER},
+      </if>
+      <if test="contractOwner != null" >
+        #{contractOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="contractVersion != null" >
+        #{contractVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="contractStart != null" >
+        #{contractStart,jdbcType=DATE},
+      </if>
+      <if test="contractEnd != null" >
+        #{contractEnd,jdbcType=DATE},
+      </if>
+      <if test="settleDate != null" >
+        #{settleDate,jdbcType=INTEGER},
+      </if>
+      <if test="validity != null" >
+        #{validity,jdbcType=INTEGER},
+      </if>
+      <if test="balanced != null" >
+        #{balanced,jdbcType=INTEGER},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementBody != null" >
+        #{settlementBody,jdbcType=INTEGER},
+      </if>
+      <if test="distributionUnit != null" >
+        #{distributionUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.balance.model.Contract" >
+    update tb_contract_basicinfo
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="contractNo != null" >
+        contract_no = #{contractNo,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null" >
+        contract_name = #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractType != null" >
+        contract_type = #{contractType,jdbcType=INTEGER},
+      </if>
+      <if test="contractOwner != null" >
+        contract_owner = #{contractOwner,jdbcType=VARCHAR},
+      </if>
+      <if test="contractVersion != null" >
+        contract_version = #{contractVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="contractStart != null" >
+        contract_start = #{contractStart,jdbcType=DATE},
+      </if>
+      <if test="contractEnd != null" >
+        contract_end = #{contractEnd,jdbcType=DATE},
+      </if>
+      <if test="settleDate != null" >
+        settle_date = #{settleDate,jdbcType=INTEGER},
+      </if>
+      <if test="validity != null" >
+        validity = #{validity,jdbcType=INTEGER},
+      </if>
+      <if test="balanced != null" >
+        balanced = #{balanced,jdbcType=INTEGER},
+      </if>
+      <if test="contact != null" >
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementBody != null" >
+        settlement_body = #{settlementBody,jdbcType=INTEGER},
+      </if>
+      <if test="distributionUnit != null" >
+        distribution_unit = #{distributionUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.balance.model.Contract" >
+    update tb_contract_basicinfo
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      contract_no = #{contractNo,jdbcType=VARCHAR},
+      contract_name = #{contractName,jdbcType=VARCHAR},
+      contract_type = #{contractType,jdbcType=INTEGER},
+      contract_owner = #{contractOwner,jdbcType=VARCHAR},
+      contract_version = #{contractVersion,jdbcType=VARCHAR},
+      contract_start = #{contractStart,jdbcType=DATE},
+      contract_end = #{contractEnd,jdbcType=DATE},
+      settle_date = #{settleDate,jdbcType=INTEGER},
+      validity = #{validity,jdbcType=INTEGER},
+      balanced = #{balanced,jdbcType=INTEGER},
+      contact = #{contact,jdbcType=VARCHAR},
+      tel = #{tel,jdbcType=VARCHAR},
+      settlement_body = #{settlementBody,jdbcType=INTEGER},
+      distribution_unit = #{distributionUnit,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAllId" resultType="java.lang.Integer">
+  	select id from tb_contract_basicinfo where contract_type = 4 
+  </select>
+  
+  
+  
+</mapper>

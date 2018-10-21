@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.workOrder.dao.ManhoursMapper" >
+	<select id="countWorkOrderAccounts" parameterType="Object" resultType="Integer">
+		SELECT count(1)
+		FROM (
+				SELECT
+					id,
+					employee_number,
+					name
+				FROM s_employee
+				WHERE project_id="workorder"
+		) a LEFT JOIN (
+			SELECT
+				employee,
+				s_group.group_name
+			FROM s_employee_in_group
+			LEFT JOIN s_group ON s_employee_in_group.group=s_group.id
+		
+		) b ON a.id=b.employee
+		WHERE
+			b.group_name IS NOT NULL
+		<if test="group_name != null and group_name != ''">
+			AND b.group_name LIKE CONCAT("%", #{group_name }, "%")
+		</if>
+		<if test="employee_number != null and employee_number != ''">
+			AND a.employee_number LIKE CONCAT("%", #{employee_number }, "%")
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name LIKE CONCAT("%", #{name }, "%")
+		</if>
+	</select>
+	<select id="getWorkOrderAccounts" parameterType="Object" resultType="java.util.Map">
+		SELECT
+			a.id,
+			b.group_name,
+			a.employee_number,
+			a.name
+		FROM (
+				SELECT
+					id,
+					employee_number,
+					name
+				FROM s_employee
+				WHERE project_id="workorder"
+		) a LEFT JOIN (
+			SELECT
+				employee,
+				s_group.group_name
+			FROM s_employee_in_group
+			LEFT JOIN s_group ON s_employee_in_group.group=s_group.id
+		
+		) b ON a.id=b.employee
+		WHERE
+			b.group_name IS NOT NULL
+		<if test="group_name != null and group_name != ''">
+			AND b.group_name LIKE CONCAT("%", #{group_name }, "%")
+		</if>
+		<if test="employee_number != null and employee_number != ''">
+			AND a.employee_number LIKE CONCAT("%", #{employee_number }, "%")
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name LIKE CONCAT("%", #{name }, "%")
+		</if>
+		ORDER BY group_name
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id= "selectById" parameterType= "Object" resultType= "com.bt.workOrder.model.Manhours" >
+		SELECT
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			account,
+			date,
+			manhours,
+			allocated,
+			status
+		FROM wo_manhours
+		WHERE id= #{id }
+	</select>
+	<update id= "update" parameterType= "com.bt.workOrder.model.Manhours" >
+		update wo_manhours
+		<trim prefix= "SET" suffixOverrides= "," >
+			update_time= now(),
+			update_by= #{update_by },
+			<if test= "account != null" >
+		    	account= #{account },
+			</if>
+			<if test= "date != null and date != ''" >
+				date= #{date },
+			</if>
+			<if test= "manhours != null" >
+				manhours= #{manhours },
+			</if>
+			<if test= "allocated != null" >
+				allocated= #{allocated },
+			</if>
+			<if test= "status != null" >
+			    status= #{status },
+			</if>
+		</trim>
+		where id= #{id }
+	</update>
+	<insert id= "add" parameterType= "java.util.List" >
+		insert into wo_manhours (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			account,
+			date,
+			manhours,
+			allocated,
+			status
+			
+		) values
+		<foreach collection= "list" item= "obj" index= "index" separator= "," >
+		(
+			#{obj.id },
+			now(),
+			#{obj.create_by },
+			now(),
+			#{obj.create_by },
+			#{obj.account },
+			#{obj.date },
+			#{obj.manhours },
+			0,
+			true
+			
+		)
+		</foreach>
+	</insert>
+	<select id= "judgeUnique" parameterType= "Object" resultType= "Integer" >
+		select count(1) from wo_manhours where account= #{account } and date= #{date }
+	</select>
+	<select id= "getSubordinates" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			s_employee.id,
+			s_group.group_name,
+			s_employee.employee_number,
+			s_employee.`name`
+		FROM
+			(
+				SELECT
+					s_employee_in_group.employee,
+					s_employee_in_group.group
+				FROM
+					s_employee_in_group
+				WHERE
+					s_employee_in_group.group IN
+					<foreach collection= "groups" index= "index" item= "group" open= "(" separator= "," close= ")" >  
+				    	#{group }
+				   	</foreach>
+			) a
+		LEFT JOIN s_employee ON a.employee = s_employee.id
+		LEFT JOIN s_group ON a.group = s_group.id
+		WHERE 
+			1= 1
+		<if test="accountParam.group_name != null and accountParam.group_name != ''">
+			AND s_group.group_name LIKE CONCAT("%", #{accountParam.group_name }, "%")
+		</if>
+		<if test="accountParam.employee_number != null and accountParam.employee_number != ''">
+			AND s_employee.employee_number LIKE CONCAT("%", #{accountParam.employee_number }, "%")
+		</if>
+		<if test="accountParam.name != null and accountParam.name != ''">
+			AND s_employee.`name` LIKE CONCAT("%", #{accountParam.name }, "%")
+		</if>
+	</select>
+	<select id= "getSubordinateGroups" parameterType= "Object" resultType= "Integer" >
+		SELECT s_group.id FROM s_group
+		WHERE superior IN
+		<foreach collection= "array" index= "index" item= "group" open= "(" separator= "," close= ")" >  
+	    	#{group }  
+	   	</foreach>
+	</select>
+	<select id= "getGroups" parameterType= "Object" resultType= "Integer" >
+		SELECT s_employee_in_group.group FROM s_employee_in_group WHERE employee = #{employee_id }
+	</select>
+	<delete id= "delManhours" parameterType= "Object" >
+		delete from wo_manhours where id in 
+		<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	    	#{item }  
+	   	</foreach>
+	</delete>
+	<select id= "judgeManhours" parameterType= "Object" resultType= "Integer" >
+		SELECT
+			count(1)
+		FROM
+			wo_manhours
+		WHERE
+			id = #{id }
+		AND TO_DAYS(date) &lt;= TO_DAYS(NOW())
+	</select>
+	<update id= "updateStatus" parameterType= "Object" >
+		UPDATE wo_manhours
+		SET update_time=now(),
+			update_by= #{updateBy },
+		 	status= #{status }
+		WHERE id in 
+		<foreach collection= "ids" item= "id" index= "index" open= "(" separator= "," close= ")" >  
+	       	#{id }
+	   	</foreach>
+	</update>
+	<!-- 查询数据总行 -->
+	<select id= "countQuery" resultType= "java.lang.Integer" parameterType= "com.bt.workOrder.controller.param.ManhoursParam" >
+		SELECT
+			count(1)
+		FROM
+			wo_manhours
+		LEFT JOIN s_employee ON wo_manhours.account = s_employee.id
+		WHERE
+			1= 1
+		<if test= "employee_number != null and employee_number != ''" >
+			AND employee_number= #{employee_number }
+		</if>
+		<if test= "employee_name != null and employee_name != ''" >
+			AND name LIKE CONCAT("%", #{employee_name }, "%")
+		</if>
+		<if test= "date_start != null and date_start != ''" >
+			AND TO_DAYS(date) &gt;= TO_DAYS(#{date_start })
+		</if>
+		<if test= "date_end != null and date_end != ''" >
+			AND TO_DAYS(date) &lt;= TO_DAYS(#{date_end })
+		</if>
+	</select>
+	<!-- 列表查询 -->
+	<select id= "query" resultType= "java.util.Map" parameterType= "com.bt.workOrder.controller.param.ManhoursParam" >
+		SELECT
+			wo_manhours.id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			date,
+			s_employee.employee_number,
+			s_employee.name,
+			manhours,
+			allocated,
+			(manhours - allocated) AS rest,
+			CASE wo_manhours.status
+			WHEN TRUE THEN "启用"
+			WHEN FALSE THEN "禁用"
+			ELSE "" END AS status
+		FROM
+			wo_manhours
+		LEFT JOIN s_employee ON wo_manhours.account = s_employee.id
+		WHERE
+			1= 1
+		<if test= "employee_number != null and employee_number != ''" >
+			AND employee_number= #{employee_number }
+		</if>
+		<if test= "employee_name != null and employee_name != ''" >
+			AND name LIKE CONCAT("%", #{employee_name }, "%")
+		</if>
+		<if test= "date_start != null and date_start != ''" >
+			AND TO_DAYS(date) &gt;= TO_DAYS(#{date_start })
+		</if>
+		<if test= "date_end != null and date_end != ''" >
+			AND TO_DAYS(date) &lt;= TO_DAYS(#{date_end })
+		</if>
+		ORDER BY date DESC, update_time DESC
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id="querysHours" resultType="java.util.Map"
+		parameterType="java.util.HashMap">
+		select
+		id,import_status,error_info,work_number,name,data_time,man_hour
+		from
+		wo_hour_interim
+		where 1=1
+		and to_delete='0'
+		LIMIT #{firstResult}, #{maxResult}
+	</select>
+	<select id="countsHours" resultType="Integer"
+		parameterType="com.bt.workOrder.controller.param.WoHourInterimParam">
+		select
+		count(1)
+		from wo_hour_interim
+		where 1=1
+		and to_delete='0'
+	</select>
+	<insert id="insertManhours" parameterType="com.bt.workOrder.model.woHourInterim">  
+      insert into wo_hour_interim 
+    	(import_status,error_info,work_number,name,data_time,man_hour,to_delete)   
+      values  
+        (#{import_status},#{error_info},#{work_number},#{name},#{data_time},#{man_hour},#{to_delete})  
+    </insert>
+	<update id="updateWoHourInterimToDelete" parameterType="Object">
+		update wo_hour_interim set to_delete=1 
+	</update>
+	<select id="queryHourInterim" resultType="com.bt.workOrder.model.woHourInterim"
+		parameterType="java.util.List">
+		select id,import_status,error_info,work_number,name,data_time,man_hour,to_delete from wo_hour_interim where import_status='正确'
+	</select>
+	<insert id="saveWoManhours" parameterType="java.util.HashMap">
+		insert into wo_manhours
+		(
+		id,
+		create_time,
+		update_time,
+		account,
+		date,
+		manhours,
+		status,
+		create_by,
+		update_by
+		)values(
+		#{uuid},
+		now(),
+		now(),
+		#{ids},
+		#{dataTime},
+		#{manHour},
+		#{status},
+		#{userName},
+		#{update_by}
+		)
+	</insert>
+	<select id="findsEmployeeId" parameterType="java.util.Map"
+		resultType="com.bt.lmis.model.Employee">
+		select
+		id
+		from s_employee t
+		where 1=1
+		<if test="workNumber != null  and workNumber != '' ">
+			and t.employee_number=#{workNumber}
+		</if>
+	</select>
+	<delete id="deleteWoHourInterim" parameterType="java.util.HashMap">
+		delete from wo_hour_interim where id= #{id }
+	</delete>
+	<insert id="addWoHourInterim" parameterType="java.util.HashMap">
+		insert into wo_hour_interim
+		(
+		import_status,
+		error_info,
+		work_number,
+		name,
+		data_time,
+		man_hour,
+		to_delete
+		)values(
+		#{import_status},
+		#{error_info},
+		#{work_number},
+		#{name},
+		#{data_time},
+		#{man_hour},
+		#{to_delete}
+		)
+	</insert>
+	<update id= "updateWoHourInterim" parameterType= "java.util.Map" >
+		update wo_hour_interim set import_status= #{import_status}, error_info= #{error_info}, work_number= #{work_number}, name= #{name}, data_time= #{data_time}, man_hour= #{man_hour} where id= #{id }
+	</update>
+	<!-- 选择最近日期的有效工时 -->
+	<select id="selectValLatest"  parameterType= "java.util.Map" resultType= "com.bt.workOrder.controller.param.ManhoursParam" >
+		SELECT * FROM wo_manhours
+	    WHERE 1=1
+    	<if test="dateGtEq != null  and dateGtEq != '' ">
+			and date&gt;=#{date}
+		</if> 
+		<if test="status != null  and status != '' ">
+			and status=#{status}
+		</if> 
+		<if test="orderBy != null  and orderBy != '' ">
+			#{orderBy}
+		</if> 
+		<if test="limitParam != null  and limitParam != '' ">
+			#{limitParam}
+		</if> 
+	
+	</select>
+</mapper>   

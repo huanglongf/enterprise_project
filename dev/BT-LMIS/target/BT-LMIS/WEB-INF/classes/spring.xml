@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-3.0.xsd
+						http://www.springframework.org/schema/util
+						http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location= "classpath:config.properties" />
+	
+	<!-- redis配置文件 -->
+	<util:properties id="redisConfig" location="classpath:redis.properties"></util:properties>
+	
+	<!-- 自动扫描(自动注入) -->
+	<context:component-scan base-package="com.bt">
+		<context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
+	</context:component-scan>
+	
+	<bean id= "springUtils" class= "com.bt.lmis.base.spring.SpringUtils" />
+	<bean id= "schedulerFactoryBean" class= "org.springframework.scheduling.quartz.SchedulerFactoryBean" />
+	<bean id= "quartzJob" class= "com.bt.lmis.quartz.QuartzJob" />
+	<bean id= "employeeServiceImpl" class= "com.bt.lmis.service.impl.EmployeeServiceImpl" />
+	
+</beans>

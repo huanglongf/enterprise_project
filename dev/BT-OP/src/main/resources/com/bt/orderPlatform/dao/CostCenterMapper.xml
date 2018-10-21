@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.CostCenterMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.CostCenter" >
+	<result column="id" property="id"/>
+	<result column="cost_center" property="cost_center"/>
+	<result column="mis" property="mis"/>
+</resultMap>
+       
+<!-- tb_cost_center table all fields -->
+<sql id="Base_Column_List" >
+	 id,cost_center,mis
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	 	<if test="cost_center != null and cost_center != ''" >
+	    and cost_center =  #{cost_center}
+	</if>
+	 	<if test="mis != null and mis != ''" >
+	    and mis =  #{mis}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入成本中心表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.CostCenter" >
+  insert into tb_cost_center(id,cost_center,mis)
+ values(#{id},#{cost_center},#{mis})
+</insert>
+
+<!-- 修改成本中心表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.CostCenter" >
+  update tb_cost_center set cost_center=#{cost_center},mis=#{mis} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改成本中心表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.CostCenter" >
+	update tb_cost_center set 
+	<trim  suffixOverrides="," >
+	<if test="cost_center != null  and cost_center != '' ">
+		cost_center=#{cost_center},
+	</if>
+	<if test="mis != null  and mis != '' ">
+		mis=#{mis},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除成本中心表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_cost_center where id = #{id}
+</update>
+<!-- 批量删除成本中心表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_cost_center where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找成本中心表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_cost_center where id = #{id}
+</select>
+  	
+<!-- 成本中心表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.CostCenterQueryParam">
+	select count(1) from tb_cost_center 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的成本中心表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.CostCenterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_cost_center 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 成本中心表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.CostCenterQueryParam">
+	select count(1) from tb_cost_center 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的成本中心表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.CostCenterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_cost_center 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+
+<select id="selectAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.CostCenterQueryParam">
+	select 
+	 id,cost_center, CONCAT(cost_center,'-',mis) as mis
+	from tb_cost_center 
+</select>
+<select id="selectByName" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.CostCenterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_cost_center  where mis = #{mis}
+</select>
+<select id="selectByCostCenter" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.CostCenterQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_cost_center  where cost_center = #{cost_center}
+</select>
+  	
+</mapper>   

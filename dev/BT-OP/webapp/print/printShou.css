@@ -1,0 +1,17 @@
+.printDiv{
+    width: 400;
+    height: 680;
+    margin: 0 auto
+
+}
+.printDiv p{
+    width: 100%;
+    height: 10%;
+    margin-bottom:-2px;
+    margin-left: 15px;
+}
+.printDiv img{
+   width: 100%;
+    height: 70%;
+    margin-bottom: 2px;
+}

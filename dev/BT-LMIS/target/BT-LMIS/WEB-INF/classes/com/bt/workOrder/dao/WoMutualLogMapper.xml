@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.WoMutualLogMapper" >
+  <resultMap id="ResultMap" type="com.bt.workOrder.bean.WoMutualLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="wo_no" property="woNo" jdbcType="VARCHAR" />
+    <result column="action" property="action" jdbcType="VARCHAR" />
+    <result column="obligate" property="obligate" jdbcType="VARCHAR" />
+    <result column="log" property="log" jdbcType="LONGVARCHAR" />
+    <result column="process_remark" property="processRemark" jdbcType="LONGVARCHAR" />
+    <result column="accessory" property="accessory" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_by, create_time, wo_no, action, obligate,log, process_remark, accessory
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wo_mutual_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByWoNo" resultType="java.util.HashMap" parameterType="java.lang.String" >
+    select 
+    log,
+    process_remark,
+    accessory
+    from wo_mutual_log
+    where wo_no = #{woNo,jdbcType=VARCHAR}
+    order by create_time DESC
+  </select>
+  <select id="selectNewAccessory" resultType="java.lang.String" parameterType="java.lang.String" >
+    select 
+    accessory
+    from wo_mutual_log
+    where wo_no = #{woNo,jdbcType=VARCHAR}
+    AND action = "CREATED"
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wo_mutual_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.workOrder.bean.WoMutualLog" >
+    insert into wo_mutual_log (create_by, create_time, 
+      wo_no, action, obligate, 
+      log, process_remark, accessory
+      )
+    values (#{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{woNo,jdbcType=INTEGER}, #{action,jdbcType=VARCHAR}, #{obligate,jdbcType=VARCHAR}, 
+      #{log}, #{processRemark}, #{accessory}
+      )
+  </insert>
+</mapper>

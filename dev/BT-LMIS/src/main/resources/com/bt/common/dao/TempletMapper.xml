@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.common.dao.TempletMapper">
+	<select id="listTableColumn" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			table_name,
+			column_code,
+			column_name,
+			sort,
+			status
+		FROM com_table_column_map
+		WHERE status=1
+		<if test="param.tableName != null and param.tableName != ''">
+			AND table_name=#{param.tableName}
+		</if>
+		<if test="param.columnName != null and param.columnName != ''">
+			AND column_name like CONCAT("%",#{param.columnName},"%")
+		</if>
+		ORDER BY sort
+	</select>
+	<select id="listTableColumnConfig" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			com_table_column_map_config.id,
+			com_table_column_map_config.create_time,
+			com_table_column_map_config.create_by,
+			com_table_column_map_config.update_time,
+			com_table_column_map_config.update_by,
+			com_table_column_map_config.submit_to,
+			com_table_column_map_config.table_name,
+			com_table_column_map_config.table_column_id,
+			com_table_column_map.column_code,
+			com_table_column_map.column_name,
+			com_table_column_map_config.sort
+		FROM com_table_column_map_config
+		LEFT JOIN com_table_column_map
+		ON com_table_column_map_config.table_column_id = com_table_column_map.id
+		WHERE status=1
+		<if test="currentAccount.id != null">
+			AND com_table_column_map_config.submit_to=#{currentAccount.id}
+		</if>
+		<if test="param.tableName != null and param.tableName != ''">
+			AND com_table_column_map_config.table_name=#{param.tableName}
+		</if>
+		<if test="param.columnName != null and param.columnName != ''">
+			AND com_table_column_map.column_name like CONCAT("%",#{param.columnName},"%")
+		</if>
+		ORDER BY sort	
+	</select>
+	<delete id="delTableColumnConfig" parameterType="com.bt.common.controller.param.Parameter">
+		DELETE FROM com_table_column_map_config
+		WHERE submit_to=#{currentAccount.id}
+		AND table_name=#{param.tableName}
+	</delete>
+	<insert id="saveTableColumnConfig" parameterType="com.bt.common.model.TableColumnConfig">
+		INSERT INTO com_table_column_map_config (
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			submit_to,
+			table_name,
+			table_column_id,
+			sort
+		) VALUES
+		<foreach collection="list" item="tableColumnConfig" index="index" separator=",">
+		(
+			UUID(),
+			now(),
+			#{tableColumnConfig.createBy},
+			now(),
+			#{tableColumnConfig.createBy},
+			#{tableColumnConfig.submitTo},
+			#{tableColumnConfig.tableName},
+			#{tableColumnConfig.tableColumnId},
+			#{tableColumnConfig.sort}
+		
+		)
+		</foreach>
+	</insert>
+	<select id="searchTempletTest" parameterType="com.bt.common.controller.param.Parameter" resultType="java.util.Map">
+		SELECT
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			field_1,
+			field_2,
+			field_3,
+			field_4,
+			field_5,
+			field_6,
+			field_7,
+			field_8,
+			field_9
+		FROM templet_test
+		<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id="countTempletTest" parameterType="com.bt.common.controller.param.Parameter" resultType="int">
+		SELECT COUNT(1) FROM templet_test
+	</select>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.workOrder.dao.WoAssociationMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.workOrder.model.WoAssociation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="wo_no_p" property="woNoP" jdbcType="VARCHAR" />
+    <result column="wo_no_s" property="woNoS" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, create_by, update_time, update_by, wo_no_p, wo_no_s
+  </sql>
+  <select id="selectByWoNoP" parameterType="java.lang.String" resultType="java.lang.String">
+		 SELECT
+			wo_no_s
+		FROM
+			wo_association
+		WHERE
+			wo_no_p = #{woNoP}
+  </select>
+  <insert id="insert" parameterType="com.bt.workOrder.model.WoAssociation" >
+    insert into wo_association
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="woNoP != null" >
+        wo_no_p,
+      </if>
+      <if test="woNoS != null" >
+        wo_no_s,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="createTime != null" >
+        now(),
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        now(),
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="woNoP != null" >
+        #{woNoP,jdbcType=VARCHAR},
+      </if>
+      <if test="woNoS != null" >
+        #{woNoS,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

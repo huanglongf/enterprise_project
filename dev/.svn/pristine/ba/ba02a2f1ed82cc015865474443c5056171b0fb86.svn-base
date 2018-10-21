@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.PerationfeeDataDailySettlementMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.PerationfeeDataDailySettlement" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="contract_id" property="contract_id"/>
+	<result column="data_date" property="data_date"/>
+	<result column="btc_qty" property="btc_qty"/>
+	<result column="btc_qtyunit" property="btc_qtyunit"/>
+	<result column="btc_fee" property="btc_fee"/>
+	<result column="btc_remark" property="btc_remark"/>
+	<result column="btb_qty" property="btb_qty"/>
+	<result column="btb_qtyunit" property="btb_qtyunit"/>
+	<result column="btb_fee" property="btb_fee"/>
+	<result column="btb_remark" property="btb_remark"/>
+	<result column="return_qty" property="return_qty"/>
+	<result column="return_qtyunit" property="return_qtyunit"/>
+	<result column="return_fee" property="return_fee"/>
+	<result column="return_remark" property="return_remark"/>
+	<result column="ib_qty" property="ib_qty"/>
+	<result column="ib_qtyunit" property="ib_qtyunit"/>
+	<result column="ib_fee" property="ib_fee"/>
+	<result column="ib_remark" property="ib_remark"/>
+	
+	<result column="xse_qty" property="xse_qty"/>
+	<result column="xse_qtyunit" property="xse_qtyunit"/>
+	<result column="xse_fee" property="xse_fee"/>
+	<result column="xse_remark" property="xse_remark"/>
+	<result column="gd_qty" property="gd_qty"/>
+	<result column="gd_qtyunit" property="gd_qtyunit"/>
+	<result column="gd_fee" property="gd_fee"/>
+	<result column="gd_remark" property="gd_remark"/>
+</resultMap>
+       
+<!-- tb_operationfee_data_daily_settlement table all fields -->
+<sql id="Base_Column_List" >
+	 id,xse_qty,xse_qtyunit,xse_fee,xse_remark,gd_qty,gd_qtyunit,gd_fee,gd_remark,create_time,create_user,update_time,update_user,contract_id,data_date,btc_qty,btc_qtyunit,btc_fee,btc_remark,btb_qty,btb_qtyunit,btb_fee,btb_remark,return_qty,return_qtyunit,return_fee,return_remark,ib_qty,ib_qtyunit,ib_fee,ib_remark
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="contract_id != null" >
+	    and contract_id =  #{contract_id}
+	</if>
+	<if test="data_date != null" >
+	    and data_date =  #{data_date}
+	</if>
+	<if test="btc_qty != null" >
+	    and btc_qty =  #{btc_qty}
+	</if>
+	 	<if test="btc_qtyunit != null and btc_qtyunit != ''" >
+	    and btc_qtyunit =  #{btc_qtyunit}
+	</if>
+	<if test="btc_fee != null" >
+	    and btc_fee =  #{btc_fee}
+	</if>
+	 	<if test="btc_remark != null and btc_remark != ''" >
+	    and btc_remark =  #{btc_remark}
+	</if>
+	<if test="btb_qty != null" >
+	    and btb_qty =  #{btb_qty}
+	</if>
+	 	<if test="btb_qtyunit != null and btb_qtyunit != ''" >
+	    and btb_qtyunit =  #{btb_qtyunit}
+	</if>
+	<if test="btb_fee != null" >
+	    and btb_fee =  #{btb_fee}
+	</if>
+	 	<if test="btb_remark != null and btb_remark != ''" >
+	    and btb_remark =  #{btb_remark}
+	</if>
+	<if test="return_qty != null" >
+	    and return_qty =  #{return_qty}
+	</if>
+	 	<if test="return_qtyunit != null and return_qtyunit != ''" >
+	    and return_qtyunit =  #{return_qtyunit}
+	</if>
+	<if test="return_fee != null" >
+	    and return_fee =  #{return_fee}
+	</if>
+	 	<if test="return_remark != null and return_remark != ''" >
+	    and return_remark =  #{return_remark}
+	</if>
+	<if test="ib_qty != null" >
+	    and ib_qty =  #{ib_qty}
+	</if>
+	 	<if test="ib_qtyunit != null and ib_qtyunit != ''" >
+	    and ib_qtyunit =  #{ib_qtyunit}
+	</if>
+	<if test="ib_fee != null" >
+	    and ib_fee =  #{ib_fee}
+	</if>
+	 	<if test="ib_remark != null and ib_remark != ''" >
+	    and ib_remark =  #{ib_remark}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入操作费明细数据 -->
+<insert id="insert" parameterType="com.bt.lmis.model.PerationfeeDataDailySettlement" >
+  insert into tb_operationfee_data_daily_settlement(id,xse_qty,xse_qtyunit,xse_fee,xse_remark,gd_qty,gd_qtyunit,gd_fee,gd_remark,create_time,create_user,update_time,update_user,contract_id,data_date,btc_qty,btc_qtyunit,btc_fee,btc_remark,btb_qty,btb_qtyunit,btb_fee,btb_remark,return_qty,return_qtyunit,return_fee,return_remark,ib_qty,ib_qtyunit,ib_fee,ib_remark)
+ values(#{id},#{xse_qty},#{xse_qtyunit},#{xse_fee},#{xse_remark},#{gd_qty},#{gd_qtyunit},#{gd_fee},#{gd_remark},#{create_time},#{create_user},#{update_time},#{update_user},#{contract_id},#{data_date},#{btc_qty},#{btc_qtyunit},#{btc_fee},#{btc_remark},#{btb_qty},#{btb_qtyunit},#{btb_fee},#{btb_remark},#{return_qty},#{return_qtyunit},#{return_fee},#{return_remark},#{ib_qty},#{ib_qtyunit},#{ib_fee},#{ib_remark})
+</insert>
+
+<!-- 修改操作费明细数据-->  
+ <update id="update" parameterType="com.bt.lmis.model.PerationfeeDataDailySettlement" >
+  update tb_operationfee_data_daily_settlement set xse_qty=#{xse_qty},xse_qtyunit=#{xse_qtyunit},xse_fee=#{xse_fee},xse_remark=#{xse_remark},gd_qty=#{gd_qty},gd_qtyunit=#{gd_qtyunit},gd_fee=#{gd_fee},gd_remark=#{gd_remark},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},contract_id=#{contract_id},data_date=#{data_date},btc_qty=#{btc_qty},btc_qtyunit=#{btc_qtyunit},btc_fee=#{btc_fee},btc_remark=#{btc_remark},btb_qty=#{btb_qty},btb_qtyunit=#{btb_qtyunit},btb_fee=#{btb_fee},btb_remark=#{btb_remark},return_qty=#{return_qty},return_qtyunit=#{return_qtyunit},return_fee=#{return_fee},return_remark=#{return_remark},ib_qty=#{ib_qty},ib_qtyunit=#{ib_qtyunit},ib_fee=#{ib_fee},ib_remark=#{ib_remark} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改操作费明细数据-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.PerationfeeDataDailySettlement" >
+	update tb_operationfee_data_daily_settlement set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	
+	<if test="xse_qty != null  and xse_qty != '' ">
+		xse_qty=#{xse_qty},
+	</if>
+	<if test="xse_qtyunit != null  and xse_qtyunit != '' ">
+		xse_qtyunit=#{xse_qtyunit},
+	</if>
+	<if test="xse_fee != null  and xse_fee != '' ">
+		xse_fee=#{xse_fee},
+	</if>
+	<if test="xse_remark != null  and xse_remark != '' ">
+		xse_remark=#{xse_remark},
+	</if>
+	
+	<if test="gd_qty != null  and gd_qty != '' ">
+		gd_qty=#{gd_qty},
+	</if>
+	<if test="gd_qtyunit != null  and gd_qtyunit != '' ">
+		gd_qtyunit=#{gd_qtyunit},
+	</if>
+	<if test="gd_fee != null  and gd_fee != '' ">
+		gd_fee=#{gd_fee},
+	</if>
+	<if test="gd_remark != null  and gd_remark != '' ">
+		gd_remark=#{gd_remark},
+	</if>
+	
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="contract_id != null  ">
+		contract_id=#{contract_id},
+	</if>
+	<if test="data_date != null  ">
+		data_date=#{data_date},
+	</if>
+	<if test="btc_qty != null  ">
+		btc_qty=#{btc_qty},
+	</if>
+	<if test="btc_qtyunit != null  and btc_qtyunit != '' ">
+		btc_qtyunit=#{btc_qtyunit},
+	</if>
+	<if test="btc_fee != null  ">
+		btc_fee=#{btc_fee},
+	</if>
+	<if test="btc_remark != null  and btc_remark != '' ">
+		btc_remark=#{btc_remark},
+	</if>
+	<if test="btb_qty != null  ">
+		btb_qty=#{btb_qty},
+	</if>
+	<if test="btb_qtyunit != null  and btb_qtyunit != '' ">
+		btb_qtyunit=#{btb_qtyunit},
+	</if>
+	<if test="btb_fee != null  ">
+		btb_fee=#{btb_fee},
+	</if>
+	<if test="btb_remark != null  and btb_remark != '' ">
+		btb_remark=#{btb_remark},
+	</if>
+	<if test="return_qty != null  ">
+		return_qty=#{return_qty},
+	</if>
+	<if test="return_qtyunit != null  and return_qtyunit != '' ">
+		return_qtyunit=#{return_qtyunit},
+	</if>
+	<if test="return_fee != null  ">
+		return_fee=#{return_fee},
+	</if>
+	<if test="return_remark != null  and return_remark != '' ">
+		return_remark=#{return_remark},
+	</if>
+	<if test="ib_qty != null  ">
+		ib_qty=#{ib_qty},
+	</if>
+	<if test="ib_qtyunit != null  and ib_qtyunit != '' ">
+		ib_qtyunit=#{ib_qtyunit},
+	</if>
+	<if test="ib_fee != null  ">
+		ib_fee=#{ib_fee},
+	</if>
+	c
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除操作费明细数据 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_operationfee_data_daily_settlement where id = #{id}
+</update>
+<!-- 批量删除操作费明细数据 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_operationfee_data_daily_settlement where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+
+<update id="delete_by_condition" parameterType="com.bt.lmis.model.PerationfeeDataDailySettlement">
+	delete 	 from tb_operationfee_data_daily_settlement where 
+	<if test="contract_id != null  and contract_id != '' ">
+		contract_id=#{contract_id}
+	</if>
+	<if test="data_date != null  and data_date != '' ">
+	 and data_date=#{data_date}
+	</if>
+</update>
+ 
+<!-- 依据主键查找操作费明细数据 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_operationfee_data_daily_settlement where id = #{id}
+</select>
+  	
+<!-- 操作费明细数据 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.PerationfeeDataDailySettlementQueryParam">
+	select count(1) from tb_operationfee_data_daily_settlement 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的操作费明细数据集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.PerationfeeDataDailySettlementQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operationfee_data_daily_settlement 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 操作费明细数据总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.PerationfeeDataDailySettlementQueryParam">
+	select count(1) from tb_operationfee_data_daily_settlement 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的操作费明细数据集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.PerationfeeDataDailySettlementQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operationfee_data_daily_settlement 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+
+<select id="findByEntity" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.PerationfeeDataDailySettlement">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_operationfee_data_daily_settlement 
+	<include refid="where_Clause"/>
+</select>
+
+</mapper>   

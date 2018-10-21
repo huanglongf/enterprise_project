@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.WarningLevelupRecordMapper" >
+	<update id="updateWarningLevelupRecord" parameterType="com.bt.radar.model.WarningLevelupRecord">
+		update er_warning_levelup_record
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="waybill != null and waybill != ''">
+				waybill = #{waybill },
+			</if>
+			<if test="pid != null and pid != ''">
+				pid = #{pid },
+			</if>
+			<if test="before_level != null and before_level != ''">
+				before_level = #{before_level },
+			</if>
+			<if test="after_level != null and after_level != ''">
+				after_level = #{after_level },
+			</if>
+			<if test="levelup_time != null and levelup_time != ''">
+				levelup_time = #{levelup_time },
+			</if>
+		</trim>
+		where id = #{id } 
+	</update>
+	<insert id="insertWarningLevelupRecord" parameterType="com.bt.radar.model.WarningLevelupRecord">
+		insert into er_warning_levelup_record
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			waybill,
+			pid,
+			before_level,
+			after_level,
+			levelup_time
+		) values (
+			#{id },
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{waybill },
+			#{pid },
+			#{before_level },
+			#{after_level },
+			now()
+		)
+	</insert>
+	<select id="findRecords" parameterType="com.bt.radar.model.WarningLevelupRecord" resultType="com.bt.radar.model.WarningLevelupRecord">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			waybill,
+			pid,
+			before_level,
+			after_level,
+			levelup_time
+		from
+			er_warning_levelup_record
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id != null and id != ''">
+				AND id = #{id }
+			</if>
+			<if test="waybill != null and waybill != ''">
+				AND waybill = #{waybill }
+			</if>
+			<if test="pid != null and pid != ''">
+				AND pid = #{pid }
+			</if>
+			<if test="before_level != null and before_level != ''">
+				AND before_level = #{before_level }
+			</if>
+			<if test="after_level != null and after_level != ''">
+				AND after_level = #{after_level }
+			</if>
+			<if test="levelup_time != null and levelup_time != ''">
+				AND levelup_time = #{levelup_time }
+			</if>
+    	</trim>
+	</select>
+</mapper>   

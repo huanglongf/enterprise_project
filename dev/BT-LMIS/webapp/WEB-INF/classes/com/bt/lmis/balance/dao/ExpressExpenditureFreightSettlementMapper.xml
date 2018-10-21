@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.ExpressExpenditureFreightSettlementMapper">
+	<select id="ensureExpressExpenditureFreightSettlementRule" parameterType="Integer" resultType="com.bt.lmis.balance.model.ExpressExpenditureFreightSettlementRule">
+		SELECT * FROM view_express_expenditure_freight_settlement_rule
+		<if test="conId != null">
+			WHERE conId IN
+			<foreach collection="conId" item="conId" index="index" open="(" separator="," close=")">  
+		       	#{conId }
+		   	</foreach>
+		</if>
+	</select>
+	<select id="cleanTempTable">
+		TRUNCATE tb_warehouse_express_data_settlement_temp;
+	</select>
+	<select id="move2TempTable" parameterType="Object">
+		INSERT INTO tb_warehouse_express_data_settlement_temp (
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse_code,
+			warehouse,
+			transport_code,
+			transport_name,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			express_number,
+			transport_direction,
+			itemtype_code,
+			itemtype_name,
+			transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			weight,
+			length,
+			width,
+			higth,
+			volumn,
+			delivery_address,
+			province,
+			city,
+			state,
+			street,
+			insurance_flag,
+			cod_flag,
+			data_id
+			
+		)
+		SELECT
+			UUID() AS id,
+			now() AS create_time,
+			'TIMER' AS create_user,
+			now() AS update_time,
+			'TIMER' AS update_user,
+			cost_center,
+			store_code,
+			store_name,
+			warehouse_code,
+			warehouse,
+			transport_code,
+			transport_name,
+			delivery_order,
+			epistatic_order,
+			order_type,
+			express_number,
+			transport_direction,
+			itemtype_code,
+			itemtype_name,
+			transport_time,
+			collection_on_delivery,
+			order_amount,
+			sku_number,
+			weight,
+			length,
+			width,
+			higth,
+			length*width*higth,
+			delivery_address,
+			province,
+			city,
+			state,
+			street,
+			insurance_flag,
+			cod_flag,
+			id AS data_id
+		FROM ${tableName }
+		WHERE 1=1
+		<if test="deadline!=null and deadline!=''">
+			AND transport_time&lt;#{deadline }
+		</if>
+		AND settle_flag=0
+		LIMIT #{batchNumber }
+	</select>
+	<select id="countTempTable" resultType="int">
+		SELECT count(id) FROM tb_warehouse_express_data_settlement_temp
+	</select>
+	<update id="endowOffer" parameterType="Object">
+		UPDATE tb_warehouse_express_data_settlement_temp
+		SET jf_weight=#{rule.chargedWeight },
+		jp_num=#{rule.volumnParam },
+		first_weight=#{rule.firstWeight },
+		first_weight_price=#{rule.firstWeightPrice },
+		<if test="rule.contractOwner!='SF'">
+			discount=#{rule.discount },
+		</if>
+		<if test="rule.contractOwner=='SF'">
+			discount=0,
+		</if>
+		contract_id=#{rule.conId }
+		WHERE transport_code=#{rule.contractOwner }
+		<if test="rule.itemtypeCode!=null and rule.itemtypeCode!=''">
+			AND itemtype_code=#{rule.itemtypeCode }
+		</if>
+		AND delivery_address=#{rule.origination }
+		AND province=#{rule.province }
+		<if test="rule.city!=null and rule.city!=''">
+			AND city=#{rule.city }
+		</if>
+		<if test="rule.district!=null and rule.district!=''">
+			AND state=#{rule.district }
+		</if>
+	</update>
+</mapper>

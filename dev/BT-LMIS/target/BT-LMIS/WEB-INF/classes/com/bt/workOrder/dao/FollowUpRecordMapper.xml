@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.workOrder.dao.FollowUpRecordMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.workOrder.model.FollowUpRecord" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_by" property="create_by"/>
+	<result column="create_by_display" property="create_by_display"/>
+	<result column="create_by_group" property="create_by_group"/>
+	<result column="create_by_group_display" property="create_by_group_display"/>
+	<result column="create_by_department" property="create_by_department"/>
+	<result column="create_by_department_display" property="create_by_department_display"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_by" property="update_by"/>
+	<result column="wo_store_id" property="wo_store_id"/>
+	<result column="follow_up_record" property="follow_up_record"/>
+</resultMap>
+       
+<!-- wo_follow_up_record table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_by,create_by_display,create_by_group,create_by_group_display,create_by_department,create_by_department_display,update_time,update_by,wo_store_id,follow_up_record
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_by != null and create_by != ''" >
+	    and create_by =  #{create_by}
+	</if>
+	 	<if test="create_by_display != null and create_by_display != ''" >
+	    and create_by_display =  #{create_by_display}
+	</if>
+	<if test="create_by_group != null" >
+	    and create_by_group =  #{create_by_group}
+	</if>
+	 	<if test="create_by_group_display != null and create_by_group_display != ''" >
+	    and create_by_group_display =  #{create_by_group_display}
+	</if>
+	 	<if test="create_by_department != null and create_by_department != ''" >
+	    and create_by_department =  #{create_by_department}
+	</if>
+	 	<if test="create_by_department_display != null and create_by_department_display != ''" >
+	    and create_by_department_display =  #{create_by_department_display}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_by != null and update_by != ''" >
+	    and update_by =  #{update_by}
+	</if>
+	 	<if test="wo_store_id != null and wo_store_id != ''" >
+	    and wo_store_id =  #{wo_store_id}
+	</if>
+	<if test="follow_up_record != null" >
+	    and follow_up_record =  #{follow_up_record}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入跟进信息表 -->
+<insert id="insert" parameterType="com.bt.workOrder.model.FollowUpRecord" >
+  insert into wo_follow_up_record(id,create_time,create_by,create_by_display,create_by_group,create_by_group_display,create_by_department,create_by_department_display,update_time,update_by,wo_store_id,follow_up_record)
+ values(#{id},#{create_time},#{create_by},#{create_by_display},#{create_by_group},#{create_by_group_display},#{create_by_department},#{create_by_department_display},#{update_time},#{update_by},#{wo_store_id},#{follow_up_record})
+</insert>
+
+<!-- 修改跟进信息表-->  
+ <update id="update" parameterType="com.bt.workOrder.model.FollowUpRecord" >
+  update wo_follow_up_record set create_time=#{create_time},create_by=#{create_by},create_by_display=#{create_by_display},create_by_group=#{create_by_group},create_by_group_display=#{create_by_group_display},create_by_department=#{create_by_department},create_by_department_display=#{create_by_department_display},update_time=#{update_time},update_by=#{update_by},wo_store_id=#{wo_store_id},follow_up_record=#{follow_up_record} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改跟进信息表-->
+<update id="updateBySelective" parameterType="com.bt.workOrder.model.FollowUpRecord" >
+	update wo_follow_up_record set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_by != null  and create_by != '' ">
+		create_by=#{create_by},
+	</if>
+	<if test="create_by_display != null  and create_by_display != '' ">
+		create_by_display=#{create_by_display},
+	</if>
+	<if test="create_by_group != null  ">
+		create_by_group=#{create_by_group},
+	</if>
+	<if test="create_by_group_display != null  and create_by_group_display != '' ">
+		create_by_group_display=#{create_by_group_display},
+	</if>
+	<if test="create_by_department != null  and create_by_department != '' ">
+		create_by_department=#{create_by_department},
+	</if>
+	<if test="create_by_department_display != null  and create_by_department_display != '' ">
+		create_by_department_display=#{create_by_department_display},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_by != null  and update_by != '' ">
+		update_by=#{update_by},
+	</if>
+	<if test="wo_store_id != null  and wo_store_id != '' ">
+		wo_store_id=#{wo_store_id},
+	</if>
+	<if test="follow_up_record != null  ">
+		follow_up_record=#{follow_up_record},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除跟进信息表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from wo_follow_up_record where id = #{id}
+</update>
+<!-- 批量删除跟进信息表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from wo_follow_up_record where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找跟进信息表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from wo_follow_up_record where id = #{id}
+</select>
+
+
+<select id="querysFollowUpRecordByGroupwoId"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from wo_follow_up_record where wo_store_id = #{wo_store_id} order by create_time desc
+</select>
+
+<!-- 依据主键查找组织表信息表 -->
+<select id="querysGroupByGroupId"  resultType="java.util.Map" >
+	select * from tb_shop_group where id = #{id} and status=1
+</select>
+<select id="querysShopGroupStorePowerByGroupId"  resultType="java.util.Map" >
+	select * from tb_shop_group_store_power where tb_shop_group_store_power.group = #{group}
+</select>
+<select id="querysStoreByStoreCode"  resultType="java.util.Map" >
+	select * from tb_store where store_code = #{store_code}
+</select>
+  	
+<!-- 跟进信息表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.workOrder.controller.form.FollowUpRecordQueryParam">
+	select count(1) from wo_follow_up_record 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的跟进信息表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.workOrder.controller.form.FollowUpRecordQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from wo_follow_up_record 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 跟进信息表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.workOrder.controller.form.FollowUpRecordQueryParam">
+	select count(1) from wo_follow_up_record 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的跟进信息表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.workOrder.controller.form.FollowUpRecordQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from wo_follow_up_record 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

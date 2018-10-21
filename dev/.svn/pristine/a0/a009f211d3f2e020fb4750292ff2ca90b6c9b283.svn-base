@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.dao.JkErrorMapper">
+   <select id="getJkErrorOrder" parameterType="com.bt.lmis.model.ErrorAddress" resultType="java.util.HashMap">
+     select 
+	     t.id,
+	     t.store_code,
+	     t.store_name,
+	     t.warehouse_code,
+	     t.warehouse_name,
+	     t.transport_code,
+	     t.transport_name,
+	     t.express_number,
+	     t.delivery_address,
+	     t.province,
+	     t.city,
+	     t.state,
+	     t.length,
+	     t.width,
+	     t.higth,
+         s.error_remark
+     from jk_settle_order t,jk_error_compared s
+    where 1=1
+      and t.pro_remark=s.error_msg
+      and t.pro_flag=2
+    limit #{firstResult},#{maxResult}
+   </select>
+   
+	<select id="selectJkCount" parameterType="com.bt.lmis.model.ErrorAddress" resultType="java.lang.Integer">
+     select 
+          count(1)
+     from jk_settle_order t,jk_error_compared s
+    where 1=1
+      and t.pro_remark=s.error_msg
+      and t.pro_flag=2
+	</select>
+	
+	<select id="dealErrorDataPro" parameterType="java.util.HashMap" resultType="java.util.HashMap" statementType="CALLABLE">
+	  {call pro_jk_error_deal(
+		  #{id,jdbcType=VARCHAR,mode=IN},
+		  #{out_result,jdbcType=VARCHAR,mode=OUT},
+		  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+	
+   <select id="getJkDataInfo" parameterType="com.bt.lmis.controller.form.ErrorAddressQueryParam" resultType="java.util.HashMap">
+     select 
+	    t.id,
+		t.wms_count,
+		t.lmis_count,
+		t.jk_code,
+		t.jk_name,
+		t.newly_link_flag,
+		t.count_time,
+		t.count_time_param,
+		t.lmis_update_time,
+		t.wms_update_time
+     from jk_data_check t
+    where 1=1
+	<if test="isError!='' and isError!=null">
+	    <if test="isError==1">
+		  and t.lmis_count !=t.wms_count and t.wms_update_time is not null
+		</if>
+	</if>
+	<if test="jkCode!='' and jkCode!=null">
+		and t.jk_code=#{jkCode}
+	</if>			    
+    order by t.count_time asc
+    limit #{firstResult},#{maxResult}
+   </select>
+   
+	<select id="getJkDataCount" parameterType="com.bt.lmis.controller.form.ErrorAddressQueryParam" resultType="java.lang.Integer">
+     select 
+          count(1)
+     from jk_data_check t
+    where 1=1
+	<if test="isError!='' or isError!=null">
+	    <if test="isError==1">
+		  and t.lmis_count !=t.wms_count and t.wms_update_time is not null
+		</if>
+	</if>
+	<if test="jkCode!='' and jkCode!=null">
+	     and t.jk_code=#{jkCode}
+	</if>			    
+	</select>
+	
+	
+   <select id="dealjkDataPro" parameterType="java.util.HashMap" resultType="java.util.HashMap" statementType="CALLABLE">
+	  {call pro_jk_data_check(
+		  #{out_result,jdbcType=VARCHAR,mode=OUT},
+		  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+
+   <select id="refreshjkDataPro" parameterType="java.util.HashMap" resultType="java.util.HashMap" statementType="CALLABLE">
+	  {call pro_jk_data_refresh_init(
+	      #{count_time,jdbcType=VARCHAR,mode=IN},
+		  #{out_result,jdbcType=VARCHAR,mode=OUT},
+		  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+	<update id="upStatus" parameterType="java.util.HashMap">
+	  update jk_data_check
+	     set newly_link_flag=#{status}
+	   where jk_code=#{jkCode}
+	     and count_time_param=#{countTimeParam}
+	</update>		
+	
+	<select id="getStatus" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+	  select 
+	       t.newly_link_flag
+	  from jk_data_check t 
+	  where t.jk_code=#{jkCode}
+	    and t.count_time_param=#{countTimeParam}
+	</select>
+	
+	
+	
+	<!-- 操作费 -->
+	
+		<select id="findOperatorData" parameterType="com.bt.lmis.model.OperatorBean" resultType="java.util.HashMap">
+	  select 
+	      t.id,
+		  t.store_name,
+		  t.job_orderno,
+		  t.related_orderno,
+		  t.job_type,
+		  t.in_num,
+		  t.out_num,
+		  t.item_number,
+		  t.sku_number,
+		  t.art_no,
+		  t.item_name,
+		  t.is_consumable,
+		  t.platform_order,
+		  t.warehouse_code,
+		  t.warehouse_name,
+		  t.warehouse_type,
+		  if(s.error_remark is null,t.pro_remark,s.error_remark) as pro_remark
+	 from jk_settle_operator t left join jk_error_compared s 
+     on t.pro_remark like concat('%',s.error_msg,'%')
+	 where t.pro_flag not in('0','1','4')
+	 LIMIT #{firstResult}, #{maxResult}
+	</select>
+	
+	<select id="selecOperatorCount" resultType="java.lang.Integer" parameterType="com.bt.lmis.model.OperatorBean">
+		select
+		count(1) cnt
+		from jk_settle_operator t
+		where 1=1
+		and t.pro_flag not in('0','1','4')
+	</select>
+	
+	
+	<select id="query_export"  parameterType="com.bt.lmis.model.OperatorBean" resultType="java.util.HashMap">
+        select 	   
+			 t.id as "主键(请勿操作)",
+			 t.upper_id as "wms系统主键",
+			 t.store_code as '店铺编码',
+			 t.store_name as '店铺名称',
+			 t.warehouse_code as '仓库编码',
+			 t.warehouse_name as '仓库名称',
+			 t.order_type as '订单类型',
+			 t.job_orderno as '作业单号',
+			 t.related_orderno as '相关单号',
+			 t.job_type as '作业类型名称',
+			 t.storaggelocation_code "库位编码",
+			 t.in_num "入库数量",
+			 t.out_num "出库数量",
+			 t.item_number "商品编码",
+			 t.sku_number "sku编码",
+			 t.art_no "货号",
+			 t.item_name as "商品名称",
+			 t.item_size as "商品大小",
+			 t.inventory_status as "库存状态",
+			 t.is_consumable as "是否为耗材 1：是，0：不是",
+			 t.brand_docking_code  as "品牌对接编码",
+			 t.barcode as "条形码",
+			 if(s.error_remark is null,t.pro_remark,s.error_remark)  as '异常原因',
+			 t.operation_time '操作费时间',
+			 t.platform_order '平台订单号',
+			 t.operator '操作人',
+			 t.warehouse_type '仓库类型 0:自营仓 1:外包仓'
+			 from jk_settle_operator t left join jk_error_compared s 
+		     on t.pro_remark like concat('%',s.error_msg,'%')
+		     and s.jk_type=2
+			 where  t.pro_flag not in('0','1','4')
+			              s.jk_type=2
+	</select>
+	
+	<select id="getImportMainInfo" parameterType="com.bt.lmis.model.OperatorBean"  resultType="com.bt.lmis.model.OperatorBean">
+       select 
+		   t.bat_id,
+		   max(t.create_date) as create_date,
+		   (select e.name from s_employee e where e.username=t.create_by) as create_by,
+		   count(1) as init_count,
+		   ifnull(sum(t.is_complete=1),0) as success_count,
+		   ifnull(sum(t.is_complete=0),0) as error_count,
+		   if(t.pro_flag=3,'是','否') as trans_flag
+		   from jk_operator_error_temporary t
+		   group by t.bat_id
+		   order by t.create_date desc
+	   limit #{firstResult},#{maxResult}
+	</select>
+	
+	<select id="getImportMainInfoCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	   select count(1)
+	   from (
+		   select 
+		   t.bat_id,
+		   t.create_by
+		   from jk_operator_error_temporary t
+		   group by t.bat_id
+	   ) as c
+	</select>
+	
+	<insert id="insertOper"  parameterType="java.util.List">
+		insert into jk_operator_error_temporary(
+			id,
+			bat_id,
+			upper_id,
+			order_type,
+			operation_time,
+			store_code,
+			store_name,
+			job_orderno,
+			related_orderno,
+			job_type,
+			storaggelocation_code,
+			in_num,
+			out_num,
+			item_number,
+			sku_number,
+			art_no,
+			item_name,
+			item_size,
+			inventory_status,
+			is_consumable,
+			platform_order,
+			operator,
+			create_date,
+			is_complete,
+			is_transferring,
+			warehouse_code,
+			warehouse_name,
+			warehouse_type,
+			brand_docking_code,
+			barcode,
+			epistatic_order
+		)values
+		<foreach collection="list" item="obj" index="index" separator=",">
+		(
+		    #{obj.id},
+			#{obj.bat_id},
+			#{obj.upper_id},
+			#{obj.order_type},
+			#{obj.operation_time},
+			#{obj.store_code},
+			#{obj.store_name},
+			#{obj.job_orderno},
+			#{obj.related_orderno},
+			#{obj.job_type},
+			#{obj.storaggelocation_code},
+			#{obj.in_num},
+			#{obj.out_num},
+			#{obj.item_number},
+			#{obj.sku_number},
+			#{obj.art_no},
+			#{obj.item_name},
+			#{obj.item_size},
+			#{obj.inventory_status},
+			#{obj.is_consumable},
+			#{obj.platform_order},
+			#{obj.operator},
+			#{obj.create_date},
+			#{obj.is_complete},
+			#{obj.is_transferring},
+			#{obj.warehouse_code},
+			#{obj.warehouse_name},
+			#{obj.warehouse_type},
+			#{obj.brand_docking_code},
+			#{obj.barcode},
+			#{obj.epistatic_order}
+		)
+		</foreach>
+	</insert>
+	
+		<update id="update_iscomplete" parameterType="java.util.Map">
+	   update jk_operator_error_temporary 
+	          set  is_complete=1
+	      where bat_id=#{bat_id}
+	</update>
+	
+		 <select id="transDataPro" parameterType="java.util.HashMap" resultType="java.util.HashMap" statementType="CALLABLE">
+		  {call jk_operator_error_temporary(
+			  #{bat_id,jdbcType=VARCHAR,mode=IN},
+			  #{out_result,jdbcType=VARCHAR,mode=OUT},
+			  #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+	</select>
+	
+			<delete id="deleteImport" parameterType="java.lang.String" >
+	    delete from jk_operator_error_temporary
+	    where bat_id = #{bat_id,jdbcType=VARCHAR}
+  	</delete>
+  	
+  	<select id="findAllDetailData" parameterType="java.lang.String" resultType="java.util.Map">
+  	   select 
+			t.id,
+			t.bat_id,
+			t.upper_id,
+			t.order_type,
+			t.operation_time,
+			t.store_code,
+			t.store_name,
+			t.job_orderno,
+			t.related_orderno,
+			t.job_type,
+			t.storaggelocation_code,
+			t.in_num,
+			t.out_num,
+			t.item_number,
+			t.sku_number,
+			t.art_no,
+			t.item_name,
+			t.item_size,
+			t.inventory_status,
+			t.is_consumable,
+			t.platform_order,
+			t.operator,
+			t.create_date,
+			t.is_complete,
+			t.is_transferring,
+			t.warehouse_code,
+			t.warehouse_name,
+			t.warehouse_type,
+			t.brand_docking_code,
+			t.barcode,
+			t.epistatic_order,
+			t.pro_flag,
+			t.pro_remark,
+	        t.pro_flag,
+	        if(s.error_remark is null,t.pro_remark,s.error_remark) as "pro_remark",
+			t.create_by
+   from jk_operator_error_temporary t left join jk_error_compared s 
+      on t.pro_remark like concat('%',s.error_msg,'%')
+   where  t.bat_id=#{bat_id}	   
+   LIMIT #{firstResult }, #{maxResult }
+  	</select>
+  	
+  	<select id="selectDetailCount" parameterType="com.bt.lmis.model.OperatorBean" resultType="java.lang.Integer">
+  	  select count(1) from jk_operator_error_temporary t where t.bat_id=#{bat_id}
+  	</select>
+  	
+  	
+  	<select id="exportData" parameterType="com.bt.lmis.model.OperatorBean"  resultType="java.util.HashMap">
+  	  select 	   
+			 t.id as "主键(请勿操作)",
+			 t.upper_id as "wms系统主键",
+			 t.store_code as '店铺编码',
+			 t.store_name as '店铺名称',
+			 t.warehouse_code as '仓库编码',
+			 t.warehouse_name as '仓库名称',
+			 t.order_type as '订单类型',
+			 t.job_orderno as '作业单号',
+			 t.related_orderno as '相关单号',
+			 t.job_type as '作业类型名称',
+			 t.storaggelocation_code "库位编码",
+			 t.in_num "入库数量",
+			 t.out_num "出库数量",
+			 t.item_number "商品编码",
+			 t.sku_number "sku编码",
+			 t.art_no "货号",
+			 t.item_name as "商品名称",
+			 t.item_size as "商品大小",
+			 t.inventory_status as "库存状态",
+			 t.is_consumable as "是否为耗材 1：是，0：不是",
+			 t.brand_docking_code  as "品牌对接编码",
+			 t.barcode as "条形码",
+			 if(s.error_remark is null,t.pro_remark,s.error_remark)  as '异常原因'
+			 from jk_operator_error_temporary t left join jk_error_compared s 
+		     on t.pro_remark like concat('%',s.error_msg,'%')
+		     and s.jk_type=2
+			 where  t.pro_flag not in('0','1','4')
+  	 </select>
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.workOrder.dao.FailureReasonMapper" >
+    <select id="queryFailureReasonData" resultType= "java.util.Map" parameterType= "com.bt.common.controller.param.Parameter" >
+		SELECT
+		id,code,reason
+		FROM
+	    failure_reason
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+
+			<if test="param.reason != null and param.reason != '' and param.reason != '-1'  and param.reason != 'undefined'  and param.reason != 'NaN'">
+				and reason LIKE CONCAT(CONCAT('%', #{param.reason}), '%')
+			</if>
+
+		</trim>
+		<if test="param.sortColumn != null and param.sortColumn != ''">
+			ORDER BY ${param.sortColumn } ${param.sort }
+		</if>
+		LIMIT ${firstResult}, ${maxResult}
+
+	</select>
+
+
+	<select id="countFailureReasonData" resultType= "java.lang.Integer" parameterType= "com.bt.common.controller.param.Parameter" >
+		SELECT
+		count(1)
+		from
+		failure_reason
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="param.reason != null and param.reason != '' and param.reason != '-1'  and param.reason != 'undefined'  and param.reason != 'NaN'">
+				and reason LIKE CONCAT(CONCAT('%', #{param.reason}), '%')
+			</if>
+		</trim>
+	</select>
+	
+	<delete id="deleteById" parameterType="java.lang.String">
+		delete from failure_reason where id=#{id}
+	</delete>
+
+
+
+
+	<insert id="addFailureReason" parameterType="java.lang.String">
+		INSERT INTO
+			failure_reason (
+				id,
+				code,
+				reason
+			)
+		VALUES (
+			UUID(),
+			#{code, jdbcType=VARCHAR},
+		    #{reason,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="selectFailureReason" resultType="java.util.Map">
+	select  code ,reason from failure_reason
+
+	</select>
+	
+	
+	
+</mapper>

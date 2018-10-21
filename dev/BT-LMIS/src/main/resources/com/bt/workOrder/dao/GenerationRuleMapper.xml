@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.workOrder.dao.GenerationRuleMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.workOrder.model.GenerationRule" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="update_time" property="update_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_user" property="update_user"/>
+	<result column="ew_type_code" property="ew_type_code"/>
+	<result column="ew_level" property="ew_level"/>
+	<result column="ew_flag" property="ew_flag"/>
+	<result column="wk_type" property="wk_type"/>
+	<result column="wk_level" property="wk_level"/>
+</resultMap>
+       
+<!-- wk_generation_rule table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,update_time,create_user,update_user,ew_type_code,ew_level,ew_flag,wk_type_level_id
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="ew_type_code != null and ew_type_code != ''" >
+	    and ew_type_code =  #{ew_type_code}
+	</if>
+	 	<if test="ew_level != null and ew_level != ''" >
+	    and ew_level =  #{ew_level}
+	</if>
+	 	<if test="ew_flag != null and ew_flag != ''" >
+	    and ew_flag =  #{ew_flag}
+	</if>
+	 	<if test="wk_type != null and wk_type != ''" >
+	    and wk_type =  #{wk_type}
+	</if>
+	 	<if test="wk_level != null and wk_level != ''" >
+	    and wk_level =  #{wk_level}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入工单生成规则 -->
+<insert id="insert" parameterType="com.bt.workOrder.model.GenerationRule" >
+  insert into wk_generation_rule(id,create_time,update_time,create_user,update_user,ew_flag,wk_type_level_id,ew_type_code,ew_level)
+ values(#{id},#{create_time},#{update_time},#{create_user},#{update_user},#{ew_flag},#{wk_type_level_id},#{ew_type_code},#{ew_level})
+</insert>
+
+<!-- 修改工单生成规则-->  
+ <update id="update" parameterType="com.bt.workOrder.model.GenerationRule" >
+  update wk_generation_rule set create_time=#{create_time},update_time=#{update_time},create_user=#{create_user},update_user=#{update_user},ew_type_code=#{ew_type_code},ew_level=#{ew_level},ew_flag=#{ew_flag},wk_type_level_id=#{wk_type_level_id} where id=#{id}
+ </update>
+ 
+ <insert id='save' parameterType="com.bt.workOrder.model.GenerationRule">
+ 
+  insert  into wk_generation_rule (id,create_time,update_time,create_user,update_user,ew_type_code,ew_level,ew_flag,wk_type,wk_level)
+  values(#{id},#{create_time},#{update_time},#{create_user},#{update_user},#{ew_type_code},#{ew_level},#{ew_flag},#{wk_type},#{wk_level})
+ </insert>
+ <!-- 选择修改工单生成规则-->
+<update id="updateBySelective" parameterType="com.bt.workOrder.model.GenerationRule" >
+	update wk_generation_rule set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="ew_type_code != null  and ew_type_code != '' ">
+		ew_type_code=#{ew_type_code},
+	</if>
+	<if test="ew_level != null  and ew_level != '' ">
+		ew_level=#{ew_level},
+	</if>
+	<if test="ew_flag != null  and ew_flag != '' ">
+		ew_flag=#{ew_flag},
+	</if>
+	<if test="wk_type != null  and wk_type != '' ">
+		wk_type=#{wk_type},
+	</if>
+	<if test="wk_level != null  and wk_level != '' ">
+		wk_level=#{wk_level},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除工单生成规则 -->
+<update id="delete" parameterType="Object">
+	delete 	 from wk_generation_rule where id = #{id}
+</update>
+<!-- 批量删除工单生成规则 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from wk_generation_rule where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找工单生成规则 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from wk_generation_rule where id = #{id}
+</select>
+  	
+<!-- 工单生成规则 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.workOrder.controller.form.GenerationRuleQueryParam">
+	select count(1) from wk_generation_rule 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的工单生成规则集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.workOrder.controller.form.GenerationRuleQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from wk_generation_rule 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 工单生成规则总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.workOrder.controller.form.GenerationRuleQueryParam">
+	select count(1) from wk_generation_rule 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的工单生成规则集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.workOrder.controller.form.GenerationRuleQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from wk_generation_rule 
+	<include refid="where_Clause"/>
+</select>
+<select id='findGenerationRule' parameterType="com.bt.lmis.page.QueryParameter" resultType='com.bt.workOrder.model.GenerationRule'>
+  select * from  wk_generation_rule
+  <include refid="where_Clause"/>
+
+</select>
+
+
+<select id='findAllData' parameterType="com.bt.lmis.page.QueryParameter" resultType="java.util.HashMap">    
+	    SELECT 
+    a.id,
+    a.ew_flag,
+    c.name AS wk_type_name,
+    c.code as wk_type_code,
+    d.name AS wk_level,
+    d.code as wk_level_code,
+    a.ew_level AS ew_level,
+    b.wk_standard,
+    b.wk_timeout,
+    f.warningtype_name as ew_type_name,
+    d.sort,
+     f.warningtype_code as ew_type_code
+FROM
+    wk_generation_rule a,
+    wk_order_type b,
+    wk_type c,
+    wk_level d,
+    er_warninginfo_maintain_master f
+WHERE
+    a.wk_type_level_id = b.id
+        AND b.wk_type = c.code
+        AND b.level = d.code
+        and a.ew_type_code=f.warningtype_code     
+	<if test="ew_type_code != null and ew_type_code != ''" >
+     and  f.warningtype_code=#{ew_type_code}
+    </if>
+    <if test="ew_level != null and ew_level != ''" >
+     and  a.ew_level=#{ew_level}
+    </if>
+    <if test="ew_flag != null and ew_flag != ''" >
+     and a.ew_flag=#{ew_flag}
+    </if>
+     <if test="wk_level != null and wk_level != ''" >
+     and d.code=#{wk_level}
+    </if>
+     <if test="wk_type != null and wk_type != ''" >
+     and c.code =#{wk_type}
+    </if>
+    <if test="id != null and id != ''" >
+     and a.id =#{id}
+    </if>
+    and b.status=1
+    and c.flag=1
+    and d.flag=1
+    and f.dl_flag=1
+     <if test="maxResult != null and maxResult != ''" >
+   limit 
+	#{firstResult},#{maxResult}
+	</if>
+    </select>
+<select id='findAllData2' parameterType="com.bt.lmis.page.QueryParameter" resultType="java.util.HashMap">    
+	    SELECT 
+    a.id,
+    
+    CASE a.ew_flag
+	WHEN 0 THEN '禁用'
+	WHEN 1 THEN '启用'
+	ELSE '' END AS ew_flag,
+    
+    c.name AS wk_type_name,
+    c.code as wk_type_code,
+    d.name AS wk_level,
+    d.code as wk_level_code,
+    a.ew_level AS ew_level,
+    b.wk_standard,
+    b.wk_timeout,
+    f.warningtype_name as ew_type_name,
+    d.sort,
+     f.warningtype_code as ew_type_code
+FROM
+    wk_generation_rule a,
+    wk_order_type b,
+    wk_type c,
+    wk_level d,
+    er_warninginfo_maintain_master f
+WHERE
+    a.wk_type_level_id = b.id
+        AND b.wk_type = c.code
+        AND b.level = d.code
+        and a.ew_type_code=f.warningtype_code     
+	<if test="param.warningtype_code != null and param.warningtype_code != ''" >
+     and  f.warningtype_code=#{param.warningtype_code}
+    </if>
+    <if test="param.initial_level != null and param.initial_level != ''" >
+     and  a.ew_level=#{param.initial_level}
+    </if>
+    <if test="param.ew_flag != null and param.ew_flag != ''" >
+     and a.ew_flag=#{param.ew_flag}
+    </if>
+     <if test="param.wk_level_query != null and param.wk_level_query != ''" >
+     and d.code=#{param.wk_level_query}
+    </if>
+     <if test="param.wk_type_query != null and param.wk_type_query != ''" >
+     and c.code =#{param.wk_type_query}
+    </if>
+    <if test="param.id != null and param.id != ''" >
+     and a.id =#{param.id}
+    </if>
+    and b.status=1
+    and c.flag=1
+    and d.flag=1
+    and f.dl_flag=1
+     <if test="maxResult != null and maxResult != ''" >
+   limit 
+	#{firstResult},#{maxResult}
+	</if>
+    </select>
+  
+    <select id='findAllDataUpdate' parameterType="com.bt.lmis.page.QueryParameter" resultType="java.util.HashMap">    
+    SELECT 
+    a.id,
+    a.ew_flag,
+    c.name AS wk_type_name,
+    c.code as wk_type_code,
+    d.name AS wk_level,
+    d.code as wk_level_code,
+    a.ew_level AS ew_level,
+    b.wk_standard,
+    b.wk_timeout,
+    f.warningtype_name as ew_type_name,
+    d.sort,
+     f.warningtype_code as ew_type_code
+FROM
+    wk_generation_rule a,
+    wk_order_type b,
+    wk_type c,
+    wk_level d,
+    er_warninginfo_maintain_master f
+WHERE
+    a.wk_type_level_id = b.id
+        AND b.wk_type = c.code
+        AND b.level = d.code
+        and a.ew_type_code=f.warningtype_code        
+	<if test="ew_type_code != null and ew_type_code != ''" >
+     and  f.warningtype_code=#{ew_type_code}
+    </if>
+    <if test="ew_level != null and ew_level != ''" >
+     and  a.ew_level=#{ew_level}
+    </if>
+    <if test="ew_flag != null and ew_flag != ''" >
+     and a.ew_flag=#{ew_flag}
+    </if>
+     <if test="wk_level != null and wk_level != ''" >
+     and d.code=#{wk_level}
+    </if>
+     <if test="wk_type != null and wk_type != ''" >
+     and c.code =#{wk_type}
+    </if>
+    <if test="id != null and id != ''" >
+     and a.id !=#{id}
+    </if>
+    and b.status=1
+    and c.flag=1
+    and d.flag=1
+    and f.dl_flag=1
+    </select>
+  
+  <select id='selectCount' parameterType="com.bt.lmis.page.QueryParameter" resultType='java.lang.Integer'>
+    SELECT 
+    count(1)
+FROM
+    wk_generation_rule a,
+    wk_order_type b,
+    wk_type c,
+    wk_level d,
+    er_warninginfo_maintain_master f
+WHERE
+    a.wk_type_level_id = b.id
+        AND b.wk_type = c.code
+        AND b.level = d.code
+        and a.ew_type_code=f.warningtype_code     
+	<if test="ew_type_code != null and ew_type_code != ''" >
+     and  f.warningtype_code=#{ew_type_code}
+    </if>
+    <if test="ew_level != null and ew_level != ''" >
+     and  a.ew_level=#{ew_level}
+    </if>
+    <if test="ew_flag != null and ew_flag != ''" >
+     and a.ew_flag=#{ew_flag}
+    </if>
+     <if test="wk_level != null and wk_level != ''" >
+     and d.code=#{wk_level}
+    </if>
+     <if test="wk_type != null and wk_type != ''" >
+     and c.code =#{wk_type}
+    </if>
+    <if test="id != null and id != ''" >
+     and a.id =#{id}
+    </if>
+    and b.status=1
+    and c.flag=1
+    and d.flag=1
+    and f.dl_flag=1
+    
+    </select>
+  <select id='selectCount2' parameterType="com.bt.lmis.page.QueryParameter" resultType='java.lang.Integer'>
+    SELECT 
+    count(1)
+FROM
+    wk_generation_rule a,
+    wk_order_type b,
+    wk_type c,
+    wk_level d,
+    er_warninginfo_maintain_master f
+WHERE
+    a.wk_type_level_id = b.id
+        AND b.wk_type = c.code
+        AND b.level = d.code
+        and a.ew_type_code=f.warningtype_code     
+	<if test="param.warningtype_code != null and param.warningtype_code != ''" >
+     and  f.warningtype_code=#{param.warningtype_code}
+    </if>
+    <if test="param.initial_level != null and param.initial_level != ''" >
+     and  a.ew_level=#{param.initial_level}
+    </if>
+    <if test="param.ew_flag != null and param.ew_flag != ''" >
+     and a.ew_flag=#{param.ew_flag}
+    </if>
+     <if test="param.wk_level_query != null and param.wk_level_query != ''" >
+     and d.code=#{param.wk_level_query}
+    </if>
+     <if test="param.wk_type_query != null and param.wk_type_query != ''" >
+     and c.code =#{param.wk_type_query}
+    </if>
+    <if test="param.id != null and param.id != ''" >
+     and a.id =#{param.id}
+    </if>
+    and b.status=1
+    and c.flag=1
+    and d.flag=1
+    and f.dl_flag=1
+    
+    </select>
+  
+  <select id='CanAddData' parameterType="com.bt.lmis.page.QueryParameter" resultType='java.lang.Integer'>
+SELECT 
+    COUNT(1)
+FROM
+    (SELECT 
+        1
+    FROM
+        wk_generation_rule a, wk_order_type c, wk_type d, wk_level e
+    WHERE
+            a.wk_type_level_id = c.id
+            AND c.wk_type = d.code
+            AND c.level = e.code
+            and c.status=1
+            and d.flag=1
+            and e.flag=1
+            AND a.ew_type_code = #{ew_type_code}
+            AND a.ew_level = #{ew_level}
+            and d.code=#{wk_type}
+            <if test="id != null and id != ''" >  
+                    and a.id!=#{id}
+                    </if>
+            UNION SELECT 
+        1
+    FROM
+         wk_generation_rule a ,wk_order_type c, wk_type d, wk_level e
+    WHERE
+            a.wk_type_level_id = c.id
+            AND c.wk_type = d.code
+            AND c.level = e.code
+            and c.status=1
+            and d.flag=1
+            and e.flag=1
+            and  d.code=#{wk_type}
+            and e.code=#{wk_level}
+            AND a.ew_type_code = #{ew_type_code} 
+            <if test="id != null and id != ''" >  
+                    and a.id!=#{id}
+                    </if>
+            ) a
+  </select>
+  <select id="CanAddData_se" parameterType="com.bt.lmis.page.QueryParameter" resultType='java.util.HashMap'>   
+      SELECT 
+    a.ew_level, e.sort
+FROM
+    wk_generation_rule a,
+    wk_order_type c,
+    wk_type d,
+    wk_level e,
+    er_warninginfo_maintain_master m
+WHERE
+    m.warningtype_code = a.ew_type_code
+        AND a.wk_type_level_id = c.id
+        AND c.wk_type = d.code
+        AND c.level = e.code
+        AND c.status = 1
+        AND e.flag = 1
+         <if test="ew_type_code != null and ew_type_code != ''" >  
+           AND a.ew_type_code = #{ew_type_code}
+           </if>
+          <if test="wk_type != null and wk_type != ''" >  
+          AND d.code = #{wk_type}
+           </if>
+           <if test="id != null and id != ''" >  
+          AND a.id != #{id}
+           </if>
+           
+  </select>
+  
+   <select id="CanAddData_th" parameterType="com.bt.lmis.page.QueryParameter" resultType='java.lang.Integer'>
+   select   count(1) from 	wk_generation_rule  where  ew_type_code=#{ew_type_code} and  ew_level=#{ew_level}
+  </select>
+  
+  <delete id='deletRule' parameterType="com.bt.workOrder.controller.form.GenerationRuleQueryParam">
+  DELETE FROM wk_generation_rule 
+WHERE
+    id =#{id} 
+  </delete>
+  <select id='checkRuleIsInUse' parameterType="com.bt.workOrder.controller.form.GenerationRuleQueryParam" resultType='java.util.HashMap'>
+SELECT 
+    *
+FROM
+    wo_master a,
+    wk_generation_rule b,
+    wk_order_type c
+WHERE
+    b.wk_type_level_id = c.id
+        AND a.wo_level = c.level
+        AND a.wo_type = c.wk_type
+         and b.ew_type_code=a.warning_type
+        and  b.ew_level=a.warning_level
+        AND b.id =#{id}
+        AND a.wo_process_status NOT IN ('CCD' , 'FIN')
+LIMIT 0 , 1; 
+  </select>
+  
+</mapper>   

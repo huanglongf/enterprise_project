@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.ConsumerRevenueEstimateMapper">
+	<resultMap type="com.bt.lmis.balance.model.Contract" id="ContractMap">
+		<result property="id" column="id" />
+		<result property="createTime" column="create_time" />
+		<result property="createBy" column="create_user" />
+		<result property="updateTime" column="update_time" />
+		<result property="updateBy" column="update_user" />
+		<result property="contractNo" column="contract_no" />
+		<result property="contractName" column="contract_name" />
+		<result property="contractType" column="contract_type" />
+		<result property="contractOwner" column="contract_owner" />
+		<result property="contractOwnerName" column="client_name" />
+		<result property="contractVersion" column="contract_version" />
+		<result property="contractStart" column="contract_start" />
+		<result property="contractEnd" column="contract_end" />
+		<result property="settleDate" column="settle_date" />
+		<result property="validity" column="validity" />
+		<result property="contact" column="contact" />
+		<result property="tel" column="tel" />
+		<result property="distributionUnit" column="distribution_unit" />
+	</resultMap>
+	<select id="ensureContractById" parameterType="int" resultMap="ContractMap">
+		SELECT a.*,tb_client.client_name
+		FROM (
+			SELECT
+				id,
+				create_time,
+				create_user,
+				update_time,
+				update_user,
+				contract_no,
+				contract_name,
+				contract_type,
+				contract_owner,
+				contract_version,
+				contract_start,
+				contract_end,
+				settle_date,
+				tb_contract_basicinfo.validity,
+				tb_contract_basicinfo.contact,
+				tel,
+				distribution_unit
+			FROM tb_contract_basicinfo
+			WHERE contract_type=4
+		) a LEFT JOIN tb_client
+		ON a.contract_owner=tb_client.client_code
+		WHERE a.id=#{id }
+	</select>
+	<select id="querySQL" parameterType="com.bt.lmis.balance.model.EstimateParam" resultType="java.util.Map">
+		${param.sql }
+	</select>
+	<select id="countSQL" parameterType="com.bt.lmis.balance.model.EstimateParam" resultType="int">
+		${param.sql }
+	</select>
+	<select id="sumSQL" parameterType="com.bt.lmis.balance.model.EstimateParam" resultType="java.math.BigDecimal">
+		${param.sql}
+	</select>
+	<delete id="cleanEstimate" parameterType="Object">
+		DELETE FROM ${tableName } WHERE batch_number=#{batchNumber };
+	</delete>
+</mapper>

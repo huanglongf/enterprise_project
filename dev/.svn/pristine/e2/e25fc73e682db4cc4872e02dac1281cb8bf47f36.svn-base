@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.dao.JipaoConditionExMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.model.JipaoConditionEx" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="con_id" property="conId" jdbcType="INTEGER" />
+    <result column="belong_to" property="belongTo" jdbcType="VARCHAR" />
+    <result column="attr" property="attr" jdbcType="INTEGER" />
+    <result column="compare_mark" property="compareMark" jdbcType="INTEGER" />
+    <result column="con" property="con" jdbcType="DECIMAL" />
+    <result column="uom" property="uom" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, create_time, create_by, update_time, update_by, is_deleted, remark, con_id, belong_to, 
+    attr, compare_mark, con, uom
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ex_con_jipao_condition
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="Object" >
+    select 
+    <include refid="Base_Column_List" />
+    from ex_con_jipao_condition
+    where 
+    	is_deleted = 0
+    	<if test="con_id!=null and con_id!=''">
+		and
+			con_id = #{con_id } 
+		</if>
+		<if test="belong_to!=null and belong_to!=''">
+		and
+			belong_to = #{belong_to }
+		</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ex_con_jipao_condition
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.model.JipaoConditionEx" >
+    insert into ex_con_jipao_condition (create_time, create_by, 
+      update_time, update_by, 
+      remark, con_id, belong_to, 
+      attr, compare_mark, con, 
+      uom)
+    values (now(), #{createBy,jdbcType=VARCHAR}, 
+      now(), #{updateBy,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{conId,jdbcType=INTEGER}, #{belongTo,jdbcType=VARCHAR}, 
+      #{attr,jdbcType=INTEGER}, #{compareMark,jdbcType=INTEGER}, #{con,jdbcType=DECIMAL}, 
+      #{uom,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.model.JipaoConditionEx" >
+    insert into ex_con_jipao_condition
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="conId != null" >
+        con_id,
+      </if>
+      <if test="belongTo != null" >
+        belong_to,
+      </if>
+      <if test="attr != null" >
+        attr,
+      </if>
+      <if test="compareMark != null" >
+        compare_mark,
+      </if>
+      <if test="con != null" >
+        con,
+      </if>
+      <if test="uom != null" >
+        uom,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="conId != null" >
+        #{conId,jdbcType=INTEGER},
+      </if>
+      <if test="belongTo != null" >
+        #{belongTo,jdbcType=VARCHAR},
+      </if>
+      <if test="attr != null" >
+        #{attr,jdbcType=INTEGER},
+      </if>
+      <if test="compareMark != null" >
+        #{compareMark,jdbcType=INTEGER},
+      </if>
+      <if test="con != null" >
+        #{con,jdbcType=DECIMAL},
+      </if>
+      <if test="uom != null" >
+        #{uom,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.model.JipaoConditionEx" >
+    update ex_con_jipao_condition
+    <set >
+      <if test="updateTime != null" >
+        update_time = now(),
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="conId != null" >
+        con_id = #{conId,jdbcType=INTEGER},
+      </if>
+      <if test="belongTo != null" >
+        belong_to = #{belongTo,jdbcType=VARCHAR},
+      </if>
+      <if test="attr != null" >
+        attr = #{attr,jdbcType=INTEGER},
+      </if>
+      <if test="compareMark != null" >
+        compare_mark = #{compareMark,jdbcType=INTEGER},
+      </if>
+      <if test="con != null" >
+        con = #{con,jdbcType=DECIMAL},
+      </if>
+      <if test="uom != null" >
+        uom = #{uom,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+ 	<update id= "delJBPConditon" parameterType= "Object" >
+		update ex_con_jipao_condition set is_deleted= 1 where id= #{id }
+	</update>
+	<select id= "judgeUnique" parameterType= "com.bt.lmis.model.JipaoConditionEx" resultType= "Integer" >
+		select
+			count(1)
+		from 
+			ex_con_jipao_condition
+		where
+			is_deleted= 0 
+		and	
+			con_id= #{conId }
+		and
+			belong_to= #{belongTo }
+		and 
+			attr= #{attr }
+	</select>
+</mapper>

@@ -1,0 +1,174 @@
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<html>
+	<head>
+		<title>打印</title>
+	    <%@ include file="yuriy.jsp" %>
+	    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+	    <link rel="stylesheet"  href="<%=basePath %>/css/button.css" >
+	    <link/>
+		<script type="text/javascript">
+// 			function doPrint() {
+// 				bdhtml = window.document.body.innerHTML;
+// 				sprnstr = "<!--start-->";
+// 				eprnstr = "<!--end-->";
+// 				prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr));
+// 				prnhtml = prnhtml.substring(0,prnhtml.indexOf(eprnstr));
+// 				window.document.body.innerHTML = prnhtml;
+// 				window.print();
+// 				setTimeout("window.close()",100 );
+// 			}
+			function closewin(){
+				self.opener=null;
+				self.close();
+			}
+			function clock(){
+				i=i-1
+				if(i>0){
+					setTimeout("clock();",3000);
+				}else{ 
+					this.window.opener = null;
+					window.close();
+				}
+			}
+			function loadding() {
+				jsPrintSetup.setOption('orientation', jsPrintSetup.kPortraitOrientation);
+				// set top margins in millimeters
+				jsPrintSetup.setOption('marginTop', 0);
+				jsPrintSetup.setOption('marginBottom', 0);
+				jsPrintSetup.setOption('marginLeft', 0);
+				jsPrintSetup.setOption('marginRight', 0);
+				// set page header
+				jsPrintSetup.setOption('headerStrLeft', '');
+				jsPrintSetup.setOption('headerStrCenter', '');
+				jsPrintSetup.setOption('headerStrRight', '');
+				// set empty page footer
+				jsPrintSetup.setOption('footerStrLeft', '');
+				jsPrintSetup.setOption('footerStrCenter', '');
+				jsPrintSetup.setOption('footerStrRight', '');
+				// Suppress print dialog
+				jsPrintSetup.setSilentPrint(true);
+				// Do Print
+				jsPrintSetup.print();
+				// Restore print dialog
+				//jsPrintSetup.setSilentPrint(false);
+				closewin();
+			}
+			$(document).ready(function(){ 
+// 				doPrint();
+				loadding();
+			});			
+		</script>
+		<style type="text/css">
+			#main_div {
+				border: 1px solid gray;
+				width:99%;
+				height:95%;
+				margin: auto;
+			}
+		   #main_div2 {
+				border: 1px solid gray;
+				width:300px;
+				height:370px;
+				margin: auto;
+				display: none;
+			}
+			
+			#logo_div {
+				text-align:center;
+				margin-top:3%;
+				height:15%
+			}
+			#heand_div {
+				width: 100%;
+				height:40%;
+				margin: auto;
+				margin-top: 2px;
+				text-align: center;
+			}
+			.tbale {
+		    width: 100%;
+		    height:34%;
+		    margin-top: 5%;
+			}
+			.tbale tr {
+				line-height: 1;
+			}
+			.tbale tr td {
+				font-size: 18;
+				font-weight: 2;
+				text-align: center;
+			}
+			#vister_info_div {
+				margin-top: 20px;
+				margin: auto;
+				width: 100%;
+				margin-top: 10px;
+			}
+			.hite {
+				width: 100%;
+				border-bottom: 1px solid gray;
+				vertical-align: bottom;
+			}
+		</style>
+	</head>
+	<body>
+	   <input type="hidden" id="ids" value="${obj.id}"/>
+		<!--start-->
+		<div id="main_div">
+			<div id="logo_div">
+				<img alt="" src="<%=basePath %>/img/baozun.png" width="50%" height="80%">
+			</div>
+			<div id="heand_div">
+				<img alt="" src="data:image/png;base64,${img}" width="50%" height="105%">
+			</div>
+			<div id="vister_info_div">
+				<table class="tbale">
+					<tr height="10px;">
+						<td width="25%">姓&nbsp;&nbsp;&nbsp;名:</td>
+						<td width="40%"><div class="hite">${obj.visitor_name}</div></td>
+						<td rowspan="3" width="40%">
+<%-- 						<img alt="" src="<%=basePath %>/file/${img_qrc}" width="50%" height="45%"><br/> --%>
+						<img alt="" src="<%=basePath %>/img/bao.png" width="50%" height="45%">
+						</td>
+					</tr>
+					<tr height="10px;">
+						<td width="25%">拜访人:</td>
+						<td width="40%" align="center"><div class="hite">${obj.host}</div></td>
+					</tr>
+					<tr height="10px;">
+						<td width="25%" align="left">日&nbsp;&nbsp;&nbsp;期:</td>
+						<td width="40%" align="center"><div class="hite">${obj.data}</div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<!--end-->
+		<div id="main_div2">
+			<!-- logo -->
+			<div id="logo_div">
+				<img alt="" src="<%=basePath %>/img/baozun.png" width="140" height="50">
+			</div>
+			<div id="heand_div">
+				<img alt="" src="data:image/png;base64,${img}" width="100" height="125">
+			</div>
+			<div id="vister_info_div">
+				<table class="tbale">
+					<tr height="10px;">
+						<td width="25%">姓&nbsp;&nbsp;&nbsp;名:</td>
+						<td width="40%"><div class="hite">${obj.visitor_name}</div></td>
+						<td rowspan="3" width="40%"><img alt="" src="<%=basePath %>/file/${img_qrc}" width="100" height="100"></td>
+					</tr>
+					<tr height="10px;">
+						<td width="25%">拜访人:</td>
+						<td width="40%" align="center"><div class="hite">${obj.host}</div></td>
+					</tr>
+					<tr height="10px;">
+						<td width="25%" align="left">日&nbsp;&nbsp;&nbsp;期:</td>
+						<td width="40%" align="center"><div class="hite"><fmt:formatDate value="${obj.check_in_time}" pattern="yyyy/MM/dd" /></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- 		<div style="width: 100%;text-align: center;margin-top: 10px;"><a href="javascript:;" onclick="doPrint()" id="but" class="button button-3d button-action button-pill">打印</a></div> -->
+	</body>
+</html>

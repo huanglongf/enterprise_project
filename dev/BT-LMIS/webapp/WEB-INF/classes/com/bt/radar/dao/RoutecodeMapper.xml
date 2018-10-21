@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.RoutecodeMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.radar.model.Routecode" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="transport_code" property="transport_code"/>
+	<result column="status_code" property="status_code"/>
+	<result column="status" property="status"/>
+	<result column="flag" property="flag"/>
+	<result column="remark" property="remark"/>
+	<result column="dl_flag" property="dl_flag"/>
+</resultMap>
+       
+<!-- er_routecode table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,transport_code,status_code,status,flag,remark,dl_flag
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="transport_code != null and transport_code != ''" >
+	    and transport_code =  #{transport_code}
+	</if>
+	 	<if test="status_code != null and status_code != ''" >
+	    and status_code =  #{status_code}
+	</if>
+	 	<if test="status != null and status != ''" >
+	    and status =  #{status}
+	</if>
+	<if test="flag != null" >
+	    and flag =  #{flag}
+	</if>
+	 	<if test="remark != null and remark != ''" >
+	    and remark =  #{remark}
+	</if>
+	<if test="dl_flag != null" >
+	    and dl_flag =  #{dl_flag}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入快递状态代码 -->
+<insert id="insert" parameterType="com.bt.radar.model.Routecode" >
+  insert into er_routecode(id,create_time,create_user,update_time,update_user,transport_code,status_code,status,flag,remark,dl_flag)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{transport_code},#{status_code},#{status},#{flag},#{remark},#{dl_flag})
+</insert>
+
+<!-- 修改快递状态代码-->  
+ <update id="update" parameterType="com.bt.radar.model.Routecode" >
+  update er_routecode set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},transport_code=#{transport_code},status_code=#{status_code},status=#{status},flag=#{flag},remark=#{remark},dl_flag=#{dl_flag} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改快递状态代码-->
+<update id="updateBySelective" parameterType="com.bt.radar.model.Routecode" >
+	update er_routecode set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="transport_code != null  and transport_code != '' ">
+		transport_code=#{transport_code},
+	</if>
+	<if test="status_code != null  and status_code != '' ">
+		status_code=#{status_code},
+	</if>
+	<if test="status != null  and status != '' ">
+		status=#{status},
+	</if>
+	<if test="flag != null  ">
+		flag=#{flag},
+	</if>
+	<if test="remark != null  and remark != '' ">
+		remark=#{remark},
+	</if>
+	<if test="dl_flag != null  ">
+		dl_flag=#{dl_flag},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除快递状态代码 -->
+<update id="delete" parameterType="Object">
+	delete 	 from er_routecode where id = #{id}
+</update>
+<!-- 批量删除快递状态代码 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from er_routecode where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找快递状态代码 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from er_routecode where id = #{id}
+</select>
+  	
+<!-- 快递状态代码 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+	select count(1) from er_routecode 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的快递状态代码集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+	select 
+	*
+	from er_routecode 
+    where 1=1
+</select>
+
+
+<!--依据条件统计 快递状态代码总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+	select count(1) from er_routecode 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的快递状态代码集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from er_routecode 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="findAllData" resultType="java.util.HashMap"  parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+	select 
+	  a.*,
+	  b.transport_name as transport_name
+	   from er_routecode a,tb_transport_vendor b
+	    where b.validity=1 
+	          and b.transport_type=1 
+	          and b.transport_code=a.transport_code
+              and a.dl_flag=1
+              <if test="transport_code != null and transport_code != ''" >
+	            and a.transport_code =  #{transport_code}
+	          </if>
+	           <if test="transport_name != null and transport_name != ''" >
+	            and b.transport_name =  #{transport_name}
+	          </if>
+	          <if test="status != null and status != ''" >
+	            and a.status like CONCAT('%','${status}','%' ) 
+	          </if>
+	          <if test="flag != null" >
+	            and a.flag =  #{flag}
+	          </if>
+	          <if test="remark != null and remark != ''" >
+	            and a.remark =  #{remark}
+	          </if>
+	          <if test="status_code != null and status_code != ''" >
+	            and a.status_code =  #{status_code}
+	          </if>
+	          order by transport_code
+	           LIMIT #{firstResult}, #{maxResult}
+	          
+</select>
+
+<select id="findAllRecord" resultType="java.util.HashMap"  parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+	select 
+	  a.*,
+	  b.transport_name as transport_name
+	   from er_routecode a,tb_transport_vendor b
+	    where b.validity=1 
+	          and b.transport_type=1 
+	          and b.transport_code=a.transport_code
+              and a.dl_flag=1
+              <if test="transport_code != null and transport_code != ''" >
+	            and a.transport_code =  #{transport_code}
+	          </if>
+	           <if test="transport_name != null and transport_name != ''" >
+	            and b.transport_name =  #{transport_name}
+	          </if>
+	          <if test="status != null and status != ''" >
+	            and a.status =  #{status}
+	          </if>
+	          <if test="flag != null and flag != ''" >
+	            and a.flag =  #{flag}
+	          </if>
+	          <if test="remark != null and remark != ''" >
+	            and a.remark =  #{remark}
+	          </if>
+	          <if test="status_code != null and status_code != ''" >
+	            and a.status_code =  #{status_code}
+	          </if> 
+	          <if test="id != null and id != ''" >
+	            and a.id =  #{id}
+	          </if>      
+</select>
+
+<!-- 获得已有 的所有状态 物流服务商 -->
+<select id="getTransport_vender" resultType="java.util.HashMap"  parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+	select a.transport_name, b.transport_code from  tb_transport_vendor  a ,
+        (select  transport_code from er_routecode where dl_flag=1 group by   transport_code )  b
+         where a.transport_code=b.transport_code and a.validity=1 and a.transport_type=1
+	          
+</select>
+
+
+
+<select id="selectTransport_vender" resultType="java.util.HashMap"  parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+	select 
+	  b.transport_name as transport_name,
+	  b.transport_code as transport_code
+	   from tb_transport_vendor b
+	    where b.validity=1 
+	          and b.transport_type=1 
+	               
+</select>
+
+<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="com.bt.radar.controller.form.RoutecodeQueryParam">
+		select
+		count(1) cnt
+		from er_routecode a ,
+		      tb_transport_vendor b
+		       where a.transport_code=b.transport_code
+		          and b.transport_type=1     
+		          and a.dl_flag=1
+		          and  b.validity=1 
+				<if test="transport_code != null and transport_code != ''" >
+	            and a.transport_code =  #{transport_code}
+	          </if>
+	           <if test="transport_name != null and transport_name != ''" >
+	            and b.transport_name =  #{transport_name}
+	          </if>
+	          <if test="status != null and status != ''" >
+	            and a.status =  #{status}
+	          </if>
+	          <if test="flag != null and flag != ''" >
+	            and a.flag =  #{flag}
+	          </if>
+	          <if test="remark != null and remark != ''" >
+	            and a.remark =  #{remark}
+	          </if>       
+	</select>
+	<select id="selectRecordsByWID" resultType="java.util.HashMap"
+		parameterType="java.util.HashMap">
+select a.*,d.transport_name,b.id as id_code from er_routecode a,
+                                      tb_transport_vendor d,
+                                      er_warninginfo_maintain_master c,
+                                      er_warning_routestatus_list b
+                                       where 
+                                          b.warningtype_code=c.warningtype_code 
+                                      and a.transport_code=d.transport_code 
+                                      and d.transport_type=1 
+                                      and a.transport_code=b.transport_code 
+                                      and a.status_code=b.routestatus_code
+                                      and d.validity=1 
+                                      and b.dl_flag=c.dl_flag=a.dl_flag=1 
+                                      <if test="id != null and id != ''" >
+	                                           and c.id=#{id}
+	                                  </if>                               
+	</select>
+	
+	
+		<select id="selectRecordsByID" resultType="java.util.HashMap"
+		parameterType="java.util.HashMap">
+select  a.*,b.transport_code from er_routecode a,tb_transport_vendor b 
+                          where
+                          a.transport_code=b.transport_code 
+                          and b.validity=1 
+                          and  a.dl_flag=1 
+                                      <if test="id != null and id != ''" >
+	                                           and a.id=#{id}
+	                                  </if>                               
+	</select>
+	
+<select id="getStatus" resultType="java.util.HashMap"  parameterType="java.util.HashMap">
+select  status,status_code from er_routecode  where dl_flag=1
+</select>
+
+<select id="test"  resultType="java.util.HashMap" >
+SELECT 
+    '运单号',
+    '作业单号',
+    '平台订单号',
+    '收件人',
+    '电话',
+    '地址',
+    '复核时间',
+    '称重时间',
+    '物流商',
+    '产品类型',
+    '店铺名',
+    '仓库名',
+    '目的地省',
+    '目的地市',
+    '目的地区',
+    '预警级别',
+     '预警类别',
+     '预警类型'
+UNION SELECT 
+    a.waybill AS '运单号',
+    a.work_no AS '作业单号',
+    a.platform_no AS '平台订单号',
+    a.shiptoname AS '收件人',
+    a.phone AS '电话',
+    a.address AS '地址',
+    a.check_time AS '复核时间',
+    a.weight_time AS '称重时间',
+    a.express_name AS '物流商',
+    a.producttype_name AS '产品类型',
+    a.store_name AS '店铺名',
+    a.warehouse_name AS '仓库名',
+    a.provice_name AS '目的地省',
+    a.city_name AS '目的地市',
+    a.state_name AS '目的地区',
+    b.warning_level as '预警级别',
+    case 
+    b.warning_category 
+     when 1 then '超时预警'
+      when 0 then '时间预警'
+      else  '--' end
+    as '预警类别',
+   b.warningtype_code  as  '预警类型'
+FROM
+    er_expressinfo_master a left join 
+    er_waybill_warninginfo_detail b on a.waybill=b.waybill 
+    
+    
+    
+    UNION all SELECT 
+    a.waybill AS '运单号',
+    a.work_no AS '作业单号',
+    a.platform_no AS '平台订单号',
+    a.shiptoname AS '收件人',
+    a.phone AS '电话',
+    a.address AS '地址',
+    a.check_time AS '复核时间',
+    a.weight_time AS '称重时间',
+    a.express_name AS '物流商',
+    a.producttype_name AS '产品类型',
+    a.store_name AS '店铺名',
+    a.warehouse_name AS '仓库名',
+    a.provice_name AS '目的地省',
+    a.city_name AS '目的地市',
+    a.state_name AS '目的地区',
+    b.warning_level as '预警级别',
+    case 
+    b.warning_category 
+     when 1 then '超时预警'
+      when 0 then '时间预警'
+      else  '--' end
+    as '预警类别',
+   b.warningtype_code  as  '预警类型'
+FROM
+    er_expressinfo_master a left join 
+    er_waybill_warninginfo_detail b on a.waybill=b.waybill 
+    
+     UNION all SELECT 
+    a.waybill AS '运单号',
+    a.work_no AS '作业单号',
+    a.platform_no AS '平台订单号',
+    a.shiptoname AS '收件人',
+    a.phone AS '电话',
+    a.address AS '地址',
+    a.check_time AS '复核时间',
+    a.weight_time AS '称重时间',
+    a.express_name AS '物流商',
+    a.producttype_name AS '产品类型',
+    a.store_name AS '店铺名',
+    a.warehouse_name AS '仓库名',
+    a.provice_name AS '目的地省',
+    a.city_name AS '目的地市',
+    a.state_name AS '目的地区',
+    b.warning_level as '预警级别',
+    case 
+    b.warning_category 
+     when 1 then '超时预警'
+      when 0 then '时间预警'
+      else  '--' end
+    as '预警类别',
+   b.warningtype_code  as  '预警类型'
+FROM
+    er_expressinfo_master a left join 
+    er_waybill_warninginfo_detail b on a.waybill=b.waybill 
+     UNION all SELECT 
+    a.waybill AS '运单号',
+    a.work_no AS '作业单号',
+    a.platform_no AS '平台订单号',
+    a.shiptoname AS '收件人',
+    a.phone AS '电话',
+    a.address AS '地址',
+    a.check_time AS '复核时间',
+    a.weight_time AS '称重时间',
+    a.express_name AS '物流商',
+    a.producttype_name AS '产品类型',
+    a.store_name AS '店铺名',
+    a.warehouse_name AS '仓库名',
+    a.provice_name AS '目的地省',
+    a.city_name AS '目的地市',
+    a.state_name AS '目的地区',
+    b.warning_level as '预警级别',
+    case 
+    b.warning_category 
+     when 1 then '超时预警'
+      when 0 then '时间预警'
+      else  '--' end
+    as '预警类别',
+   b.warningtype_code  as  '预警类型'
+FROM
+    er_expressinfo_master a left join 
+    er_waybill_warninginfo_detail b on a.waybill=b.waybill 
+    
+      INTO OUTFILE 'F://output102.csv' FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '' LINES TERMINATED BY '\n';
+      
+      
+
+</select>
+
+</mapper>   

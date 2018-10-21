@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.PhysicalWarehouseMapper" >
+<select id="getPhysicalWarehouse" resultType="com.bt.radar.model.PhysicalWarehouse">
+	select 
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		warehouse_code,
+		warehouse_name,
+		province_code,
+		city_code,
+		state_code,
+		street_code,
+		dl_flag
+	from 
+		er_physical_warehouse
+	where
+		dl_flag = 1
+</select>
+<select id="countAllExist" parameterType="com.bt.radar.controller.form.PhysicalWarehouseQueryParam" resultType="Integer">
+	select
+		count(1)
+	from
+		(
+			select
+				id,
+				create_time,
+				create_user,
+				update_time,
+				update_user,
+				warehouse_code,
+				warehouse_name,
+				province_code,
+				city_code,
+				state_code,
+				street_code,
+				dl_flag
+			from
+				er_physical_warehouse
+			<trim prefix="WHERE" prefixOverrides="AND|OR">
+				dl_flag = 1
+				<if test="warehouse_code != null and warehouse_code != ''">
+					AND warehouse_code = #{warehouse_code }
+				</if>
+				<if test="warehouse_name != null and warehouse_name != ''">
+					AND warehouse_name like CONCAT('%', #{warehouse_name }, '%')
+				</if>
+				<if test="province_code != null and province_code != ''">
+					AND province_code = #{province_code }
+				</if>
+				<if test="city_code != null and city_code != ''">
+					AND city_code = #{city_code }
+				</if>
+				<if test="state_code != null and state_code != ''">
+					AND state_code = #{state_code }
+				</if>
+				<if test="street_code != null and street_code != ''">
+					AND street_code = #{street_code }
+				</if>
+			</trim>
+		) a
+</select>
+<select id="toList" parameterType="com.bt.radar.controller.form.PhysicalWarehouseQueryParam" resultType="java.util.Map">
+	select
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		warehouse_code,
+		warehouse_name,
+		province_code,
+		b.area_name as province_name,
+		city_code,
+		c.area_name as city_name,
+		state_code,
+		d.area_name as state_name,
+		street_code,
+		e.area_name as street_name,
+		dl_flag
+	from
+		er_physical_warehouse a
+	left join(
+		select
+			area_code,
+			area_name
+		from
+			tb_area
+	) b on a.province_code = b.area_code
+	left join(
+		select
+			area_code,
+			area_name
+		from
+			tb_area
+	) c on a.city_code = c.area_code
+	left join(
+		select
+			area_code,
+			area_name
+		from
+			tb_area
+	) d on a.state_code = d.area_code
+	left join(
+		select
+			area_code,
+			area_name
+		from
+			tb_area
+	) e on a.street_code = e.area_code
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		dl_flag = 1
+		<if test="warehouse_code != null and warehouse_code != ''">
+			AND warehouse_code = #{warehouse_code }
+		</if>
+		<if test="warehouse_name != null and warehouse_name != ''">
+			AND warehouse_name like CONCAT('%', #{warehouse_name }, '%')
+		</if>
+		<if test="province_code != null and province_code != ''">
+			AND province_code = #{province_code }
+		</if>
+		<if test="city_code != null and city_code != ''">
+			AND city_code = #{city_code }
+		</if>
+		<if test="state_code != null and state_code != ''">
+			AND state_code = #{state_code }
+		</if>
+		<if test="street_code != null and street_code != ''">
+			AND street_code = #{street_code }
+		</if>
+	</trim>
+   	order by update_time desc
+   	LIMIT #{firstResult}, #{maxResult}
+</select>
+<select id="findAllExist" parameterType="com.bt.radar.model.PhysicalWarehouse" resultType="com.bt.radar.model.PhysicalWarehouse">
+	select
+		id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		warehouse_code,
+		warehouse_name,
+		province_code,
+		city_code,
+		state_code,
+		street_code,
+		dl_flag
+	from
+		er_physical_warehouse
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+		dl_flag = 1
+		<if test="id != null and id != ''">
+			AND id = #{id }
+		</if>
+		<if test="warehouse_code != null and warehouse_code != ''">
+			AND warehouse_code = #{warehouse_code }
+		</if>
+		<if test="warehouse_name != null and warehouse_name != ''">
+			AND warehouse_name = #{warehouse_name }
+		</if>
+		<if test="province_code != null and province_code != ''">
+			AND province_code = #{province_code }
+		</if>
+		<if test="city_code != null">
+			AND city_code = #{city_code }
+		</if>
+		<if test="state_code != null">
+			AND state_code = #{state_code }
+		</if>
+		<if test="street_code != null">
+			AND street_code = #{street_code }
+		</if>
+   	</trim>
+</select>
+<update id="updatePhysicalWarehouse" parameterType="com.bt.radar.model.PhysicalWarehouse">
+	update er_physical_warehouse
+	<trim prefix="SET" suffixOverrides=",">
+		update_time = now(),
+		<if test="update_user != null and update_user != ''">
+			update_user = #{update_user },
+		</if>
+		<if test="warehouse_code != null and warehouse_code != ''">
+			warehouse_code = #{warehouse_code },
+		</if>
+		<if test="warehouse_name != null and warehouse_name != ''">
+			warehouse_name = #{warehouse_name },
+		</if>
+		<if test="province_code != null and province_code != ''">
+			province_code = #{province_code },
+		</if>
+		<if test="city_code != null and city_code != ''">
+			city_code = #{city_code },
+		</if>
+		<if test="state_code != null and state_code != ''">
+			state_code = #{state_code },
+		</if>
+		<if test="street_code != null and street_code != ''">
+			street_code = #{street_code },
+		</if>
+		<if test="dl_flag != null and dl_flag != ''">
+			dl_flag = #{dl_flag }
+		</if>
+	</trim>
+	where id = #{id } 
+</update>
+<insert id="insertPhysicalWarehouse" parameterType="com.bt.radar.model.PhysicalWarehouse">
+		insert into er_physical_warehouse
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			warehouse_code,
+			warehouse_name,
+			province_code,
+			city_code,
+			state_code,
+			street_code,
+			dl_flag
+		) values (
+			#{id },
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{warehouse_code },
+			#{warehouse_name },
+			#{province_code },
+			#{city_code },
+			#{state_code },
+			#{street_code },
+			1
+		)
+	</insert>
+	<update id='pro_radar_refresh_warehouse_temp'>
+	call  pro_radar_refresh_warehouse_temp();
+	</update>
+</mapper>   

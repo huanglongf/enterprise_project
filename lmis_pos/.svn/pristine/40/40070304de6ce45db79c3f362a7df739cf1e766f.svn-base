@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.whsCover.dao.PosWhsCoverMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.whsCover.model.PosWhsCover" id="PosWhsCoverMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="city_name" property="cityName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		whs_code,
+		province,
+		province_name,
+		city,
+		city_name
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			whs_code,
+			province,
+			province_name,
+			city,
+			city_name
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.pos.whsCover.model.PosWhsCover">
+		INSERT INTO pos_whs_cover
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{whsCode, jdbcType=VARCHAR},
+			#{province, jdbcType=VARCHAR},
+			#{provinceName, jdbcType=VARCHAR},
+			#{city, jdbcType=VARCHAR},
+			#{cityName, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_whs_cover
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.whsCode, jdbcType=VARCHAR},
+				#{obj.province, jdbcType=VARCHAR},
+				#{obj.provinceName, jdbcType=VARCHAR},
+				#{obj.city, jdbcType=VARCHAR},
+				#{obj.cityName, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.pos.whsCover.model.PosWhsCover" resultMap="PosWhsCoverMap">
+		SELECT <include refid="Base_Column_List" /> FROM pos_whs_cover
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="whsCode!=null and whsCode!=''">
+	            AND whs_code = #{whsCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="province!=null and province!=''">
+	            AND province = #{province, jdbcType=VARCHAR}
+	        </if>
+	        <if test="provinceName!=null and provinceName!=''">
+	            AND province_name = #{provinceName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="city!=null and city!=''">
+	            AND city = #{city, jdbcType=VARCHAR}
+	        </if>
+	        <if test="cityName!=null and cityName!=''">
+	            AND city_name = #{cityName, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.pos.whsCover.model.PosWhsCover">
+		UPDATE pos_whs_cover
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="whsCode!=null and whsCode!=''">
+	            whs_code = #{whsCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="province!=null and province!=''">
+	            province = #{province, jdbcType=VARCHAR},
+	        </if>
+	        <if test="provinceName!=null and provinceName!=''">
+	            province_name = #{provinceName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="city!=null and city!=''">
+	            city = #{city, jdbcType=VARCHAR},
+	        </if>
+	        <if test="cityName!=null and cityName!=''">
+	            city_name = #{cityName, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.whsCover.model.PosWhsCover">
+		UPDATE pos_whs_cover
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	whs_code = #{whsCode, jdbcType=VARCHAR},
+        	province = #{province, jdbcType=VARCHAR},
+        	province_name = #{provinceName, jdbcType=VARCHAR},
+        	city = #{city, jdbcType=VARCHAR},
+        	city_name = #{cityName, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.whsCover.model.PosWhsCover">
+		UPDATE pos_whs_cover
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.whsCover.model.PosWhsCover">
+		UPDATE pos_whs_cover
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.whsCover.model.PosWhsCover">
+		DELETE FROM pos_whs_cover
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</delete>
+	<select id="checkProvince" parameterType="java.lang.String" resultType="int">
+		SELECT
+			COUNT(1)
+		FROM
+			pos_whs_cover
+		WHERE
+			province = #{province}
+	</select>
+	<select id="checkProvinceCity" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM
+			pos_whs_cover
+		WHERE
+			 province = #{province} AND city = #{city}
+	</select>
+	<select id="getaddrNameByCode" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			name
+		FROM
+			`pos_addr_lib`
+		WHERE
+			code = #{code};
+	</select>
+</mapper>

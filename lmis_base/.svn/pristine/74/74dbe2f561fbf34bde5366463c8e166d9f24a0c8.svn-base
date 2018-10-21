@@ -1,0 +1,22 @@
+package com.lmis.sys.login.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.framework.baseInfo.LmisResult;
+
+/**
+ * @author daikaihua
+ * @date 2018年1月11日
+ * @todo TODO
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public interface LmisLoginServiceInterface<T> {
+	
+	LmisResult<T> lmisLogin(T t);
+
+	LmisResult<T> lmisLogout(String lmisUserId, String lmisTokenId);
+	
+	LmisResult<T> getFbTree(String lmisUserId);
+}

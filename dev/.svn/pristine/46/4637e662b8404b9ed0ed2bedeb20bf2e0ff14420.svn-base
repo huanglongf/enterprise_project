@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.PackagePriceLadderMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.PackagePriceLadder" >
+	<result column="id" property="id"/>
+	<result column="con_id" property="con_id"/>
+	<result column="return_flag" property="return_flag"/>
+	<result column="insurance" property="insurance"/>
+	<result column="charge_percent" property="charge_percent"/>
+	<result column="charge_percent_uom" property="charge_percent_uom"/>
+	<result column="charge_min_flag" property="charge_min_flag"/>
+	<result column="charge_min" property="charge_min"/>
+	<result column="charge_min_uom" property="charge_min_uom"/>
+	<result column="compare_1" property="compare_1"/>
+	<result column="num_1" property="num_1"/>
+	<result column="uom_1" property="uom_1"/>
+	<result column="rel" property="rel"/>
+	<result column="compare_2" property="compare_2"/>
+	<result column="num_2" property="num_2"/>
+	<result column="uom_2" property="uom_2"/>
+	<result column="charge" property="charge"/>
+	<result column="charge_uom" property="charge_uom"/>
+	<result column="dFlag" property="dFlag"/>
+	<result column="create_by" property="create_by"/>
+	<result column="create_time" property="create_time"/>
+	<result column="update_by" property="update_by"/>
+	<result column="update_time" property="update_time"/>
+</resultMap>
+       
+<!-- ssc_package_price_ladder table all fields -->
+<sql id="Base_Column_List" >
+	 id,con_id,return_flag,insurance,charge_percent,charge_percent_uom,charge_min_flag,charge_min,charge_min_uom,compare_1,num_1,uom_1,rel,compare_2,num_2,uom_2,charge,charge_uom,dFlag,create_by,create_time,update_by,update_time
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="con_id != null" >
+	    and con_id =  #{con_id}
+	</if>
+	<if test="return_flag != null" >
+	    and return_flag =  #{return_flag}
+	</if>
+	<if test="charge_percent != null" >
+	    and charge_percent =  #{charge_percent}
+	</if>
+	<if test="charge_percent_uom != null" >
+	    and charge_percent_uom =  #{charge_percent_uom}
+	</if>
+	<if test="charge_min_flag != null" >
+	    and charge_min_flag =  #{charge_min_flag}
+	</if>
+	<if test="charge_min != null" >
+	    and charge_min =  #{charge_min}
+	</if>
+	<if test="charge_min_uom != null" >
+	    and charge_min_uom =  #{charge_min_uom}
+	</if>
+	<if test="compare_1 != null" >
+	    and compare_1 =  #{compare_1}
+	</if>
+	<if test="num_1 != null" >
+	    and num_1 =  #{num_1}
+	</if>
+	<if test="uom_1 != null" >
+	    and uom_1 =  #{uom_1}
+	</if>
+	<if test="rel != null" >
+	    and rel =  #{rel}
+	</if>
+	<if test="compare_2 != null" >
+	    and compare_2 =  #{compare_2}
+	</if>
+	<if test="num_2 != null" >
+	    and num_2 =  #{num_2}
+	</if>
+	<if test="uom_2 != null" >
+	    and uom_2 =  #{uom_2}
+	</if>
+	<if test="charge != null" >
+	    and charge =  #{charge}
+	</if>
+	<if test="charge_uom != null" >
+	    and charge_uom =  #{charge_uom}
+	</if>
+	<if test="dFlag != null" >
+	    and dFlag =  #{dFlag}
+	</if>
+	 	<if test="create_by != null and create_by != ''" >
+	    and create_by =  #{create_by}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="update_by != null and update_by != ''" >
+	    and update_by =  #{update_by}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入快递结算阶梯表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.PackagePriceLadder" >
+  insert into ssc_package_price_ladder(id,con_id,return_flag,insurance,charge_percent,charge_percent_uom,charge_min_flag,charge_min,charge_min_uom,compare_1,num_1,uom_1,rel,compare_2,num_2,uom_2,charge,charge_uom,dFlag,create_by,create_time,update_by,update_time)
+ values(#{id},#{con_id},#{return_flag},#{insurance},#{charge_percent},#{charge_percent_uom},#{charge_min_flag},#{charge_min},#{charge_min_uom},#{compare_1},#{num_1},#{uom_1},#{rel},#{compare_2},#{num_2},#{uom_2},#{charge},#{charge_uom},#{dFlag},#{create_by},#{create_time},#{update_by},#{update_time})
+</insert>
+
+<!-- 修改快递结算阶梯表-->  
+ <update id="update" parameterType="com.bt.lmis.model.PackagePriceLadder" >
+  update ssc_package_price_ladder set con_id=#{con_id},return_flag=#{return_flag},insurance=#{insurance},charge_percent=#{charge_percent},charge_percent_uom=#{charge_percent_uom},charge_min_flag=#{charge_min_flag},charge_min=#{charge_min},charge_min_uom=#{charge_min_uom},compare_1=#{compare_1},num_1=#{num_1},uom_1=#{uom_1},rel=#{rel},compare_2=#{compare_2},num_2=#{num_2},uom_2=#{uom_2},charge=#{charge},charge_uom=#{charge_uom},dFlag=#{dFlag},create_by=#{create_by},create_time=#{create_time},update_by=#{update_by},update_time=#{update_time} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改快递结算阶梯表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.PackagePriceLadder" >
+	update ssc_package_price_ladder set 
+	<trim  suffixOverrides="," >
+	<if test="con_id != null  ">
+		con_id=#{con_id},
+	</if>
+	<if test="return_flag != null  ">
+		return_flag=#{return_flag},
+	</if>
+	<if test="insurance != null  ">
+		insurance=#{insurance},
+	</if>
+	<if test="charge_percent != null  ">
+		charge_percent=#{charge_percent},
+	</if>
+	<if test="charge_percent_uom != null  ">
+		charge_percent_uom=#{charge_percent_uom},
+	</if>
+	<if test="charge_min_flag != null  ">
+		charge_min_flag=#{charge_min_flag},
+	</if>
+	<if test="charge_min != null  ">
+		charge_min=#{charge_min},
+	</if>
+	<if test="charge_min_uom != null  ">
+		charge_min_uom=#{charge_min_uom},
+	</if>
+	<if test="compare_1 != null  ">
+		compare_1=#{compare_1},
+	</if>
+	<if test="num_1 != null  ">
+		num_1=#{num_1},
+	</if>
+	<if test="uom_1 != null  ">
+		uom_1=#{uom_1},
+	</if>
+	<if test="rel != null  ">
+		rel=#{rel},
+	</if>
+	<if test="compare_2 != null  ">
+		compare_2=#{compare_2},
+	</if>
+	<if test="num_2 != null  ">
+		num_2=#{num_2},
+	</if>
+	<if test="uom_2 != null  ">
+		uom_2=#{uom_2},
+	</if>
+	<if test="charge != null  ">
+		charge=#{charge},
+	</if>
+	<if test="charge_uom != null  ">
+		charge_uom=#{charge_uom},
+	</if>
+	<if test="dFlag != null  ">
+		dFlag=#{dFlag},
+	</if>
+	<if test="create_by != null  and create_by != '' ">
+		create_by=#{create_by},
+	</if>
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="update_by != null  and update_by != '' ">
+		update_by=#{update_by},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除快递结算阶梯表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_package_price_ladder where id = #{id}
+</update>
+<!-- 批量删除快递结算阶梯表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_package_price_ladder where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找快递结算阶梯表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_package_price_ladder where id = #{id}
+</select>
+  	
+<!-- 快递结算阶梯表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.PackagePriceLadderQueryParam">
+	select count(1) from ssc_package_price_ladder 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的快递结算阶梯表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.PackagePriceLadderQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_package_price_ladder 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 快递结算阶梯表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.PackagePriceLadderQueryParam">
+	select count(1) from ssc_package_price_ladder 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的快递结算阶梯表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.PackagePriceLadderQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_package_price_ladder 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="findByCBID" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.PackagePriceLadder">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_package_price_ladder
+	<include refid="where_Clause"/>
+</select>
+</mapper>   

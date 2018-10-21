@@ -1,0 +1,20 @@
+package com.bt.radar.model;
+
+/**
+* @ClassName: ExpressinfoDetail
+* @Description: TODO(ExpressinfoDetail)
+* @author Yuriy.Jiang
+* @date 2016年6月22日 上午10:19:25
+*
+*/
+public class ExpressinfoDetail {
+	
+		public String getBat_id() {
+		return bat_id;
+	}
+	public void setBat_id(String bat_id) {
+		this.bat_id = bat_id;
+	}
+	private String id;			                //主键	private String u_id;			           	private java.util.Date create_time;			//创建时间	private String create_user;			        //创建人	private java.util.Date update_time;			//更新时间	private String update_user;			        //更新人	private String sku_number;			        //SKU条码	private String barcode;			            //条形码	private String item_name;		        	//商品名称	private String extend_pro;		        	//扩展属性	private Integer qty;			            //商品数量	private String waybill;			            //运单号
+	private String bat_id;                      //批次号	public String getId() {	    return this.id;	}	public void setId(String id) {	    this.id=id;	}	public String getU_id() {	    return this.u_id;	}	public void setU_id(String u_id) {	    this.u_id=u_id;	}	public java.util.Date getCreate_time() {	    return this.create_time;	}	public void setCreate_time(java.util.Date create_time) {	    this.create_time=create_time;	}	public String getCreate_user() {	    return this.create_user;	}	public void setCreate_user(String create_user) {	    this.create_user=create_user;	}	public java.util.Date getUpdate_time() {	    return this.update_time;	}	public void setUpdate_time(java.util.Date update_time) {	    this.update_time=update_time;	}	public String getUpdate_user() {	    return this.update_user;	}	public void setUpdate_user(String update_user) {	    this.update_user=update_user;	}	public String getSku_number() {	    return this.sku_number;	}	public void setSku_number(String sku_number) {	    this.sku_number=sku_number;	}	public String getBarcode() {	    return this.barcode;	}	public void setBarcode(String barcode) {	    this.barcode=barcode;	}	public String getItem_name() {	    return this.item_name;	}	public void setItem_name(String item_name) {	    this.item_name=item_name;	}	public String getExtend_pro() {	    return this.extend_pro;	}	public void setExtend_pro(String extend_pro) {	    this.extend_pro=extend_pro;	}	public Integer getQty() {	    return this.qty;	}	public void setQty(Integer qty) {	    this.qty=qty;	}	public String getWaybill() {	    return this.waybill;	}	public void setWaybill(String waybill) {	    this.waybill=waybill;	}
+}

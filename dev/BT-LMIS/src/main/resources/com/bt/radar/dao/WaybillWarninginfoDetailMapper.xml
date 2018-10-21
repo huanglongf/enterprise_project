@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.WaybillWarninginfoDetailMapper" >
+	<update id="updateWaybillWarninginfoDetail" parameterType="com.bt.radar.model.WaybillWarninginfoDetail">
+		update er_waybill_warninginfo_detail
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="happen_time != null and happen_time != ''">
+				happen_time = #{happen_time },
+			</if>
+			<if test="warning_level != null and warning_level != ''">
+				warning_level = #{warning_level},
+			</if>
+			<if test="source != null and source != ''">
+				source = #{source },
+			</if>
+			<if test="reason != null and reason != ''">
+				reason = #{reason },
+			</if>
+			<if test="stop_watch != null and stop_watch != ''">
+				stop_watch = #{stop_watch},
+			</if>
+		</trim>
+		where id = #{id } 
+	</update>
+	<insert id="insertWaybillWarninginfoDetail" parameterType="com.bt.radar.model.WaybillWarninginfoDetail">
+		insert into er_waybill_warninginfo_detail
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			happen_time,
+			warning_level,
+			source,
+			reason,
+			waybill,
+			jkid,
+			warning_category,
+			warningtype_code,
+			del_flag,
+		    express_code,
+		    producttype_code,
+		    warehouse_code,
+		    weight_time,
+		    check_time,
+		    routestatus_code
+		) values (
+			#{id },
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{happen_time },
+			#{warning_level },
+			#{source },
+			#{reason },
+			#{waybill },
+			#{jkid },
+			#{warning_category},
+			#{warningtype_code},
+			#{del_flag},
+			#{express_code},
+			#{producttype_code},
+			#{warehouse_code},
+			#{weight_time},
+			#{check_time},
+			#{routestatus_code}
+		)
+	</insert>
+	<select id="findRecords" parameterType="com.bt.radar.model.WaybillWarninginfoDetail" resultType="com.bt.radar.model.WaybillWarninginfoDetail">
+		select
+			a.*
+		from
+			er_waybill_warninginfo_detail a 
+             where 1=1
+		    <if test="waybill != null and waybill != ''">
+				AND a.waybill = #{waybill}
+			</if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id }
+			</if>
+			<if test="happen_time != null and happen_time != ''">
+				AND a.happen_time = #{happen_time }
+			</if>
+			<if test="warning_level != null and warning_level != ''">
+				AND a.warning_level = #{warning_level }
+			</if>
+			<if test="source != null and source != ''">
+				AND a.source = #{source }
+			</if>
+			<if test="reason != null and reason != ''">
+				AND a.reason = #{reason }
+			</if>
+			<if test="jkid != null and jkid != ''">
+				AND a.jkid = #{jkid }
+			</if>
+			<if test="warningtype_code != null and warningtype_code != ''">
+				AND a.warningtype_code = #{warningtype_code }
+			</if>
+			<if test="warning_category != null and warning_category != ''">
+				AND a.warning_category = #{warning_category }
+			</if>
+			<if test="del_flag != null and del_flag != ''">
+				AND a.del_flag = #{del_flag }
+			</if>
+			<if test="stop_watch != null and stop_watch != ''">
+				AND a.stop_watch = #{stop_watch }
+			</if>
+			<if test="wk_flag != null and wk_flag != ''">
+				AND a.wk_flag = #{wk_flag }
+			</if>
+	</select>
+	<select id="findRecordsPageData" parameterType="java.util.HashMap" resultType="com.bt.radar.model.WaybillWarninginfoDetail">
+		select
+			a.*
+		from
+			er_waybill_warninginfo_detail a 
+             where 1=1
+		    <if test="waybill != null">
+				AND a.waybill = #{waybill}
+			</if>
+			<if test="id != null">
+				AND a.id = #{id }
+			</if>
+			<if test="happen_time != null ">
+				AND a.happen_time = #{happen_time }
+			</if>
+			<if test="warning_level != null ">
+				AND a.warning_level = #{warning_level }
+			</if>
+			<if test="source != null">
+				AND a.source = #{source }
+			</if>
+			<if test="reason != null ">
+				AND a.reason = #{reason }
+			</if>
+			<if test="jkid != null ">
+				AND a.jkid = #{jkid }
+			</if>
+			<if test="warningtype_code != null">
+				AND a.warningtype_code = #{warningtype_code }
+			</if>
+			<if test="warning_category != null">
+				AND a.warning_category = #{warning_category }
+			</if>
+			<if test="del_flag != null">
+				AND a.del_flag = #{del_flag }
+			</if>
+			<if test="stop_watch != null">
+				AND a.stop_watch = #{stop_watch }
+			</if>
+			<if test="wk_flag != null ">
+				AND a.wk_flag = #{wk_flag }
+			</if>
+			<if test="first != null ">
+				limit #{first},#{last};
+			</if>
+	</select>
+	
+	
+	
+	<update id='updateDel' parameterType='java.util.HashMap'>
+	 update 
+	er_waybill_warninginfo_detail set del_flag=1	
+	where id=#{id}
+	</update>
+	<update id='updatWkflag' parameterType='java.util.HashMap'>
+	 update 
+	er_waybill_warninginfo_detail set stop_watch=1
+	    <if test="wk_flag != null and wk_flag != ''">
+				, wk_flag = #{wk_flag}
+			</if>
+	<if test="wk_id != null and wk_id != ''">
+				, wk_id = #{wk_id}
+			</if>
+	where id=#{id}
+	</update>
+	<update id='CancelWaybillWarning' parameterType='java.lang.String'>
+	update 
+	  er_waybill_warninginfo_detail
+	  set del_flag=1
+	  where wk_id=#{id}
+	</update>
+	<select id="findRecordsForMap" parameterType='java.util.HashMap' resultType='java.util.HashMap'>
+	select  id,happen_time,warningtype_code,warning_category,route_time
+	 from 
+	er_waybill_warninginfo_detail a where 1=1
+	  <if test="waybill != null and waybill != ''">
+				AND a.waybill = #{waybill}
+			</if>
+			<if test="id != null and id != ''">
+				AND a.id = #{id }
+			</if>
+			<if test="happen_time != null and happen_time != ''">
+				AND a.happen_time = #{happen_time }
+			</if>
+			<if test="warning_level != null and warning_level != ''">
+				AND a.warning_level = #{warning_level }
+			</if>
+			<if test="source != null and source != ''">
+				AND a.source = #{source }
+			</if>
+			<if test="reason != null and reason != ''">
+				AND a.reason = #{reason }
+			</if>
+			<if test="jkid != null and jkid != ''">
+				AND a.jkid = #{jkid }
+			</if>
+			<if test="warningtype_code != null and warningtype_code != ''">
+				AND a.warningtype_code = #{warningtype_code }
+			</if>
+			<if test="warning_category != null and warning_category != ''">
+				AND a.warning_category = #{warning_category }
+			</if>
+			<if test="del_flag != null and del_flag != ''">
+				AND a.del_flag = #{del_flag }
+			</if>
+			<if test="stop_watch != null and stop_watch != ''">
+				AND a.stop_watch = #{stop_watch }
+			</if>
+			<if test="wk_flag != null and wk_flag != ''">
+				AND a.wk_flag = #{wk_flag }
+			</if>
+	</select>
+	<insert id='insertDetailBf'  parameterType="com.bt.radar.model.WaybillWarninginfoDetail">
+	 insert into er_waybill_warninginfo_detail_bf (id_no,warningtype_code,level,create_time,waybill,event_flag) values(#{id},#{warningtype_code},#{warning_level},now(),#{waybill},1);
+	</insert>
+</mapper>   

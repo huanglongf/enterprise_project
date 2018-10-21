@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.StorageExpendituresDataSettlementMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.StorageExpendituresDataSettlement" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="storage_fee" property="storage_fee"/>
+	<result column="remark" property="remark"/>
+	<result column="data_id" property="data_id"/>
+	<result column="operation_id" property="operation_id"/>
+	<result column="start_time" property="start_time"/>
+	<result column="store_name" property="store_name"/>
+	<result column="warehouse_name" property="warehouse_name"/>
+	<result column="area_name" property="area_name"/>
+	<result column="item_type" property="item_type"/>
+	<result column="storage_type" property="storage_type"/>
+	<result column="storage_acreage" property="storage_acreage"/>
+	<result column="acreage_unit" property="acreage_unit"/>
+	<result column="batch" property="batch"/>
+</resultMap>
+       
+<!-- tb_storage_expenditures_data_settlement table all fields -->
+<sql id="Base_Column_List" >
+	 id,batch,create_time,create_user,update_time,update_user,storage_fee,remark,data_id,operation_id,start_time,store_name,warehouse_name,area_name,item_type,storage_type,storage_acreage,acreage_unit
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="storage_fee != null" >
+	    and storage_fee =  #{storage_fee}
+	</if>
+	 	<if test="remark != null and remark != ''" >
+	    and remark =  #{remark}
+	</if>
+	 	<if test="batch != null and batch != ''" >
+	    and batch =  #{batch}
+	</if>
+	<if test="data_id != null" >
+	    and data_id =  #{data_id}
+	</if>
+	<if test="operation_id != null" >
+	    and operation_id =  #{operation_id}
+	</if>
+	<if test="start_time != null and end_time != null" >
+	    and start_time Between  #{start_time} and #{end_time}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	 	<if test="warehouse_name != null and warehouse_name != ''" >
+	    and warehouse_name =  #{warehouse_name}
+	</if>
+	 	<if test="area_name != null and area_name != ''" >
+	    and area_name =  #{area_name}
+	</if>
+	 	<if test="item_type != null and item_type != ''" >
+	    and item_type =  #{item_type}
+	</if>
+	<if test="storage_type != null" >
+	    and storage_type =  #{storage_type}
+	</if>
+	<if test="storage_acreage != null" >
+	    and storage_acreage =  #{storage_acreage}
+	</if>
+	 	<if test="acreage_unit != null and acreage_unit != ''" >
+	    and acreage_unit =  #{acreage_unit}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入仓储费明细数据表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.StorageExpendituresDataSettlement" >
+  insert into tb_storage_expenditures_data_settlement(id,batch,create_time,create_user,update_time,update_user,storage_fee,remark,data_id,operation_id,start_time,store_name,warehouse_name,area_name,item_type,storage_type,storage_acreage,acreage_unit)
+ values(#{id},#{batch},#{create_time},#{create_user},#{update_time},#{update_user},#{storage_fee},#{remark},#{data_id},#{operation_id},#{start_time},#{store_name},#{warehouse_name},#{area_name},#{item_type},#{storage_type},#{storage_acreage},#{acreage_unit})
+</insert>
+
+<!-- 修改仓储费明细数据表-->  
+ <update id="update" parameterType="com.bt.lmis.model.StorageExpendituresDataSettlement" >
+  update tb_storage_expenditures_data_settlement set create_time=#{create_time},batch=#{batch},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},storage_fee=#{storage_fee},remark=#{remark},data_id=#{data_id},operation_id=#{operation_id},start_time=#{start_time},store_name=#{store_name},warehouse_name=#{warehouse_name},area_name=#{area_name},item_type=#{item_type},storage_type=#{storage_type},storage_acreage=#{storage_acreage},acreage_unit=#{acreage_unit} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改仓储费明细数据表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.StorageExpendituresDataSettlement" >
+	update tb_storage_expenditures_data_settlement set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="batch != null  and batch != '' ">
+		batch=#{batch},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="storage_fee != null  ">
+		storage_fee=#{storage_fee},
+	</if>
+	<if test="remark != null  and remark != '' ">
+		remark=#{remark},
+	</if>
+	<if test="data_id != null  ">
+		data_id=#{data_id},
+	</if>
+	<if test="operation_id != null  ">
+		operation_id=#{operation_id},
+	</if>
+	<if test="start_time != null  ">
+		start_time=#{start_time},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="warehouse_name != null  and warehouse_name != '' ">
+		warehouse_name=#{warehouse_name},
+	</if>
+	<if test="area_name != null  and area_name != '' ">
+		area_name=#{area_name},
+	</if>
+	<if test="item_type != null  and item_type != '' ">
+		item_type=#{item_type},
+	</if>
+	<if test="storage_type != null  ">
+		storage_type=#{storage_type},
+	</if>
+	<if test="storage_acreage != null  ">
+		storage_acreage=#{storage_acreage},
+	</if>
+	<if test="acreage_unit != null  and acreage_unit != '' ">
+		acreage_unit=#{acreage_unit},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除仓储费明细数据表 -->
+<update id="delete" parameterType="Object">
+	delete from tb_storage_expenditures_data_settlement where id = #{id}
+</update>
+<!-- 批量删除仓储费明细数据表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_storage_expenditures_data_settlement where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+
+<delete id='delete_by_condition' parameterType="com.bt.lmis.model.StorageExpendituresDataSettlement" >
+   delete  from tb_storage_expenditures_data_settlement  where 1=1
+
+
+</delete>
+
+ 
+<!-- 依据主键查找仓储费明细数据表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_storage_expenditures_data_settlement where id = #{id}
+</select>
+  	
+<!-- 仓储费明细数据表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageExpendituresDataSettlementQueryParam">
+	select count(1) from tb_storage_expenditures_data_settlement 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的仓储费明细数据表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageExpendituresDataSettlementQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_expenditures_data_settlement 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 仓储费明细数据表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.StorageExpendituresDataSettlementQueryParam">
+	select count(1) from tb_storage_expenditures_data_settlement 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的仓储费明细数据表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.StorageExpendituresDataSettlementQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_expenditures_data_settlement 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="findBySEDS" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.StorageExpendituresDataSettlement">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_storage_expenditures_data_settlement 
+	<include refid="where_Clause"/>
+</select> 	
+
+
+<select id="findSEDS" parameterType="com.bt.lmis.controller.form.StorageExpendituresDataSettlementQueryParam" resultType="com.bt.lmis.model.StorageExpendituresDataSettlement">
+    SELECT * FROM tb_storage_expenditures_data_settlement
+	<include refid="where_Clause"/>
+	LIMIT #{firstResult}, #{maxResult}
+</select>
+
+<select id="countSEDSRecords" parameterType="com.bt.lmis.controller.form.StorageExpendituresDataSettlementQueryParam" resultType="java.lang.Integer">
+	SELECT COUNT(1) FROM tb_storage_expenditures_data_settlement
+	<include refid="where_Clause"/>
+</select>
+
+
+<update id="updateSEDS" parameterType="com.bt.lmis.model.StorageExpendituresDataSettlement" >
+	update tb_storage_expenditures_data_settlement set 
+	<trim  suffixOverrides="," >
+	<if test="batch != null  and batch != '' ">
+		batch=#{batch},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="batch != null  and batch != '' ">
+		batch=#{batch},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="storage_fee != null  ">
+		storage_fee=#{storage_fee},
+	</if>
+	<if test="remark != null  and remark != '' ">
+		remark=#{remark},
+	</if>
+	<if test="data_id != null  ">
+		data_id=#{data_id},
+	</if>
+	<if test="operation_id != null  ">
+		operation_id=#{operation_id},
+	</if>
+	<if test="start_time != null  ">
+		start_time=#{start_time},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="warehouse_name != null  and warehouse_name != '' ">
+		warehouse_name=#{warehouse_name},
+	</if>
+	<if test="area_name != null  and area_name != '' ">
+		area_name=#{area_name},
+	</if>
+	<if test="item_type != null  and item_type != '' ">
+		item_type=#{item_type},
+	</if>
+	<if test="storage_type != null  ">
+		storage_type=#{storage_type},
+	</if>
+	<if test="storage_acreage != null  ">
+		storage_acreage=#{storage_acreage},
+	</if>
+	<if test="acreage_unit != null  and acreage_unit != '' ">
+		acreage_unit=#{acreage_unit},
+	</if>
+	</trim> where id=#{id}
+</update>
+<delete id='delete_readyForResettle'>
+delete from  tb_storage_expenditures_data_settlement where 1=1
+	<if test="area_name != null  and area_name != '' ">
+	and	area_name=#{area_name}
+	</if>
+	<if test="start_time != null  ">
+   and	start_time=#{start_time}
+	</if>
+	<if test="storage_type != null  ">
+	and	storage_type=#{storage_type}
+	</if>
+	<if test="item_type != null  and item_type != '' ">
+	  and	item_type=#{item_type}
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+	 and store_name=#{store_name}
+	</if>
+	<if test="warehouse_name != null  and warehouse_name != '' ">
+	and warehouse_name=#{warehouse_name}
+	</if>
+</delete>
+
+</mapper>   

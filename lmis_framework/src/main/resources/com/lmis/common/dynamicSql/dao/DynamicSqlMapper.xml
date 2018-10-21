@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.common.dynamicSql.dao.DynamicSqlMapper">
+	<select id="executeSelect" parameterType="String" resultType="java.util.Map">
+		${sql }
+	</select>
+	<insert id="executeInsert" parameterType="String">
+		${sql }
+	</insert>
+	<update id="executeUpdate" parameterType="String">
+		${sql }
+	</update>
+	<delete id="executeDelete" parameterType="String">
+		${sql }
+	</delete>
+	
+	<select id="findColumns" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT * from information_schema.`COLUMNS`
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="TABLE_SCHEMA!=null and TABLE_SCHEMA!=''">
+	            AND TABLE_SCHEMA = #{TABLE_SCHEMA, jdbcType=VARCHAR}
+	        </if>
+	        <if test="TABLE_NAME!=null and TABLE_NAME!=''">
+	            AND TABLE_NAME = #{TABLE_NAME, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="COLUMN_NAME!=null and COLUMN_NAME!=''">
+	            AND COLUMN_NAME = #{COLUMN_NAME, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+		
+	</select>
+	
+</mapper>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.OrganizationInformationMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.OrganizationInformation" >
+	<result column="id" property="id"/>
+	<result column="org_name" property="org_name"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="organization_code" property="organization_code"/>
+	<result column="org_contacts" property="org_contacts"/>
+	<result column="org_address" property="org_address"/>
+	<result column="org_province" property="org_province"/>
+	<result column="org_city" property="org_city"/>
+	<result column="org_state" property="org_state"/>
+	<result column="org_province_code" property="org_province_code"/>
+	<result column="org_city_code" property="org_city_code"/>
+	<result column="org_state_code" property="org_state_code"/>
+	<result column="org_street" property="org_street"/>
+	<result column="org_phone" property="org_phone"/>
+	<result column="custid" property="custid"/>
+	<result column="secret_key" property="secret_key"/>
+	<result column="pay_path" property="pay_path"/>
+	<result column="store_code" property="store_code"/>
+</resultMap>
+       
+<!-- tb_organization_information table all fields -->
+<sql id="Base_Column_List" >
+	 id,org_name,create_time,create_user,update_time,update_user,organization_code,org_contacts,org_address,
+	 org_province,org_city,org_state,
+	 org_province_code,org_city_code,org_state_code,
+	 org_street,org_phone,custid,secret_key,pay_path,store_code
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="id != null and id != ''" >
+	    and id =  #{id}
+	</if>
+	 	<if test="org_name != null and org_name != ''" >
+	    and org_name =  #{org_name}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="organization_code != null and organization_code != ''" >
+	    and organization_code =  #{organization_code}
+	</if>
+	 	<if test="org_contacts != null and org_contacts != ''" >
+	    and org_contacts =  #{org_contacts}
+	</if>
+	 	<if test="org_address != null and org_address != ''" >
+	    and org_address =  #{org_address}
+	</if>
+	 	<if test="org_province != null and org_province != ''" >
+	    and org_province =  #{org_province}
+	</if>
+	 	<if test="org_city != null and org_city != ''" >
+	    and org_city =  #{org_city}
+	</if>
+	 	<if test="custid != null and custid != ''" >
+	    and custid =  #{custid}
+	</if>
+	 	<if test="org_state != null and org_state != ''" >
+	    and org_state =  #{org_state}
+	</if>
+	<if test="org_province_code != null  and org_province_code != '' ">
+		org_province_code=#{org_province_code},
+	</if>
+	<if test="org_city_code != null  and org_city_code != '' ">
+		org_city_code=#{org_city_code},
+	</if>
+	<if test="org_state_code != null  and org_state_code != '' ">
+		org_state_code=#{org_state_code},
+	</if>
+	 	<if test="org_street != null and org_street != ''" >
+	    and org_street =  #{org_street}
+	</if>
+	 	<if test="org_phone != null and org_phone != ''" >
+	    and org_phone =  #{org_phone}
+	</if>
+	 	<if test="secret_key != null and secret_key != ''" >
+	    and secret_key =  #{secret_key}
+	</if>
+	 	<if test="pay_path != null and pay_path != ''" >
+	    and pay_path =  #{pay_path}
+	</if>
+	 	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入组织机构信息表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.OrganizationInformation" >
+  insert into tb_organization_information(id,org_name,create_time,create_user,update_time,update_user,organization_code,org_contacts,org_address,
+  org_province,org_city,org_state,custid,secret_key,pay_path,store_code,
+  org_province_code,org_city_code,org_state_code,
+  org_street,org_phone)
+ values(#{id},#{org_name},#{create_time},#{create_user},#{update_time},#{update_user},#{organization_code},#{org_contacts},#{org_address},
+ #{org_province},#{org_city},
+ #{org_state},
+ #{custid},
+ #{secret_key},
+ #{pay_path},
+ #{store_code},
+ #{org_province_code},#{org_city_code},#{org_state_code},
+ #{org_street},#{org_phone})
+</insert>
+
+<!-- 修改组织机构信息表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.OrganizationInformation" >
+  update tb_organization_information set org_name=#{org_name},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},organization_code=#{organization_code},org_contacts=#{org_contacts},org_address=#{org_address},
+  org_province=#{org_province},org_city=#{org_city},
+  org_state=#{org_state},
+  custid=#{custid},
+  pay_path=#{pay_path},
+  secret_key=#{secret_key},
+  store_code=#{store_code},
+  org_province_code=#{org_province_code},org_city_code=#{org_city_code},org_state_code=#{org_state_code},
+  org_street=#{org_street},org_phone=#{org_phone} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改组织机构信息表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.OrganizationInformation" >
+	update tb_organization_information set 
+	<trim  suffixOverrides="," >
+	<if test="org_name != null  and org_name != '' ">
+		org_name=#{org_name},
+	</if>
+	<if test="custid != null  and custid != '' ">
+		custid=#{custid},
+	</if>
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="organization_code != null  and organization_code != '' ">
+		organization_code=#{organization_code},
+	</if>
+	<if test="org_contacts != null  and org_contacts != '' ">
+		org_contacts=#{org_contacts},
+	</if>
+	<if test="org_address != null  and org_address != '' ">
+		org_address=#{org_address},
+	</if>
+	<if test="org_province != null  and org_province != '' ">
+		org_province=#{org_province},
+	</if>
+	<if test="org_city != null  and org_city != '' ">
+		org_city=#{org_city},
+	</if>
+	<if test="org_state != null  and org_state != '' ">
+		org_state=#{org_state},
+	</if>
+	<if test="org_province_code != null  and org_province_code != '' ">
+		org_province_code=#{org_province_code},
+	</if>
+	<if test="org_city_code != null  and org_city_code != '' ">
+		org_city_code=#{org_city_code},
+	</if>
+	<if test="org_state_code != null  and org_state_code != '' ">
+		org_state_code=#{org_state_code},
+	</if>
+	<if test="org_street != null  and org_street != '' ">
+		org_street=#{org_street},
+	</if>
+	<if test="org_phone != null  and org_phone != '' ">
+		org_phone=#{org_phone},
+	</if>
+	<if test="secret_key != null  and secret_key != '' ">
+		secret_key=#{secret_key},
+	</if>
+	<if test="pay_path != null  and pay_path != '' ">
+		pay_path=#{pay_path},
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除组织机构信息表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_organization_information where id = #{id}
+</update>
+<!-- 批量删除组织机构信息表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_organization_information where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找组织机构信息表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_organization_information where id = #{id}
+</select>
+
+
+<select id="findOrgName"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_organization_information where org_name=#{org_name}
+</select>
+  	
+<!-- 组织机构信息表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.OrganizationInformationQueryParam">
+	select count(1) from tb_organization_information 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的组织机构信息表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.OrganizationInformationQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_organization_information 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 组织机构信息表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.OrganizationInformationQueryParam">
+	select count(1) from tb_organization_information 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的组织机构信息表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.OrganizationInformationQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_organization_information 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="queryAllBypid" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.OrganizationInformationQueryParam">
+	SELECT <include refid="Base_Column_List"/>  FROM tb_organization_information where 
+     id in ( SELECT id FROM sys_organization WHERE remark not in ('1','2') and superior_id = (
+		SELECT superior_id FROM sys_organization WHERE id = #{id}));
+</select>
+<select id="queryAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.OrganizationInformationQueryParam">
+	SELECT <include refid="Base_Column_List"/>  FROM tb_organization_information where 
+     id in (${idvar});
+</select>
+  	
+</mapper>   

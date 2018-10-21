@@ -1,0 +1,56 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+	<display-name>WMSPlatform</display-name>
+	<!-- Spring -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath*:spring.xml
+		</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>checkTaskisOk</servlet-name>
+		<servlet-class>com.jumbo.wms.servlet.CheckTaskServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>  
+	</servlet>
+	
+	<servlet-mapping>  
+        <servlet-name>checkTaskisOk</servlet-name>  
+        <url-pattern>/checkTaskisOk</url-pattern>
+    </servlet-mapping>  
+    
+    <servlet>
+		<servlet-name>monitorServlet</servlet-name>
+		<servlet-class>com.jumbo.wms.servlet.MonitorDaemonServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	
+
+	<servlet-mapping> 
+		<servlet-name>monitorServlet</servlet-name> 
+		<url-pattern>/monitor</url-pattern> 
+	</servlet-mapping>
+    
+    
+	<session-config>
+		<session-timeout>120</session-timeout>
+	</session-config>
+
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<!-- <el-ignored>true</el-ignored> -->
+		</jsp-property-group>
+	</jsp-config>
+
+	<!-- Welcome files -->
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+</web-app>

@@ -1,0 +1,3052 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+    
+    <aop:aspectj-autoproxy/>
+	<context:annotation-config/>
+	
+	<context:component-scan base-package="com.jumbo.wms.manager,com.jumbo.task" />
+	
+	<bean id="inventoryOccupyThreadPool" class="com.jumbo.wms.newInventoryOccupy.InventoryOccupyThreadPool" />
+	<bean id="staInventoryOcpThreadPool" class="com.jumbo.wms.newInventoryOccupy.StaInventoryOcpThreadPool" />
+	<bean id="createStaTask" class="com.jumbo.task.CreateStaTask"/>
+	<bean id="order2WmsTask" class="com.jumbo.task.Order2WmsTask"/>
+	<bean id="setTransNoTask" class="com.jumbo.task.SetTransNoTask"/>
+	<bean id="mongoInventoryTask" class="com.jumbo.task.MongoInventoryTask"/>
+
+	<bean id="compareJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="group" value="GROUP_INIT"/>
+		<property name="name" value="GROUP_INIT_TRIGGER"/>
+		<property name="targetObject" ref="systemTaskInitManager" />
+		<property name="targetMethod" value="initAllTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="initAllTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="compareJob" />
+		<property name="cronExpression">
+			<value>* * * * * ?</value>
+		</property>
+	</bean>
+	
+  <bean class="com.jumbo.wms.aop.TimeInvokeWarning"/>
+  <!-- ============= guess 发送入单取消通知 ================= -->
+  <bean id="guessSendReturnCancelOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="guessSendReturnCancelOrderTaskDetail" />
+    <property name="cronExpression" value="51 */15 * * * ?" />
+  </bean>
+  <bean id="guessSendReturnCancelOrderTaskDetail"
+    class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="taskGuess" />
+    <property name="targetMethod" value="customerReturnCancelRequestTask" />
+    <property name="concurrent" value="false" />
+  </bean>
+
+	<!-- ============= guess 执行调整指令 ================= -->
+  <bean id="guessreceiveEcomAdjTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="guessreceiveEcomAdjTaskDetail" />
+    <property name="cronExpression" value="11 */15 * * * ?" />
+  </bean>
+  <bean id="guessreceiveEcomAdjTaskDetail"
+    class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="taskGuess" />
+    <property name="targetMethod" value="receiveEcomAdjTask" />
+    <property name="concurrent" value="false" />
+   </bean>
+  <!-- ============= guess 发送入库通知 ================= -->
+  <bean id="guessSendReturnOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="guessSendReturnOrderTaskDetail" />
+    <property name="cronExpression" value="21 */15 * * * ?" />
+  </bean>
+  <bean id="guessSendReturnOrderTaskDetail"
+    class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="taskGuess" />
+    <property name="targetMethod" value="customerReturnRequestToHubTask" />
+    <property name="concurrent" value="false" />
+  </bean>
+	<!-- ============= guess 发送出库库通知 ================= -->
+  <bean id="guessSendReturnOrder1TaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <property name="jobDetail" ref="guessSendReturnOrder1TaskDetail" />
+    <property name="cronExpression" value="39 */15 * * * ?" />
+  </bean>
+  <bean id="guessSendReturnOrder1TaskDetail"
+    class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+    <property name="targetObject" ref="taskGuess" />
+    <property name="targetMethod" value="sendSalesOrderToHubTask" />
+    <property name="concurrent" value="false" />
+  </bean>
+
+	<!-- 异常定时任务邮件通知 -->
+	<bean id="errorTaskMailService" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="errorTaskMailServiceDetail" />
+		<property name="cronExpression" value="18 21 * * * ?" />
+	</bean>
+	<bean id="errorTaskMailServiceDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="daemonTask" />
+		<property name="targetMethod" value="errorTaskMailNotify" />
+		<property name="concurrent" value="false" />
+	</bean>
+    <!-- AF 库存调整失败订单重复执行  -->
+    <bean id="inventoryCheckExecuteAFTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryCheckExecuteAFTaskDetail" />
+		<property name="cronExpression" value="8 0 23 * * ?" />
+	</bean>
+	<bean id="inventoryCheckExecuteAFTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="inventoryCheckAF" />
+		<property name="concurrent" value="false" />
+	</bean>
+        <!-- AEO 库存调整失败订单重复执行  -->
+    <bean id="inventoryCheckExecuteAEOTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryCheckExecuteAEOTaskDetail" />
+		<property name="cronExpression" value="4 0 23 * * ?" />
+	</bean>
+	<bean id="inventoryCheckExecuteAEOTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="inventoryCheckAEO" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- guess 库存调整失败订单重复执行  -->
+    <bean id="inventoryCheckExecuteGUESSTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryCheckExecuteGUESSTaskDetail" />
+		<property name="cronExpression" value="9 6 23 * * ?" />
+	</bean>
+	<bean id="inventoryCheckExecuteGUESSTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="inventoryCheckGUESS" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- UA 库存调整失败订单重复执行  -->
+    <bean id="inventoryCheckExecuteUATask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryCheckExecuteUATaskDetail" />
+		<property name="cronExpression" value="2 8 22 * * ?" />
+	</bean>
+	<bean id="inventoryCheckExecuteUATaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="inventoryCheckUA" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- newLook 库存调整失败订单重复执行  -->
+    <bean id="inventoryCheckExecuteNewLookTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryCheckExecuteNewLookTaskDetail" />
+		<property name="cronExpression" value="5 8 21 * * ?" />
+	</bean>
+	<bean id="inventoryCheckExecuteNewLookTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="inventoryCheckNewLook" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== IDS AF INVENTORY ADJ ======================= -->
+		<!-- ============= NBA UA出入库同步 ================= -->
+	<bean id="NBAUAinventorySynchronousTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="NBAUAinventorySynchronousTaskDetail" />
+		<property name="cronExpression" value="13 */5 * * * ?" />
+	</bean>
+	<bean id="NBAUAinventorySynchronousTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="executeNBAUAIdsInventorySyn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= af 出入库同步 ================= -->
+	<bean id="afinventorySynchronousTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="afinventorySynchronousTaskDetail" />
+		<property name="cronExpression" value="11 */10 * * * ?" />
+	</bean>
+	<bean id="afinventorySynchronousTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="executeAFIdsInventorySyn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== IDS newLook======================= -->
+	<bean id="idsNewLookInventoryADJTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="idsNewLookInventoryADJTaskDetail" />
+		<property name="cronExpression" value="17 */10 * * * ?" />
+	</bean>
+	<bean id="idsNewLookInventoryADJTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="executeNewLookIdsInventorySyn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== IDS 入库同步UA======================= -->
+	<bean id="idsUAInventoryADJTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="idsUAInventoryADJTaskDetail" />
+		<property name="cronExpression" value="26 */5 * * * ?" />
+	</bean>
+	<bean id="idsUAInventoryADJTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="executeUAIdsInventorySyn" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- ============= NBAUA 发送入库通知 ================= -->
+	<bean id="NBAUASendReturnOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="NBAUASendReturnOrderTaskDetail" />
+		<property name="cronExpression" value="39 */10 * * * ?" />
+	</bean>
+
+	<bean id="NBAUASendReturnOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendNBAUAReturnOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= aeo 发送入库通知 ================= -->
+	<bean id="afSendReturnOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="afSendReturnOrderTaskDetail" />
+		<property name="cronExpression" value="13 */10 * * * ?" />
+	</bean>
+
+	<bean id="afSendReturnOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendAFReturnOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= NewLook 发送入库通知 ================= -->
+	<bean id="newLookSendReturnOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="newLookSendReturnOrderTaskDetail" />
+		<property name="cronExpression" value="14 */10 * * * ?" />
+	</bean>
+
+	<bean id="newLookSendReturnOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendNewLookReturnOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= LF立峰 发送作业单取消通知 ================= -->
+	<bean id="lfSendCancelOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lfSendCancelOrderTaskDetail" />
+		<property name="cronExpression" value="17 */5 * * * ?" />
+	</bean>
+
+	<bean id="lfSendCancelOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendCaneleOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== IDS LEVIS INVENTORY ADJ ======================= -->
+	<bean id="idslevisInventoryADJTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="idslevisInventoryADJTaskDetail" />
+		<property name="cronExpression" value="24 */10 * * * ?" />
+	</bean>
+	<bean id="idslevisInventoryADJTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="executeLevisIdsInventorySyn" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== AF INVENTORY REPORT ======================= -->
+	<bean id="afInventoryTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="afInventoryTaskDetail" />
+		<property name="cronExpression" value="1 1 12 * * ?" />
+	</bean>
+	<bean id="afInventoryTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="afManagerImpl" />
+		<property name="targetMethod" value="sendAfInventoryMessage" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= aeo 出入库同步 ================= -->
+	<bean id="aeoinventorySynchronousTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="aeoinventorySynchronousTaskDetail" />
+		<property name="cronExpression" value="15 */10 * * * ?" />
+	</bean>
+	<bean id="aeoinventorySynchronousTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="executeAEOIdsInventorySyn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= NBAUA 发送出库通知 ================= -->
+	<bean id="sendNBAUASaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sendNBAUASaleOrderTaskDetail" />
+		<property name="cronExpression" value="22 */5 * * * ?" />
+	</bean>
+
+	<bean id="sendNBAUASaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendNBAUASalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= aeo 发送出库通知 ================= -->
+	<bean id="sendAeoSaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sendAeoSaleOrderTaskDetail" />
+		<property name="cronExpression" value="12 */4 * * * ?" />
+	</bean>
+
+	<bean id="sendAeoSaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendAEOSalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- ============= UA 发送出库通知 ================= -->
+	<bean id="sendUASaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="uaSendSaleOrderTaskDetail" />
+		<property name="cronExpression" value="11 */5 * * * ?" />
+	</bean>
+
+	<bean id="uaSendSaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendUASalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= af 发送出库通知 ================= -->
+	<bean id="sendAfSaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="afSendSaleOrderTaskDetail" />
+		<property name="cronExpression" value="19 */5 * * * ?" />
+	</bean>
+
+	<bean id="afSendSaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendAFSalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- NewLook外包仓出库通知 -->
+	<bean id="sendNewLookSaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="newLookSendSaleOrderTaskDetail" />
+		<property name="cronExpression" value="22 */5 * * * ?" />
+	</bean>
+	
+	<bean id="newLookSendSaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendNewLookSalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= nike 发送出库通知 ================= -->
+	<bean id="sendNikeSaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sendNikeSaleOrderTaskDetail" />
+		<property name="cronExpression" value="49 */5 * * * ?" />
+	</bean>
+
+	<bean id="sendNikeSaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendNIKESalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- ============= UA 发送出库反馈执行 ================= -->
+	<bean id="exeUASaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="exeUASaleOrderTaskDetail" />
+		<property name="cronExpression" value="47 */5 * * * ?" />
+	</bean>
+
+	<bean id="exeUASaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="exeUASalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= aeo 发送出库反馈执行 ================= -->
+	<bean id="exeAeoSaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="exeAeoSaleOrderTaskDetail" />
+		<property name="cronExpression" value="47 */10 * * * ?" />
+	</bean>
+
+	<bean id="exeAeoSaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="exeAEOSalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= af 发送出库反馈执行 ================= -->
+	<bean id="exeAfSaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="exeAfSaleOrderTaskDetail" />
+		<property name="cronExpression" value="33 */10 * * * ?" />
+	</bean>
+
+	<bean id="exeAfSaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="exeAFSalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= nike 发送出库反馈执行 ================= -->
+	<bean id="exeNikeSaleOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="exeNikeSaleOrderTaskDetail" />
+		<property name="cronExpression" value="56 */10 * * * ?" />
+	</bean>
+
+	<bean id="exeNikeSaleOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="exeNIKESalesOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= UA 发送入库通知 ================= -->
+	<bean id="UASendReturnOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="UASendReturnOrderTaskDetail" />
+		<property name="cronExpression" value="13 */5 * * * ?" />
+	</bean>
+
+	<bean id="UASendReturnOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendUAReturnOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ============= aeo 发送入库通知 ================= -->
+	<bean id="aeoSendReturnOrderTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="aeoSendReturnOrderTaskDetail" />
+		<property name="cronExpression" value="13 */10 * * * ?" />
+	</bean>
+
+	<bean id="aeoSendReturnOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsInterfaceTask" />
+		<property name="targetMethod" value="sendAEOReturnOrderToLFTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== 外包仓取消定时任务 ======================= -->
+	<bean id="msgCancelTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="msgCancelTaskDetail" />
+		<property name="cronExpression" value="46 0/3 * * * ?" />
+	</bean>
+	<bean id="msgCancelTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskManagerProxy" />
+		<property name="targetMethod" value="msgCancelTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== 秒杀 定时任务 =======================-->
+	<bean id="secKillTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="secKillTaskDetail" />
+		<property name="cronExpression" value="52 */5 * * * ?" />
+	</bean>
+	<bean id="secKillTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="secKillTask" />
+		<property name="targetMethod" value="taskTrigger" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== GUESS DAILY REPORT ======================= -->
+	<bean id="guessDailyReportTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="guessDailyReportTaskDetail" />
+		<property name="cronExpression" value="11 0 1 * * ?" />
+	</bean>
+	<bean id="guessDailyReportTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskGuess" />
+		<property name="targetMethod" value="createGuessSales" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== BOC Order ======================= -->
+	<bean id="bocOutboundTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="bocOutboundTaskDetail" />
+		<property name="cronExpression" value="0 */10 * * * ?" />
+	</bean>
+	<bean id="bocOutboundTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bocTask" />
+		<property name="targetMethod" value="bocfollieOrderTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== BOC Return Order ======================= -->
+	<bean id="bocReturnOrderTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="bocReturnOrderTaskDetail" />
+		<property name="cronExpression" value="18 */10 * * * ?" />
+	</bean>
+	<bean id="bocReturnOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bocTask" />
+		<property name="targetMethod" value="bocfollieReturnTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== BOC UPDATE PRICE ======================= -->
+	<bean id="bocUpdatePriceTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="bocUpdatePriceTaskDetail" />
+		<property name="cronExpression" value="14 30 2 * * ?" />
+	</bean>
+	<bean id="bocUpdatePriceTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bocTask" />
+		<property name="targetMethod" value="updateBocPriceTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== BOC CANCEL ORDER ======================= -->
+	<bean id="bocCancelOrderTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="bocCancelOrderTaskDetail" />
+		<property name="cronExpression" value="18 */10 * * * ?" />
+	</bean>
+	<bean id="bocCancelOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bocTask" />
+		<property name="targetMethod" value="sendBocCancelOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== BOC MSGRTNOUTBOUND TASK======================= -->
+	<bean id="boceOrderOutboundTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="boceOrderOutboundTaskDetail" />
+		<property name="cronExpression" value="10 0 0/1 * * ?" />
+	</bean>
+	<bean id="boceOrderOutboundTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bocTask" />
+		<property name="targetMethod" value="executeMsgRtnOutbound" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!--
+		=============== BOC MSGRTNINBOUNDORDER TASK=======================
+	-->
+	<bean id="bocRtnInboundOrderTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="bocRtnInboundOrderTaskDetail" />
+		<property name="cronExpression" value="0 */30 * * * ?" />
+	</bean>
+	<bean id="bocRtnInboundOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bocTask" />
+		<property name="targetMethod" value="executeRtnInboundOrderTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!--
+		=============== BOC INVENTMOVEMENT TASK=======================
+	-->
+	<bean id="executeInventoryMovementTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="executeInventoryMovementDetail" />
+		<property name="cronExpression" value="0 */15 * * * ?" />
+	</bean>
+	<bean id="executeInventoryMovementDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bocInterfaceManagerProxy" />
+		<property name="targetMethod" value="executeInventoryMovement" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== PDA入库 ======================= -->
+	<bean id="pdaInboundTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="pdaInboundDetail" />
+		<property name="cronExpression" value="19 0/3 * * * ?" />
+	</bean>
+	<bean id="pdaInboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pdaTask" />
+		<property name="targetMethod" value="pdaOrderTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== PDA退仓盘点 ======================= -->
+	<bean id="pdaReturnTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="pdaReturnDetail" />
+		<property name="cronExpression" value="19 0/2 * * * ?" />
+	</bean>
+	<bean id="pdaReturnDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pdaTask" />
+		<property name="targetMethod" value="pdaReturnTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== 库内补货 ======================= -->
+	<bean id="whRepenishTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="whReplenishDetail" />
+		<property name="cronExpression" value="19 0/3 * * * ?" />
+	</bean>
+	<bean id="whReplenishDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="whTask" />
+		<property name="targetMethod" value="generateWhReplenishReportDetail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ================短信发送============================= -->
+<!-- 	<bean id="smdSendTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="smdSendDetail" />
+		<property name="cronExpression" value="19 */5 8-23 * * ?" />
+	</bean>
+	<bean id="smdSendDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="smsTask" />
+		<property name="targetMethod" value="smsSendTask" />
+		<property name="concurrent" value="false" />
+	</bean> -->
+<!-- 	<bean id="smsGetReportTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="smsGetReportDetail" />
+		<property name="cronExpression" value="19 10 5 * * ?" />
+	</bean>
+	<bean id="smsGetReportDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="smsTask" />
+		<property name="targetMethod" value="getReport" />
+		<property name="concurrent" value="false" />
+	</bean> -->
+	<!-- =============== 高启诗执行出库反馈 ======================= -->
+	<bean id="taskGQSOutBoundTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="taskGQSOutBoundDetail" />
+		<property name="cronExpression" value="41 */9 * * * ?" />
+	</bean>
+	<bean id="taskGQSOutBoundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskManagerProxy" />
+		<property name="targetMethod" value="gqsTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== 大陆生成报表上传FTP ======================= -->
+	<bean id="taskStatisticsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="taskStatisticsDetail" />
+		<property name="cronExpression" value="16 35 7 * * ?" />
+	</bean>
+	<bean id="taskStatisticsDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="k3Executor" />
+		<property name="targetMethod" value="taskStatisticsMainland" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== 香港生成报表上传FTP ======================= -->
+	<bean id="taskStatisticsHKTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="taskStatisticsHKDetail" />
+		<property name="cronExpression" value="16 35 7 * * ?" />
+	</bean>
+	<bean id="taskStatisticsHKDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="k3Executor" />
+		<property name="targetMethod" value="taskStatisticsOverseas" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== 高启诗入库反馈  ======================= -->
+	<bean id="taskOutsourcingWHTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="taskOutsourcingWHDetail" />
+		<property name="cronExpression" value="30 5/20 * * * ?" />
+	</bean>
+	<bean id="taskOutsourcingWHDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskOutsourcingWH" />
+		<property name="targetMethod" value="inOutBoundRtn" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =================== NIKE 创单定时任务 ================== -->
+<!-- 	<bean id="nikeCreateStaTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="nikeCreateStaDetail" />
+		<property name="cronExpression" value="30 */5 * * * ?" />
+	</bean>
+
+	<bean id="nikeCreateStaDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="nikeTask" />
+		<property name="targetMethod" value="generateStaByQueue" />
+		<property name="concurrent" value="false" />
+	</bean> -->
+
+	<!-- ============= levis读取文件 ================= -->
+	<bean id="levisDownloadFileTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="levisDownloadFileDetail" />
+		<property name="cronExpression" value="48 1 1/1 * * ?" />
+	</bean>
+
+	<bean id="levisDownloadFileDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="levisTask" />
+		<property name="targetMethod" value="downloadFile" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= levis生成SKMR数据 ================= -->
+	<bean id="levisCreateSkmrDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="levisCreateSkmrDataDetail" />
+		<property name="cronExpression" value="48 0 0 * * ?" />
+	</bean>
+
+	<bean id="levisCreateSkmrDataDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="levisTask" />
+		<property name="targetMethod" value="createSkmrData" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= levis生成STKR数据 ================= -->
+	<bean id="levisCreateStkrDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="levisCreateStkrDataDetail" />
+		<property name="cronExpression" value="3 5 0 * * ?" />
+	</bean>
+
+	<bean id="levisCreateStkrDataDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="levisTask" />
+		<property name="targetMethod" value="createStkrData" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= IDS 出入库反馈执行定时任务 ================= -->
+	<bean id="idsTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="idsTaskDetail" />
+		<property name="cronExpression" value="48 */5 * * * ?" />
+	</bean>
+
+	<bean id="idsTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsTask" />
+		<property name="targetMethod" value="idsFeedbackTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="levisInboundTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="levisInboundTaskDetail" />
+		<property name="cronExpression" value="20 2 */2 * * ?" />
+	</bean>
+
+	<bean id="levisInboundTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="levisTask" />
+		<property name="targetMethod" value="generateInboundSta" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= 库容警戒定时任务 ================= -->
+	<bean id="wareHouseReplenishmentTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="wareHouseReplenishment" />
+		<property name="cronExpression" value="0 20 8,12,17 * * ?" />
+	</bean>
+
+	<bean id="wareHouseReplenishment"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="wareHouseManager" />
+		<property name="targetMethod" value="whReplenishmentTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= IDS 执行反馈出库定时任务 ================= -->
+	<bean id="idsSaleOutboundTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="idsSaleOutbound" />
+		<property name="cronExpression" value="0 */5 * * * ?" />
+	</bean>
+
+	<bean id="idsSaleOutbound"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsTask" />
+		<property name="targetMethod" value="vimIDSSaleOutboundRtn" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ===============IT上传文件======================= -->
+	<bean id="itUploadITFileTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="itUploadITFileTaskDetail" />
+		<property name="cronExpression" value="0 30 1 * * ?" />
+	</bean>
+	<bean id="itUploadITFileTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="itTask" />
+		<property name="targetMethod" value="upload" />
+	</bean>
+	<!-- ===============IT抓取文件===================================== -->
+	<bean id="itFtpTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="itFtpTaskDetail" />
+		<property name="cronExpression" value="0 0 1 */1 * ?" />
+	</bean>
+	<bean id="itFtpTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="itTask" />
+		<property name="targetMethod" value="download" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ==================IT生成DN确认文件=========================== -->
+	<bean id="itGenerateReceiveFileTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="itGenerateReceiveFileDetail" />
+		<property name="cronExpression" value="0 0 1 * * ?" />
+	</bean>
+	<bean id="itGenerateReceiveFileDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="itTask" />
+		<property name="targetMethod" value="generateReceiveFile" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ===============IT生成STA======================= -->
+	<bean id="itGenerateStaTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="itGenerateStaTaskDetail" />
+		<property name="cronExpression" value="30 2 4 */1 * ?" />
+	</bean>
+	<bean id="itGenerateStaTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="itTask" />
+		<property name="targetMethod" value="generateSta" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ================ MsgOutBoundOrder定时解锁 =================== -->
+	<bean id="msgOutBoundOrderUnLocked" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="msgOutBoundUnLocked" />
+		<property name="cronExpression" value="30 */3 * * * ?" />
+	</bean>
+	<bean id="msgOutBoundUnLocked"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsTask" />			<!-- 指定调用哪个类 -->
+		<property name="targetMethod" value="msgUnLocked" />			<!-- 调用该类的哪个方法 -->
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ===============ESPRIT 生成入库STA=======================  -->
+	<bean id="espritGenerateStaTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="espGenerateStaTaskDetail" />
+		<property name="cronExpression" value="30 3 */2 * * ?" />
+	</bean>
+	<bean id="espGenerateStaTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="espTask" />
+		<property name="targetMethod" value="generateSta" />
+	</bean>
+
+	<!-- ===============ESPRIT 读取入库文件=======================  -->
+	<bean id="espritDownloadTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="espritDownloadTaskDetail" />
+		<property name="cronExpression" value="30 50 */2 * * ?" />
+	</bean>
+	<bean id="espritDownloadTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="espTask" />
+		<property name="targetMethod" value="downloadFile" />
+	</bean>
+
+	<!-- ===============ESPRIT 上传文件=======================  -->
+	<bean id="espritUploadTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="espritUploadTaskDetail" />
+		<property name="cronExpression" value="21 46 0 * * ?" />
+	</bean>
+
+	<bean id="espritUploadTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="espTask" />
+		<property name="targetMethod" value="uploadFile" />
+	</bean>
+	<!-- ===============ESPRIT 上传失败指令邮件通知=======================  -->
+	<bean id="espReceivedNotUploadEmailInformTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="espReceivedNotUploadEmailInformDetail" />
+		<property name="cronExpression" value="0 0 10 * * ?" />
+	</bean>
+	<bean id="espReceivedNotUploadEmailInformDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="espTask" />
+		<property name="targetMethod" value="receivedNotUploadEmailInform" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- ===============ESPRIT DR 接收转入文件数据=======================  -->
+	<bean id="downloadEspritDispatchInfoTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="downloadEspritDispatchInfoTaskDetail" />
+		<property name="cronExpression" value="30 */5 * * * ?" />
+	</bean>
+	<bean id="downloadEspritDispatchInfoTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="espTask" />
+		<property name="targetMethod" value="downloadEspritDispatchInfo" />
+	</bean>
+	<!-- ===============ESPRIT DR 生成入库STA=======================  -->
+	<bean id="espritGenerateDispatchStaTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="espGenerateDispatchStaTaskDetail" />
+		<property name="cronExpression" value="3 */5 * * * ?" />
+	</bean>
+	<bean id="espGenerateDispatchStaTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="espTask" />
+		<property name="targetMethod" value="generateEspritDispatchSta" />
+	</bean>
+	<!-- ===============ESPRIT DR 转入转出反馈=======================  -->
+	<bean id="espritInOutBoundDeliveryTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="espritInOutBoundDeliveryTaskDetail" />
+		<property name="cronExpression" value="3 */5 * * * ?" />
+	</bean>
+	<bean id="espritInOutBoundDeliveryTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="espTask" />
+		<property name="targetMethod" value="inOutboundEspritDeliveryRtn" />
+	</bean>
+
+	<!-- 调用ZTO电子运单号申请接口 
+	<bean id="ztoServiceTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ztoServiceTaskDetail" />
+		<property name="cronExpression" value="30 3 */8 * * ?" />
+	</bean>
+	<bean id="ztoServiceTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ztoOrderTask" />			
+		<property name="targetMethod" value="ztoTransNo" />
+		<property name="concurrent" value="false" />
+	</bean>-->
+
+	<bean id="ztoTransNoTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ztoTransNoTaskDetail" />
+		<property name="cronExpression" value="30 */10 * * * ?" />
+	</bean>
+	<bean id="ztoTransNoTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ztoOrderTask" />			<!-- 指定调用哪个类 -->
+		<property name="targetMethod" value="ztoInterfaceByWarehouse" />			<!-- 调用该类的哪个方法 -->
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="ztoConfirmOrderQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ztoConfirmOrderQueueDetail" />
+		<property name="cronExpression" value="30 */5 * * * ?" />
+	</bean>
+	<bean id="ztoConfirmOrderQueueDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="wareHouseManagerProxy" />
+		<property name="targetMethod" value="exeZtoConfirmOrderQueue" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="ztoReUseTransNoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ztoReUseTransNoDetail" />
+		<property name="cronExpression" value="30 4 */8 * * ?" />
+	</bean>
+	<bean id="ztoReUseTransNoDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ztoOrderTask" />
+		<property name="targetMethod" value="reUsedTransNo" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!--  ===============ESPRIT 生成转仓STA======================= -->
+	<bean id="espritGenerateTransferStaTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="espGenerateTransferStaTaskDetail" />
+		<property name="cronExpression" value="30 10/45 * * * ?" />
+	</bean>
+	<bean id="espGenerateTransferStaTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="espTask" />
+		<property name="targetMethod" value="generateTransferSta" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- 发送短信 -->
+	<bean id="sendSmsTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sendSmsTaskDetail" />
+		<property name="cronExpression" value="30 5/30 9-21 * * ?" />
+	</bean>
+	<bean id="sendSmsTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskManagerProxy" />
+		<property name="targetMethod" value="sendSms" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 调用顺风接口-->
+	<bean id="sfOrderTaskTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sfOrderTaskDetail" />
+		<property name="cronExpression" value="30 0/3 * * * ?" />
+	</bean>
+	<bean id="sfOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="sfInterfaceAllWarehouse" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- nike -->
+	<bean id="nikeUploadTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="nikeUploadTaskDetail" />
+		<property name="cronExpression" value="15 0,30 * * * ?" />
+	</bean>
+	<bean id="nikeUploadTaskTrigger1" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="nikeUploadTaskDetail" />
+		<property name="cronExpression" value="15 15,45 * * * ?" />
+	</bean>
+	<bean id="nikeUploadTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="nikeTask" />
+		<property name="targetMethod" value="uploadNikeData" />
+	</bean>
+
+	<bean id="nikeDownloadTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="nikeDownloadTaskDetail" />
+		<property name="cronExpression" value="15 23/10 * * * ?" />
+	</bean>
+	<bean id="nikeDownloadTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="nikeTask" />
+		<property name="targetMethod" value="downloadNikeData" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============itochu 出入库通知============ -->
+	<bean id="inOutBoundNotifyTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inOutBoundNotifyTaskDetail" />
+		<property name="cronExpression" value="0 0/15 * * * ?" />
+	</bean>
+	<bean id="inOutBoundNotifyTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskItochu" />
+		<property name="targetMethod" value="inOutBoundNotify" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============itochu 出入库反馈============ -->
+	<bean id="inOutBoundRtnTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inOutBoundRtnTaskDetail" />
+		<property name="cronExpression" value="0 25 0/1 * * ?" />
+	</bean>
+
+	<bean id="inOutBoundRtnTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskItochu" />
+		<property name="targetMethod" value="inOutBoundRtn" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============etam 商品主档============ -->
+
+	<bean id="etamSkuTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="etamSkuTaskDetail" />
+		<property name="cronExpression" value="0 0 8/2 * * ?" />
+	</bean>
+	<bean id="etamSkuTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskItochu" />
+		<property name="targetMethod" value="etamSku" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============Itochu 库存反馈============ -->
+	<bean id="itochuInvTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="itochuInvTaskDetail" />
+		<property name="cronExpression" value="0 30 21 * * ?" />
+	</bean>
+	<bean id="itochuInvTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskItochu" />
+		<property name="targetMethod" value="readItochuRtnInvToDB" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= CONVERSE 服务同步 ================= -->
+	<bean id="converseTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="converseTaskDetail" />
+		<property name="cronExpression" value="28 0/30 * * * ?" />
+	</bean>
+
+	<bean id="converseTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="converseTask" />
+		<property name="targetMethod" value="startConverseTasks" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ============= CONVERSE TEST ================= -->
+	<bean id="conversSendFileTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="conversSendFileDetail" />
+		<property name="cronExpression" value="28 1 1 * * ?" />
+	</bean>
+
+	<bean id="conversSendFileDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="converseTask" />
+		<property name="targetMethod" value="conversSendFile" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!--
+		=============== COACH price MESSAGE insert T_MQ_MD_PRICE_LOG
+		=======================
+	-->
+	<!-- <bean id="autoInsertPriceLogFromCoachPrice" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="autoautoInsertPriceLogFromCoachPriceData" />
+		<property name="cronExpression" value="13 0/7 * * * ?" />
+	</bean>
+	<bean id="autoautoInsertPriceLogFromCoachPriceData"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="coachParseDataManager" />
+		<property name="targetMethod" value="coachPriceToPriceLog" />
+		<property name="concurrent" value="false" />
+	</bean> -->
+	<!-- ============= Cache-Cache 创入库指令 ================= -->
+	<bean id="cchInboundStaTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cchInboundStaTaskDetail" />
+		<property name="cronExpression" value="23 0/2 * * * ?" />
+	</bean>
+
+	<bean id="cchInboundStaTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cchTask" />
+		<property name="targetMethod" value="generateInbountSta" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== cache-cache Sales  ======================= -->
+	<bean id="cchMQSendSalesTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cchMQSaleTaskDetail" />
+		<property name="cronExpression" value="25 45 0 * * ?" />
+	</bean>
+
+	<bean id="cchMQSaleTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cchTask" />
+		<property name="targetMethod" value="mqSendCCHSales" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== cache-cache 收货反馈  ======================= -->
+	<bean id="cchMQSendASNReceiveTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cchMQSendASNReceiveTaskDetail" />
+		<property name="cronExpression" value="20 5 0 * * ?" />
+	</bean>
+
+	<bean id="cchMQSendASNReceiveTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cchTask" />
+		<property name="targetMethod" value="mqSendASNReceive" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ===================cache-cache RTVT ================= -->
+	<bean id="cchMQSendRTVTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cchMQSendRTVTaskDetail" />
+		<property name="cronExpression" value="25 10 0/1 * * ?" />
+	</bean>
+
+	<bean id="cchMQSendRTVTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cchTask" />
+		<property name="targetMethod" value="mqSendStockReturn" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== 同步VMIGdvOrder ======================= -->
+	<bean id="mqSendVMIGdvOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="mqSendVMIGdvOrderDetail" />
+		<property name="cronExpression" value="33 0/10 * * * ?" />
+	</bean>
+	<bean id="mqSendVMIGdvOrderDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="mqManagerProxy" />
+		<property name="targetMethod" value="mqSendGDVSalesOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== VMIGdvOrder 入库======================= -->
+	<bean id="gdvMsgOutBoundTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gdvMsgOutBoundOrderDetail" />
+		<property name="cronExpression" value="0 30 0/1 * * ?" />
+	</bean>
+	<bean id="gdvMsgOutBoundOrderDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="godivaManagerProxy" />
+		<property name="targetMethod" value="msgOutBoundTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+
+	<!-- =============== PHILIPS 在库库存数据  ======================= -->
+	<!-- <bean id="philipsMQSendStockComparisonTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="philipsMQSendStockComparisonDetail" />
+		<property name="cronExpression" value="0 0/7 * * * ?" />
+	</bean>
+
+	<bean id="philipsMQSendStockComparisonDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="philipsTask" />
+		<property name="targetMethod" value="mqSendStockComparison" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	=============== PHILIPS 库存状态变更  =======================
+	<bean id="philipsMQSendGoodsMovementTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="philipsMQSendGoodsMovementDetail" />
+		<property name="cronExpression" value="0 0/7 * * * ?" />
+	</bean>
+
+	<bean id="philipsMQSendGoodsMovementDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="philipsTask" />
+		<property name="targetMethod" value="mqSendGoodsMovement" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	=============== PHILIPS 客户退货的收货确认  =======================
+	<bean id="philipsMQSendGoodsCustomerReceiptReturnTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail"
+			ref="philipsMQSendGoodsCustomerReceiptReturnDetail" />
+		<property name="cronExpression" value="0 0/7 * * * ?" />
+	</bean>
+
+	<bean id="philipsMQSendGoodsCustomerReceiptReturnDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="philipsTask" />
+		<property name="targetMethod" value="mqSendGoodsCustomerReceiptReturn" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	=============== PHILIPS 大仓发货的收货确认  =======================
+	<bean id="philipsMQSendGoodsReceiptTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="philipsMQSendGoodsReceiptDetail" />
+		<property name="cronExpression" value="0 0/7 * * * ?" />
+	</bean>
+
+	<bean id="philipsMQSendGoodsReceiptDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="philipsTask" />
+		<property name="targetMethod" value="mqSendGoodsReceipt" />
+		<property name="concurrent" value="false" />
+	</bean> -->
+
+	<!-- =============== EMS订单确认  ======================= -->
+	<bean id="emsConfirmOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="emsConfirmOrder" />
+		<property name="cronExpression" value="33 */3 * * * ?" />
+	</bean>
+
+	<bean id="emsConfirmOrder"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="exeEmsConfirmOrderQueue" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="emsGetOrderCodeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="emsGetOrderCode" />
+		<property name="cronExpression" value="21 4 */8 * * ?" />
+	</bean>
+
+	<bean id="emsGetOrderCode"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="emsTask" />
+		<property name="targetMethod" value="toEmsGetOrderCode" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="setEmsStaTrasnNoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="setEmsStaTrasnNo" />
+		<property name="cronExpression" value="47 */5 * * * ?" />
+	</bean>
+
+	<bean id="setEmsStaTrasnNo"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="setTransNoTask" />
+		<property name="targetMethod" value="setEmsStaTransNo" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== SF订单确认  ======================= -->
+	<bean id="sfConfirmOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sfConfirmOrder" />
+		<property name="cronExpression" value="0 5/5 * * * ?" />
+	</bean>
+
+	<bean id="sfConfirmOrder"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="exeSfConfirmOrderQueue" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== SF订单取消  ======================= -->
+	<bean id="sfOrderCancelTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="exeSfCancelOrder" />
+		<property name="cronExpression" value="0 8/5 * * * ?" />
+	</bean>
+
+	<bean id="exeSfCancelOrder"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="wareHouseManagerProxy" />
+		<property name="targetMethod" value="exeSfCancelOrderQueue" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== CK 同步库存 ======================= -->
+	<bean id="ckSynchronicInventoryTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ckSynchronicInventory" />
+		<property name="cronExpression" value="0 0 20,21 * * ?" />
+	</bean>
+
+	<bean id="ckSynchronicInventory"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ckTask" />
+		<property name="targetMethod" value="synchronizeInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== CK 执行出入库 ======================= -->
+	<bean id="ckexecuteOutAndInboundTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ckexecuteOutAndInbound" />
+		<property name="cronExpression" value="22 0/5 * * * ?" />
+	</bean>
+
+	<bean id="ckexecuteOutAndInbound"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ckTask" />
+		<property name="targetMethod" value="executeOutAndInbound" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== GDV转店  ======================= -->
+	<bean id="gdvAutoTransTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gdvAutoTrans" />
+		<property name="cronExpression" value="0 3 0 * * ?" />
+	</bean>
+
+	<bean id="gdvAutoTrans"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="wareHouseManager" />
+		<property name="targetMethod" value="autoGdvChangeOwner" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== CK 退货入库通知、出库通知======================= -->
+	<bean id="ckinOutBoundNotifyTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ckinOutBoundNotify" />
+		<property name="cronExpression" value="12 0/5 * * * ?" />
+	</bean>
+
+	<bean id="ckinOutBoundNotify"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ckTask" />
+		<property name="targetMethod" value="inOutBoundNotify" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== WMS取消通知OMS ======================= -->
+	<bean id="execoutStaCancelNoticeOmsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="execoutStaCancelNoticeOmsDetail" />
+		<property name="cronExpression" value="46 */3 * * * ?" />
+	</bean>
+	<bean id="execoutStaCancelNoticeOmsDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskManagerProxy" />
+		<property name="targetMethod" value="execoutStaCancelNoticeOms" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== WMS待系统过仓 ======================= -->
+
+	<bean id="taskCreateStaTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="taskCreateStaDetail" />
+		<property name="cronExpression" value="29 0/2 * * * ?" />
+	</bean>
+	<bean id="taskCreateStaDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskCreateSta" />
+		<property name="targetMethod" value="createSta" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ================JD获取运单号=========================== -->
+	<bean id="taskgetJdTransNoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jdgetJdTransNoDetail" />
+		<property name="cronExpression" value="1 0/10 * * * ?" />
+	</bean>
+	<bean id="jdgetJdTransNoDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="jdOrderTask" />
+		<property name="targetMethod" value="toHubGetJdTransNo" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ================JD设置运单号=========================== -->
+	<bean id="taskCreateJDTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jdjdInterfaceByWarehouseDetail" />
+		<property name="cronExpression" value="10 0/2 * * * ?" />
+	</bean>
+	<bean id="jdjdInterfaceByWarehouseDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="jdOrderTask" />
+		<property name="targetMethod" value="jdInterfaceByWarehouse" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ================JD同步运单号=========================== -->
+	<bean id="taskOrderJDTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="jdReReceiveOrderDetail" />
+		<property name="cronExpression" value="30 0/3 * * * ?" />
+	</bean>
+	<bean id="jdReReceiveOrderDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="jdOrderTask" />
+		<property name="targetMethod" value="jdReceiveOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- =============== OMS外包仓销售出库定时任务 ===============-->
+	<bean id="omsOutbound" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="vmiOMSOutboundDetail" />
+		<property name="cronExpression" value="30 */5 * * * ?" />
+	</bean>
+	<bean id="vmiOMSOutboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskOms" />
+		<property name="targetMethod" value="vmiOMSOutbound" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== SF外包仓出库通知推送定时任务 ===============-->
+	<bean id="sfOutOrderSendTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sfOutOrderSendTaskDetail" />
+		<property name="cronExpression" value="30 */5 * * * ?" />
+	</bean>
+	<bean id="sfOutOrderSendTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskSf" />
+		<property name="targetMethod" value="sendOutboundOrderToSf1" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== SF外包仓入库通知推送定时任务 ===============-->
+	<bean id="sfInOrderSendTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sfInOrderSendTaskDetail" />
+		<property name="cronExpression" value="54 */3 * * * ?" />
+	</bean>
+	<bean id="sfInOrderSendTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskSf" />
+		<property name="targetMethod" value="sendInboundOrderToSf1" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== SF外包仓入库反馈定时任务 ===============-->
+	<bean id="sfInOutBoundRtnTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sfinOutBoundRtnTaskDetail" />
+		<property name="cronExpression" value="43 */10 * * * ?" />
+	</bean>
+	<bean id="sfinOutBoundRtnTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskSf" />
+		<property name="targetMethod" value="inOutBoundRtn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== SF外包仓出库反馈定时任务 ===============-->
+	<bean id="sfVmiSfOutboundRtnTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sfvmiSfOutboundRtnTaskDetail" />
+		<property name="cronExpression" value="43 */8 * * * ?" />
+	</bean>
+	<bean id="sfvmiSfOutboundRtnTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskSf" />
+		<property name="targetMethod" value="vmiSfOutboundRtn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== SF外包仓库存调整定时任务 ===============-->
+	<bean id="sfVmiAdjustMentRtnTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sfvmiAdjustMentRtnDetail" />
+		<property name="cronExpression" value="43 */6 * * * ?" />
+	</bean>
+	<bean id="sfvmiAdjustMentRtnDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskSf" />
+		<property name="targetMethod" value="vmiAdjustMentRtn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== SF补充出库 ===============-->
+	<bean id="sfReplenishOutboundTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="sfReplenishOutboundDetail" />
+		<!-- <property name="cronExpression" value="27 0/20 * * * ?" /> -->
+		<property name="cronExpression" value="43 */5 * * * ?" />
+	</bean>
+	<bean id="sfReplenishOutboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskSf" />
+		<property name="targetMethod" value="replenishOutbound" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ====STO电子面单定时任务 -->
+	<bean id="stoOrderTaskTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="stoOrderTaskDetail" />
+		<property name="cronExpression" value="30 0/3 * * * ?" />
+	</bean>
+	<bean id="stoOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="stoInterfaceAllWarehouse" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ====YTO电子面单定时任务 -->
+	<bean id="ytoOrderTaskTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ytoOrderTaskDetail" />
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	<bean id="ytoOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="setTransNoTask" />
+		<property name="targetMethod" value="ytoInterfaceAllWarehouse" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝零售单指示 -->
+	<bean id="gymboreeShipMsgTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeShipMsgDetail" />
+		<property name="cronExpression" value="12 */15 * * * ?" />
+	</bean>
+	<bean id="gymboreeShipMsgDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="outboundNotice" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝零售单执行 -->
+	<bean id="gymboreeSalesOrderTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeSalesOrderDetail" />
+		<property name="cronExpression" value="52 */15 * * * ?" />
+	</bean>
+	<bean id="gymboreeSalesOrderDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="exeGymboreeOutboundOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝零售单取消 -->
+	<bean id="gymboreeShipCancelTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeShipCancelDetail" />
+		<property name="cronExpression" value="45 2/10 * * * ?" />
+	</bean>
+	<bean id="gymboreeShipCancelDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="cancelOutbound" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝退货指示 -->
+	<bean id="gymboreeReturnTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeReturnDetail" />
+		<property name="cronExpression" value="24 */20 * * * ?" />
+	</bean>
+	<bean id="gymboreeReturnDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="rtnInboundNotice" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝退货执行/店存入库执行 -->
+	<bean id="gymboreeInboundOrderTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeInboundOrderDetail" />
+		<property name="cronExpression" value="34 */30 * * * ?" />
+	</bean>
+	<bean id="gymboreeInboundOrderDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="exeInboundOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝店存出库创单-->
+	<bean id="gymboreeOutboundCreateTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeOutboundCreateDetail" />
+		<property name="cronExpression" value="21 */15 * * * ?" />
+	</bean>
+	<bean id="gymboreeOutboundCreateDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="rtnOutboundCreateSta" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝店存出库反馈-->
+	<bean id="gymboreeOutboundTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeOutboundDetail" />
+		<property name="cronExpression" value="22 20 */2 * * ?" />
+	</bean>
+	<bean id="gymboreeOutboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="sendRtnOutboundResult" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝店存入库创单执行-->
+	<bean id="gymboreeInboundCreateTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeInboundCreateDetail" />
+		<property name="cronExpression" value="17 */15 * * * ?" />
+	</bean>
+	<bean id="gymboreeInboundCreateDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="createStaByReceive" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝店存入库反馈-->
+	<bean id="gymboreeInboundTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeInboundDetail" />
+		<property name="cronExpression" value="23 10 */2 * * ?" />
+	</bean>
+	<bean id="gymboreeInboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="sendRtnInboundResult" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝其他出库反馈-->
+	<bean id="gymboreeOtherOutboundTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeOtherOutboundDetail" />
+		<property name="cronExpression" value="19 15 */2 * * ?" />
+	</bean>
+	<bean id="gymboreeOtherOutboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="otherOutboundRtn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝其他出入库创单执行-->
+	<bean id="gymboreeInOutCreateTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeInOutCreateDetail" />
+		<property name="cronExpression" value="29 */30 * * * ?" />
+	</bean>
+	<bean id="gymboreeInOutCreateDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="exeInventoryChange" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 金宝贝其他入库反馈-->
+	<bean id="gymboreeOtherInboundTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="gymboreeOtherInboundDetail" />
+		<property name="cronExpression" value="31 15 */2 * * ?" />
+	</bean>
+	<bean id="gymboreeOtherInboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="gymboreeTask" />
+		<property name="targetMethod" value="otherInboundRtn" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== 修改可销售库存状态(临近保质期)定时任务bin.hu ===============-->
+	<bean id="shelfLifeTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="shelfLifeTaskDetail" />
+		<!-- <property name="cronExpression" value="13 */3 * * * ?" />-->
+		<property name="cronExpression" value="10 0 1 * * ?" />
+	</bean>
+	<bean id="shelfLifeTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="shelfLifeTask" />
+		<property name="targetMethod" value="updateShelfLifeStatus" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== 发送保质期商品修改信息给OMS bin.hu ===============-->
+	<bean id="updateShelfLifeTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="updateShelfLifeTaskDetail" />
+		<property name="cronExpression" value="10 */10 * * * ?" />
+	</bean>
+	<bean id="updateShelfLifeTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="shelfLifeTask" />
+		<property name="targetMethod" value="updateSkuShelfLifeTime" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- 物流推荐定时任务 -->
+	<bean id="suggestTransTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="suggestTransTaskDetail" />
+		<property name="cronExpression" value="41 */3 * * * ?" />
+	</bean>
+	<bean id="suggestTransTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="transSuggestManagerProxy" />
+		<property name="targetMethod" value="suggestTransService" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- 自动创建配货清单定时任务 -->
+	<bean id="autoPickingTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="autoPickingTaskDetail" />
+		<property name="cronExpression" value="13 */3 * * * ?" />
+	</bean>
+	<bean id="autoPickingTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="autoPickingTask" />
+		<property name="targetMethod" value="autoPicking" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ================EBS库存同步=========================== -->
+	<bean id="taskEbsInventoryTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ebsInventoryDetail" />
+		<property name="cronExpression" value="0 0 2 1,20 * ?" />
+	</bean>
+	<bean id="ebsInventoryDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="invTask" />
+		<property name="targetMethod" value="ebsInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ================每日可销售库存同步=========================== -->
+	<bean id="taskSalesInventoryTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="salesInventoryDetail" />
+		<property name="cronExpression" value="34 1 1 * * ?" />
+	</bean>
+	<bean id="salesInventoryDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="invTask" />
+		<property name="targetMethod" value="salesInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ================每日可销售库存总量汇总=========================== -->
+	<bean id="taskSalesInventoryQtyTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="taskSalesInventoryQtyDetail" />
+		<property name="cronExpression" value="29 30 1 * * ?" />
+	</bean>
+	<bean id="taskSalesInventoryQtyDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="invTask" />
+		<property name="targetMethod" value="replenishForSalesInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ================实时增量库存同步=========================== -->
+	<bean id="taskSalesInventoryOmsTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="salesInventoryOmsTirgger" />
+		<property name="cronExpression" value="20 0/3 * * * ?" />
+	</bean>
+	<bean id="salesInventoryOmsTirgger"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="invTask" />
+		<property name="targetMethod" value="salesInventoryOms" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="salesInventoryOmsEmail" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="salesEmail" />
+		<property name="cronExpression" value="8 */3 * * * ?" />
+	</bean>
+	<bean id="salesEmail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="invTask" />
+		<property name="targetMethod" value="salesInventoryOmsEmail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	
+	<!-- =============== OMS销售出库、退换货出库定时任务  3分钟执行一次=============== -->
+	<bean id="omsOutboundSeo" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="omsOutboundSeoDetail" />
+		<property name="cronExpression" value="2 */3 * * * ?" />
+	</bean>
+	<bean id="omsOutboundSeoDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="outboundNoticePac" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!--  =============== 出库失败邮件发送定时任务  每小时执行一次=============== -->
+	<bean id="emailNotice" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="emailNoticeDetail" />
+		<property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="emailNoticeDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskOms" />
+		<property name="targetMethod" value="emailNotice" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  =============== OMS未创建商品邮件发送定时任务  每小时执行一次=============== -->
+	<bean id="emailNoticeOms" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="emailNoticeOmsDetail" />
+	    <property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="emailNoticeOmsDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskOms" />
+		<property name="targetMethod" value="emailNoticeOms" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 过仓失败邮件通知 -->
+	<bean id="emailToOmsForFailureTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="emailToOmsForFailureTriggerDetail" />
+		<property name="cronExpression" value="1 1/30 * * * ?" />
+	</bean>
+	<bean id="emailToOmsForFailureTriggerDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskCreateSta" />
+		<property name="targetMethod" value="emailToOmsForFailure" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 增量同步邮件通知 -->
+	<bean id="emailToOmsForIncrementInvFailureTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="emailToOmsForIncrementInvFailureDetail" />
+		<property name="cronExpression" value="27 7 * * * ?" />
+	</bean>
+	<bean id="emailToOmsForIncrementInvFailureDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="invTask" />
+		<property name="targetMethod" value="emailToOmsForIncrementInvFailure" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 合并订单创建 -->
+	<bean id="createMergeOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createMergeOrderDetail" />
+		<property name="cronExpression" value="43 0/10 * * * ?" />
+	</bean>
+	<bean id="createMergeOrderDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="autoPickingTask" />
+		<property name="targetMethod" value="createMergeOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- Converse yx 下载ftp文件创入库单 -->
+	<bean id="converseYxDownLoadFileTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="converseYxDownLoadFileTriggerDetail" />
+		<property name="cronExpression" value="21 0/7 * * * ?" />
+	</bean>
+	<bean id="converseYxDownLoadFileTriggerDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="converseYxTask" />
+		<property name="targetMethod" value="downloadFtpDataAndCreateStaForConverseYx" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- Converse yx 收获反馈、退大仓反馈 上传文件 -->
+	<bean id="converseYxUpLoadFileTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="converseYxUpLoadFileTriggerDetail" />
+		<property name="cronExpression" value="31 0/11 * * * ?" />
+	</bean>
+	<bean id="converseYxUpLoadFileTriggerDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="converseYxTask" />
+		<property name="targetMethod" value="uploadConverseYxData" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============全量库存同步定时任务 每天凌晨1点开始执行=============== -->
+	<bean id="totalInv" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="totalInvDetail" />
+	    <property name="cronExpression" value="11 0 1 * * ?" />
+	</bean>
+	<bean id="totalInvDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="totalInvTask" />
+		<property name="targetMethod" value="totalInv" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============全量库存同步至PAC定时任务 每天凌晨1点开始执行=============== -->
+	<bean id="totalInvToPAC" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="totalInvToPACDetail" />
+		<property name="cronExpression" value="12 0 1 * * ?" />
+	</bean>
+	<bean id="totalInvToPACDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="totalInvToPACTask" />
+		<property name="targetMethod" value="totalInvToPac" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============其他出库库存同步通知PAC=============== -->
+	<bean id="otherInvToOms" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="otherInvToOmsDetail" />
+	    <property name="cronExpression" value="43 */3 * * * ?" />
+	</bean>
+	<bean id="otherInvToOmsDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="otherInvToOmsTask" />
+		<property name="targetMethod" value="otherInvToOms" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	 <!--  ===============重新上传zip定时任务  凌晨2点到9点间每5分钟执行一次=============== -->
+	<bean id="totalInvZipUpload" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="totalInvZipUploadDetail" />
+	    <property name="cronExpression" value="0 0/5 2-9 * * ?" />
+	</bean>
+	<bean id="totalInvZipUploadDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="totalInvTask" />
+		<property name="targetMethod" value="totalInvZipUploadTask" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- =====================每晚23:00查询强生的实时库存并上传至ftp  start==================== -->
+	<bean id="totalJNJInv" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="totalJNJInvDetail" />
+	    <property name="cronExpression" value="0 0 23 * * ?" />
+	</bean>
+	<bean id="totalJNJInvDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="totalJNJInvTask" />
+		<property name="targetMethod" value="totalInv" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =====================每晚23:00查询强生的实时库存并上传至ftp  end==================== -->
+	<!-- 取消特定单据定时任务（7天前未完成的库内移动，库存状态修改，转店） -->
+	<bean id="cancelOrderTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cancelOrderTriggerDetail" />
+	    <property name="cronExpression" value="3 0/10 * * * ?" />
+	</bean>
+	<bean id="cancelOrderTriggerDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cancelOrderTask" />
+		<property name="targetMethod" value="cancelOrderAndReleaseInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- =============== 从FTP拉取CathKidston收货指令插入中间表 bin.hu ===============-->
+	<bean id="downloadCkReveiceFileTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="downloadCkReveiceFileDetail" />
+		<property name="cronExpression" value="51 */55 * * * ?" />
+	</bean>
+	<bean id="downloadCkReveiceFileDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cathKidstonTask" />
+		<property name="targetMethod" value="downloadCkReveiceFile" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- =============== 获取中间表CathKidston收货数据 生成STA bin.hu ===============-->
+	<bean id="createStaForCathKidstonTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaForCathKidstonDetail" />
+		<property name="cronExpression" value="12 */56 * * * ?" />
+	</bean>
+	<bean id="createStaForCathKidstonDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cathKidstonTask" />
+		<property name="targetMethod" value="createStaForCathKidston" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- =============== CathKidston收货完成后生成反馈文件到FTP bin.hu ===============-->
+	<bean id="uploadCkReveiceFileTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="uploadCkReveiceFileDetail" />
+		<property name="cronExpression" value="25 */58 * * * ?" />
+	</bean>
+	<bean id="uploadCkReveiceFileDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cathKidstonTask" />
+		<property name="targetMethod" value="uploadCkReveiceFile" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- =============== CathKidston退仓完成后生成反馈文件到FTP bin.hu ===============-->
+	<bean id="uploadCkTransferOutFileTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="uploadCkTransferOutFileDetail" />
+		<property name="cronExpression" value="23 */59 * * * ?" />
+	</bean>
+	<bean id="uploadCkTransferOutFileDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="cathKidstonTask" />
+		<property name="targetMethod" value="uploadCkTransferOutFile" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ==============================TTK天天快递任务，获取运单号=========================== -->
+	<bean id="ttkTransNoTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ttkTransNoTaskDetail" />
+		<property name="cronExpression" value="30 */20 * * * ?" />
+	</bean>
+	<bean id="ttkTransNoTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ttkOrderTask" />			
+		<property name="targetMethod" value="ttkTransNo" />			
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ==============================TTK天天快递任务，匹配运单号及获取大头笔信息=========================== -->
+	<bean id="ttkSetTransNoTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ttkSetTransNoTaskDetail" />
+		<property name="cronExpression" value="30 */5 * * * ?" />
+	</bean>
+	<bean id="ttkSetTransNoTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ttkOrderTask" />			
+		<property name="targetMethod" value="setTransNoByWarehouse" />			
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ==============================TTK天天快递任务，订单信息回传=========================== -->
+	<bean id="ttkConfirmOrderQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ttkConfirmOrderQueueDetail" />
+		<property name="cronExpression" value="30 */30 * * * ?" />
+	</bean>
+	<bean id="ttkConfirmOrderQueueDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ttkOrderTask" />
+		<property name="targetMethod" value="exeTtkConfirmOrderQueue" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- ==============================WX快递任务，匹配运单号=========================== -->
+	<bean id="wxSetTransNoTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="wxSetTransNoTaskDetail" />
+		<property name="cronExpression" value="30 */5 * * * ?" />
+	</bean>
+	<bean id="wxSetTransNoTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="wxOrderTask" />			
+		<property name="targetMethod" value="setWxWarehouseTranckingNo" />			
+		<property name="concurrent" value="false" />
+	</bean>
+	
+			<!-- =============== VMI通用收货创建STA bin.hu ===============-->
+	<bean id="createStaForVmiDefaultTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaForVmiDefaultDetail" />
+		<property name="cronExpression" value="23 */59 * * * ?" />
+	</bean>
+	<bean id="createStaForVmiDefaultDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="vmiDefaultTask" />
+		<property name="targetMethod" value="createStaForVmiDefault" />
+		<property name="concurrent" value="false" />
+	</bean>
+			<!-- =============== WMS生成反馈信息通知HUB bin.hu ===============-->
+	<bean id="uploadVmiToHubTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="uploadVmiToHubDetail" />
+		<property name="cronExpression" value="13 */29 * * * ?" />
+	</bean>
+	<bean id="uploadVmiToHubDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="vmiDefaultTask" />
+		<property name="targetMethod" value="uploadVmiToHub" />
+		<property name="concurrent" value="false" />
+	</bean>
+			<!-- =============== VMI邮件通知异常数据 bin.hu ===============-->
+	<bean id="vmiErrorEmailInformTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="vmiErrorEmailInformDetail" />
+		<property name="cronExpression" value="0 0 10 * * ?" />
+	</bean>
+	<bean id="vmiErrorEmailInformDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="vmiDefaultTask" />
+		<property name="targetMethod" value="vmiErrorEmailInform" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- =============== 彪马生成反馈信息通知HUB ===============-->
+	<bean id="pumaUploadVmiToHubTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="pumaUploadVmiToHubDetail" />
+		<property name="cronExpression" value="23 */5 * * * ?" />
+	</bean>
+	<bean id="pumaUploadVmiToHubDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pumaTask" />
+		<property name="targetMethod" value="uploadVmiToHubExt" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== 彪马全量库存快照反馈HUB ===============-->
+	<bean id="pumaTotalInvTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="pumaTotalInvDetail" />
+	    <property name="cronExpression" value="11 30 0 * * ?" />
+	</bean>
+	<bean id="pumaTotalInvDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="pumaTask" />
+		<property name="targetMethod" value="totalInvToHubExt" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- IDS取消邮件通知 -->
+	<bean id="idsTaskMailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="idsTaskMailDetail" />
+		<property name="cronExpression" value="48 0/3 * * * ?" />
+	</bean>
+	<bean id="idsTaskMailDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="idsTask" />
+		<property name="targetMethod" value="mailIds" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 每天凌晨增量同步数据给EDW bin.hu -->
+	<bean id="edwTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="edwTaskDetail" />
+		<property name="cronExpression" value="0 10 0 * * ?" />
+	</bean>
+	<bean id="edwTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="edwTask" />
+		<property name="targetMethod" value="uploadEdwFile" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+		<!--  ===============物流宝商品同步定时任务=============== -->
+	<bean id="threePLSku" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLSynSkuDetail" />
+	    <property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="threePLSynSkuDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="sendSkuToHab" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============物流宝入库定时任务=============== -->
+	<bean id="threePLInbound" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLInboundDetail" />
+	    <property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="threePLInboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="sendInboundHab" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============物流宝入库查询定时任务=============== -->
+	<bean id="threePLInboundQuery" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLInboundQueryDetail" />
+	    <property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="threePLInboundQueryDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="wlbNewInboundQuery" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============物流宝出库定时任务=============== -->
+	<bean id="threePLOutbound" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLOutboundDetail" />
+	    <property name="cronExpression" value="0 0/30 * * * ?" />
+	</bean>
+	<bean id="threePLOutboundDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="sendOutboundHab" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============物流宝取消推送定时任务=============== -->
+	<bean id="threePLOutCancel" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLOutCancelDetail" />
+	    <property name="cronExpression" value="0 0/20 * * * ?" />
+	</bean>
+	<bean id="threePLOutCancelDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="wlbOutboundCancel" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============物流宝取消查询定时任务=============== -->
+	<bean id="threePLOutCancelQuery" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLOutCancelQueryDetail" />
+	    <property name="cronExpression" value="0 0/20 * * * ?" />
+	</bean>
+	<bean id="threePLOutCancelQueryDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="wlbOutboundCancelQuery" />
+		<property name="concurrent" value="false" />
+	</bean>
+		
+	<!--  ===============物流宝出库查询定时任务=============== -->
+	<bean id="threePLOutQuery" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLOutQueryDetail" />
+	    <property name="cronExpression" value="0 0/20 * * * ?" />
+	</bean>
+	<bean id="threePLOutQueryDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="wlbOutboundQuery" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+		
+	<!--  ===============物流宝入库反馈执行定时任务=============== -->
+	<bean id="threePLInExecute" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLInExecuteDetail" />
+	    <property name="cronExpression" value="0 0/20 * * * ?" />
+	</bean>
+	<bean id="threePLInExecuteDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="threePLInboundExecute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+		
+	<!--  ===============物流宝出库反馈执行定时任务=============== -->
+	<bean id="threePLOutExecute" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLOutExecuteDetail" />
+	    <property name="cronExpression" value="0 0/20 * * * ?" />
+	</bean>
+	<bean id="threePLOutExecuteDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="threePLOutboundExecute" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!--  ===============物流宝失败邮件通知=============== -->
+	<bean id="threePLSkuNotice" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLSkuNoticeDetail" />
+	    <property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="threePLSkuNoticeDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="threePLEmailNotice" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============AF库存比对=============== -->
+	<bean id="afInventoryCompare" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="afInventoryCompareDetail" />
+	    <property name="cronExpression" value="4 50 0 * * ?" />
+	</bean>
+	<bean id="afInventoryCompareDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="bocTask" />
+		<property name="targetMethod" value="afInvCompareMethod" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- 每天凌晨增量同步数据给EDW bin.hu HK-->
+	<bean id="edwHkTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="edwHkTaskDetail" />
+		<property name="cronExpression" value="0 10 0 * * ?" />
+	</bean>
+	<bean id="edwHkTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="edwTask" />
+		<property name="targetMethod" value="uploadEdwFileHk" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!--  ===============万象发货接口定时任务=============== -->
+	<bean id="threePLWXShipments" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLWXDetail" />
+	    <property name="cronExpression" value="0 0/3 * * * ?" />
+	</bean>
+	<bean id="threePLWXDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="wxOutBoundQueryMq" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ===============渠道快递规则状态变更定时任务=============== -->
+	<bean id="transRoleAccordTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="transRoleAccordTaskDetail" />
+		<property name="cronExpression" value="0 0/10 * * * ?" />
+	</bean>
+	<bean id="transRoleAccordTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="transRoleAccordTask" />
+		<property name="targetMethod" value="transRoleAccordSwitch" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- =====================快递雷达  start==================== -->
+	<!-- 共用 -->
+	<bean id="expressRadarCommonTask" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="expressRadarTaskDetail" />
+	    <property name="cronExpression" value="0 0 0/4 * * ?" />
+	</bean>
+	<bean id="expressRadarTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="expressRadarTask" />
+		<property name="targetMethod" value="commonStore" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 特殊店铺 -->
+	<!-- <bean id="expressRadarTaskNike" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="expressRadarTaskNikeDetail" />
+	    <property name="cronExpression" value="0 0/25 * * * ?" />
+	</bean>
+	<bean id="expressRadarTaskNikeDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="expressRadarTask" />
+		<property name="targetMethod" value="specialStore" />
+		<property name="arguments" value="1飞利浦官方旗舰店" />
+		<property name="concurrent" value="false" />
+	</bean> -->
+	
+	<!-- 快递预警 -->
+	<bean id="expressRadarWarning" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="expressRadarWarningDetail" />
+	    <property name="cronExpression" value="0 0/2 * * * ?" />
+	</bean>
+	<bean id="expressRadarWarningDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="expressRadarTask" />
+		<property name="targetMethod" value="updateExpressWarnningInfo" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- =====================快递雷达  end==================== -->
+
+	
+			<!--  ===============外包仓库存状态调整定时任务=============== -->
+	<bean id="threePLInvStatusChange" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLInvStatusChangeDetail" />
+	    <property name="cronExpression" value="0 0/30 * * * ?" />
+	</bean>
+	<bean id="threePLInvStatusChangeDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="threePlInvStatusChange" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+		<!--  ===============外包仓库存状态修改执行定时任务=============== -->
+	<bean id="threePLInvStatusExecute" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePLInvStatusExecuteDetail" />
+	    <property name="cronExpression" value="0 0/30 * * * ?" />
+	</bean>
+	<bean id="threePLInvStatusExecuteDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="threePlInvStatusEexcute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+			<!--  ===============外包仓库存数量修改定时任务=============== -->
+	<bean id="threePlInvQtyChange" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePlInvQtyChangeDetail" />
+	    <property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="threePlInvQtyChangeDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="threePlInvQtyChange" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+				<!--  ===============外包仓库存数量修改执行定时任务=============== -->
+	<bean id="threePlInvQtyExecute" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="threePlInvQtyExecuteDetail" />
+	    <property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="threePlInvQtyExecuteDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="threePLTask" />
+		<property name="targetMethod" value="threePlInvQtyExecute" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- ==================新的库存占用 start================== -->
+	<!-- 占用批占用库存 -->
+	<bean id="staBatchOcp" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="batchOcp" />
+	    <property name="cronExpression" value="21 */5 * * * ?" />
+	</bean>
+	<bean id="batchOcp"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="inventoryOccupyThreadPool" />
+		<property name="targetMethod" value="staBatchHandle" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 订单占用库存 -->
+	<bean id="staOcpByBatch" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="staOcp" />
+	    <property name="cronExpression" value="24 */5 * * * ?" />
+	</bean>
+	<bean id="staOcp"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="staInventoryOcpThreadPool" />
+		<property name="targetMethod" value="staHandle" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 订单占用库存失败邮件通知 -->
+	<bean id="exceptionOcpOrderEmail" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="ocpOrderInformEmail" />
+	    <property name="cronExpression" value="0 0 * * * ?" />
+	</bean>
+	<bean id="ocpOrderInformEmail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="ocpOrderEmailInform" />
+		<property name="targetMethod" value="exceptionOcpOrderInformEmail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 生成取消确认结果 -->
+	<bean id="msgOrderCancel" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="msgOrderCancelDetail" />
+	    <property name="cronExpression" value="46 0/2 * * * ?" />
+	</bean>
+	<bean id="msgOrderCancelDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="msgOrderCancelTask" />
+		<property name="targetMethod" value="createMsgOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 直连打标识 -->
+	<bean id="setFlagTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="setFlagTriggerDetail" />
+	    <property name="cronExpression" value="41 0/3 * * * ?" />
+	</bean>
+	<bean id="setFlagTriggerDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="createStaTask" />
+		<property name="targetMethod" value="setFlagForOrderToCreate" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 直连创单 -->
+	<bean id="createStaNewTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaNewTriggerDetail" />
+	    <property name="cronExpression" value="43 0/2 * * * ?" />
+	</bean>
+	<bean id="createStaNewTriggerDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="createStaTask" />
+		<property name="targetMethod" value="createStaAfterSetFlag" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- 订单占用库存失败邮件通知 -->
+	<!-- ==================新的库存占用 end================== -->
+	
+	<!-- 每天凌晨同步强生库存快照给HUB bin.hu -->
+	<bean id="vmiInventoryJNJTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="vmiInventoryJNJTaskDetail" />
+		<property name="cronExpression" value="0 6 0 * * ?" />
+	</bean>
+	<bean id="vmiInventoryJNJTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="vmiInventoryTask" />
+		<property name="targetMethod" value="vmiInventoryJNJ" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- 强生非销售出库非vmi入库非退换货入库数据给HUB -->
+	<bean id="vmiInboundAndOutboundJohnsonTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="vmiInboundAndOutboundJohnsonTaskDetail" />
+		<property name="cronExpression" value="0 0 2 * * ?" />
+	</bean>
+	<bean id="vmiInboundAndOutboundJohnsonTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="vmiDefaultTask" />
+		<property name="targetMethod" value="vmiInboundAndOutboundJohnson" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="inventoryInsert" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryInsertByMq" />
+	    <property name="cronExpression" value="0 30 1 * * ?" />
+	</bean>
+	<bean id="inventoryInsertByMq"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskItochuUA" />
+		<property name="targetMethod" value="insertUaInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<bean id="rtnOrdercreateTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="rtnOrdercreate" />
+	    <property name="cronExpression" value="50 0/2 * * * ?" />
+	</bean>
+	<bean id="rtnOrdercreate"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="rtnOrderTask" />
+		<property name="targetMethod" value="createRtnOrder" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="guessInventoryInsert" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="guessInventoryInsertByMq" />
+	    <property name="cronExpression" value="0 30 5 * * ?" />
+	</bean>
+	<bean id="guessInventoryInsertByMq"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskGuess" />
+		<property name="targetMethod" value="insertGuessInventoryLog" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+		<!--  =============== 退货申请文档上传ftp 5分钟一次	=============== -->
+	<bean id="uploadDocToFtp" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="uploadDocToFtpDetail" />
+	    <property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	<bean id="uploadDocToFtpDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskOms" />
+		<property name="targetMethod" value="uploadRtnInDocToFtp" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- 每天凌晨同步星巴克库存快照给HUB bin.hu -->
+	<bean id="vmiInventoryStarbucksTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="vmiInventoryStarbucksTaskDetail" />
+		<property name="cronExpression" value="0 0 3 * * ?" />
+	</bean>
+	<bean id="vmiInventoryStarbucksTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="vmiInventoryTask" />
+		<property name="targetMethod" value="vmiInventoryStarbucks" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- 每天凌晨同步星巴克出库/退换货入给HUB bin.hu -->
+	<bean id="vmiInOutBoundForStarbucksTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="vmiInOutBoundForStarbucksTaskDetail" />
+		<property name="cronExpression" value="0 23 0 * * ?" />
+	</bean>
+	<bean id="vmiInOutBoundForStarbucksTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="vmiDefaultTask" />
+		<property name="targetMethod" value="vmiInOutBoundForStarbucks" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- ====发票批量打印获取运单号定时任务 -->
+	<bean id="invoiceOrderTaskTirgger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="invoiceOrderTaskDetail" />
+		<property name="cronExpression" value="0 */10 * * * ?" />
+	</bean>
+	<bean id="invoiceOrderTaskDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="invoiceOrderTask" />
+		<property name="targetMethod" value="invoiceOrderInterface" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- PMS -->
+		<!-- o2o订单顾客已签收通知PAC刷完成 Sheng Ge -->
+	<bean id="parcelChangeStatusNotifyPACTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="parcelChangeStatusNotifyPACTaskDetail" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="parcelChangeStatusNotifyPACTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="parcelManagerTask" />
+		<property name="targetMethod" value="parcelChangeStatusNotifyPAC" />
+		<property name="concurrent" value="false" />
+	</bean>
+		<!-- 上门取件通知 Sheng Ge -->
+	<bean id="parcelPickUpNotifyTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="parcelPickUpNotifyTaskDetail" />
+		<property name="cronExpression" value="0 */10 * * * ?" />
+	</bean>
+	<bean id="parcelPickUpNotifyTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="parcelManagerTask" />
+		<property name="targetMethod" value="parcelPickUpNotify" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+
+	
+	<bean id="trigger_createStaByWh_4882" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_4882" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_4882" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>4882</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_2102" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_2102" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_2102" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>2102</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_4082" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_4082" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_4082" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>4082</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6126" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6126" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6126" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6126</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_5462" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_5462" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_5462" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>5462</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_4942" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_4942" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_4942" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>4942</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6031" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6031" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6031" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6031</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6123" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6123" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6123" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6123</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6327" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6327" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6327" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6327</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6028" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6028" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6028" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6028</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6075" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6075" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6075" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6075</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_5083" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_5083" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_5083" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>5083</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6227" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6227" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6227" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6227</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6377" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6377" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6377" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6377</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_121" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_121" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_121" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>121</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_881" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_881" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_881" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>881</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_1061" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_1061" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_1061" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>1061</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_1642" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_1642" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_1642" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>1642</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_1843" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_1843" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_1843" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>1843</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_2582" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_2582" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_2582" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>2582</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_4422" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_4422" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_4422" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>4422</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_4166" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_4166" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_4166" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>4166</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_5424" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_5424" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_5424" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>5424</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_5712" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_5712" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_5712" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>5712</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_5864" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_5864" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_5864" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>5864</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_5912" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_5912" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_5912" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>5912</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6024" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6024" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6024" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6024</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6026" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6026" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6026" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6026</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6177" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6177" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6177" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6177</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+
+
+	<bean id="trigger_createStaByWh_1121" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_1121" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_1121" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>1121</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_6023" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_6023" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_6023" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>6023</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="trigger_createStaByWh_5612" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_5612" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_5612" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>5612</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="trigger_createStaByWh_3742" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="createStaByWh_3742" />
+		<property name="cronExpression" value="0 */1 * * * ?" />
+	</bean>
+	<bean id="createStaByWh_3742" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="order2WmsTask" />
+		<property name="targetMethod" value="createStaByWh" />
+		<property name="arguments">
+			<list>
+				<value>3742</value>
+			</list>
+		</property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== HK NIKE 单据解锁 ======================= -->
+
+	<bean id="taskDeblockingTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="taskDeblockingDetail" />
+		<property name="cronExpression" value="23 0/2 4 * * ?" />
+	</bean>
+	<bean id="taskDeblockingDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="arriveTimeTask" />
+		<property name="targetMethod" value="deblocking" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =============== HK NIKE 单据解锁失败发送邮件 ======================= -->
+
+	<bean id="taskErrorEmailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="taskErrorEmailDetail" />
+		<property name="cronExpression" value="22 0/1 5 * * ?" />
+	</bean>
+	<bean id="taskErrorEmailDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="arriveTimeTask" />
+		<property name="targetMethod" value="errorEmail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- MongoDB差异 -->
+	<bean id="mongoDBDifTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="mongoDBDifDetail" />
+		<property name="cronExpression" value="22 0 */1 * * ?" />
+	</bean>
+	<bean id="mongoDBDifDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="mongoInventoryTask" />
+		<property name="targetMethod" value="recordDifBetweenOraAndMongo" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<!-- AF -->
+		<bean id="inventoryInsertAf" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryInsertByMqAf" />
+	    <property name="cronExpression" value="30 30 1 * * ?" />
+	</bean>
+	<bean id="inventoryInsertByMqAf"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskItochuIDS" />
+		<property name="targetMethod" value="insertAFInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- AEO -->
+	<bean id="inventoryInsertAeo" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryInsertByMqAeo" />
+	    <property name="cronExpression" value="20 30 1 * * ?" />
+	</bean>
+	<bean id="inventoryInsertByMqAeo"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskItochuIDS" />
+		<property name="targetMethod" value="insertAeoInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- NewLook -->
+		<bean id="inventoryInsertNewlook" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="inventoryInsertByMqNewlook" />
+	    <property name="cronExpression" value="10 30 1 * * ?" />
+	</bean>
+	<bean id="inventoryInsertByMqAeo"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="taskItochuIDS" />
+		<property name="targetMethod" value="insertNewLookInventory" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =====================每晚00:00查询零点实时库存并上传至ftp  start==================== -->
+	<bean id="totalZeroInv" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="totalZeroInvDetail" />
+        <!-- <property name="cronExpression" value="0 0 0 * * ?" /> -->
+	    <property name="cronExpression" value="0 */15 * * * ?" />
+	</bean>
+	<bean id="totalZeroInvDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="totalZeroInvTask" />
+		<property name="targetMethod" value="totalInv" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<!-- =====================每晚00:00查询零点实时库存并上传至ftp  end==================== -->
+
+    <!-- =====================每10分钟发送纸箱数据给LMIS==================== -->
+    <!--<bean id="staCartonInfoCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail" ref="staCartonInfoTaskDetail" />-->
+        <!--<property name="cronExpression" value="0 0/10 * * * ?" />-->
+    <!--</bean>-->
+    <!--<bean id="staCartonInfoTaskDetail"-->
+          <!--class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="staCartonInfoTask" />-->
+        <!--<property name="targetMethod" value="sendToLMIS" />-->
+        <!--<property name="concurrent" value="false" />-->
+    <!--</bean>-->
+    <!-- =====================每10分钟发送纸箱数据给LMIS==================== -->
+</beans>

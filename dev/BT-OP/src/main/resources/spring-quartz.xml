@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/mvc 
+						http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<bean id="routeJobBean"
+		class="com.bt.orderPlatform.quartz.RouteQuartz"></bean>
+	<bean id="routeJobSF"
+		class="com.bt.orderPlatform.quartz.RouteQuartzSF"></bean>
+	<bean id="OrderStatusQueryMTQuartz"
+		class="com.bt.orderPlatform.quartz.OrderStatusQueryMTQuartz"></bean>
+    <bean id="riderLocation" class="com.bt.orderPlatform.quartz.MtRiderLocationQuartz"></bean>
+
+	<!-- 任务类描述 -->
+	<bean id="routeJobDetailPullRoutingInfo"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="routeJobBean"></property>
+		<property name="targetMethod" value="pullRoutingInfo"></property>
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="routeJobDetailPullFTP"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="routeJobBean"></property>
+		<property name="targetMethod" value="pullFTP"></property>
+		<property name="concurrent" value="true" />
+	</bean>
+
+	<bean id="routeJobDetailPullStatus"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="routeJobBean"></property>
+		<property name="targetMethod" value="pullStatus"></property>
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="routeJobBTINS"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="routeJobBean"></property>
+		<property name="targetMethod" value="QuartzBTINS"></property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="updateStatusForSFTCJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="routeJobBean"></property>
+		<property name="targetMethod" value="updateStatusForSFTCWaybillWithQuartz"></property>
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="routeJobWaybill"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="routeJobSF"></property>
+		<property name="targetMethod" value="execute"></property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="queryOrderStatusMT"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="OrderStatusQueryMTQuartz"></property>
+		<property name="targetMethod" value="execute"></property>
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="riderLocationTask"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="riderLocation"></property>
+		<property name="targetMethod" value="execute"></property>
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<!-- 触发器 -->
+	<bean id="routeTriggerPullRoutingInfo"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail"
+			ref="routeJobDetailPullRoutingInfo"></property>
+		<property name="cronExpression" value="0 0/10 * * * ?"></property>
+	</bean>
+	<bean id="routeTriggerPullFTP"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="routeJobDetailPullFTP"></property>
+		<property name="cronExpression" value="0 0/5 * * * ?"></property>
+	</bean>
+	<bean id="routeTriggerPullStatus"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="routeJobDetailPullStatus"></property>
+		<property name="cronExpression" value="10 0/15 * * * ?"></property>
+	</bean>
+	<bean id="routeTriggerBTINS"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="routeJobBTINS"></property>
+		<property name="cronExpression" value="15 0 0/1 * * ?"></property>
+	</bean>
+		<bean id="updateStatusForSFTCTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="updateStatusForSFTCJob"></property>
+		<property name="cronExpression" value="0 0/12 * * * ?"></property>
+	</bean>
+	<bean id="routeTriggerWaybill"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="routeJobWaybill"></property>
+		<property name="cronExpression" value="15 0/10 * * * ?"></property>
+	</bean>
+	<bean id="routeTriggerOrderStatusMT"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="queryOrderStatusMT"></property>
+		<property name="cronExpression" value="0 0/14 * * * ?"></property>
+	</bean>
+	<bean id="riderLocationTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="riderLocationTask"></property>
+		<property name="cronExpression" value="0 0/7 * * * ?"></property>
+	</bean>
+
+	<!-- 总管理容器:入口 -->
+	 <bean id="startQuartz"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="routeTriggerPullRoutingInfo" />
+				<ref bean="routeTriggerPullFTP" />
+				<ref bean="routeTriggerPullStatus" />
+				<ref bean="routeTriggerBTINS"/>
+				<ref bean="routeTriggerWaybill" />
+				<!-- <ref bean="updateStatusForSFTCTrigger"/>
+						
+					
+				
+				<ref bean="riderLocationTrigger"/>
+				<ref bean="routeTriggerOrderStatusMT"/>-->
+				
+			</list>
+		</property>
+	</bean> 
+</beans>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TotalVolumeCalculationMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.TotalVolumeCalculation" >
+	<result column="stvc_id" property="stvc_id"/>
+	<result column="stvc_cb_id" property="stvc_cb_id"/>
+	<result column="stvc_section" property="stvc_section"/>
+	<result column="stvc_price" property="stvc_price"/>
+	<result column="stvc_price_unit" property="stvc_price_unit"/>
+	<result column="stvc_status" property="stvc_status"/>
+</resultMap>
+       
+<!-- ssc_total_volume_calculation table all fields -->
+<sql id="Base_Column_List" >
+	 stvc_id,stvc_cb_id,stvc_section,stvc_price,stvc_price_unit,stvc_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="stvc_id != null" >
+	    and stvc_id =  #{stvc_id}
+	</if>
+	<if test="stvc_cb_id != null" >
+	    and stvc_cb_id =  #{stvc_cb_id}
+	</if>
+	 	<if test="stvc_section != null and stvc_section != ''" >
+	    and stvc_section =  #{stvc_section}
+	</if>
+	 	<if test="stvc_price != null and stvc_price != ''" >
+	    and stvc_price =  #{stvc_price}
+	</if>
+	<if test="stvc_price_unit != null" >
+	    and stvc_price_unit =  #{stvc_price_unit}
+	</if>
+	<if test="stvc_status != null" >
+	    and stvc_status =  #{stvc_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入超过部分体积反推表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.TotalVolumeCalculation" >
+  insert into ssc_total_volume_calculation(stvc_id,stvc_cb_id,stvc_section,stvc_price,stvc_price_unit,stvc_status)
+ values(#{stvc_id},#{stvc_cb_id},#{stvc_section},#{stvc_price},#{stvc_price_unit},#{stvc_status})
+</insert>
+
+<!-- 修改超过部分体积反推表-->  
+ <update id="update" parameterType="com.bt.lmis.model.TotalVolumeCalculation" >
+  update ssc_total_volume_calculation set stvc_cb_id=#{stvc_cb_id},stvc_section=#{stvc_section},stvc_price=#{stvc_price},stvc_price_unit=#{stvc_price_unit},stvc_status=#{stvc_status} where stvc_id=#{stvc_id}
+ </update>
+ 
+ <!-- 选择修改超过部分体积反推表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.TotalVolumeCalculation" >
+	update ssc_total_volume_calculation set 
+	<trim  suffixOverrides="," >
+	<if test="stvc_cb_id != null  ">
+		stvc_cb_id=#{stvc_cb_id},
+	</if>
+	<if test="stvc_section != null  and stvc_section != '' ">
+		stvc_section=#{stvc_section},
+	</if>
+	<if test="stvc_price != null  and stvc_price != '' ">
+		stvc_price=#{stvc_price},
+	</if>
+	<if test="stvc_price_unit != null  ">
+		stvc_price_unit=#{stvc_price_unit},
+	</if>
+	<if test="stvc_status != null  ">
+		stvc_status=#{stvc_status},
+	</if>
+	</trim> where stvc_id=#{stvc_id}
+</update>
+
+<!-- 删除超过部分体积反推表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_total_volume_calculation where stvc_id = #{stvc_id}
+</update>
+<!-- 批量删除超过部分体积反推表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_total_volume_calculation where stvc_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找超过部分体积反推表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_total_volume_calculation where stvc_id = #{stvc_id}
+</select>
+  	
+<!-- 超过部分体积反推表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.TotalVolumeCalculationQueryParam">
+	select count(1) from ssc_total_volume_calculation 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的超过部分体积反推表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.TotalVolumeCalculationQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_total_volume_calculation 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 超过部分体积反推表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.TotalVolumeCalculationQueryParam">
+	select count(1) from ssc_total_volume_calculation 
+	<include refid="where_Clause"/>
+</select>
+  	
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_total_volume_calculation 
+	where stvc_cb_id=#{cbid}
+</select>
+  	
+</mapper>   

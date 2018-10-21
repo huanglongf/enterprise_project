@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.HandlingFeeRawDataMapper" > 
+<!-- Result Map-->
+	<select id="findCB" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select
+		 id,
+	     create_time,
+		  create_user,
+		  update_time,
+		  update_user,
+		  order_type,
+		  operation_time,
+		  store_name,
+		  job_orderno,
+		  related_orderno,
+		  job_type,
+		  storaggelocation_code,
+		  in_num,
+		  out_num,
+		  item_number,
+		  sku_number,
+		  art_no,
+		  item_name,
+		  item_size,
+		  inventory_status,
+		  operator,
+		  store_id,
+		  settle_flag
+		from tb_operationfee_data t
+		where 1=1	
+		<if test="storeName != null  and storeName != '' ">
+		 and t.store_name like concat('%',#{storeName},'%');
+		</if>		
+		<if test="goodsName != null  and goodsName != '' ">
+		 and t.item_name like concat('%',#{goodsName},'%');
+		</if>				
+		<if test="firstResult != null  and firstResult != '' ">
+			LIMIT #{firstResult}, #{maxResult}
+		</if>
+   
+	</select>
+	<select id="countCBRecords" resultType="java.lang.Integer" parameterType="com.bt.lmis.controller.form.HandlingFeeRawDataQueryParam">
+		select
+		count(1) cnt
+		from tb_operationfee_data t
+		where 1=1
+		<if test="storeName != null  and storeName != '' ">
+		 and t.store_name like concat('%',#{storeName},'%');
+		</if>		
+		<if test="goodsName != null  and goodsName != '' ">
+		 and t.item_name like concat('%',#{goodsName},'%');
+		</if>					
+	</select>
+</mapper>   

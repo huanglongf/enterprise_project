@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.jbasis.expenses.dao.TbExpensesMapper">	
+	<resultMap type="com.lmis.jbasis.expenses.model.TbExpressReturnStorage" id="TbExpressReturnStorageMap" >
+		<!-- 子类字段 -->
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+		<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+		<result column="job_no" property="jobNo" jdbcType="VARCHAR" />
+		<result column="job_type" property="jobType" jdbcType="VARCHAR" />
+		<result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="related_no" property="relatedNo" jdbcType="VARCHAR" />
+		<result column="waybill" property="waybill" jdbcType="VARCHAR" />
+		<result column="re_epistatic_order" property="reEpistaticOrder" jdbcType="VARCHAR" />
+		<result column="platform_no" property="platformNo" jdbcType="VARCHAR" />
+		<result column="finish_time" property="finishTime" jdbcType="TIMESTAMP" />
+		<result column="plan_qty" property="planQty" jdbcType="INTEGER" />
+		<result column="actual_qty" property="actualQty" jdbcType="INTEGER" />
+		<result column="transport_code" property="transportCode" jdbcType="VARCHAR" />
+		<result column="transport_name" property="transportName" jdbcType="VARCHAR" />
+		<result column="itemtype_code" property="itemtypeCode" jdbcType="VARCHAR" />
+		<result column="itemtype_name" property="itemtypeName" jdbcType="VARCHAR" />
+		<result column="physical_warehouse" property="physicalWarehouse" jdbcType="VARCHAR" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="deblock_user" property="deblockUser" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="re_province" property="reProvince" jdbcType="VARCHAR" />
+		<result column="re_city" property="reCity" jdbcType="VARCHAR" />
+		<result column="re_state" property="reState" jdbcType="VARCHAR" />
+		<result column="re_weight" property="reWeight" jdbcType="VARCHAR" />
+		<result column="re_length" property="reLength" jdbcType="VARCHAR" />
+		<result column="re_width" property="reWidth" jdbcType="VARCHAR" />
+		<result column="re_higth" property="reHigth" jdbcType="VARCHAR" />
+		<result column="re_volumn" property="reVolumn" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="VARCHAR" />
+		<result column="refuse_reason" property="refuseReason" jdbcType="VARCHAR" />
+		<result column="return_order" property="returnOrder" jdbcType="VARCHAR" />
+		<result column="out_order" property="outOrder" jdbcType="VARCHAR" />
+		<result column="batch_number" property="batchNumber" jdbcType="VARCHAR" />
+		<result column="cost_center" property="costCenter" jdbcType="VARCHAR" />
+		<result column="bf_flag" property="bfFlag" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.expenses.model.TbOperationfeeData" id="TbOperationfeeDataMap">
+		<!-- 子类字段 -->
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="primary_id" property="primaryId" jdbcType="INTEGER" />
+		<result column="bat_id" property="batId" jdbcType="INTEGER" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+		<result column="order_type" property="orderType" jdbcType="VARCHAR" />
+		<result column="operation_time" property="operationTime" jdbcType="TIMESTAMP" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="job_orderno" property="jobOrderno" jdbcType="VARCHAR" />
+		<result column="related_orderno" property="relatedOrderno" jdbcType="VARCHAR" />
+		<result column="platform_order" property="platformOrder" jdbcType="VARCHAR" />
+		<result column="job_type" property="jobType" jdbcType="VARCHAR" />
+		<result column="storaggelocation_code" property="storaggelocationCode" jdbcType="VARCHAR" />
+		<result column="in_num" property="inNum" jdbcType="VARCHAR" />
+		<result column="out_num" property="outNum" jdbcType="VARCHAR" />
+		<result column="item_number" property="itemNumber" jdbcType="VARCHAR" />
+		<result column="sku_number" property="skuNumber" jdbcType="VARCHAR" />
+		<result column="art_no" property="artNo" jdbcType="VARCHAR" />
+		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="item_size" property="itemSize" jdbcType="VARCHAR" />
+		<result column="inventory_status" property="inventoryStatus" jdbcType="VARCHAR" />
+		<result column="operator" property="operator" jdbcType="VARCHAR" />
+		<result column="warehouse_type" property="warehouseType" jdbcType="VARCHAR" />
+		<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+		<result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="INTEGER" />
+		<result column="settle_flag" property="settleFlag" jdbcType="INTEGER" />
+		<result column="brand_docking_code" property="brandDockingCode" jdbcType="VARCHAR" />
+		<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+		<result column="epistatic_order" property="epistaticOrder" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.expenses.model.TbStorageExpendituresData" id="TbStorageExpendituresDataMap">
+		<!-- 子类字段 -->
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="bat_id" property="batId" jdbcType="INTEGER" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+		<result column="warehouse_type" property="warehouseType" jdbcType="INTEGER" />
+		<result column="start_time" property="startTime" jdbcType="VARCHAR" />
+		<result column="store_id" property="storeId" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="is_closed" property="isClosed" jdbcType="INTEGER" />
+		<result column="trade" property="trade" jdbcType="VARCHAR" />
+		<result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+		<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+		<result column="system_warehouse" property="systemWarehouse" jdbcType="VARCHAR" />
+		<result column="whcost_center" property="whcostCenter" jdbcType="VARCHAR" />
+		<result column="cost_code" property="costCode" jdbcType="VARCHAR" />
+		<result column="cost_name" property="costName" jdbcType="VARCHAR" />
+		<result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+		<result column="area_name" property="areaName" jdbcType="VARCHAR" />
+		<result column="item_type" property="itemType" jdbcType="VARCHAR" />
+		<result column="storage_type" property="storageType" jdbcType="INTEGER" />
+		<result column="storage_acreage" property="storageAcreage" jdbcType="VARCHAR" />
+		<result column="acreage_unit" property="acreageUnit" jdbcType="VARCHAR" />
+		<result column="settle_flag" property="settleFlag" jdbcType="INTEGER" />
+		<result column="acreage_size" property="acreageSize" jdbcType="VARCHAR" />
+		<result column="volume_size" property="volumeSize" jdbcType="VARCHAR" />
+		<result column="qty_size" property="qtySize" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.expenses.model.ViewTbWarehouseExpressData" id="TbWarehouseExpressDataMap">
+		<!-- 子类字段 -->
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="bat_id" property="batId" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="cost_center" property="costCenter" jdbcType="VARCHAR" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+		<result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+		<result column="store_name" property="storeName" jdbcType="VARCHAR" />
+		<result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+		<result column="warehouse" property="warehouse" jdbcType="VARCHAR" />
+		<result column="transport_code" property="transportCode" jdbcType="VARCHAR" />
+		<result column="transport_name" property="transportName" jdbcType="VARCHAR" />
+		<result column="delivery_order" property="deliveryOrder" jdbcType="VARCHAR" />
+		<result column="epistatic_order" property="epistaticOrder" jdbcType="VARCHAR" />
+		<result column="order_type" property="orderType" jdbcType="VARCHAR" />
+		<result column="express_number" property="expressNumber" jdbcType="VARBINARY" />
+		<result column="transport_direction" property="transportDirection" jdbcType="VARCHAR" />
+		<result column="itemtype_code" property="itemtypeCode" jdbcType="VARCHAR" />
+		<result column="itemtype_name" property="itemtypeName" jdbcType="VARCHAR" />
+		<result column="transport_time" property="transportTime" jdbcType="TIMESTAMP" />
+		<result column="collection_on_delivery" property="collectionOnDelivery" jdbcType="VARCHAR" />
+		<result column="order_amount" property="orderAmount" jdbcType="VARCHAR" />
+		<result column="sku_number" property="skuNumber" jdbcType="VARCHAR" />
+		<result column="qty" property="qty" jdbcType="INTEGER" />
+		<result column="weight" property="weight" jdbcType="VARCHAR" />
+		<result column="length" property="length" jdbcType="VARCHAR" />
+		<result column="width" property="width" jdbcType="VARCHAR" />
+		<result column="higth" property="higth" jdbcType="VARCHAR" />
+		<result column="volumn" property="volumn" jdbcType="VARCHAR" />
+		<result column="delivery_address" property="deliveryAddress" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="VARCHAR" />
+		<result column="street" property="street" jdbcType="VARCHAR" />
+		<result column="detail_address" property="detailAddress" jdbcType="VARCHAR" />
+		<result column="shiptoname" property="shiptoname" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="insurance_flag" property="insuranceFlag" jdbcType="BOOLEAN" />
+		<result column="cod_flag" property="codFlag" jdbcType="BOOLEAN" />
+		<result column="balance_subject" property="balanceSubject" jdbcType="VARCHAR" />
+		<result column="operating_flag" property="operatingFlag" jdbcType="INTEGER" />
+		<result column="hcf_settle_flag" property="hcfSettleFlag" jdbcType="VARCHAR" />
+		<result column="offer_id" property="offerId" jdbcType="INTEGER" />
+		<result column="k_flag" property="kFlag" jdbcType="VARCHAR" />
+		<result column="platform_order_time" property="platformOrderTime" jdbcType="TIMESTAMP" />
+		<result column="platform_pay_time" property="platformPayTime" jdbcType="TIMESTAMP" />
+		<result column="bf_flag" property="bfFlag" jdbcType="VARCHAR" />
+		<result column="client_code" property="clientCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="TbWarehouseExpressData_Column_List">
+		id,
+		bat_id,
+		create_time,
+		create_user,
+		update_time,
+		cost_center,
+		update_user,
+		store_code,
+		store_name,
+		warehouse_code,
+		warehouse,
+		transport_code,
+		transport_name,
+		delivery_order,
+		epistatic_order,
+		order_type,
+		express_number,
+		transport_direction,
+		itemtype_code,
+		itemtype_name,
+		transport_time,
+		collection_on_delivery,
+		order_amount,
+		sku_number,
+		qty,
+		weight,
+		length,
+		width,
+		higth,
+		volumn,
+		delivery_address,
+		province,
+		city,
+		state,
+		street,
+		detail_address,
+		shiptoname,
+		phone,
+		insurance_flag,
+		cod_flag,
+		balance_subject,
+		operating_flag,
+		hcf_settle_flag,
+		offer_id,
+		k_flag,
+		platform_order_time,
+		platform_pay_time,
+		bf_flag,
+		client_code
+	</sql>
+	<sql id="TbStorageExpendituresData_Column_List">
+		id,
+		bat_id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		warehouse_type,
+		start_time,
+		store_id,
+		store_name,
+		is_closed,
+		trade,
+		warehouse_code,
+		warehouse_name,
+		system_warehouse,
+		whcost_center,
+		cost_code,
+		cost_name,
+		area_code,
+		area_name,
+		item_type,
+		storage_type,
+		storage_acreage,
+		acreage_unit,
+		settle_flag,
+		acreage_size,
+		volume_size,
+		qty_size
+	</sql>
+		<sql id="TbOperationfeeData_Column_List">
+		id,
+		primary_id,
+		bat_id,
+		create_time,
+		create_user,
+		update_time,
+		update_user,
+		order_type,
+		operation_time,
+		store_name,
+		job_orderno,
+		related_orderno,
+		platform_order,
+		job_type,
+		storaggelocation_code,
+		in_num,
+		out_num,
+		item_number,
+		sku_number,
+		art_no,
+		item_name,
+		item_size,
+		inventory_status,
+		operator,
+		warehouse_type,
+		warehouse_name,
+		warehouse_code,
+		store_id,
+		settle_flag,
+		brand_docking_code,
+		barcode,
+		epistatic_order
+	</sql>
+	<sql id="TbExpressReturnStorage_Column_List">
+		id,
+		warehouse_code,
+		warehouse_name,
+		job_no,
+		job_type,
+		store_code,
+		store_name,
+		related_no,
+		waybill,
+		re_epistatic_order,
+		platform_no,
+		create_time,
+		finish_time,
+		plan_qty,
+		actual_qty,
+		transport_code,
+		transport_name,
+		itemtype_code,
+		itemtype_name,
+		physical_warehouse,
+		create_user,
+		deblock_user,
+		remark,
+		re_province,
+		re_city,
+		re_state,
+		re_weight,
+		re_length,
+		re_width,
+		re_higth,
+		re_volumn,
+		state,
+		refuse_reason,
+		return_order,
+		out_order,
+		batch_number,
+		cost_center,
+		update_time,
+		bf_flag
+	</sql>
+	<select id="selectTbExpressReturnStorage" resultMap="TbExpressReturnStorageMap">
+	select <include refid="TbExpressReturnStorage_Column_List" /> from tb_express_return_storage
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="returnStorage.id!=null">
+	            AND id = #{returnStorage.id, jdbcType=Integer}
+	        </if>
+	        <if test="returnStorage.warehouseCode!=null and returnStorage.warehouseCode!=''">
+	            AND warehouse_code = #{returnStorage.warehouseCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.warehouseName!=null and returnStorage.warehouseName!=''">
+	            and warehouse_name = #{returnStorage.warehouseName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.jobNo!=null and returnStorage.jobNo!=''">
+	            and job_no = #{returnStorage.jobNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.jobType!=null and returnStorage.jobType!=''">
+	            and job_type = #{returnStorage.jobType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.storeCode!=null and returnStorage.storeCode!=''">
+	            and store_code = #{returnStorage.storeCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.storeName!=null and returnStorage.storeName!=''">
+	            and store_name = #{returnStorage.storeName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.relatedNo!=null and returnStorage.relatedNo!=''">
+	            and related_no = #{returnStorage.relatedNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.waybill!=null and returnStorage.waybill!=''">
+	            and waybill = #{returnStorage.waybill, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reEpistaticOrder!=null and returnStorage.reEpistaticOrder!=''">
+	            and re_epistatic_order = #{returnStorage.reEpistaticOrder, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.platformNo!=null and returnStorage.platformNo!=''">
+	            and platform_no = #{returnStorage.platformNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.createTime!=null">
+	            and create_time = #{returnStorage.createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="returnStorage.finishTime!=null">
+	            and finish_time = #{returnStorage.finishTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="returnStorage.planQty!=null">
+	            and plan_qty = #{returnStorage.planQty, jdbcType=INTEGER}
+	        </if>
+	        <if test="returnStorage.actualQty!=null">
+	            and actual_qty = #{returnStorage.actualQty, jdbcType=INTEGER}
+	        </if>
+	        <if test="returnStorage.transportCode!=null and returnStorage.transportCode!=''">
+	            and transport_code = #{returnStorage.transportCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.transportName!=null and returnStorage.transportName!=''">
+	            and transport_name = #{returnStorage.transportName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.itemtypeCode!=null and returnStorage.itemtypeCode!=''">
+	            and itemtype_code = #{returnStorage.itemtypeCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.itemtypeName!=null and returnStorage.itemtypeName!=''">
+	            and itemtype_name = #{returnStorage.itemtypeName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.physicalWarehouse!=null and returnStorage.physicalWarehouse!=''">
+	            and physical_warehouse = #{returnStorage.physicalWarehouse, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.createUser!=null and returnStorage.createUser!=''">
+	            and create_user = #{returnStorage.createUser, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.deblockUser!=null and returnStorage.deblockUser!=''">
+	            and deblock_user = #{returnStorage.deblockUser, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.remark!=null and returnStorage.remark!=''">
+	            and remark = #{returnStorage.remark, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reProvince!=null and returnStorage.reProvince!=''">
+	            and re_province = #{returnStorage.reProvince, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reCity!=null and returnStorage.reCity!=''">
+	            and re_city = #{returnStorage.reCity, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reState!=null and returnStorage.reState!=''">
+	            and re_state = #{returnStorage.reState, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reWeight!=null and returnStorage.reWeight!=''">
+	            and re_weight = #{returnStorage.reWeight, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reLength!=null and returnStorage.reLength!=''">
+	            and re_length = #{returnStorage.reLength, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reWidth!=null and returnStorage.reWidth!=''">
+	            and re_width = #{returnStorage.reWidth, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reHigth!=null and returnStorage.reHigth!=''">
+	            and re_higth = #{returnStorage.reHigth, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.reVolumn!=null and returnStorage.reVolumn!=''">
+	            and re_volumn = #{returnStorage.reVolumn, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.state!=null and returnStorage.state!=''">
+	            and state = #{returnStorage.state, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.refuseReason!=null and returnStorage.refuseReason!=''">
+	            and refuse_reason = #{returnStorage.refuseReason, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.returnOrder!=null and returnStorage.returnOrder!=''">
+	            and return_order = #{returnStorage.returnOrder, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.outOrder!=null and returnStorage.outOrder!=''">
+	            and out_order = #{returnStorage.outOrder, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.batchNumber!=null and returnStorage.batchNumber!=''">
+	            and batch_number = #{returnStorage.batchNumber, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.costCenter!=null and returnStorage.costCenter!=''">
+	            and cost_center = #{returnStorage.costCenter, jdbcType=VARCHAR}
+	        </if>
+	        <if test="returnStorage.updateTime!=null">
+	            and update_time = #{returnStorage.updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="returnStorage.bfFlag!=null and returnStorage.bfFlag!=''">
+	            and bf_flag = #{returnStorage.bfFlag, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	    limit #{pageObject.pageSize},#{pageObject.pageNum}
+	</select>
+	<select id="selectTbOperationfeeData" resultMap="TbOperationfeeDataMap">
+	select <include refid="TbOperationfeeData_Column_List" /> from tb_operationfee_data
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="operationfeeData.id!=null">
+	            AND id = #{operationfeeData.id, jdbcType=INTEGER}
+	        </if>
+	        <if test="operationfeeData.primaryId!=null">
+	            AND primary_id = #{operationfeeData.primaryId, jdbcType=INTEGER}
+	        </if>
+	        <if test="operationfeeData.batId!=null">
+	            AND bat_id = #{operationfeeData.batId, jdbcType=INTEGER}
+	        </if>
+	        <if test="operationfeeData.createTime!=null">
+	            AND create_time = #{operationfeeData.createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="operationfeeData.createUser!=null and operationfeeData.createUser!=''">
+	            AND create_user = #{operationfeeData.createUser, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.updateTime!=null">
+	            AND update_time = #{operationfeeData.updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="operationfeeData.updateUser!=null and operationfeeData.updateUser!=''">
+	            AND update_user = #{operationfeeData.updateUser, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.orderType!=null and operationfeeData.orderType!=''">
+	            AND order_type = #{operationfeeData.orderType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.operationTime!=null">
+	            AND operation_time = #{operationfeeData.operationTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="operationfeeData.storeName!=null and operationfeeData.storeName!=''">
+	            AND store_name = #{operationfeeData.storeName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.jobOrderno!=null and operationfeeData.jobOrderno!=''">
+	            AND job_orderno = #{operationfeeData.jobOrderno, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.relatedOrderno!=null and operationfeeData.relatedOrderno!=''">
+	            AND related_orderno = #{operationfeeData.relatedOrderno, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.platformOrder!=null and operationfeeData.platformOrder!=''">
+	            AND platform_order = #{operationfeeData.platformOrder, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.jobType!=null and operationfeeData.jobType!=''">
+	            AND job_type = #{operationfeeData.jobType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.storaggelocationCode!=null and operationfeeData.storaggelocationCode!=''">
+	            AND storaggelocation_code = #{operationfeeData.storaggelocationCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.inNum!=null and operationfeeData.inNum!=''">
+	            AND in_num = #{operationfeeData.inNum, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.outNum!=null and operationfeeData.outNum!=''">
+	            AND out_num = #{operationfeeData.outNum, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.itemNumber!=null and operationfeeData.itemNumber!=''">
+	            AND item_number = #{operationfeeData.itemNumber, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.skuNumber!=null and operationfeeData.skuNumber!=''">
+	            AND sku_number = #{operationfeeData.skuNumber, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.artNo!=null and operationfeeData.artNo!=''">
+	            AND art_no = #{operationfeeData.artNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.itemName!=null and operationfeeData.itemName!=''">
+	            AND item_name = #{operationfeeData.itemName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.itemSize!=null and operationfeeData.itemSize!=''">
+	            AND item_size = #{operationfeeData.itemSize, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.inventoryStatus!=null and operationfeeData.inventoryStatus!=''">
+	            AND inventory_status = #{operationfeeData.inventoryStatus, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.operator!=null and operationfeeData.operator!=''">
+	            AND operator = #{operationfeeData.operator, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.warehouseType!=null and operationfeeData.warehouseType!=''">
+	            AND warehouse_type = #{operationfeeData.warehouseType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.warehouseName!=null and operationfeeData.warehouseName!=''">
+	            AND warehouse_name = #{operationfeeData.warehouseName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.warehouseCode!=null and operationfeeData.warehouseCode!=''">
+	            AND warehouse_code = #{operationfeeData.warehouseCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.storeId!=null">
+	            AND store_id = #{operationfeeData.storeId, jdbcType=INTEGER}
+	        </if>
+	        <if test="operationfeeData.settleFlag!=null">
+	            AND settle_flag = #{operationfeeData.settleFlag, jdbcType=INTEGER}
+	        </if>
+	        <if test="operationfeeData.brandDockingCode!=null and operationfeeData.brandDockingCode!=''">
+	            AND brand_docking_code = #{operationfeeData.brandDockingCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.barcode!=null and operationfeeData.barcode!=''">
+	            AND barcode = #{operationfeeData.barcode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="operationfeeData.epistaticOrder!=null and operationfeeData.epistaticOrder!=''">
+	            AND epistatic_order = #{operationfeeData.epistaticOrder, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	     limit #{pageObject.pageSize},#{pageObject.pageNum}
+	</select>
+	<select id="selectTbStorageExpendituresData" resultMap="TbStorageExpendituresDataMap">
+	select <include refid="TbStorageExpendituresData_Column_List" /> from tb_storage_expenditures_data
+	<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="storageExpendituresData.id!=null">
+	            AND id = #{storageExpendituresData.id, jdbcType=INTEGER}
+	        </if>
+	        <if test="storageExpendituresData.batId!=null">
+	            AND bat_id = #{storageExpendituresData.batId, jdbcType=INTEGER}
+	        </if>
+	        <if test="storageExpendituresData.createTime!=null">
+	            AND create_time = #{storageExpendituresData.createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="storageExpendituresData.createUser!=null and storageExpendituresData.createUser!=''">
+	            AND create_user = #{storageExpendituresData.createUser, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.updateTime!=null">
+	            AND update_time = #{storageExpendituresData.updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="storageExpendituresData.updateUser!=null and storageExpendituresData.updateUser!=''">
+	            AND update_user = #{storageExpendituresData.updateUser, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.warehouseType!=null">
+	            AND warehouse_type = #{storageExpendituresData.warehouseType, jdbcType=INTEGER}
+	        </if>
+	        <if test="storageExpendituresData.startTime!=null and storageExpendituresData.startTime!=''">
+	            AND start_time = #{storageExpendituresData.startTime, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.storeId!=null and storageExpendituresData.storeId!=''">
+	            AND store_id = #{storageExpendituresData.storeId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.storeName!=null and storageExpendituresData.storeName!=''">
+	            AND store_name = #{storageExpendituresData.storeName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.isClosed!=null">
+	            AND is_closed = #{storageExpendituresData.isClosed, jdbcType=INTEGER}
+	        </if>
+	        <if test="storageExpendituresData.trade!=null and storageExpendituresData.trade!=''">
+	            AND trade = #{storageExpendituresData.trade, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.warehouseCode!=null and storageExpendituresData.warehouseCode!=''">
+	            AND warehouse_code = #{storageExpendituresData.warehouseCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.warehouseName!=null and storageExpendituresData.warehouseName!=''">
+	            AND warehouse_name = #{storageExpendituresData.warehouseName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.systemWarehouse!=null and storageExpendituresData.systemWarehouse!=''">
+	            AND system_warehouse = #{storageExpendituresData.systemWarehouse, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.whcostCenter!=null and storageExpendituresData.whcostCenter!=''">
+	            AND whcost_center = #{storageExpendituresData.whcostCenter, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.costCode!=null and storageExpendituresData.costCode!=''">
+	            AND cost_code = #{storageExpendituresData.costCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.costName!=null and storageExpendituresData.costName!=''">
+	            AND cost_name = #{storageExpendituresData.costName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.areaCode!=null and storageExpendituresData.areaCode!=''">
+	            AND area_code = #{storageExpendituresData.areaCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.areaName!=null and storageExpendituresData.areaName!=''">
+	            AND area_name = #{storageExpendituresData.areaName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.itemType!=null and storageExpendituresData.itemType!=''">
+	            AND item_type = #{storageExpendituresData.itemType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.storageType!=null">
+	            AND storage_type = #{storageExpendituresData.storageType, jdbcType=INTEGER}
+	        </if>
+	        <if test="storageExpendituresData.storageAcreage!=null and storageExpendituresData.storageAcreage!=''">
+	            AND storage_acreage = #{storageExpendituresData.storageAcreage, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.acreageUnit!=null and storageExpendituresData.acreageUnit!=''">
+	            AND acreage_unit = #{storageExpendituresData.acreageUnit, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.settleFlag!=null">
+	            AND settle_flag = #{storageExpendituresData.settleFlag, jdbcType=INTEGER}
+	        </if>
+	        <if test="storageExpendituresData.acreageSize!=null and storageExpendituresData.acreageSize!=''">
+	            AND acreage_size = #{storageExpendituresData.acreageSize, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.volumeSize!=null and storageExpendituresData.volumeSize!=''">
+	            AND volume_size = #{storageExpendituresData.volumeSize, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storageExpendituresData.qtySize!=null">
+	            AND qty_size = #{storageExpendituresData.qtySize, jdbcType=INTEGER}
+	        </if>
+	    </trim>
+	limit #{pageObject.pageSize},#{pageObject.pageNum}
+	</select>
+	<select id="selectTbWarehouseExpressData" resultMap="TbWarehouseExpressDataMap">
+	select <include refid="TbWarehouseExpressData_Column_List" /> from view_tb_warehouse_express_data
+	${str}
+	limit #{pageObject.pageSize},#{pageObject.pageNum}
+	</select>
+	<select id="executeSelect" parameterType="String" resultMap="TbStorageExpendituresDataMap">
+		${sql }
+	</select>
+</mapper>

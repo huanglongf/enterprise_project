@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.jbasis.warehouse.dao.JbasisWarehouseMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.warehouse.model.JbasisWarehouse" id="JbasisWarehouseMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+		<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="state" property="state" jdbcType="VARCHAR" />
+		<result column="street" property="street" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="contact" property="contact" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="warehouse_type" property="warehouseType" jdbcType="VARCHAR" />
+		<result column="validity" property="validity" jdbcType="VARCHAR" />
+		<result column="wo_flag" property="woFlag" jdbcType="VARCHAR" />
+		<result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+		<result column="city_name" property="cityName" jdbcType="VARCHAR" />
+		<result column="state_name" property="stateName" jdbcType="VARCHAR" />
+		<result column="street_name" property="streetName" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.jbasis.warehouse.model.ViewJbasisWarehouse" id="ViewJbasisWarehouseMap">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="is_disabled_display" property="isDisabledDisplay" jdbcType="VARCHAR" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+		<result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+		<result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+		<result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+		<result column="city_name" property="cityName" jdbcType="VARCHAR" />
+		<result column="state_name" property="stateName" jdbcType="VARCHAR" />
+		<result column="street_name" property="streetName" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="warehouse_type" property="warehouseType" jdbcType="VARCHAR" />
+		<result column="warehouse_type_display" property="warehouseTypeDisplay" jdbcType="VARCHAR" />
+		<result column="contact" property="contact" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		warehouse_code,
+		warehouse_name,
+		province,
+		city,
+		state,
+		street,
+		address,
+		contact,
+		phone,
+		warehouse_type,
+		validity,
+		wo_flag,
+		province_name,
+		city_name,
+		state_name,
+		street_name
+	</sql>
+	<sql id="ViewJbasisWarehouse_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		is_disabled_display,
+		version,
+		pwr_org,
+		warehouse_name,
+		warehouse_code,
+		province_name,
+		city_name,
+		state_name,
+		street_name,
+		address,
+		warehouse_type,
+		warehouse_type_display,
+		contact,
+		phone
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			warehouse_code,
+			warehouse_name,
+			province,
+			city,
+			state,
+			street,
+			address,
+			contact,
+			phone,
+			warehouse_type,
+			validity,
+			wo_flag,
+			province_name,
+			city_name,
+			state_name,
+			street_name
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.jbasis.warehouse.model.JbasisWarehouse">
+		INSERT INTO jbasis_warehouse
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{warehouseCode, jdbcType=VARCHAR},
+			#{warehouseName, jdbcType=VARCHAR},
+			#{province, jdbcType=VARCHAR},
+			#{city, jdbcType=VARCHAR},
+			#{state, jdbcType=VARCHAR},
+			#{street, jdbcType=VARCHAR},
+			#{address, jdbcType=VARCHAR},
+			#{contact, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{warehouseType, jdbcType=VARCHAR},
+			#{validity, jdbcType=VARCHAR},
+			#{woFlag, jdbcType=VARCHAR},
+			(SELECT area_name FROM jbasis_area WHERE id =#{province, jdbcType=VARCHAR}),
+			(SELECT area_name FROM jbasis_area WHERE id =#{city, jdbcType=VARCHAR}),
+			(SELECT area_name FROM jbasis_area WHERE id =#{state, jdbcType=VARCHAR}),
+			#{streetName, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO jbasis_warehouse
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.warehouseCode, jdbcType=VARCHAR},
+				#{obj.warehouseName, jdbcType=VARCHAR},
+				#{obj.province, jdbcType=VARCHAR},
+				#{obj.city, jdbcType=VARCHAR},
+				#{obj.state, jdbcType=VARCHAR},
+				#{obj.street, jdbcType=VARCHAR},
+				#{obj.address, jdbcType=VARCHAR},
+				#{obj.contact, jdbcType=VARCHAR},
+				#{obj.phone, jdbcType=VARCHAR},
+				#{obj.warehouseType, jdbcType=VARCHAR},
+				#{obj.validity, jdbcType=VARCHAR},
+				#{obj.woFlag, jdbcType=VARCHAR},
+				(SELECT area_name FROM jbasis_area WHERE id =#{obj.province, jdbcType=VARCHAR}),
+				(SELECT area_name FROM jbasis_area WHERE id =#{obj.city, jdbcType=VARCHAR}),
+				(SELECT area_name FROM jbasis_area WHERE id =#{obj.state, jdbcType=VARCHAR}),
+				#{obj.streetName, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.jbasis.warehouse.model.JbasisWarehouse" resultMap="JbasisWarehouseMap">
+		SELECT <include refid="Base_Column_List" /> FROM jbasis_warehouse
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null">
+	            AND id = #{id, jdbcType=INTEGER}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warehouseCode!=null and warehouseCode!=''">
+	            AND warehouse_code = #{warehouseCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warehouseName!=null and warehouseName!=''">
+	            AND warehouse_name = #{warehouseName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="province!=null and province!=''">
+	            AND province = #{province, jdbcType=VARCHAR}
+	        </if>
+	        <if test="city!=null and city!=''">
+	            AND city = #{city, jdbcType=VARCHAR}
+	        </if>
+	        <if test="state!=null and state!=''">
+	            AND state = #{state, jdbcType=VARCHAR}
+	        </if>
+	        <if test="street!=null and street!=''">
+	            AND street = #{street, jdbcType=VARCHAR}
+	        </if>
+	        <if test="address!=null and address!=''">
+	            AND address = #{address, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            AND contact = #{contact, jdbcType=VARCHAR}
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            AND phone = #{phone, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warehouseType!=null">
+	            AND warehouse_type = #{warehouseType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="validity!=null">
+	            AND validity = #{validity, jdbcType=VARCHAR}
+	        </if>
+	        <if test="woFlag!=null and woFlag!=''">
+	            AND wo_flag = #{woFlag, jdbcType=VARCHAR}
+	        </if>
+	        <if test="provinceName!=null and provinceName!=''">
+	            AND province_name = #{provinceName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="cityName!=null and cityName!=''">
+	            AND city_name = #{cityName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="stateName!=null and stateName!=''">
+	            AND state_name = #{stateName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="streetName!=null and streetName!=''">
+	            AND street_name = #{streetName, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<select id="retrieveViewJbasisWarehouse" parameterType="com.lmis.jbasis.warehouse.model.ViewJbasisWarehouse" resultMap="ViewJbasisWarehouseMap">
+		SELECT <include refid="ViewJbasisWarehouse_Column_List" /> FROM view_jbasis_warehouse
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null">
+	            AND id = #{id, jdbcType=INTEGER}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabledDisplay!=null and isDisabledDisplay!=''">
+	            AND is_disabled_display = #{isDisabledDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warehouseName!=null and warehouseName!=''">
+	            AND warehouse_name = #{warehouseName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warehouseCode!=null and warehouseCode!=''">
+	            AND warehouse_code = #{warehouseCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="provinceName!=null and provinceName!=''">
+	            AND province_name = #{provinceName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="cityName!=null and cityName!=''">
+	            AND city_name = #{cityName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="stateName!=null and stateName!=''">
+	            AND state_name = #{stateName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="streetName!=null and streetName!=''">
+	            AND street_name = #{streetName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="address!=null and address!=''">
+	            AND address = #{address, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warehouseType!=null and warehouseType!=''">
+	            AND warehouse_type = #{warehouseType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warehouseTypeDisplay!=null and warehouseTypeDisplay!=''">
+	            AND warehouse_type_display = #{warehouseTypeDisplay, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            AND contact = #{contact, jdbcType=VARCHAR}
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            AND phone = #{phone, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.jbasis.warehouse.model.JbasisWarehouse">
+		UPDATE jbasis_warehouse
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="warehouseCode!=null and warehouseCode!=''">
+	            warehouse_code = #{warehouseCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="warehouseName!=null and warehouseName!=''">
+	            warehouse_name = #{warehouseName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="province!=null and province!=''">
+	            province = #{province, jdbcType=VARCHAR},
+	        </if>
+	        <if test="city!=null and city!=''">
+	            city = #{city, jdbcType=VARCHAR},
+	        </if>
+	        <if test="state!=null and state!=''">
+	            state = #{state, jdbcType=VARCHAR},
+	        </if>
+	        <if test="street!=null and street!=''">
+	            street = #{street, jdbcType=VARCHAR},
+	        </if>
+	        <if test="address!=null and address!=''">
+	            address = #{address, jdbcType=VARCHAR},
+	        </if>
+	        <if test="contact!=null and contact!=''">
+	            contact = #{contact, jdbcType=VARCHAR},
+	        </if>
+	        <if test="phone!=null and phone!=''">
+	            phone = #{phone, jdbcType=VARCHAR},
+	        </if>
+	        <if test="warehouseType!=null">
+	            warehouse_type = #{warehouseType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="validity!=null">
+	            validity = #{validity, jdbcType=VARCHAR},
+	        </if>
+	        <if test="woFlag!=null and woFlag!=''">
+	            wo_flag = #{woFlag, jdbcType=VARCHAR},
+	        </if>
+	        <if test="province!=null and province!=''">
+	            province_name=(SELECT area_name FROM jbasis_area WHERE id =#{province, jdbcType=VARCHAR}),
+	        </if>
+	        <if test="city!=null and city!=''">
+	            city_name=(SELECT area_name FROM jbasis_area WHERE id =#{city, jdbcType=VARCHAR}),
+	        </if>
+	        <if test="state!=null and state!=''">
+	            state_name=(SELECT area_name FROM jbasis_area WHERE id =#{state, jdbcType=VARCHAR}),
+	        </if>
+	        <if test="streetName!=null and streetName!=''">
+	            street_name = #{streetName, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.jbasis.warehouse.model.JbasisWarehouse">
+		UPDATE jbasis_warehouse
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	warehouse_code = #{warehouseCode, jdbcType=VARCHAR},
+        	warehouse_name = #{warehouseName, jdbcType=VARCHAR},
+        	province = #{province, jdbcType=VARCHAR},
+        	city = #{city, jdbcType=VARCHAR},
+        	state = #{state, jdbcType=VARCHAR},
+        	street = #{street, jdbcType=VARCHAR},
+        	address = #{address, jdbcType=VARCHAR},
+        	contact = #{contact, jdbcType=VARCHAR},
+        	phone = #{phone, jdbcType=VARCHAR},
+        	warehouse_type = #{warehouseType, jdbcType=VARCHAR},
+        	validity = #{validity, jdbcType=VARCHAR},
+        	wo_flag = #{woFlag, jdbcType=VARCHAR},
+			province_name=(SELECT area_name FROM jbasis_area WHERE id =#{province, jdbcType=VARCHAR}),
+			city_name=(SELECT area_name FROM jbasis_area WHERE id =#{city, jdbcType=VARCHAR}),
+			state_name=(SELECT area_name FROM jbasis_area WHERE id =#{state, jdbcType=VARCHAR}),
+        	street_name = #{streetName, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.jbasis.warehouse.model.JbasisWarehouse">
+		UPDATE jbasis_warehouse
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.jbasis.warehouse.model.JbasisWarehouse">
+		UPDATE jbasis_warehouse
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.jbasis.warehouse.model.JbasisWarehouse">
+		DELETE FROM jbasis_warehouse
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</delete>
+</mapper>

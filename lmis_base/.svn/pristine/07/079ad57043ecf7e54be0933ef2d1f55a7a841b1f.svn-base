@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.setup.pageLayout.dao.SetupPageLayoutMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.setup.pageLayout.model.SetupPageLayout" id="SetupPageLayoutMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="layout_id" property="layoutId" jdbcType="VARCHAR" />
+		<result column="page_id" property="pageId" jdbcType="VARCHAR" />
+		<result column="layout_name" property="layoutName" jdbcType="VARCHAR" />
+		<result column="layout_seq" property="layoutSeq" jdbcType="INTEGER" />
+		<result column="layout_width" property="layoutWidth" jdbcType="VARCHAR" />
+		<result column="layout_height" property="layoutHeight" jdbcType="VARCHAR" />
+		<result column="layout_type" property="layoutType" jdbcType="VARCHAR" />
+		<result column="parent_layout_id" property="parentLayoutId" jdbcType="VARCHAR" />
+		<result column="button_flag1" property="buttonFlag1" jdbcType="BOOLEAN" />
+		<result column="button_flag2" property="buttonFlag2" jdbcType="BOOLEAN" />
+		<result column="button_flag3" property="buttonFlag3" jdbcType="BOOLEAN" />
+		<result column="button_flag4" property="buttonFlag4" jdbcType="BOOLEAN" />
+		<result column="button_flag5" property="buttonFlag5" jdbcType="BOOLEAN" />
+	</resultMap>
+	<resultMap type="com.lmis.setup.pageLayout.model.ViewSetupPageLayout" id="ViewSetupPageLayoutMap">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+		<result column="layout_id" property="layoutId" jdbcType="VARCHAR" />
+		<result column="page_id" property="pageId" jdbcType="VARCHAR" />
+		<result column="layout_name" property="layoutName" jdbcType="VARCHAR" />
+		<result column="layout_seq" property="layoutSeq" jdbcType="INTEGER" />
+		<result column="layout_width" property="layoutWidth" jdbcType="VARCHAR" />
+		<result column="layout_height" property="layoutHeight" jdbcType="VARCHAR" />
+		<result column="layout_type" property="layoutType" jdbcType="VARCHAR" />
+		<result column="parent_layout_id" property="parentLayoutId" jdbcType="VARCHAR" />
+		<result column="button_flag1" property="buttonFlag1" jdbcType="BOOLEAN" />
+		<result column="button_flag2" property="buttonFlag2" jdbcType="BOOLEAN" />
+		<result column="button_flag3" property="buttonFlag3" jdbcType="BOOLEAN" />
+		<result column="button_flag4" property="buttonFlag4" jdbcType="BOOLEAN" />
+		<result column="button_flag5" property="buttonFlag5" jdbcType="BOOLEAN" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		layout_id,
+		page_id,
+		layout_name,
+		layout_seq,
+		layout_width,
+		layout_height,
+		layout_type,
+		parent_layout_id,
+		button_flag1,
+		button_flag2,
+		button_flag3,
+		button_flag4,
+		button_flag5
+	</sql>
+	<sql id="View_Setup_Page_Layout_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		layout_id,
+		page_id,
+		layout_name,
+		layout_seq,
+		layout_width,
+		layout_height,
+		layout_type,
+		parent_layout_id,
+		button_flag1,
+		button_flag2,
+		button_flag3,
+		button_flag4,
+		button_flag5
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			layout_id,
+			page_id,
+			layout_name,
+			layout_seq,
+			layout_width,
+			layout_height,
+			layout_type,
+			parent_layout_id,
+			button_flag1,
+			button_flag2,
+			button_flag3,
+			button_flag4,
+			button_flag5
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.setup.pageLayout.model.SetupPageLayout">
+		INSERT INTO setup_page_layout
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{layoutId, jdbcType=VARCHAR},
+			#{pageId, jdbcType=VARCHAR},
+			#{layoutName, jdbcType=VARCHAR},
+			#{layoutSeq, jdbcType=INTEGER},
+			#{layoutWidth, jdbcType=VARCHAR},
+			#{layoutHeight, jdbcType=VARCHAR},
+			#{layoutType, jdbcType=VARCHAR},
+			#{parentLayoutId, jdbcType=VARCHAR},
+			#{buttonFlag1, jdbcType=BOOLEAN},
+			#{buttonFlag2, jdbcType=BOOLEAN},
+			#{buttonFlag3, jdbcType=BOOLEAN},
+			#{buttonFlag4, jdbcType=BOOLEAN},
+			#{buttonFlag5, jdbcType=BOOLEAN}
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO setup_page_layout
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.layoutId, jdbcType=VARCHAR},
+				#{obj.pageId, jdbcType=VARCHAR},
+				#{obj.layoutName, jdbcType=VARCHAR},
+				#{obj.layoutSeq, jdbcType=INTEGER},
+				#{obj.layoutWidth, jdbcType=VARCHAR},
+				#{obj.layoutHeight, jdbcType=VARCHAR},
+				#{obj.layoutType, jdbcType=VARCHAR},
+				#{obj.parentLayoutId, jdbcType=VARCHAR},
+				#{obj.buttonFlag1, jdbcType=BOOLEAN},
+				#{obj.buttonFlag2, jdbcType=BOOLEAN},
+				#{obj.buttonFlag3, jdbcType=BOOLEAN},
+				#{obj.buttonFlag4, jdbcType=BOOLEAN},
+				#{obj.buttonFlag5, jdbcType=BOOLEAN}
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.setup.pageLayout.model.SetupPageLayout" resultMap="SetupPageLayoutMap">
+		SELECT <include refid="Base_Column_List" /> FROM setup_page_layout
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	        	AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	        	AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	        	AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="layoutId!=null and layoutId!=''">
+	            AND layout_id = #{layoutId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="pageId!=null and pageId!=''">
+	            AND page_id = #{pageId, jdbcType=VARCHAR}
+	        </if>	        
+	        <if test="layoutName!=null and layoutName!=''">
+	            AND layout_name = #{layoutName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="layoutWidth!=null and layoutWidth!=''">
+	            AND layout_width = #{layoutWidth, jdbcType=VARCHAR}
+	        </if>
+	        <if test="layoutHeight!=null and layoutHeight!=''">
+	            AND layout_height = #{layoutHeight, jdbcType=VARCHAR}
+	        </if>
+	        <if test="layoutType!=null and layoutType!=''">
+	            AND layout_type = #{layoutType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="parentLayoutId!=null and parentLayoutId!=''">
+	            AND parent_layout_id = #{parentLayoutId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="buttonFlag1!=null">
+	            AND button_flag1 = #{buttonFlag1, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonFlag2!=null">
+	            AND button_flag2 = #{buttonFlag2, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonFlag3!=null">
+	            AND button_flag3 = #{buttonFlag3, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonFlag4!=null">
+	            AND button_flag4 = #{buttonFlag4, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonFlag5!=null">
+	            AND button_flag5 = #{buttonFlag5, jdbcType=BOOLEAN}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.setup.pageLayout.model.SetupPageLayout">
+		UPDATE setup_page_layout
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="layoutId!=null and layoutId!=''">
+	        	layout_id = #{layoutId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="pageId!=null and pageId!=''">
+	        	page_id = #{pageId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="layoutName!=null and layoutName!=''">
+	        	layout_name = #{layoutName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="layoutSeq!=null">
+	        	layout_seq = #{layoutSeq, jdbcType=VARCHAR},
+	        </if>
+	        <if test="layoutWidth!=null and layoutWidth!=''">
+	       		layout_width = #{layoutWidth, jdbcType=VARCHAR},
+	        </if>
+	        <if test="layoutHeight!=null and layoutHeight!=''">
+	        	layout_height = #{layoutHeight, jdbcType=VARCHAR},
+	        </if>
+	        <if test="layoutType!=null and layoutType!=''">
+	        	layout_type = #{layoutType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="parentLayoutId!=null and parentLayoutId!=''">
+	        	parent_layout_id = #{parentLayoutId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="buttonFlag1!=null">
+	            button_flag1 = #{buttonFlag1, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="buttonFlag2!=null">
+	            button_flag2 = #{buttonFlag2, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="buttonFlag3!=null">
+	            button_flag3 = #{buttonFlag3, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="buttonFlag4!=null">
+	            button_flag4 = #{buttonFlag4, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="buttonFlag5!=null">
+	            button_flag5 = #{buttonFlag5, jdbcType=BOOLEAN}
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="layoutId!=null and layoutId!=''">
+		    	AND layout_id = #{layoutId, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.setup.pageLayout.model.SetupPageLayout">
+		UPDATE setup_page_layout
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	layout_id = #{layoutId, jdbcType=VARCHAR},
+        	page_id = #{pageId, jdbcType=VARCHAR},
+        	layout_name = #{layoutName, jdbcType=VARCHAR},
+        	layout_seq = #{layoutSeq, jdbcType=VARCHAR},
+       		layout_width = #{layoutWidth, jdbcType=VARCHAR},
+        	layout_height = #{layoutHeight, jdbcType=VARCHAR},
+        	layout_type = #{layoutType, jdbcType=VARCHAR},
+        	parent_layout_id = #{parentLayoutId, jdbcType=VARCHAR},
+            button_flag1 = #{buttonFlag1, jdbcType=BOOLEAN},
+            button_flag2 = #{buttonFlag2, jdbcType=BOOLEAN},
+            button_flag3 = #{buttonFlag3, jdbcType=BOOLEAN},
+            button_flag4 = #{buttonFlag4, jdbcType=BOOLEAN},
+            button_flag5 = #{buttonFlag5, jdbcType=BOOLEAN}
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="layoutId!=null and layoutId!=''">
+		    	AND layout_id = #{layoutId, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.setup.pageLayout.model.SetupPageLayout">
+		UPDATE setup_page_layout
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="layoutId!=null and layoutId!=''">
+	            AND layout_id = #{layoutId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.setup.pageLayout.model.SetupPageLayout">
+		UPDATE setup_page_layout
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled != null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="layoutId!=null and layoutId!=''">
+	            AND layout_id = #{layoutId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.setup.pageLayout.model.SetupPageLayout">
+		DELETE FROM setup_page_layout
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="layoutId!=null and layoutId!=''">
+		    	AND layout_id = #{layoutId, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</delete>
+	<select id="listSetupPageLayoutBySeq" parameterType="com.lmis.setup.pageLayout.model.ViewSetupPageLayout" resultMap="ViewSetupPageLayoutMap">
+		SELECT <include refid="View_Setup_Page_Layout_Column_List" /> FROM view_setup_page_layout
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	        	AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	        	AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	        	AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="layoutId!=null and layoutId!=''">
+	            AND layout_id = #{layoutId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="pageId!=null and pageId!=''">
+	            AND page_id = #{pageId, jdbcType=VARCHAR}
+	        </if>	        
+	        <if test="layoutName!=null and layoutName!=''">
+	            AND layout_name = #{layoutName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="layoutWidth!=null and layoutWidth!=''">
+	            AND layout_width = #{layoutWidth, jdbcType=VARCHAR}
+	        </if>
+	        <if test="layoutHeight!=null and layoutHeight!=''">
+	            AND layout_height = #{layoutHeight, jdbcType=VARCHAR}
+	        </if>
+	        <if test="layoutType!=null and layoutType!=''">
+	            AND layout_type = #{layoutType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="parentLayoutId!=null and parentLayoutId!=''">
+	            AND parent_layout_id = #{parentLayoutId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="parentLayoutId==''">
+	        	AND parent_layout_id IS NULL
+	        </if>
+	        <if test="buttonFlag1!=null">
+	            AND button_flag1 = #{buttonFlag1, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonFlag2!=null">
+	            AND button_flag2 = #{buttonFlag2, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonFlag3!=null">
+	            AND button_flag3 = #{buttonFlag3, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonFlag4!=null">
+	            AND button_flag4 = #{buttonFlag4, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonFlag5!=null">
+	            AND button_flag5 = #{buttonFlag5, jdbcType=BOOLEAN}
+	        </if>
+	    </trim>
+	    ORDER BY layout_seq
+	</select>
+</mapper>

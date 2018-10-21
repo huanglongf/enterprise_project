@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.radar.dao.AgeingDetailBackupsMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.radar.model.AgeingDetailBackups" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ageing_id" property="ageingId" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="p_name" property="pName" jdbcType="VARCHAR" />
+    <result column="p_code" property="pCode" jdbcType="VARCHAR" />
+    <result column="c_name" property="cName" jdbcType="VARCHAR" />
+    <result column="c_code" property="cCode" jdbcType="VARCHAR" />
+    <result column="s_name" property="sName" jdbcType="VARCHAR" />
+    <result column="s_code" property="sCode" jdbcType="VARCHAR" />
+    <result column="product_type_code" property="productTypeCode" jdbcType="VARCHAR" />
+    <result column="product_type_name" property="productTypeName" jdbcType="VARCHAR" />
+    <result column="express_code" property="expressCode" jdbcType="VARCHAR" />
+    <result column="express_name" property="expressName" jdbcType="VARCHAR" />
+    <result column="embrance_cal_time" property="embranceCalTime" jdbcType="VARCHAR" />
+    <result column="ageing_value" property="ageingValue" jdbcType="INTEGER" />
+    <result column="bat_id" property="batId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ageing_id, warehouse_code, warehouse_name, store_code, store_name, p_name, p_code, 
+    c_name, c_code, s_name, s_code, product_type_code, product_type_name, express_code, 
+    express_name, embrance_cal_time, ageing_value, bat_id,error,create_time,create_user,update_time,update_user
+  </sql>
+  
+   <sql id="where_Clause">
+	where 1=1
+	<trim  suffixOverrides="," >
+ 		<if test="id != null and id != ''" >
+    		and id =  #{id}
+	</if>
+ 		<if test="createTime != null and createTime != ''" >
+    		and create_time =  #{createTime}
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		and create_user =  #{createUser}
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		and update_time =  #{updateTime}
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		and update_user =  #{updateUser}
+	</if>
+ 		<if test="ageingId != null and ageingId != ''" >
+        	and ageing_id = #{ageingId,jdbcType=VARCHAR}
+      </if>
+      	<if test="warehouseCode != null and warehouseCode != ''" >
+       		and warehouse_code = #{warehouseCode,jdbcType=VARCHAR}
+      </if>
+      <if test="warehouseName != null and warehouseName != ''" >
+       and warehouse_name = #{warehouseName,jdbcType=VARCHAR}
+      </if>
+      <if test="storeCode != null and storeCode != ''" >
+       and store_code = #{storeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="storeName != null and storeName != ''" >
+       and store_name = #{storeName,jdbcType=VARCHAR}
+      </if>
+      <if test="pName != null and pName != ''" >
+      and  p_name = #{pName,jdbcType=VARCHAR}
+      </if>
+      <if test="pCode != null and pCode != ''" >
+       and p_code = #{pCode,jdbcType=VARCHAR}
+      </if>
+      <if test="cName != null and cName != ''" >
+       and c_name = #{cName,jdbcType=VARCHAR}
+      </if>
+      <if test="cCode != null and cCode != ''" >
+       and c_code = #{cCode,jdbcType=VARCHAR}
+      </if>
+      <if test="sName != null and sName != ''" >
+       and s_name = #{sName,jdbcType=VARCHAR}
+      </if>
+      <if test="sCode != null and sCode != ''" >
+       and s_code = #{sCode,jdbcType=VARCHAR}
+      </if>
+      <if test="productTypeCode != null and productTypeCode != ''" >
+      and  product_type_code = #{productTypeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="productTypeName != null and productTypeName != ''" >
+       and product_type_name = #{productTypeName,jdbcType=VARCHAR}
+      </if>
+      <if test="expressCode != null and expressCode != ''" >
+      and  express_code = #{expressCode,jdbcType=VARCHAR}
+      </if>
+      <if test="expressName != null and expressName != ''" >
+      and  express_name = #{expressName,jdbcType=VARCHAR}
+      </if>
+      <if test="embranceCalTime != null and embranceCalTime != ''" >
+      and  embrance_cal_time = #{embranceCalTime,jdbcType=VARCHAR}
+      </if>
+      <if test="ageingValue != null and ageingValue != ''" >
+       and ageing_value = #{ageingValue,jdbcType=INTEGER}
+      </if>
+      <if test="batId != null and batId != ''" >
+       and bat_id = #{batId,jdbcType=VARCHAR}
+      </if>
+      <if test="error != null and error != ''" >
+       and error = #{error,jdbcType=VARCHAR}
+      </if>
+	</trim>
+	</sql>
+   <sql id="where_Clause1">
+	where 1=1
+	<trim  suffixOverrides="," >
+ 		<if test="id != null and id != ''" >
+    		and id =  #{id}
+	</if>
+ 		<if test="createTime != null and createTime != ''" >
+    		and create_time =  #{createTime}
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		and create_user =  #{createUser}
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		and update_time =  #{updateTime}
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		and update_user =  #{updateUser}
+	</if>
+ 		<if test="ageingId != null and ageingId != ''" >
+        	and ageing_id = #{ageingId,jdbcType=VARCHAR}
+      </if>
+      	<if test="warehouseCode != null and warehouseCode != ''" >
+       		and warehouse_code = #{warehouseCode,jdbcType=VARCHAR}
+      </if>
+      <if test="warehouseName != null and warehouseName != ''" >
+       and warehouse_name = #{warehouseName,jdbcType=VARCHAR}
+      </if>
+      <if test="storeCode != null and storeCode != ''" >
+       and store_code = #{storeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="storeName != null and storeName != ''" >
+       and store_name = #{storeName,jdbcType=VARCHAR}
+      </if>
+      <if test="pName != null and pName != ''" >
+      and  p_name = #{pName,jdbcType=VARCHAR}
+      </if>
+      <if test="pCode != null and pCode != ''" >
+       and p_code = #{pCode,jdbcType=VARCHAR}
+      </if>
+      <if test="cName != null and cName != ''" >
+       and c_name = #{cName,jdbcType=VARCHAR}
+      </if>
+      <if test="cCode != null and cCode != ''" >
+       and c_code = #{cCode,jdbcType=VARCHAR}
+      </if>
+      <if test="sName != null and sName != ''" >
+       and s_name = #{sName,jdbcType=VARCHAR}
+      </if>
+      <if test="sCode != null and sCode != ''" >
+       and s_code = #{sCode,jdbcType=VARCHAR}
+      </if>
+      <if test="productTypeCode != null and productTypeCode != ''" >
+      and  product_type_code = #{productTypeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="productTypeName != null and productTypeName != ''" >
+       and product_type_name = #{productTypeName,jdbcType=VARCHAR}
+      </if>
+      <if test="expressCode != null and expressCode != ''" >
+      and  express_code = #{expressCode,jdbcType=VARCHAR}
+      </if>
+      <if test="expressName != null and expressName != ''" >
+      and  express_name = #{expressName,jdbcType=VARCHAR}
+      </if>
+      <if test="embranceCalTime != null and embranceCalTime != ''" >
+      and  embrance_cal_time = #{embranceCalTime,jdbcType=VARCHAR}
+      </if>
+      <if test="ageingValue != null and ageingValue != ''" >
+       and ageing_value = #{ageingValue,jdbcType=INTEGER}
+      </if>
+      <if test="batId != null and batId != ''" >
+       and bat_id = #{batId,jdbcType=VARCHAR}
+      </if>
+	</trim>
+	</sql>
+  
+  
+  
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail_backups
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectOrderByBatId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail_backups
+    where bat_id = #{BatId,jdbcType=INTEGER} GROUP BY warehouse_code,p_code,c_code,product_type_code,express_code
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from er_ageing_detail_backups
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.radar.model.AgeingDetailBackups" >
+    insert into er_ageing_detail_backups (id, ageing_id, warehouse_code, 
+      warehouse_name, store_code, store_name, 
+      p_name, p_code, c_name, 
+      c_code, s_name, s_code, 
+      product_type_code, product_type_name, express_code, 
+      express_name, embrance_cal_time, ageing_value, 
+      bat_id,error,create_time,create_user,update_time,update_user)
+    values (#{id,jdbcType=INTEGER}, #{ageingId,jdbcType=VARCHAR}, #{warehouseCode,jdbcType=VARCHAR}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{storeCode,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR}, 
+      #{pName,jdbcType=VARCHAR}, #{pCode,jdbcType=VARCHAR}, #{cName,jdbcType=VARCHAR}, 
+      #{cCode,jdbcType=VARCHAR}, #{sName,jdbcType=VARCHAR}, #{sCode,jdbcType=VARCHAR}, 
+      #{productTypeCode,jdbcType=VARCHAR}, #{productTypeName,jdbcType=VARCHAR}, #{expressCode,jdbcType=VARCHAR}, 
+      #{expressName,jdbcType=VARCHAR}, #{embranceCalTime,jdbcType=VARCHAR},
+       #{ageingValue,jdbcType=INTEGER},
+       #{batId,jdbcType=VARCHAR},
+       #{error,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{createUser,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP},
+      #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.radar.model.AgeingDetailBackups" >
+    insert into er_ageing_detail_backups
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		create_time,
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		create_user,
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		update_time,
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		update_user,
+	</if>
+      <if test="ageingId != null" >
+        ageing_id,
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code,
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name,
+      </if>
+      <if test="storeCode != null" >
+        store_code,
+      </if>
+      <if test="storeName != null" >
+        store_name,
+      </if>
+      <if test="pName != null" >
+        p_name,
+      </if>
+      <if test="pCode != null" >
+        p_code,
+      </if>
+      <if test="cName != null" >
+        c_name,
+      </if>
+      <if test="cCode != null" >
+        c_code,
+      </if>
+      <if test="sName != null" >
+        s_name,
+      </if>
+      <if test="sCode != null" >
+        s_code,
+      </if>
+      <if test="productTypeCode != null" >
+        product_type_code,
+      </if>
+      <if test="productTypeName != null" >
+        product_type_name,
+      </if>
+      <if test="expressCode != null" >
+        express_code,
+      </if>
+      <if test="expressName != null" >
+        express_name,
+      </if>
+      <if test="embranceCalTime != null" >
+        embrance_cal_time,
+      </if>
+      <if test="ageingValue != null" >
+        ageing_value,
+      </if>
+      <if test="batId != null" >
+        bat_id,
+      </if>
+      <if test="error != null" >
+        error,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		#{createTime},
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		#{createUser},
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		#{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		#{updateUser},
+	</if>
+      <if test="ageingId != null" >
+        #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="pName != null" >
+        #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pCode != null" >
+        #{pCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null" >
+        #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="cCode != null" >
+        #{cCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sName != null" >
+        #{sName,jdbcType=VARCHAR},
+      </if>
+      <if test="sCode != null" >
+        #{sCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeCode != null" >
+        #{productTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeName != null" >
+        #{productTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null" >
+        #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="embranceCalTime != null" >
+        #{embranceCalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ageingValue != null" >
+        #{ageingValue,jdbcType=INTEGER},
+      </if>
+      <if test="batId != null" >
+        #{batId,jdbcType=VARCHAR},
+      </if>
+      <if test="error != null" >
+        #{error,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.radar.model.AgeingDetailBackups" >
+    update er_ageing_detail_backups
+    <set >
+      <if test="ageingId != null" >
+        ageing_id = #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="pName != null" >
+        p_name = #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pCode != null" >
+        p_code = #{pCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null" >
+        c_name = #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="cCode != null" >
+        c_code = #{cCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sName != null" >
+        s_name = #{sName,jdbcType=VARCHAR},
+      </if>
+      <if test="sCode != null" >
+        s_code = #{sCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeCode != null" >
+        product_type_code = #{productTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeName != null" >
+        product_type_name = #{productTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        express_code = #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null" >
+        express_name = #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="embranceCalTime != null" >
+        embrance_cal_time = #{embranceCalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ageingValue != null" >
+        ageing_value = #{ageingValue,jdbcType=INTEGER},
+      </if>
+      <if test="batId != null" >
+        bat_id = #{batId,jdbcType=VARCHAR},
+      </if>
+      <if test="error != null" >
+        error = #{error,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		 create_time =  #{createTime},
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		 create_user =  #{createUser},
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		 update_time =  #{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		 update_user =  #{updateUser},
+	</if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.radar.model.AgeingDetailBackups" >
+    update er_ageing_detail_backups
+    set ageing_id = #{ageingId,jdbcType=VARCHAR},
+      warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      store_code = #{storeCode,jdbcType=VARCHAR},
+      store_name = #{storeName,jdbcType=VARCHAR},
+      p_name = #{pName,jdbcType=VARCHAR},
+      p_code = #{pCode,jdbcType=VARCHAR},
+      c_name = #{cName,jdbcType=VARCHAR},
+      c_code = #{cCode,jdbcType=VARCHAR},
+      s_name = #{sName,jdbcType=VARCHAR},
+      s_code = #{sCode,jdbcType=VARCHAR},
+      product_type_code = #{productTypeCode,jdbcType=VARCHAR},
+      product_type_name = #{productTypeName,jdbcType=VARCHAR},
+      express_code = #{expressCode,jdbcType=VARCHAR},
+      express_name = #{expressName,jdbcType=VARCHAR},
+      embrance_cal_time = #{embranceCalTime,jdbcType=VARCHAR},
+      ageing_value = #{ageingValue,jdbcType=INTEGER},
+      error = #{error,jdbcType=INTEGER},
+      create_time= #{createTime,jdbcType=TIMESTAMP},
+      create_user=#{createUser,jdbcType=VARCHAR},
+      update_time =#{updateTime,jdbcType=TIMESTAMP},
+      update_user=#{updateUser,jdbcType=VARCHAR},
+      bat_id = #{batId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="countAllAgeingDetailBackups" resultType="java.lang.Integer" parameterType="com.bt.radar.model.AgeingDetailBackups" >
+    select count(1) 
+    from er_ageing_detail_backups
+    <include refid="where_Clause" />
+    and ERROR is NOT null
+  </select>
+  
+   <select id="queryAgeingDetailBackups" resultMap="BaseResultMap" parameterType="com.bt.radar.model.AgeingDetailBackups" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail_backups
+    <include refid="where_Clause1" />
+    and ERROR is NOT null
+    ORDER BY create_time DESC
+	LIMIT #{firstResult }, #{maxResult }
+  </select>
+  
+  <select id="selectCountError" resultType="java.lang.Integer">
+    select count(1) 
+    from er_ageing_detail_backups
+   where status='2' and bat_id=#{batId}
+  </select>
+</mapper>

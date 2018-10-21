@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.NvitationUseanmountDataMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.NvitationUseanmountData" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="ib_time" property="ib_time"/>
+	<result column="store_id" property="store_id"/>
+	<result column="store_name" property="store_name"/>
+	<result column="vendor" property="vendor"/>
+	<result column="inbound_no" property="inbound_no"/>
+	<result column="barcode" property="barcode"/>
+	<result column="bz_number" property="bz_number"/>
+	<result column="item_no" property="item_no"/>
+	<result column="inbound_qty" property="inbound_qty"/>
+	<result column="purchase_price" property="purchase_price"/>
+	<result column="inbound_money" property="inbound_money"/>
+	<result column="end_time" property="end_time"/>
+	<result column="paymentdays_type" property="paymentdays_type"/>
+	<result column="settle_flag" property="settle_flag"/>
+	<result column="sku_name" property="sku_name"/>
+	<result column="park_code" property="park_code"/>
+	<result column="park_name" property="park_name"/>
+	<result column="park_cost_center" property="park_cost_center"/>
+</resultMap>
+       
+<!-- tb_invitation_useanmount_data table all fields -->
+<sql id="Base_Column_List" >
+	 id,sku_name,create_time,create_user,update_time,update_user,ib_time,store_id,store_name,vendor,inbound_no,barcode,bz_number,item_no,inbound_qty,purchase_price,inbound_money,end_time,paymentdays_type,settle_flag,park_code,park_name,park_cost_center
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	<if test="ib_time != null" >
+	    and ib_time =  #{ib_time}
+	</if>
+	<if test="store_id != null" >
+	    and store_id =  #{store_id}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	 	<if test="vendor != null and vendor != ''" >
+	    and vendor =  #{vendor}
+	</if>
+	 	<if test="inbound_no != null and inbound_no != ''" >
+	    and inbound_no =  #{inbound_no}
+	</if>
+	 	<if test="barcode != null and barcode != ''" >
+	    and barcode =  #{barcode}
+	</if>
+	 	<if test="bz_number != null and bz_number != ''" >
+	    and bz_number =  #{bz_number}
+	</if>
+	 	<if test="item_no != null and item_no != ''" >
+	    and item_no =  #{item_no}
+	</if>
+	<if test="inbound_qty != null" >
+	    and inbound_qty =  #{inbound_qty}
+	</if>
+	<if test="purchase_price != null" >
+	    and purchase_price =  #{purchase_price}
+	</if>
+	<if test="inbound_money != null" >
+	    and inbound_money =  #{inbound_money}
+	</if>
+	<if test="end_time != null" >
+	    and end_time =  #{end_time}
+	</if>
+	 	<if test="paymentdays_type != null and paymentdays_type != ''" >
+	    and paymentdays_type =  #{paymentdays_type}
+	</if>
+	<if test="settle_flag != null" >
+	    and settle_flag =  #{settle_flag}
+	</if>
+	<if test="sku_name != null and sku_name != ''" >
+	    and sku_name =  #{sku_name}
+	</if>
+	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	<if test="starttime != null and starttime != ''" >
+	    and ib_time  <![CDATA[  >=#{starttime}  ]]>  
+	</if>
+		<if test="endtime != null and endtime != ''" >
+	    and ib_time <![CDATA[  <=#{endtime}  ]]> 
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入耗材采购原始数据 -->
+<insert id="insert" parameterType="com.bt.lmis.model.NvitationUseanmountData" >
+  insert into tb_invitation_useanmount_data(id,sku_name,create_time,create_user,update_time,update_user,ib_time,store_id,store_name,vendor,inbound_no,barcode,bz_number,item_no,inbound_qty,purchase_price,inbound_money,end_time,paymentdays_type,settle_flag,park_code,park_name,park_cost_center)
+ values(#{id},#{sku_name},#{create_time},#{create_user},#{update_time},#{update_user},#{ib_time},#{store_id},#{store_name},#{vendor},#{inbound_no},#{barcode},#{bz_number},#{item_no},#{inbound_qty},#{purchase_price},#{inbound_money},#{end_time},#{paymentdays_type},#{settle_flag},#{park_code},#{park_name},#{park_cost_center})
+</insert>
+
+<!-- 修改耗材采购原始数据-->  
+ <update id="update" parameterType="com.bt.lmis.model.NvitationUseanmountData" >
+  update tb_invitation_useanmount_data set sku_name=#{sku_name},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},ib_time=#{ib_time},store_id=#{store_id},store_name=#{store_name},vendor=#{vendor},inbound_no=#{inbound_no},barcode=#{barcode},bz_number=#{bz_number},item_no=#{item_no},inbound_qty=#{inbound_qty},purchase_price=#{purchase_price},inbound_money=#{inbound_money},end_time=#{end_time},paymentdays_type=#{paymentdays_type},settle_flag=#{settle_flag},park_code=#{park_code},park_name=#{park_name},park_cost_center=#{park_cost_center} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改耗材采购原始数据-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.NvitationUseanmountData" >
+	update tb_invitation_useanmount_data set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="sku_name != null  and sku_name != '' ">
+		sku_name=#{sku_name},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="ib_time != null  ">
+		ib_time=#{ib_time},
+	</if>
+	<if test="store_id != null  ">
+		store_id=#{store_id},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="vendor != null  and vendor != '' ">
+		vendor=#{vendor},
+	</if>
+	<if test="inbound_no != null  and inbound_no != '' ">
+		inbound_no=#{inbound_no},
+	</if>
+	<if test="barcode != null  and barcode != '' ">
+		barcode=#{barcode},
+	</if>
+	<if test="bz_number != null  and bz_number != '' ">
+		bz_number=#{bz_number},
+	</if>
+	<if test="item_no != null  and item_no != '' ">
+		item_no=#{item_no},
+	</if>
+	<if test="inbound_qty != null  ">
+		inbound_qty=#{inbound_qty},
+	</if>
+	<if test="purchase_price != null  ">
+		purchase_price=#{purchase_price},
+	</if>
+	<if test="inbound_money != null  ">
+		inbound_money=#{inbound_money},
+	</if>
+	<if test="end_time != null  ">
+		end_time=#{end_time},
+	</if>
+	<if test="paymentdays_type != null  and paymentdays_type != '' ">
+		paymentdays_type=#{paymentdays_type},
+	</if>
+	<if test="settle_flag != null  ">
+		settle_flag=#{settle_flag},
+	</if>
+	<if test="park_code != null  ">
+		park_code=#{park_code},
+	</if>
+	<if test="park_name != null  ">
+		park_name=#{park_name},
+	</if>
+	<if test="park_cost_center != null  ">
+		park_cost_center=#{park_cost_center},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除耗材采购原始数据 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_invitation_useanmount_data where id = #{id}
+</update>
+<!-- 批量删除耗材采购原始数据 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_invitation_useanmount_data where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找耗材采购原始数据 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_invitation_useanmount_data where id = #{id}
+</select>
+  	
+<!-- 耗材采购原始数据 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.NvitationUseanmountDataQueryParam">
+	select count(1) from tb_invitation_useanmount_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的耗材采购原始数据集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.NvitationUseanmountDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitation_useanmount_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 耗材采购原始数据总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.NvitationUseanmountDataQueryParam">
+	select count(1) from tb_invitation_useanmount_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的耗材采购原始数据集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.NvitationUseanmountDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitation_useanmount_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="list" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.NvitationUseanmountData">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitation_useanmount_data 
+	<include refid="where_Clause"/>
+</select>
+
+<select id="countSE" resultType="java.lang.Integer"  parameterType="com.bt.lmis.model.NvitationUseanmountData">
+	select 
+		count(1)
+	from tb_invitation_useanmount_data
+	where 1=1
+	<trim  suffixOverrides="," >
+		<if test="id != null" >
+		    and id =  #{id}
+		</if>
+		<if test="create_time != null" >
+		    and create_time =  #{create_time}
+		</if>
+		 	<if test="create_user != null and create_user != ''" >
+		    and create_user =  #{create_user}
+		</if>
+		<if test="update_time != null" >
+		    and update_time =  #{update_time}
+		</if>
+		 	<if test="update_user != null and update_user != ''" >
+		    and update_user =  #{update_user}
+		</if>
+		<if test="ib_time != null" >
+		    and ib_time =  #{ib_time}
+		</if>
+		<if test="store_id != null" >
+		    and store_id =  #{store_id}
+		</if>
+		 	<if test="store_name != null and store_name != ''" >
+		    and store_name =  #{store_name}
+		</if>
+		 	<if test="vendor != null and vendor != ''" >
+		    and vendor =  #{vendor}
+		</if>
+		 	<if test="inbound_no != null and inbound_no != ''" >
+		    and inbound_no =  #{inbound_no}
+		</if>
+		 	<if test="barcode != null and barcode != ''" >
+		    and barcode =  #{barcode}
+		</if>
+		 	<if test="bz_number != null and bz_number != ''" >
+		    and bz_number =  #{bz_number}
+		</if>
+		 	<if test="item_no != null and item_no != ''" >
+		    and item_no =  #{item_no}
+		</if>
+		<if test="inbound_qty != null" >
+		    and inbound_qty =  #{inbound_qty}
+		</if>
+		<if test="purchase_price != null" >
+		    and purchase_price =  #{purchase_price}
+		</if>
+		<if test="inbound_money != null" >
+		    and inbound_money =  #{inbound_money}
+		</if>
+		<if test="end_time != null" >
+		    and end_time =  #{end_time}
+		</if>
+		 	<if test="paymentdays_type != null and paymentdays_type != ''" >
+		    and paymentdays_type =  #{paymentdays_type}
+		</if>
+		<if test="settle_flag != null" >
+		    and settle_flag =  #{settle_flag}
+		</if>
+		<if test="sku_name != null and sku_name != ''" >
+		    and sku_name =  #{sku_name}
+		</if>
+		<if test="store_name != null and store_name != ''" >
+		    and store_name =  #{store_name}
+		</if>
+		<if test="starttime != null and starttime != ''" >
+		    and TO_DAYS(ib_time)  <![CDATA[  >= TO_DAYS(#{starttime})  ]]>  
+		</if>
+			<if test="endtime != null and endtime != ''" >
+		    and TO_DAYS(ib_time) <![CDATA[  <= TO_DAYS(#{endtime})  ]]> 
+		</if>
+	</trim>
+</select>
+
+<select id="listSE" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.NvitationUseanmountData">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitation_useanmount_data
+	where 1=1
+	<trim  suffixOverrides="," >
+		<if test="id != null" >
+		    and id =  #{id}
+		</if>
+		<if test="create_time != null" >
+		    and create_time =  #{create_time}
+		</if>
+		 	<if test="create_user != null and create_user != ''" >
+		    and create_user =  #{create_user}
+		</if>
+		<if test="update_time != null" >
+		    and update_time =  #{update_time}
+		</if>
+		 	<if test="update_user != null and update_user != ''" >
+		    and update_user =  #{update_user}
+		</if>
+		<if test="ib_time != null" >
+		    and ib_time =  #{ib_time}
+		</if>
+		<if test="store_id != null" >
+		    and store_id =  #{store_id}
+		</if>
+		 	<if test="store_name != null and store_name != ''" >
+		    and store_name =  #{store_name}
+		</if>
+		 	<if test="vendor != null and vendor != ''" >
+		    and vendor =  #{vendor}
+		</if>
+		 	<if test="inbound_no != null and inbound_no != ''" >
+		    and inbound_no =  #{inbound_no}
+		</if>
+		 	<if test="barcode != null and barcode != ''" >
+		    and barcode =  #{barcode}
+		</if>
+		 	<if test="bz_number != null and bz_number != ''" >
+		    and bz_number =  #{bz_number}
+		</if>
+		 	<if test="item_no != null and item_no != ''" >
+		    and item_no =  #{item_no}
+		</if>
+		<if test="inbound_qty != null" >
+		    and inbound_qty =  #{inbound_qty}
+		</if>
+		<if test="purchase_price != null" >
+		    and purchase_price =  #{purchase_price}
+		</if>
+		<if test="inbound_money != null" >
+		    and inbound_money =  #{inbound_money}
+		</if>
+		<if test="end_time != null" >
+		    and end_time =  #{end_time}
+		</if>
+		 	<if test="paymentdays_type != null and paymentdays_type != ''" >
+		    and paymentdays_type =  #{paymentdays_type}
+		</if>
+		<if test="settle_flag != null" >
+		    and settle_flag =  #{settle_flag}
+		</if>
+		<if test="sku_name != null and sku_name != ''" >
+		    and sku_name =  #{sku_name}
+		</if>
+		<if test="store_name != null and store_name != ''" >
+		    and store_name =  #{store_name}
+		</if>
+		<if test="starttime != null and starttime != ''" >
+		    and TO_DAYS(ib_time)  <![CDATA[  >= TO_DAYS(#{starttime})  ]]>  
+		</if>
+			<if test="endtime != null and endtime != ''" >
+		    and TO_DAYS(ib_time) <![CDATA[  <= TO_DAYS(#{endtime})  ]]> 
+		</if>
+	</trim>
+	<if test="firstResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+</select>
+  <update id='update_settle_flag' parameterType="com.bt.lmis.model.NvitationUseanmountData">
+  update   tb_invitation_useanmount_data set  settle_flag=0 
+  <include refid="where_Clause"/>
+  </update>	
+</mapper>   

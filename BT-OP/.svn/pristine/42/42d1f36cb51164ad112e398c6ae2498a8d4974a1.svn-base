@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.orderPlatform.dao.InterfaceInformationMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.InterfaceInformation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="secret_key" property="secretKey" jdbcType="VARCHAR" />
+    <result column="custid" property="custid" jdbcType="VARCHAR" />
+    <result column="access_code" property="accessCode" jdbcType="VARCHAR" />
+    <result column="express_code" property="expressCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, secret_key, custid, access_code, express_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from op_interface_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from op_interface_information
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.orderPlatform.model.InterfaceInformation" >
+    insert into op_interface_information (id, secret_key, custid, 
+      access_code, express_code)
+    values (#{id,jdbcType=INTEGER}, #{secretKey,jdbcType=VARCHAR}, #{custid,jdbcType=VARCHAR}, 
+      #{accessCode,jdbcType=VARCHAR}, #{expressCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.orderPlatform.model.InterfaceInformation" >
+    insert into op_interface_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="secretKey != null" >
+        secret_key,
+      </if>
+      <if test="custid != null" >
+        custid,
+      </if>
+      <if test="accessCode != null" >
+        access_code,
+      </if>
+      <if test="expressCode != null" >
+        express_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="secretKey != null" >
+        #{secretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="custid != null" >
+        #{custid,jdbcType=VARCHAR},
+      </if>
+      <if test="accessCode != null" >
+        #{accessCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        #{expressCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.orderPlatform.model.InterfaceInformation" >
+    update op_interface_information
+    <set >
+      <if test="secretKey != null" >
+        secret_key = #{secretKey,jdbcType=VARCHAR},
+      </if>
+      <if test="custid != null" >
+        custid = #{custid,jdbcType=VARCHAR},
+      </if>
+      <if test="accessCode != null" >
+        access_code = #{accessCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        express_code = #{expressCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.orderPlatform.model.InterfaceInformation" >
+    update op_interface_information
+    set secret_key = #{secretKey,jdbcType=VARCHAR},
+      custid = #{custid,jdbcType=VARCHAR},
+      access_code = #{accessCode,jdbcType=VARCHAR},
+      express_code = #{expressCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+   <select id="selectByCustid" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.model.InterfaceInformation" >
+    select 
+    <include refid="Base_Column_List" />
+    from op_interface_information
+    where custid = #{custid,jdbcType=VARCHAR}
+  </select>
+</mapper>

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.ClientMapper" > 
+	<!-- Result Map-->
+	<resultMap id= "BaseResultMap" type= "com.bt.lmis.model.Client" >
+		<result column= "id" property= "id" />
+		<result column= "create_time" property= "create_time" />
+		<result column= "create_user" property= "create_user" />
+		<result column= "update_time" property= "update_time" />
+		<result column= "update_user" property= "update_user" />
+		<result column= "client_code" property= "client_code" />
+		<result column= "client_name" property= "client_name" />
+		<result column= "client_type" property= "client_type" />
+		<result column= "settlement_method" property= "settlement_method" />
+		<result column= "contact" property ="contact" />
+		<result column= "phone" property= "phone" />
+		<result column= "address" property= "address" />
+		<result column= "company" property= "company" />
+		<result column= "invoice_type" property= "invoice_type" />
+		<result column= "invoice_info" property= "invoice_info" />
+		<result column= "remark" property= "remark" />
+		<result column= "validity" property= "validity" />
+	</resultMap>
+       
+	<!-- tb_client table all fields -->
+	<sql id= "Base_Column_List" >
+		 id,
+		 create_time,
+		 create_user,
+		 update_time,
+		 update_user,
+		 client_code,
+		 client_name,
+		 client_type,
+		 settlement_method,
+		 contact,
+		 phone,
+		 address,
+		 company,
+		 invoice_type,
+		 invoice_info,
+		 remark,
+		 validity
+	</sql>
+   
+	<!-- 查询条件 -->
+	<sql id= "where_Clause" >
+		where 1= 1
+		<trim suffixOverrides= "," >
+			<if test= "id != null" >
+			    and id= #{id }
+			</if>
+			<if test= "create_time != null" >
+			    and create_time= #{create_time }
+			</if>
+		 	<if test= "create_user != null and create_user != ''" >
+			    and create_user= #{create_user }
+			</if>
+			<if test= "update_time != null" >
+			    and update_time= #{update_time }
+			</if>
+		 	<if test= "update_user != null and update_user != ''" >
+			    and update_user= #{update_user }
+			</if>
+		 	<if test= "client_code != null and client_code != ''" >
+			    and client_code= #{client_code }
+			</if>
+		 	<if test= "client_name != null and client_name != ''" >
+			    and client_name like concat('%', #{client_name }, '%')  
+			</if>
+		 	<if test= "client_type != null and client_type != ''" >
+			    and client_type= #{client_type }
+			</if>
+			<if test= "settlement_method != null and settlement_method != -1" >
+			    and settlement_method= #{settlement_method }
+			</if>
+			<if test= "contact != null and contact != ''" >
+			    and contact= #{contact }
+			</if>
+			<if test= "phone != null and phone != ''" >
+			    and phone= #{phone }
+			</if>
+			<if test= "address != null and address != ''" >
+			    and address= #{address }
+			</if>
+			<if test= "company != null and company != ''" >
+			    and company= #{company }
+			</if>
+			<if test= "invoice_type != null and invoice_type != ''" >
+			    and invoice_type= #{invoice_type }
+			</if>
+			<if test= "invoice_info != null and invoice_info != ''" >
+			    and invoice_info= #{invoice_info }
+			</if>
+			<if test= "remark != null and remark != ''" >
+			    and remark= #{remark }
+			</if>
+			<if test= "validity != null and validity != -1" >
+			    and validity=  #{validity }
+			</if>
+		</trim>
+	</sql>
+	
+	<!-- 满足条件的客户表集合 -->
+	<select id="findAll" resultMap="BaseResultMap">
+		select <include refid= "Base_Column_List" /> from tb_client
+	</select>
+	  	
+	<select id= "findByClient" resultType= "com.bt.lmis.model.Client" parameterType= "com.bt.lmis.model.Client" >
+		select <include refid= "Base_Column_List" /> from tb_client <include refid= "where_Clause" />
+	</select>
+	
+	<insert id= "addClient" parameterType= "com.bt.lmis.model.Client" useGeneratedKeys= "true" keyProperty= "id" >
+		insert into tb_client(
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			client_code,
+			client_name,
+			client_type,
+			settlement_method,
+			contact,
+			phone,
+			address,
+			company,
+			invoice_type,
+			invoice_info,
+			remark,
+			validity
+		) values (
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{client_code },
+			#{client_name },
+			#{client_type },
+			#{settlement_method },
+			#{contact },
+			#{phone },
+			#{address },
+			#{company },
+			#{invoice_type },
+			#{invoice_info },
+			#{remark },
+			#{validity }
+		)
+	</insert>
+	
+	<update id= "updateClient" parameterType= "com.bt.lmis.model.Client" >
+		update tb_client 
+		<trim prefix= "SET" suffixOverrides= "," >
+			update_time= now(),
+			<if test= "update_user != null and update_user != '' ">
+				update_user= #{update_user },
+			</if>
+			<if test= "client_code != null and client_code != '' ">
+				client_code= #{client_code },
+			</if>
+			<if test= "client_name != null and client_name != '' ">
+				client_name= #{client_name },
+			</if>
+			<if test= "client_type != null and client_type != '' ">
+				client_type= #{client_type },
+			</if>
+			<if test= "settlement_method != null and settlement_method != ''" >
+			   settlement_method= #{settlement_method },
+			</if>
+			<if test= "contact != null and contact != '' ">
+				contact= #{contact },
+			</if>
+			<if test="phone != null and phone != '' ">
+				phone= #{phone },
+			</if>
+			<if test="address != null and address != '' ">
+				address= #{address },
+			</if>
+			<if test= "company != null and company != '' ">
+				company= #{company },
+			</if>
+			<if test= "invoice_type != null and invoice_type != '' ">
+				invoice_type= #{invoice_type },
+			</if>
+			<if test= "invoice_info != null and invoice_info != '' ">
+				invoice_info= #{invoice_info },
+			</if>
+			<if test= "remark != null and remark != '' ">
+				remark= #{remark },
+			</if>
+			<if test= "validity != null ">
+				validity= #{validity },
+			</if>
+		</trim>
+		where id= #{id }
+	</update>
+	
+	<select id= "findByContractOwner" resultMap= "BaseResultMap" parameterType= "Object" >
+		select <include refid= "Base_Column_List"/> from tb_client where client_code= #{contract_owner }	
+	</select>	
+	
+	<!-- 依据主键查找客户表 -->
+	<select id= "getById" parameterType= "java.lang.Integer" resultMap= "BaseResultMap" >
+		select <include refid="Base_Column_List" /> from tb_client where id= #{id }
+	</select>
+
+	<!-- 批量删除客户 -->
+	<delete id= "delClients" parameterType= "Object" >
+		delete from tb_client where id in 
+		<foreach collection= "list" index= "index" item= "item" open= "(" separator= "," close= ")" >  
+	    	#{item}  
+	   	</foreach> 
+	</delete>
+	
+	<select id= "judgeClientContractExistOrNot" parameterType= "Integer" resultType= "Integer" >
+		SELECT
+			count(0)
+		FROM
+			(
+				SELECT
+					tb_client.id
+				FROM
+					tb_contract_basicinfo
+				LEFT JOIN tb_client ON tb_contract_basicinfo.contract_owner= tb_client.client_code
+				WHERE
+					tb_client.id= #{id }
+			) a
+	</select>
+	
+	<!-- 查询数据总行 -->
+	<select id= "count" resultType= "java.lang.Integer"  parameterType= "com.bt.lmis.controller.form.ClientQueryParam" >
+		select count(1) cnt from tb_client <include refid= "where_Clause" />
+	</select>
+	
+	<!-- 满足条件的客户表集合 -->
+	<select id= "query" resultType= "java.util.Map"  parameterType= "com.bt.lmis.controller.form.ClientQueryParam" >
+		SELECT
+			id,
+			client_code,
+			client_name,
+			case client_type 
+			when "0" then "一般客户"
+			when "1" then "普通客户"
+			when "2" then "重要客户"
+			when "3" then "其它"
+			else "" end as client_type,
+			contact,
+			phone,
+			address,
+			case settlement_method
+			when 0 then "代销"
+			when 1 then "结算经销"
+			when 2 then "付款经销"
+			else "" end as settlement_method,
+			case invoice_type
+			when "0" then "手写发票"
+			when "1" then "机打发票"
+			when "2" then "普通发票"
+			when "3" then "增值税发票"
+			when "4" then "其它发票"
+			else "" end as invoice_type,
+			invoice_info,
+			company,
+			remark,
+			case validity
+			when 0 then "无效"
+			when 1 then "有效"
+			else "" end as validity
+		FROM
+			tb_client
+		<include refid= "where_Clause" />
+		ORDER BY update_time DESC
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+    <select id='getStoreByClient' resultType= "java.util.Map"  parameterType="java.util.Map">
+			SELECT 
+			    b.store_code
+			FROM
+			    tb_client a,
+			    tb_store b
+			WHERE
+			    a.id = b.client_id AND a.validity = 1
+			        AND b.validity = 1
+             and a.client_code=#{client_code};
+    </select>
+</mapper>   

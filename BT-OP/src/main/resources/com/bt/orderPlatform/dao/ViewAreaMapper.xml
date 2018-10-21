@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.orderPlatform.dao.ViewAreaMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.orderPlatform.model.ViewArea" >
+	<result column="p_name" property="p_name"/>
+	<result column="p_code" property="p_code"/>
+	<result column="s_name" property="s_name"/>
+	<result column="s_code" property="s_code"/>
+	<result column="q_name" property="q_name"/>
+	<result column="q_code" property="q_code"/>
+	<result column="address_name" property="address_name"/>
+</resultMap>
+       
+<!-- view_area table all fields -->
+<sql id="Base_Column_List" >
+	 p_name,p_code,s_name,s_code,q_name,q_code,address_name
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	 	<if test="p_name != null and p_name != ''" >
+	    and p_name =  #{p_name}
+	</if>
+	 	<if test="p_code != null and p_code != ''" >
+	    and p_code =  #{p_code}
+	</if>
+	 	<if test="s_name != null and s_name != ''" >
+	    and s_name =  #{s_name}
+	</if>
+	 	<if test="s_code != null and s_code != ''" >
+	    and s_code =  #{s_code}
+	</if>
+	 	<if test="q_name != null and q_name != ''" >
+	    and q_name =  #{q_name}
+	</if>
+	 	<if test="q_code != null and q_code != ''" >
+	    and q_code =  #{q_code}
+	</if>
+	 	<if test="address_name != null and address_name != ''" >
+	    and address_name =  #{address_name}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入运单信息临时表 -->
+<insert id="insert" parameterType="com.bt.orderPlatform.model.ViewArea" >
+  insert into view_area(p_name,p_code,s_name,s_code,q_name,q_code,address_name)
+ values(#{p_name},#{p_code},#{s_name},#{s_code},#{q_name},#{q_code},#{address_name})
+</insert>
+
+<!-- 修改运单信息临时表-->  
+ <update id="update" parameterType="com.bt.orderPlatform.model.ViewArea" >
+  update view_area set p_code=#{p_code},s_name=#{s_name},s_code=#{s_code},q_name=#{q_name},q_code=#{q_code},address_name=#{address_name} where p_name=#{p_name}
+ </update>
+ 
+ <!-- 选择修改运单信息临时表-->
+<update id="updateBySelective" parameterType="com.bt.orderPlatform.model.ViewArea" >
+	update view_area set 
+	<trim  suffixOverrides="," >
+	<if test="p_code != null  and p_code != '' ">
+		p_code=#{p_code},
+	</if>
+	<if test="s_name != null  and s_name != '' ">
+		s_name=#{s_name},
+	</if>
+	<if test="s_code != null  and s_code != '' ">
+		s_code=#{s_code},
+	</if>
+	<if test="q_name != null  and q_name != '' ">
+		q_name=#{q_name},
+	</if>
+	<if test="q_code != null  and q_code != '' ">
+		q_code=#{q_code},
+	</if>
+	<if test="address_name != null  and address_name != '' ">
+		address_name=#{address_name},
+	</if>
+	</trim> where p_name=#{p_name}
+</update>
+
+<!-- 删除运单信息临时表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from view_area where p_name = #{p_name}
+</update>
+<!-- 批量删除运单信息临时表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from view_area where p_name in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找运单信息临时表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from view_area where p_name = #{p_name}
+</select>
+
+
+<select id="selectByViewAreaAddress"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from view_area where  address_name = #{address_name}
+</select>
+
+<!-- 依据导入信息进行模糊查询 -->
+<select id="selectByViewArea"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" />
+	 from view_area where  p_name like 
+	 CONCAT(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(#{p_name}, '省', ''),'市', ''), '区', ''), '县', '') , '自治区', '') , '自治县', ''), '自治州', ''), '地区', ''),'%')
+	 and s_name like
+	 CONCAT(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(#{s_name}, '省', ''),'市', ''), '区', ''), '县', '') , '自治区', '') , '自治县', ''), '自治州', ''), '地区', ''),'%')
+	 and q_name like
+	 CONCAT(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(#{q_name}, '省', ''),'市', ''), '区', ''), '县', '') , '自治区', '') , '自治县', ''), '自治州', ''), '地区', ''),'%')
+</select>
+
+<!-- 依据导入信息进行模糊查询 -->
+<select id="selectByProcessedViewArea"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" />
+	 from view_area where  p_name like 
+	 CONCAT(#{p_name},'%')
+	 and s_name like
+	 CONCAT(#{s_name},'%')
+	 and q_name like
+	 CONCAT(#{q_name},'%')
+</select>
+  	
+<!-- 运单信息临时表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.ViewAreaQueryParam">
+	select count(1) from view_area 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的运单信息临时表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.ViewAreaQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from view_area 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 运单信息临时表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.orderPlatform.controller.form.ViewAreaQueryParam">
+	select count(1) from view_area 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的运单信息临时表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.orderPlatform.controller.form.ViewAreaQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from view_area 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+  	
+</mapper>   

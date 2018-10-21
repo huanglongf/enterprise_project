@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.WarehouseRelationMapper">
+	<select id="countAllExist" parameterType="com.bt.radar.controller.form.WarehouseRelationQueryParam" resultType="Integer">
+		select
+			count(1)
+		from
+			er_warehouse_relation
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			dl_flag = 1
+			<if test="physical_code != null and physical_code != ''">
+				AND physical_code = #{physical_code }
+			</if>
+		</trim>
+	</select>
+	<select id="toList" parameterType="com.bt.radar.controller.form.WarehouseRelationQueryParam" resultType="java.util.Map">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			physical_code,
+			logic_code,
+			b.warehouse_name,
+			dl_flag
+		from
+			er_warehouse_relation a
+		left join(
+			select
+				warehouse_code,
+				warehouse_name
+			from
+				tb_warehouse
+		) b on a.logic_code = b.warehouse_code
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			dl_flag = 1
+			<if test="physical_code != null and physical_code != ''">
+				AND physical_code = #{physical_code }
+			</if>
+		</trim>
+	   	order by update_time desc
+	   	LIMIT #{firstResult}, #{maxResult}
+	</select>
+	<select id="findAllExist" parameterType="com.bt.radar.model.WarehouseRelation" resultType="com.bt.radar.model.WarehouseRelation">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			physical_code,
+			logic_code,
+			dl_flag
+		from
+			er_warehouse_relation
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			dl_flag = 1
+			<if test="id != null and id != ''">
+				AND id = #{id }
+			</if>
+			<if test="physical_code != null and physical_code != ''">
+				AND physical_code = #{physical_code }
+			</if>
+			<if test="logic_code != null and logic_code != ''">
+				AND logic_code = #{logic_code }
+			</if>
+	   	</trim>
+	</select>
+	<update id="updateWarehouseRelation" parameterType="com.bt.radar.model.WarehouseRelation">
+		update er_warehouse_relation
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="physical_code != null and physical_code != ''">
+				physical_code = #{physical_code },
+			</if>
+			<if test="logic_code != null and logic_code != ''">
+				logic_code = #{logic_code },
+			</if>
+			<if test="dl_flag != null and dl_flag != ''">
+				dl_flag = #{dl_flag }
+			</if>
+		</trim>
+		where id = #{id } 
+	</update>
+	<insert id="insertWarehouseRelation" parameterType="com.bt.radar.model.WarehouseRelation">
+		insert into er_warehouse_relation
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			physical_code,
+			logic_code,
+			dl_flag
+		) values (
+			#{id },
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{physical_code },
+			#{logic_code },
+			1
+		)
+	</insert>
+</mapper>   

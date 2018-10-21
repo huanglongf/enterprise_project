@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.TotalAreaMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.TotalArea" >
+	<result column="sta_id" property="sta_id"/>
+	<result column="sta_cb_id" property="sta_cb_id"/>
+	<result column="sta_section" property="sta_section"/>
+	<result column="sta_price" property="sta_price"/>
+	<result column="sta_price_unit" property="sta_price_unit"/>
+	<result column="sta_status" property="sta_status"/>
+</resultMap>
+       
+<!-- ssc_total_area table all fields -->
+<sql id="Base_Column_List" >
+	 sta_id,sta_cb_id,sta_section,sta_price,sta_price_unit,sta_status
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="sta_id != null" >
+	    and sta_id =  #{sta_id}
+	</if>
+	<if test="sta_cb_id != null" >
+	    and sta_cb_id =  #{sta_cb_id}
+	</if>
+	 	<if test="sta_section != null and sta_section != ''" >
+	    and sta_section =  #{sta_section}
+	</if>
+	 	<if test="sta_price != null and sta_price != ''" >
+	    and sta_price =  #{sta_price}
+	</if>
+	<if test="sta_price_unit != null" >
+	    and sta_price_unit =  #{sta_price_unit}
+	</if>
+	<if test="sta_status != null" >
+	    and sta_status =  #{sta_status}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入超过部分占用面积表 -->
+<insert id="insert" parameterType="com.bt.lmis.model.TotalArea" >
+  insert into ssc_total_area(sta_id,sta_cb_id,sta_section,sta_price,sta_price_unit,sta_status)
+ values(#{sta_id},#{sta_cb_id},#{sta_section},#{sta_price},#{sta_price_unit},#{sta_status})
+</insert>
+
+<!-- 修改超过部分占用面积表-->  
+ <update id="update" parameterType="com.bt.lmis.model.TotalArea" >
+  update ssc_total_area set sta_cb_id=#{sta_cb_id},sta_section=#{sta_section},sta_price=#{sta_price},sta_price_unit=#{sta_price_unit},sta_status=#{sta_status} where sta_id=#{sta_id}
+ </update>
+ 
+ <!-- 选择修改超过部分占用面积表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.TotalArea" >
+	update ssc_total_area set 
+	<trim  suffixOverrides="," >
+	<if test="sta_cb_id != null  ">
+		sta_cb_id=#{sta_cb_id},
+	</if>
+	<if test="sta_section != null  and sta_section != '' ">
+		sta_section=#{sta_section},
+	</if>
+	<if test="sta_price != null  and sta_price != '' ">
+		sta_price=#{sta_price},
+	</if>
+	<if test="sta_price_unit != null  ">
+		sta_price_unit=#{sta_price_unit},
+	</if>
+	<if test="sta_status != null  ">
+		sta_status=#{sta_status},
+	</if>
+	</trim> where sta_id=#{sta_id}
+</update>
+
+<!-- 删除超过部分占用面积表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from ssc_total_area where sta_id = #{sta_id}
+</update>
+<!-- 批量删除超过部分占用面积表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from ssc_total_area where sta_id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找超过部分占用面积表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from ssc_total_area where sta_id = #{sta_id}
+</select>
+  	
+<!-- 超过部分占用面积表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.TotalAreaQueryParam">
+	select count(1) from ssc_total_area 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的超过部分占用面积表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.TotalAreaQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_total_area 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 超过部分占用面积表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.TotalAreaQueryParam">
+	select count(1) from ssc_total_area 
+	<include refid="where_Clause"/>
+</select>
+  	
+<select id="findByCBID" resultType="java.util.HashMap"  parameterType="Object">
+	select 
+	<include refid="Base_Column_List"/>
+	from ssc_total_area 
+	where 1=1 and sta_cb_id=#{cbid}
+	order by sta_id asc
+</select>
+  	
+</mapper>   

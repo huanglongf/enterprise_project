@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.radar.dao.ReceiveDeadlineMapper" >
+	<resultMap id="ReceiveDeadlineMap" type="com.bt.radar.model.ReceiveDeadline" >
+		<result column="id" property="id"/>
+		<result column="create_time" property="create_time"/>
+		<result column="create_user" property="create_user"/>
+		<result column="update_time" property="update_time"/>
+		<result column="update_user" property="update_user"/>
+		<result column="express_code" property="express_code"/>
+		<result column="producttype_code" property="producttype_code"/>
+		<result column="warehouse_code" property="warehouse_code"/>
+		<result column="province_code" property="province_code"/>
+		<result column="city_code" property="city_code"/>
+		<result column="state_code" property="state_code"/>
+		<result column="street_code" property="street_code"/>
+		<result column="embrace_time" property="embrace_time"/>
+		<result column="dl_flag" property="dl_flag"/>
+	</resultMap>
+	<select id="getById" parameterType="Object" resultType="com.bt.radar.model.ReceiveDeadline">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			express_code,
+			producttype_code,
+			warehouse_code,
+			province_code,
+			city_code,
+			state_code,
+			street_code,
+			embrace_time,
+			dl_flag
+		from
+			er_receive_time
+		where
+			id = #{id }
+	</select>
+	<select id="countAllExist" parameterType="com.bt.radar.controller.form.ReceiveDeadlineQueryParam" resultType="Integer">
+		select
+			count(1)
+		from
+			(
+				select
+					id,
+					create_time,
+					create_user,
+					update_time,
+					update_user,
+					express_code,
+					producttype_code,
+					warehouse_code,
+					province_code,
+					city_code,
+					state_code,
+					street_code,
+					embrace_time,
+					dl_flag
+				from
+					er_receive_time
+				<trim prefix="WHERE" prefixOverrides="AND|OR">
+					dl_flag = 1
+					<if test="express_code != null and express_code != ''">
+						AND express_code = #{express_code }
+					</if>
+					<if test="producttype_code != null and producttype_code != ''">
+						AND producttype_code = #{producttype_code }
+					</if>
+					<if test="warehouse_code != null and warehouse_code != ''">
+						AND warehouse_code = #{warehouse_code }
+					</if>
+					<if test="province_code != null and province_code != ''">
+						AND province_code = #{province_code }
+					</if>
+					<if test="city_code != null and city_code != ''">
+						AND city_code = #{city_code }
+					</if>
+					<if test="state_code != null and state_code != ''">
+						AND state_code = #{state_code }
+					</if>
+					<if test="street_code != null and street_code != ''">
+						AND street_code = #{street_code }
+					</if>
+		   		</trim>
+			) a
+	</select>
+	<select id="toList" parameterType="com.bt.radar.controller.form.ReceiveDeadlineQueryParam" resultType="java.util.Map">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			express_code,
+			b.transport_name,
+			producttype_code,
+			c.product_type_name,
+			a.warehouse_code,
+			d.warehouse_name,
+			province_code,
+			e.area_name as province_name,
+			city_code,
+			f.area_name as city_name,
+			state_code,
+			g.area_name as state_name,
+			street_code,
+			h.area_name as street_name,
+			DATE_FORMAT(embrace_time, '%T') AS embrace_time,
+			dl_flag
+		from
+			er_receive_time a
+		left join(
+			select
+				transport_code,
+				transport_name
+			from
+				tb_transport_vendor
+			where
+				validity = 1
+			and
+				transport_type = 1
+		) b on a.express_code = b.transport_code
+		left join(
+			select
+				product_type_code,
+				product_type_name
+			from
+				tb_transport_product_type
+			where
+				status = true
+		) c on a.producttype_code = c.product_type_code
+		left join(
+			select
+				warehouse_code,
+				warehouse_name
+			from
+				er_physical_warehouse
+			where
+				dl_flag = 1
+		) d on a.warehouse_code = d.warehouse_code
+		left join(
+			select
+				area_code,
+				area_name
+			from
+				tb_area
+		) e on a.province_code = e.area_code
+		left join(
+			select
+				area_code,
+				area_name
+			from
+				tb_area
+		) f on a.city_code = f.area_code
+		left join(
+			select
+				area_code,
+				area_name
+			from
+				tb_area
+		) g on a.state_code = g.area_code
+		left join(
+			select
+				area_code,
+				area_name
+			from
+				tb_area
+		) h on a.street_code = h.area_code
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			dl_flag = 1
+			<if test="express_code != null and express_code != ''">
+				AND express_code = #{express_code }
+			</if>
+			<if test="producttype_code != null and producttype_code != ''">
+				AND producttype_code = #{producttype_code }
+			</if>
+			<if test="warehouse_code != null and warehouse_code != ''">
+				AND a.warehouse_code = #{warehouse_code }
+			</if>
+			<if test="province_code != null and province_code != ''">
+				AND province_code = #{province_code }
+			</if>
+			<if test="city_code != null and city_code != ''">
+				AND city_code = #{city_code }
+			</if>
+			<if test="state_code != null and state_code != ''">
+				AND state_code = #{state_code }
+			</if>
+			<if test="street_code != null and street_code != ''">
+				AND street_code = #{street_code }
+			</if>
+   		</trim>
+    	order by  express_code, producttype_code, warehouse_code, embrace_time
+    	LIMIT #{firstResult}, #{maxResult}
+	</select>
+	<select id="findAllExist" parameterType="com.bt.radar.model.ReceiveDeadline" resultType="com.bt.radar.model.ReceiveDeadline">
+		select
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			express_code,
+			producttype_code,
+			warehouse_code,
+			province_code,
+			city_code,
+			state_code,
+			street_code,
+			embrace_time,
+			dl_flag
+		from
+			er_receive_time
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			dl_flag = 1
+			<if test="express_code != null and express_code != ''">
+				AND express_code = #{express_code }
+			</if>
+			<if test="producttype_code != null">
+				AND producttype_code = #{producttype_code }
+			</if>
+			<if test="warehouse_code != null and warehouse_code != ''">
+				AND warehouse_code = #{warehouse_code }
+			</if>
+			<if test="province_code != null and province_code != ''">
+				AND province_code = #{province_code }
+			</if>
+			<if test="city_code != null">
+				AND city_code = #{city_code }
+			</if>
+			<if test="state_code != null">
+				AND state_code = #{state_code }
+			</if>
+			<if test="street_code != null">
+				AND street_code = #{street_code }
+			</if>
+			<if test="embrace_time != null and embrace_time != ''">
+				AND embrace_time = #{embrace_time }
+			</if>
+    	</trim>
+    	order by  express_code, producttype_code, warehouse_code
+	</select>
+	<update id= "updateReceiveDeadline" parameterType= "com.bt.radar.model.ReceiveDeadline" >
+		update er_receive_time
+		<trim prefix= "SET" suffixOverrides= "," >
+			update_time = now(),
+			<if test="update_user != null and update_user != ''">
+				update_user = #{update_user },
+			</if>
+			<if test="express_code != null and express_code != ''">
+				express_code = #{express_code },
+			</if>
+			<if test="producttype_code != null and producttype_code != ''">
+				producttype_code = #{producttype_code },
+			</if>
+			<if test="warehouse_code != null and warehouse_code != ''">
+				warehouse_code = #{warehouse_code },
+			</if>
+			<if test="province_code != null and province_code != ''">
+				province_code = #{province_code },
+			</if>
+			<if test="city_code != null and city_code != ''">
+				city_code = #{city_code },
+			</if>
+			<if test="state_code != null and state_code != ''">
+				state_code = #{state_code },
+			</if>
+			<if test="street_code != null and street_code != ''">
+				street_code = #{street_code },
+			</if>
+			<if test="embrace_time != null and embrace_time != ''">
+				embrace_time = #{embrace_time },
+			</if>
+			<if test="dl_flag != null">
+				dl_flag = #{dl_flag }
+			</if>
+		</trim>
+		where id = #{id } 
+	</update>
+	<insert id="insertReceiveDeadline" parameterType="com.bt.radar.model.ReceiveDeadline">
+		insert into er_receive_time
+		(
+			id,
+			create_time,
+			create_user,
+			update_time,
+			update_user,
+			express_code,
+			producttype_code,
+			warehouse_code,
+			province_code,
+			city_code,
+			state_code,
+			street_code,
+			embrace_time,
+			dl_flag
+		) values (
+			#{id },
+			now(),
+			#{create_user },
+			now(),
+			#{create_user },
+			#{express_code },
+			#{producttype_code },
+			#{warehouse_code, },
+			#{province_code },
+			#{city_code },
+			#{state_code },
+			#{street_code },
+			#{embrace_time },
+			1
+		)
+	</insert>
+	<update id='pro_radar_refresh_receive_temp'>
+	call pro_radar_refress_receive_temp();
+	</update>
+</mapper>   

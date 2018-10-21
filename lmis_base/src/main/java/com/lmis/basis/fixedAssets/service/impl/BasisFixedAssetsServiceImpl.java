@@ -1,0 +1,424 @@
+package com.lmis.basis.fixedAssets.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.basis.fixedAssets.dao.BasisFixedAssetsMapper;
+import com.lmis.basis.fixedAssets.model.BasisFixedAssets;
+import com.lmis.basis.fixedAssets.model.ViewBasisFixedAssets;
+import com.lmis.basis.fixedAssets.service.BasisFixedAssetsServiceInterface;
+import com.lmis.basis.fixedAssetsAmt.dao.BasisFixedAssetsAmtMapper;
+import com.lmis.basis.fixedAssetsAmt.model.BasisFixedAssetsAmt;
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.common.dynamicSql.service.DynamicSqlServiceInterface;
+import com.lmis.constant.LBASEConstant;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.setup.constant.dao.SetupConstantMapper;
+import com.lmis.setup.constant.model.SetupConstant;
+
+/** 
+ * @ClassName: BasisFixedAssetsServiceImpl
+ * @Description: TODO(固定资产业务层实现类)
+ * @author codeGenerator
+ * @date 2018-01-22 13:28:46
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class BasisFixedAssetsServiceImpl<T extends BasisFixedAssets> implements BasisFixedAssetsServiceInterface<T> {
+	
+	@Resource(name="dynamicSqlServiceImpl")
+	DynamicSqlServiceInterface<BasisFixedAssets> dynamicSqlService;
+	
+	@Autowired
+	private BasisFixedAssetsAmtMapper<BasisFixedAssetsAmt> basisFixedAssetsAmtMapper;
+	@Autowired
+	private BasisFixedAssetsMapper<T> basisFixedAssetsMapper;
+	
+	@Autowired
+	private SetupConstantMapper<SetupConstant> setupConstantMapper;
+	
+	@Autowired
+	private HttpSession session;
+
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		return dynamicSqlService.executeSelect(dynamicSqlParam, pageObject);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		LmisResult<?> _lmisResult = dynamicSqlService.executeSelect(dynamicSqlParam);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(_lmisResult.getCode())) return _lmisResult;
+		List<Map<String, Object>> result =  (List<Map<String, Object>>) _lmisResult.getData();
+		if(ObjectUtils.isNull(result)) throw new Exception(LBASEConstant.EBASE000007);
+		if(result.size() != 1) throw new Exception(LBASEConstant.EBASE000008);
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, result.get(0));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+		// TODO(业务校验)
+		//唯一校验
+		BasisFixedAssets assets = dynamicSqlService.generateTableModel((DynamicSqlParam<BasisFixedAssets>) dynamicSqlParam, new BasisFixedAssets()).getTableModel();
+		
+		//非空校验
+		if(ObjectUtils.isNull(assets.getAssetsCode())) throw new Exception(LBASEConstant.EBASE000048);
+		
+		BasisFixedAssets checkAssets=new BasisFixedAssets();
+		checkAssets.setIsDeleted(false);
+		checkAssets.setAssetsCode(assets.getAssetsCode());
+		if(basisFixedAssetsMapper.retrieve((T) checkAssets).size()>0) throw new Exception(LBASEConstant.EBASE000049);
+		
+		//有效性校验
+		if(!ObjectUtils.isNull(assets.getAssetsType())) {
+			SetupConstant param= new SetupConstant();
+			param.setConstantCode(assets.getAssetsType());
+			param.setIsDeleted(false);
+			if(setupConstantMapper.retrieve(param).size()==0) throw new Exception(LBASEConstant.EBASE000050);
+		}
+		if(!ObjectUtils.isNull(assets.getMaterialType())) {
+			SetupConstant param= new SetupConstant();
+			param.setConstantCode(assets.getMaterialType());
+			param.setIsDeleted(false);
+			if(setupConstantMapper.retrieve(param).size()==0) throw new Exception(LBASEConstant.EBASE000051);
+		}
+		if(!ObjectUtils.isNull(assets.getUnit())) {
+			SetupConstant param= new SetupConstant();
+			param.setConstantCode(assets.getUnit());
+			param.setIsDeleted(false);
+			if(setupConstantMapper.retrieve(param).size()==0) throw new Exception(LBASEConstant.EBASE000052);
+		}
+		if(!ObjectUtils.isNull(assets.getWorkingLifeUnit())) {
+			SetupConstant param= new SetupConstant();
+			param.setConstantCode(assets.getWorkingLifeUnit());
+			param.setIsDeleted(false);
+			if(setupConstantMapper.retrieve(param).size()==0) throw new Exception(LBASEConstant.EBASE000053);
+		}
+		if(!ObjectUtils.isNull(assets.getResidualRateUnit())) {
+			SetupConstant param= new SetupConstant();
+			param.setConstantCode(assets.getResidualRateUnit());
+			param.setIsDeleted(false);
+			if(setupConstantMapper.retrieve(param).size()==0) throw new Exception(LBASEConstant.EBASE000054);
+		}
+		if(!ObjectUtils.isNull(assets.getDepreciationRule())) {
+			SetupConstant param= new SetupConstant();
+			param.setConstantCode(assets.getDepreciationRule());
+			param.setIsDeleted(false);
+			if(setupConstantMapper.retrieve(param).size()==0) throw new Exception(LBASEConstant.EBASE000055);
+		}
+		if(!ObjectUtils.isNull(assets.getSuperior())&&!assets.getSuperior().equals("0")) {
+			BasisFixedAssets param= new BasisFixedAssets();
+			param.setAssetsCode(assets.getSuperior());
+			param.setIsDeleted(false);
+			if(basisFixedAssetsMapper.retrieve((T) param).size()==0) throw new Exception(LBASEConstant.EBASE000056);
+		}
+		
+		//值校验
+		
+		
+		Pattern pattern = Pattern.compile("[0-9]+");
+		Pattern _pattern = Pattern.compile("[0-9]+\\.?[0-9]*");
+		
+		if(!ObjectUtils.isNull(assets.getAssetsSeq())) {
+	        Matcher isNum = pattern.matcher(assets.getAssetsSeq());
+	        if( !isNum.matches() ){
+	            throw new Exception(LBASEConstant.EBASE000057);
+	        }
+		}
+		if(!ObjectUtils.isNull(assets.getPurchasePrice())) {
+	        Matcher isNum = _pattern.matcher(assets.getPurchasePrice());
+	        if( !isNum.matches() ){
+	            throw new Exception(LBASEConstant.EBASE000058);
+	        }
+		}
+		if(!ObjectUtils.isNull(assets.getWorkingLife())) {
+	        Matcher isNum = _pattern.matcher(assets.getWorkingLife());
+	        if( !isNum.matches() ){
+	            throw new Exception(LBASEConstant.EBASE000059);
+	        }
+		}
+		if(!ObjectUtils.isNull(assets.getResidualRate())) {
+	        Matcher isNum = _pattern.matcher(assets.getResidualRate());
+	        if( !isNum.matches() ){
+	            throw new Exception(LBASEConstant.EBASE000060);
+	        }
+		}
+		
+		// 插入操作
+		//创建人
+		dynamicSqlParam.setCreateBy(session.getAttribute("lmisUserId").toString());
+		//更新人
+		dynamicSqlParam.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		//所属机构
+		dynamicSqlParam.setPwrOrg(session.getAttribute("lmisUserOrg").toString());
+		// 插入操作
+		return dynamicSqlService.executeInsert(dynamicSqlParam);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception {
+			
+		
+		// TODO(业务校验)
+		
+		
+		//存在校验
+		BasisFixedAssets assets = dynamicSqlService.generateTableModel((DynamicSqlParam<BasisFixedAssets>) dynamicSqlParam, new BasisFixedAssets()).getTableModel();
+		BasisFixedAssets checkAssets=new BasisFixedAssets();
+		checkAssets.setIsDeleted(false);
+		checkAssets.setAssetsCode(assets.getAssetsCode());
+		if(basisFixedAssetsMapper.retrieve((T) checkAssets).size()==0) throw new Exception(LBASEConstant.EBASE000061);
+		
+		//更新人
+		dynamicSqlParam.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		// 更新操作
+		return dynamicSqlService.executeUpdate(dynamicSqlParam);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> deleteBasisFixedAssets(T t) throws Exception {
+			
+		// TODO(业务校验)
+		
+		BasisFixedAssets checkAssets=new BasisFixedAssets();
+		checkAssets.setIsDeleted(false);
+		checkAssets.setAssetsCode(t.getAssetsCode());
+		if(basisFixedAssetsMapper.retrieve((T) checkAssets).size()==0) throw new Exception(LBASEConstant.EBASE000061);
+		
+		//无子节点才可删除
+		BasisFixedAssets assets = new BasisFixedAssets();
+		assets.setIsDeleted(false);
+		assets.setSuperior(t.getAssetsCode());
+		List<T> list = basisFixedAssetsMapper.retrieve((T) assets);
+		if(list.size()>0)throw new Exception(LBASEConstant.EBASE000062);
+		
+		BasisFixedAssetsAmt amt=new BasisFixedAssetsAmt();
+		amt.setIsDeleted(false);
+		amt.setAssetsCode(t.getAssetsCode());
+		
+		List<BasisFixedAssetsAmt> amtList = basisFixedAssetsAmtMapper.retrieve(amt);
+		if(amtList.size()>0)throw new Exception(LBASEConstant.EBASE000063);
+		
+		
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		// 删除操作
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, basisFixedAssetsMapper.logicalDelete(t));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> switchBasisFixedAssets(T t) throws Exception {
+		
+		BasisFixedAssets checkAssets=new BasisFixedAssets();
+		checkAssets.setIsDeleted(false);
+		checkAssets.setAssetsCode(t.getAssetsCode());
+		if(basisFixedAssetsMapper.retrieve((T) checkAssets).size()==0) throw new Exception(LBASEConstant.EBASE000061);
+		
+		if(t.getIsDisabled()) {
+			BasisFixedAssets assets=new BasisFixedAssets();
+			assets.setIsDeleted(false);
+			assets.setSuperior(t.getAssetsCode());
+			assets.setIsDisabled(false);
+			if(basisFixedAssetsMapper.retrieve((T) assets).size()>0) throw new Exception(LBASEConstant.EBASE000064);
+			
+			BasisFixedAssetsAmt amt=new BasisFixedAssetsAmt();
+			amt.setIsDeleted(false);
+			amt.setAssetsCode(t.getAssetsCode());
+			List<BasisFixedAssetsAmt> amtList = basisFixedAssetsAmtMapper.retrieve(amt);
+			if(amtList.size()>0)throw new Exception(LBASEConstant.EBASE000065);
+			
+		}else {
+			BasisFixedAssets assets=new BasisFixedAssets();
+			assets.setIsDeleted(false);
+			assets.setAssetsCode(t.getSuperior());
+			assets.setIsDisabled(true);
+			if(basisFixedAssetsMapper.retrieve((T) assets).size()>0) throw new Exception(LBASEConstant.EBASE000025);
+		}
+		
+		//更新人
+		t.setUpdateBy(session.getAttribute("lmisUserId").toString());
+		
+		return new LmisResult<T>(LmisConstant.RESULT_CODE_SUCCESS, basisFixedAssetsMapper.shiftValidity(t));
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<BasisFixedAssets> findAssets(BasisFixedAssets assets) {
+		List<BasisFixedAssets>  assetsList=new ArrayList<>();
+		if(ObjectUtils.isNull(assets.getAssetsCode())&&ObjectUtils.isNull(assets.getAssetsName())){
+			assets.setSuperior("0");
+			assets.setIsDeleted(false);
+			assets.setIsDisabled(false);
+			List<BasisFixedAssets> fixedAssetsList = (List<BasisFixedAssets>)basisFixedAssetsMapper.retrieve((T) assets);
+			for (BasisFixedAssets fixedAssets : fixedAssetsList) {
+				assetsList.add(AssetsRecursive(fixedAssets));
+			}
+		}else {
+			List<BasisFixedAssets> fixedAssetsList = (List<BasisFixedAssets>)basisFixedAssetsMapper.retrieve((T) assets);
+			if(fixedAssetsList.size()>0) {
+				BasisFixedAssets t = fixedAssetsList.get(0);
+				assetsList.add(AssetsRecursive(t));
+			}
+		}
+		return assetsList;
+	}
+
+	@SuppressWarnings("unchecked")
+	private BasisFixedAssets AssetsRecursive(BasisFixedAssets fixedAssets) {
+		List<BasisFixedAssets> childList=new ArrayList<BasisFixedAssets>();
+		
+		//查询所有子结构
+		BasisFixedAssets assetsParam = new BasisFixedAssets();
+		assetsParam.setIsDeleted(false);
+		assetsParam.setIsDisabled(false);
+		assetsParam.setSuperior(fixedAssets.getAssetsCode());
+		List<BasisFixedAssets> assetsList = (List<BasisFixedAssets>)basisFixedAssetsMapper.retrieve((T) assetsParam);
+		
+		//遍历子结构继续查询做递归
+		if(assetsList.size()>0) {
+			for (BasisFixedAssets child : assetsList) {
+				BasisFixedAssets assets = AssetsRecursive(child);
+				childList.add(assets);
+			}
+			fixedAssets.setChildList(childList);
+		}
+		return fixedAssets;
+	}
+
+	@Override
+	public List<ViewBasisFixedAssets> findAssetsView(ViewBasisFixedAssets assets) {
+		List<ViewBasisFixedAssets>  assetsList=new ArrayList<>();
+		if(ObjectUtils.isNull(assets.getAssetsCode())&&ObjectUtils.isNull(assets.getAssetsName())){
+			assets.setIsDeleted(false);
+			List<ViewBasisFixedAssets> fixedAssetsList = basisFixedAssetsMapper.retrieveViewBasisFixedAssets(assets);
+			assetsList = buildByRecursiveView(fixedAssetsList);
+			
+		}else {
+			ViewBasisFixedAssets assets1=new ViewBasisFixedAssets();
+			assets1.setIsDeleted(false);
+			List<ViewBasisFixedAssets> AllfixedAssetsList = basisFixedAssetsMapper.retrieveViewBasisFixedAssets(assets1);
+			List<ViewBasisFixedAssets> fixedAssetsList = basisFixedAssetsMapper.retrieveViewBasisFixedAssets( assets);
+			for (ViewBasisFixedAssets fixedAssets : fixedAssetsList) {
+				ViewBasisFixedAssets _assets = findChildren(fixedAssets, AllfixedAssetsList);
+				assetsList.add(_assets);
+			}
+		}
+		return assetsList;
+	}
+
+	@Override
+    public  List<ViewBasisFixedAssets> lazyfindAssetsView(ViewBasisFixedAssets assets){
+		List<ViewBasisFixedAssets>  assetsList=new ArrayList<>();
+		if(ObjectUtils.isNull(assets.getAssetsCode())&&ObjectUtils.isNull(assets.getAssetsName())) {
+			assets.setSuperior("0");
+			assets.setAssetsCode(null);
+			assets.setIsDeleted(false);
+
+		}else{
+			assets.setSuperior(assets.getAssetsCode());
+			assets.setAssetsCode(null);
+			assets.setIsDeleted(false);
+
+		}
+		List<ViewBasisFixedAssets> fixedAssetsList = basisFixedAssetsMapper.retrieveViewBasisFixedAssets(assets);
+		assetsList.addAll(fixedAssetsList);
+		return assetsList;
+	}
+
+	
+	@Override
+	public LmisResult<?> exportFixedAssets(int pageSize) throws Exception {
+		
+		//返回参数
+		LmisResult<List<ViewBasisFixedAssets>> lmisResult=new LmisResult<>();
+		List<ViewBasisFixedAssets> exportList=new ArrayList<>();
+		
+		ViewBasisFixedAssets fixedAssets=new ViewBasisFixedAssets();
+		fixedAssets.setIsDeleted(false);
+		fixedAssets.setIsDisabled(false);
+		fixedAssets.setSuperior("0");
+		List<ViewBasisFixedAssets> fixedAssetsList = basisFixedAssetsMapper.retrieveViewBasisFixedAssets(fixedAssets);
+		for (ViewBasisFixedAssets a : fixedAssetsList) {
+			exportList.add(a);
+			if(exportList.size()==pageSize) break;
+			exportRecursive(a,exportList,pageSize);
+		}
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		lmisResult.setData(exportList);
+		
+		return lmisResult;
+	}
+
+	private void exportRecursive(ViewBasisFixedAssets fixedAssets, List<ViewBasisFixedAssets> exportList,int pageSize) {
+		//查询所有子结构
+		ViewBasisFixedAssets param = new ViewBasisFixedAssets();
+		param.setIsDeleted(false);
+		param.setSuperior(fixedAssets.getAssetsCode());
+		List<ViewBasisFixedAssets> fixedAssetsList = basisFixedAssetsMapper.retrieveViewBasisFixedAssets(param);
+		
+		//遍历子结构继续查询做递归
+		if(fixedAssetsList.size()>0) {
+			for (ViewBasisFixedAssets child : fixedAssetsList) {
+				if(exportList.size()==pageSize) return;
+				exportList.add(child);
+				exportRecursive(child,exportList,pageSize);
+			}
+		}
+	}
+	
+	/** 
+     * 使用递归方法建树 
+     * @param treeNodes 
+     * @return 
+     */  
+    public static List<ViewBasisFixedAssets> buildByRecursiveView(List<ViewBasisFixedAssets> treeNodes) {  
+        List<ViewBasisFixedAssets> trees = new ArrayList<ViewBasisFixedAssets>();  
+        for (ViewBasisFixedAssets treeNode : treeNodes) {  
+            if ("0".equals(treeNode.getSuperior())) {  
+                trees.add(findChildren(treeNode,treeNodes));  
+            }  
+        }  
+        return trees;  
+    }
+    
+    /** 
+     * 递归查找子节点 
+     * @param treeNodes 
+     * @return 
+     */  
+    public static ViewBasisFixedAssets findChildren(ViewBasisFixedAssets treeNode,List<ViewBasisFixedAssets> treeNodes) {  
+        for (ViewBasisFixedAssets it : treeNodes) {  
+            if(treeNode.getAssetsCode().equals(it.getSuperior())) {  
+                if (treeNode.getChildList() == null) {  
+                    treeNode.setChildList(new ArrayList<ViewBasisFixedAssets>());  
+                } 
+                treeNode.getChildList().add(findChildren(it,treeNodes));  
+            }  
+        }  
+        return treeNode;  
+    }
+	
+
+}

@@ -1,0 +1,150 @@
+package com.lmis.sys.roleFunctionButton.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lmis.common.dataFormat.ObjectUtils;
+import com.lmis.common.dynamicSql.model.DynamicSqlParam;
+import com.lmis.common.dynamicSql.service.DynamicSqlServiceInterface;
+import com.lmis.constant.LBASEConstant;
+import com.lmis.framework.baseInfo.LmisConstant;
+import com.lmis.framework.baseInfo.LmisPageObject;
+import com.lmis.framework.baseInfo.LmisResult;
+import com.lmis.sys.roleFunctionButton.dao.SysRoleFunctionButtonMapper;
+import com.lmis.sys.roleFunctionButton.model.SysRoleFunctionButton;
+import com.lmis.sys.roleFunctionButton.service.SysRoleFunctionButtonServiceInterface;
+
+/** 
+ * @ClassName: SysRoleFunctionButtonServiceImpl
+ * @Description: TODO(业务层实现类)
+ * @author codeGenerator
+ * @date 2018-01-09 17:35:11
+ * 
+ * @param <T>
+ */
+@Transactional(rollbackFor=Exception.class)
+@Service
+public class SysRoleFunctionButtonServiceImpl<T extends SysRoleFunctionButton> implements SysRoleFunctionButtonServiceInterface<T>{
+
+	@SuppressWarnings("unused")
+	private static Logger logger = Logger.getLogger(SysRoleFunctionButtonServiceImpl.class);
+	@Resource(name="dynamicSqlServiceImpl")
+	DynamicSqlServiceInterface<Map<String, Object>> dynamicSqlService;
+	@Autowired
+	private SysRoleFunctionButtonMapper<T> sysRoleFunctionButtonMapper;
+	@Autowired
+	private HttpSession session;
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam, LmisPageObject pageObject) throws Exception {
+		return dynamicSqlService.executeSelect(dynamicSqlParam, pageObject);
+	}
+
+	@Override
+	public LmisResult<?> executeSelect(DynamicSqlParam<T> dynamicSqlParam) throws Exception{
+		LmisResult<?> lmisResult = new LmisResult<T>();
+		dynamicSqlParam.setIsDeleted(false);
+		LmisResult<?> _lmisResult = dynamicSqlService.executeSelect(dynamicSqlParam);
+		if(LmisConstant.RESULT_CODE_ERROR.equals(_lmisResult.getCode())) {
+			return _lmisResult;
+		}
+		@SuppressWarnings("unchecked")
+		List<Map<String, Object>> result =  (List<Map<String, Object>>) _lmisResult.getData();
+		if(ObjectUtils.isNull(result)) throw new Exception(LBASEConstant.EBASE000007);
+		if(result.size() != 1) throw new Exception(LBASEConstant.EBASE000008);
+		lmisResult.setData(result.get(0));
+		lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		return lmisResult;
+	}
+
+	@Override
+	public LmisResult<?> executeInsert(DynamicSqlParam<T> dynamicSqlParam) throws Exception{
+		// TODO(业务校验)
+		// 插入操作
+		return dynamicSqlService.executeInsert(dynamicSqlParam);
+	}
+
+	@Override
+	public LmisResult<?> executeUpdate(DynamicSqlParam<T> dynamicSqlParam) throws Exception{
+		// TODO(业务校验)
+		
+		// 更新操作
+		return dynamicSqlService.executeUpdate(dynamicSqlParam);
+	}
+
+	@Override
+	public LmisResult<?> deleteSysRoleFunctionButton(T t) throws Exception{
+		LmisResult<T> lmisResult = new LmisResult<T>();
+			
+		// TODO(业务校验)
+		
+		// 删除操作
+		if(sysRoleFunctionButtonMapper.logicalDelete(t) == 1) lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+		return lmisResult;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public LmisResult<?> addRoleFunctionButton(List<SysRoleFunctionButton> roleFbList) throws Exception{
+		
+			//返回参数
+			LmisResult<T> lmisResult = new LmisResult<T>();
+			//插入LISt
+			List<SysRoleFunctionButton> insertList=new ArrayList<>();
+			
+			SysRoleFunctionButton param=new SysRoleFunctionButton();
+			for (SysRoleFunctionButton sysRoleFb : roleFbList) {
+				param.setFbId(sysRoleFb.getFbId());
+				param.setRoleId(sysRoleFb.getRoleId());
+				param.setIsDeleted(false);
+				List<T> list = sysRoleFunctionButtonMapper.retrieve((T)param);
+				if(list.size()==0) {
+					
+					SysRoleFunctionButton roleFb =new SysRoleFunctionButton();
+					
+					//创建人
+					roleFb.setCreateBy(session.getAttribute("lmisUserId").toString());
+					//更新人
+					roleFb.setUpdateBy(session.getAttribute("lmisUserId").toString());
+					//所属机构
+					roleFb.setPwrOrg(session.getAttribute("lmisUserOrg").toString());
+					
+					//功能菜单ID
+					roleFb.setFbId(sysRoleFb.getFbId());
+					//角色ID
+					roleFb.setRoleId(sysRoleFb.getRoleId());
+					insertList.add(roleFb);
+				}
+			}
+			if(insertList.size()>0) {
+				sysRoleFunctionButtonMapper.createBatch( (List<T>) insertList);
+			}
+			
+			//查询要逻辑删除的数据
+			List<SysRoleFunctionButton> updateList=sysRoleFunctionButtonMapper.getRoleFbByFbId(roleFbList);
+			for (SysRoleFunctionButton sysRoleFb : updateList) {
+				sysRoleFb.setUpdateBy(session.getAttribute("lmisUserId").toString());
+				sysRoleFunctionButtonMapper.logicalDelete((T) sysRoleFb);
+			}
+			lmisResult.setCode(LmisConstant.RESULT_CODE_SUCCESS);
+			return lmisResult;
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> sysRoleFunctionButton(SysRoleFunctionButton sysRoleFunctionButton) {
+		sysRoleFunctionButton.setIsDeleted(false);
+		return sysRoleFunctionButtonMapper.retrieve((T) sysRoleFunctionButton);
+	}
+
+
+}

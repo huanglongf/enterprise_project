@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.dao.NvitationRealuseanmountDataMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.model.NvitationRealuseanmountData" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="store_code" property="store_code"/>
+	<result column="store_name" property="store_name"/>
+	<result column="epistatic_order" property="epistatic_order"/>
+	<result column="express_number" property="express_number"/>
+	<result column="cost_center" property="cost_center"/>
+	<result column="use_time" property="use_time"/>
+	<result column="sku_code" property="sku_code"/>
+	<result column="sku_name" property="sku_name"/>
+	<result column="use_amount" property="use_amount"/>
+	<result column="use_amountunit" property="use_amountunit"/>
+	<result column="settle_flag" property="settle_flag"/>
+	<result column="warehouse_code" property="warehouse_code"/>
+	<result column="warehouse_name" property="warehouse_name"/>
+	<result column="park_code" property="park_code"/>
+	<result column="park_name" property="park_name"/>
+	<result column="park_cost_center" property="park_cost_center"/>
+</resultMap>
+       
+<!-- tb_invitation_realuseanmount_data table all fields -->
+<sql id="Base_Column_List" >
+	 id,create_time,create_user,update_time,update_user,store_code,store_name,cost_center,use_time,sku_code,sku_name,epistatic_order,express_number,use_amount,use_amountunit,settle_flag,warehouse_code,warehouse_name,park_code,park_name,park_cost_center
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	 	<if test="cost_center != null and cost_center != ''" >
+	    and cost_center =  #{cost_center}
+	</if>
+	 	<if test="use_time != null and use_time != ''" >
+	    and use_time =  #{use_time}
+	</if>
+	 	<if test="sku_code != null and sku_code != ''" >
+	    and sku_code =  #{sku_code}
+	</if>
+	 	<if test="sku_name != null and sku_name != ''" >
+	    and sku_name =  #{sku_name}
+	</if>
+ 	<if test="express_number != null and express_number != ''" >
+	    and express_number =  #{express_number}
+	</if>
+ 	<if test="epistatic_order != null and epistatic_order != ''" >
+	    and epistatic_order =  #{epistatic_order}
+	</if>
+	<if test="use_amount != null" >
+	    and use_amount =  #{use_amount}
+	</if>
+	 	<if test="use_amountunit != null and use_amountunit != ''" >
+	    and use_amountunit =  #{use_amountunit}
+	</if>
+	<if test="settle_flag != null" >
+	    and settle_flag =  #{settle_flag}
+	</if>
+	<if test="start_time != null" >
+	    and ob_time <![CDATA[  >=#{start_time}  ]]>  
+	</if>
+	<if test="end_time != null" >
+	    and ob_time <![CDATA[  <=#{end_time}  ]]>  
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入耗材实际使用量 -->
+<insert id="insert" parameterType="com.bt.lmis.model.NvitationRealuseanmountData" >
+  insert into tb_invitation_realuseanmount_data(id,create_time,create_user,update_time,update_user,store_code,store_name,cost_center,use_time,sku_code,sku_name,epistatic_order,express_number,use_amount,use_amountunit,settle_flag,warehouse_code,warehouse_name,park_code,park_name,park_cost_center)
+ values(#{id},#{create_time},#{create_user},#{update_time},#{update_user},#{store_code},#{store_name},#{cost_center},#{use_time},#{sku_code},#{sku_name},#{epistatic_order},#{express_number},#{use_amount},#{use_amountunit},#{settle_flag},#{warehouse_code},#{warehouse_name},#{park_code},#{park_name},#{park_cost_center})
+</insert>
+
+<!-- 修改耗材实际使用量-->  
+ <update id="update" parameterType="com.bt.lmis.model.NvitationRealuseanmountData" >
+  update tb_invitation_realuseanmount_data set create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},store_code=#{store_code},store_name=#{store_name},cost_center=#{cost_center},use_time=#{use_time},sku_code=#{sku_code},sku_name=#{sku_name},epistatic_order=#{epistatic_order},express_number=#{express_number},use_amount=#{use_amount},use_amountunit=#{use_amountunit},settle_flag=#{settle_flag},warehouse_code=#{warehouse_code},warehouse_name=#{warehouse_name},park_code=#{park_code},park_name=#{park_name},park_cost_center=#{park_cost_center} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改耗材实际使用量-->
+<update id="updateBySelective" parameterType="com.bt.lmis.model.NvitationRealuseanmountData" >
+	update tb_invitation_realuseanmount_data set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="cost_center != null  and cost_center != '' ">
+		cost_center=#{cost_center},
+	</if>
+	<if test="use_time != null  and use_time != '' ">
+		use_time=#{use_time},
+	</if>
+	<if test="sku_code != null  and sku_code != '' ">
+		sku_code=#{sku_code},
+	</if>
+	<if test="sku_name != null  and sku_name != '' ">
+		sku_name=#{sku_name},
+	</if>
+	<if test="epistatic_order != null  and epistatic_order != '' ">
+		epistatic_order=#{epistatic_order},
+	</if>
+	<if test="express_number != null  and express_number != '' ">
+		express_number=#{express_number},
+	</if>
+	<if test="use_amount != null  ">
+		use_amount=#{use_amount},
+	</if>
+	<if test="use_amountunit != null  and use_amountunit != '' ">
+		use_amountunit=#{use_amountunit},
+	</if>
+	<if test="settle_flag != null  ">
+		settle_flag=#{settle_flag},
+	</if>
+	<if test="warehouse_code != null  ">
+		warehouse_code=#{warehouse_code},
+	</if>
+	<if test="warehouse_name != null  ">
+		warehouse_name=#{warehouse_name},
+	</if>
+	<if test="park_code != null  ">
+		park_code=#{park_code},
+	</if>
+	<if test="park_name != null  ">
+		park_name=#{park_name},
+	</if>
+	<if test="park_cost_center != null  ">
+		park_cost_center=#{park_cost_center},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除耗材实际使用量 -->
+<update id="delete" parameterType="Object">
+	delete 	 from tb_invitation_realuseanmount_data where id = #{id}
+</update>
+<!-- 批量删除耗材实际使用量 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from tb_invitation_realuseanmount_data where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找耗材实际使用量 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from tb_invitation_realuseanmount_data where id = #{id}
+</select>
+  	
+<!-- 耗材实际使用量 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.NvitationRealuseanmountDataQueryParam">
+	select count(1) from tb_invitation_realuseanmount_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的耗材实际使用量集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.NvitationRealuseanmountDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitation_realuseanmount_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 耗材实际使用量总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.controller.form.NvitationRealuseanmountDataQueryParam">
+	select count(1) from tb_invitation_realuseanmount_data 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的耗材实际使用量集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.controller.form.NvitationRealuseanmountDataQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitation_realuseanmount_data 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+
+<select id="list" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.NvitationRealuseanmountData">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitation_realuseanmount_data 
+	<include refid="where_Clause"/>
+</select>
+
+<select id="countSE" resultType="java.lang.Integer"  parameterType="com.bt.lmis.model.NvitationRealuseanmountData">
+	select 
+	count(1)
+	from tb_invitation_realuseanmount_data 
+	where 1=1
+	<trim  suffixOverrides="," >
+		<if test="create_time != null" >
+		    and create_time =  #{create_time}
+		</if>
+		 	<if test="create_user != null and create_user != ''" >
+		    and create_user =  #{create_user}
+		</if>
+		<if test="update_time != null" >
+		    and update_time =  #{update_time}
+		</if>
+		 	<if test="update_user != null and update_user != ''" >
+		    and update_user =  #{update_user}
+		</if>
+		 	<if test="store_code != null and store_code != ''" >
+		    and store_code =  #{store_code}
+		</if>
+		 	<if test="store_name != null and store_name != ''" >
+		    and store_name =  #{store_name}
+		</if>
+		 	<if test="cost_center != null and cost_center != ''" >
+		    and cost_center =  #{cost_center}
+		</if>
+		 	<if test="use_time != null and use_time != ''" >
+		    and use_time =  #{use_time}
+		</if>
+		 	<if test="sku_code != null and sku_code != ''" >
+		    and sku_code =  #{sku_code}
+		</if>
+	 	<if test="sku_name != null and sku_name != ''" >
+		    and sku_name =  #{sku_name}
+		</if>
+	 	<if test="express_number != null and express_number != ''" >
+		    and express_number =  #{express_number}
+		</if>
+	 	<if test="epistatic_order != null and epistatic_order != ''" >
+		    and epistatic_order =  #{epistatic_order}
+		</if>
+		<if test="use_amount != null" >
+		    and use_amount =  #{use_amount}
+		</if>
+		 	<if test="use_amountunit != null and use_amountunit != ''" >
+		    and use_amountunit =  #{use_amountunit}
+		</if>
+		<if test="settle_flag != null" >
+		    and settle_flag =  #{settle_flag}
+		</if>
+		<if test="start_time != null" >
+		    and TO_DAYS(ob_time) <![CDATA[  >= TO_DAYS(#{start_time})  ]]>  
+		</if>
+		<if test="end_time != null" >
+		    and TO_DAYS(ob_time) <![CDATA[  <= TO_DAYS(#{end_time})  ]]>  
+		</if>
+	</trim>
+</select>
+
+<select id="listSE" resultMap="BaseResultMap"  parameterType="com.bt.lmis.model.NvitationRealuseanmountData">
+	select 
+	<include refid="Base_Column_List"/>
+	from tb_invitation_realuseanmount_data 
+	where 1=1
+	<trim  suffixOverrides="," >
+		<if test="create_time != null" >
+		    and create_time =  #{create_time}
+		</if>
+		 	<if test="create_user != null and create_user != ''" >
+		    and create_user =  #{create_user}
+		</if>
+		<if test="update_time != null" >
+		    and update_time =  #{update_time}
+		</if>
+		 	<if test="update_user != null and update_user != ''" >
+		    and update_user =  #{update_user}
+		</if>
+		 	<if test="store_code != null and store_code != ''" >
+		    and store_code =  #{store_code}
+		</if>
+		 	<if test="store_name != null and store_name != ''" >
+		    and store_name =  #{store_name}
+		</if>
+		 	<if test="cost_center != null and cost_center != ''" >
+		    and cost_center =  #{cost_center}
+		</if>
+		 	<if test="use_time != null and use_time != ''" >
+		    and use_time =  #{use_time}
+		</if>
+		 	<if test="sku_code != null and sku_code != ''" >
+		    and sku_code =  #{sku_code}
+		</if>
+	 	<if test="sku_name != null and sku_name != ''" >
+		    and sku_name =  #{sku_name}
+		</if>
+	 	<if test="express_number != null and express_number != ''" >
+		    and express_number =  #{express_number}
+		</if>
+	 	<if test="epistatic_order != null and epistatic_order != ''" >
+		    and epistatic_order =  #{epistatic_order}
+		</if>
+		<if test="use_amount != null" >
+		    and use_amount =  #{use_amount}
+		</if>
+		 	<if test="use_amountunit != null and use_amountunit != ''" >
+		    and use_amountunit =  #{use_amountunit}
+		</if>
+		<if test="settle_flag != null" >
+		    and settle_flag =  #{settle_flag}
+		</if>
+		<if test="start_time != null" >
+		    and TO_DAYS(ob_time) <![CDATA[  >= TO_DAYS(#{start_time})  ]]>  
+		</if>
+		<if test="end_time != null" >
+		    and TO_DAYS(ob_time) <![CDATA[  <= TO_DAYS(#{end_time})  ]]>  
+		</if>
+	</trim>
+	<if test="firstResult != null and maxResult != null">
+		limit #{firstResult},#{maxResult}
+	</if>
+</select>
+<update id='update_settleflag' parameterType="com.bt.lmis.model.NvitationRealuseanmountData">
+update tb_invitation_realuseanmount_data set settle_flag=0 
+	<include refid="where_Clause"/>
+</update>
+
+
+</mapper>   

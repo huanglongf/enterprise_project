@@ -1,0 +1,84 @@
+.search-title label {
+	height: 34px;
+	white-space: nowrap;
+	display: table-cell;
+	vertical-align: middle;
+}
+.senior-search {
+	display: none;
+}
+.pointer {
+	cursor: pointer;
+}
+.time-picker {
+	margin-bottom: 15px;
+}
+.btn-width {
+	width:80px;	
+}
+/* 表格边缘勾线  */
+.table-border {
+	border: outset #E0E0E0 1px;
+}
+/* 表列宽固定  */
+.table-fixed {
+	table-layout: fixed;
+}
+/* 表文本格式 */
+.table-text {
+	/* 不换行  */
+	white-space: nowrap;
+	/* 溢出隐藏  */
+	overflow: hidden;
+	/* 文本溢出省略号 */
+	text-overflow: ellipsis;
+}
+/* 表头格式 */
+.table-title {
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+/* 空表头 */
+.table-title-empty {
+	height: 39px;
+}
+#table_column_content_parent {
+	width: 315px;
+}
+#table_column_content {
+	width: 332px;
+}
+#table_column_config_content_parent {
+	width: 315px;
+}
+#table_column_config_content {
+	width: 332px;
+}
+/*  */
+.table-content-parent {
+	/*  */
+	overflow:hidden;
+}
+/* 表内容格式-固定高度 */
+.table-content-fix {
+	/* 固定高度 */
+	height: 350px;
+	/* 溢出 */
+	overflow: auto;
+	overflow: scroll;
+}
+/* 表内容格式-不固定高度 */
+.table-content-free {
+	/* 溢出 */
+	overflow: auto;
+	overflow: scroll;
+}
+.col-sm {
+	width: 35px;
+}
+.col-md {
+	width: 70px;
+}
+.col-lg {
+	width: 200px;
+}

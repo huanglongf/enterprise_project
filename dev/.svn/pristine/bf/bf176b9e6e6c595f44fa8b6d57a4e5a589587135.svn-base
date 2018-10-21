@@ -1,0 +1,5 @@
+.lmis-panel {
+	overflow-x:hidden;
+	overflow-y:auto;
+	
+}

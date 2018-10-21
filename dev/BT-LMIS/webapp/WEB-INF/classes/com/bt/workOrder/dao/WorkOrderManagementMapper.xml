@@ -1,0 +1,2301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.bt.workOrder.dao.WorkOrderManagementMapper" >
+	<select id="getWorkOrderByExpressNumber" parameterType="Object" resultType="java.util.Map">
+		SELECT id,wo_no FROM wo_master WHERE express_number=#{express_number }
+	</select>
+	<select id="getWorkOrdersById" parameterType="Object" resultType="com.bt.workOrder.model.WorkOrder">
+		SELECT
+			id,
+			create_time AS createTime,
+			create_by AS createBy,
+			update_time AS updateTime,
+			update_by AS updateBy,
+			wo_alloc_status AS woAllocStatus,
+			wo_process_status AS woProcessStatus,
+			wo_source AS woSource,
+			wo_no AS woNo,
+			wo_type AS woType,
+			wo_level AS woLevel,
+			exception_type AS exceptionType,
+			carrier AS carriers,
+			express_number AS expressNumber,
+			warehouse AS warehouses,
+			transport_time AS transportTime,
+			store AS stores,
+			platform_number AS platformNumber,
+			related_number AS relatedNumber,
+			order_amount AS orderAmount,
+			logistics_status AS logisticsStatus,
+			warning_type AS warningType,
+			warning_level AS warningLevel,
+			recipient AS recipient,
+			phone AS phone,
+			address AS address,
+			query_person AS queryPerson,
+			allocated_by AS allocatedBy,
+			processor AS processor,
+			process_content AS processContent,
+			pause_reason AS pauseReason,
+			level_alter_reason AS levelAlterReason,
+			estimated_time_of_completion AS estimatedTimeOfCompletion,
+			standard_manhours AS standardManhours,
+			process_start_point AS processStartPoint,
+			actual_manhours AS actualManhours,
+			cal_date,
+			watched
+		FROM wo_master
+		WHERE id in
+		<foreach collection= "array" index= "index" item= "id" open= "(" separator= "," close= ")" >
+	    	#{id }
+	   	</foreach>
+	</select>
+	<select id="getWaybillDetailByWaybill" parameterType="String" resultType="java.util.Map">
+	    SELECT
+	    	a.epistatic_order,
+	    	CASE WHEN b.sku_number IS NOT NULL THEN b.sku_number
+	    	ELSE "" END AS sku_number,
+	    	CASE WHEN b.barcode IS NOT NULL THEN b.barcode
+	    	ELSE "" END AS barcode,
+	    	CASE WHEN b.item_name IS NOT NULL THEN b.item_name
+	    	ELSE "" END AS item_name,
+	    	CASE WHEN b.extend_pro IS NOT NULL THEN b.extend_pro
+	    	ELSE "" END AS extend_pro,
+	    	CASE WHEN b.qty IS NOT NULL THEN b.qty
+	    	ELSE "" END AS qty
+	    FROM er_expressinfo_detail b, wo_waybill_master a
+	    WHERE a.express_number=b.waybill
+    	AND b.waybill=#{waybill }
+	</select>
+	<select id="selectOMSInterfaceClaimDetail" parameterType="Integer" resultType="com.bt.workOrder.model.ClaimDetail">
+		SELECT
+			skuCode AS sku_number,
+			skuName AS sku_name,
+			quantity AS sku_num,
+			unitPrice AS platform_price,
+			totalPrice AS platform_price_all,
+			claimQty AS claim_num_applied,
+			claimUnitPrice AS claim_price_applied,
+			claimAmt AS claim_value_applied
+		FROM jk_claim_detail
+		WHERE parent_id=#{parent_id }
+	</select>
+	<select id="getEmailByWoNo" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT email from s_employee e,wo_store_master w 
+		where wo_no=#{woNo} AND e.id=w.current_processor
+	</select>
+	<select id="getAllNoControlGroup" resultType="java.util.HashMap">
+		SELECT id,group_name from s_group where process_control=1
+	</select>
+	<select id="getOMSClaimById" parameterType="Integer" resultType="com.bt.workOrder.model.OMSClaim">
+		SELECT
+			id,
+			bat_id,
+			systemCode,
+			claimCode,
+			erpOrderCode,
+			omsOrderCode,
+			rasCode,
+			shopOwner,
+			createTime,
+			createUserName,
+			transName,
+			transCode,
+			transNumber,
+			claimReason,
+			isOuterContainerDamaged,
+			isPackageDamaged,
+			isTwoSubBox,
+			isHasProductReturn,
+			isFilledWith,
+			remark,
+			fileUrl,
+			extralAmt,
+			extralRemark,
+			totalClaimAmt,
+			createDate,
+			is_complete,
+			claim_status,
+			pro_flag,
+			pro_remark,
+			exception_handling
+		FROM jk_claim_data
+		WHERE id= #{id }
+	</select>
+	<select id= "getClaimStatus" parameterType= "Object" resultType= "String" >
+		SELECT column_value FROM wo_operation_detail WHERE wo_id= #{woId } AND column_code= "claim_status"
+	</select>
+	<select id= "getClaimWorkOrderOnDeadline" parameterType= "String" resultType= "com.bt.workOrder.model.ClaimSchedule" >
+		SELECT
+			id,
+			create_by AS createBy,
+			create_time AS createTime,
+			update_by AS updateBy,
+			update_time AS updateTime,
+			wo_id AS woId,
+			wo_type AS woType,
+			trigger_time AS triggerTime
+		FROM wo_claim_schedule
+		WHERE TO_SECONDS(trigger_time) &lt;= TO_SECONDS(#{now })
+	</select>
+	<select id= "getWarningDays" resultType= "Integer" >
+		SELECT warning_days FROM wo_claim_config
+	</select>
+	<select id= "delCliamSchedule" parameterType= "String" >
+		DELETE FROM wo_claim_schedule WHERE wo_id= #{woId }
+	</select>
+	<select id= "addCliamSchedule" parameterType= "com.bt.workOrder.model.ClaimSchedule" >
+		INSERT INTO wo_claim_schedule (
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			wo_id,
+			wo_type,
+			trigger_time
+			
+		) VALUES (
+			#{id },
+			#{createBy },
+			now(),
+			#{createBy },
+			now(),
+			#{woId },
+			#{woType },
+			#{triggerTime }
+		
+		)
+	</select>
+	<select id= "loadingEmployeeInGroupProcessSummary" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			"已处理" AS subject,b.name AS employee,count(1) AS num
+		FROM
+			(
+				SELECT
+					a.name
+				FROM
+					wo_master
+				LEFT JOIN (
+					SELECT
+						employee,
+						s_employee.name,
+						CASE WHEN s_group.group_name IS NULL THEN "无组别"
+						WHEN s_group.group_name IS NOT NULL THEN s_group.group_name
+						ELSE "" END AS group_name
+					FROM
+						s_employee_in_group
+					LEFT JOIN s_employee ON s_employee.id = s_employee_in_group.employee
+					LEFT JOIN s_group ON s_group.id = s_employee_in_group.`group`
+				) a ON a.employee = wo_master.processor
+				WHERE
+					a.group_name= #{group }
+				AND	wo_alloc_status = "ALD"
+				AND wo_process_status = "FIN"
+				AND TO_DAYS(create_time) &gt;= TO_DAYS(#{dateRangeStart })
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{dateRangeEnd })
+				ORDER BY a.employee
+			) b
+		GROUP BY
+			employee
+		UNION ALL
+		SELECT
+			"未处理" AS subject,b.name AS employee,count(1) AS num
+		FROM
+			(
+				SELECT
+					a.name
+				FROM
+					wo_master
+				LEFT JOIN (
+					SELECT
+						employee,
+						s_employee.name,
+						CASE WHEN s_group.group_name IS NULL THEN "无组别"
+						WHEN s_group.group_name IS NOT NULL THEN s_group.group_name
+						ELSE "" END AS group_name
+					FROM
+						s_employee_in_group
+					LEFT JOIN s_employee ON s_employee.id = s_employee_in_group.employee
+					LEFT JOIN s_group ON s_group.id = s_employee_in_group.`group`
+				) a ON a.employee = wo_master.processor
+				WHERE
+					a.group_name= #{group }
+				AND wo_alloc_status = "ALD"
+				AND wo_process_status != "CCD"
+				AND wo_process_status != "FIN"
+				AND TO_DAYS(create_time) &gt;= TO_DAYS(#{dateRangeStart })
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{dateRangeEnd })
+				ORDER BY a.employee
+			) b
+		GROUP BY
+			employee
+	</select>
+	<select id= "loadingGroupProcessSummary" parameterType= "Object" resultType= "java.util.Map"  >
+		SELECT
+			"已处理" AS subject,b.group_name AS groups,count(1) AS num
+		FROM
+			(
+				SELECT
+					CASE WHEN a.group_name IS NULL THEN "无组别"
+					WHEN a.group_name IS NOT NULL THEN a.group_name
+					ELSE "" END AS group_name
+				FROM
+					wo_master
+				LEFT JOIN (
+					SELECT
+						employee,
+						s_group.group_name
+					FROM
+						s_employee_in_group
+					LEFT JOIN s_group ON s_group.id = s_employee_in_group.`group`
+				) a ON a.employee = wo_master.processor
+				WHERE
+					wo_alloc_status = "ALD"
+				AND wo_process_status = "FIN"
+				AND TO_DAYS(create_time) &gt;= TO_DAYS(#{dateRangeStart })
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{dateRangeEnd })
+				ORDER BY a.group_name
+			) b
+		GROUP BY
+			b.group_name
+		UNION ALL
+		SELECT
+			"未处理" AS subject,b.group_name AS groups,count(1) AS num
+		FROM
+			(
+				SELECT
+					CASE WHEN a.group_name IS NULL THEN "无组别"
+					WHEN a.group_name IS NOT NULL THEN a.group_name
+					ELSE "" END AS group_name
+				FROM
+					wo_master
+				LEFT JOIN (
+					SELECT
+						employee,
+						s_group.group_name
+					FROM
+						s_employee_in_group
+					LEFT JOIN s_group ON s_group.id = s_employee_in_group.`group`
+				) a ON a.employee = wo_master.processor
+				WHERE
+					wo_alloc_status = "ALD"
+				AND wo_process_status != "CCD"
+				AND wo_process_status != "FIN"
+				AND TO_DAYS(create_time) &gt;= TO_DAYS(#{dateRangeStart })
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{dateRangeEnd })
+				ORDER BY a.group_name
+			) b
+		GROUP BY
+			b.group_name
+	</select>
+	<select id= "workOrderProcessStatusSummary" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			wo_process_status AS subject,count(1) AS num
+		FROM
+			(
+				SELECT
+					CASE wo_process_status
+					WHEN "NEW" THEN "新建"
+					WHEN "PRO" THEN "处理中"
+					WHEN "PAU" THEN "挂起待确认"
+					WHEN "CCD" THEN "已取消"
+					WHEN "FIN" THEN "已处理"
+					ELSE ""
+					END AS wo_process_status
+				FROM
+					wo_master
+				WHERE
+					TO_DAYS(create_time) &gt;= TO_DAYS(#{dateRangeStart })
+				AND TO_DAYS(create_time) &lt;= TO_DAYS(#{dateRangeEnd })
+				ORDER BY wo_process_status
+			) a
+		GROUP BY
+			wo_process_status
+	</select>
+	<select id= "untreatedWorkOrderSummary" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT * FROM(
+			SELECT
+				wo_alloc_status AS subject,create_time,count(1) AS num
+			FROM
+				(
+					SELECT
+						CASE wo_alloc_status
+						WHEN "WAA" THEN
+							"待自动分配"
+						WHEN "WMA" THEN
+							"待手动分配"
+						ELSE
+							""
+						END AS wo_alloc_status,
+						DATE_FORMAT(create_time, '%Y-%m-%d') AS create_time
+					FROM
+						wo_master
+					WHERE
+						wo_alloc_status != "ALD"
+					AND TO_DAYS(create_time) &gt;= TO_DAYS(#{dateRangeStart })
+					AND TO_DAYS(create_time) &lt;= TO_DAYS(#{dateRangeEnd })
+					ORDER BY wo_alloc_status, create_time
+				) a
+			GROUP BY
+				wo_alloc_status,create_time
+			UNION ALL
+			SELECT
+				b.group_name AS subject,b.create_time,count(1) AS num
+			FROM
+				(
+					SELECT
+						CASE WHEN a.group_name IS NULL THEN "无组别"
+						WHEN a.group_name IS NOT NULL THEN a.group_name
+						ELSE "" END AS group_name,
+						DATE_FORMAT(create_time, '%Y-%m-%d') AS create_time
+					FROM
+						wo_master
+					LEFT JOIN (
+						SELECT
+							employee,
+							s_group.group_name
+						FROM
+							s_employee_in_group
+						LEFT JOIN s_group ON s_group.id = s_employee_in_group.`group`
+					) a ON a.employee = wo_master.processor
+					WHERE
+						wo_alloc_status = "ALD"
+					AND (wo_process_status != "CCD" OR wo_process_status != "FIN")
+					AND TO_DAYS(create_time) &gt;= TO_DAYS(#{dateRangeStart })
+					AND TO_DAYS(create_time) &lt;= TO_DAYS(#{dateRangeEnd })
+					ORDER BY a.group_name,create_time
+				) b
+			GROUP BY
+				b.group_name,b.create_time
+		) c
+	</select>
+	<select id= "getLevelName" parameterType= "String" resultType= "String" >
+		SELECT name FROM wk_level WHERE code= #{level }
+	</select>
+	<select id="getSort" parameterType="String" resultType="Integer">
+		SELECT MAX(sort) FROM wo_event_monitor WHERE wo_id= #{wo_id }
+	</select>
+	<update id= "cancelWaybillWarning" parameterType= 'java.lang.String' >
+		update er_waybill_warninginfo_detail set del_flag= 1 where wk_id= #{id }
+	</update>
+	<select id= "monitoringStatus" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			count(1) AS current_num,
+			wo_process_status
+		FROM wo_master
+		WHERE processor = #{processor }
+		GROUP BY wo_process_status
+		UNION ALL
+		SELECT
+			count(1) AS current_num,
+			""
+		FROM wo_master
+		WHERE processor = #{processor }
+	</select>
+	<update id= "delClaimDetail" parameterType= "Object" >
+		UPDATE wo_claim_detail
+		SET update_by= #{update_by },
+		update_time= now(),
+		dFlag= 0
+		WHERE id= #{id }
+	</update>
+	<select id= "getClaimDetailById" parameterType= "Object" resultType= "com.bt.workOrder.model.ClaimDetail" >
+		SELECT id AS claimDetailId,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			wo_id,
+			related_number,
+			sku_number,
+			bar_code,
+			sku_name,
+			extended_name,
+			sku_num,
+			platform_price,
+			claim_num_applied,
+			claim_value_applied,
+			claim_num_agreed,
+			claim_value_ld,
+			claim_value_tv,
+			compensate_value_ld,
+			compensate_value_tv,
+			total_claim_value,
+			remark,
+			dFlag
+		FROM wo_claim_detail
+		WHERE id= #{id }
+	</select>
+	<select id= "getClaimDetailByWoId" parameterType= "Object" resultType= "com.bt.workOrder.model.ClaimDetail" >
+		SELECT
+			id AS claimDetailId,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			wo_id,
+			related_number,
+			sku_number,
+			bar_code,
+			sku_name,
+			extended_name,
+			sku_num,
+			platform_price,
+			platform_price_all,
+			claim_num_applied,
+			claim_price_applied,
+			claim_value_applied,
+			claim_num_agreed,
+			claim_value_ld,
+			claim_value_tv,
+			compensate_value_ld,
+			compensate_value_tv,
+			total_claim_value,
+			remark,
+			dFlag
+		FROM wo_claim_detail
+		WHERE dFlag= 1 AND wo_id= #{wo_id }
+	</select>
+	<update id= "updateCliamDetail" parameterType= "com.bt.workOrder.model.ClaimDetail" >
+		UPDATE wo_claim_detail
+		SET update_by= #{update_by },
+		update_time= now()
+		<if test= "wo_id != null and wo_id != ''">
+			,wo_id= #{wo_id }
+		</if>
+		<if test= "related_number != null and related_number != ''">
+			,related_number= #{related_number }
+		</if>
+		<if test= "sku_number != null and sku_number != ''">
+			,sku_number= #{sku_number }
+		</if>
+		<if test= "bar_code != null and bar_code != ''">
+			,bar_code= #{bar_code }
+		</if>
+		<if test= "sku_name != null and sku_name != ''">
+			,sku_name= #{sku_name }
+		</if>
+		<if test= "extended_name != null and extended_name != ''">
+			,extended_name= #{extended_name }
+		</if>
+		<if test= "sku_num != null">
+			,sku_num= #{sku_num }
+		</if>
+		<if test= "platform_price != null">
+			,platform_price= #{platform_price }
+		</if>
+		<if test= "claim_num_applied != null">
+			,claim_num_applied= #{claim_num_applied }
+		</if>
+		<if test= "claim_value_applied != null">
+			,claim_value_applied= #{claim_value_applied }
+		</if>
+		<if test= "claim_num_agreed != null">
+			,claim_num_agreed= #{claim_num_agreed }
+		</if>
+		<if test= "claim_value_ld != null">
+			,claim_value_ld= #{claim_value_ld }
+		</if>
+		<if test= "claim_value_tv != null">
+			,claim_value_tv= #{claim_value_tv }
+		</if>
+		<if test= "compensate_value_ld != null">
+			,compensate_value_ld= #{compensate_value_ld }
+		</if>
+		<if test= "compensate_value_tv != null">
+			,compensate_value_tv= #{compensate_value_tv }
+		</if>
+		<if test= "total_claim_value != null">
+			,total_claim_value= #{total_claim_value }
+		</if>
+		<if test= "remark != null and remark != ''">
+			,remark= #{remark }
+		</if>
+		WHERE id= #{claimDetailId }
+	</update>
+	<insert id= "addCliamDetail" parameterType= "java.util.List" >
+		INSERT INTO wo_claim_detail (
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			wo_id,
+			related_number,
+			sku_number,
+			bar_code,
+			sku_name,
+			extended_name,
+			sku_num,
+			platform_price,
+			platform_price_all,
+			claim_num_applied,
+			claim_price_applied,
+			claim_value_applied,
+			claim_num_agreed,
+			claim_value_ld,
+			claim_value_tv,
+			compensate_value_ld,
+			compensate_value_tv,
+			total_claim_value,
+			remark
+			
+		) VALUES
+		<foreach collection= "list" item= "obj" index= "index" separator= "," >
+		(
+			#{obj.claimDetailId },
+			#{obj.create_by },
+			now(),
+			#{obj.create_by },
+			now(),
+			#{obj.wo_id },
+			#{obj.related_number },
+			#{obj.sku_number },
+			#{obj.bar_code },
+			#{obj.sku_name },
+			#{obj.extended_name },
+			#{obj.sku_num },
+			#{obj.platform_price },
+			#{obj.platform_price_all },
+			#{obj.claim_num_applied },
+			#{obj.claim_price_applied },
+			#{obj.claim_value_applied },
+			#{obj.claim_num_agreed },
+			#{obj.claim_value_ld },
+			#{obj.claim_value_tv },
+			#{obj.compensate_value_ld },
+			#{obj.compensate_value_tv },
+			#{obj.total_claim_value },
+			#{obj.remark }
+			
+		)
+		</foreach>
+	</insert>
+	<update id= "updateNum" parameterType= "com.bt.workOrder.model.ClaimCount" >
+		UPDATE wo_claim_count SET update_time= now(), update_by= #{update_by }, claim_num= #{claim_num } WHERE date= #{date }
+	</update>
+	<insert id= "initializeNum" parameterType= "com.bt.workOrder.model.ClaimCount" >
+		INSERT INTO wo_claim_count(
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			date,
+			claim_num
+			
+		) VALUES (
+			now(),
+			#{create_by },
+			now(),
+			#{create_by },
+			#{date },
+			#{claim_num }
+			
+		)
+	</insert>
+	<select id= "getCurrentNum" parameterType= "Object" resultType= "com.bt.workOrder.model.ClaimCount" >
+		SELECT
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			date,
+			claim_num
+		FROM wo_claim_count WHERE date= #{date }
+	</select>
+	<select id= "judgeDateExist" parameterType= "Object" resultType= "Integer" >
+		SELECT count(0) FROM wo_claim_count WHERE date= #{date }
+	</select>
+	<select id= "getInitialLevel" parameterType= "Object" resultType= "String" >
+		SELECT
+			CODE
+		FROM
+			wk_level
+		WHERE
+			sort = (
+				SELECT
+					MIN(wk_level.sort)
+				FROM
+					(
+						SELECT
+							LEVEL
+						FROM
+							wk_order_type
+						WHERE
+							STATUS = 1
+						AND wk_type = #{wk_type }
+					) a
+				LEFT JOIN wk_level ON a. LEVEL = wk_level.CODE
+			)
+	</select>
+	<insert id= "addOperations" parameterType= "java.util.List" >
+		INSERT INTO wo_operation_detail(
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			wo_id,
+			wo_type,
+			column_code,
+			column_value
+			
+		) VALUES
+		<foreach collection= "list" item= "obj" index= "index" separator= "," >
+		(
+			#{obj.id },
+			#{obj.create_by },
+			now(),
+			#{obj.create_by },
+			now(),
+			#{obj.wo_id },
+			#{obj.wo_type },
+			#{obj.column_code },
+			#{obj.column_value }
+			
+		)
+		</foreach>
+	</insert>
+	<insert id= "addOperation" parameterType= "com.bt.workOrder.model.Operation" >
+		INSERT INTO wo_operation_detail(
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			wo_id,
+			wo_type,
+			column_code,
+			column_value
+			
+		) VALUES (
+			#{id },
+			#{create_by },
+			now(),
+			#{create_by },
+			now(),
+			#{wo_id },
+			#{wo_type },
+			#{column_code },
+			#{column_value }
+			
+		)
+	</insert>
+	<update id= "updateOperation" parameterType= "com.bt.workOrder.model.Operation" >
+		UPDATE wo_operation_detail
+		SET
+			update_by= #{update_by },
+			update_time= now(),
+			column_value= #{column_value }
+		WHERE wo_id= #{wo_id } AND wo_type= #{wo_type } AND column_code= #{column_code }
+	</update>
+	<select id= "judgeOperationExist" parameterType= "com.bt.workOrder.model.Operation" resultType= "Integer" >
+		SELECT count(1) FROM wo_operation_detail WHERE wo_id= #{wo_id } AND wo_type= #{wo_type } AND column_code= #{column_code }
+	</select>
+	<select id= "getValue" parameterType= "com.bt.workOrder.model.Operation" resultType= "Object" >
+		SELECT column_value FROM wo_operation_detail WHERE wo_id= #{wo_id } AND wo_type= #{wo_type } AND column_code= #{column_code }
+	</select>
+	<select id= "getColumnsInPage" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			id,
+			create_by,
+			create_time,
+			update_by,
+			update_time,
+			current,
+			superior,
+			column_code,
+			column_name,
+			control_type
+		FROM wo_column
+		WHERE current= #{woType }
+	</select>
+	<select id= "queryWarningDetail" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			DATE_FORMAT(er_waybill_warninginfo_detail.happen_time, '%Y-%m-%d %H:%i:%s') AS happen_time,
+			er_warninginfo_maintain_master.warningtype_name,
+			er_waybill_warninginfo_detail.warning_level,
+			CASE del_flag
+			WHEN "0" THEN "预警中"
+			WHEN "1" THEN "取消预警"
+			ELSE "" END AS del_flag,
+			DATE_FORMAT(er_waybill_warninginfo_detail.efficient_time, '%Y-%m-%d %H:%i:%s') AS efficient_time,
+			er_waybill_warninginfo_detail.source,
+			er_waybill_warninginfo_detail.reason
+		FROM
+			er_waybill_warninginfo_detail
+		LEFT JOIN er_warninginfo_maintain_master
+		ON er_waybill_warninginfo_detail.warningtype_code= er_warninginfo_maintain_master.warningtype_code
+		WHERE er_waybill_warninginfo_detail.waybill= #{express_number }
+		ORDER BY er_waybill_warninginfo_detail.happen_time DESC
+	</select>
+	<select id= "queryRouteDetail" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			DATE_FORMAT(er_route_info.route_time, '%Y-%m-%d %H:%i:%s') AS route_time,
+			er_route_info.routestatus_code,
+			er_routecode.status,
+			er_route_info.description
+		FROM
+			er_route_info
+		LEFT JOIN er_routecode
+		ON er_route_info.transport_code = er_routecode.transport_code
+		AND er_route_info.routestatus_code = er_routecode.status_code
+		WHERE er_route_info.waybill= #{express_number }
+		ORDER BY er_route_info.route_time DESC
+	</select>
+	<select id= "queryPackageDetail" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			id,
+			sku_number,
+			barcode,
+			item_name,
+			extend_pro,
+			qty
+		FROM er_expressinfo_detail
+		WHERE waybill= #{express_number }
+		ORDER BY sku_number
+	</select>
+	<select id= "queryWorkOrderEventMonitor" parameterType= "Object" resultType= "com.bt.workOrder.model.WorkOrderEventMonitor" >
+		SELECT
+			CASE wo_event_monitor.create_by
+			WHEN "0" THEN "系统"
+			ELSE s_employee.name END AS create_By,
+			DATE_FORMAT(wo_event_monitor.create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+			event_description,
+			remark
+		FROM
+			wo_event_monitor
+		LEFT JOIN s_employee ON wo_event_monitor.create_by = s_employee.id
+		WHERE
+			wo_id= #{wo_id }
+		ORDER BY sort DESC
+	</select>
+	<select id="displayWorkOrder" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			id,
+			wo_source,
+			DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+			create_by_display,
+			wo_no,
+			wo_alloc_status_display,
+			wo_process_status_display,
+			wo_type AS woType,
+			wo_type_display,
+			wo_level AS woLevel,
+			wo_level_display,
+			exception_type,
+			carrier_display,
+			express_number,
+			logistics_status,
+			a.warningtype_name AS warning_type,
+			warning_level,
+			warehouse_display,
+			DATE_FORMAT(transport_time, '%Y-%m-%d %H:%i:%s') AS transport_time,
+			store_display,
+			platform_number,
+			related_number,
+			recipient,
+			phone,
+			address,
+			process_content,
+			supplement_explain,
+			mistake_barcode,
+			mistake_product_count,
+			query_person,
+			allocated_by_display,
+			pause_reason,
+			level_alter_reason
+		FROM wo_master
+		LEFT JOIN (
+			SELECT warningtype_code, warningtype_name FROM er_warninginfo_maintain_master
+		) a ON wo_master.warning_type = a.warningtype_code
+		WHERE id= #{wo_id }
+	</select>
+	<select id= "getReturnStandardManhours" parameterType= "Object" resultType= "String" >
+		SELECT alter_amount FROM wo_manhours_alter
+		WHERE create_time= (SELECT MAX(create_time) FROM wo_manhours_alter WHERE mh_id= #{mh_id } AND wo_id= #{wo_id } AND alter_type= false)
+		AND mh_id= #{mh_id }
+		AND wo_id= #{wo_id }
+		AND alter_type= false 
+	</select>
+	<select id="getLastManhoursAlterEvent" parameterType="String" resultType="com.bt.workOrder.model.WorkOrderEventMonitor">
+	 	SELECT
+			a.id,
+			a.create_by,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') AS create_time,
+			a.update_by,
+			a.update_time,
+			a.wo_id,
+			a.event,
+			a.outManhours,
+			a.remark
+		FROM (
+			SELECT
+				id,
+				create_by,
+				create_time,
+				update_by,
+				update_time,
+				wo_id,
+				event,
+				outManhours,
+				remark
+			FROM wo_event_monitor
+			WHERE wo_id = #{wo_id }
+			AND event IN (
+				"ALLOC_A",
+				"ALLOC_M",
+				"UPDATE"
+			)
+			ORDER BY TO_SECONDS(create_time) DESC
+			LIMIT 1
+		) a
+		WHERE outManhours = 0
+	</select>
+	<update id= "updateWorkOrder" parameterType= "com.bt.workOrder.model.WorkOrder" >
+		UPDATE wo_master
+		SET
+		update_time= now(),
+		update_by= #{updateBy }
+		<if test= "woAllocStatus != null and woAllocStatus != ''">
+			,wo_alloc_status= #{woAllocStatus }
+			,wo_alloc_status_display= #{woAllocStatusDisplay }
+		</if>
+		<if test= "woProcessStatus != null and woProcessStatus != ''">
+			,wo_process_status= #{woProcessStatus }
+			,wo_process_status_display= #{woProcessStatusDisplay }
+		</if>
+		<if test= "woLevel != null and woLevel != ''">
+			,wo_level= #{woLevel }
+			,wo_level_display= #{woLevelDisplay }
+		</if>
+		<if test= "exceptionType != null and exceptionType != ''">
+			,exception_type= #{exceptionType }
+		</if>
+		<if test= "allocatedBy != null and allocatedBy != ''">
+			,allocated_by= #{allocatedBy }
+			,allocated_by_display= #{allocatedByDisplay }
+		</if>
+		<if test= "allocatedBy == ''">
+			,allocated_by= ""
+			,allocated_by_display= ""
+		</if>
+		<if test= "processor != null and processor != ''">
+			,processor= #{processor }
+			,processor_display= #{processorDisplay }
+		</if>
+		<if test= "processor == ''">
+			,processor= ""
+			,processor_display= ""
+		</if>
+		<if test= "levelAlterReason != null and levelAlterReason != ''" >
+			,level_alter_reason= #{levelAlterReason }
+		</if>
+		<if test= "pauseReason != null and pauseReason != ''" >
+			,pause_reason= #{pauseReason }
+		</if>
+		<if test= "pauseReason == ''" >
+			,pause_reason= ""
+		</if>
+		<if test= "standardManhours != null" >
+			,standard_manhours= #{standardManhours }
+		</if>
+		<if test= "processStartPoint != null" >
+			,process_start_point= #{processStartPoint }
+		</if>
+		<if test= "processStartPoint == null" >
+			,process_start_point= null
+		</if>
+		<if test= "actualManhours != null" >
+			,actual_manhours= #{actualManhours }
+		</if>
+		<if test= "woProcessStatus == 'FIN'" >
+			,terminal_time= now()
+		</if>
+		<if test= "woType != null and woType != ''" >
+			,wo_type=#{woType}
+			,wo_type_display=#{woTypeDisplay}
+		</if>
+		WHERE id= #{id }
+	</update>
+	<select id= "getEmployeeById" parameterType= "Integer" resultType= "com.bt.lmis.model.Employee" >
+		SELECT
+			id,
+			employee_number,
+			username,
+			name,
+			password,
+			email,
+			iphone,
+			status,
+			createtime,
+			createby,
+			updatetime,
+			updateby
+		FROM s_employee
+		WHERE id= #{id }
+	</select>
+	<select id= "getEmployeeInGroup" parameterType= "Integer" resultType= "java.util.Map" >
+		SELECT s_employee.id, s_employee.name
+		FROM (
+			SELECT employee FROM s_employee_in_group
+			WHERE s_employee_in_group.group = #{group }
+			<if test= "except != null" >
+				AND employee != #{except }
+			</if>
+		) a
+		LEFT JOIN s_employee ON s_employee.id = a.employee
+	</select>
+	<select id= "getGroupInPower" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT s_group.id, s_group.group_name FROM (
+			SELECT DISTINCT a.group FROM 
+			(
+				SELECT wo_group_workPower.group
+				FROM wo_group_workPower
+				WHERE dFlag= 1 AND carrier= #{wo.carriers } AND wo_type= #{wo.woType } AND wo_level= #{wo.woLevel }
+				
+			) a
+			INNER JOIN (
+				SELECT wo_group_storePower.group
+				FROM wo_group_storePower
+				WHERE dFlag= 1 AND store= #{wo.stores }
+				<if test= "warehouseType == 0" >
+					AND selfwarehouse= true
+				</if>
+				<if test= "warehouseType == 1" >
+					AND outsourcedwarehouse= true
+				</if>
+				
+			) b ON a.group = b.group
+		) c LEFT JOIN s_group ON s_group.id = c.group
+		ORDER BY s_group.id
+	</select>
+	<select id= "selectWorkOrderById" parameterType= "Object" resultType= "com.bt.workOrder.model.WorkOrder"  >
+		SELECT
+			id,
+			create_time AS createTime,
+			create_by AS createBy,
+			update_time AS updateTime,
+			update_by AS updateBy,
+			wo_alloc_status AS woAllocStatus,
+			wo_process_status AS woProcessStatus,
+			wo_source AS woSource,
+			wo_no AS woNo,
+			wo_type AS woType,
+			wo_type_display as woTypeDisplay,
+			wo_level AS woLevel,
+			exception_type AS exceptionType,
+			carrier AS carriers,
+			express_number AS expressNumber,
+			warehouse AS warehouses,
+			transport_time AS transportTime,
+			store AS stores,
+			platform_number AS platformNumber,
+			related_number AS relatedNumber,
+			order_amount AS orderAmount,
+			logistics_status AS logisticsStatus,
+			warning_type AS warningType,
+			warning_level AS warningLevel,
+			recipient AS recipient,
+			phone AS phone,
+			address AS address,
+			query_person AS queryPerson,
+			allocated_by AS allocatedBy,
+			processor AS processor,
+			processor_display AS processorDisplay,
+			process_content AS processContent,
+			pause_reason AS pauseReason,
+			level_alter_reason AS levelAlterReason,
+			estimated_time_of_completion AS estimatedTimeOfCompletion,
+			standard_manhours AS standardManhours,
+			process_start_point AS processStartPoint,
+			actual_manhours AS actualManhours,
+			cal_date,
+			watched,
+			package_id AS packageId
+		FROM wo_master
+		WHERE id= #{id }
+	</select>
+	<insert id= "add" parameterType= "com.bt.workOrder.model.WorkOrder" >
+		INSERT INTO wo_master(
+			id,
+			create_time,
+			create_by,
+			create_by_display,
+			update_time,
+			update_by,
+			wo_no,
+			<if test= "resourceWoNo != null and resourceWoNo != ''" >
+				resource_wo_no,
+			</if>
+			wo_source,
+			wo_alloc_status,
+			wo_alloc_status_display,
+			wo_process_status,
+			wo_process_status_display,
+			wo_type,
+			wo_type_display,
+			wo_level,
+			wo_level_display,
+			<if test= "exceptionType != null and exceptionType != ''" >
+				exception_type,
+			</if>
+			carrier,
+			carrier_display,
+			express_number,
+			<if test= "logisticsStatus != null and logisticsStatus != ''" >
+				logistics_status,
+			</if>
+			<if test= "warningType != null and warningType != ''" >
+				warning_type,
+			</if>
+			<if test= "warningLevel != null and warningLevel != ''" >
+				warning_level,
+			</if>
+			warehouse,
+			warehouse_display,
+			<if test= "transportTime != null and transportTime != ''" >
+				transport_time,
+			</if>
+			store,
+			store_display,
+			platform_number,
+			related_number,
+			<if test= "orderAmount != null and orderAmount != ''" >
+				order_amount,
+			</if>
+			recipient,
+			phone,
+			address,
+			query_person,
+			<if test= "allocatedBy != null and allocatedBy != ''" >
+				allocated_by,
+				allocated_by_display,
+			</if>
+			<if test= "processor != null and processor != ''" >
+				processor,
+				processor_display,
+			</if>
+		      supplement_explain,
+		     mistake_barcode,
+		     mistake_product_count,
+			estimated_time_of_completion,
+			
+			<if test= "cal_date != null and cal_date != ''" >
+				cal_date,
+			</if>
+			<if test= "packageId != null and packageId != ''" >
+				package_id,
+			</if>
+			standard_manhours
+		) VALUES (
+			#{id },
+			#{createTime },
+			#{createBy },
+			#{createByDisplay },
+			#{createTime },
+			#{createBy },
+			#{woNo },
+			<if test= "resourceWoNo != null and resourceWoNo != ''" >
+				#{resourceWoNo },
+			</if>
+			#{woSource },
+			#{woAllocStatus },
+			#{woAllocStatusDisplay },
+			#{woProcessStatus },
+			#{woProcessStatusDisplay },
+			#{woType },
+			#{woTypeDisplay },
+			#{woLevel },
+			#{woLevelDisplay },
+			<if test= "exceptionType != null and exceptionType != ''" >
+				#{exceptionType },
+			</if>
+			#{carriers },
+			#{carriersDisplay },
+			#{expressNumber },
+			<if test= "logisticsStatus != null and logisticsStatus != ''" >
+				#{logisticsStatus },
+			</if>
+			<if test= "warningType != null and warningType != ''" >
+				#{warningType },
+			</if>
+			<if test= "warningLevel != null and warningLevel != ''" >
+				#{warningLevel },
+			</if>
+			#{warehouses },
+			#{warehousesDisplay },
+			<if test= "transportTime != null and transportTime != ''" >
+				#{transportTime },
+			</if>
+			#{stores },
+			#{storesDisplay },
+			#{platformNumber },
+			#{relatedNumber },
+			<if test= "orderAmount != null and orderAmount != ''" >
+				#{orderAmount },
+			</if>
+			#{recipient },
+			#{phone },
+			#{address },
+			#{queryPerson },
+			<if test= "allocatedBy != null and allocatedBy != ''" >
+				#{allocatedBy },
+				#{allocatedByDisplay },
+			</if>
+			<if test= "processor != null and processor != ''" >
+				#{processor },
+				#{processorDisplay },
+			</if>
+		 	#{supplementExplain },
+		    #{mistakeBarcode },
+	     	#{mistakeProductCount },
+			#{estimatedTimeOfCompletion },
+			
+			<if test= "cal_date != null and cal_date != ''" >
+				#{cal_date },
+			</if>
+			<if test= "packageId != null and packageId != ''" >
+				#{packageId },
+			</if>
+			#{standardManhours }
+		)
+	</insert>
+	<insert id= "addWorkOrderEvent" parameterType= "com.bt.workOrder.model.WorkOrderEventMonitor" >
+	INSERT INTO wo_event_monitor(
+	id,
+	create_time,
+	create_by,
+	update_time,
+	update_by,
+	wo_id,
+	sort,
+	event,
+	event_status,
+	event_description,
+	outManhours,
+	remark
+
+	) VALUES (
+	#{id },
+	now(),
+	#{create_by },
+	now(),
+	#{create_by },
+	#{wo_id },
+	#{sort },
+	#{event },
+	#{event_status },
+	#{event_description },
+	#{outManhours },
+	#{remark }
+	);
+	</insert>
+	
+	
+ <select id="add_log_pro" parameterType="com.bt.workOrder.model.WorkOrderEventMonitor" resultType="com.bt.workOrder.model.WorkOrderEventMonitor" statementType="CALLABLE">
+	{call pro_shop_log(
+	#{wo_id,jdbcType=VARCHAR,mode=IN},
+	#{create_by,jdbcType=VARCHAR,mode=IN},
+	#{event,jdbcType=VARCHAR,mode=IN},
+	#{event_description,jdbcType=VARCHAR,mode=IN},
+	#{remark,jdbcType=VARCHAR,mode=IN},
+	#{file_path,jdbcType=VARCHAR,mode=IN},
+	#{result_info,jdbcType=VARCHAR,mode=IN},
+	#{sort_store,jdbcType=VARCHAR,mode=IN},
+	#{out_result,jdbcType=VARCHAR,mode=OUT},
+	#{out_result_reason,jdbcType=VARCHAR,mode=OUT}
+	)}
+	</select>
+	
+	<select id= "getEventRemark" parameterType= "Object" resultType= "String" >
+		SELECT event_remark FROM wo_event WHERE event= #{event }
+	</select>
+	<insert id= "addManhoursAlter" parameterType= "com.bt.workOrder.model.ManhoursAlter" >
+		INSERT INTO wo_manhours_alter(
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			mh_id,
+			wo_id,
+			alter_type,
+			alter_amount,
+			remark
+			
+		) VALUES (
+			#{id },
+			now(),
+			#{create_by },
+			now(),
+			#{create_by },
+			#{mh_id },
+			#{wo_id },
+			#{alter_type },
+			#{alter_amount },
+			#{remark }
+			
+		)
+	</insert>
+	<update id= "allocatedManhours" parameterType= "com.bt.workOrder.model.Manhours" >
+		UPDATE wo_manhours SET update_time= now(), update_by= #{update_by }, allocated= #{allocated } WHERE id= #{id }
+	</update>
+	<select id= "getManhours" parameterType= "Object" resultType= "com.bt.workOrder.model.Manhours" >
+		SELECT
+			id,
+			manhours,
+			allocated
+		FROM
+			wo_manhours
+		WHERE
+			status= 1
+		AND account= #{account }
+		AND date= #{date }
+	</select>
+	<select id= "gethours" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT
+			wk_standard,
+			wk_plan,
+			wk_timeout
+		FROM wk_order_type
+		WHERE status= 1
+		AND wk_type= #{woType } 
+		AND level= #{woLevel }
+	</select>
+	<select id= "judgeGroupStorePower" parameterType= "Object" resultType= "java.util.Map" >
+		SELECT selfwarehouse, outsourcedwarehouse
+		FROM wo_group_storePower
+		WHERE wo_group_storePower.group= #{group }
+		AND store= #{wo.stores }
+	</select>
+	<select id= "getWarehouseType" parameterType= "Object" resultType= "Integer" >
+		SELECT warehouse_type FROM tb_warehouse WHERE warehouse_code= #{warehouse }
+	</select>
+	<select id= "judgeGroupWorkPower" parameterType= "Object" resultType= "Integer" >
+		SELECT count(1)
+		FROM wo_group_workPower
+		WHERE wo_group_workPower.group= #{group }
+		AND carrier= #{wo.carriers }
+		AND wo_type= #{wo.woType }
+		AND wo_level= #{wo.woLevel }
+	</select>
+	<select id= "judgeGroupWorkPowerNoLevel" parameterType= "Object" resultType= "Integer" >
+		SELECT count(1)
+		FROM wo_group_workPower
+		WHERE wo_group_workPower.group= #{group }
+		AND carrier= #{wo.carriers }
+		AND wo_type= #{wo.woType }
+	</select>
+	<select id= "getProcessControl" parameterType= "Object" resultType= "Integer" >
+		SELECT process_control
+		FROM s_group
+		WHERE id= #{groupId }
+	</select>
+	<select id= "selectGroups" parameterType= "Object" resultType= "Integer" >
+		SELECT s_employee_in_group.group FROM s_employee_in_group WHERE employee = #{employee }
+	</select>
+	<select id= "getExpressNumberWithWorkOrder" resultType= "Integer" parameterType= "Object" >
+		SELECT COUNT(1) FROM wo_master WHERE express_number= #{express_number }
+	</select>
+	<select id= "getByExpressNumber" resultType= "java.util.Map" parameterType= "Object" >
+		SELECT
+			DATE_FORMAT(transport_time, '%Y-%m-%d %H:%i:%s') AS transport_time,
+			delivery_order,
+			epistatic_order,
+			tb_store.store_code,
+			tb_store.store_name,
+			tb_warehouse.warehouse_code,
+			tb_warehouse.warehouse_name,
+			tb_transport_vendor.transport_code,
+			tb_transport_vendor.transport_name,
+			order_amount,
+			shiptoname,
+			wo_waybill_master.phone,
+			detail_address
+		FROM wo_waybill_master
+		LEFT JOIN tb_store ON wo_waybill_master.store_name = tb_store.store_name
+		LEFT JOIN tb_warehouse ON wo_waybill_master.warehouse = tb_warehouse.warehouse_name
+		LEFT JOIN tb_transport_vendor ON wo_waybill_master.transport_name = tb_transport_vendor.transport_name
+		WHERE express_number = #{express_number }
+	</select>
+	<select id="getException" resultType= "java.util.Map" parameterType= "Object" >
+		SELECT id, type_name FROM wo_error_type WHERE wk_type= #{type } AND status= 1
+	</select>
+	<select id="getLevelAlterReasonById" resultType= "String" parameterType= "Object" >
+		SELECT reason FROM wk_reason WHERE id= #{id }
+	</select>
+	<select id="getLevelAlterReason" resultType= "java.util.Map" parameterType= "Object" >
+		SELECT id, reason FROM wk_reason WHERE wk_type= #{type } AND status= 1
+	</select>
+	<select id="getLevel" resultType= "java.util.Map" parameterType= "Object" >
+		SELECT b.code, b.name
+		FROM (SELECT level FROM wk_order_type WHERE wk_type= #{type } AND status= 1) a
+		LEFT JOIN (SELECT code, name FROM wk_level) b ON a.level = b.code
+	</select>
+	<select id= "getCarrier" resultType= "java.util.Map" >
+		SELECT transport_code, transport_name FROM tb_transport_vendor WHERE validity = 1
+	</select>
+	<select id= "getWarehouse" resultType= "java.util.Map" >
+		SELECT warehouse_code, warehouse_name FROM tb_warehouse WHERE validity = 1
+	</select>
+	<select id= "getStore" resultType= "java.util.Map" >
+		SELECT store_code, store_name FROM tb_store WHERE validity = 1
+	</select>
+	<select id= "getWOType" resultType= "java.util.Map" >
+		SELECT code, name FROM wk_type WHERE flag = 1 and so_flag=0 
+	</select>
+	<!-- 查询数据总行 -->
+	<select id= "countQuery" resultType= "java.lang.Integer" parameterType= "com.bt.workOrder.controller.param.WorkOrderParam" >
+		SELECT
+			count(1)
+		FROM(
+			SELECT
+				wo_master.id,
+				wo_alloc_status_display,
+				wo_process_status_display,
+				wo_source,
+				DATE_FORMAT(wo_master.create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+				create_by_display,
+				wo_no,
+				wo_type,
+				wo_type_display,
+				wo_level_display,
+				exception_type,
+				carrier_display,
+				express_number,
+				warehouse_display,
+				DATE_FORMAT(transport_time,'%Y-%m-%d %H:%i:%s') AS transport_time,
+				store_display,
+				platform_number,
+				related_number,
+				query_person,
+				allocated_by_display,
+				processor_display,
+				DATE_FORMAT(estimated_time_of_completion,'%Y-%m-%d %H:%i:%s') AS estimated_time_of_completion,
+				standard_manhours,
+				(actual_manhours +
+				CASE WHEN ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) IS NULL 
+				THEN 0 ELSE ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) END) AS actual_manhours
+			FROM wo_master
+			WHERE 1 = 1
+			<if test= "wo_alloc_status != null and wo_alloc_status != ''" >
+				AND wo_alloc_status = #{wo_alloc_status }
+			</if>
+			<if test= "wo_process_status != null and wo_process_status != ''" >
+				AND wo_process_status = #{wo_process_status }
+			</if>
+			<if test= "createTime_from != null and createTime_from != ''" >
+				AND TO_SECONDS(create_time) &gt;= TO_SECONDS(#{createTime_from })
+			</if>
+			<if test= "createTime_to != null and createTime_to != ''" >
+				AND TO_SECONDS(create_time) &lt;= TO_SECONDS(#{createTime_to })
+			</if>
+			<if test= "create_by != null and create_by != ''" >
+				AND create_by_display LIKE CONCAT("%", #{create_by }, "%")
+			</if>
+			<if test= "wo_no != null and wo_no != ''" >
+				AND wo_no = #{wo_no }
+			</if>
+			<if test= "wo_type != null and wo_type != ''" >
+				AND wo_type = #{wo_type }
+			</if>
+			<if test= "wo_level != null and wo_level != ''" >
+				AND wo_level = #{wo_level }
+			</if>
+			<if test= "exception_type != null and exception_type != ''" >
+				AND exception_type = #{exception_type }
+			</if>
+			<if test= "carrier != null and carrier != ''" >
+				AND carrier = #{carrier }
+			</if>
+			<if test= "express_number != null and express_number != ''" >
+				AND express_number = #{express_number }
+			</if>
+			<if test= "warehouse != null and warehouse != ''" >
+				AND warehouse = #{warehouse }
+			</if>
+			<if test= "transportTime_from != null and transportTime_from != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &gt;= TO_SECONDS(#{transportTime_from })
+			</if>
+			<if test= "transportTime_to != null and transportTime_to != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &lt;= TO_SECONDS(#{transportTime_to })
+			</if>
+			<if test= "store != null and store != ''" >
+				AND store = #{store }
+			</if>
+			<if test= "platform_number != null and platform_number != ''" >
+				AND platform_number = #{platform_number }
+			</if>
+			<if test= "related_number != null and related_number != ''" >
+				AND related_number = #{related_number }
+			</if>
+			<if test= "allocated_by != null and allocated_by != ''" >
+				AND allocated_by_display LIKE CONCAT("%", #{allocated_by }, "%")
+			</if>
+			<if test= "processor != null and processor != ''" >
+				AND processor_display LIKE CONCAT("%", #{processor }, "%")
+			</if>
+			<if test= "processor_id != null and processor_id != ''" >
+				AND (processor = #{processor_id } or	wo_master.processor in(SELECT
+				ss4.qaid
+				FROM
+				s_employee ss1,
+				(
+				SELECT
+				ss2.id as qaid,
+				ss3.employee
+
+				FROM
+				s_group ss2,
+				s_employee_in_group ss3
+				WHERE
+				ss2.is_qa = 1
+				AND ss2.id = ss3.`group`
+				) ss4
+				WHERE
+				ss1.id = #{processor_id }
+				AND ss1.id = ss4.employee
+				AND ss1.project_id = 'workorder'))
+			</if>
+		) a
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_status"
+		) b ON a.id = b.wo_id AND a.wo_type = b.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_number"
+		) c ON a.id = c.wo_id AND a.wo_type = c.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_type"
+		) d ON a.id = d.wo_id AND a.wo_type = d.wo_type
+		WHERE
+			1 = 1
+		<if test= "claim_status != null and claim_status != ''" >
+			AND b.column_value = #{claim_status }
+		</if>
+		<if test= "claim_number != null and claim_number != ''" >
+			AND c.column_value = #{claim_number }
+		</if>
+		<if test= "claim_type != null and claim_type != ''" >
+			AND d.column_value = #{claim_type }
+		</if>
+	</select>
+	<!-- 查询数据总行 -->
+	<select id= "countQuery2" resultType= "java.lang.Integer" parameterType= "java.util.HashMap" >
+		SELECT
+			count(1)
+		FROM(
+			SELECT
+				wo_master.id,
+				wo_alloc_status_display,
+				wo_process_status_display,
+				wo_source,
+				DATE_FORMAT(wo_master.create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+				create_by_display,
+				wo_no,
+				wo_type,
+				wo_type_display,
+				wo_level_display,
+				exception_type,
+				carrier_display,
+				express_number,
+				warehouse_display,
+				DATE_FORMAT(transport_time,'%Y-%m-%d %H:%i:%s') AS transport_time,
+				store_display,
+				platform_number,
+				related_number,
+				query_person,
+				allocated_by_display,
+				processor_display,
+				DATE_FORMAT(estimated_time_of_completion,'%Y-%m-%d %H:%i:%s') AS estimated_time_of_completion,
+				standard_manhours,
+				(actual_manhours +
+				CASE WHEN ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) IS NULL 
+				THEN 0 ELSE ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) END) AS actual_manhours
+			FROM wo_master
+			WHERE 1 = 1
+			<if test= "wo_alloc_status != null and wo_alloc_status != ''" >
+				AND wo_alloc_status = #{wo_alloc_status }
+			</if>
+			<if test= "wo_process_status != null and wo_process_status != ''" >
+				AND wo_process_status = #{wo_process_status }
+			</if>
+			<if test= "createTime_from != null and createTime_from != ''" >
+				AND TO_SECONDS(create_time) &gt;= TO_SECONDS(#{createTime_from })
+			</if>
+			<if test= "createTime_to != null and createTime_to != ''" >
+				AND TO_SECONDS(create_time) &lt;= TO_SECONDS(#{createTime_to })
+			</if>
+			<if test= "create_by != null and create_by != ''" >
+				AND create_by_display LIKE CONCAT("%", #{create_by }, "%")
+			</if>
+			<if test= "wo_no != null and wo_no != ''" >
+				AND wo_no = #{wo_no }
+			</if>
+			<if test= "wo_type != null and wo_type != ''" >
+				AND wo_type = #{wo_type }
+			</if>
+			<if test= "wo_level != null and wo_level != ''" >
+				AND wo_level = #{wo_level }
+			</if>
+			<if test= "exception_type != null and exception_type != ''" >
+				AND exception_type = #{exception_type }
+			</if>
+			<if test= "carrier != null and carrier != ''" >
+				AND carrier = #{carrier }
+			</if>
+			<if test= "express_number != null and express_number != ''" >
+				AND express_number = #{express_number }
+			</if>
+			<if test= "warehouse != null and warehouse != ''" >
+				AND warehouse = #{warehouse }
+			</if>
+			<if test= "transportTime_from != null and transportTime_from != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &gt;= TO_SECONDS(#{transportTime_from })
+			</if>
+			<if test= "transportTime_to != null and transportTime_to != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &lt;= TO_SECONDS(#{transportTime_to })
+			</if>
+			<if test= "store != null and store != ''" >
+				AND store = #{store }
+			</if>
+			<if test= "platform_number != null and platform_number != ''" >
+				AND platform_number = #{platform_number }
+			</if>
+			<if test= "related_number != null and related_number != ''" >
+				AND related_number = #{related_number }
+			</if>
+			<if test= "allocated_by != null and allocated_by != ''" >
+				AND allocated_by_display LIKE CONCAT("%", #{allocated_by }, "%")
+			</if>
+			<if test= "processor != null and processor != ''" >
+				AND processor_display LIKE CONCAT("%", #{processor }, "%")
+			</if>
+			<if test= "processor_id != null and processor_id != ''" >
+				AND  (processor = #{processor_id } or	wo_master.processor in(SELECT
+				ss4.qaid
+				FROM
+				s_employee ss1,
+				(
+				SELECT
+				ss2.id as qaid,
+				ss3.employee
+
+				FROM
+				s_group ss2,
+				s_employee_in_group ss3
+				WHERE
+				ss2.is_qa = 1
+				AND ss2.id = ss3.`group`
+				) ss4
+				WHERE
+				ss1.id = #{processor_id }
+				AND ss1.id = ss4.employee
+				AND ss1.project_id = 'workorder'))
+			</if>
+		) a
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_status"
+		) b ON a.id = b.wo_id AND a.wo_type = b.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_number"
+		) c ON a.id = c.wo_id AND a.wo_type = c.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_type"
+		) d ON a.id = d.wo_id AND a.wo_type = d.wo_type
+		WHERE
+			1 = 1
+		<if test= "claim_status != null and claim_status != ''" >
+			AND b.column_value = #{claim_status }
+		</if>
+		<if test= "claim_number != null and claim_number != ''" >
+			AND c.column_value = #{claim_number }
+		</if>
+		<if test= "claim_type != null and claim_type != ''" >
+			AND d.column_value = #{claim_type }
+		</if>
+	</select>
+	
+	<!-- 列表查询 -->
+	<select id= "query" resultType= "java.util.Map" parameterType= "com.bt.workOrder.controller.param.WorkOrderParam" >
+		SELECT
+			*,
+			CASE b.column_value
+			WHEN "0" THEN "暂作理赔"
+			WHEN "1" THEN "索赔成功"
+			WHEN "2" THEN "索赔失败"
+			ELSE "" END AS claim_status,
+			c.column_value AS claim_number,
+			CASE d.column_value
+			WHEN "1" THEN "遗失"
+			WHEN "2" THEN "破损"
+			WHEN "3" THEN "错发"
+			WHEN "4" THEN "补偿"
+			ELSE d.column_value END AS claim_type,
+			e.column_value AS total_applied_claim_amount,
+			CASE WHEN f.column_value IS NULL OR f.column_value = ""
+			THEN "" ELSE TIMESTAMPDIFF(DAY, f.column_value, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')) END AS warningDays 
+		FROM(
+			SELECT
+				id,
+				update_time,
+				wo_alloc_status_display,
+				wo_process_status_display,
+				wo_source,
+				DATE_FORMAT(wo_master.create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+				create_by_display,
+				wo_no,
+				wo_type,
+				wo_type_display,
+				wo_level_display,
+				exception_type,
+				carrier_display,
+				express_number,
+				warehouse_display,
+				DATE_FORMAT(transport_time,'%Y-%m-%d %H:%i:%s') AS transport_time,
+				store_display,
+				platform_number,
+				related_number,
+				query_person,
+				allocated_by_display,
+				processor_display,
+				DATE_FORMAT(estimated_time_of_completion,'%Y-%m-%d %H:%i:%s') AS estimated_time_of_completion,
+				standard_manhours,
+				(actual_manhours +
+				CASE WHEN ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) IS NULL 
+				THEN 0 ELSE ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) END) AS actual_manhours,
+				(CASE WHEN ROUND((TO_SECONDS(cal_date) - TO_SECONDS(now()))/ 60) &lt;= 0
+				THEN 0 ELSE ROUND((TO_SECONDS(cal_date) - TO_SECONDS(now()))/ 60) END) AS remaining_levelup_time,
+		        failure_reason,mistake_barcode,mistake_product_count,address,phone,recipient
+			FROM wo_master
+			WHERE 1 = 1
+			<if test= "wo_alloc_status != null and wo_alloc_status != ''" >
+				AND wo_alloc_status = #{wo_alloc_status }
+			</if>
+			<if test= "wo_process_status != null and wo_process_status != ''" >
+				AND wo_process_status = #{wo_process_status }
+			</if>
+			<if test= "createTime_from != null and createTime_from != ''" >
+				AND TO_SECONDS(create_time) &gt;= TO_SECONDS(#{createTime_from })
+			</if>
+			<if test= "createTime_to != null and createTime_to != ''" >
+				AND TO_SECONDS(create_time) &lt;= TO_SECONDS(#{createTime_to })
+			</if>
+			<if test= "create_by != null and create_by != ''" >
+				AND create_by_display LIKE CONCAT("%", #{create_by }, "%")
+			</if>
+			<if test= "wo_no != null and wo_no != ''" >
+				AND wo_no = #{wo_no }
+			</if>
+			<if test= "wo_type != null and wo_type != ''" >
+				AND wo_type = #{wo_type }
+			</if>
+			<if test= "wo_level != null and wo_level != ''" >
+				AND wo_level = #{wo_level }
+			</if>
+			<if test= "exception_type != null and exception_type != ''" >
+				AND exception_type = #{exception_type }
+			</if>
+			<if test= "carrier != null and carrier != ''" >
+				AND carrier = #{carrier }
+			</if>
+			<if test= "express_number != null and express_number != ''" >
+				AND express_number = #{express_number }
+			</if>
+			<if test= "warehouse != null and warehouse != ''" >
+				AND warehouse = #{warehouse }
+			</if>
+			<if test= "transportTime_from != null and transportTime_from != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &gt;= TO_SECONDS(#{transportTime_from })
+			</if>
+			<if test= "transportTime_to != null and transportTime_to != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &lt;= TO_SECONDS(#{transportTime_to })
+			</if>
+			<if test= "store != null and store != ''" >
+				AND store = #{store }
+			</if>
+			<if test= "platform_number != null and platform_number != ''" >
+				AND platform_number = #{platform_number }
+			</if>
+			<if test= "related_number != null and related_number != ''" >
+				AND related_number = #{related_number }
+			</if>
+			<if test= "allocated_by != null and allocated_by != ''" >
+				AND allocated_by_display LIKE CONCAT("%", #{allocated_by }, "%")
+			</if>
+			<if test= "processor != null and processor != ''" >
+				AND processor_display LIKE CONCAT("%", #{processor }, "%")
+			</if>
+			<if test= "processor_id != null and processor_id != ''" >
+				AND ( wo_master.processor = #{processor_id } or  	wo_master.processor in(SELECT
+				ss4.qaid
+				FROM
+				s_employee ss1,
+				(
+				SELECT
+				ss2.id as qaid,
+				ss3.employee
+
+				FROM
+				s_group ss2,
+				s_employee_in_group ss3
+				WHERE
+				ss2.is_qa = 1
+				AND ss2.id = ss3.`group`
+				) ss4
+				WHERE
+				ss1.id =#{processor_id }
+				AND ss1.id = ss4.employee
+				AND ss1.project_id = 'workorder'))
+			</if>
+		) a
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_status"
+		) b ON a.id = b.wo_id AND a.wo_type = b.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_number"
+		) c ON a.id = c.wo_id AND a.wo_type = c.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_type"
+		) d ON a.id = d.wo_id AND a.wo_type = d.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "total_applied_claim_amount"
+		) e ON a.id = e.wo_id AND a.wo_type = e.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_start_point"
+		) f ON a.id = f.wo_id AND a.wo_type = f.wo_type
+		WHERE
+			1 = 1
+		<if test= "claim_status != null and claim_status != ''" >
+			AND b.column_value = #{claim_status }
+		</if>
+		<if test= "claim_number != null and claim_number != ''" >
+			AND c.column_value = #{claim_number }
+		</if>
+		<if test= "claim_type != null and claim_type != ''" >
+			AND d.column_value = #{claim_type }
+		</if>
+		ORDER BY ${sort_by } ${sort }
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	<select id= "exportWO" resultType= "java.util.Map" parameterType= "com.bt.workOrder.controller.param.WorkOrderParam" >
+		SELECT
+			*,
+			CASE b.column_value
+			WHEN "0" THEN "暂作理赔"
+			WHEN "1" THEN "索赔成功"
+			WHEN "2" THEN "索赔失败"
+			ELSE "" END AS claim_status,
+			c.column_value AS claim_number,
+			CASE d.column_value
+			WHEN "1" THEN "遗失"
+			WHEN "2" THEN "破损"
+			WHEN "3" THEN "错发"
+			WHEN "4" THEN "补偿"
+			ELSE d.column_value END AS claim_type,
+			e.column_value AS total_applied_claim_amount,
+			CASE WHEN f.column_value IS NULL OR f.column_value = ""
+			THEN "" ELSE TIMESTAMPDIFF(DAY, f.column_value, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')) END AS warningDays 
+		FROM(
+			SELECT
+				id,
+				update_time,
+				wo_alloc_status_display,
+				wo_process_status_display,
+				wo_source,
+				DATE_FORMAT(wo_master.create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+				create_by_display,
+				wo_no,
+				wo_type,
+				wo_type_display,
+				wo_level_display,
+				exception_type,
+				carrier_display,
+				express_number,
+				warehouse_display,
+				DATE_FORMAT(transport_time,'%Y-%m-%d %H:%i:%s') AS transport_time,
+				store_display,
+				platform_number,
+				related_number,
+				query_person,
+				allocated_by_display,
+				processor_display,
+				DATE_FORMAT(estimated_time_of_completion,'%Y-%m-%d %H:%i:%s') AS estimated_time_of_completion,
+				standard_manhours,
+				(actual_manhours +
+				CASE WHEN ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) IS NULL 
+				THEN 0 ELSE ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) END) AS actual_manhours,
+				(CASE WHEN ROUND((TO_SECONDS(cal_date) - TO_SECONDS(now()))/ 60) &lt;= 0
+				THEN 0 ELSE ROUND((TO_SECONDS(cal_date) - TO_SECONDS(now()))/ 60) END) AS remaining_levelup_time,
+		        failure_reason,mistake_barcode,mistake_product_count,address,phone,recipient
+			FROM wo_master
+			WHERE 1 = 1
+			<if test= "wo_alloc_status != null and wo_alloc_status != ''" >
+				AND wo_alloc_status = #{wo_alloc_status }
+			</if>
+			<if test= "wo_process_status != null and wo_process_status != ''" >
+				AND wo_process_status = #{wo_process_status }
+			</if>
+			<if test= "createTime_from != null and createTime_from != ''" >
+				AND TO_SECONDS(create_time) &gt;= TO_SECONDS(#{createTime_from })
+			</if>
+			<if test= "createTime_to != null and createTime_to != ''" >
+				AND TO_SECONDS(create_time) &lt;= TO_SECONDS(#{createTime_to })
+			</if>
+			<if test= "create_by != null and create_by != ''" >
+				AND create_by_display LIKE CONCAT("%", #{create_by }, "%")
+			</if>
+			<if test= "wo_no != null and wo_no != ''" >
+				AND wo_no = #{wo_no }
+			</if>
+			<if test= "wo_type != null and wo_type != ''" >
+				AND wo_type = #{wo_type }
+			</if>
+			<if test= "wo_level != null and wo_level != ''" >
+				AND wo_level = #{wo_level }
+			</if>
+			<if test= "exception_type != null and exception_type != ''" >
+				AND exception_type = #{exception_type }
+			</if>
+			<if test= "carrier != null and carrier != ''" >
+				AND carrier = #{carrier }
+			</if>
+			<if test= "express_number != null and express_number != ''" >
+				AND express_number = #{express_number }
+			</if>
+			<if test= "warehouse != null and warehouse != ''" >
+				AND warehouse = #{warehouse }
+			</if>
+			<if test= "transportTime_from != null and transportTime_from != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &gt;= TO_SECONDS(#{transportTime_from })
+			</if>
+			<if test= "transportTime_to != null and transportTime_to != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &lt;= TO_SECONDS(#{transportTime_to })
+			</if>
+			<if test= "store != null and store != ''" >
+				AND store = #{store }
+			</if>
+			<if test= "platform_number != null and platform_number != ''" >
+				AND platform_number = #{platform_number }
+			</if>
+			<if test= "related_number != null and related_number != ''" >
+				AND related_number = #{related_number }
+			</if>
+			<if test= "allocated_by != null and allocated_by != ''" >
+				AND allocated_by_display LIKE CONCAT("%", #{allocated_by }, "%")
+			</if>
+			<if test= "processor != null and processor != ''" >
+				AND processor_display LIKE CONCAT("%", #{processor }, "%")
+			</if>
+			<if test= "processor_id != null and processor_id != ''" >
+				AND
+				(wo_master.processor = #{processor_id } or	wo_master.processor in(SELECT
+				ss4.qaid
+				FROM
+				s_employee ss1,
+				(
+				SELECT
+				ss2.id as qaid,
+				ss3.employee
+
+				FROM
+				s_group ss2,
+				s_employee_in_group ss3
+				WHERE
+				ss2.is_qa = 1
+				AND ss2.id = ss3.`group`
+				) ss4
+				WHERE
+				ss1.id = #{processor_id }
+				AND ss1.id = ss4.employee
+				AND ss1.project_id = 'workorder'))
+			</if>
+		) a
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_status"
+		) b ON a.id = b.wo_id AND a.wo_type = b.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_number"
+		) c ON a.id = c.wo_id AND a.wo_type = c.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_type"
+		) d ON a.id = d.wo_id AND a.wo_type = d.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "total_applied_claim_amount"
+		) e ON a.id = e.wo_id AND a.wo_type = e.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_start_point"
+		) f ON a.id = f.wo_id AND a.wo_type = f.wo_type
+		WHERE
+			1 = 1
+		<if test= "claim_status != null and claim_status != ''" >
+			AND b.column_value = #{claim_status }
+		</if>
+		<if test= "claim_number != null and claim_number != ''" >
+			AND c.column_value = #{claim_number }
+		</if>
+		<if test= "claim_type != null and claim_type != ''" >
+			AND d.column_value = #{claim_type }
+		</if>
+		ORDER BY ${sort_by } ${sort }
+	</select>
+	<select id= "query2" resultType= "java.util.Map" parameterType= "java.util.HashMap" >
+		SELECT
+			*,
+			CASE b.column_value
+			WHEN "0" THEN "暂作理赔"
+			WHEN "1" THEN "索赔成功"
+			WHEN "2" THEN "索赔失败"
+			ELSE "" END AS claim_status,
+			c.column_value AS claim_number,
+			CASE d.column_value
+			WHEN "1" THEN "遗失"
+			WHEN "2" THEN "破损"
+			WHEN "3" THEN "错发"
+			WHEN "4" THEN "补偿"
+			ELSE d.column_value END AS claim_type,
+			e.column_value AS total_applied_claim_amount,
+			CASE WHEN f.column_value IS NULL OR f.column_value = ""
+			THEN "" ELSE TIMESTAMPDIFF(DAY, f.column_value, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s')) END AS warningDays 
+		FROM(
+			SELECT
+				id,
+				update_time,
+				wo_alloc_status_display,
+				wo_process_status_display,
+				wo_source,
+				DATE_FORMAT(wo_master.create_time, '%Y-%m-%d %H:%i:%s') AS create_time,
+				create_by_display,
+				wo_no,
+				wo_type,
+				wo_type_display,
+				wo_level_display,
+				exception_type,
+				carrier_display,
+				express_number,
+				warehouse_display,
+				DATE_FORMAT(transport_time,'%Y-%m-%d %H:%i:%s') AS transport_time,
+				store_display,
+				platform_number,
+				related_number,
+				query_person,
+				allocated_by_display,
+				processor_display,
+				DATE_FORMAT(estimated_time_of_completion,'%Y-%m-%d %H:%i:%s') AS estimated_time_of_completion,
+				standard_manhours,
+				(actual_manhours +
+				CASE WHEN ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) IS NULL 
+				THEN 0 ELSE ROUND((TO_SECONDS(now()) - TO_SECONDS(process_start_point))/ 60) END) AS actual_manhours,
+				(CASE WHEN ROUND((TO_SECONDS(cal_date) - TO_SECONDS(now()))/ 60) &lt;= 0
+				THEN 0 ELSE ROUND((TO_SECONDS(cal_date) - TO_SECONDS(now()))/ 60) END) AS remaining_levelup_time,
+		        failure_reason,mistake_barcode,mistake_product_count,address,phone,recipient
+			FROM wo_master
+			WHERE 1 = 1
+			<if test= "wo_alloc_status != null and wo_alloc_status != ''" >
+				AND wo_alloc_status = #{wo_alloc_status }
+			</if>
+			<if test= "wo_process_status != null and wo_process_status != ''" >
+				AND wo_process_status = #{wo_process_status }
+			</if>
+			<if test= "createTime_from != null and createTime_from != ''" >
+				AND TO_SECONDS(create_time) &gt;= TO_SECONDS(#{createTime_from })
+			</if>
+			<if test= "createTime_to != null and createTime_to != ''" >
+				AND TO_SECONDS(create_time) &lt;= TO_SECONDS(#{createTime_to })
+			</if>
+			<if test= "create_by != null and create_by != ''" >
+				AND create_by_display LIKE CONCAT("%", #{create_by }, "%")
+			</if>
+			<if test= "wo_no != null and wo_no != ''" >
+				AND wo_no = #{wo_no }
+			</if>
+			<if test= "wo_type != null and wo_type != ''" >
+				AND wo_type = #{wo_type }
+			</if>
+			<if test= "wo_level != null and wo_level != ''" >
+				AND wo_level = #{wo_level }
+			</if>
+			<if test= "exception_type != null and exception_type != ''" >
+				AND exception_type = #{exception_type }
+			</if>
+			<if test= "carrier != null and carrier != ''" >
+				AND carrier = #{carrier }
+			</if>
+			<if test= "express_number != null and express_number != ''" >
+				AND express_number = #{express_number }
+			</if>
+			<if test= "warehouse != null and warehouse != ''" >
+				AND warehouse = #{warehouse }
+			</if>
+			<if test= "transportTime_from != null and transportTime_from != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &gt;= TO_SECONDS(#{transportTime_from })
+			</if>
+			<if test= "transportTime_to != null and transportTime_to != ''" >
+				AND TO_SECONDS(wo_master.transport_time) &lt;= TO_SECONDS(#{transportTime_to })
+			</if>
+			<if test= "store != null and store != ''" >
+				AND store = #{store }
+			</if>
+			<if test= "platform_number != null and platform_number != ''" >
+				AND platform_number = #{platform_number }
+			</if>
+			<if test= "related_number != null and related_number != ''" >
+				AND related_number = #{related_number }
+			</if>
+			<if test= "allocated_by != null and allocated_by != ''" >
+				AND allocated_by_display LIKE CONCAT("%", #{allocated_by }, "%")
+			</if>
+			<if test= "processor != null and processor != ''" >
+				AND processor_display LIKE CONCAT("%", #{processor }, "%")
+			</if>
+			<if test= "processor_id != null and processor_id != ''" >
+				AND
+				(wo_master.processor = #{processor_id } or	wo_master.processor in(SELECT
+				ss4.qaid
+				FROM
+				s_employee ss1,
+				(
+				SELECT
+				ss2.id as qaid,
+				ss3.employee
+
+				FROM
+				s_group ss2,
+				s_employee_in_group ss3
+				WHERE
+				ss2.is_qa = 1
+				AND ss2.id = ss3.`group`
+				) ss4
+				WHERE
+				ss1.id = #{processor_id }
+				AND ss1.id = ss4.employee
+				AND ss1.project_id = 'workorder'))
+			</if>
+		) a
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_status"
+		) b ON a.id = b.wo_id AND a.wo_type = b.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_number"
+		) c ON a.id = c.wo_id AND a.wo_type = c.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_type"
+		) d ON a.id = d.wo_id AND a.wo_type = d.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "total_applied_claim_amount"
+		) e ON a.id = e.wo_id AND a.wo_type = e.wo_type
+		LEFT JOIN (
+			SELECT wo_id, wo_type, column_value FROM wo_operation_detail WHERE column_code = "claim_start_point"
+		) f ON a.id = f.wo_id AND a.wo_type = f.wo_type
+		WHERE
+			1 = 1
+		<if test= "claim_status != null and claim_status != ''" >
+			AND b.column_value = #{claim_status }
+		</if>
+		<if test= "claim_number != null and claim_number != ''" >
+			AND c.column_value = #{claim_number }
+		</if>
+		<if test= "claim_type != null and claim_type != ''" >
+			AND d.column_value = #{claim_type }
+		</if>
+		ORDER BY ${sort_by } ${sort }
+		LIMIT #{firstResult }, #{maxResult }
+	</select>
+	
+	<select id="findNeedLevelUpData"  resultType='java.util.HashMap'  parameterType ='java.util.HashMap'>	
+		SELECT 
+		    a.id, a.wo_type, a.wo_level,
+		    DATE_FORMAT(a.cal_date,'%Y-%m-%d %H:%i:%s') as cal_date,
+		    a.create_time,a.processor,a.estimated_time_of_completion,b.wk_timeout,a.carrier
+		FROM
+		    wo_master  a, wk_order_type b
+		WHERE
+			a.wo_type=b.wk_type
+		   	AND a.wo_level=b.level
+		   	AND b.status=1
+		   	AND cal_date &lt;= NOW()
+	        <if test= "watched != null and watched != ''" >
+				AND a.watched = #{watched }
+			</if>
+	        AND a.wo_process_status NOT IN ('CCD' , 'FIN');
+	</select>
+	
+	<update id='stopWatch' parameterType='java.lang.String'>
+		update wo_master set watched=0 where id=#{id};	
+	</update>
+	
+	<update id="updateWorkOrder_se" parameterType ='java.util.HashMap'>
+		update wo_master set 
+		<trim  suffixOverrides="," >
+			<if test="level_starttime !='' and level_starttime !=null">
+				level_starttime=#{level_starttime},
+			</if>
+			<if test="update_time != ''  and update_time !=null">
+				update_time=#{update_time},
+			</if>
+			<if test="update_user != null and update_user !=null">
+				update_user=#{update_user},
+			</if>
+			<if test="create_user != '' and  create_user!= null">
+				create_user=#{create_user},
+			</if>
+			<if test="wo_level != ''  and wo_level!=null ">
+				wo_level=#{wo_level},
+			</if>
+			<if test="wo_level_display != ''  and wo_level_display!=null ">
+				wo_level_display=#{wo_level_display},
+			</if>
+			<if test="cal_date !='' and  cal_date!=null ">
+				cal_date=#{cal_date},
+			</if>
+			<if test="watched !='' and  watched!=null  ">
+				watched=#{watched},
+			</if>
+			<if test="wo_alloc_status !='' and  wo_alloc_status!=null  ">
+				wo_alloc_status=#{wo_alloc_status},
+			</if>
+			<if test= "standardManhours != null and standardManhours != ''" >
+			   standard_manhours= #{standardManhours },
+		     </if>
+		</trim> where id=#{id}
+	</update>
+
+	<select id='finWoMasterData'   parameterType ='java.util.HashMap'  resultType='java.util.HashMap'>
+		SELECT  a.*,b.sort
+	   	FROM wo_master a, wk_level b
+	   	WHERE a.wo_level =b.code
+		<if test= "wo_no != null and wo_no != ''" >
+			AND a.wo_no = #{wo_no }
+		</if>
+		<if test= "wo_alloc_status != null and wo_alloc_status != ''" >
+			AND a.wo_alloc_status = #{wo_alloc_status }
+		</if>
+		<if test= "wo_process_status != null and wo_process_status != ''" >
+			AND a.wo_process_status = #{wo_process_status }
+		</if>
+		<if test= "wo_type != null and wo_type != ''" >
+			AND a.wo_type = #{wo_type }
+		</if>
+		<if test= "wo_level != null and wo_level != ''" >
+			AND a.wo_level = #{wo_level }
+		</if>
+		<if test= "createTime_to != null and createTime_to != ''" >
+			AND TO_SECONDS(a.create_time) &lt;= TO_SECONDS(#{createTime_to })
+		</if>
+		<if test= "store != null and store != ''" >
+			AND a.store = #{store }
+		</if>
+		<if test= "warehouse != null and warehouse != ''" >
+			AND a.warehouse = #{warehouse }
+		</if>
+		<if test= "carrier != null and carrier != ''" >
+			AND a.carrier = #{carrier }
+		</if>
+		<if test= "express_number != null and express_number != ''" >
+			AND a.express_number = #{express_number }
+		</if>
+		<if test= "platform_number != null and platform_number != ''" >
+			AND a.platform_number = #{platform_number }
+		</if>
+		<if test= "related_number != null and related_number != ''" >
+			AND a.related_number = #{related_number }
+		</if>
+		<if test= "job_number != null and job_number != ''" >
+			AND a.job_number = #{job_number }
+		</if>
+		<if test= "warning_type != null and warning_type != ''" >
+			AND a.warning_type = #{warning_type }
+		</if>
+	</select>
+
+	<select id="findNeedLevelUpData_ADV"  resultType='java.util.HashMap'  parameterType ='java.util.HashMap'>	
+		SELECT 
+		    a.*
+		    ,b.sort
+		FROM
+		    wo_master a,
+		    wk_level b 
+		WHERE
+		   b.code=a.wo_level
+        <if test= "watched != null and watched != ''" >
+			AND a.watched = #{watched }
+		</if>
+		<if test= "id != null and id != ''" >
+			AND a.id = #{id}
+		</if>
+		<if test= "wo_type != null and wo_type != ''" >
+			AND a.wo_type = #{wo_type}
+		</if>
+		<if test= "express_number != null and express_number != ''" >
+			AND a.express_number = #{express_number}
+		</if>
+           AND a.wo_process_status NOT IN ('CCD' , 'FIN')
+	</select>
+	
+	
+	<select id="get_wo_level" parameterType="java.util.Map" resultType="java.util.Map">
+	   
+	</select>
+	
+	<delete id="delClaimDetailByWid" parameterType='Object'>
+		DELETE FROM wo_claim_detail WHERE wo_id=#{wo_id}
+	</delete>
+	
+	<select id="getTicketForWorkOrder" parameterType='java.lang.String' resultType='java.util.HashMap' >
+		SELECT 
+		    a.waybill,
+		    b.wo_flag AS store_flag,
+		    c.wo_flag AS warehouse_flag
+		FROM
+		    er_cal_master a
+		        LEFT JOIN
+		    tb_store b ON a.store_code = b.store_code
+		        LEFT JOIN
+		    tb_warehouse c ON a.warehouse_code = c.warehouse_code
+        WHERE a.waybill=#{waybill}  and c.validity=1 and b.validity=1
+	</select>
+	
+	<update id="updateFailureReason" parameterType ='java.lang.String'>
+		update wo_master set  failure_reason = #{failureReason}
+		 where id=#{id}
+	</update>
+
+	<select id="listOrderDetailByWaybill" parameterType="String" resultType="com.bt.workOrder.bean.Packages">
+		SELECT
+			id,
+			bat_id as batId,
+			sku_number as skuNumber,
+			barcode,
+			item_name as itemName,
+			extend_pro as extendPro,
+			qty
+		FROM er_expressinfo_detail
+		WHERE waybill = #{waybill }
+	</select>
+	  <select id="selectResultInfo" resultType="java.lang.String" parameterType="java.lang.String" >
+	    select 
+	    resultInfo
+	    from wo_followup_resultinfo
+	    where 1=1
+	    <if test= "wkType != null and wkType != ''" >
+	   		and wk_type=#{wkType}
+	   	</if>
+	   	<if test= "errorType != null and errorType != ''" >
+	   		and exception_type=#{errorType}
+	   	</if>
+	  </select>
+	  <select id="getRemark" resultType="java.lang.String" parameterType="java.lang.String" >
+	    SELECT
+			column_value
+		FROM
+			`wo_operation_detail`
+		WHERE
+			column_code = "remark"
+		AND wo_id = #{id}
+		and wo_type=#{woType}
+	  </select>
+</mapper>

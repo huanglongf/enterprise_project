@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.dao.JkSettleMapper">
+	<select id="jk_settle_pro" parameterType="java.util.HashMap" statementType="CALLABLE" resultType="java.util.HashMap">
+		<choose>
+			<!--耗材费-采购明细 -->
+			<when test="class_name == 'invitation'">
+				{call pro_jk_data_invitation(
+					#{bat_id,jdbcType=VARCHAR,mode=IN},
+					#{out_result,jdbcType=VARCHAR,mode=OUT},
+					#{out_result_reason,jdbcType=VARCHAR,mode=OUT})}
+       		</when>
+       
+      		<!--操作费接口 -->
+       		<when test="class_name == 'operator'">
+				{call pro_jk_data_operator(
+	                #{bat_id,jdbcType=VARCHAR,mode=IN},
+	                #{out_result,jdbcType=VARCHAR,mode=OUT},
+	                #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}      
+			</when>  
+       
+      		<!--快递订单接口 -->
+       		<when test="class_name == 'order'">
+				{call pro_jk_data_order(
+		            #{bat_id,jdbcType=VARCHAR,mode=IN},
+		            #{out_result,jdbcType=VARCHAR,mode=OUT},
+		            #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}      
+       		</when>              
+       
+      		<!--耗材费-实际使用量 -->
+        	<when test="class_name == 'use'">
+				{call pro_jk_data_use(
+	                #{bat_id,jdbcType=VARCHAR,mode=IN},
+	                #{out_result,jdbcType=VARCHAR,mode=OUT},
+	                #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}       
+        	</when>       
+      
+      		<!--仓储费 -->
+        	<when test="class_name == 'storage'">
+				{call pro_jk_storage(
+		            #{bat_id,jdbcType=VARCHAR,mode=IN},
+		            #{out_result,jdbcType=VARCHAR,mode=OUT},
+		            #{out_result_reason,jdbcType=VARCHAR,mode=OUT})}       
+        	</when>         
+		</choose>
+	</select>            
+</mapper>

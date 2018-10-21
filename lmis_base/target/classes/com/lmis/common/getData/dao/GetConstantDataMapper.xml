@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.common.getData.dao.GetConstantDataMapper">
+	<resultMap type="com.lmis.common.getData.model.ConstantData" id="ConstantDataMap">
+		<!-- 子类字段 -->
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="value1" property="value1" jdbcType="VARCHAR" />
+		<result column="value2" property="value2" jdbcType="VARCHAR" />
+		<result column="value3" property="value3" jdbcType="VARCHAR" />
+		<result column="value4" property="value4" jdbcType="VARCHAR" />
+		<result column="value5" property="value5" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<select id="getConstantData" parameterType="String" resultMap="ConstantDataMap">
+		select sql_code as code,sql_remark as name,default_value as value1,is_empty as value2 
+			from setup_constant_sql where sql_code=#{sqlCode, jdbcType=VARCHAR}
+	</select>
+
+	<select id="getConstantSqlData" parameterType="String" resultType="com.lmis.common.getData.model.ConstantData">
+		${value}
+	</select>
+	
+</mapper>

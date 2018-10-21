@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bt.lmis.balance.dao.WarehouseExpressDataStoreSettlementEstimateMapper" > 
+<!-- Result Map-->
+<resultMap id="BaseResultMap" type="com.bt.lmis.balance.model.WarehouseExpressDataStoreSettlementEstimate" >
+	<result column="id" property="id"/>
+	<result column="create_time" property="create_time"/>
+	<result column="create_user" property="create_user"/>
+	<result column="update_time" property="update_time"/>
+	<result column="update_user" property="update_user"/>
+	<result column="cost_center" property="cost_center"/>
+	<result column="store_code" property="store_code"/>
+	<result column="store_name" property="store_name"/>
+	<result column="warehouse" property="warehouse"/>
+	<result column="transport_direction" property="transport_direction"/>
+	<result column="transport_code" property="transport_code"/>
+	<result column="transport_name" property="transport_name"/>
+	<result column="itemtype_name" property="itemtype_name"/>
+	<result column="itemtype_code" property="itemtype_code"/>
+	<result column="delivery_order" property="delivery_order"/>
+	<result column="order_type" property="order_type"/>
+	<result column="express_number" property="express_number"/>
+	<result column="transport_time" property="transport_time"/>
+	<result column="order_amount" property="order_amount"/>
+	<result column="sku_number" property="sku_number"/>
+	<result column="weight" property="weight"/>
+	<result column="length" property="length"/>
+	<result column="width" property="width"/>
+	<result column="higth" property="higth"/>
+	<result column="volumn" property="volumn"/>
+	<result column="delivery_address" property="delivery_address"/>
+	<result column="province" property="province"/>
+	<result column="city" property="city"/>
+	<result column="state" property="state"/>
+	<result column="street" property="street"/>
+	<result column="cod_flag" property="cod_flag"/>
+	<result column="balance_subject" property="balance_subject"/>
+	<result column="s_weight" property="s_weight"/>
+	<result column="x_weight" property="x_weight"/>
+	<result column="charged_weight" property="charged_weight"/>
+	<result column="standard_freight" property="standard_freight"/>
+	<result column="discount" property="discount"/>
+	<result column="afterdiscount_freight" property="afterdiscount_freight"/>
+	<result column="insurance_fee" property="insurance_fee"/>
+	<result column="cod" property="cod"/>
+	<result column="delegated_pickup" property="delegated_pickup"/>
+	<result column="package_price" property="package_price"/>
+	<result column="extend_prop1" property="extend_prop1"/>
+	<result column="extend_prop2" property="extend_prop2"/>
+	<result column="total_fee" property="total_fee"/>
+	<result column="remark" property="remark"/>
+	<result column="data_id" property="data_id"/>
+	<result column="contract_id" property="contract_id"/>
+	<result column="dFlag" property="dFlag"/>
+	<result column="insurance_flag" property="insurance_flag"/>
+	<result column="time" property="time"/>
+	<result column="batch_number" property="batch_number"/>
+	
+	
+</resultMap>
+       
+<!-- bal_warehouse_express_data_store_settlement_estimate table all fields -->
+<sql id="Base_Column_List" >
+	 id,time,insurance_flag,create_time,create_user,update_time,update_user,cost_center,store_code,store_name,warehouse,transport_direction,transport_code,transport_name,itemtype_name,itemtype_code,delivery_order,order_type,express_number,transport_time,order_amount,sku_number,weight,length,width,higth,volumn,delivery_address,province,city,state,street,cod_flag,balance_subject,s_weight,x_weight,charged_weight,standard_freight,discount,afterdiscount_freight,insurance_fee,cod,delegated_pickup,package_price,extend_prop1,extend_prop2,total_fee,remark,data_id,contract_id,dFlag,batch_number
+</sql>
+   
+   
+<!-- 查询条件 -->
+<sql id="where_Clause">
+where 1=1
+<trim  suffixOverrides="," >
+	<if test="id != null" >
+	    and id =  #{id}
+	</if>
+	<if test="create_time != null" >
+	    and create_time =  #{create_time}
+	</if>
+	
+	 	<if test="time != null and time != ''" >
+	    and time =  #{time}
+	</if>
+	 	<if test="insurance_flag != null and insurance_flag != ''" >
+	    and insurance_flag =  #{insurance_flag}
+	</if>
+	 	<if test="create_user != null and create_user != ''" >
+	    and create_user =  #{create_user}
+	</if>
+	<if test="update_time != null" >
+	    and update_time =  #{update_time}
+	</if>
+	 	<if test="update_user != null and update_user != ''" >
+	    and update_user =  #{update_user}
+	</if>
+	 	<if test="cost_center != null and cost_center != ''" >
+	    and cost_center =  #{cost_center}
+	</if>
+	 	<if test="store_code != null and store_code != ''" >
+	    and store_code =  #{store_code}
+	</if>
+	 	<if test="store_name != null and store_name != ''" >
+	    and store_name =  #{store_name}
+	</if>
+	 	<if test="warehouse != null and warehouse != ''" >
+	    and warehouse =  #{warehouse}
+	</if>
+	 	<if test="transport_direction != null and transport_direction != ''" >
+	    and transport_direction =  #{transport_direction}
+	</if>
+	 	<if test="transport_code != null and transport_code != ''" >
+	    and transport_code =  #{transport_code}
+	</if>
+	 	<if test="transport_name != null and transport_name != ''" >
+	    and transport_name =  #{transport_name}
+	</if>
+	 	<if test="itemtype_name != null and itemtype_name != ''" >
+	    and itemtype_name =  #{itemtype_name}
+	</if>
+	 	<if test="itemtype_code != null and itemtype_code != ''" >
+	    and itemtype_code =  #{itemtype_code}
+	</if>
+	 	<if test="delivery_order != null and delivery_order != ''" >
+	    and delivery_order =  #{delivery_order}
+	</if>
+	 	<if test="order_type != null and order_type != ''" >
+	    and order_type =  #{order_type}
+	</if>
+	 	<if test="express_number != null and express_number != ''" >
+	    and express_number =  #{express_number}
+	</if>
+	<if test="transport_time != null" >
+	    and transport_time =  #{transport_time}
+	</if>
+	<if test="order_amount != null" >
+	    and order_amount =  #{order_amount}
+	</if>
+	 	<if test="sku_number != null and sku_number != ''" >
+	    and sku_number =  #{sku_number}
+	</if>
+	<if test="weight != null" >
+	    and weight =  #{weight}
+	</if>
+	<if test="length != null" >
+	    and length =  #{length}
+	</if>
+	<if test="width != null" >
+	    and width =  #{width}
+	</if>
+	<if test="higth != null" >
+	    and higth =  #{higth}
+	</if>
+	<if test="volumn != null" >
+	    and volumn =  #{volumn}
+	</if>
+	 	<if test="delivery_address != null and delivery_address != ''" >
+	    and delivery_address =  #{delivery_address}
+	</if>
+	 	<if test="province != null and province != ''" >
+	    and province =  #{province}
+	</if>
+	 	<if test="city != null and city != ''" >
+	    and city =  #{city}
+	</if>
+	 	<if test="state != null and state != ''" >
+	    and state =  #{state}
+	</if>
+	 	<if test="street != null and street != ''" >
+	    and street =  #{street}
+	</if>
+	 	<if test="cod_flag != null and cod_flag != ''" >
+	    and cod_flag =  #{cod_flag}
+	</if>
+	 	<if test="balance_subject != null and balance_subject != ''" >
+	    and balance_subject =  #{balance_subject}
+	</if>
+	<if test="s_weight != null" >
+	    and s_weight =  #{s_weight}
+	</if>
+	<if test="x_weight != null" >
+	    and x_weight =  #{x_weight}
+	</if>
+	<if test="charged_weight != null" >
+	    and charged_weight =  #{charged_weight}
+	</if>
+	<if test="standard_freight != null" >
+	    and standard_freight =  #{standard_freight}
+	</if>
+	<if test="discount != null" >
+	    and discount =  #{discount}
+	</if>
+	<if test="afterdiscount_freight != null" >
+	    and afterdiscount_freight =  #{afterdiscount_freight}
+	</if>
+	<if test="insurance_fee != null" >
+	    and insurance_fee =  #{insurance_fee}
+	</if>
+	<if test="cod != null" >
+	    and cod =  #{cod}
+	</if>
+	<if test="delegated_pickup != null" >
+	    and delegated_pickup =  #{delegated_pickup}
+	</if>
+	<if test="package_price != null" >
+	    and package_price =  #{package_price}
+	</if>
+	<if test="extend_prop1 != null" >
+	    and extend_prop1 =  #{extend_prop1}
+	</if>
+	<if test="extend_prop2 != null" >
+	    and extend_prop2 =  #{extend_prop2}
+	</if>
+	<if test="total_fee != null" >
+	    and total_fee =  #{total_fee}
+	</if>
+	 	<if test="remark != null and remark != ''" >
+	    and remark =  #{remark}
+	</if>
+	<if test="data_id != null" >
+	    and data_id =  #{data_id}
+	</if>
+	<if test="contract_id != null" >
+	    and contract_id =  #{contract_id}
+	</if>
+	<if test="dFlag != null" >
+	    and dFlag =  #{dFlag}
+	</if>
+	<if test="batch_number != null" >
+	    and batch_number =  #{batch_number}
+	</if>
+</trim>
+</sql>
+   
+
+<!-- 插入快递结算明细表 -->
+<insert id="insert" parameterType="com.bt.lmis.balance.model.WarehouseExpressDataStoreSettlementEstimate" >
+  insert into bal_warehouse_express_data_store_settlement_estimate(id,time,insurance_flag,create_time,create_user,update_time,update_user,cost_center,store_code,store_name,warehouse,transport_direction,transport_code,transport_name,itemtype_name,itemtype_code,delivery_order,order_type,express_number,transport_time,order_amount,sku_number,weight,length,width,higth,volumn,delivery_address,province,city,state,street,cod_flag,balance_subject,charged_weight,standard_freight,discount,afterdiscount_freight,insurance_fee,cod,delegated_pickup,package_price,extend_prop1,extend_prop2,total_fee,remark,data_id,contract_id,dFlag,batch_number,epistatic_order)
+ values(#{id},#{time},#{insurance_flag},#{create_time},#{create_user},#{update_time},#{update_user},#{cost_center},#{store_code},#{store_name},#{warehouse},#{transport_direction},#{transport_code},#{transport_name},#{itemtype_name},#{itemtype_code},#{delivery_order},#{order_type},#{express_number},#{transport_time},#{order_amount},#{sku_number},#{weight},#{length},#{width},#{higth},#{volumn},#{delivery_address},#{province},#{city},#{state},#{street},#{cod_flag},#{balance_subject},#{charged_weight},#{standard_freight},#{discount},#{afterdiscount_freight},#{insurance_fee},#{cod},#{delegated_pickup},#{package_price},#{extend_prop1},#{extend_prop2},#{total_fee},#{remark},#{data_id},#{contract_id},#{dFlag},#{batch_number},#{epistatic_order})
+</insert>
+
+<!-- 修改快递结算明细表-->  
+ <update id="update" parameterType="com.bt.lmis.balance.model.WarehouseExpressDataStoreSettlementEstimate" >
+  update bal_warehouse_express_data_store_settlement_estimate set insurance_flag=#{insurance_flag},time=#{time},create_time=#{create_time},create_user=#{create_user},update_time=#{update_time},update_user=#{update_user},cost_center=#{cost_center},store_code=#{store_code},store_name=#{store_name},warehouse=#{warehouse},transport_direction=#{transport_direction},transport_code=#{transport_code},transport_name=#{transport_name},itemtype_name=#{itemtype_name},itemtype_code=#{itemtype_code},delivery_order=#{delivery_order},order_type=#{order_type},express_number=#{express_number},transport_time=#{transport_time},order_amount=#{order_amount},sku_number=#{sku_number},weight=#{weight},length=#{length},width=#{width},higth=#{higth},volumn=#{volumn},delivery_address=#{delivery_address},province=#{province},city=#{city},state=#{state},street=#{street},cod_flag=#{cod_flag},balance_subject=#{balance_subject},s_weight=#{s_weight},x_weight=#{x_weight},charged_weight=#{charged_weight},standard_freight=#{standard_freight},discount=#{discount},afterdiscount_freight=#{afterdiscount_freight},insurance_fee=#{insurance_fee},cod=#{cod},delegated_pickup=#{delegated_pickup},package_price=#{package_price},extend_prop1=#{extend_prop1},extend_prop2=#{extend_prop2},total_fee=#{total_fee},remark=#{remark},data_id=#{data_id},contract_id=#{contract_id},dFlag=#{dFlag},batch_number=#{batch_number} where id=#{id}
+ </update>
+ 
+ <!-- 选择修改快递结算明细表-->
+<update id="updateBySelective" parameterType="com.bt.lmis.balance.model.WarehouseExpressDataStoreSettlementEstimate" >
+	update bal_warehouse_express_data_store_settlement_estimate set 
+	<trim  suffixOverrides="," >
+	<if test="create_time != null  ">
+		create_time=#{create_time},
+	</if>
+	<if test="create_user != null  and create_user != '' ">
+		create_user=#{create_user},
+	</if>
+	<if test="time != null  and time != '' ">
+		time=#{time},
+	</if>
+	<if test="insurance_flag != null  and insurance_flag != '' ">
+		insurance_flag=#{insurance_flag},
+	</if>
+	<if test="update_time != null  ">
+		update_time=#{update_time},
+	</if>
+	<if test="update_user != null  and update_user != '' ">
+		update_user=#{update_user},
+	</if>
+	<if test="cost_center != null  and cost_center != '' ">
+		cost_center=#{cost_center},
+	</if>
+	<if test="store_code != null  and store_code != '' ">
+		store_code=#{store_code},
+	</if>
+	<if test="store_name != null  and store_name != '' ">
+		store_name=#{store_name},
+	</if>
+	<if test="warehouse != null  and warehouse != '' ">
+		warehouse=#{warehouse},
+	</if>
+	<if test="transport_direction != null  and transport_direction != '' ">
+		transport_direction=#{transport_direction},
+	</if>
+	<if test="transport_code != null  and transport_code != '' ">
+		transport_code=#{transport_code},
+	</if>
+	<if test="transport_name != null  and transport_name != '' ">
+		transport_name=#{transport_name},
+	</if>
+	<if test="itemtype_name != null  and itemtype_name != '' ">
+		itemtype_name=#{itemtype_name},
+	</if>
+	<if test="itemtype_code != null  and itemtype_code != '' ">
+		itemtype_code=#{itemtype_code},
+	</if>
+	<if test="delivery_order != null  and delivery_order != '' ">
+		delivery_order=#{delivery_order},
+	</if>
+	<if test="order_type != null  and order_type != '' ">
+		order_type=#{order_type},
+	</if>
+	<if test="express_number != null  and express_number != '' ">
+		express_number=#{express_number},
+	</if>
+	<if test="transport_time != null  ">
+		transport_time=#{transport_time},
+	</if>
+	<if test="order_amount != null  ">
+		order_amount=#{order_amount},
+	</if>
+	<if test="sku_number != null  and sku_number != '' ">
+		sku_number=#{sku_number},
+	</if>
+	<if test="weight != null  ">
+		weight=#{weight},
+	</if>
+	<if test="length != null  ">
+		length=#{length},
+	</if>
+	<if test="width != null  ">
+		width=#{width},
+	</if>
+	<if test="higth != null  ">
+		higth=#{higth},
+	</if>
+	<if test="volumn != null  ">
+		volumn=#{volumn},
+	</if>
+	<if test="delivery_address != null  and delivery_address != '' ">
+		delivery_address=#{delivery_address},
+	</if>
+	<if test="province != null  and province != '' ">
+		province=#{province},
+	</if>
+	<if test="city != null  and city != '' ">
+		city=#{city},
+	</if>
+	<if test="state != null  and state != '' ">
+		state=#{state},
+	</if>
+	<if test="street != null  and street != '' ">
+		street=#{street},
+	</if>
+	<if test="cod_flag != null  and cod_flag != '' ">
+		cod_flag=#{cod_flag},
+	</if>
+	<if test="balance_subject != null  and balance_subject != '' ">
+		balance_subject=#{balance_subject},
+	</if>
+	<if test="s_weight != null  ">
+		s_weight=#{s_weight},
+	</if>
+	<if test="x_weight != null  ">
+		x_weight=#{x_weight},
+	</if>
+	<if test="charged_weight != null  ">
+		charged_weight=#{charged_weight},
+	</if>
+	<if test="standard_freight != null  ">
+		standard_freight=#{standard_freight},
+	</if>
+	<if test="discount != null  ">
+		discount=#{discount},
+	</if>
+	<if test="afterdiscount_freight != null  ">
+		afterdiscount_freight=#{afterdiscount_freight},
+	</if>
+	<if test="insurance_fee != null  ">
+		insurance_fee=#{insurance_fee},
+	</if>
+	<if test="cod != null  ">
+		cod=#{cod},
+	</if>
+	<if test="delegated_pickup != null  ">
+		delegated_pickup=#{delegated_pickup},
+	</if>
+	<if test="package_price != null  ">
+		package_price=#{package_price},
+	</if>
+	<if test="extend_prop1 != null  ">
+		extend_prop1=#{extend_prop1},
+	</if>
+	<if test="extend_prop2 != null  ">
+		extend_prop2=#{extend_prop2},
+	</if>
+	<if test="total_fee != null  ">
+		total_fee=#{total_fee},
+	</if>
+	<if test="remark != null  and remark != '' ">
+		remark=#{remark},
+	</if>
+	<if test="data_id != null  ">
+		data_id=#{data_id},
+	</if>
+	<if test="contract_id != null  ">
+		contract_id=#{contract_id},
+	</if>
+	<if test="dFlag != null  ">
+		dFlag=#{dFlag},
+	</if>
+	<if test="batch_number != null  ">
+		batch_number=#{batch_number},
+	</if>
+	</trim> where id=#{id}
+</update>
+
+<!-- 删除快递结算明细表 -->
+<update id="delete" parameterType="Object">
+	delete 	 from bal_warehouse_express_data_store_settlement_estimate where id = #{id}
+</update>
+<!-- 批量删除快递结算明细表 -->
+<delete id="batchDelete" parameterType="Object">
+	delete 	 from bal_warehouse_express_data_store_settlement_estimate where id in 
+	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">  
+       	#{item}  
+   	</foreach> 
+</delete>
+ 
+<!-- 依据主键查找快递结算明细表 -->
+<select id="selectById"  resultMap="BaseResultMap" >
+	select <include refid="Base_Column_List" /> 
+	 from bal_warehouse_express_data_store_settlement_estimate where id = #{id}
+</select>
+  	
+<!-- 快递结算明细表 列表总数  为分页组件使用-->
+<select id="pageTotalRecord" resultType="java.lang.Long"  parameterType="com.bt.lmis.balance.controller.form.WarehouseExpressDataStoreSettlementEstimateQueryParam">
+	select count(1) from bal_warehouse_express_data_store_settlement_estimate 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 分页中的快递结算明细表集合，为分页组件使用 -->
+<select id="pageData" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.controller.form.WarehouseExpressDataStoreSettlementEstimateQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from bal_warehouse_express_data_store_settlement_estimate 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+      ${orderCondition}
+    </if>
+    ${queryCondition}
+</select>
+
+
+<!--依据条件统计 快递结算明细表总数-->
+<select id="count" resultType="java.lang.Long"  parameterType="com.bt.lmis.balance.controller.form.WarehouseExpressDataStoreSettlementEstimateQueryParam">
+	select count(1) from bal_warehouse_express_data_store_settlement_estimate 
+	<include refid="where_Clause"/>
+</select>
+  	
+<!-- 满足条件的快递结算明细表集合 -->
+<select id="findAll" resultMap="BaseResultMap"  parameterType="com.bt.lmis.balance.controller.form.WarehouseExpressDataStoreSettlementEstimateQueryParam">
+	select 
+	<include refid="Base_Column_List"/>
+	from bal_warehouse_express_data_store_settlement_estimate 
+	<include refid="where_Clause"/>
+	<if test="orderCondition != null and orderCondition != ''" >
+     ${orderCondition}
+    </if>
+</select>
+ <delete id="delete_by_con">
+ delete from bal_warehouse_express_data_store_settlement_estimate where contract_id=#{contract_id}
+ </delete> 	
+
+</mapper>   

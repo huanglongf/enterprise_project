@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.setup.pageElement.dao.SetupPageElementMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.setup.pageElement.model.SetupPageElement" id="SetupPageElementMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="element_id" property="elementId" jdbcType="VARCHAR" />
+		<result column="element_name" property="elementName" jdbcType="VARCHAR" />
+		<result column="layout_id" property="layoutId" jdbcType="VARCHAR" />
+		<result column="element_seq" property="elementSeq" jdbcType="INTEGER" />
+		<result column="element_width" property="elementWidth" jdbcType="VARCHAR" />
+		<result column="element_height" property="elementHeight" jdbcType="VARCHAR" />
+		<result column="element_type" property="elementType" jdbcType="VARCHAR" />
+		<result column="default_value" property="defaultValue" jdbcType="VARCHAR" />
+		<result column="element_disabled" property="elementDisabled" jdbcType="BOOLEAN" />
+		<result column="element_format" property="elementFormat" jdbcType="VARCHAR" />
+		<result column="table_id" property="tableId" jdbcType="VARCHAR" />
+		<result column="column_id" property="columnId" jdbcType="VARCHAR" />
+		<result column="column_type" property="columnType" jdbcType="VARCHAR" />
+		<result column="where_type" property="whereType" jdbcType="VARCHAR" />
+		<result column="where_operator" property="whereOperator" jdbcType="VARCHAR" />
+		<result column="add_readonly" property="addReadonly" jdbcType="BOOLEAN" />
+		<result column="update_readonly" property="updateReadonly" jdbcType="BOOLEAN" />
+		<result column="button_click" property="buttonClick" jdbcType="VARCHAR" />
+		<result column="not_null" property="notNull" jdbcType="BOOLEAN" />
+		<result column="add_not_null" property="addNotNull" jdbcType="BOOLEAN" />
+		<result column="update_not_null" property="updateNotNull" jdbcType="BOOLEAN" />
+		<result column="button_set" property="buttonSet" jdbcType="VARCHAR" />
+		<result column="button_picture" property="buttonPicture" jdbcType="VARCHAR" />
+		<result column="element_title" property="elementTitle" jdbcType="VARCHAR" />
+		<result column="column_len" property="columnLen" jdbcType="INTEGER" />
+		<result column="element_hide" property="elementHide" jdbcType="BOOLEAN" />
+		<result column="is_filt" property="isFilt" jdbcType="BOOLEAN" />
+	</resultMap>
+	<resultMap type="com.lmis.setup.pageElement.model.ViewSetupPageElement" id="ViewSetupPageElementMap">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+		<result column="element_id" property="elementId" jdbcType="VARCHAR" />
+		<result column="element_name" property="elementName" jdbcType="VARCHAR" />
+		<result column="layout_id" property="layoutId" jdbcType="VARCHAR" />
+		<result column="element_seq" property="elementSeq" jdbcType="INTEGER" />
+		<result column="element_width" property="elementWidth" jdbcType="VARCHAR" />
+		<result column="element_height" property="elementHeight" jdbcType="VARCHAR" />
+		<result column="element_type" property="elementType" jdbcType="VARCHAR" />
+		<result column="default_value" property="defaultValue" jdbcType="VARCHAR" />
+		<result column="element_disabled" property="elementDisabled" jdbcType="BOOLEAN" />
+		<result column="element_format" property="elementFormat" jdbcType="VARCHAR" />
+		<result column="table_id" property="tableId" jdbcType="VARCHAR" />
+		<result column="column_id" property="columnId" jdbcType="VARCHAR" />
+		<result column="column_type" property="columnType" jdbcType="VARCHAR" />
+		<result column="where_type" property="whereType" jdbcType="VARCHAR" />
+		<result column="where_operator" property="whereOperator" jdbcType="VARCHAR" />
+		<result column="add_readonly" property="addReadonly" jdbcType="BOOLEAN" />
+		<result column="update_readonly" property="updateReadonly" jdbcType="BOOLEAN" />
+		<result column="button_click" property="buttonClick" jdbcType="VARCHAR" />
+		<result column="not_null" property="notNull" jdbcType="BOOLEAN" />
+		<result column="add_not_null" property="addNotNull" jdbcType="BOOLEAN" />
+		<result column="update_not_null" property="updateNotNull" jdbcType="BOOLEAN" />
+		<result column="button_set" property="buttonSet" jdbcType="VARCHAR" />
+		<result column="button_picture" property="buttonPicture" jdbcType="VARCHAR" />
+		<result column="element_title" property="elementTitle" jdbcType="VARCHAR" />
+		<result column="column_len" property="columnLen" jdbcType="INTEGER" />
+		<result column="element_hide" property="elementHide" jdbcType="BOOLEAN" />
+		<result column="is_filt" property="isFilt" jdbcType="BOOLEAN" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		element_id,
+		element_name,
+		layout_id,
+		element_seq,
+		element_width,
+		element_height,
+		element_type,
+		default_value,
+		element_disabled,
+		element_format,
+		table_id,
+		column_id,
+		column_type,
+		where_type,
+		where_operator,
+		add_readonly,
+		update_readonly,
+		button_click,
+		not_null,
+		add_not_null,
+		update_not_null,
+		button_set,
+		button_picture,
+		element_title,
+		column_len,
+		element_hide,
+		is_filt
+	</sql>
+	<sql id="View_Setup_Page_Element_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		element_id,
+		element_name,
+		layout_id,
+		element_seq,
+		element_width,
+		element_height,
+		element_type,
+		default_value,
+		element_disabled,
+		element_format,
+		table_id,
+		column_id,
+		column_type,
+		where_type,
+		where_operator,
+		add_readonly,
+		update_readonly,
+		button_click,
+		not_null,
+		add_not_null,
+		update_not_null,
+		button_set,
+		button_picture,
+		element_title,
+		column_len,
+		element_hide,
+		is_filt
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			element_id,
+			element_name,
+			layout_id,
+			element_seq,
+			element_width,
+			element_height,
+			element_type,
+			default_value,
+			element_disabled,
+			element_format,
+			table_id,
+			column_id,
+			column_type,
+			where_type,
+			where_operator,
+			add_readonly,
+			update_readonly,
+			button_click,
+			not_null,
+			add_not_null,
+			update_not_null,
+			button_set,
+			button_picture,
+			element_title,
+			column_len,
+			element_hide,
+			is_filt
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.setup.pageElement.model.SetupPageElement">
+		INSERT INTO setup_page_element
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{elementId, jdbcType=VARCHAR},
+			#{elementName, jdbcType=VARCHAR},
+			#{layoutId, jdbcType=VARCHAR},
+			#{elementSeq, jdbcType=INTEGER},
+			#{elementWidth, jdbcType=VARCHAR},
+			#{elementHeight, jdbcType=VARCHAR},
+			#{elementType, jdbcType=VARCHAR},
+			#{defaultValue, jdbcType=VARCHAR},
+			#{elementDisabled, jdbcType=BOOLEAN},
+			#{elementFormat, jdbcType=VARCHAR},
+			#{tableId, jdbcType=VARCHAR},
+			#{columnId, jdbcType=VARCHAR},
+			#{columnType, jdbcType=VARCHAR},
+			#{whereType, jdbcType=VARCHAR},
+			#{whereOperator, jdbcType=VARCHAR},
+			#{addReadonly, jdbcType=BOOLEAN},
+			#{updateReadonly, jdbcType=BOOLEAN},
+			#{buttonClick, jdbcType=VARCHAR},
+			#{notNull, jdbcType=BOOLEAN},
+			#{addNotNull, jdbcType=BOOLEAN},
+			#{updateNotNull, jdbcType=BOOLEAN},
+			#{buttonSet, jdbcType=VARCHAR},
+			#{buttonPicture, jdbcType=VARCHAR},
+			#{elementTitle, jdbcType=VARCHAR},
+			#{columnLen, jdbcType=INTEGER},
+			#{elementHide, jdbcType=BOOLEAN},
+			#{isFilt, jdbcType=BOOLEAN}
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO setup_page_element
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.elementId, jdbcType=VARCHAR},
+				#{obj.elementName, jdbcType=VARCHAR},
+				#{obj.layoutId, jdbcType=VARCHAR},
+				#{obj.elementSeq, jdbcType=INTEGER},
+				#{obj.elementWidth, jdbcType=VARCHAR},
+				#{obj.elementHeight, jdbcType=VARCHAR},
+				#{obj.elementType, jdbcType=VARCHAR},
+				#{obj.defaultValue, jdbcType=VARCHAR},
+				#{obj.elementDisabled, jdbcType=BOOLEAN},
+				#{obj.elementFormat, jdbcType=VARCHAR},
+				#{obj.tableId, jdbcType=VARCHAR},
+				#{obj.columnId, jdbcType=VARCHAR},
+				#{obj.columnType, jdbcType=VARCHAR},
+				#{obj.whereType, jdbcType=VARCHAR},
+				#{obj.whereOperator, jdbcType=VARCHAR},
+				#{obj.addReadonly, jdbcType=BOOLEAN},
+				#{obj.updateReadonly, jdbcType=BOOLEAN},
+				#{obj.buttonClick, jdbcType=VARCHAR},
+				#{obj.notNull, jdbcType=BOOLEAN},
+				#{obj.addNotNull, jdbcType=BOOLEAN},
+				#{obj.updateNotNull, jdbcType=BOOLEAN},
+				#{obj.buttonSet, jdbcType=VARCHAR},
+				#{obj.buttonPicture, jdbcType=VARCHAR},
+				#{obj.elementTitle, jdbcType=VARCHAR},
+				#{obj.columnLen, jdbcType=INTEGER},
+				#{obj.elementHide, jdbcType=BOOLEAN},
+				#{obj.isFilt, jdbcType=BOOLEAN}
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.setup.pageElement.model.SetupPageElement" resultMap="SetupPageElementMap">
+		SELECT <include refid="Base_Column_List" /> FROM setup_page_element
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	        	AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	        	AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	        	AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementId!=null and elementId!=''">
+	            AND element_id = #{elementId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementName!=null and elementName!=''">
+	            AND element_name = #{elementName, jdbcType=VARCHAR}
+	        </if>	        
+	        <if test="layoutId!=null and layoutId!=''">
+	            AND layout_id = #{layoutId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementWidth!=null and elementWidth!=''">
+	            AND element_width = #{elementWidth, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementHeight!=null and elementHeight!=''">
+	            AND element_height = #{elementHeight, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementType!=null and elementType!=''">
+	            AND element_type = #{elementType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="defaultValue!=null and defaultValue!=''">
+	            AND default_value = #{defaultValue, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementDisabled!=null">
+	        	AND element_disabled = #{elementDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="elementFormat!=null and elementFormat!=''">
+	            AND element_format = #{elementFormat, jdbcType=VARCHAR}
+	        </if>
+	        <if test="tableId!=null and tableId!=''">
+	            AND table_id = #{tableId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnId!=null and columnId!=''">
+	            AND column_id = #{columnId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnType!=null and columnType!=''">
+	            AND column_type = #{columnType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="whereType!=null and whereType!=''">
+	            AND where_type = #{whereType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="whereOperator!=null and whereOperator!=''">
+	            AND where_operator = #{whereOperator, jdbcType=VARCHAR}
+	        </if>
+	        <if test="addReadonly!=null">
+	            AND add_readonly = #{addReadonly, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="updateReadonly!=null">
+	            AND update_readonly = #{updateReadonly, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonClick!=null and buttonClick!=''">
+	            AND button_click = #{buttonClick, jdbcType=VARCHAR}
+	        </if>
+	        <if test="notNull!=null">
+	            AND not_null = #{notNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="addNotNull!=null">
+	            AND add_not_null = #{addNotNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="updateNotNull!=null">
+	            AND update_not_null = #{updateNotNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonSet!=null and buttonClick!=''">
+	            AND button_set = #{buttonSet, jdbcType=VARCHAR}
+	        </if>
+	        <if test="buttonPicture!=null and buttonPicture!=''">
+	            AND button_picture = #{buttonPicture, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementTitle!=null and elementTitle!=''">
+	            AND element_title = #{elementTitle, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnLen!=null">
+	            AND column_len = #{columnLen, jdbcType=INTEGER}
+	        </if>
+	        <if test="elementHide!=null">
+	            AND element_hide = #{elementHide, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isFilt!=null">
+	            AND is_filt = #{isFilt, jdbcType=BOOLEAN}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.setup.pageElement.model.SetupPageElement">
+		UPDATE setup_page_element
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="elementId!=null and elementId!=''">
+	        	element_id = #{elementId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="elementName!=null and elementName!=''">
+	        	element_name = #{elementName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="layoutId!=null and layoutId!=''">
+	        	layout_id = #{layoutId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="elementSeq!=null">
+	        	element_seq = #{elementSeq, jdbcType=VARCHAR},
+	        </if>
+	        <if test="elementWidth!=null and elementWidth!=''">
+	       		element_width = #{elementWidth, jdbcType=VARCHAR},
+	        </if>
+	        <if test="elementHeight!=null and elementHeight!=''">
+	        	element_height = #{elementHeight, jdbcType=VARCHAR},
+	        </if>
+	        <if test="elementType!=null and elementType!=''">
+	        	element_type = #{elementType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="defaultValue!=null and defaultValue!=''">
+	        	default_value = #{defaultValue, jdbcType=VARCHAR},
+	        </if>
+	        <if test="elementDisabled!=null">
+	        	element_disabled = #{elementDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="elementFormat!=null and elementFormat!=''">
+	        	element_format = #{elementFormat, jdbcType=VARCHAR},
+	        </if>
+	        <if test="tableId!=null and tableId!=''">
+	        	table_id = #{tableId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="columnId!=null and columnId!=''">
+	        	column_id = #{columnId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="columnType!=null and columnType!=''">
+	            column_type = #{columnType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="whereType!=null and whereType!=''">
+	        	where_type = #{whereType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="whereOperator!=null and whereOperator!=''">
+	        	where_operator = #{whereOperator, jdbcType=VARCHAR},
+	        </if>
+	        <if test="addReadonly!=null">
+	            add_readonly = #{addReadonly, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="updateReadonly!=null">
+	            update_readonly = #{updateReadonly, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="buttonClick!=null and buttonClick!=''">
+	            button_click = #{buttonClick, jdbcType=VARCHAR},
+	        </if>
+	        <if test="notNull!=null">
+	            not_null = #{notNull, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="addNotNull!=null">
+	            add_not_null = #{addNotNull, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="updateNotNull!=null">
+	            update_not_null = #{updateNotNull, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="buttonSet!=null and buttonClick!=''">
+	            button_set = #{buttonSet, jdbcType=VARCHAR},
+	        </if>
+	        <if test="buttonPicture!=null and buttonPicture!=''">
+	            button_picture = #{buttonPicture, jdbcType=VARCHAR},
+	        </if>
+	        <if test="elementTitle!=null and elementTitle!=''">
+	            element_title = #{elementTitle, jdbcType=VARCHAR},
+	        </if>
+	        <if test="columnLen!=null and columnLen!=''">
+	            column_len = #{columnLen, jdbcType=INTEGER},
+	        </if>
+	        <if test="elementHide!=null">
+	            element_hide = #{elementHide, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isFilt!=null">
+	            is_filt = #{isFilt, jdbcType=BOOLEAN},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="elementId!=null and elementId!=''">
+	        	AND element_id = #{elementId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.setup.pageElement.model.SetupPageElement">
+		UPDATE setup_page_element
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	element_id = #{elementId, jdbcType=VARCHAR},
+        	element_name = #{elementName, jdbcType=VARCHAR},
+        	layout_id = #{layoutId, jdbcType=VARCHAR},
+        	element_seq = #{elementSeq, jdbcType=VARCHAR},
+       		element_width = #{elementWidth, jdbcType=VARCHAR},
+        	element_height = #{elementHeight, jdbcType=VARCHAR},
+        	element_type = #{elementType, jdbcType=VARCHAR},
+        	default_value = #{defaultValue, jdbcType=VARCHAR},
+        	element_disabled = #{elementDisabled, jdbcType=BOOLEAN},
+        	element_format = #{elementFormat, jdbcType=VARCHAR},
+        	table_id = #{tableId, jdbcType=VARCHAR},
+        	column_id = #{columnId, jdbcType=VARCHAR},
+        	column_type = #{columnType, jdbcType=VARCHAR},
+        	where_type = #{whereType, jdbcType=VARCHAR},
+        	where_operator = #{whereOperator, jdbcType=VARCHAR},
+            add_readonly = #{addReadonly, jdbcType=BOOLEAN},
+            update_readonly = #{updateReadonly, jdbcType=BOOLEAN},
+            button_click = #{buttonClick, jdbcType=VARCHAR},
+            not_null = #{notNull, jdbcType=BOOLEAN},
+            add_not_null = #{addNotNull, jdbcType=BOOLEAN},
+            update_not_null = #{updateNotNull, jdbcType=BOOLEAN},
+            button_set = #{buttonSet, jdbcType=VARCHAR},
+            button_picture = #{buttonPicture, jdbcType=VARCHAR},
+            element_title = #{elementTitle, jdbcType=VARCHAR},
+            column_len = #{columnLen, jdbcType=INTEGER},
+            element_hide = #{elementHide, jdbcType=BOOLEAN},
+            is_filt = #{isFilt, jdbcType=BOOLEAN}
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="elementId!=null and elementId!=''">
+	        	AND element_id = #{elementId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateBatch" parameterType="java.util.List">
+		UPDATE setup_page_element
+		<trim prefix="SET" suffixOverrides=",">
+			is_deleted = true,
+			update_time = NOW(),
+			version = version + 1
+	    </trim>
+	    WHERE
+			layout_id IN (
+			<foreach collection="list" item="obj" index="index" separator=",">
+					#{obj, jdbcType=VARCHAR}
+			</foreach>
+			)
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.setup.pageElement.model.SetupPageElement">
+		UPDATE setup_page_element
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="elementId!=null and elementId!=''">
+	        	AND element_id = #{elementId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.setup.pageElement.model.SetupPageElement">
+		UPDATE setup_page_element
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled != null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="elementId!=null and elementId!=''">
+	        	AND element_id = #{elementId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.setup.pageElement.model.SetupPageElement">
+		DELETE FROM setup_page_element
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="elementId!=null and elementId!=''">
+	        	AND element_id = #{elementId, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+	<select id="listSetupPageElementBySeq" parameterType="com.lmis.setup.pageElement.model.ViewSetupPageElement" resultMap="ViewSetupPageElementMap">
+		SELECT <include refid="View_Setup_Page_Element_Column_List" /> FROM view_setup_page_element
+		<trim prefix="WHERE" prefixOverrides="AND|OR"> 
+	        <if test="id!=null and id!=''">
+	            id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	        	AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	        	AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	        	AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementId!=null and elementId!=''">
+	            AND element_id = #{elementId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementName!=null and elementName!=''">
+	            AND element_name = #{elementName, jdbcType=VARCHAR}
+	        </if>	        
+	        <if test="layoutId!=null and layoutId!=''">
+	            AND layout_id = #{layoutId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementWidth!=null and elementWidth!=''">
+	            AND element_width = #{elementWidth, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementHeight!=null and elementHeight!=''">
+	            AND element_height = #{elementHeight, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementType!=null and elementType!=''">
+	            AND element_type = #{elementType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="defaultValue!=null and defaultValue!=''">
+	            AND default_value = #{defaultValue, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementDisabled!=null">
+	        	AND element_disabled = #{elementDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="elementFormat!=null and elementFormat!=''">
+	            AND element_format = #{elementFormat, jdbcType=VARCHAR}
+	        </if>
+	        <if test="tableId!=null and tableId!=''">
+	            AND table_id = #{tableId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnId!=null and columnId!=''">
+	            AND column_id = #{columnId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnType!=null and columnType!=''">
+	            AND column_type = #{columnType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="whereType!=null and whereType!=''">
+	            AND where_type = #{whereType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="whereOperator!=null and whereOperator!=''">
+	            AND where_operator = #{whereOperator, jdbcType=VARCHAR}
+	        </if>
+	        <if test="addReadonly!=null">
+	            AND add_readonly = #{addReadonly, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="updateReadonly!=null">
+	            AND update_readonly = #{updateReadonly, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonClick!=null and buttonClick!=''">
+	            AND button_click = #{buttonClick, jdbcType=VARCHAR}
+	        </if>
+	        <if test="notNull!=null">
+	            AND not_null = #{notNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="addNotNull!=null">
+	            AND add_not_null = #{addNotNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="updateNotNull!=null">
+	            AND update_not_null = #{updateNotNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonSet!=null and buttonClick!=''">
+	            AND button_set = #{buttonSet, jdbcType=VARCHAR}
+	        </if>
+	        <if test="buttonPicture!=null and buttonPicture!=''">
+	            AND button_picture = #{buttonPicture, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementTitle!=null and elementTitle!=''">
+	            AND element_title = #{elementTitle, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnLen!=null">
+	            AND column_len = #{columnLen, jdbcType=INTEGER}
+	        </if>
+	        <if test="elementHide!=null">
+	            AND element_hide = #{elementHide, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isFilt!=null">
+	            AND is_filt = #{isFilt, jdbcType=BOOLEAN}
+	        </if>
+	    </trim>
+	    ORDER BY layout_id, element_seq
+	</select>
+	
+	<select id="listSetupPageElementSimpleBySeq" parameterType="com.lmis.setup.pageElement.model.ViewSetupPageElement" resultMap="ViewSetupPageElementMap">
+		SELECT <include refid="View_Setup_Page_Element_Column_List" /> FROM view_setup_page_element_for_simple
+		<trim prefix="WHERE" prefixOverrides="AND|OR"> 
+	        <if test="id!=null and id!=''">
+	            id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	        	AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	        	AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	        	AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementId!=null and elementId!=''">
+	            AND element_id = #{elementId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementName!=null and elementName!=''">
+	            AND element_name = #{elementName, jdbcType=VARCHAR}
+	        </if>	        
+	        <if test="layoutId!=null and layoutId!=''">
+	            AND layout_id = #{layoutId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementWidth!=null and elementWidth!=''">
+	            AND element_width = #{elementWidth, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementHeight!=null and elementHeight!=''">
+	            AND element_height = #{elementHeight, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementType!=null and elementType!=''">
+	            AND element_type = #{elementType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="defaultValue!=null and defaultValue!=''">
+	            AND default_value = #{defaultValue, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementDisabled!=null">
+	        	AND element_disabled = #{elementDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="elementFormat!=null and elementFormat!=''">
+	            AND element_format = #{elementFormat, jdbcType=VARCHAR}
+	        </if>
+	        <if test="tableId!=null and tableId!=''">
+	            AND table_id = #{tableId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnId!=null and columnId!=''">
+	            AND column_id = #{columnId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnType!=null and columnType!=''">
+	            AND column_type = #{columnType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="whereType!=null and whereType!=''">
+	            AND where_type = #{whereType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="whereOperator!=null and whereOperator!=''">
+	            AND where_operator = #{whereOperator, jdbcType=VARCHAR}
+	        </if>
+	        <if test="addReadonly!=null">
+	            AND add_readonly = #{addReadonly, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="updateReadonly!=null">
+	            AND update_readonly = #{updateReadonly, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonClick!=null and buttonClick!=''">
+	            AND button_click = #{buttonClick, jdbcType=VARCHAR}
+	        </if>
+	        <if test="notNull!=null">
+	            AND not_null = #{notNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="addNotNull!=null">
+	            AND add_not_null = #{addNotNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="updateNotNull!=null">
+	            AND update_not_null = #{updateNotNull, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="buttonSet!=null and buttonClick!=''">
+	            AND button_set = #{buttonSet, jdbcType=VARCHAR}
+	        </if>
+	        <if test="buttonPicture!=null and buttonPicture!=''">
+	            AND button_picture = #{buttonPicture, jdbcType=VARCHAR}
+	        </if>
+	        <if test="elementTitle!=null and elementTitle!=''">
+	            AND element_title = #{elementTitle, jdbcType=VARCHAR}
+	        </if>
+	        <if test="columnLen!=null">
+	            AND column_len = #{columnLen, jdbcType=INTEGER}
+	        </if>
+	        <if test="elementHide!=null">
+	            AND element_hide = #{elementHide, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isFilt!=null">
+	            AND is_filt = #{isFilt, jdbcType=BOOLEAN}
+	        </if>
+	    </trim>
+	    ORDER BY layout_id, element_seq
+	</select>
+	
+	<select id="listAllValidateLayoutId" resultType="java.lang.String">
+		SELECT DISTINCT layout_id
+		FROM view_setup_page_element
+		WHERE is_deleted = false
+		AND table_id IS NOT NULL
+        AND column_id IS NOT NULL
+	</select>
+	
+	<select id="findPageElementByPageId" parameterType="java.lang.String" resultMap="SetupPageElementMap">
+		SELECT
+			e.element_id,
+			e.element_name,
+			e.element_seq
+		FROM
+			setup_page_element e
+		WHERE
+			e.element_type = 'h_e_button'
+		AND e.is_deleted = 0
+		AND e.is_disabled = 0
+		AND e.layout_id IN (
+			SELECT
+				l.layout_id
+			FROM
+				setup_page_layout l
+			WHERE
+				l.page_id = #{pageId, jdbcType=VARCHAR}
+			AND l.is_deleted = 0
+			AND l.is_disabled = 0
+		)
+		ORDER BY
+			e.element_seq;
+	</select>
+	
+</mapper>

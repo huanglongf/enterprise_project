@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 此文件大陆WMS应用部署不同的扩展定时配置 -->
+
+	<!-- to execute file -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				 <!-- af-->
+		    	<ref bean="inventoryInsertAf"/>
+		    	 <!-- aeo-->
+		    	<ref bean="inventoryInsertAeo"/>
+		    	 <!-- newlook-->
+		    	<ref bean="inventoryInsertNewlook"/>
+		    	
+			     <!-- NAB UA 库存调整定时任务-->
+		    	<ref bean="NBAUAinventorySynchronousTaskTrigger"/>
+		    	
+		    	<!-- NAB UA  发送入库通知-->
+		    	<ref bean="NBAUASendReturnOrderTaskTrigger"/>
+		    	
+		    	<!-- NAB UA  发送出库订单 -->
+		    	<ref bean="sendNBAUASaleOrderTaskTrigger"/>
+			    <!-- NAB UA 库存调整定时任务-->
+				<ref bean="msgOrderCancel"/>
+				<!-- 直连外包仓取消 -->
+				<ref bean="msgOrderCancel"/>
+			    <!--  GUESS 发送入库取消通知  -->
+                <ref bean="guessSendReturnCancelOrderTaskTrigger" />
+				<!-- 生成反馈文件、上传SFTP -->
+				<ref bean="nikeUploadTaskTrigger" />
+			    <!--  GUESS 库存调整执行  -->
+                <ref bean="guessreceiveEcomAdjTaskTrigger" />
+			    <!--  GUESS 发送入库库库通知  -->
+                <ref bean="guessSendReturnOrderTaskTrigger" />
+			    <!-- GUESS 发送出库订单 -->
+                <ref bean="guessSendReturnOrder1TaskTrigger" />
+                <!-- guess 库存调整失败订单重复执行 -->
+                <ref bean="inventoryCheckExecuteGUESSTask" />
+                <!-- UA 库存调整失败订单重复执行 -->
+                <ref bean="inventoryCheckExecuteUATask" />
+                <!-- NewLook 库存调整失败订单重复执行 -->
+                <ref bean="inventoryCheckExecuteNewLookTask" />
+				<!-- AF 库存调整失败订单重复执行 -->
+				<ref bean="inventoryCheckExecuteAFTask" />
+				<!-- AEO 库存调整失败订单重复执行 -->
+				<ref bean="inventoryCheckExecuteAEOTask" />
+				<!-- LF 发送取消订单  NewLook,其他改为实时接口 byfxl-->
+				<ref bean="lfSendCancelOrderTaskTrigger" />
+				<!-- AEO执行出入操作 -->
+				<ref bean="afinventorySynchronousTaskTrigger" />
+				<!-- AEO发送入库订单 -->
+				<ref bean="afSendReturnOrderTaskTrigger" />
+				<!-- UA 发送入库通知  -->
+				<ref bean="UASendReturnOrderTaskTrigger" />
+				<ref bean="newLookSendReturnOrderTaskTrigger" />
+				<!-- =================================AEO IDS TASK ================================= -->
+				<!-- AEO -->
+				<!-- 执行出入操作 -->
+				<ref bean="aeoinventorySynchronousTaskTrigger" />
+				<!-- 发送入库订单 -->
+				<ref bean="aeoSendReturnOrderTaskTrigger" />
+				<!-- ================================= IDS TASK ================================= -->
+				<!-- IDS -->
+				<ref bean="idsTaskMailTrigger"/>
+				<!-- 销售出库反馈处理 -->
+				<ref bean="idsSaleOutboundTaskTrigger" />
+				<!-- ================================= SF TASK =================================== -->
+				<!-- 单据取消 -->
+				<!-- <ref bean="sfOrderCancelTrigger" /> -->
+				<!-- EMS 定时任务 -->
+				<ref bean="emsConfirmOrderTrigger" />
+				<ref bean="emsGetOrderCodeTrigger" />
+				<ref bean="setEmsStaTrasnNoTrigger" />
+				<!-- zto -->
+				<ref bean="ztoTransNoTaskTrigger" />
+				<ref bean="ztoConfirmOrderQueueTrigger" />
+				<ref bean="ztoReUseTransNoTrigger" />
+				<!-- SF出库通知推送 -->
+				<ref bean="sfOutOrderSendTrigger" />
+				<!-- SF入库通知推送 -->
+				<ref bean="sfInOrderSendTrigger" />
+				<!-- SF入库反馈 -->
+				<ref bean="sfInOutBoundRtnTrigger" />
+				<!-- SF出库反馈 -->
+				<ref bean="sfVmiSfOutboundRtnTrigger" />
+				<!-- SF库存调整 -->
+				<ref bean="sfVmiAdjustMentRtnTrigger" />
+				<!-- SF补充出库 -->
+				<ref bean="sfReplenishOutboundTrigger" />
+				<!-- STO下单 -->
+				<ref bean="stoOrderTaskTirgger" />
+				<!-- TYO下单 -->
+				<ref bean="ytoOrderTaskTirgger" />
+				<!-- kerry下单 -->
+				<ref bean="kerryOrderTaskTrigger" />
+				<ref bean="kerryOrderCancelTrigger" />
+				<!-- =================================金宝贝=========================== -->
+				<ref bean="gymboreeSalesOrderTirgger" />
+				<ref bean="gymboreeInboundOrderTirgger" />
+				<ref bean="gymboreeOutboundCreateTirgger" />
+				<ref bean="gymboreeInboundCreateTirgger" />
+				<ref bean="gymboreeInOutCreateTirgger" />
+
+				<!-- ================================= GDV TASK ================================= -->
+				<!-- 同步Gdv订单信息 -->
+				<ref bean="mqSendVMIGdvOrderTrigger" />
+				<!-- 自动转店 -->
+				<ref bean="gdvAutoTransTrigger" />
+				<!-- 订单出库 -->
+				<ref bean="gdvMsgOutBoundTrigger" />
+				<!-- ================================= cache-cache TASK ========================= -->
+				<!-- cache-cache -->
+				<!-- 创建入库指令 -->
+				<ref bean="cchInboundStaTaskTrigger" />
+				<!-- 收货确认 -->
+				<ref bean="cchMQSendASNReceiveTaskTrigger" />
+				<!-- 退大仓反馈 -->
+				<ref bean="cchMQSendRTVTaskTrigger" />
+				<!-- ================================= IT TASK ================================== -->
+				<!-- VMI IT TASK -->
+				<!-- 生成入库作业单 -->
+				<ref bean="itGenerateStaTaskTrigger" />
+				<!-- 生成入库反馈文件 -->
+				<ref bean="itGenerateReceiveFileTaskTrigger" />
+				<!-- 上传文件至FTP -->
+				<ref bean="itUploadITFileTaskTrigger" />
+				<!-- 下载FTP文件 -->
+				<ref bean="itFtpTaskTrigger" />
+				<!-- ================================= BOC TASK ================================= -->
+				<!-- BOC出库 -->
+				<ref bean="bocOutboundTask" />
+				<!-- BOC出库反馈 -->
+				<ref bean="bocReturnOrderTask" />
+				<!-- BOC价格更新 -->
+				<ref bean="bocUpdatePriceTask" />
+				<!-- BOC取消通知 -->
+				<ref bean="bocCancelOrderTask" />
+				<!-- BOC 定时执行未出库成功订单 -->
+				<ref bean="boceOrderOutboundTask" />
+				<!-- BOC 定时执行未入库成功订单 -->
+				<ref bean="bocRtnInboundOrderTask" />
+				<!-- ================================= ESPRIT TASK =============================== -->
+				<!-- 生成入库作业单 -->
+				<ref bean="espritGenerateStaTaskTrigger" />
+				<!-- 生成转店作业单 -->
+				<ref bean="espritGenerateTransferStaTaskTrigger" />
+				<!-- 文件下载 -->
+				<ref bean="espritDownloadTaskTrigger" />
+				<!-- 文件生成上传 -->
+				<ref bean="espritUploadTaskTrigger" />
+				<!-- 上传失败指令邮件通知 -->
+				<ref bean="espReceivedNotUploadEmailInformTrigger" />
+				<!-- 接收转入文件数据 -->
+				<ref bean="downloadEspritDispatchInfoTaskTrigger" />
+				<!-- 生成转入入库作业单 -->
+				<ref bean="espritGenerateDispatchStaTaskTrigger" />
+				<!-- 生成转入转出反馈  -->
+				<ref bean="espritInOutBoundDeliveryTaskTrigger" />
+				<!-- ==============================TTK天天快递任务=========================== -->
+				<ref bean="ttkTransNoTaskTrigger"/>
+				<ref bean="ttkSetTransNoTaskTrigger"/>
+				<ref bean="ttkConfirmOrderQueueTrigger"/>
+
+				<!-- ================================= COACH TASK ================================ -->
+				<!-- COACH PRICE反馈 -->
+				<!-- <ref bean="autoInsertPriceLogFromCoachPrice" /> -->
+
+				<!-- ================================= itochu TASK =============================== -->
+				<!-- itochu 出入库通知 -->
+				<ref bean="inOutBoundNotifyTaskTrigger" />
+				<!-- itochu 出入库反馈 -->
+				<ref bean="inOutBoundRtnTaskTrigger" />
+				<!-- itochu 库存反馈 -->
+				<ref bean="itochuInvTaskTrigger" />
+
+				<!-- ================================= etam TASK ================================= -->
+				<!-- etam sku -->
+				<ref bean="etamSkuTaskTrigger" />
+				
+				<!-- ================================= CONVERSE TASK ============================= -->
+				<!-- 主档文件处理 -->
+				<ref bean="converseTaskTrigger" />
+				<!-- 上传FTP文件 -->
+				<ref bean="conversSendFileTrigger" />
+
+				<!-- ================================= LEVIS TASK ================================ -->
+				
+				<ref bean="idslevisInventoryADJTask" />
+				<!-- 创建入库作业单 -->
+				<ref bean="levisInboundTaskTrigger" />
+				<!-- ================================= GUESS TASK ================================= -->
+				<!-- guessDailyReport -->
+				<ref bean="guessDailyReportTask" />
+				<!-- afInventoryTask -->
+				<ref bean="afInventoryTask" />
+				<!-- newLook InventoryTask -->
+				<ref bean="idsNewLookInventoryADJTask" />
+				<!--UA库存同步  -->
+				<ref bean="idsUAInventoryADJTask" />
+				<!-- cathkidston -->
+				<ref bean="downloadCkReveiceFileTrigger" />
+				<ref bean="createStaForCathKidstonTrigger" />
+				<ref bean="uploadCkReveiceFileTrigger" />
+				<ref bean="uploadCkTransferOutFileTrigger" />
+				<!-- ConverseYX 定时任务 -->
+				<ref bean="converseYxDownLoadFileTrigger" />
+				<ref bean="converseYxUpLoadFileTrigger" />
+				<!-- Levis任务配置 -->
+				<ref bean="levisDownloadFileTrigger" />
+				<ref bean="levisCreateSkmrDataTrigger" />
+				<ref bean="levisCreateStkrDataTrigger" />
+
+				<!-- 强生库存文件上传 -->
+				<ref bean="totalJNJInv" />
+				<!-- Lmis仓储费零点库存文件上传 -->
+				<ref bean="totalZeroInv" />
+				<!-- ================================= IDS TASK ================================= -->
+				<!-- IDS -->
+				<!-- 文件反馈处理 -->
+				<ref bean="idsTaskTrigger" />
+				<!-- ================================= 微软 TASK ================================== -->
+				<!-- 生成报表上传FTP -->
+				<ref bean="taskStatisticsTrigger" />
+				<!-- ===JD=== -->
+				<ref bean="taskOrderJDTrigger" />
+				<ref bean="taskCreateJDTrigger" />
+				<ref bean="taskgetJdTransNoTrigger" />
+				<!-- 金宝贝 s -->
+				<ref bean="gymboreeShipMsgTirgger" />
+				<ref bean="gymboreeShipCancelTirgger" />
+				<ref bean="gymboreeReturnTirgger" />
+				<ref bean="gymboreeOutboundTirgger" />
+				<ref bean="gymboreeInboundTirgger" />
+				<ref bean="gymboreeOtherOutboundTirgger" />
+				<ref bean="gymboreeOtherInboundTirgger" />
+
+				
+				
+
+
+
+				<!-- #############################外包仓任务反馈执行############################# -->
+				<!-- ================ 标杆 TASK============== -->
+				
+				<!--================ 高启诗 TASK============== -->
+				<!-- 高启诗出库反馈处理 -->
+				<ref bean="taskGQSOutBoundTrigger" />
+				<!-- 入库反馈处理 -->
+				<ref bean="taskOutsourcingWHTrigger" />
+				
+				<ref bean="cancelOrderTrigger" />
+				
+				<!-- #############################外包仓任务反馈执行############################# -->
+				<!-- LF 销售出库接口 -->
+				<ref bean="sendAeoSaleOrderTaskTrigger" />
+				<ref bean="sendAfSaleOrderTaskTrigger" />
+				<ref bean="sendNikeSaleOrderTaskTrigger" />
+				<ref bean="sendUASaleOrderTaskTrigger" />
+				<ref bean="sendNewLookSaleOrderTaskTrigger" />
+				<!-- LF 销售反馈执行 -->
+				<ref bean="exeAeoSaleOrderTaskTrigger" />
+				<ref bean="exeAfSaleOrderTaskTrigger" />
+				<ref bean="exeNikeSaleOrderTaskTrigger" />
+                <ref bean="exeUASaleOrderTaskTrigger" />
+
+				<!-- #############################外包仓############################### -->
+			    <ref bean="threePLSku" />
+				<ref bean="threePLInbound" />
+				<ref bean="threePLInboundQuery" />
+				<ref bean="threePLOutbound" />
+				<ref bean="threePLOutCancel" />
+				<ref bean="threePLOutCancelQuery" />
+				<ref bean="threePLSkuNotice" /> 
+				<ref bean="threePLOutQuery" />
+				<ref bean="threePLInExecute" />
+				<ref bean="threePLOutExecute" /> 
+				<ref bean="threePLInvStatusChange"/>
+				<ref bean="threePLInvStatusExecute"/>
+				<ref bean="threePlInvQtyChange"/>
+				<ref bean="threePlInvQtyExecute"/>
+				
+				<!-- ==============================每天凌晨增量同步数据给EDW=========================== -->
+				<ref bean="edwTaskTrigger"/>
+				
+				<!-- ==============================AF库存对比=========================== -->
+				<ref bean="afInventoryCompare"/>
+				
+				<!-- ==============================万象发货=========================== -->
+				<ref bean="threePLWXShipments"/>
+				<!-- ==============================万象匹配快递单号=========================== -->
+				<ref bean="wxSetTransNoTaskTrigger"/>
+				
+				<!-- ==============================快递雷达  start =========================== -->
+				<!-- <ref bean="expressRadarCommonTask" /> -->
+				<!-- <ref bean="expressRadarTaskNike" /> -->
+				<!-- <ref bean="expressRadarWarning" /> -->
+				<!-- ==============================快递雷达  end   =========================== -->
+				<!-- ==============================每天凌晨同步强生库存快照给HUB   =========================== -->
+				<ref bean="vmiInventoryJNJTaskTrigger"/>
+				<!-- ==============================每天凌晨同步星巴克出库/退换货入给HUB   =========================== -->
+				<ref bean="vmiInOutBoundForStarbucksTaskTrigger"/>
+				<!-- ==============================每天凌晨同步星巴克库存快照给HUB   =========================== -->
+				<ref bean="vmiInventoryStarbucksTaskTrigger"/>
+				
+				<!-- ua库存 -->
+				<ref bean="inventoryInsert"/>
+				<!-- guess库存 -->
+				<ref bean="guessInventoryInsert"/>
+				<!-- 发票批量导出获取运单号 -->
+				<ref bean="invoiceOrderTaskTirgger"/>
+				<!-- MONGODB差异 -->
+				<ref bean="mongoDBDifTrigger"/>
+				
+<ref bean="trigger_createStaByWh_4882"/>
+<ref bean="trigger_createStaByWh_2102"/>
+<ref bean="trigger_createStaByWh_4082"/>
+<ref bean="trigger_createStaByWh_6126"/>
+<ref bean="trigger_createStaByWh_5462"/>
+<ref bean="trigger_createStaByWh_4942"/>
+<ref bean="trigger_createStaByWh_6031"/>
+<ref bean="trigger_createStaByWh_6123"/>
+<ref bean="trigger_createStaByWh_6327"/>
+<ref bean="trigger_createStaByWh_6028"/>
+<ref bean="trigger_createStaByWh_6075"/>
+<ref bean="trigger_createStaByWh_5083"/>
+<ref bean="trigger_createStaByWh_6227"/>
+<ref bean="trigger_createStaByWh_6377"/>
+<ref bean="trigger_createStaByWh_121"/>
+<ref bean="trigger_createStaByWh_881"/>
+<ref bean="trigger_createStaByWh_1061"/>
+<ref bean="trigger_createStaByWh_1642"/>
+<ref bean="trigger_createStaByWh_1843"/>
+<ref bean="trigger_createStaByWh_2582"/>
+<ref bean="trigger_createStaByWh_4422"/>
+<ref bean="trigger_createStaByWh_4166"/>
+<ref bean="trigger_createStaByWh_5424"/>
+<ref bean="trigger_createStaByWh_5712"/>
+<ref bean="trigger_createStaByWh_5864"/>
+<ref bean="trigger_createStaByWh_5912"/>
+<ref bean="trigger_createStaByWh_6024"/>
+<ref bean="trigger_createStaByWh_6026"/>
+<ref bean="trigger_createStaByWh_6177"/>
+<ref bean="trigger_createStaByWh_1121"/>
+<ref bean="trigger_createStaByWh_6023"/>
+<ref bean="trigger_createStaByWh_5612"/>
+<ref bean="trigger_createStaByWh_3742"/>
+<!-- UA 出库订单 同步到立峰 IDS-SH-UA-->
+<ref bean="sendUASalesOrderToLFTaskTirgger" />
+<!-- AF 出库订单 同步到立峰  af-->
+<ref bean="sendAFSalesOrderToLFTaskTirgger" />
+<!--NBAUA 出库订单 同步到立峰 IDS-SH-NBAUA-->
+<ref bean="sendNBAUASalesOrderToLFTaskTirgger" />
+<!--newLook 出库订单 同步到立峰    NewLook -->
+<ref bean="sendNewLookSalesOrderToLFTaskTirgger" />
+<!--godiva出库订单 同步到立峰(HAVI外包仓)    GODIVA-HAVI -->
+<ref bean="sendGodivaHaviSalesOrderToLFTaskTirgger" />
+<!--NBJ01 出库订单 同步到立峰    NBJ01-->
+<ref bean="sendNBJ01SalesOrderToLFTaskTirgger" />
+<!--AEO 出库订单 同步到立峰   AEO_IDS-->
+<ref bean="sendAEOSalesOrderToLFTaskTirgger" />
+<!--NIKE 出库订单 同步到立峰   IDS-NIKE-->
+<ref bean="sendNIKESalesOrderToLFTaskTirgger" />
+<!--NewLookJD 出库订单 同步到立峰   NewLookJD-->
+<ref bean="sendNewLookJDSalesOrderToLFTaskTirgger" />
+<!--IDS 出库订单 同步到立峰   IDS-->
+<ref bean="sendIDSSalesOrderToLFTaskTirgger" />
+
+
+<ref bean="deleteSoLogByTimeTaskTrigger" />
+
+<ref bean="executeAEOMsgRtnOutboundTirgger" />
+<ref bean="executeAFMsgRtnOutboundTirgger" />
+<ref bean="executeGODIVAMsgRtnOutboundTirgger" />
+<ref bean="executeNBAUAMsgRtnOutboundTirgger" />
+<ref bean="executeNBMsgRtnOutboundTirgger" />
+<ref bean="executeNIKEMsgRtnOutboundTirgger" />
+<ref bean="executeUAMsgRtnOutboundTirgger" />
+<ref bean="executeFOLLIEMsgRtnOutboundTirgger" />
+<ref bean="executeWMFMsgRtnOutboundTirgger" />
+<ref bean="executeNATMsgRtnOutboundTirgger" />
+<ref bean="executeNOVOMsgRtnOutboundTirgger" />
+<ref bean="executeGUESSMsgRtnOutboundTirgger" />
+<ref bean="executeNEWLOOKMsgRtnOutboundTirgger" />
+<ref bean="executeNEWLOOKJDMsgRtnOutboundTirgger" />
+<ref bean="executeIDSMsgRtnOutboundTirgger" />
+<ref bean="sendMqByPacAndTomsTaskTrigger" />
+
+
+			</list>
+		</property>
+<property name="quartzProperties">
+        <props>
+            <prop key="org.quartz.threadPool.threadCount">500</prop>
+        </props>
+    </property>
+		<property name="autoStartup" value="true" />
+	</bean>
+</beans>

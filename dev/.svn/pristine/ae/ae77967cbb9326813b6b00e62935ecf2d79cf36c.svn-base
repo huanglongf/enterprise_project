@@ -1,0 +1,798 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.radar.dao.AgeingDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.radar.model.AgeingDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ageing_id" property="ageingId" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="p_name" property="pName" jdbcType="VARCHAR" />
+    <result column="p_code" property="pCode" jdbcType="VARCHAR" />
+    <result column="c_name" property="cName" jdbcType="VARCHAR" />
+    <result column="c_code" property="cCode" jdbcType="VARCHAR" />
+    <result column="s_name" property="sName" jdbcType="VARCHAR" />
+    <result column="s_code" property="sCode" jdbcType="VARCHAR" />
+    <result column="product_type_code" property="productTypeCode" jdbcType="VARCHAR" />
+    <result column="product_type_name" property="productTypeName" jdbcType="VARCHAR" />
+    <result column="express_code" property="expressCode" jdbcType="VARCHAR" />
+    <result column="express_name" property="expressName" jdbcType="VARCHAR" />
+    <result column="embrance_cal_time" property="embranceCalTime" jdbcType="VARCHAR" />
+    <result column="ageing_value" property="ageingValue" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, ageing_id, warehouse_code, warehouse_name, store_code, store_name, p_name, p_code, 
+    c_name, c_code, s_name, s_code, product_type_code, product_type_name, express_code, 
+    express_name, embrance_cal_time, ageing_value,create_time,create_user,update_time,update_user
+  </sql>
+  <sql id="where_Clause">
+	where 1=1
+	<trim  suffixOverrides="," >
+ 		<if test="id != null and id != ''" >
+    		and id =  #{id}
+	</if>
+	<if test="createTime != null and createTime != ''" >
+    		and create_time =  #{createTime}
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		and create_user =  #{createUser}
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		and update_time =  #{updateTime}
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		and update_user =  #{updateUser}
+	</if>
+ 		<if test="ageingId != null and ageingId != ''" >
+    		and ageing_id =  #{ageingId}
+	</if>
+ 		<if test="warehouseCode != null and warehouseCode != ''" >
+    		and warehouse_code =  #{warehouseCode}
+	</if>
+ 		<if test="warehouseName != null and warehouseName != ''" >
+    		and warehouse_name =  #{warehouseName}
+	</if>
+ 		<if test="storeCode != null and storeCode != ''" >
+    		and store_code =  #{storeCode}
+	</if>
+ 		<if test="storeName != null and storeName != ''" >
+    		and store_name =  #{storeName}
+	</if>
+ 		<if test="pName != null and pName != ''" >
+    		and p_name =  #{pName}
+	</if>
+ 		<if test="pCode != null and pCode != ''" >
+    		and p_code =  #{pCode}
+	</if>
+ 		<if test="cName != null and cName != ''" >
+    		and c_name =  #{cName}
+	</if>
+ 		<if test="cCode != null and cCode != ''" >
+    		and c_code =  #{cCode}
+	</if>
+ 		<if test="sName != null and sName != ''" >
+    		and s_name =  #{sName}
+	</if>
+ 		<if test="sCode != null and sCode != ''" >
+    		and s_code =  #{sCode}
+	</if>
+ 		<if test="productTypeCode != null and productTypeCode != ''" >
+    		and product_type_code =  #{productTypeCode}
+	</if>
+ 		<if test="productTypeName != null and productTypeName != ''" >
+    		and product_type_name =  #{productTypeName}
+	</if>
+ 		<if test="expressCode != null and expressCode != ''" >
+    		and express_code =  #{expressCode}
+	</if>
+ 		<if test="expressName != null and expressName != ''" >
+    		and express_name =  #{expressName}
+	</if>
+ 		<if test="embranceCalTime != null and embranceCalTime != ''" >
+    		and embrance_cal_time =  #{embranceCalTime}
+	</if>
+ 		<if test="ageingValue != null and ageingValue != ''" >
+    		and ageing_value =  #{ageingValue}
+	</if>
+	</trim>
+	</sql>
+  
+  <select id="queryAgeingDetail" resultMap="BaseResultMap" parameterType="com.bt.radar.model.AgeingDetail" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail
+    <include refid="where_Clause" />
+    ORDER BY create_time DESC
+	LIMIT #{firstResult }, #{maxResult }
+  </select>
+  <select id="countAllAgeingDetail" resultType="java.lang.Integer" parameterType="com.bt.radar.model.AgeingDetail" >
+    select count(1) 
+    from er_ageing_detail
+    <include refid="where_Clause" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByAgeingDetailBackups" resultMap="BaseResultMap" parameterType="com.bt.radar.model.AgeingDetailBackups" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail
+    where  ageing_value =  #{ageingValue} and embrance_cal_time =  #{embranceCalTime}
+    and express_code =  #{expressCode} and product_type_code =  #{productTypeCode} 
+    and c_code =  #{cCode} and p_code =  #{pCode}  and ageing_id =  #{ageingId} and warehouse_code =  #{warehouseCode}
+    <if test="sCode != null and sCode != ''" >
+    		and s_code =  #{sCode}
+	</if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from er_ageing_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.radar.model.AgeingDetail" >
+    insert into er_ageing_detail (id, ageing_id, warehouse_code, 
+      warehouse_name, store_code, store_name, 
+      p_name, p_code, c_name, 
+      c_code, s_name, s_code, 
+      product_type_code, product_type_name, express_code, 
+      express_name, embrance_cal_time, ageing_value,create_time,create_user,update_time,update_user
+      )
+    values (#{id,jdbcType=INTEGER}, #{ageingId,jdbcType=VARCHAR}, #{warehouseCode,jdbcType=VARCHAR}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{storeCode,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR}, 
+      #{pName,jdbcType=VARCHAR}, #{pCode,jdbcType=VARCHAR}, #{cName,jdbcType=VARCHAR}, 
+      #{cCode,jdbcType=VARCHAR}, #{sName,jdbcType=VARCHAR}, #{sCode,jdbcType=VARCHAR}, 
+      #{productTypeCode,jdbcType=VARCHAR}, #{productTypeName,jdbcType=VARCHAR}, #{expressCode,jdbcType=VARCHAR}, 
+      #{expressName,jdbcType=VARCHAR}, #{embranceCalTime,jdbcType=VARCHAR}, #{ageingValue,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{createUser,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP},
+      #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertAgeingDetailBackups" parameterType="com.bt.radar.model.AgeingDetailBackups" >
+    insert into er_ageing_detail (ageing_id, warehouse_code, 
+      warehouse_name, store_code, store_name, 
+      p_name, p_code, c_name, 
+      c_code, s_name, s_code, 
+      product_type_code, product_type_name, express_code, 
+      express_name, embrance_cal_time, ageing_value,create_time,create_user,update_time,update_user
+      )
+    values (#{ageingId,jdbcType=VARCHAR}, #{warehouseCode,jdbcType=VARCHAR}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{storeCode,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR}, 
+      #{pName,jdbcType=VARCHAR}, #{pCode,jdbcType=VARCHAR}, #{cName,jdbcType=VARCHAR}, 
+      #{cCode,jdbcType=VARCHAR}, #{sName,jdbcType=VARCHAR}, #{sCode,jdbcType=VARCHAR}, 
+      #{productTypeCode,jdbcType=VARCHAR}, #{productTypeName,jdbcType=VARCHAR}, #{expressCode,jdbcType=VARCHAR}, 
+      #{expressName,jdbcType=VARCHAR}, #{embranceCalTime,jdbcType=VARCHAR}, #{ageingValue,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{createUser,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP},
+      #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.radar.model.AgeingDetail" >
+    insert into er_ageing_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="ageingId != null" >
+        ageing_id,
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code,
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name,
+      </if>
+      <if test="storeCode != null" >
+        store_code,
+      </if>
+      <if test="storeName != null" >
+        store_name,
+      </if>
+      <if test="pName != null" >
+        p_name,
+      </if>
+      <if test="pCode != null" >
+        p_code,
+      </if>
+      <if test="cName != null" >
+        c_name,
+      </if>
+      <if test="cCode != null" >
+        c_code,
+      </if>
+      <if test="sName != null" >
+        s_name,
+      </if>
+      <if test="sCode != null" >
+        s_code,
+      </if>
+      <if test="productTypeCode != null" >
+        product_type_code,
+      </if>
+      <if test="productTypeName != null" >
+        product_type_name,
+      </if>
+      <if test="expressCode != null" >
+        express_code,
+      </if>
+      <if test="expressName != null" >
+        express_name,
+      </if>
+      <if test="embranceCalTime != null" >
+        embrance_cal_time,
+      </if>
+      <if test="ageingValue != null" >
+        ageing_value,
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		create_time,
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		create_user,
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		update_time,
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		update_user,
+	</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="ageingId != null" >
+        #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="pName != null" >
+        #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pCode != null" >
+        #{pCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null" >
+        #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="cCode != null" >
+        #{cCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sName != null" >
+        #{sName,jdbcType=VARCHAR},
+      </if>
+      <if test="sCode != null" >
+        #{sCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeCode != null" >
+        #{productTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeName != null" >
+        #{productTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null" >
+        #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="embranceCalTime != null" >
+        #{embranceCalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ageingValue != null" >
+        #{ageingValue,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		#{createTime},
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		#{createUser},
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		#{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		#{updateUser},
+	</if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.radar.model.AgeingDetail" >
+    update er_ageing_detail
+    <set >
+      <if test="ageingId != null" >
+        ageing_id = #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="pName != null" >
+        p_name = #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pCode != null" >
+        p_code = #{pCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null" >
+        c_name = #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="cCode != null" >
+        c_code = #{cCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sName != null" >
+        s_name = #{sName,jdbcType=VARCHAR},
+      </if>
+      <if test="sCode != null" >
+        s_code = #{sCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeCode != null" >
+        product_type_code = #{productTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeName != null" >
+        product_type_name = #{productTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        express_code = #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null" >
+        express_name = #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="embranceCalTime != null" >
+        embrance_cal_time = #{embranceCalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ageingValue != null" >
+        ageing_value = #{ageingValue,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		 create_time =  #{createTime},
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		 create_user =  #{createUser},
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		 update_time =  #{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		 update_user =  #{updateUser},
+	</if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.radar.model.AgeingDetail" >
+    update er_ageing_detail
+    set ageing_id = #{ageingId,jdbcType=VARCHAR},
+      warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      store_code = #{storeCode,jdbcType=VARCHAR},
+      store_name = #{storeName,jdbcType=VARCHAR},
+      p_name = #{pName,jdbcType=VARCHAR},
+      p_code = #{pCode,jdbcType=VARCHAR},
+      c_name = #{cName,jdbcType=VARCHAR},
+      c_code = #{cCode,jdbcType=VARCHAR},
+      s_name = #{sName,jdbcType=VARCHAR},
+      s_code = #{sCode,jdbcType=VARCHAR},
+      product_type_code = #{productTypeCode,jdbcType=VARCHAR},
+      product_type_name = #{productTypeName,jdbcType=VARCHAR},
+      express_code = #{expressCode,jdbcType=VARCHAR},
+      express_name = #{expressName,jdbcType=VARCHAR},
+      embrance_cal_time = #{embranceCalTime,jdbcType=VARCHAR},
+      create_time= #{createTime,jdbcType=TIMESTAMP},
+      create_user=#{createUser,jdbcType=VARCHAR},
+      update_time =#{updateTime,jdbcType=TIMESTAMP},
+      update_user=#{updateUser,jdbcType=VARCHAR},
+      ageing_value = #{ageingValue,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--根据时效主表id批量删除-->
+  <delete id="delBatchAgeingDetailByAgeingId" parameterType="java.util.List">
+    DELETE FROM `er_ageing_detail` WHERE ageing_id IN
+    <foreach collection="ageingIdList" item="ageingId" open="(" separator="," close=")">
+      #{ageingId}
+    </foreach>
+  </delete>
+  <!--根据id批量删除-->
+  <delete id="delBatchAgeingDetailById" parameterType="java.util.List">
+    DELETE FROM `er_ageing_detail` WHERE id IN
+    <foreach collection="idList" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+
+  <!--根据时效id查询明细-->
+  <select id="queryByAgeingIds" parameterType="java.util.List" resultMap="BaseResultMap">
+    SELECT  <include refid="Base_Column_List" /> FROM `er_ageing_detail`  WHERE `ageing_id` IN
+    <foreach collection="ageingIdList" item="ageingId" open="(" separator="," close=")">
+      #{ageingId}
+    </foreach>
+  </select>
+  
+   <insert id="insertAgeingDetailQueryParam" parameterType="com.bt.radar.controller.form.AgeingDetailQueryParam" >
+    insert into er_ageing_detail (ageing_id, warehouse_code, 
+      warehouse_name, store_code, store_name, 
+      p_name, p_code, c_name, 
+      c_code, s_name, s_code, 
+      product_type_code, product_type_name, express_code, 
+      express_name, embrance_cal_time, ageing_value,create_time,create_user,update_time,update_user
+      )
+    values (#{ageingId,jdbcType=VARCHAR}, #{warehouseCode,jdbcType=VARCHAR}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{storeCode,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR}, 
+      #{pName,jdbcType=VARCHAR}, #{pCode,jdbcType=VARCHAR}, #{cName,jdbcType=VARCHAR}, 
+      #{cCode,jdbcType=VARCHAR}, #{sName,jdbcType=VARCHAR}, #{sCode,jdbcType=VARCHAR}, 
+      #{productTypeCode,jdbcType=VARCHAR}, #{productTypeName,jdbcType=VARCHAR}, #{expressCode,jdbcType=VARCHAR}, 
+      #{expressName,jdbcType=VARCHAR}, #{embranceCalTime,jdbcType=VARCHAR}, #{ageingValue,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{createUser,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP},
+      #{updateUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <select id="selectByAgeingDetailQueryParam" resultMap="BaseResultMap" parameterType="com.bt.radar.controller.form.AgeingDetailQueryParam" >
+    select 
+    <include refid="Base_Column_List" />
+    from er_ageing_detail
+    where  ageing_value =  #{ageingValue} and embrance_cal_time =  #{embranceCalTime}
+    and express_code =  #{expressCode} and product_type_code =  #{productTypeCode} 
+    and c_code =  #{cCode} and p_code =  #{pCode}  and ageing_id =  #{ageingId} and warehouse_code =  #{warehouseCode}
+    <if test="sCode != null and sCode != ''" >
+    		and s_code =  #{sCode}
+	</if>
+    <if test="id != null and id != ''" >
+    		and id!=  #{id}
+	</if>
+  </select>
+  
+  <update id="updateAgeingDetailQueryParam" parameterType="com.bt.radar.controller.form.AgeingDetailQueryParam" >
+    update er_ageing_detail
+    <set >
+      <if test="ageingId != null" >
+        ageing_id = #{ageingId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="storeName != null" >
+        store_name = #{storeName,jdbcType=VARCHAR},
+      </if>
+      <if test="pName != null" >
+        p_name = #{pName,jdbcType=VARCHAR},
+      </if>
+      <if test="pCode != null" >
+        p_code = #{pCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cName != null" >
+        c_name = #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="cCode != null" >
+        c_code = #{cCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sName != null" >
+        s_name = #{sName,jdbcType=VARCHAR},
+      </if>
+      <if test="sCode != null" >
+        s_code = #{sCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sName == null" >
+        s_name = #{sName,jdbcType=VARCHAR},
+      </if>
+      <if test="sCode == null" >
+        s_code = #{sCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeCode != null" >
+        product_type_code = #{productTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productTypeName != null" >
+        product_type_name = #{productTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        express_code = #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="expressName != null" >
+        express_name = #{expressName,jdbcType=VARCHAR},
+      </if>
+      <if test="embranceCalTime != null" >
+        embrance_cal_time = #{embranceCalTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ageingValue != null" >
+        ageing_value = #{ageingValue,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null and createTime != ''" >
+    		 create_time =  #{createTime},
+	</if>
+ 		<if test="createUser != null and createUser != ''" >
+    		 create_user =  #{createUser},
+	</if>
+ 		<if test="updateTime != null and updateTime != ''" >
+    		 update_time =  #{updateTime},
+	</if>
+ 		<if test="updateUser != null and updateUser != ''" >
+    		 update_user =  #{updateUser},
+	</if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectAgeingDetailQueryParam" resultType="java.util.Map" parameterType="com.bt.radar.controller.form.AgeingDetailQueryParam" >
+    SELECT
+		a.ageing_id,
+		a.warehouse_name,
+		a.p_name,
+		a.c_name,
+		a.s_name,
+		a.product_type_name,
+		a.express_name,
+		a.embrance_cal_time,
+		a.ageing_value,
+		b.store_name as store_name
+	FROM
+		er_ageing_detail a,
+		er_ageing_master b
+	WHERE
+		a.ageing_id = b.id
+		and a.ageing_id=#{ageingId}
+			 <if test="warehouseCode != null" >
+		      	 AND a.warehouse_code = #{warehouseCode,jdbcType=VARCHAR}
+	      </if>
+		     <if test="warehouseName != null" >
+		       	AND a.warehouse_name = #{warehouseName,jdbcType=VARCHAR}
+	      </if>
+		     <if test="storeCode != null" >
+		        AND a.store_code = #{storeCode,jdbcType=VARCHAR}
+	      </if>
+		     <if test="storeName != null" >
+		      	AND  a.store_name = #{storeName,jdbcType=VARCHAR}
+	      </if>
+		     <if test="pName != null" >
+		        AND a.p_name = #{pName,jdbcType=VARCHAR}
+	      </if>
+		     <if test="pCode != null" >
+		        AND a.p_code = #{pCode,jdbcType=VARCHAR}
+	      </if>
+		     <if test="cName != null" >
+		        AND a.c_name = #{cName,jdbcType=VARCHAR}
+	      </if>
+		     <if test="cCode != null" >
+		        AND a.c_code = #{cCode,jdbcType=VARCHAR}
+	      </if>
+		     <if test="sName != null" >
+		        AND a.s_name = #{sName,jdbcType=VARCHAR}
+	      </if>
+		     <if test="sCode != null" >
+		        AND a.s_code = #{sCode,jdbcType=VARCHAR}
+	      </if>
+		     <if test="productTypeCode != null" >
+		        AND a.product_type_code = #{productTypeCode,jdbcType=VARCHAR}
+	      </if>
+		     <if test="productTypeName != null" >
+		        AND a.product_type_name = #{productTypeName,jdbcType=VARCHAR}
+	      </if>
+		     <if test="expressCode != null" >
+		        AND a.express_code = #{expressCode,jdbcType=VARCHAR}
+	      </if>
+		     <if test="expressName != null" >
+		        AND a.express_name = #{expressName,jdbcType=VARCHAR}
+	      </if>
+		     <if test="embranceCalTime != null" >
+		        AND a.embrance_cal_time = #{embranceCalTime,jdbcType=VARCHAR}
+	      </if>
+		     <if test="ageingValue != null" >
+		        AND a.ageing_value = #{ageingValue,jdbcType=INTEGER}
+	      </if>
+		     <if test="createTime != null and createTime != ''" >
+		    	AND a.create_time =  #{createTime}
+		</if>
+	 		<if test="createUser != null and createUser != ''" >
+	    		 AND a.create_user =  #{createUser}
+		</if>
+	 		<if test="updateTime != null and updateTime != ''" >
+	    		 AND a.update_time =  #{updateTime}
+		</if>
+	 		<if test="updateUser != null and updateUser != ''" >
+	    		 AND a.update_user =  #{updateUser}
+		</if>
+  </select>
+  <insert id='insertTemp' parameterType='Object'>
+   insert into er_ageing_detail_backups (ageing_id,
+			warehouse_name,
+			p_name,
+			c_name,
+			s_name,
+			product_type_name,
+			express_name,
+			embrance_cal_time,
+			ageing_value,
+			bat_id,
+			create_time,
+			create_user,error) values
+  	<foreach collection='dataList' item="item" separator="," close='' index="index1">
+   ("${ageId}","${item[0]}",
+   substring_index('${item[1]}', '省', 1)
+   ,substring_index('${item[2]}', '市', 1),"${item[3]}", "${item[5]}","${item[4]}","${item[6]}",${item[7]},"${uid}",now(),"${username}",'')
+  </foreach>
+  </insert>
+  <update id='checkWare' parameterType='Object'>
+    UPDATE er_ageing_detail_backups a,
+    tb_warehouse b 
+SET 
+    a.warehouse_code = b.warehouse_code
+WHERE
+    a.warehouse_name = b.warehouse_name
+    and a.bat_id=#{batid};
+    
+   update er_ageing_detail_backups set status='2',
+   error=concat(error,'仓库不存在;')
+   where warehouse_code is null and bat_id=#{batid};
+  </update>
+  <update id='checkAddress' parameterType='Object'>
+  update er_ageing_detail_backups set status='2',error=concat(error,'省市不能为空;')
+  where 
+  bat_id=#{batid}
+  and  (p_name ='' or c_name ='');
+  UPDATE er_ageing_detail_backups a , tb_area p set a.p_code=p.area_code
+  where a.bat_id=#{batid} and a.status='0' and a.p_name=p.area_name and p.level=1;
+  UPDATE er_ageing_detail_backups a , tb_area c set a.c_code=c.area_code
+  where a.bat_id=#{batid} and a.status='0' and a.c_name=c.area_name and c.level=2;
+   UPDATE er_ageing_detail_backups a , tb_area s set a.s_code=s.area_code
+  where a.bat_id=#{batid} and a.status='0' and a.s_name=s.area_name and s.level=3 and a.s_name !='';
+  
+  
+  
+  UPDATE er_ageing_detail_backups a
+        LEFT JOIN
+    (SELECT 
+        p.area_name AS pname, c.area_name AS cname
+    FROM
+        tb_area p, tb_area c
+    WHERE
+        p.id = c.pid AND p.level = 1
+            AND c.level = 2) b ON (a.p_name = b.pname
+        AND a.c_name = b.cname )
+SET 
+    status = '2',
+    error =  concat(error,'省市不匹配;') 
+    where a.bat_id=#{batid} and a.status='0' and b.pname is null;
+    
+     UPDATE er_ageing_detail_backups a
+        LEFT JOIN
+    (SELECT 
+        s.area_name AS sname, c.area_name AS cname
+    FROM
+        tb_area s, tb_area c
+    WHERE
+        c.id=s.pid and c.level=2 and s.level=3) b ON (a.s_name = b.sname
+        AND a.c_name = b.cname )
+SET 
+    status = '2',
+    error =  concat(error,'市区不匹配;') 
+    where a.bat_id=#{batid}  and a.status='0' 
+    and a.s_name!=''
+    and b.cname is null;
+    
+    
+  </update>
+  <update id='checkExpress' parameterType='Object'>
+  update  er_ageing_detail_backups a,tb_transport_vendor b
+  set a.express_code=b.transport_code
+  where bat_id=#{batid} and a.express_name=b.transport_name 
+  and b.validity='1';
+  update er_ageing_detail_backups
+   set status='2',error= concat(error,'物流商不匹配;')
+  where bat_id=#{batid} and express_code is null;
+
+  update er_ageing_detail_backups a ,tb_transport_product_type b
+  set a.product_type_code=b.product_type_code
+  where a.bat_id=#{batid} and a.express_code=b.vendor_code 
+  and a.product_type_name=b.product_type_name;
+  update er_ageing_detail_backups set status='2',error=concat(error,'产品类型不匹配;')
+  where bat_id=#{batid} and product_type_code is  null and product_type_name !='';
+   </update>
+  <update id='checkUnique' parameterType='Object'>
+		  UPDATE er_ageing_detail_backups a,
+		    er_ageing_detail b 
+		SET 
+		    status = '2',
+		    error = concat(error,'此条时效已经存在;')
+		WHERE
+		        a.bat_id=#{batid}
+		        and  a.ageing_id = b.ageing_id
+		        AND a.warehouse_name = b.warehouse_name
+		        AND a.express_name = b.express_name
+		        AND a.product_type_name = b.product_type_name
+		        AND a.p_name = b.p_name
+		        AND a.c_name = b.c_name
+		        AND a.s_name = b.s_name;
+  </update>
+  <select id='checkUniqueOther' parameterType='Object' resultType='java.util.List'>
+
+   select id from er_ageing_detail_backups where bat_id=#{batid} group by warehouse_name,express_name,product_type_name,p_name,c_name,s_name
+        having count(1)>1
+
+  </select>
+  <update id='UpdateUniqueOther' parameterType='Object'>
+  update er_ageing_detail_backups set status='2',error=concat(error,'文件中重复;')
+  where id in 
+  <foreach collection="list" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  
+  <insert id='insertDetail' parameterType='Object'>
+  insert  into er_ageing_detail
+  (ageing_id,
+warehouse_code,
+warehouse_name,
+store_code,
+store_name,
+p_name,
+p_code,
+c_name,
+c_code,
+s_name,
+s_code,
+product_type_code,
+product_type_name,
+express_code,
+express_name,
+embrance_cal_time,
+ageing_value,
+create_time,
+create_user,
+update_time,update_user)
+  select  ageing_id,
+warehouse_code,
+warehouse_name,
+store_code,
+store_name,
+p_name,
+p_code,
+c_name,
+c_code,
+s_name,
+s_code,
+product_type_code,
+product_type_name,
+express_code,
+express_name,
+embrance_cal_time,
+ageing_value,
+create_time,
+create_user,create_time,
+create_user from er_ageing_detail_backups
+where bat_id=#{batid} and status='0';
+  
+  </insert>
+  
+</mapper>

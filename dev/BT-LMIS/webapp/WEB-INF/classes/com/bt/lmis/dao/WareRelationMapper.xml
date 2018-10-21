@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bt.lmis.dao.WareRelationMapper" >
+  <resultMap id="BaseResultMap" type="com.bt.lmis.model.WareRelation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="park_id" property="parkId" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="client_id" property="clientId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseQueryResultMap" type="com.bt.lmis.controller.form.WareRelationQueryParam" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="park_id" property="parkId" jdbcType="VARCHAR" />
+    <result column="store_code" property="storeCode" jdbcType="VARCHAR" />
+    <result column="store_name" property="storeName" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="client_id" property="clientId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    twr.id, twr.park_id, twr.store_code, twr.warehouse_code, twr.client_id, twr.create_time, twr.create_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_ware_relation twr
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_ware_relation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.bt.lmis.model.WareRelation" >
+    insert into tb_ware_relation (id, park_id, store_code, 
+      warehouse_code, client_id, create_time, 
+      create_user)
+    values (#{id,jdbcType=INTEGER}, #{parkId,jdbcType=VARCHAR}, #{storeCode,jdbcType=INTEGER}, 
+      #{warehouseCode,jdbcType=INTEGER}, #{clientId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.bt.lmis.model.WareRelation" >
+    insert into tb_ware_relation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="parkId != null" >
+        park_id,
+      </if>
+      <if test="storeCode != null" >
+        store_code,
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code,
+      </if>
+      <if test="clientId != null" >
+        client_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="parkId != null" >
+        #{parkId,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        #{storeCode,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseCode != null" >
+        #{warehouseCode,jdbcType=INTEGER},
+      </if>
+      <if test="clientId != null" >
+        #{clientId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bt.lmis.model.WareRelation" >
+    update tb_ware_relation
+    <set >
+      <if test="parkId != null" >
+        park_id = #{parkId,jdbcType=VARCHAR},
+      </if>
+      <if test="storeCode != null" >
+        store_code = #{storeCode,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code = #{warehouseCode,jdbcType=INTEGER},
+      </if>
+      <if test="clientId != null" >
+        client_id = #{clientId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bt.lmis.model.WareRelation" >
+    update tb_ware_relation
+    set park_id = #{parkId,jdbcType=VARCHAR},
+      store_code = #{storeCode,jdbcType=INTEGER},
+      warehouse_code = #{warehouseCode,jdbcType=INTEGER},
+      client_id = #{clientId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="query_sql_where">
+  	where 1=1
+  		<if test="parkId != null and parkId != ''">
+  			and twr.park_id = #{parkId}
+  		</if>
+  </sql>
+  <select id="findAll" parameterType="com.bt.lmis.controller.form.WareRelationQueryParam" resultMap="BaseQueryResultMap">
+  	select 
+  		<include refid="Base_Column_List"/>,
+  		ts.store_name,
+  		tw.warehouse_name
+  	from
+  		tb_ware_relation twr
+  	left join tb_store ts on twr.store_code = ts.store_code
+  	left join tb_warehouse tw on tw.warehouse_code = twr.warehouse_code
+  	<include refid="query_sql_where"/>
+	limit #{firstResult }, #{maxResult }
+  </select>
+  
+  <select id="countAll" parameterType="com.bt.lmis.controller.form.WareRelationQueryParam" resultType="java.lang.Integer">
+  	select 
+  		count(1)
+  	from
+  		tb_ware_relation twr
+  	left join tb_store ts on twr.store_code = ts.store_code
+  	left join tb_warehouse tw on tw.warehouse_code = twr.warehouse_code
+  	<include refid="query_sql_where"/>
+  </select>
+  
+  <select id="checkWareRelationParam" parameterType="com.bt.lmis.model.WareRelation" resultType="java.util.Map">
+  	select 
+  		count(1) wareRelationResult 
+  	from
+  		tb_ware_relation twr
+  	where
+  		store_code = #{storeCode}
+  		and warehouse_code = #{warehouseCode}
+  </select>
+  
+</mapper>

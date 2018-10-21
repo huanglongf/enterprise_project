@@ -1,0 +1,158 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.lmis</groupId>
+  <artifactId>lmis_framework</artifactId>
+  <version>1.1.40-RELEASES</version>
+  <packaging>jar</packaging>
+
+  <name>lmisframework</name>
+  <url>http://maven.apache.org</url>
+  
+  	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.8.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+  	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<!-- set pagehelper version -->
+		<pagehelper.version>4.2.1</pagehelper.version>
+		<!-- set gson version -->
+		<gson.version>2.8.0</gson.version>
+		<!-- set redis version -->
+		<redis.version>2.9.0</redis.version>
+		<!-- set fastjson version -->
+		<fastjson.version>1.2.38</fastjson.version>
+		<!-- set mybatis version -->
+		<mybatis.version>1.3.1</mybatis.version>
+		<!-- set swagger2 version -->
+		<swagger2.version>2.2.2</swagger2.version>
+		<!-- set druid version -->
+		<druid.version>1.1.3</druid.version>
+		<!-- set pagehelper version -->
+		<poi.version>3.17</poi.version>
+		<!-- set redis version -->
+		<redis.version>1.4.3.RELEASE</redis.version>
+		<!-- java工具 -->
+		<hutool.version>4.0.5</hutool.version>
+  	</properties>
+
+	<dependencies>
+	    <dependency>
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	      <scope>test</scope>
+	    </dependency>
+	    
+	    <dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>${hutool.version}</version>
+		</dependency>
+	    
+    	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+    
+    	<!-- pagehelper -->
+		<dependency>
+		    <groupId>com.github.pagehelper</groupId>
+		    <artifactId>pagehelper</artifactId>
+		    <version>${pagehelper.version}</version>
+		</dependency>
+		
+		<!-- fastjson -->
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>${fastjson.version}</version>
+		</dependency>
+		
+		<!-- mybatis -->
+		<dependency>
+	        <groupId>org.mybatis.spring.boot</groupId>
+	        <artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
+		
+		<!-- redis -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-redis</artifactId>
+		    <version>${redis.version}</version>
+		</dependency>
+		
+		<!-- druid -->
+		<dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid.version}</version>
+        </dependency>
+		
+		<!-- swagger2 -->
+		<dependency>
+	    	<groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger2</artifactId>
+		    <version>${swagger2.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-swagger-ui</artifactId>
+		    <version>${swagger2.version}</version>
+		</dependency>
+		
+		<!-- POI -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+	</dependencies>
+  
+  	<!-- 私有仓库 -->
+    <repositories>  
+        <repository>  
+            <id>com.lmis</id>  <!--这个ID需要与你的组group ID一致--> 
+            <name>Public Repository</name>
+            <url>http://10.7.46.58:8081/nexus/content/groups/public</url>   
+        </repository>  
+    </repositories> 
+
+    <!-- 打包发布 -->
+    <distributionManagement>
+        <repository>
+            <id>releases</id><!--这个ID需要与你的release仓库的Repository ID一致-->
+            <url>http://10.7.46.58:8081/nexus/content/repositories/releases</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>snapshots</id><!--这个ID需要与你的snapshots仓库的Repository ID一致-->
+            <url>http://10.7.46.58:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+	
+	<build> 
+	    <plugins> 
+	        <plugin> 
+	            <groupId>org.apache.maven.plugins</groupId> 
+	            <artifactId>maven-compiler-plugin</artifactId>
+	            <configuration> 
+	                <source>${java.version}</source> 
+	                <target>${java.version}</target> 
+	            </configuration> 
+	        </plugin> 
+	    </plugins> 
+	</build>
+</project>
