@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LF_outbound_order" language="groovy" pageWidth="623" pageHeight="793" columnWidth="583" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"  >
+	<property name="ireport.zoom" value="1.771561000000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="printDate" class="java.lang.String"/>
+	<field name="packSlipNo" class="java.lang.String"/>
+	<field name="loadingPlace" class="java.lang.String"/>
+	<field name="loadingTime" class="java.lang.String"/>
+	<field name="whContact" class="java.lang.String"/>
+	<field name="tel" class="java.lang.String"/>
+	<field name="fax" class="java.lang.String"/>
+	<field name="nfsStoreCode" class="java.lang.String"/>
+	<field name="companyName" class="java.lang.String"/>
+	<field name="contact" class="java.lang.String"/>
+	<field name="tel2" class="java.lang.String"/>
+	<field name="address3" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="address4" class="java.lang.String"/>
+	<field name="address2" class="java.lang.String"/>
+	<field name="crd" class="java.lang.String"/>
+	<field name="fw" class="java.lang.String"/>
+	<field name="app" class="java.lang.String"/>
+	<field name="eq" class="java.lang.String"/>
+	<field name="totalPackages" class="java.lang.String"/>
+	<field name="totalWeight" class="java.lang.String"/>
+	<field name="packList" class="java.lang.String"/>
+	<field name="podStaCode" class="java.lang.String"/>
+	<field name="staCode" class="java.lang.String"/>
+	<field name="unloadingTime" class="java.lang.String"/>
+	<field name="whCode" class="java.lang.String"/>
+	<detail>
+		<band height="753" splitType="Stretch">
+			<staticText>
+				<reportElement x="21" y="0" width="352" height="25"  />
+				<textElement>
+					<font fontName="宋体" size="15" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[供货商(Supplier): 耐克体育(中国)有限公司
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="196" y="25" width="179" height="42"  />
+				<textElement>
+					<font fontName="宋体" size="15" isBold="true" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[国内运输委托书暨回单
+PROOF OF DELIVERY
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="68" width="76" height="14"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[发货单号 MBOL#:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="97" width="75" height="16"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[B/L No:    Load#:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="177" y="68" width="28" height="29"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[日期
+Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="82" width="56" height="16"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[Pack Slip No:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="112" width="62" height="20"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[装货地址
+Loading Place:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="138" width="58" height="20"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[装货时间
+Loading Time:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="171" y="138" width="63" height="20"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[仓库联系人
+W/H Contact:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="315" y="138" width="26" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[电话
+Tel:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="422" y="139" width="23" height="21"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[传真
+Fax:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="169" width="54" height="23"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[收货单位
+Consignee:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="253" y="171" width="43" height="21"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[联系人
+Contact:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="170" width="21" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[电话
+Tel:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="196" width="68" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[卸货地点
+Unloading Place:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="257" width="84" height="23"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[预计卸货时间
+Est. Unloading Time:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="276" y="259" width="82" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[实际卸货时间
+Act Unloading Time:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="285" width="41" height="21"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[货物名称
+SKU:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="311" width="68" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[货物总数量
+Total Packages:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="319" width="11" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[箱]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="176" y="311" width="58" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[货物总重量
+Total Weight:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="319" y="321" width="24" height="12"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[公斤]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="311" width="63" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[货物总价值
+Cargo Value:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="518" y="321" width="35" height="13"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[人民币]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="337" width="50" height="20"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[货物体积(M)
+Size(CBM):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="128" y="345" width="11" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[x]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="345" width="11" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[x]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="243" y="345" width="36" height="12"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[或总计]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="337" y="345" width="36" height="12"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[立方米]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="386" y="337" width="48" height="21"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[起止里程
+Mileage:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="491" y="346" width="11" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="364" width="50" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Remarks:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="22" y="380" width="319" height="87"  />
+			</rectangle>
+			<rectangle>
+				<reportElement x="341" y="380" width="213" height="87"  />
+			</rectangle>
+			<staticText>
+				<reportElement x="153" y="381" width="79" height="13"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[注意事项NOTICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="394" width="317" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[1.承运人需防水、防震、防潮，门到门运输。]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="409" width="317" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[2.收货人在货到时，需检查货物数量和外包装并在本回单上签名盖章。]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="424" width="317" height="28"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[3.若货物在运输途中外包装受损，收货人需检查内包装货物。
+   如有货损/货缺，须在“收货单位备注”上注明，并及时与发货方联系。]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="452" width="317" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[4.货物明细单在包装箱内(最后一箱)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="381" width="117" height="13"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[收货单位备注 REMARKS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="22" y="472" width="532" height="77"  />
+			</rectangle>
+			<staticText>
+				<reportElement x="24" y="474" width="268" height="13"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[客户反馈 CUSTOMER FEEDBACK:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="487" width="342" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[1.所有箱数是否同一天收到]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="502" width="342" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[2.收货前收到运输公司预计到货时间通知]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="517" width="342" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[3.整车配备包括司机在内的3名卸货人员]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="533" width="342" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[4.其它意见]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="408" y="487" width="24" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[YES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="408" y="517" width="24" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[YES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="408" y="502" width="24" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[YES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="487" y="487" width="20" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="487" y="502" width="20" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="487" y="517" width="20" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="435" y="488" width="26" height="13"  />
+			</rectangle>
+			<rectangle>
+				<reportElement x="435" y="503" width="26" height="13"  />
+			</rectangle>
+			<rectangle>
+				<reportElement x="435" y="519" width="26" height="13"  />
+			</rectangle>
+			<rectangle>
+				<reportElement x="508" y="488" width="26" height="13"  />
+			</rectangle>
+			<rectangle>
+				<reportElement x="508" y="503" width="26" height="13"  />
+			</rectangle>
+			<rectangle>
+				<reportElement x="508" y="518" width="26" height="13"  />
+			</rectangle>
+			<staticText>
+				<reportElement x="172" y="551" width="229" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[“货收讫回执联”须及时交回IDS有关仓库联系人]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="577" width="39" height="21"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[承运人
+Carrler]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="577" width="65" height="21"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[收货人(签名)
+Consignee Sign
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="577" width="25" height="20"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[日期
+Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="605" width="32" height="20"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[日期
+Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="605" width="68" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[收货人(盖章)
+Consignee Chop
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="629" width="256" height="22"  />
+				<textElement>
+					<font fontName="宋体" size="6" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[本单共四联：
+白：货收讫回执联  红：承运人联  蓝：收货人联  黄：存根联]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="287" y="601" width="268" height="68"  />
+			</rectangle>
+			<ellipse>
+				<reportElement x="375" y="602" width="109" height="67"  />
+			</ellipse>
+			<staticText>
+				<reportElement x="413" y="626" width="36" height="15"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[盖章处]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="54" y="670" width="427" height="41"  />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barHeight="41">
+					<jr:codeExpression><![CDATA[$F{podStaCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<line>
+				<reportElement x="205" y="90" width="100" height="1"  />
+			</line>
+			<line>
+				<reportElement x="84" y="131" width="469" height="1"  />
+			</line>
+			<line>
+				<reportElement x="80" y="158" width="88" height="1"  />
+			</line>
+			<line>
+				<reportElement x="232" y="159" width="80" height="1"  />
+			</line>
+			<line>
+				<reportElement x="337" y="159" width="81" height="1"  />
+			</line>
+			<line>
+				<reportElement x="443" y="159" width="110" height="1"  />
+			</line>
+			<line>
+				<reportElement x="75" y="177" width="100" height="1"  />
+			</line>
+			<line>
+				<reportElement x="75" y="191" width="171" height="1"  />
+			</line>
+			<line>
+				<reportElement x="292" y="191" width="122" height="1"  />
+			</line>
+			<line>
+				<reportElement x="438" y="191" width="116" height="1"  />
+			</line>
+			<line>
+				<reportElement x="88" y="216" width="466" height="1"  />
+			</line>
+			<line>
+				<reportElement x="88" y="235" width="466" height="1"  />
+			</line>
+			<line>
+				<reportElement x="88" y="253" width="466" height="1"  />
+			</line>
+			<line>
+				<reportElement x="97" y="280" width="177" height="1"  />
+			</line>
+			<line>
+				<reportElement x="360" y="280" width="194" height="1"  />
+			</line>
+			<line>
+				<reportElement x="69" y="303" width="485" height="1"  />
+			</line>
+			<line>
+				<reportElement x="87" y="333" width="63" height="1"  />
+			</line>
+			<line>
+				<reportElement x="236" y="333" width="79" height="1"  />
+			</line>
+			<line>
+				<reportElement x="409" y="333" width="109" height="1"  />
+			</line>
+			<line>
+				<reportElement x="75" y="357" width="53" height="1"  />
+			</line>
+			<line>
+				<reportElement x="136" y="357" width="52" height="1"  />
+			</line>
+			<line>
+				<reportElement x="196" y="357" width="49" height="1"  />
+			</line>
+			<line>
+				<reportElement x="276" y="357" width="62" height="1"  />
+			</line>
+			<line>
+				<reportElement x="431" y="357" width="60" height="1"  />
+			</line>
+			<line>
+				<reportElement x="498" y="357" width="56" height="1"  />
+			</line>
+			<line>
+				<reportElement x="62" y="598" width="143" height="1"  />
+			</line>
+			<line>
+				<reportElement x="284" y="597" width="131" height="1"  />
+			</line>
+			<line>
+				<reportElement x="444" y="597" width="111" height="1"  />
+			</line>
+			<line>
+				<reportElement x="62" y="625" width="143" height="2"  />
+			</line>
+			<componentElement>
+				<reportElement x="321" y="71" width="230" height="29"  />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barHeight="30">
+					<jr:codeExpression><![CDATA[$F{packList}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<image>
+				<reportElement x="375" y="6" width="179" height="57"  />
+				<imageExpression><![CDATA["print_img/BaoZunLogoNew.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="69" y="290" width="43" height="13"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[耐克鞋服]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="291" width="18" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[FW]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="204" y="291" width="11" height="12"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[件]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="225" y="291" width="11" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[，]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="236" y="291" width="28" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[APP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="313" y="291" width="11" height="12"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[件]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="291" width="11" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[，]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="341" y="291" width="18" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[EQ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="291" width="11" height="12"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[件]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="467" y="291" width="33" height="12"  />
+				<textElement>
+					<font fontName="宋体" size="8" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H"/>
+				</textElement>
+				<text><![CDATA[(件数)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="97" y="68" width="80" height="14"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{staCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="96" y="97" width="157" height="16"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{packList}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="204" y="76" width="114" height="14"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{printDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="83" y="82" width="94" height="16"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{packSlipNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="84" y="118" width="469" height="13"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loadingPlace}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="143" width="88" height="14"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{loadingTime}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="233" y="145" width="80" height="14"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{whContact}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="341" y="145" width="81" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="445" y="144" width="108" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fax}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="76" y="165" width="107" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nfsStoreCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="76" y="179" width="170" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{companyName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="89" y="204" width="303" height="12"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address3}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="204" width="162" height="11"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="222" width="466" height="14"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address4}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="89" y="241" width="465" height="13"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="158" y="291" width="41" height="12"  />
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fw}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="264" y="291" width="45" height="12"  />
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{app}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="359" y="291" width="54" height="12"  />
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{eq}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="244" y="319" width="65" height="14"  />
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalWeight}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="105" y="263" width="163" height="15"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unloadingTime}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="92" y="319" width="49" height="14"  />
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalPackages}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="347" y="403" width="100" height="31"  />
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{crd}==null?"":"CRD"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="438" width="189" height="29"  />
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{crd}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="77" y="711" width="281" height="21"  />
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{podStaCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="449" y="99" width="102" height="20"  />
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{whCode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

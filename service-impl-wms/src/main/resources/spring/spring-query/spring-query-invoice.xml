@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="StaInvoice.findInvoiceByPlid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select inv.invoice_date as invoiceDate,
+					       inv.payer,
+					       inv.item,
+					       inv.unit_price as UnitPrice,
+					       inv.qty,
+					       inv.amt,
+					       sta.pg_index||'|'||decode(sta.idx1,null,'',sta.idx1||'-'||sta.idx2||'|')||inv.memo as memo,
+					       inv.payee,
+					       inv.drawer,
+					       inv.identification_number as identificationNumber,
+					       inv.address,
+					       inv.telephone,
+					       channel.company_name as companyName
+					  from t_wh_sta sta, t_wh_sta_invoice inv, t_bi_channel channel
+					 where sta.picking_list_id = :plid
+					   and sta.owner = channel.code
+					   and sta.id = inv.sta_id
+					   and nvl(inv.execute_count, 0) = 0
+					 order by sta.pg_index
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StaInvoice.findInvoiceByPlids" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select inv.invoice_date as invoiceDate,
+					       inv.payer,
+					       inv.item,
+					       inv.unit_price as UnitPrice,
+					       inv.qty,
+					       sta.slip_code as refSlipCode,
+					       inv.amt,
+					       sta.pg_index||'|'||decode(sta.idx1,null,'',sta.idx1||'-'||sta.idx2||'|')||inv.memo as memo,
+					       inv.payee,
+					       inv.drawer,
+					       channel.company_name as companyName
+					  from t_wh_sta sta, t_wh_sta_invoice inv, t_bi_channel channel,t_wh_sta_picking_list pic
+					 where sta.picking_list_id in (
+					 	 	#foreach($plId in $plIds)
+			               		$plId,
+			               	#end
+			               	-1)
+			           and sta.picking_list_id=pic.id
+					   and sta.owner = channel.code
+					   and sta.id = inv.sta_id
+					   and nvl(inv.execute_count, 0) = 0
+					 order by pic.create_time asc
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.findInvoiceByStaid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						   inv.id,
+						   inv.invoice_date as invoiceDate,
+					       inv.payer,
+					       inv.item,
+					       inv.unit_price as UnitPrice,
+					       inv.qty,
+					       inv.amt,
+					       sta.pg_index||'|'||decode(sta.idx1,null,'',sta.idx1||'-'||sta.idx2||'|')||inv.memo as memo,
+					       inv.payee,
+					       inv.drawer,
+					       inv.identification_number as identificationNumber,
+					       inv.address,
+					       inv.telephone,
+					       channel.company_name as companyName
+					  from t_wh_sta sta, t_wh_sta_invoice inv, t_bi_channel channel
+					 where sta.id=:staid
+					   and sta.owner = channel.code
+					   and sta.id = inv.sta_id
+					   and nvl(inv.execute_count, 0) = 0
+					 order by sta.pg_index
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!--销售|换货出库发票导出  -->
+	<bean id="StaInvoice.findInvoicImportByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select inv.invoice_date as invoiceDate,
+					       inv.payer,
+					       inv.item,
+					       inv.unit_price as UnitPrice,
+					       inv.qty,
+					       inv.amt,
+					       sta.pg_index||'|'||decode(sta.idx1,null,'',sta.idx1||'-'||sta.idx2||'|')||inv.memo as memo,
+					       inv.payee,
+					       inv.drawer
+					  from t_wh_sta sta, t_wh_sta_invoice inv
+					 where sta.main_wh_id= :ouid
+					   and sta.id = inv.sta_id
+					   and nvl(inv.execute_count, 0) = 0
+					  #if($fromDate)
+					    and inv.invoice_date >= :fromDate
+					  #end
+					  #if($endDate)
+					    and inv.invoice_date <= :endDate
+					  #end  
+					 order by sta.pg_index
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.findBurberryInvoiceByPlid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.id,
+					         sta.pg_index  as seqNo,
+			                 sta.code      as staCode,
+			                 sta.slip_code as refSlipCode,
+			                 t.payer,
+			                 sta.pg_index||'|'||decode(sta.idx1,null,'',sta.idx1||'-'||sta.idx2||'|')||t.memo        as memo,
+			                 t.amt         as totalAmt,
+			                 tl.ITEM       as ITEM,
+			                 tl.qty        as qty,
+			                 tl.unit_price as unitPrice,
+			                 tl.amt        as amt,
+			                 channel.company_name as companyName
+					  from t_wh_sta sta, t_wh_sta_invoice t, t_wh_sta_invoice_line tl, t_bi_channel channel
+					 where sta.id = t.sta_id
+					   and sta.owner = channel.code
+					   and t.id = tl.invoice_id 
+					   and sta.picking_list_id = :plid 
+					   and nvl(t.execute_count,0) = 0
+					   order by sta.pg_index
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.findBurberryInvoiceByStaid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.id,
+					sta.pg_index  as seqNo,
+					sta.code      as staCode,
+					sta.slip_code as refSlipCode,
+					t.payer,
+					sta.pg_index||'|'||decode(sta.idx1,null,'',sta.idx1||'-'||sta.idx2||'|')||t.memo        as memo,
+					t.amt         as totalAmt,
+					tl.qty        as qty,
+					tl.unit_price as unitPrice,
+					tl.amt        as amt,
+					channel.company_name as companyName
+					from t_wh_sta sta, t_wh_sta_invoice t, t_wh_sta_invoice_line tl, t_bi_channel channel
+					where sta.id = t.sta_id
+					and sta.owner = channel.code
+					and t.id = tl.invoice_id 
+					and sta.id = :staid
+					and nvl(t.execute_count,0) = 0
+					order by sta.pg_index
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.findReplenishBurberryInvoice" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.id,
+					io.pg_index  as seqNo,
+			        io.code as refSlipCode,
+			        io.order_code as staCode,
+			        t.payer,
+			        t.memo || io.pg_index        as memo,
+					t.amt         as totalAmt,
+          			tl.ITEM       as ITEM,
+					tl.qty        as qty,
+					tl.unit_price as unitPrice,
+					tl.amt        as amt,
+			          channel.company_name as companyName          
+			          from t_wh_invoice_order io,t_wh_sta_invoice t,t_wh_sta_invoice_line tl, t_bi_channel channel
+			          where io.id = t.io_id
+			          and io.owner = channel.code
+			          and t.id = tl.invoice_id 
+			          and io.batch_code = :batchNo
+			          #if($wioIdList)
+								and io.id in (
+								#foreach($w in $wioIdList)
+									$w,
+								#end
+								-1)
+					  #end
+			          and nvl(t.execute_count,0) = 0
+			          order by io.pg_index
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.resetExecuteCountByStaid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_sta_invoice iv set iv.execute_count = 0
+					where iv.sta_id = :staid
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.resetExecuteCountByPlid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+			      		update t_wh_sta_invoice iv set iv.execute_count = 0
+								where iv.sta_id in(
+			                select id from t_wh_sta sta where sta.picking_list_id = :plid
+			          )
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.addExecuteCountByPlId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+						update t_wh_sta_invoice invc
+						   set execute_count = nvl(execute_count, 0) + 1
+						 where invc.sta_id in (
+						       select id from t_wh_sta sta where sta.picking_list_id = :plid
+						 )
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StaInvoice.addExecuteCountByPlIds" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+						update t_wh_sta_invoice invc
+						   set execute_count = nvl(execute_count, 0) + 1
+						 where invc.sta_id in (
+						       select id from t_wh_sta sta where sta.picking_list_id in(
+						       	#foreach($plId in $plIds)
+			               			$plId,
+			               		#end
+			               	-1)
+						 )
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.addExecuteCountByBatchNo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+						 update t_wh_sta_invoice invc
+						     set execute_count = nvl(execute_count, 0) + 1
+						     where invc.io_id in (
+                   			select t.id from t_wh_invoice_order t where t.batch_code =:batchNo
+                   			#if($wioIdList)
+                  					and t.id in (
+				                  #foreach($w in $wioIdList)
+				                    $w,
+				                  #end
+				                  -1)
+              				#end
+						 	 )
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.addExecuteCountBySta" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+						update t_wh_sta_invoice invc
+						   set execute_count = nvl(execute_count, 0) + 1
+						 where invc.sta_id = :staid
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaInvoice.findCoachInvoice" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+					select to_char(sta.create_time,'yyyy-MM-dd') as invoiceDate,
+					       sta.slip_code as refSlipCode,
+					       sku.supplier_code as item,
+					       d.receiver as payer,
+					       l.unit_price as unitPrice,
+					       l.quantity as qty,
+					       l.total_actual as amt,
+					       i.identification_number as identificationNumber,
+                           i.address,
+                           i.telephone,
+					       channel.company_name as companyName
+					  from t_wh_sta               sta  left join t_wh_sta_invoice i on i.sta_id=sta.id,
+					       t_wh_sta_line          l,
+					       t_bi_inv_sku           sku,
+					       t_wh_sta_delivery_info d,
+					       t_bi_channel			  channel
+					 where sta.id = l.sta_id
+					   and sta.owner = channel.code
+					   and d.id = sta.id
+					   and sku.id = l.sku_id
+					   #if($plid)
+					   		and sta.picking_list_id = :plid
+					   #elseif($staid)
+					   		and sta.id = :staid
+					   #else
+					   		and sta.id = -1
+					   #end
+					 order by sta.pg_index
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StaInvoice.findReplenishCoachInvoice" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+					select SUBSTR(t.invoice_date,0,10) as invoiceDate,
+                  t.invoice_code as refSlipCode,
+                  tl.item as item,
+                  io.receiver as payer,
+                  tl.unit_price as unitPrice,
+                  tl.qty as qty,
+                  tl.amt as amt,
+                  channel.company_name as companyName
+            from 
+                 t_wh_invoice_order io,t_wh_sta_invoice t,t_wh_sta_invoice_line tl, t_bi_channel channel
+                where io.id = t.io_id
+                and io.owner = channel.code
+                and t.id = tl.invoice_id 
+                and io.batch_code = :batchNo
+                #if($wioIdList)
+                      and io.id in (
+                      #foreach($w in $wioIdList)
+                        $w,
+                      #end
+                      -1)
+                   #end
+                and nvl(t.execute_count,0) = 0
+                order by io.pg_index
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		 <bean id="StaInvoice.findDefaultInvoice" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+                 inv.id,
+                 inv.invoice_date as invoiceDate,
+                 inv.payer,
+                 inv.item,
+                 inv.unit_price as UnitPrice,
+                 inv.qty,
+                 inv.amt,
+                 inv.memo ||'#'||io.pg_index  as memo,
+                 inv.payee,
+                 inv.drawer,
+                 inv.identification_number as identificationNumber,
+				 inv.address,
+				 inv.telephone,
+                 channel.company_name as companyName
+            from t_wh_invoice_order io,t_wh_sta_invoice inv, t_bi_channel channel
+            where io.id = inv.io_id 
+            and io.owner = channel.code
+			  #if($wioIdList)
+                  and io.id in (
+                  #foreach($w in $wioIdList)
+                    $w,
+                  #end
+                  -1)
+              #end
+			          order by io.pg_index
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StaDeliveryInfo.findWmsInvoiceOrderBillDataByInvoiceId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select d.id as id,
+       '' as departure,
+       '' as cmpname,
+       1 as totalBillQty,
+       '' as toLocation,
+       '' as transBigWord,
+       d.trans_no as trackingNo,
+       d.trans_no as sfTrackingNo,
+       to_char(sysdate, 'yyyy-MM-dd') as printTime,
+       d.batch_code as pickingListCode,
+       d.lp_code as lpcode,
+       m.name as expName,
+       d.address as address,
+       '中国' as country,
+       d.province as province,
+       d.city as city,
+       d.district as district,
+       d.zipcode as zipcode,
+       d.telephone as telephone,
+       '' as remark,
+       d.mobile as mobile,
+       case
+         when d.mobile is null then
+          d.telephone
+         when d.telephone is null then
+          d.mobile
+         else
+          d.mobile || ',' || d.telephone
+       end as receverTel,
+       d.receiver as receiver,
+       0 as transferFee,
+       d.order_code as refSlipCode,
+       d.order_code code,
+       d.owner as owner,
+       '' as warehouseName,
+       d.owner as sender,
+       shop.address as senderAddress,
+       shop.telephone as senderTel,
+       shop.telephone as senderMobile,
+       shop.zipcode as sendZipCode,
+       (select option_value from t_sys_choose_option where category_code='wmsSFServiceInfo' and option_key = 'JCUST_ID') as jcustid,
+       '' as sfWhCode,
+       '否' as isSupportCod,
+       d.pg_index as pgindex,
+       1 as quantity,
+       '' as slipCode2,
+       d.trans_city_code as transCityCode,
+       0 as amount,
+       0 as totalactual,
+       0 as ordertotalactual,
+       0 orderTransferFree,
+       fn_getregion_forwritebig(d.address, d.province, d.city, d.district) as bigAddress,
+       1 as isRailway,
+       1 as transTypeB,
+       1 as transTimeTypeB,
+       '' as transmemo,
+       sa.contacts as contacts,
+       sa.ext1 as ext1,
+       shop.code as channelCode,
+       0 as insuranceAmount,
+       '' as barCode,
+       1 as staQuantity,
+       '否' as isTransCodPos,
+       '1' as sfOrder,
+       1 as sfSum
+  from 
+       t_wh_invoice_order d,t_ma_transportator m,t_bi_channel shop left join
+       t_bi_channel_special_action sa on sa.channel_id = shop.id  and sa.type = 30
+  where d.owner = shop.code and d.lp_code = m.exp_code
+  and d.id = :id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	 <bean id="StaInvoice.findInvoiceBySlipCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+			select count(id)
+			from t_wh_sta_invoice where sta_id in 
+			(select id  from t_wh_sta sta where sta.slip_code1=:slipcode1 and type=21)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+</beans>

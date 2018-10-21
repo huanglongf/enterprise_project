@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.skuMaster.dao.PosSkuMasterMapper">
+	<resultMap type="com.lmis.pos.skuMaster.model.PosSkuMaster" id="PosSkuMasterMap" >
+		<result column="CCD_Dt_Bus_Seasn_Yr_Cd" property="ccdDtBusSeasnYrCd" jdbcType="VARCHAR" />
+		<result column="Prod_Cd" property="prodCd" jdbcType="VARCHAR" />
+		<result column="PPK" property="ppk" jdbcType="VARCHAR" />
+		<result column="Div_Cd" property="divCd" jdbcType="VARCHAR" />
+		<result column="Gndr_Age_Desc" property="gndrAgeDesc" jdbcType="VARCHAR" />
+		<result column="Gbl_Cat_Sum_Desc" property="gblCatSumDesc" jdbcType="VARCHAR" />
+		<result column="Gbl_Cat_Core_Focs_Desc" property="gblCatCoreFocsDesc" jdbcType="VARCHAR" />
+		<result column="V_NUMBER" property="vNumber" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		  CCD_Dt_Bus_Seasn_Yr_Cd,
+		  Prod_Cd,
+		  PPK,
+		  Div_Cd,
+		  Gndr_Age_Desc,
+		  Gbl_Cat_Sum_Desc,
+		  Gbl_Cat_Core_Focs_Desc,
+		  V_NUMBER
+	</sql>
+
+	<!-- 自定义sql -->
+	<select id="getPosSkuMasterInfo" parameterType="java.lang.String" resultMap="PosSkuMasterMap">
+		SELECT 
+		      <include refid="Base_Column_List" /> 
+		FROM 
+		      pos_sku_master
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="_parameter != null and _parameter != ''">
+		    	Prod_Cd = #{prodCd, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</select>
+	
+	<delete id="deleteAll">
+	    DELETE FROM 
+	          pos_sku_master
+	</delete>
+	
+	<insert id="savePosSkuMasterInfo" parameterType="java.util.List">
+		INSERT INTO pos_sku_master
+		(CCD_Dt_Bus_Seasn_Yr_Cd,
+		  Prod_Cd,
+		  PPK,
+		  Div_Cd,
+		  Gndr_Age_Desc,
+		  Gbl_Cat_Sum_Desc,
+		  Gbl_Cat_Core_Focs_Desc,
+		  V_NUMBER)
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				#{obj.ccdDtBusSeasnYrCd, jdbcType=VARCHAR},
+				#{obj.prodCd, jdbcType=VARCHAR},
+				#{obj.ppk, jdbcType=VARCHAR},
+				#{obj.divCd, jdbcType=INTEGER},
+				#{obj.gndrAgeDesc, jdbcType=VARCHAR},
+				#{obj.gblCatSumDesc, jdbcType=VARCHAR},
+				#{obj.gblCatCoreFocsDesc, jdbcType=VARCHAR},
+				#{obj.vNumber, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	
+	<select id="queryCount" resultType="java.lang.Integer">
+	      SELECT COUNT(*) AS NUM FROM pos_sku_master1
+	</select>
+</mapper>

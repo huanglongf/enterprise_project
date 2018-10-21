@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+<package name="rest-default" extends="struts-default">
+		<result-types>
+			<result-type name="json" class="loxia.web.struts2.result.JsonResult"/>
+		</result-types>
+		<interceptors>
+			<interceptor name="exceptionEx" class="com.jumbo.web.interceptor.ExceptionInterceptor"/>
+			<interceptor name="paramsEx" class="loxia.web.struts2.interceptor.ParametersExInterceptor"/>
+			<interceptor name="ognlNullHandlerInterceptor" class="com.jumbo.web.interceptor.OgnlNullHandlerInterceptor"/>
+			<interceptor-stack name="defaultStack">
+            <interceptor-ref name="exceptionEx"><param name="debug">true</param></interceptor-ref>
+            <!-- <interceptor-ref name="accountSet"/> -->
+            <interceptor-ref name="alias"/>
+            <interceptor-ref name="servletConfig"/>
+            <interceptor-ref name="i18n"/>
+            <interceptor-ref name="prepare"/>
+            <interceptor-ref name="chain"/>
+            <interceptor-ref name="debugging"/>            
+            <interceptor-ref name="scopedModelDriven"/>
+            <interceptor-ref name="modelDriven"/>                        
+            <interceptor-ref name="fileUpload"/>
+            <interceptor-ref name="checkbox"/>
+            <interceptor-ref name="multiselect"/>
+            <interceptor-ref name="staticParams"/>
+            <interceptor-ref name="actionMappingParams"/>
+            <interceptor-ref name="paramsEx">
+              <param name="ordered">true</param>
+              <param name="excludeParams">dojo\..*,^struts\..*</param>
+            </interceptor-ref>
+            <interceptor-ref name="ognlNullHandlerInterceptor"/>   
+            <interceptor-ref name="conversionError"/>
+            <interceptor-ref name="validation">
+                <param name="excludeMethods">input,back,cancel,browse</param>
+            </interceptor-ref>
+            <interceptor-ref name="workflow">
+                <param name="excludeMethods">input,back,cancel,browse</param>
+            </interceptor-ref>
+        </interceptor-stack>
+		</interceptors>		
+		<global-results>
+			<result name="error">/error.jsp</result>
+			<result name="json" type="json">
+				<param name="charSet">UTF-8</param>
+			</result>		
+			<result name="print" type="stream">
+				<param name="contentType">application/octet-stream</param>
+			</result>	
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception" result="error"/>
+		</global-exception-mappings>
+	</package>
+
+	<package name="interface_json" extends="rest-default" namespace="/rest">
+		<!-- <action name="createstabysobatch" class="wmsAction" method="createStaBySo" /> -->
+		<!--<action name="cancelstabyso3" class="wmsAction" method="createStaBySo" />-->
+		<!-- <action name="createbyoms3ngpo" class="wmsAction" method="createByOMS3NgPo" /> -->
+		<!-- <action name="cancelbyoms3ngpo" class="wmsAction" method="cancelByOMS3NgPo" /> -->
+		<action name="cancelsalesstabyso" class="wmsAction" method="cancelSalesStaBySo" />
+		<action name="cancelrtninboundbyra" class="wmsAction" method="cancelRtnInboundByRa" />
+	    <action name="ids" class="idsServiceClientAction" method="idsSendMegToWms"/>
+	    <action name="userSyncInfo" class="userSyncInfoAction" method="syncUserInfo">
+		    <result name="success" type="plainText">  
+                <param name="charSet">UTF-8</param>  
+                <param name="location">/frame/oauth-user-sync-info.jsp</param>  
+            </result>
+	    </action>
+	    <action name="monitorWmsWeb" class="sysMonitorAction" method="monitorWmsWeb" />
+	    <action name="webCheckVersion" class="checkPingAction"  method="webCheckVersion"></action>
+	</package>
+
+
+	<package name="interface_pda" extends="rest-default" namespace="/pda">
+		<action name="findbycode" class="pdaInterfaceAction" method="findByCode" />
+		<action name="findbysku" class="pdaInterfaceAction" method="findBySku" />
+		<action name="postdata" class="pdaInterfaceAction" method="postData" />
+		<action name="findpickingdata" class="pdaInterfaceAction" method="findPickingData" />
+	</package>
+	<package name="interface_sf" extends="rest-default" namespace="/sf">
+		<action name="wmspurchaseorderpushinfo" class="sfWarehouseAction" method="wmsPurchaseOrderPushInfo"></action>
+        <action name="wmssailorderpushinfo" class="sfWarehouseAction" method="wmsSailOrderPushInfo"></action>
+        <action name="wmsinventoryadjustpushinfo" class="sfWarehouseAction" method="wmsInventoryAdjustPushInfo"></action>
+        <action name="wmssendvendortosf" class="sfWarehouseAction" method="wmsSendVender"></action>
+	</package>
+	<package name="interface_sto" extends="rest-default" namespace="/sto">
+		<action name="olTransNo" class="stoTransNoAction" method="olTransNo"></action>
+	</package>
+	<package name="interface_sftw" extends="rest-default" namespace="/sftw">
+		<action name="orderinboundpushservice" class="sfTwWarehouseAction" method="purchaseOrderInboundPushService"></action>
+		<action name="sendvendorservice" class="sfTwWarehouseAction" method="sendVendorService"></action>
+		<action name="orderoutboundpushservice" class="sfTwWarehouseAction" method="saleOrderOutboundPushService"></action>
+		<action name="invchangepushservice" class="sfTwWarehouseAction" method="inventoryChangePushService"></action>
+	</package>
+</struts>

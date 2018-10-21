@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="STOTemplate" language="groovy" pageWidth="720" pageHeight="370" whenNoDataType="AllSectionsNoDetail" columnWidth="720" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<parameter name="sender" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="receiver" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="targetAddress" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="senderUnit" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="receiverUnit" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="senderAddress" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="receiverAddress" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="senderTel" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="receiverTel" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="senderSign" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pickingCode" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="senderStamp" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="protocolFeeFrame" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="owner" class="java.lang.String"/>
+	<parameter name="refSlipcode" class="java.lang.String"/>
+	<parameter name="warehouseName" class="java.lang.String"/>
+	<parameter name="receiverMobile" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="receiverAddressP" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="receiverAddressC" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="receiverAddressD" class="java.lang.String" isForPrompting="false"/>
+	<pageHeader>
+		<band height="370">
+			<textField isBlankWhenNull="true">
+				<reportElement x="166" y="80" width="218" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{sender}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="426" y="82" width="153" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Left">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{receiver}]]></textFieldExpression>
+			</textField>
+			<textField  isBlankWhenNull="true">
+				<reportElement x="493" y="82" width="156" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{targetAddress}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="187" y="183" width="195" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{senderTel}]]></textFieldExpression>
+			</textField>
+			<textField  isBlankWhenNull="true">
+				<reportElement x="427" y="175" width="224" height="60" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{receiverTel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="176" y="275" width="96" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{senderSign}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy-MM-dd" isBlankWhenNull="true">
+				<reportElement x="136" y="297" width="169" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField  isBlankWhenNull="true">
+				<reportElement x="167" y="105" width="250" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{warehouseName}]]></textFieldExpression>
+			</textField>
+			<textField  isBlankWhenNull="true">
+				<reportElement x="167" y="152" width="250" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Top">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{owner}]]></textFieldExpression>
+			</textField>
+			<textField  isBlankWhenNull="true">
+				<reportElement x="167" y="133" width="250" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Top">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{refSlipcode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="133" width="88" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[订单：]]></text>
+			</staticText>
+			<textField  isBlankWhenNull="true">
+				<reportElement x="428" y="198" width="225" height="60" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Top">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{receiverMobile}]]></textFieldExpression>
+			</textField>
+			<textField  >
+				<reportElement stretchType="RelativeToBandHeight" x="379" y="102" width="272" height="211" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{receiverAddress}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+</jasperReport>

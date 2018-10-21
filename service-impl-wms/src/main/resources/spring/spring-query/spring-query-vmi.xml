@@ -1,0 +1,3706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="LevisDeliveryReceive.findByDate" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+select sku.supplier_code  supplierCode,
+       sku.key_properties keyProperties,
+       STORE_CODE1        STORECODE1,
+       STORE_CODE2        STORECODE2,
+       QUANTITY           QUANTITY,
+       ORDER_CODE         ORDERCODE,
+       PO_CODE            POCODE,
+       TYPE               TYPE,
+       SEQ_NO             SEQNO,
+       CREATE_TIME        CREATETIME
+  from T_LEVIS_DELIVERY_RECEIVE r, t_bi_inv_sku sku
+ where sku.id = r.sku_id
+ 	and sku.is_gift !=1
+     and sku.ext_code2 not like 'GWP%'
+   and r.create_time >= to_date(:date, 'yyyy-MM-dd')
+   and r.create_time < to_date(:date, 'yyyy-MM-dd') + 1
+union all
+select sku.supplier_code  supplierCode,
+       sku.key_properties keyProperties,
+       ch.vmi_code,
+       '',
+       lg.quantity || '',
+       sta.slip_code,
+       '',
+       case 
+         when sta.type = 21 then '90' 
+         when sta.type = 42 then '93'
+         when sta.type = 41 and sta.slip_code like 'R%' then '91'
+         when sta.type = 41 and sta.slip_code like 'E%' then '92'
+       else '' end,
+       null,
+       lg.tran_time
+  from t_wh_st_log lg, t_bi_inv_sku sku, t_bi_channel ch,t_wh_stv stv,t_wh_sta sta
+ where lg.sku_id = sku.id
+   and stv.id = lg.stv_id
+   and sta.id = stv.sta_id
+   and sta.type in (21,42,41)
+   and sku.is_gift !=1
+   and sku.ext_code2 not like 'GWP%'
+   and lg.owner = ch.code
+   and ch.vmi_code in ('0020019205', '0020022340', '0020022600','0020025697','0020023525','0020025915','0020026208')
+   and lg.tran_time >= to_date(:date, 'yyyy-MM-dd')
+   and lg.tran_time < to_date(:date, 'yyyy-MM-dd') + 1
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPReceiving.updateReceivingDataToWriting" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				update t_esprit_receiving
+					   set status = 2
+					 where (status is null or status = 1)
+					   and length(invoice_invoicenumber) < 15
+					   --and RECEIVING_DUTYPERCENTAGE != '1.92'
+					   and RECEIVING_DUTYPERCENTAGE is not null
+					   and (invoice_invoicenumber like 'WN%' or
+					       REGEXP_LIKE(invoice_invoicenumber, '*CE$||*EO$'))
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPReceiving.updateReceivingDataToFinish" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			update t_esprit_receiving r set status = 5,r.header_sequencenumber = :seq  where status = 2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="ESPReceiving.receivingList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select  distinct r.invoice_invoicenumber as invoice_invoicenumber from t_esprit_receiving r  where status = 2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPReceiving.updateReceivingDataWritingInvoiceNumber"
+		class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					update t_esprit_receiving re set RECEIVING_WAREHOUSE_REFERENCE  = (
+					select 'BZ'||RECEIVING_GOODSRECEIVEDDATE from t_esprit_receiving ra
+					where  ra.status = 2 and re.id = ra.id
+					) 
+					where re.status = 2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPReceiving.findHeaderSeq" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select trim(to_char(S_T_ESPRIT_RECV_FILE_SEQ.nextval,'000000')) seq from dual
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ESPDelivery.findDispatchHeaderSeq" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select trim(to_char(S_T_ESPRIT_DISPATCH_FILE_SEQ .nextval,'000000')) seq from dual
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPReceiving.findAllWrintingData" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+	select HEADER_FROMGLN,
+       HEADER_TOGLN,
+       HEADER_FROMNODE ,
+       HEADER_TONODE,
+       RECEIVING_RECEIVINGNO,
+       RECEIVING_GOODSRECEIVEDDATE ,
+       RECEIVING_ORDERNUMBER,
+       RECEIVING_POREFERENCE ,
+       RECEIVING_DUTYPERCENTAGE ,
+       RECEIVING_MISCFEEPERCENTAGE,
+       RECEIVING_COMMPERCENTAGE,
+       INVOICE_INVOICENUMBER ,
+       INVOICE_CURRENCY,
+       INVOICE_TOTALQTY ,
+       INVOICE_TOTALFOB ,
+       INVOICE_TOTALGTP,
+       RECEIVING_BUYERGLN ,
+       RECEIVING_DELIVERYPARTYGLN,
+       RECEIVING_WAREHOUSE ,
+       ITEM_SKU ,
+       sum(ITEM_RECEIVEDQTY) as ITEM_RECEIVEDQTY,
+       INVOICE_BATCH ,
+       RECEIVING_WAREHOUSE_REFERENCE
+  from t_esprit_receiving re
+ where re.invoice_invoicenumber is not null
+   and re.status = 2
+ group by HEADER_FROMGLN,
+          HEADER_TOGLN,
+          HEADER_FROMNODE,
+          HEADER_TONODE,
+          RECEIVING_RECEIVINGNO,
+          RECEIVING_GOODSRECEIVEDDATE,
+          RECEIVING_ORDERNUMBER,
+          RECEIVING_POREFERENCE,
+          RECEIVING_DUTYPERCENTAGE,
+          RECEIVING_MISCFEEPERCENTAGE,
+          RECEIVING_COMMPERCENTAGE,
+          INVOICE_INVOICENUMBER,
+          INVOICE_CURRENCY,
+          INVOICE_TOTALFOB,
+          INVOICE_TOTALGTP,
+          RECEIVING_BUYERGLN,
+          RECEIVING_DELIVERYPARTYGLN,
+          RECEIVING_WAREHOUSE,
+          ITEM_SKU,
+          INVOICE_BATCH,
+          RECEIVING_WAREHOUSE_REFERENCE,
+          INVOICE_TOTALQTY
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ESPReceiving.findAllNoneInvoiceAndNotFeedbackReceivingData" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select HEADER_FROMGLN,
+		       HEADER_TOGLN,
+		       HEADER_FROMNODE ,
+		       HEADER_TONODE,
+		       RECEIVING_RECEIVINGNO,
+		       RECEIVING_ORDERNUMBER
+		  from t_esprit_receiving re
+		 where re.invoice_invoicenumber is null
+		   and (re.status = 2 or re.status is null)
+		 group by HEADER_FROMGLN,
+		          HEADER_TOGLN,
+		          HEADER_FROMNODE,
+		          HEADER_TONODE,
+		          RECEIVING_RECEIVINGNO,
+		          RECEIVING_ORDERNUMBER
+		 order by RECEIVING_ORDERNUMBER
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ESPInvoicePercentage.findESPInvoiceByPoOrderByCreateTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+			select t.* from t_esprit_invoice_percentage t,T_WH_ESP_INVOICE_BD_PO bd
+			where t.invoice_number=bd.invoice_number
+			and bd.po=:po
+			order by bd.create_time asc
+                ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ESPInvoicePercentage.findESPInvoiceByPoOrderByCreateTime1" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+			select max(t.id) as id from t_esprit_invoice_percentage t,T_WH_ESP_INVOICE_BD_PO bd
+			where t.invoice_number=bd.invoice_number
+			and bd.po=:po
+			
+                ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ESPReceiving.updateReceivingDataForWriting" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				update t_esprit_receiving
+					   set status = 2
+					 where (status is null or status = 1)
+					   and invoice_invoicenumber is not null
+					   and length(invoice_invoicenumber) < 15
+					   --and RECEIVING_DUTYPERCENTAGE != '1.92'
+					   and RECEIVING_DUTYPERCENTAGE is not null
+					   and (invoice_invoicenumber like 'WN%' or
+					       REGEXP_LIKE(invoice_invoicenumber, '*CE$||*EO$'))
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPReceiving.findAllReceivingDataByOrderNo" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+	        <![CDATA[
+		select ID
+	  from t_esprit_receiving re
+	  where re.invoice_invoicenumber is null
+	   and (re.status = 2 or re.status is null)
+	   and re.receiving_ordernumber = :orderNo
+	          ]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+	<bean id="ESPReceiving.findAllNotFeedbackReceivingData" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+	        <![CDATA[
+			select distinct er.receiving_ordernumber from t_esprit_receiving er ,t_wh_sta sta 
+		where er.receiving_ordernumber=sta.slip_code
+		and (er.status is null or er.status = 2)
+		and er.invoice_invoicenumber is null
+		and sta.inbound_time <= sysdate-1
+		group by er.receiving_ordernumber
+	          ]]>
+				</value>
+			</constructor-arg>
+	</bean>	
+
+	<bean id="ESPDelivery.findDeliveryList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        select HEADER_FROMGLN,
+               HEADER_TOGLN,
+               HEADER_FROMNODE,
+               HEADER_TONODE,
+               d.header_sequencenumber, 
+               DELIVERY_DELIVERYNO,
+               DELIVERY_DELIVERYDATE,
+               DELIVERY_DELIVERYTYPE,
+               DELIVERY_DELIVERYSTATUS,
+               DELIVERY_GOODSRECEIPTDATE,
+               DELIVERY_DELIVEREDFROMGLN,
+               DELIVERY_DELIVEREDTOGLN,
+               ITEM_SKU,
+               sum(ITEM_RECEIVEDQTY) ITEM_RECEIVEDQTY
+          from T_ESPRIT_DELIVERY_DATA d
+         where status = 2
+         group by HEADER_FROMGLN,
+                  d.header_sequencenumber,
+                  HEADER_TOGLN,
+                  HEADER_FROMNODE,
+                  HEADER_TONODE,
+                  DELIVERY_DELIVERYNO,
+                  DELIVERY_DELIVERYDATE,
+                  DELIVERY_DELIVERYTYPE,
+                  DELIVERY_DELIVERYSTATUS,
+                  DELIVERY_GOODSRECEIPTDATE,
+                  DELIVERY_DELIVEREDFROMGLN,
+                  DELIVERY_DELIVEREDTOGLN,
+                  ITEM_SKU
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.updateStatusToDoing" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				update T_ESPRIT_DELIVERY_DATA set status = 2 where (status is null or status = 1)
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.updateStatusToFinished" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+           	update T_ESPRIT_DELIVERY_DATA d set status = 5 where status = 2 and d.header_sequencenumber = :seqno
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPMarkDown.updateMarkDownForStatu" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+                 update t_esprit_markdown set status = :newStatus
+				 where version >= :startDate
+			     and version < :endDate and (status is null or status = :oldStatus)
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPMarkDown.updateMarkDownForStatuSeq" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+                 update t_esprit_markdown set status = :newStatus,header_sequencenumber =:seqNum
+				 where   status = :oldStatus
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPMarkDown.findMarkDownList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+                select HEADER_FROMGLN,HEADER_TOGLN,HEADER_FROMNODE,HEADER_TONODE,
+				MARKDOWN_BUYINGSEASONYEAR,MARKDOWN_BUYINGSEASONCODE,MARKDOWN_STYLE,
+				MARKDOWN_EFFECTIVEDATE,MARKDOWN_LISTEDRETAILPRICE,SHOP_ID
+				from t_esprit_markdown
+				where status = :status
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPStockCount.updateStockCountForStatu" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+		
+                 update t_esprit_stock_count set status = :newStatus
+				 where version >= :startDate
+			     and version < :endDate and (status is null or status = :oldStatus)
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPStockCount.updateStockCountForStatuSeq" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+                 update t_esprit_stock_count set status = :newStatus,header_sequencenumber =:seqNum
+				 where   status = :oldStatus
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPStockCount.findStockCountList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+                select HEADER_FROMGLN,HEADER_TOGLN,HEADER_FROMNODE,HEADER_TONODE,
+				STOCKCOUNT_LOCATIONGLN,STOCKCOUNT_SKUID,STOCKCOUNT_QTY,
+				HEADER_SEQUENCENUMBER,HEADER_GENERATIONDATE
+				from t_esprit_stock_count
+				where status = :status
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="LevisDeliveryOrder.findSingelPoCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select po_code from t_levis_delivery_order r where r.po_code = :poCode
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- ad product 是否存在 -->
+	<bean id="BlProduct.findSingelCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select code from T_BL_PRODUCT r where r.code = :code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- ad sku 是否存在  -->
+	<bean id="BlSku.findSingelSkuCdBarcodeOrBarcode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select r.* from T_BL_SKU r where 1=1 
+				  #if($code)
+			   		and	r.SKU_CD_BARCODE =:code
+			   	  #end
+			   	  #if($barcode)
+			   		and	r.BARCODE =:barcode
+			   	  #end
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+
+	<!--艾格 -->
+	<bean id="EtamSales.updateForSendError" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+               update t_etam_sales set 
+			   status = :newErrorStatus,msg = '$errorMsg'||'||'||msg
+			   where 1=1  
+				and status = 5 
+			   #if($orderNo)
+			   	and order_no in ($orderNo) 
+			   #end
+			  #if($shopId)
+			   	and shop_id = :shopId
+			   #end
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="EtamSales.updateTotalActual" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+               update t_etam_sales es set total_actual = 
+				(
+				select abs(sum(net_retail * qty)) from t_etam_sales t 
+				where t.status = 5
+				and t.shop_id =$shopId
+				and t.type = '$type'
+				and t.shop_no = $shopNo
+				group by order_no
+				having t.order_no = es.order_no
+				)
+				where exists(
+				select 1 from t_etam_sales t where t.order_no = es.order_no and t.status = 5 and t.shop_id =$shopId and t.type = '$type'
+				)
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="EtamInventoryLog.updateInvLogStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+		update t_etam_inv_log set status=:newStatus 
+		where status=:oldStatus
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="EtamInventoryLog.findByStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+		select  * from t_etam_inv_log l where l.status=0
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="EtamInventoryLog.saveInventoryLog" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+		insert into t_etam_inv_log
+		  (id, upc, create_time, qty, status)
+		  select s_t_etam_inv_log.nextval,
+		         substr(sku.ext_code1, 2, 14),
+		         sysdate,
+		         inv.qty,
+		         0
+		    from v_oms_full_inv inv
+		   inner join t_bi_inv_sku sku
+		      on sku.id = inv.sku_id
+		   where inv.shop_id = :shopId
+		     and not exists (select 1
+		            from t_ma_oms_inventory t
+		           where t.shop_id = inv.shop_id
+		             and t.sku_id = inv.sku_id
+		             and t.qty = inv.qty)
+
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="EtamInventoryLog.saveInventoryLog2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+		insert into t_etam_inv_log(id,upc,create_time, qty,status)
+		 select s_t_etam_inv_log.nextval,substr(sku.ext_code1,2,14),sysdate,inv.qty,0 from v_oms_full_inv inv
+		 inner join t_bi_inv_sku sku on sku.id=inv.sku_id
+		 where inv.shop_id =  :shopId
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="EtamInventoryLog.updateInvLogForInventory" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+		update t_etam_inv_log l
+		   set l.status = 3
+		 where exists (select 1
+		          from t_ma_oms_inventory inv
+		         inner join t_bi_inv_sku sku
+		            on sku.id = inv.sku_id
+		         where inv.shop_id = :shopId
+		           and substr(sku.ext_code1, 2, 14) = l.upc
+		           and not exists (select 1
+		                  from v_oms_full_inv t
+		                 where t.shop_id = inv.shop_id
+		                   and t.sku_id = inv.sku_id
+		                   and t.qty = inv.qty))
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="EtamDeliveryInfo.findByStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+		select d.warehouse_no whno,
+		       d.outer_order_code ordercode,
+		       d.lp_code lpcode,
+		       d.trans_exp_code expcode,
+		       to_char(d.delivery_time, 'yyyymmdd') deliverytime
+		  from t_so_etam_delivery_info d
+		 where d.status = 1
+
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="EtamSales.updateSalesTransactionStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+               #if($num)
+					update 
+						t_etam_sales es 
+						set status = $newStatus
+					where
+						es.order_no in
+						(
+							select order_no
+							from
+								(
+								select 
+									distinct order_no
+								from 
+									t_etam_sales es
+								where
+									status = $oldStatus 
+									and shop_id = $shopId
+									and type = '$type'
+									and shop_no = $shopNo
+								)
+								where rownum <= $num
+						)
+					#else
+					update 
+						t_etam_sales es 
+						set status = $newStatus,batch_id = '$batchId'
+					where
+						status = $oldStatus 
+						and shop_id = $shopId
+						and shop_no = $shopNo
+					#end
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPOrder.findBatchId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select S_T_ESPRIT_ORDER_DATA_BATCH.nextval  seq from dual
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="LevisStkr.findAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+  select ch.vmi_code storeCode,
+       sku.supplier_code supplierSkuCode,
+       sku.key_properties keyprop,
+       sum(inv.quantity) as quantity,
+       lg.lmd lastMovementDate,
+       sku.list_price listPrice
+    from t_wh_sku_inventory inv
+    left join (
+        select lg.sku_id,to_char(max(lg.tran_time),'yyyyMMdd') lmd
+        from t_wh_st_log lg,t_bi_channel ch,t_bi_inv_sku sku
+        where lg.owner = ch.code
+              and sku.id = lg.sku_id
+              and sku.brand_id = 821
+              and (sku.is_gift is null or sku.is_gift = 0)
+              and ch.vmi_code in ('0020019205', '0020022340', '0020022600','0020025697','0020023525','0020025915','0020026208')
+        group by lg.sku_id
+    ) lg on lg.sku_id = inv.sku_id,
+         t_bi_channel       ch,
+         t_bi_inv_sku       sku
+   where inv.inv_owner = ch.code
+     and sku.id = inv.sku_id
+     and sku.brand_id = 821
+     and ch.vmi_code in ('0020019205', '0020022340', '0020022600','0020025697','0020023525','0020025915','0020026208')
+     and (sku.is_gift is null or sku.is_gift = 0)
+     and sku.ext_code2 not like 'GWP%'
+   group by ch.vmi_code, sku.supplier_code, sku.key_properties,lg.lmd,sku.list_price
+   order by ch.vmi_code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="EtamSales.findCount" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+               select count(distinct order_no) num
+				from
+					t_etam_sales es 
+				where
+					status in(0,5)
+					and shop_id =$shopId
+					and type = '$type'
+					and shop_no = $shopNo
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="EtamSales.findSales2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+              select
+			Order_No "Order_No",
+			sku_Code "Bar",
+			case when ssize is not null then ssize else ' ' end  "Size",
+			case when color is not null then color else ' ' end "Color",
+			qty "Quantity",
+			Net_Retail "Net_Price",
+			Sys_Type "Sys_Type",
+			vip_id "vip_id",
+			shop_no "Shop_No",
+			'\/Date('||(to_date(to_char(create_time,'yyyy-MM-dd'),'yyyy-MM-dd') - to_date('1970-01-01','yyyy-MM-dd')) * 86400000||')\/' "D_T",
+			'\/Date('||(to_date(to_char(create_time,'yyyy-MM-dd HH24-MI-ss'),'yyyy-MM-dd HH24-MI-ss') - to_date('1970-01-01 8:0:0','yyyy-MM-dd HH24-MI-ss')) * 86400000||')\/' "Bill_Time",
+			Ori_Order_No "Ori_Order_No",
+			'$batchId' "Batch_ID",
+			total_Actual "Sum_Total",
+			case when shop_no = 5001 or shop_no = 5009 then null when shop_no = 5013 and source = '聚划算' then 'JHS' else 'QJD' end "SalesChannel"
+			from t_etam_sales es 
+			where es.status = :status
+			and es.shop_id =$shopId
+			and es.shop_no = $shopNo
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDeliveryReceive.findReceiveDatasGroupByBatchNoAndPN"
+		class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+               select dr.h_batch_no,dr.p_pick_no,dr.p_edi_status,dr.p_pick_type
+		                 from t_esprit_delivery_receive dr
+		                 where dr.sta_id is null
+		                 #if($status)
+						     and upper(dr.p_edi_status)= upper(:status)
+						#end
+		       group by dr.h_batch_no,dr.p_pick_no,dr.p_edi_status,dr.p_pick_type
+           	   order by dr.h_batch_no asc
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDeliveryReceive.updateReceiveOrdersStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	   update  t_esprit_delivery_receive dr set dr.sta_id = :staId, dr.last_modify_time = sysdate,dr.version = sysdate
+        	   where dr.h_batch_no=:batchNo and dr.p_pick_no=:pickNo 
+        	   #if($status)
+        	   and upper(dr.p_edi_status)= upper(:status)
+        	   #end
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.findDeliveryCountByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  select count(1) from t_esprit_delivery_data dd
+        	  where dd.sta_code=:staCode
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.findDeliveryDatasGroupByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  select dd.sta_code from t_esprit_delivery_data dd
+        	  where dd.status = 2 or dd.status = 0
+        	  group by dd.sta_code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.findDeliveryDatasGroupByStaCode2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  select dd.sta_code from t_esprit_delivery_data dd left join t_wh_sta sta on dd.sta_code=sta.code
+        	  where (dd.status = 2 or dd.status = 0)
+        	  and sta.type ='81'
+        	  and sta.is_esprit = '1'
+        	  group by dd.sta_code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.findAllDeliveryDatasGroupByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  select dd.sta_code from t_esprit_delivery_data dd left join t_wh_sta sta on dd.sta_code=sta.code
+        	  where (dd.status = 2 or dd.status = 0)
+        	  and sta.type = :staType
+        	  and ( sta.is_esprit <> '1' or sta.is_esprit is null )
+              group by dd.sta_code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<bean id="ESPDelivery.findAllDeliveryDatasGroupByStaCode2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  select dd.sta_code from t_esprit_delivery_data dd left join t_wh_sta sta on dd.sta_code=sta.code
+        	  where (dd.status = 2 or dd.status = 0)
+        	  and sta.type = :staType
+        	  and ( sta.is_esprit <> '1' or sta.is_esprit is null )
+        	  group by dd.sta_code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<bean id="ESPDelivery.findAllDeliveryDatasGroupByStaCode3" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  select dd.sta_code from t_esprit_delivery_data dd left join t_wh_sta sta on dd.sta_code=sta.code
+        	  where (dd.status = 2 or dd.status = 0)
+        	  and sta.type = :staType
+        	  and sta.is_esprit = '1'
+        	  and sta.status=10
+        	  group by dd.sta_code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="ESPDelivery.findCloseDeliveryDatasGroupByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+       	  select dd.sta_code from t_esprit_delivery_data dd  left join t_wh_sta sta on dd.sta_code=sta.code
+       	  where dd.status = 3 or dd.status = 1
+          and ( sta.is_esprit <> '1' or sta.is_esprit is null)
+       	  group by dd.sta_code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.findCloseDeliveryDatasGroupByStaCode2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+       	  select dd.sta_code from t_esprit_delivery_data dd  left join t_wh_sta sta on dd.sta_code=sta.code
+       	  where dd.status = 3 or dd.status = 1
+          and  sta.is_esprit = '1'
+       	  group by dd.sta_code
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="ESPDelivery.findDeliveryDatasByStaCode2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+       	  select  * from t_esprit_delivery_data d  where d.sta_code =:staCode and  d.batchcode =:batchCode and rownum=1
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.findDeliveryDatasByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	select dd.item_sku,sum(to_number((case when dd.item_receivedqty is null or dd.item_receivedqty = 'null' then '0' else dd.item_receivedqty end))) as item_receivedqty,0 as header_numberofrecords,dd.delivery_deliveryno
+            ,dd.header_fromgln,dd.header_togln,dd.header_fromnode,dd.header_tonode,dd.delivery_deliveredfromgln
+            ,dd.delivery_deliveredtogln,dd.create_time
+        	  from t_esprit_delivery_data dd
+        	  where dd.sta_code =:staCode
+        	  and (dd.status = 2 or dd.status = 0)
+        	  #if($batchCode)
+        	  	and dd.batchcode =:batchCode
+        	  #end
+        	  group by dd.item_sku,dd.delivery_deliveryno,dd.header_fromgln,dd.header_togln,dd.header_fromnode,dd.header_tonode,dd.delivery_deliveredfromgln,dd.delivery_deliveredtogln,dd.create_time
+        	union all
+ 			select sku.ext_code2 as item_sku,0 as item_receivedqty,0 as header_numberofrecords,edd.delivery_deliveryno as delivery_deliveryno
+            ,edd.header_fromgln as header_fromgln,edd.header_togln as header_togln,edd.header_fromnode as header_fromnode,edd.header_tonode as header_tonode,edd.delivery_deliveredfromgln as delivery_deliveredfromgln
+            ,edd.delivery_deliveredtogln as delivery_deliveredtogln,sysdate as create_time  
+ 			  from t_wh_sta_line stal,t_wh_sta sta left join (select * from t_esprit_delivery_data where sta_code =:staCode and (status = 2 or status = 0) and rownum=1) edd on sta.code=edd.sta_code,t_bi_inv_sku sku
+ 			  where stal.sta_id=sta.id and stal.sku_id=sku.id 
+ 			  and sta.code =:staCode
+ 			  and sku.ext_code2 not in
+              (select dd.item_sku from t_esprit_delivery_data dd
+        	   where dd.sta_code =:staCode  
+        	   #if($batchCode)
+        	  	and dd.batchcode =:batchCode
+        	   #end
+        	   and dd.item_receivedqty > 0  and (dd.status = 2 or dd.status = 0) group by dd.item_sku)
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ESPDelivery.findCloseDeliveryDatasByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	select dd.item_sku,sum(to_number((case when dd.item_receivedqty is null or dd.item_receivedqty = 'null' then '0' else dd.item_receivedqty end))) as item_receivedqty,0 as header_numberofrecords,dd.delivery_deliveryno 
+            ,dd.header_fromgln,dd.header_togln,dd.header_fromnode,dd.header_tonode,dd.delivery_deliveredfromgln
+            ,dd.delivery_deliveredtogln,dd.create_time
+        	  from t_esprit_delivery_data dd
+        	  where dd.sta_code =:staCode
+        	  and (dd.status = 3 or dd.status = 1)
+        	  #if($batchCode)
+        	  	and dd.batchcode =:batchCode
+        	  #end
+        	  group by dd.item_sku,dd.delivery_deliveryno,dd.header_fromgln,dd.header_togln,dd.header_fromnode,dd.header_tonode,dd.delivery_deliveredfromgln,dd.delivery_deliveredtogln,dd.create_time
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDeliveryReceive.findReceiveOrdersByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  select sku.ext_code2 as extCode2,sum(staLine.Quantity) as skuQty
+  			  from t_wh_sta_line staLine,t_wh_sta sta,t_bi_inv_sku sku
+        	  where staLine.sta_id=sta.id and staLine.sku_id=sku.id
+              and sta.id= :staId
+              group by sku.ext_code2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDeliveryReceive.findReceiveOrdersByShelveStvId"
+		class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  select sku.ext_code2 as extCode2,sum(stLog.Quantity) as skuQty
+  			  from t_wh_stv_line stvLine,t_wh_stv stv,t_bi_inv_sku sku,t_wh_st_log stLog
+        	  where stvLine.stv_id=stv.id and stvLine.sku_id=sku.id
+        	  and stLog.Location_Id=stvLine.Location_Id and stLog.Sku_Id=stvLine.Sku_Id
+              and stLog.Stv_Id=stv.id
+              and stv.id= :stvId
+              and stv.status = 10
+              group by sku.ext_code2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDeliveryReceive.findShelveReceiveOrdersByStaId"
+		class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	select sku.ext_code2 as extCode2,sum(stLog.Quantity) as skuQty
+          	from t_wh_stv stv,t_bi_inv_sku sku,t_wh_st_log stLog,t_wh_sta sta
+            where stLog.Sku_Id=sku.id
+              and stLog.Stv_Id=stv.id
+              and stv.sta_id=sta.id
+              and stv.status = 10
+              and sta.status = 10
+              and sta.id = :staId
+              group by sku.ext_code2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!--esprit收货  -->
+		<bean id="ESPDeliveryReceive.findReceiveOrdersByStaId2"
+		class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	select r.* from t_esprit_delivery_receive r  where r.sta_id=:staId and rownum=1
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="ESPDeliveryReceive.findReceiveOrdersByCloseStaId"
+		class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	select sku.ext_code2 as extCode2,sum(stLog.Quantity) as skuQty
+          	from t_wh_stv stv,t_bi_inv_sku sku,t_wh_st_log stLog,t_wh_sta sta
+            where stLog.Sku_Id=sku.id
+              and stLog.Stv_Id=stv.id
+              and stv.sta_id=sta.id
+              and stv.status = 10
+              and sta.id = :staId
+              group by sku.ext_code2
+            union
+        	select distinct sku.ext_code2 as extCode2,sum(stal.complete_quantity) as skuQty
+			from t_wh_sta sta, t_wh_sta_line stal,t_bi_inv_sku sku
+			where stal.sta_id=sta.id and stal.sku_id=sku.id
+			and stal.quantity > 0 and (stal.complete_quantity = 0 or stal.complete_quantity is null)
+			and stal.sku_id not in (
+			  select sku.id
+  			  from t_wh_stv stv,t_bi_inv_sku sku,t_wh_st_log stLog,t_wh_sta sta
+              where stLog.Sku_Id=sku.id
+              and stLog.Stv_Id=stv.id
+              and stv.sta_id=sta.id
+              and stv.status = 10
+              and sta.id = :staId
+              group by sku.id
+              having sum(stLog.Quantity) > 0
+			)
+			and sta.id =:staId
+			group by sku.ext_code2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="CKReceive.findCkReceiveByDeliveryNo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select t.id as id from T_CK_RECEIVE t where t.delivery_no = :deliveryNo 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="CKReceive.findNikeVmiStockIn" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				     select t.delivery_no
+			             from T_CK_RECEIVE t
+			             where t.sta_id is null
+			               group by t.delivery_no
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="CKReceiveConfrim.findCKReceiveConfrim" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+                    select 
+                     c.id as id,
+                     c.status as status,
+                     c.delivery_no as deliveryNo,
+                     c.date_time as dateTime,
+                     c.from_location as fromLocation,
+                     c.to_location as toLoaction,
+                     c.upc as upc,
+                     c.quantity as quantity,
+                     c.store as store,
+                     nvl(c.carton_id,'') as cartonId 
+                     from t_ck_receive_confrim c 
+                     where c.status in(0,1) 
+                     order by c.delivery_no 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="CKTransferOut.findCKTransferOut" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			            select 
+			              t.id as id,
+			              t.delivery_no as deliveryNo,
+			              t.carton_id as cartonId,
+			              t.from_location as fromLocation,
+			              t.to_location as toLoaction,
+			              t.status as status,
+			              t.date_time as dateTime,
+			              t.store as store,
+			              t.upc as upc,
+			              t.quantity as quantity,
+			              t.inventory_status as invStatus,
+			              t.remark as remark   
+			              from t_ck_transfer_out t 
+			              where t.status in (0,1) 
+			              order by t.delivery_no 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.updateStatusByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  update t_esprit_delivery_data dd set dd.status = :status, dd.version = sysdate
+        	  where dd.sta_code = :staCode and ( dd.status = 2 or dd.status = 0)
+        	   #if($batchCode)
+        	  	and dd.batchcode =:batchCode
+        	   #end
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="ESPDelivery.updateStatusByStaCode3" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  update t_esprit_delivery_data dd set  dd.remark=:remark,dd.remark2=:remark2
+        	  where dd.sta_code = :staCode 
+        	  	and dd.batchcode =:batchCode
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.updateStatusByStaCode2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  update t_esprit_delivery_data dd set dd.remark = :batchCode,dd.remark2=:sequenceNumber
+        	  where dd.sta_code = :staCode and dd.batch_code=:batchCode2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.updateStatusByClosedStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+        	  update t_esprit_delivery_data dd set dd.status = :status, dd.version = sysdate
+        	  where dd.sta_code = :staCode and ( dd.status = 3 or dd.status = 1)
+        	  #if($batchCode)
+        	  	and dd.batchcode =:batchCode
+        	  #end
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ESPDelivery.findBatchId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select S_T_ESPRIT_DELIVERY_DATA_BATCH.nextval  seq from dual
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.findVmiAsnByuuid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.from_location as fromLocation,
+					a.to_location as toLoaction,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.status as statusString,
+					a.sta_id as sId 
+					from 
+					t_vmi_asn a where a.uuid = :uuid
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="VmiAsnDefault.findVmiAsnByOrder" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.from_location as fromLocation,
+					a.to_location as toLoaction,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.status as statusString,
+					a.sta_id as sId 
+					from 
+					t_vmi_asn a 
+					where a.order_code = :orderCode
+						  and a.status in (1,5) 
+						#if($vmicode)
+						and a.store_code = :vmicode
+						#end 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannel.findVmiDefaultTbiChannel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+            select 
+				                 t.id as id,
+				                 t.customer_id as customerId,
+				                 t.code as code,
+				                 t.name as name,
+				                 t.telephone as telephone,
+				                 t.address as address,
+				                 t.zipcode as zipcode,
+				                 t.rtn_warehouse_address as rtnWarehouseAddress,
+				                 t.is_not_display_sum as isNds,
+				                 t.sms_template as smsTemplate,
+				                 t.is_sms as isM,
+           					      t.vmi_code as vmiCode,
+           					       t.vmi_wh_source as vmiWHSource,
+        							t.shop_code as shopCode,
+									t.is_marger as isMa,
+									t.is_return_need_package as isRnp,
+									t.is_jd_ol_order as isJdoo,
+									t.status as statusString,
+									t.create_time as createTime,
+									t.last_modify_time as lastModifyTime,
+								  t.vmi_source as vmiSource,
+				                  t.asn_order_type as asnTypeString,
+				                  t.rsn_type as rsnTypeString,
+				                  t.is_vmi_ext as isVmiExt,
+				                  t.default_code as defaultCode,
+				                  t.is_def_inbound_store as isDefInboundStore    
+									from t_bi_channel t 
+				                  where t.vmi_code = :vmicode 
+				                  #if($vmisource)
+				                  		and t.vmi_source = :vmisource
+				                   #end
+				                  #if($isdef)
+				                  		and t.is_def_inbound_store = :isdef
+				                   #end
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.findVmiAsnByType1" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select a.order_code||','||a.order_code
+						from t_vmi_asn a
+						where a.store_code = :vmicode
+				        #if($vmisource)
+		                  		and a.vmi_source = :vmisource
+		                   #end
+						and a.status in (1,5)
+				          
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.findVmiAsnByType2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select distinct l.carton_no||','||a.order_code
+						from t_vmi_asn a,t_vmi_asn_line l 
+						where a.store_code = :vmicode 
+						and l.asn_id = a.id 
+				        #if($vmisource)
+		                  		and a.vmi_source = :vmisource
+		                   #end
+						and a.status in (1,5)
+				          
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.findVmiAsnList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.from_location as fromLocation,
+					a.to_location as toLoaction,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.status as statusString,
+					a.type,
+					a.sta_id as sId 
+					from 
+					t_vmi_asn a where a.order_code = :vmicode 
+                  	#if($vmisource)
+                  		and t.vmi_source = :vmisource
+                  	#end
+                  	and a.status in (1,5)
+				          
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.findVmiAsnAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.from_location as fromLocation,
+					a.to_location as toLoaction,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.status as statusString,
+					a.sta_id as sId 
+					from 
+					t_vmi_asn a 
+					where a.status in (1,5) 
+					and 	a.store_code = :vmicode 
+                  	#if($vmisource)
+                  		and t.vmi_source = :vmisource
+                  	#end          
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnLineDefault.findVmiAsnLineList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select 
+				l.id as id,
+				l.upc as upc,
+				l.qty as qty,
+				l.carton_no as cartonNo,
+				l.ext_memo as extMemo,
+				l.asn_id as aId,
+				l.status as statusString 
+				from 
+				t_vmi_asn a,t_vmi_asn_line l
+				where 
+				a.id = l.asn_id 
+				and a.order_code = :ordercode
+				#if($cartonno)
+						and l.carton_no = :cartonno 
+                 #end
+				and l.status = 1		          
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnLineDefault.findVmiAsnLineListIgnoreStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select 
+				l.id as id,
+				l.upc as upc,
+				l.qty as qty,
+				l.carton_no as cartonNo,
+				l.ext_memo as extMemo,
+				l.asn_id as aId,
+				l.status as statusString 
+				from 
+				t_vmi_asn a,t_vmi_asn_line l
+				where 
+				a.id = l.asn_id 
+				and a.order_code = :ordercode
+				and l.status = 10
+				#if($cartonno)
+						and l.carton_no = :cartonno 
+                #end		          
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtoDefault.findVmiRtoByUuid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.sta_id as sId 
+					from 
+					t_vmi_rto a where a.uuid = :uuid
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtoDefault.findVmiRtoByOrder" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.status as intStatus,
+					a.sta_id as staId 
+					from 
+					t_vmi_rto a 
+					where a.order_code = :orderCode
+						  and a.status = 1
+						#if($vmicode)
+						and a.store_code = :vmicode
+						#end 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VmiRtoDefault.initPumaToOrderCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.order_code as orderCode from 
+					t_vmi_rto a 
+					where a.store_code='puma' and a.status=1 and a.sta_id is null order by a.id desc
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VmiRtoDefault.findPumaVmiRtoByOrder" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.status as intStatus,
+					a.sta_id as staId 
+					from 
+					t_vmi_rto a 
+					where a.order_code = :orderCode
+						  and a.status = 1
+						#if($vmicode)
+						and a.store_code = :vmicode
+						#end 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VmiRtoDefault.findVmiRtoListByPage" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.status as intStatus,
+					a.sta_id as staId,
+					sta.code as staCode 
+					from 
+					t_vmi_rto a left join t_wh_sta sta on a.sta_id = sta.id
+					where 1 = 1
+						#if($startDate)
+							and a.create_time >= :startDate
+						#end
+						#if($endDate)
+						    and a.create_time <= :endDate
+						#end
+						#if($orderCode)
+							and a.order_code = :orderCode
+						#end
+						#if($intStatus)
+						  and a.status = :intStatus
+						#end
+						and a.store_code in (
+						#foreach($code in $vmiCodeList)
+		                 '$code',
+		                #end
+		                '-1')
+		             order by a.create_time desc
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtoLineDefault.findRtoLineListByRtoId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					rl.id as id,
+					rl.upc as upc,
+					sku.code as skuCode,
+					sku.bar_code as skuBarcode,
+          			sku.name as skuName,
+          			rl.qty as qty,
+                	rl.carton_no as cartonNo,
+                	rl.ext_memo as extMemo,
+                	rl.line_no as lineNo,
+                	rl.consignee_key as consigneeKey,
+                	rl.original_qty as originalQty,
+                	rl.uom as uom,
+                	rl.inv_status as invStatus
+					from t_vmi_rto_line rl left join t_bi_inv_sku sku on rl.upc = sku.ext_code2
+					where rl.rto_id = :rtoId
+					
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtoLineDefault.findRtoLinePageByRtoId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+						rl.id as id,
+						rl.upc as upc,
+						sku.code as skuCode,
+						sku.bar_code as skuBarcode,
+	          			sku.name as skuName,
+	          			rl.qty as qty,
+	                	rl.carton_no as cartonNo,
+	                	rl.ext_memo as extMemo,
+	                	rl.line_no as lineNo,
+	                	rl.consignee_key as consigneeKey,
+	                	rl.original_qty as originalQty,
+	                	rl.uom as uom,
+	                	rl.inv_status as invStatus,
+	                  	r.order_code as slipCode
+						from t_vmi_rto_line rl 
+	               inner join t_vmi_rto r on rl.rto_id=r.id
+	               left join t_bi_inv_sku sku on rl.upc = sku.ext_code2
+					where rl.rto_id = :rtoId
+					
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VmiRtoLineDefault.findRtoLineListByRtoIdAndOrderCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select rl.upc as upc,sum(rl.qty) as num from t_vmi_rto_line rl left join t_vmi_rto r on r.id=rl.rto_id 
+					where r.order_code=:orderCode and r.status=1 and r.store_code=:storeCode group by rl.upc
+					
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="StockTransApplication.findVmiAsnBySlipCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select count(*) 
+				from t_wh_sta sta
+				where 
+				sta.slip_code = :ordercode
+				and sta.type = :type  
+				and sta.owner = :owen         
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnLineDefault.updateVmiAsnLineStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					update t_vmi_asn_line l set l.status = :status where l.asn_id = :asnid  
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRsnDefault.updateVmiRsnStatusByVmiAsn" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+						update t_vmi_rsn t 
+						set t.finish_time = sysdate,t.status = :status 
+						where 
+						t.order_code = :ordercode 
+						and t.store_code = :vmicode 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnLineDefault.findVmiAsnLineErrorCount" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+						select 
+						count(*)
+						from t_vmi_asn_line l
+						where l.asn_id = :asnid 
+						and l.status <> 10 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnLineDefault.findVmiAsnLineOkCount" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+						select 
+						count(*)
+						from t_vmi_asn_line l
+						where l.asn_id = :asnid 
+						and l.status = 10 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.updateVmiAsnStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				update t_vmi_asn t set t.finish_time = sysdate,t.status = :status  where t.id = :id
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannel.findVmiDefaultTbiChannelByOwen" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+            select 
+				                 t.id as id,
+				                 t.customer_id as customerId,
+				                 t.code as code,
+				                 t.name as name,
+				                 t.telephone as telephone,
+				                 t.address as address,
+				                 t.zipcode as zipcode,
+				                 t.rtn_warehouse_address as rtnWarehouseAddress,
+				                 t.is_not_display_sum as isNds,
+				                 t.sms_template as smsTemplate,
+				                 t.is_sms as isM,
+           					     t.vmi_code as vmiCode,
+           					     t.vmi_wh_source as vmiWHSource,
+       							 t.shop_code as shopCode,
+							 	t.is_marger as isMa,
+								t.is_return_need_package as isRnp,
+								t.is_jd_ol_order as isJdoo,
+								t.status as statusString,
+								t.create_time as createTime,
+								t.last_modify_time as lastModifyTime,
+								  t.vmi_source as vmiSource,
+				                  t.asn_order_type as asnTypeString,
+				                  t.rsn_type as rsnTypeString,
+				                  t.op_type as opType,
+				                  t.is_vmi_ext as isVmiExt,
+				                  t.default_code as defaultCode,
+				                  t.is_pda as isPda         
+									from t_bi_channel t 
+				                  where t.code = :owen 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="StockTransTxLog.findStaLogByStvId2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				  select 
+                  log.invs_tatus_id as invStatus,
+                  log.location_id as locationCode,
+                  log.sku_id as skuCode,
+                  sum(log.quantity) as inQty 
+                  from 
+                  t_wh_sta sta,
+                  t_wh_st_log log
+                  where 1=1
+                  and sta.code=log.sta_code
+                  and sta.id=:staid
+                  group by log.invs_tatus_id,log.location_id,log.sku_id
+                  order by log.sku_id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	
+	<bean id="StockTransTxLog.findStaLogByStvId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						log.invs_tatus_id as invStatus,
+						log.location_id as locationCode,
+						log.sku_id as skuCode,
+						sum(log.quantity) as inQty 
+						from 
+						t_wh_stv stv,
+						t_wh_st_log log
+						where 1=1 
+						and stv.id = :stvid 
+						and log.stv_id = stv.id 
+						group by log.invs_tatus_id,log.location_id,log.sku_id
+						order by log.sku_id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StockTransTxLog.findLogByStvId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select      
+		            log.invs_tatus_id as statusId, 
+		            log.location_id,
+		            log.sku_id,
+		              log.owner,
+		                  log.quantity,
+		                  log.tran_time,
+		                  log.wh_id whId,
+		                  log.tran_time as tranTime,
+		                  log.batch_code,
+		                case when us.is_forsale = 1 and se.op_mode = 1 then 1 else 0 end as marketAbility
+		            from 
+		            t_wh_st_log log
+		            left join t_bi_warehouse se  on se.ou_id = log.wh_id
+		            left join t_wh_inventory_status us on us.id = log.invs_tatus_id
+		            where 
+		             log.stv_id = :stvid 
+		             and log.tran_time >sysdate -120
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRsnDefault.findVmiRsnAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.carton_no as cartonNo,
+								t.from_location as fromLocation,
+								t.to_location as toLoaction,
+								t.receive_date as receiveDate,
+								t.order_status as orderStatus,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount,
+								t.type as type 
+								from t_vmi_rsn t
+								where t.status = 1
+								and (t.is_vmi_ext is null or t.is_vmi_ext <> 1)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRsnDefault.findVmiRsnAllExt" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.carton_no as cartonNo,
+								t.from_location as fromLocation,
+								t.to_location as toLoaction,
+								t.receive_date as receiveDate,
+								t.order_status as orderStatus,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount,
+								t.type 
+								from t_vmi_rsn t
+								where t.status = 1
+								and t.is_vmi_ext = 1
+								and t.store_code = :vmicode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRsnLineDefault.findVmiRsnLineByRsnId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select 
+								l.id as id,
+								l.upc as upc,
+								l.qty as qty,
+								l.carton_no as cartonNo,
+								l.line_seq as lineSeq,
+								l.carton_status as cartonStatus,
+								l.ext_memo as extMemo 
+								from t_vmi_rsn_line l
+								where l.rsn_id = :rsnid
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VmiAsnLineDefault.findExtMemoByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+                                select 
+								l.ext_memo as extMemo 
+								from t_vmi_asn_line l,t_vmi_asn asn
+								where l.asn_id = asn.id and l.upc=:upc
+								and asn.sta_id=:staId
+								
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="VmiAsnDefault.findVmiAsnStoreCodeVmiSource" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select distinct 
+			        a.store_code as storeCode,
+			        a.vmi_source as vmiSource 
+					from 
+					t_vmi_asn a 
+					where a.status in (1,5)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiTfxDefault.findVmiTfxAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        			select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.from_location as fromLocation,
+								t.to_location as toLoaction,
+								t.return_date as returnDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount 
+								from t_vmi_tfx t
+								where t.status = 1
+								and (t.is_vmi_ext is null or t.is_vmi_ext <> 1)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiTfxLineDefault.findVmiTfxLineByTfxId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+   						select 
+								l.id as id,
+								l.upc as upc,
+								l.qty as qty,
+								l.carton_no as cartonNo,
+								l.line_seq as lineSeq,
+								l.ext_memo as extMemo,
+                				l.inv_status as invStatus 
+								from t_vmi_tfx_line l
+								where l.tfx_id = :tfxid
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StockTransApplication.findVMIRDSEQ" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select S_VMI_SLIPCODE.Nextval from dual 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtwDefault.findVmiRtwAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        		select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.return_date as returnDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount 
+								from t_vmi_rtw t
+								where t.status = 1
+								and (t.is_vmi_ext is null or t.is_vmi_ext <> 1)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtwDefault.findVmiRtwAllExt" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        		select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.return_date as returnDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount 
+								from t_vmi_rtw t
+								where t.status = 1
+								and t.is_vmi_ext = 1
+								and t.store_code = :vmicode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtwDefault.findPumaVmiRtwAllExt" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        		select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.return_date as returnDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount 
+								from t_vmi_rtw t
+								where t.status = 1
+								and t.is_vmi_ext = 1
+								and t.store_code = :vmicode
+								and not exists(select 1 from t_vmi_rtw_line tl where tl.rtw_id=t.id and (tl.line_no is null or tl.line_no=''))
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtwDefault.findPumaNotHasLineNoVmiRtwAllExt" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        		select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.return_date as returnDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount 
+								from t_vmi_rtw t
+								where t.status = 1
+								and t.is_vmi_ext = 1
+								and t.store_code = :vmicode
+								and exists(select 1 from t_vmi_rtw_line tl where tl.rtw_id=t.id and (tl.line_no is null or tl.line_no=''))
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtwLineDefault.findVmiRtwLineByRtwId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+								l.id as id,
+								l.upc as upc,
+								l.qty as qty,
+								l.carton_no as cartonNo,
+								l.line_seq as lineSeq,
+								l.ext_memo as extMemo,
+                				l.inv_status as invStatus,
+                				l.line_no as lineNo,
+                				l.consignee_key as  consigneeKey,
+                				l.original_qty as originalQty,
+                				l.uom as uom 
+								from t_vmi_rtw_line l
+								where l.rtw_id = :rtwid
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.findVmiAsnErrorAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select 
+					a.id as id,
+					a.uuid as uuid,
+					a.create_time as createTime,
+					a.finish_time as finishTime,
+					a.store_code as storeCode,
+					a.vmi_source as vmiSource,
+					a.order_code as orderCode,
+					a.from_location as fromLocation,
+					a.to_location as toLoaction,
+					a.arrive_date as arriveDate,
+					a.ext_memo as extMemo,
+					a.wh_code as whCode,
+					a.status as statusString,
+					a.sta_id as sId 
+					from 
+					t_vmi_asn a 
+					where a.status = 1 
+					and a.create_time <= sysdate - 1 
+					order by a.store_code     
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.findVmiAsnHasFinishedCount" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					select count(1)
+					from t_vmi_asn a 
+					where a.status = 10 
+					and a.store_code = :vmicode
+					and a.order_code = :orderCode
+    
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnDefault.findGucciVmiAsnNoSku" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+          <![CDATA[
+					select t.upc from 
+					    (select distinct(l.upc) from t_vmi_asn_line l 
+					     where l.asn_id in( select g.id from t_vmi_asn g 
+					                        where g.store_code=:vmicode 
+					                             and g.status in (1,5) 
+					                             and g.create_time>sysdate-7 
+					                             and g.create_time<= sysdate-numtodsinterval(6,'hour'))) t
+					where not exists(select sku.id from t_bi_inv_sku sku where t.upc=sku.ext_code2 )
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRsnDefault.findVmiRsnErrorAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.carton_no as cartonNo,
+								t.from_location as fromLocation,
+								t.to_location as toLoaction,
+								t.receive_date as receiveDate,
+								t.order_status as orderStatus,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount 
+								from t_vmi_rsn t
+								where t.status = 20 or 
+								(t.status = 1 and t.create_time <= sysdate - 1)  
+								order by t.store_code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiTfxDefault.findVmiTfxErrorAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        			select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.from_location as fromLocation,
+								t.to_location as toLoaction,
+								t.return_date as returnDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount 
+								from t_vmi_tfx t
+								where t.status = 20 or 
+								(t.status = 1 and t.create_time <= sysdate - 1)  
+								order by t.store_code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiCfgOrderCode.findCfgOrderCodeByVmiSourceType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+    		     select  
+				          t.id as id,
+				          t.vmi_source as vmiSource,
+				          t.seq_category as seqCategory,
+				          t.min_length as minLength,
+				          t.fill_char as fillChar,
+				          t.px_code as pxCode,
+				          t.type as typeString,
+				          t.is_default as isDefault 
+				          from T_VMI_CFG_ORDER_CODE t
+				          where t.vmi_source =  :vmisource 
+				          and t.type = :type 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.selectWhCodeByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+             		 select 
+			              t.code
+			              from t_wh_sta sta,
+			              t_au_operation_unit t
+			              where sta.id = :id  
+			              and sta.main_wh_id = t.id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAdjDefault.findVmiAdjAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        		select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.adj_date as adjDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount,
+								t.adj_reason as adjReason  
+								from t_vmi_adj t
+								where t.status = 1 
+								and (t.is_vmi_ext is null or t.is_vmi_ext <> 1)
+								and (t.store_code <> 'SPEEDO')
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAdjDefault.findVmiAdjAllExt" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        		select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.adj_date as adjDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount,
+								t.adj_reason as adjReason,
+								t.INV_CK_ID as invckId  
+								from t_vmi_adj t
+								where t.status = 1 
+								and t.store_code = :vmicode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="VmiAdjLineDefault.findVmiAdjLineByAdjId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+             		select 
+								l.id as id,
+								l.upc as upc,
+								l.qty as qty,
+								l.ext_memo as extMemo,
+				                l.inv_status as invStatus,
+				                l.ext_memo as extMemo  
+								from t_vmi_adj_line l
+								where l.adj_id = :adjid 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="VmiAdjDefault.findVmiAdjErrorAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select 
+									t.id as id,
+									t.store_code as storeCode,
+									t.vmi_source as vmiSource,
+									t.create_time as createTime,
+									t.finish_time as finishTime,
+									t.order_code as orderCode,
+									t.adj_date as adjDate,
+									t.ext_memo as extMemo,
+									t.wh_code as whCode,
+									t.status as statusString,
+									t.sta_id as sId,
+									t.error_count as errorCount 
+									from t_vmi_adj t 
+									where t.status = 20 or 
+									(t.status = 1 and t.create_time <= sysdate - 1)  
+									order by t.store_code 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiRtwDefault.findVmiRtwErrorAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select 
+									t.id as id,
+									t.store_code as storeCode,
+									t.vmi_source as vmiSource,
+									t.create_time as createTime,
+									t.finish_time as finishTime,
+									t.order_code as orderCode,
+									t.ext_memo as extMemo,
+									t.wh_code as whCode,
+									t.status as statusString,
+									t.sta_id as sId,
+									t.error_count as errorCount 
+									from t_vmi_rtw t 
+									where t.status = 20 or 
+									(t.status = 1 and t.create_time <= sysdate - 1)  
+									order by t.store_code 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiInventoryDefault.insertTotalInvExt" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						insert into t_vmi_inventory inv (id,create_time,version,store_code,vmi_source,upc,qty,block_qty,batch_no,wh_code,status,error_count,is_vmi_ext)
+						select s_t_vmi_inventory.nextval,:datetime,0,c.vmi_code,c.vmi_source,sku.ext_code2,invs.QTY,invs.LOCK_QTY+invs.occupied_qty,:batchNo,ou.code,1,0,1
+						from v_wh_inventory_summary invs left join
+							t_bi_inv_sku sku on invs.SKU_ID=sku.id left join
+							t_bi_channel c  on invs.OWNER=c.code  left join
+             				t_au_operation_unit ou on invs.WH_OUID=ou.id
+							where c.vmi_code=:vmiCode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiInventoryDefault.findTotalInvAllExt" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+                				t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+               					t.upc as upc,
+                				t.qty as qty,
+                				t.block_qty as blockQty,
+                				t.batch_no as batchNo,
+								t.ext_memo as extMemo,
+								t.status as statusString,
+								t.inv_status as invStatus,
+								t.error_count as errorCount ,
+								t.wh_code as whCode
+							from t_vmi_inventory t
+								where t.status = 1
+								and t.is_vmi_ext = 1
+								and t.store_code = :vmiCode
+                				and t.create_time = :datetime
+                				#if($batchNo)
+                    				and t.batch_no = :batchNo
+               					#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="AFInventoryCompareReport.findAFInventoryCompareData" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+	        <![CDATA[
+			  	SELECT af.ID AS id, 
+	                 UPC AS UPC, 
+	                 BAOZUN_QTY AS bzQty, 
+	                 CREATE_DATE AS createDate, 
+	                 DIFFERENCE_QTY AS differenceQty, 
+	                 LIFENG_QTY AS lfQty,
+	                 INVENTORY_STATUS AS invStatus,
+	                 ts.name AS invStatusName
+			        FROM AF_INVENTORY_COMPARE_REPORT af
+	            LEFT JOIN T_WH_INVENTORY_STATUS ts
+	            ON af.inventory_status = ts.id
+		        where status = 1 and CREATE_DATE >=:today
+	          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="NikeStockReceiveData.updateToDoing" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				update T_NIKE_STOCK_RECEIVE_DATA d set d.status = 2 where d.status = 1
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="NikeStockReceiveData.updateFinished" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				update T_NIKE_STOCK_RECEIVE_DATA d set d.status = 10 where d.status = 2
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransApplication.findNikeAsnStaByRsnPo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select s.sta_id ID,s.sap_carton MEMO
+				from  t_nike_vmi_stockin s
+				where s.sap_carton in (select d.sap_carton from T_NIKE_STOCK_RECEIVE_DATA d where d.status = 2)
+				group by s.sta_id,s.sap_carton
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="AFInventoryCompareReport.updateAFInvComNorStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				update AF_INVENTORY_COMPARE_REPORT
+					   set status = :status
+					 where status = 1 and CREATE_DATE >=:today
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StaLine.findTotalQtyByStaIdAndSkuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select
+						sum(l.quantity) as quantity,
+						sum(l.complete_quantity) as completeQuantity 
+						from 
+						t_wh_sta_line l
+						where
+						l.sta_id = :staid 
+						and sku_id = :skuid 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiAsnLineDefault.findVmiAsnLineByOrdercodeCartonnoUpc" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select 
+				l.id as id,
+				l.upc as upc,
+				l.qty as qty,
+				l.carton_no as cartonNo,
+				l.ext_memo as extMemo,
+				l.asn_id as aId,
+				l.status as statusString 
+				from 
+				t_vmi_asn a,t_vmi_asn_line l
+				where 
+				a.id = l.asn_id 
+				and a.order_code = :ordercode 
+				and l.carton_no = :cartonno  
+		        and l.upc = :upc  
+				and l.status = 1		 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannel.getBiChannelByVmiCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select 
+							t.code
+							from t_bi_channel t where t.vmi_code = :vmicode
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannel.getBiChannelByDefaultCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select 
+						t.id as id,
+						t.code as code,
+						t.name as name,
+						t.vmi_code as vmiCode,
+						t.vmi_source as vmiSource,
+						t.default_code as defaultCode 
+						from t_bi_channel t 
+						where 
+						t.default_code = :code 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Inventory.findVmiInventoryByOwner" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						distinct 
+						i.sku_id as skuId,
+						i.inv_owner as invOwner  
+						from t_wh_sku_inventory i 
+						where 
+						i.inv_owner in (
+						#foreach($code in $owner)
+		                 '$code',
+		                #end
+		                '-1')
+						and i.quantity > 0 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Inventory.findVmiInventoryQtyAndBlockQty" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+					nvl(qty.qty,0) || ',' ||nvl(bqty.bqty,0)
+					from 
+					(
+					  select 
+					  sum(t.quantity) as qty
+					  from 
+					  t_wh_sku_inventory t 
+					  where 
+					  t.batch_code = :batchCode 
+					  and t.sku_id = :skuid  
+					  and t.inv_owner = :owner 
+					  and t.status_id = :status  
+					  and t.occupation_code is null 
+					  and (t.is_occupied = 0 or t.is_occupied is null) 
+					  and t.quantity > 0
+					) qty,
+					(
+					  select 
+					  sum(t.quantity) as bqty
+					  from 
+					  t_wh_sku_inventory t 
+					  where 
+					  t.batch_code = :batchCode 
+					  and t.sku_id = :skuid  
+					  and t.inv_owner = :owner 
+					  and t.status_id = :status  
+					  and t.occupation_code is not null 
+					  and t.is_occupied = 1
+					  and t.quantity > 0
+					) bqty
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiInventoryDefault.vmiInventoryToHubList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select 
+						t.id as id,
+						t.create_time as createTime,
+						t.finish_time as finishTime,
+						t.store_code as storeCode,
+						t.vmi_source as vmiSource,
+						t.upc as upc,
+						t.qty as qty,
+						t.block_qty as blockQty,
+						t.batch_no as batchNo,
+						t.inv_status as invStatus,
+						t.ext_memo as extMemo,
+						t.wh_code as whCode,
+						t.on_hold_qty as onHoldQty   
+						from t_vmi_inventory t 
+						where 
+						t.store_code = :vmiCode  
+						and t.status = 1 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannel.findBiChannelByDefaultCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+				select 
+							t.vmi_code
+							from 
+							t_bi_channel t 
+							where 
+							t.default_code = :code 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiOutBoundDefault.findVmiOutBoundByVmiCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						t.id as id,
+						t.order_code as orderCode,
+						t.customer_code as customerCode,
+						t.customer_ref as customerRef,
+						t.order_time as orderTime,
+						t.outbound_time as outBoundTime,
+						t.ext_memo as extMemo,
+						t.store_code as storeCode
+						from 
+						t_vmi_outbound t 
+						where 
+						t.store_code in (
+						#foreach($code in $vmicode)
+		                 '$code',
+		                #end
+		                '-1') 
+						and t.status = 1 
+						order by t.outbound_time asc
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VmiOutBoundDefault.findVmiOutBoundByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						t.id as id,
+						t.order_code as orderCode,
+						t.customer_code as customerCode,
+						t.customer_ref as customerRef,
+						t.order_time as orderTime,
+						t.outbound_time as outBoundTime,
+						t.ext_memo as extMemo,
+						t.store_code as storeCode
+						from 
+						t_vmi_outbound t 
+						where t.sta_id=:staId
+						
+						
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VmiOutBoundLineDefault.findVmiOutBoundLineByObid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select
+					t.id as id,
+					t.qty as qty,
+					t.upc as upc,
+					t.ext_memo as extMemo
+					from
+					t_vmi_outbound_line t
+					where 
+					t.ob_id = :id 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="VmiInBoundDefault.findVmiInBoundByVmiCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						t.id as id,
+						t.order_code as orderCode,
+						t.customer_code as customerCode,
+						t.customer_ref as customerRef,
+						t.order_time as orderTime,
+						t.inbound_time as inBoundTime,
+						t.ext_memo as extMemo,
+						t.store_code as storeCode
+						from 
+						t_vmi_inbound t 
+						where 
+						t.store_code in (
+						#foreach($code in $vmicode)
+		                 '$code',
+		                #end
+		                '-1') 
+						and t.status = 1 
+						order by t.inbound_time asc
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="VmiInBoundLineDefault.findVmiInBoundLineByIbid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select
+					t.id as id,
+					t.qty as qty,
+					t.upc as upc,
+					t.ext_memo as extMemo
+					from
+					t_vmi_inbound_line t
+					where 
+					t.ib_id = :id 
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Inventory.findVmiInventoryByOwnerToJNJ" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						distinct i.batch_code as batchCode,
+						i.sku_id as skuId,
+						i.inv_owner as invOwner,
+						i.status_id as inventoryStatusId,
+						i.ou_id as whOuId
+						from t_wh_sku_inventory i 
+						where 
+						i.inv_owner in (
+						#foreach($code in $owner)
+		                 '$code',
+		                #end
+		                '-1')
+						and i.quantity > 0 
+						order by i.status_id
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<!-- 根据店铺code List查询出ad全量库存 -->
+		<bean id="Inventory.findAdidasTotalInventoryByCodes" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+									SELECT
+					U .code as skuCode,
+					U .bar_code AS skuBarCode,
+					SUM (y.quantity) AS quantity,
+					s. NAME AS inventoryProperty
+				FROM
+					t_wh_sku_inventory y
+				LEFT JOIN t_bi_inv_sku U ON U . ID = y.sku_id
+				LEFT JOIN t_au_operation_unit op ON y.ou_id =op.ID
+				LEFT JOIN t_wh_inventory_status s ON s. ID = y.status_id
+				WHERE
+					y.inv_owner  in (
+							#foreach($c in $codes)
+								                 '$c',
+								                #end
+								                '-1')
+				AND y.quantity != 0
+				AND op.id=:ouId
+				GROUP BY
+					U .bar_code,
+					U .code,
+					s. NAME
+				ORDER BY
+					skuCode
+          ]]>
+			</value>
+		</constructor-arg>
+		</bean>
+			<!-- 根据店铺code List查询出reebok全量库存 -->
+		<bean id="Inventory.findReebokTotalInventoryByCodes" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+									SELECT
+					U .code as skuCode,
+					U .bar_code AS skuBarCode,
+					SUM (y.quantity) AS quantity,
+					s. NAME AS inventoryProperty,
+					op.code  AS whCode
+				FROM
+					t_wh_sku_inventory y
+				LEFT JOIN t_bi_inv_sku U ON U . ID = y.sku_id
+				LEFT JOIN t_au_operation_unit op ON y.ou_id =op.ID
+				LEFT JOIN t_wh_inventory_status s ON s. ID = y.status_id
+				WHERE
+					y.inv_owner  in (
+							#foreach($c in $codes)
+								                 '$c',
+								                #end
+								                '-1')
+				AND y.quantity != 0
+				AND op.id  in (
+							#foreach($c in $ouIds)
+								                 '$c',
+								                #end
+								                '-1')
+				GROUP BY
+					U .bar_code,
+					U .code,
+					s. NAME,
+					op.code 
+				ORDER BY
+					skuCode
+          ]]>
+			</value>
+	</constructor-arg>
+	</bean>
+	
+	
+			<!-- 根据店铺code List查询出ad销售库存 -->
+		<bean id="Inventory.findAdidasSalesInventoryByCodes" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+							select nvl(inv.avail_qty,0) - nvl(oqty.qty,0) quantity,sku.code as skuBarCode,'良品' as inventoryProperty
+									from (select inv.sku_id,sum(inv.quantity) as avail_qty
+			from t_wh_sku_inventory inv,
+			     T_BI_WAREHOUSE wh,
+			     t_bi_inv_sku sku,
+			     t_wh_inventory_status st
+			where wh.ou_id = inv.ou_id
+			      and inv.inv_owner  in (
+							#foreach($c in $codes)
+								                 '$c',
+								                #end
+								                '-1')
+			      and wh.op_mode = 1
+			      and st.id = inv.status_id
+			      and inv.quantity > 0
+			      and inv.sku_id = sku.id
+			      and (sku.store_mode != 33 or  inv.expire_date - sku.warning_date > sysdate)
+			      and st.is_forsale = 1
+			      and inv.occupation_code is null
+			      and wh.ou_id=:ouId
+			group by inv.sku_id
+			)
+			             inv
+									     left join (select sku_id,sum(qty) as qty
+			from(
+			  select  stal.sku_id,sum(stal.quantity) as qty
+			  from t_wh_sta sta, t_wh_sta_line stal,T_BI_WAREHOUSE wh,t_wh_inventory_status sts
+			  where sta.id = stal.sta_id
+			    and sta.owner in (
+							#foreach($c in $codes)
+								                 '$c',
+								                #end
+								                '-1')
+			    and  stal.inv_status_id = sts.id(+)
+			    and (sts.is_forsale = 1 or sts.is_forsale is null)
+			    and wh.ou_id = sta.main_wh_id
+			    and (sta.status = 1 or sta.status = 20 or sta.status = 25)
+			    and sta.is_need_occupied = 1
+			    and sta.create_time >= sysdate - 90
+			    and wh.ou_id=:ouId
+			  group by stal.sku_id,wh.is_share) tp
+			group by sku_id)
+			                  oqty
+									     on inv.sku_id = oqty.sku_id
+									     inner join t_bi_inv_sku sku on sku.id = inv.sku_id
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<!-- 根据店铺code List查询出全量销售库存  通用-->
+		<bean id="Inventory.findAdidasSalesInventoryByCodes2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select nvl(inv.avail_qty,0) - nvl(oqty.qty,0) quantity,sku.code as skuBarCode,'良品' as inventoryProperty,o.code as whCode,decode(sku.store_mode,'33','1','0') isValid 
+									from (select inv.sku_id,sum(inv.quantity) as avail_qty,wh.ou_id
+			from t_wh_sku_inventory inv,
+			     T_BI_WAREHOUSE wh,
+			     t_bi_inv_sku sku,
+			     t_wh_inventory_status st
+			where wh.ou_id = inv.ou_id
+			      and inv.inv_owner  in (
+							#foreach($c in $codes)
+								                 '$c',
+								                #end
+								                '-1')
+			      and wh.op_mode = 1
+			      and st.id = inv.status_id
+			      and inv.quantity > 0
+			      and inv.sku_id = sku.id
+			      and (sku.store_mode != 33 or  inv.expire_date - sku.warning_date > sysdate)
+			      and st.is_forsale = 1
+			      and inv.occupation_code is null
+			      and wh.ou_id  in (
+							#foreach($c in $ouIds)
+								                 '$c',
+								                #end
+								                '-1')
+			group by inv.sku_id,wh.ou_id
+			)
+			             inv
+									     left join (select sku_id,sum(qty) as qty,ou_id
+			from(
+			  select  stal.sku_id,sum(stal.quantity) as qty,wh.ou_id
+			  from t_wh_sta sta, t_wh_sta_line stal,T_BI_WAREHOUSE wh,t_wh_inventory_status sts
+			  where sta.id = stal.sta_id
+			    and sta.owner in (
+							#foreach($c in $codes)
+								                 '$c',
+								                #end
+								                '-1')
+			    and  stal.inv_status_id = sts.id(+)
+			    and (sts.is_forsale = 1 or sts.is_forsale is null)
+			    and wh.ou_id = sta.main_wh_id
+			    and (sta.status = 1 or sta.status = 20 or sta.status = 25)
+			    and sta.is_need_occupied = 1
+			    and sta.create_time >= sysdate - 90
+			    and wh.ou_id  in (
+							#foreach($c in $ouIds)
+								                 '$c',
+								                #end
+								                '-1')
+			  group by stal.sku_id,wh.is_share,wh.ou_id) tp
+			group by sku_id,ou_id)
+			                  oqty
+									     on inv.sku_id = oqty.sku_id
+									     and inv.ou_id=oqty.ou_id
+									     inner join t_bi_inv_sku sku on sku.id = inv.sku_id
+									     inner join t_au_operation_unit o  on inv.ou_id=o.id
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	
+		<!-- 根据店铺code List查询出reebok销售库存 -->
+		<bean id="Inventory.findReebokSalesInventoryByCodes" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select nvl(inv.avail_qty,0) - nvl(oqty.qty,0) quantity,sku.bar_code as skuBarCode,'良品' as inventoryProperty,o.code as whCode 
+									from (select inv.sku_id,sum(inv.quantity) as avail_qty,wh.ou_id
+			from t_wh_sku_inventory inv,
+			     T_BI_WAREHOUSE wh,
+			     t_bi_inv_sku sku,
+			     t_wh_inventory_status st
+			where wh.ou_id = inv.ou_id
+			      and inv.inv_owner  in (
+							#foreach($c in $codes)
+								                 '$c',
+								                #end
+								                '-1')
+			      and wh.op_mode = 1
+			      and st.id = inv.status_id
+			      and inv.quantity > 0
+			      and inv.sku_id = sku.id
+			      and (sku.store_mode != 33 or  inv.expire_date - sku.warning_date > sysdate)
+			      and st.is_forsale = 1
+			      and inv.occupation_code is null
+			      and wh.ou_id  in (
+							#foreach($c in $ouIds)
+								                 '$c',
+								                #end
+								                '-1')
+			group by inv.sku_id,wh.ou_id
+			)
+			             inv
+									     left join (select sku_id,sum(qty) as qty,ou_id
+			from(
+			  select  stal.sku_id,sum(stal.quantity) as qty,wh.ou_id
+			  from t_wh_sta sta, t_wh_sta_line stal,T_BI_WAREHOUSE wh,t_wh_inventory_status sts
+			  where sta.id = stal.sta_id
+			    and sta.owner in (
+							#foreach($c in $codes)
+								                 '$c',
+								                #end
+								                '-1')
+			    and  stal.inv_status_id = sts.id(+)
+			    and (sts.is_forsale = 1 or sts.is_forsale is null)
+			    and wh.ou_id = sta.main_wh_id
+			    and (sta.status = 1 or sta.status = 20 or sta.status = 25)
+			    and sta.is_need_occupied = 1
+			    and sta.create_time >= sysdate - 90
+			    and wh.ou_id  in (
+							#foreach($c in $ouIds)
+								                 '$c',
+								                #end
+								                '-1')
+			  group by stal.sku_id,wh.is_share,wh.ou_id) tp
+			group by sku_id,ou_id)
+			                  oqty
+									     on inv.sku_id = oqty.sku_id
+									     and inv.ou_id=oqty.ou_id
+									     inner join t_bi_inv_sku sku on sku.id = inv.sku_id
+									     inner join t_au_operation_unit o  on inv.ou_id=o.id
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+		<bean id="Inventory.findVmiInventoryByOwnerToSPEEDO" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						distinct
+						i.sku_id as skuId
+						from t_wh_sku_inventory i 
+						where 
+						i.inv_owner in (
+						#foreach($code in $owner)
+		                 '$code',
+		                #end
+		                '-1')
+						and i.quantity > 0 
+						
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+  <bean id="Inventory.findVmiInventoryByOwnerToPaulFrank" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						distinct
+						i.sku_id as skuId
+						from t_wh_sku_inventory i 
+						where 
+						i.inv_owner in (
+						#foreach($code in $owner)
+		                 '$code',
+		                #end
+		                '-1')
+						and i.quantity > 0 
+						
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransApplication.findNotExecuteReturnOrder" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select sta.code code,sta.slip_code refSlipCode from t_wh_sta sta where sta.type in (102,101) and sta.status in (4,10) and sta.code=:staCode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Inventory.findVmiInventoryQtyAndBlockQtyAndOnHoldQty" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						nvl(qty.qty,0) || ',' ||nvl(bqty.bqty,0) || ',' ||nvl (bbqty.bbqty,0) 
+						from 
+						(
+						  select 
+						  sum(t.quantity) as qty
+						  from 
+						  t_wh_sku_inventory t,
+	                     T_WH_INVENTORY_STATUS i  
+						  where 1=1
+						  and t.sku_id = :skuid   
+						  and t.inv_owner = :owner 
+						  and t.status_id = i.id 
+	       				  and i.name = '良品'    
+						  and t.occupation_code is null 
+						  and (t.is_occupied = 0 or t.is_occupied is null) 
+						  and t.quantity > 0
+						) qty,
+						(
+						  select 
+						  sum(t.quantity) as bqty
+						  from 
+						  t_wh_sku_inventory t,
+	     		         T_WH_INVENTORY_STATUS i  
+						  where 1=1 
+						  and t.sku_id = :skuid   
+						  and t.inv_owner = :owner  
+						  and t.status_id = i.id 
+	    			      and i.name = '良品'    
+						  and t.occupation_code is not null 
+						  and t.is_occupied = 1
+						  and t.quantity > 0
+						) bqty,
+	 			         (
+						  select 
+						  sum(t.quantity) as bbqty
+						  from 
+						  t_wh_sku_inventory t,
+			            T_WH_INVENTORY_STATUS i  
+						  where 1=1 
+						  and t.sku_id = :skuid   
+						  and t.inv_owner = :owner 
+						  and t.status_id = i.id 
+				          and i.name <> '良品' 
+						  and t.quantity > 0
+						) bbqty
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="Inventory.findVmiInventoryQtyAndBlockQtyAndOnHoldQtySPEEDO" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						nvl(qty.qty,0) || ',' ||nvl(bqty.bqty,0) || ',' ||nvl (bbqty.bbqty,0) 
+						from 
+						(
+						  select 
+						  sum(t.quantity) as qty
+						  from 
+						  t_wh_sku_inventory t,
+	                     T_WH_INVENTORY_STATUS i  
+						  where 1=1
+						  and t.sku_id = :skuid   
+						  and t.status_id = i.id 
+	       				  and i.name = '良品'    
+						  and t.quantity > 0
+						) qty,
+						(
+						  select 
+						  sum(t.quantity) as bqty
+						  from 
+						  t_wh_sku_inventory t,
+	     		         T_WH_INVENTORY_STATUS i  
+						  where 1=1 
+						  and t.sku_id = :skuid   
+						  and t.status_id = i.id 
+	    			      and i.name = '良品不可销售'    
+						  and t.quantity > 0
+						) bqty,
+	 			         (
+						  select 
+						  sum(t.quantity) as bbqty
+						  from 
+						  t_wh_sku_inventory t,
+			            T_WH_INVENTORY_STATUS i  
+						  where 1=1 
+						  and t.sku_id = :skuid   
+						  and t.status_id = i.id 
+				          and i.name <> '良品' and i.name <> '良品不可销售' 
+						  and t.quantity > 0
+						) bbqty
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Inventory.findVmiInventoryQtyAndBlockQtyAndOnHoldQtyCK" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						nvl(qty.qty,0) || ',' ||nvl(bqty.bqty,0) || ',' ||nvl (bbqty.bbqty,0) 
+						from 
+						(
+						  select 
+						  sum(t.quantity) as qty
+						  from 
+						  t_wh_sku_inventory t,
+	                     T_WH_INVENTORY_STATUS i  
+						  where 1=1
+						  and t.sku_id = :skuid   
+						  and t.inv_owner = :owner
+						  and t.status_id = i.id 
+	       				  and i.name = '良品'    
+						  and t.quantity > 0
+						) qty,
+						(
+						  select 
+						  sum(t.quantity) as bqty
+						  from 
+						  t_wh_sku_inventory t,
+	     		         T_WH_INVENTORY_STATUS i  
+						  where 1=1 
+						  and t.sku_id = :skuid   
+						  and t.inv_owner = :owner
+						  and t.status_id = i.id 
+	    			      and i.name = '良品不可销售'    
+						  and t.quantity > 0
+						) bqty,
+	 			         (
+						  select 
+						  sum(t.quantity) as bbqty
+						  from 
+						  t_wh_sku_inventory t,
+			            T_WH_INVENTORY_STATUS i  
+						  where 1=1 
+						  and t.sku_id = :skuid   
+						  and t.inv_owner = :owner
+						  and t.status_id = i.id 
+				          and i.name <> '良品' and i.name <> '良品不可销售' 
+						  and t.quantity > 0
+						) bbqty
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Inventory.findVmiInventoryQtyAndBlockQtyAndOnHoldQtyPaulFrank" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			select 
+						nvl(qty.qty,0) || ',' ||nvl (bbqty.bbqty,0) 
+						from 
+						(
+						  select 
+						  sum(t.quantity) as qty
+						  from 
+						  t_wh_sku_inventory t,
+	                     T_WH_INVENTORY_STATUS i  
+						  where 1=1
+						  and t.sku_id = :skuid   
+						  and t.status_id = i.id 
+	       				  and i.name = '良品'    
+						  and t.quantity > 0
+						) qty,
+	 			         (
+						  select 
+						  sum(t.quantity) as bbqty
+						  from 
+						  t_wh_sku_inventory t,
+			            T_WH_INVENTORY_STATUS i  
+						  where 1=1 
+						  and t.sku_id = :skuid   
+						  and t.status_id = i.id 
+				          and i.name='残次品'
+						  and t.quantity > 0
+						) bbqty
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+   <bean id="StockTransTxLog.findLogPushOutboundData" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+					 select  un.code whouCode,ch.vmi_code storeCode ,sta.code staCode,lg.tran_time staOutboundTime, sku.ext_code2 extensionCode2 , lg.quantity quantity,h.sku_batch_no  batchCode,
+			 ss.name invStatus
+		        from t_wh_st_log         lg,
+		             t_wh_stv            stv,
+		             t_wh_sta            sta,
+		             t_bi_inv_sku        sku,
+		             t_bi_channel        ch,
+		             t_au_operation_unit un,
+		              t_wh_inventory_status ss,
+                  t_wh_inv_sku_batch h
+		       where un.id = lg.wh_id
+		         and lg.sku_id = sku.id
+		         and lg.stv_id = stv.id
+		         and ss.id=lg.invs_tatus_id
+		         and stv.sta_id = sta.id
+		         and ch.code=lg.owner
+		         and sta.type <> 21
+		         and lg.direction = 2
+			     and h.sku_id = lg.sku_id
+             and h.inv_batch_code = lg.batch_code
+			   #if($ownerList)
+	                    	and lg.owner in (
+	                    	#foreach($owner in $ownerList)
+	 								'$owner',
+								#end
+							'-1')               	
+                 #end
+                 and lg.tran_time>=trunc(sysdate)-1 and lg.tran_time<sysdate-2/24 
+                 order by lg.tran_time asc
+   
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransTxLog.findLogPushInboundData" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			  select ch.vmi_code storeCode,sta.code staCode, un.code whouCode, lg.tran_time staInboundTime, sku.ext_code2  extensionCode2, lg.quantity quantity,h.sku_batch_no  batchCode,
+			 ss.name invStatus
+		            from t_wh_st_log         lg,
+		                 t_wh_stv            stv,
+		                 t_wh_sta            sta,
+		                 t_bi_inv_sku        sku,
+		                 t_bi_channel        ch,
+		                 t_au_operation_unit un,
+		                  t_wh_inventory_status ss,
+                      t_wh_inv_sku_batch h
+		           where un.id = lg.wh_id
+		             and lg.sku_id = sku.id
+		             and ss.id=lg.invs_tatus_id
+		             and lg.stv_id = stv.id
+		             and stv.sta_id = sta.id
+		             and ch.code=lg.owner
+		             and sta.type not in (41,81,85)
+		             and lg.direction = 1
+                 and h.sku_id = lg.sku_id
+                 and h.inv_batch_code = lg.batch_code
+			   #if($ownerList)
+	                    	and lg.owner in (
+	                    	#foreach($owner in $ownerList)
+	 								'$owner',
+								#end
+							'-1')               	
+                 #end
+                 and lg.tran_time>=trunc(sysdate)-1 and lg.tran_time<sysdate-2/24 
+                 order by lg.tran_time asc
+   
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="StockTransTxLog.findOwnerByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+			  select l.owner  from t_wh_sta sta ,t_wh_st_log l 
+			  where sta.code=l.sta_code and sta.slip_code1= :slipCode and sta.type=21 and l.direction=2 and l.sku_id=:skuId
+			  
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- speedo库存数量调整定制数据反馈 -->
+	<bean id="InventoryStatus.findInvStatusByorderCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+                select * from t_WH_INVENTORY_STATUS 
+                where id=
+				(select distinct status_id from T_WH_INV_CHECK_DIF_LINE t1 where  
+				t1.inv_check_id=
+             	(select id from T_WH_INV_CHECK c where
+             	 c.code=:orderCode))
+             	]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	<!-- speedo库存状态调整反馈 -->
+	
+<bean id="VmiStatusAdjDefault.findVmiStatusAdjAllExt" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+        		select 
+								t.id as id,
+								t.store_code as storeCode,
+								t.vmi_source as vmiSource,
+								t.create_time as createTime,
+								t.finish_time as finishTime,
+								t.order_code as orderCode,
+								t.adj_date as adjDate,
+								t.ext_memo as extMemo,
+								t.wh_code as whCode,
+								t.status as statusString,
+								t.sta_id as sId,
+								t.error_count as errorCount,
+								t.adj_reason as adjReason  
+								from T_STA_ADJ t
+								where t.status = 1 
+								and t.store_code = :vmicode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 查询speedo库存状态明细 -->
+		<bean id="VmiStatusAdjLineDefault.findVmiStatusAdjLineByAdjId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+             		select 
+								l.id as id,
+								l.upc as upc,
+								l.qty as qty,
+								l.ext_memo as extMemo,
+				                l.inv_status as invStatus,
+				                l.ext_memo as extMemo,
+				                l.FROM_STATUS as fromStatus,
+				                l.TO_STATUS as  toStatus
+								from T_STA_ADJ_LINE l
+								where l.adj_id = :adjid 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<!-- 根据品牌查询库存日志列表 -->
+	<bean id="StockTransTxLog.findLogListByOwner" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+                select 
+                sku_id as skuId,
+                direction as intDirection,
+                invs_tatus_id as statusId ,
+                sum(quantity) as outQty ,
+                min(wh_id) as whId ,
+                min(tran_time) as tranTime 
+                from t_wh_st_log  
+                where sta_code=:staCode and 
+                direction=:direction 
+                group by sku_id,direction,invs_tatus_id
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransTxLog.findLogListByStaCodeAndtransId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+                select 
+               	 *
+                from t_wh_st_log  
+                where sta_code=:staCode 
+                and   TRANSTYPE_ID=:transId 
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransTxLog.findByOccupiedCodeLog" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+                select * from t_wh_st_log l where l.sta_code=:staCode
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="InventoryStatus.findStatusNameByid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+                select * from t_WH_INVENTORY_STATUS 
+                where id=:statusId]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GucciSalesInventory.insertTotalSalesInv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     insert into t_gucci_sales_inventory(id,inv_qty,sku_number,inv_date,brand_code,location,jda_warehouse_code,create_time)        		 
+					 select s_t_gucci_sales_inventory.nextval,
+			                 t.invQty invQty,
+			                 sku.ext_code2 as skuNumber,
+			                 sysdate-1 as invDate,
+			                 :brandCode as bandCode,
+			                 :location  as location,
+			                 :jdaWarehouseCode  as jda_warehouse_code, 
+			                 sysdate as createTime 
+			           from  (select sum(inv.quantity) as invQty,
+			                         inv.sku_id                
+			                    from t_wh_sku_inventory  inv
+			                   where inv.ou_id = :ouId
+			                         and inv.inv_owner = :owner
+			                         and inv.quantity > 0
+			                   group by inv.sku_id) t
+			           inner join t_bi_inv_sku sku on sku.id = t.sku_id 
+			           where sku.IS_GIFT is null or sku.IS_GIFT=0
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	<bean id="TransferOwnerTarget.findTargetOwnerByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     select distinct t.target_owner targetOwner
+					from   t_wh_Transfer_owner_target t,
+					(select distinct sta.owner,l.sku_id,sta.main_wh_id ouId
+						from t_wh_sta sta,t_wh_stv stv,t_wh_stv_line l
+						where sta.id=stv.sta_id
+						    and stv.id=l.stv_id
+						    and stv.type=11  
+					      	and sta.id= :staId) a
+					where t.source_owner=a.owner
+					      and t.sku_id=a.sku_id	
+					      and t.ou_id=a.ouId
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	<bean id="TransferOwnerTarget.findTargetRatioByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     	select nvl(t.target_ratio,0) targetRatio,a.sku_id skuId,a.quantity qty
+						from   t_wh_Transfer_owner_target t,
+						(select sta.owner,l.sku_id,sum(l.quantity) quantity,sta.main_wh_id ouId
+						from t_wh_sta sta,t_wh_stv stv,t_wh_stv_line l
+						where sta.id=stv.sta_id
+			                  and stv.id=l.stv_id  
+			                  and stv.type=11  
+						      and sta.id= :staId
+						      and l.inv_status_id = :invStatusId
+						group by sta.owner,l.sku_id,sta.main_wh_id) a      
+						where t.source_owner=a.owner
+						      and t.sku_id=a.sku_id
+						      and t.ou_id=a.ouId
+						      and t.target_owner= :targetOwner
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransferOwnerTarget.findTransferInvStatusIdByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     	select distinct l.inv_status_id
+						from t_wh_stv stv,t_wh_stv_line l
+						where stv.id=l.stv_id
+							  and stv.type=11  
+						      and stv.sta_id =  :staId   
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransferOwnerTarget.findTransferOwnerTarget" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     	select ot.id,sku.code skuCode,sku.bar_code skuBarCode,sku.name skuName,ot.source_owner sourceOwner,
+						       100-nvl(a.targetRatio,0) sourceRatio,ot.target_owner targetOwner,ot.target_ratio targetRatio,
+						       c.name sourceOwnerName,bc.name targetOwnerName
+						from T_WH_TRANSFER_OWNER_TARGET ot,t_bi_inv_sku sku,(
+						     select sum(t.target_ratio) targetRatio,t.sku_id skuId,t.source_owner sourceOwner 
+		                 from T_WH_TRANSFER_OWNER_TARGET t
+		                 where  t.ou_id= :ouId
+		                 group by t.sku_id,t.source_owner
+								) a,t_bi_channel c,t_bi_channel bc
+						where ot.sku_id=sku.id
+		                  and ot.sku_id=a.skuId
+		                  and ot.source_owner=sourceOwner
+		                  and ot.source_owner=c.code
+                      	  and ot.target_owner=bc.code
+		                  and ot.ou_id= :ouId
+							#if($skuCode)
+							  and sku.code = :skuCode
+							#end  
+							#if($sourceOwner)
+							  and ot.source_owner = :sourceOwner
+							#end  
+							#if($targetOwner)
+							  and ot.TARGET_OWNER = :targetOwner
+							#end  
+							#if($sourceOwnerName)
+							  and c.name = :sourceOwnerName
+							#end  
+							#if($targetOwnerName)
+							  and bc.name = :targetOwnerName
+							#end 
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	<bean id="TransferOwnerTarget.findTargetRatioBySourceAndSku" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     	select t.id,t.sku_id skuId,t.source_owner sourceOwner,t.target_owner targetOwner,t.target_ratio targetRatio
+						from   t_wh_Transfer_owner_target t
+						where t.source_owner= :sourceOwner
+						      and t.sku_id = :skuId
+						      and t.ou_id = :ouId
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransferOwnerTarget.findAllTargetOwner" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     	select distinct t.target_owner targetOwner,c.name targetOwnerName
+						from t_wh_Transfer_owner_target t   ,t_bi_channel c   
+						where t.source_owner = :sourceOwner
+                  				and t.target_owner=c.code
+							    and t.ou_id = :ouId 
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransferOwnerTarget.findAllSourceOwner" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     	select distinct t.source_owner sourceOwner,c.name sourceOwnerName
+						from t_wh_Transfer_owner_target t ,t_bi_channel c
+            			where t.source_owner=c.code
+							  and  t.ou_id= :ouId
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransferOwnerSource.findTransferOwnerSource" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[   
+                     	select s.id,s.owner_source ownerSource,c.name ownerSourceName,s.target_owner targetOwner,
+       							bc.name targetOwnerName,s.priority_owner priorityOwner,tbc.name priorityOwnerName
+						from t_wh_Transfer_owner_source s,t_bi_channel c,t_bi_channel bc,t_bi_channel tbc
+						where s.ou_id= :ouId                  
+			                  and s.owner_source=c.code
+			                  and s.target_owner=bc.code
+			                  and s.priority_owner=tbc.code
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+		<!-- 库存状态调整数量校验-->
+	<bean id="StockTransTxLog.findLogListByStaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+           		select 
+                sku_id as skuId,
+                sum(quantity) as outQty          
+                from t_wh_st_log  
+                where sta_code=:staCode and 
+                direction=:direction
+                group by sku_id
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaLf.findNikeOutBoundLabel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+           			select c.code cartonCode,c.seqno containerId,l.city,sta.slip_code2 packList,l.pack_slip_no,
+					       l.division_code_translation,l.nfs_store_code,l.crd,l.vas_code,l.nike_po,sta.code staCode,
+					       (select sum(cl.qty) from t_wh_carton_line cl where cl.carton_id=c.id) packQty,
+					       l.address1,l.address2,l.address3,l.address4,l.company_name,l.trans_method,l.is_more_wh,ou.code whCode
+					from t_wh_carton c,t_wh_sta sta,t_wh_sta_lf l,t_au_operation_unit ou
+					where c.sta_id=sta.id
+					      and sta.id=l.sta_id
+					      and sta.main_wh_id=ou.id
+					      and c.id= :cartonId
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	<bean id="StaLf.findNikeCrwPod" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+           			select sta.code staCode,sta.slip_code2 packList,sysdate printDateTime,sl.pack_slip_no,w.address loadingPlace,
+					       sysdate loadingDateTime,w.pic whContact,w.pic_contact tel,w.fax,sl.nfs_store_code,sl.company_name,
+					       sl.city,sl.address1,sl.address2,sl.address3,sl.address4,sl.crd,sl.division_code,'POD-'||sta.code podStaCode,
+					       (select count(1) from t_wh_carton c where c.sta_id=sta.id and c.status=10) totalPackages,
+					       (select sum(c.weight) from t_wh_carton c where c.sta_id=sta.id and c.status=10) totalWeight,
+					       (select sum(l.quantity) from t_wh_st_log l where l.sta_code=sta.code) fw,sta.plan_outbound_time planDateTime,
+                 			sl.transport_pra transportPra,sl.trans_method,sl.is_more_wh,ou.code whCode
+					from t_wh_sta sta,t_wh_sta_lf sl,t_bi_warehouse w,t_au_operation_unit ou
+					where sta.id=sl.sta_id
+					      and sta.main_wh_id=w.ou_id
+					      and sta.main_wh_id=ou.id
+					      and sta.id= :staId
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="StaLf.findOutBound" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+           			select sta.slip_code1 as slipcode1,sta.slip_code2 as slipcode2,sta.plan_outbound_time as planDateTime,
+           			lf.TRANSPORT_PRA,lf.CRD,lf.NFS_STORE_CODE,lf.city,lf.zip,lf.address1,lf.address2,lf.address3,
+           			lf.address4,lf.COMPANY_NAME,lf.nike_Po,lf.vas_Code,lf.DIVISION_CODE_TRANSLATION,lf.id as lfId
+           			from t_wh_sta_lf lf,t_wh_sta sta
+					where sta.id= :staId and lf.sta_id=sta.id
+					 
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+		<bean id="StaLineLf.getStaLineLfBystaIdAndskuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+           		 select lf.vas  from t_wh_sta_line_lf  lf where lf.sta_id=:staId and lf.sku_id=:skuId
+           		
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransTxLog.findLogGroupListByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+           		select l.invs_tatus_id intInvstatus,l.owner,l.sku_id skuId,l.batch_code batchCode,sum(l.quantity) quantity
+				from t_wh_sta s,t_wh_stv stv,t_wh_st_log l
+				where s.id=stv.sta_id
+				      and stv.id=l.stv_id
+				      and l.direction = :direction
+				      and s.id= :staId
+				group by l.invs_tatus_id ,l.owner,l.sku_id ,l.batch_code
+                ]]>	
+              </value>
+		</constructor-arg>
+	</bean>
+</beans>

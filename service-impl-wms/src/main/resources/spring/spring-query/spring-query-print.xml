@@ -1,0 +1,1558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="StaLine.findPackingPageNoLocation" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+select sta.id as STAID,
+	   sta.idx1 || '-' || sta.idx2 as batchIndex,
+       t.name as TRANS_NAME,
+       nvl(sa.shop_name, s.name) as PRINTSHOPNAME,
+       nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME,
+       TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE,
+       TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY/MM/DD') as ORDERDATE1,
+       d.receiver as RECEIVER,
+       d.address as ADDRESS,
+       d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE,
+       d.province province,
+       d.city city,
+       d.district district,
+       d.address as cppAddress,
+	   d.return_transno as returnTransno,
+	   sta.create_time as RETURNTIME,
+       nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS,
+       sa.contacts as RTN_CONTACTS,
+       sa.img_semacode as IMG_SEMACODE,
+       sa.ext3 as IMG_LOGOTMALL,
+       case
+         when d.mobile is null then
+          d.telephone
+         when d.telephone is null then
+          d.mobile
+         else
+          d.telephone || ',' || d.mobile
+       end as MOBILE,
+       nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone) as TELEPHONE,
+       d.remark as MEMO,
+       sta.slip_code as SLIP_CODE,
+       sta.slip_code1 as SLIPCODE1,
+       sta.slip_code2 as SLIPCODE2,
+       sta.code as CODE,
+       nvl(sta.memo, '无') as STA_MEMO,
+       d.zipcode as ZIPCODE,
+       nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL,
+       d.TRANSFER_FEE as TRANSFER_FEE,
+       pl.code as PLCODE,
+       sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM,
+       sta.pg_index as pgindex,
+       sku.KEY_PROPERTIES as KEYPROPERTIES,
+       al.quantity as QUANTITY,
+       nvl(nvl(sku.name,sku.en_name),al.skuname) as SKUNAME,
+       nvl(sku.ext_code1,sku.bar_code) as JMCODE,
+       sku.bar_code as BARCODE,
+       sku.SUPPLIER_CODE as SUPPLIERCODE,
+       al.total_actual as STATPRICE,
+       round(al.total_actual / al.quantity, 2) as UNITPRICE,
+       al.order_total_actual as ORDERTOTAL,
+       round(al.order_total_actual / al.quantity, 2) as ORDERUNITPRICE,
+       nvl(iovqty, 0) as INVOICENUMBER,
+        d.order_user_code as ORDERUSERCODE,
+        nvl(al.line_size,sku.sku_size) as SKUSIZE,
+        decode(d.is_cod, '1', '是', '否') as ISCODSTRING,
+        nvl(al.color,sku.color) as COLOR,      
+        g.memo as GIFTMEMO,
+        NVL(NVL(SKU.NAME, SKU.EN_NAME),'') || ' ' || nvl(SKU.COLOR,'') || ' ' || nvl(SKU.SKU_SIZE,'') AS CONCATFIELD,
+        sku.code as skuCodeStr,
+        sku.supplier_code||sku.color  as SKUSTYLECODE,
+        nvl(al.list_price,sku.list_price) as SKULISTPRICE,
+        nvl(al.list_price,sku.list_price)* al.quantity as TOTALSKULISTPRICE,
+        nvl(al.skuname,sku.name) as GUCCISKUNAME,
+        sta.is_print_price||'' as ISPRINTPRICE,
+        sta.RULE_CODE as ruleCode
+  from t_wh_sta_delivery_info d, t_wh_sta sta
+  left join t_wh_sta_picking_list pl
+    on pl.id = sta.picking_list_id
+  left join (
+  		select sta.id sta_id, count(1) iovqty
+               from t_wh_sta_invoice inv, t_wh_sta sta
+              where inv.sta_id = sta.id
+              #if($staId)
+                and sta.id = :staId 
+              #end
+              #if($plId)
+                and sta.picking_list_id = :plId    
+              #end
+              #if(!$staId && !$plId)
+                and sta.id =-1
+              #end   
+              group by sta.id) siov
+    on siov.sta_id = sta.id, t_wh_sta_line al  
+    left join t_wh_gift_line g on g.sta_line_id = al.id and (g.type in (50,70)), 
+    t_ma_transportator t,
+ t_au_operation_unit ou, t_bi_channel s
+  left join t_bi_channel_special_action sa
+    on sa.channel_id = s.id
+   and sa.type = 20, t_bi_inv_sku sku
+ where d.id = sta.id
+   and al.sta_id = sta.id
+   and sku.id = al.sku_id
+   and ou.id = sta.main_wh_id
+   and sta.owner = s.code
+   and d.lpcode = t.exp_code
+   and al.quantity>0
+   and sta.status != 17
+  #if($staId)
+    and sta.id = :staId 
+  #end
+  #if($plId)
+    and pl.id = :plId    
+  #end
+  #if(!$plId && !$staId)
+    and sta.id =-1
+  #end
+  #if($sort=="giftmemo")
+   order by g.memo ,sta.pg_index, sku.ext_code1
+  #else
+ order by sta.pg_index, sku.ext_code1
+ #end
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="StaLine.findPackagedPageNoLocation" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+select sta.id as STAID,
+	   sta.idx1 || '-' || sta.idx2 as batchIndex,
+       t.name as TRANS_NAME,
+       nvl(sa.shop_name, '宝尊电商') as PRINTSHOPNAME,
+       nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME,
+       TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE,
+       d.receiver as RECEIVER,
+       d.address as ADDRESS,
+       d.address as cppAddress,
+       sta.create_time as RETURNTIME,
+	   d.return_transno as returnTransno,
+       d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE,
+       d.province province,
+       d.city city,
+       d.district district,
+       nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS,
+       sa.contacts as RTN_CONTACTS,
+       sa.img_semacode as IMG_SEMACODE,
+       sa.ext3 as IMG_LOGOTMALL,
+       case
+         when d.mobile is null then
+          d.telephone
+         when d.telephone is null then
+          d.mobile
+         else
+          d.telephone || ',' || d.mobile
+       end as MOBILE,
+       nvl(sa.contacts_phone, s.telephone) as TELEPHONE,
+       d.remark as MEMO,
+       sta.slip_code as SLIP_CODE,
+       sta.slip_code1 as SLIPCODE1,
+       sta.slip_code2 as SLIPCODE2,
+       sta.code as CODE,
+       nvl(sta.memo, '无') as STA_MEMO,
+       d.zipcode as ZIPCODE,
+       nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL,
+       d.TRANSFER_FEE as TRANSFER_FEE,
+       pl.code as PLCODE,
+       sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM,
+       sta.pg_index as pgindex,
+       sku.KEY_PROPERTIES as KEYPROPERTIES,
+       al.quantity as QUANTITY,
+       sku.name as SKUNAME,
+       sku.ext_code1 as JMCODE,
+       sku.bar_code as BARCODE,
+       sku.SUPPLIER_CODE as SUPPLIERCODE,
+       al.total_actual as STATPRICE,
+       round(al.total_actual / al.quantity, 2) as UNITPRICE,
+       al.order_total_actual as ORDERTOTAL,
+       round(al.order_total_actual / al.quantity, 2) as ORDERUNITPRICE,
+       nvl(iovqty, 0) as INVOICENUMBER,
+        d.order_user_code as ORDERUSERCODE,
+        sku.sku_size as SKUSIZE,
+        decode(d.is_cod, '1', '是', '否') as ISCODSTRING,
+        sku.color as COLOR      
+  from t_wh_sta_delivery_info d, t_wh_sta sta
+  left join t_wh_sta_picking_list pl
+    on pl.id = sta.picking_list_id
+  left join (
+  		select sta.id sta_id, count(1) iovqty
+               from t_wh_sta_invoice inv, t_wh_sta sta
+              where inv.sta_id = sta.id
+              #if($staId)
+                and sta.id = :staId 
+              #end
+              #if($plId)
+                and sta.picking_list_id = :plId    
+              #end
+              #if($ppId)
+        		and sta.picking_package_id = :ppId      
+        	  #end
+              #if(!$staId && !$plId)
+                and sta.id =-1
+              #end   
+              group by sta.id) siov
+    on siov.sta_id = sta.id,t_wh_picking_package pp, t_wh_sta_line al, t_ma_transportator t,
+ t_au_operation_unit ou, t_bi_channel s
+  left join t_bi_channel_special_action sa
+    on sa.channel_id = s.id
+   and sa.type = 20, t_bi_inv_sku sku
+ where d.id = sta.id
+   and al.sta_id = sta.id
+   and pp.id = sta.picking_package_id
+   and pp.picking_list_id = pl.id
+   and sku.id = al.sku_id
+   and ou.id = sta.main_wh_id
+   and sta.owner = s.code
+   and d.lpcode = t.exp_code
+   and sta.status != 17
+  #if($staId)
+    and sta.id = :staId 
+  #end
+  #if($plId)
+    and pl.id = :plId    
+  #end
+  #if($ppId)
+    and pp.id = :ppId
+  #end
+  #if(!$plId && !$staId)
+    and sta.id =-1
+  #end
+ order by sta.pg_index, sku.ext_code1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+<bean id="StaLine.findPackingPageShowLocationNike" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+     select 
+	sta.id as STAID,
+	sta.idx1 || '-' || sta.idx2 as batchIndex,
+    t.name as TRANS_NAME,
+    nvl(sa.shop_name, s.name) as PRINTSHOPNAME,
+    nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME,
+    TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE,
+    d.receiver as RECEIVER,
+    sa.contacts as RTN_CONTACTS,
+    d.address as ADDRESS,
+    case when sta.nike_pickup_code is null then d.address else CONCAT('耐克自提：',sta.nike_pickup_code) end as cppAddress,
+    d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE,
+    d.province province,
+    d.city city,
+    d.district district,
+    d.return_transno as returnTransno,
+    d.RETURN_TRACKING_NO returnUrl,
+	CONCAT((CONCAT(CONCAT(CONCAT(CONCAT(to_char(sta.create_time+30,'YYYY'),'年'),to_char(sta.create_time+30,'MM')),'月'),to_char(sta.create_time+30,'DD'))),'日过期') as returnTime,
+	ou.name as diliveryWhName,
+    sku.ext_code2 as UPCCODE,
+    nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS,
+    sa.img_semacode as IMG_SEMACODE,
+    sa.ext3 as IMG_LOGOTMALL,
+    case
+    when d.mobile is null then
+    d.telephone
+    when d.telephone is null then
+    d.mobile
+    else
+    d.telephone || ',' || d.mobile
+    end as MOBILE,
+    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone) as TELEPHONE,
+    d.remark as MEMO,
+    sta.slip_code as SLIP_CODE,
+    sta.slip_code1 as SLIPCODE1,
+    sta.slip_code2 as SLIPCODE2,
+    sta.code as CODE,
+    nvl(sta.memo, '无') as STA_MEMO,
+    d.zipcode as ZIPCODE,
+    nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL,
+    d.TRANSFER_FEE as TRANSFER_FEE,
+    pl.code as PLCODE,
+    sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM,
+    sta.pg_index as pgindex,
+    sku.KEY_PROPERTIES as KEYPROPERTIES,
+    loc.code as LOCATIONCODE,
+    sum(l.quantity) as QUANTITY,
+     case
+     when sku.name is null then
+        sku.en_name 
+     else 
+        sku.name
+     end as SKUNAME, 
+    sku.ext_code1 as JMCODE,
+    sku.bar_code as BARCODE,
+    sku.code as skuCodeStr,
+    sku.SUPPLIER_CODE as SUPPLIERCODE,
+    nvl(iovqty, 0) as INVOICENUMBER,
+    d.order_user_code as ORDERUSERCODE,
+    sku.sku_size as SKUSIZE,
+    decode(d.is_cod, '1', '是', '否') as ISCODSTRING,
+    NVL(NVL(SKU.NAME, SKU.EN_NAME),'') || ' ' || nvl(SKU.COLOR,'') || ' ' || nvl(SKU.SKU_SIZE,'') AS CONCATFIELD,
+    sku.color as COLOR
+from 
+    t_wh_sta_delivery_info d,
+    t_wh_sta sta
+    left join (
+        select sta.id sta_id, count(1) iovqty
+        from t_wh_sta_invoice inv, t_wh_sta sta
+        where inv.sta_id = sta.id
+        #if($staId)
+        and sta.id = :staId 
+        #end
+        #if($plId)
+        and sta.picking_list_id = :plId      
+        #end
+        #if(!$staId && !$plId) 
+        and sta.id = -1
+        #end
+        group by sta.id
+    ) siov
+    on siov.sta_id = sta.id,
+    t_wh_sta_picking_list pl,
+    t_wh_stv stv,
+    t_wh_stv_line l,
+    t_ma_transportator t,
+    t_au_operation_unit ou,
+    t_bi_channel s
+    left join t_bi_channel_special_action sa on sa.channel_id = s.id and sa.type = 20,
+    t_bi_inv_sku sku,
+    t_wh_location loc
+where 
+	d.id = sta.id
+    and pl.id = sta.picking_list_id
+    and stv.sta_id = sta.id
+    and l.stv_id = stv.id
+    and sku.id = l.sku_id
+    and loc.id = l.location_id
+    and ou.id = sta.main_wh_id
+    and sta.owner = s.code
+    and d.lpcode = t.exp_code
+    and sta.status != 17
+    #if($staId)
+    and sta.id = :staId 
+    #end
+    #if($plId)
+    and pl.id = :plId
+    #end
+    #if(!$staId && !$plId) 
+    and sta.id = -1
+    #end
+group by 
+CONCAT((CONCAT(CONCAT(CONCAT(CONCAT(to_char(sta.create_time+30,'YYYY'),'年'),to_char(sta.create_time+30,'MM')),'月'),to_char(sta.create_time+30,'DD'))),'日过期'),
+    sta.id,
+    t.name,
+    nvl(sa.shop_name,
+    s.name),
+    nvl(sa.SEND_WAREHOUSE_NAME, ou.name),
+    case when sta.nike_pickup_code is null then d.address else CONCAT('耐克自提：',sta.nike_pickup_code) end,
+    d.receiver,
+    d.address,
+   nvl(sta.nike_pickup_code,d.address),
+    d.province,
+    d.city,
+    d.district,
+    d.return_transno,
+    ou.name,
+    nvl(sa.rtn_address,
+    s.RTN_WAREHOUSE_ADDRESS),
+    case
+    when d.mobile is null then
+    d.telephone
+    when d.telephone is null then
+    d.mobile
+    else
+    d.telephone || ',' || d.mobile
+    end,
+    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone),
+    d.remark,
+    sta.ORDER_CREATE_TIME,
+    sta.slip_code,
+    sta.slip_code1,
+    d.STORE_COM_IS_NEED_INVOICE,
+    sta.slip_code2,
+    sta.code,
+    d.zipcode,
+    nvl(sta.order_total_actual, sta.total_actual),
+    d.TRANSFER_FEE,
+    pl.code,
+    sa.IS_NOT_DISPLAY_SUM,
+    sta.pg_index,
+    sta.idx1,
+    sta.idx2,
+    sku.KEY_PROPERTIES,
+    loc.code,
+    sku.name,
+    sku.ext_code1,
+    sku.SUPPLIER_CODE,
+    sku.bar_code,
+    nvl(iovqty, 0),
+    sa.contacts,
+    sa.img_semacode,
+    sa.ext3,
+    sta.memo,
+    d.order_user_code,
+    sku.sku_size,
+    d.is_cod,
+    sku.color,
+    sku.en_name,
+    sku.ext_code2,
+    sku.code,
+    d.RETURN_TRACKING_NO,
+    sta.idx1 || '-' || sta.idx2    
+order by sta.pg_index, sku.ext_code1
+     			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="StaLine.findPackingPageShowLocation" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+       select 
+	sta.id as STAID,
+	sta.idx1 || '-' || sta.idx2 as batchIndex,
+    t.name as TRANS_NAME,
+    nvl(sa.shop_name, s.name) as PRINTSHOPNAME,
+    nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME,
+    TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE,
+    d.receiver as RECEIVER,
+    sa.contacts as RTN_CONTACTS,
+    d.address as ADDRESS,
+    d.address as cppAddress,
+    sta.create_time as RETURNTIME,
+	d.return_transno as returnTransno,
+	d.RETURN_TRACKING_NO returnUrl,
+    d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE,
+    d.province province,
+    d.city city,
+    d.district district,
+    sku.ext_code2 as UPCCODE,
+    nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS,
+    sa.img_semacode as IMG_SEMACODE,
+    sa.ext3 as IMG_LOGOTMALL,
+    case
+    when d.mobile is null then
+    d.telephone
+    when d.telephone is null then
+    d.mobile
+    else
+    d.telephone || ',' || d.mobile
+    end as MOBILE,
+    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone) as TELEPHONE,
+    d.remark as MEMO,
+    sta.slip_code as SLIP_CODE,
+    sta.slip_code1 as SLIPCODE1,
+    sta.slip_code2 as SLIPCODE2,
+    sta.code as CODE,
+    nvl(sta.memo, '无') as STA_MEMO,
+    d.zipcode as ZIPCODE,
+    nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL,
+    d.TRANSFER_FEE as TRANSFER_FEE,
+    pl.code as PLCODE,
+    sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM,
+    sta.pg_index as pgindex,
+    sku.KEY_PROPERTIES as KEYPROPERTIES,
+    loc.code as LOCATIONCODE,
+    sum(l.quantity) as QUANTITY,
+     case
+     when sku.name is null then
+        sku.en_name 
+     else 
+        sku.name
+     end as SKUNAME, 
+    sku.ext_code1 as JMCODE,
+    sku.bar_code as BARCODE,
+    sku.SUPPLIER_CODE as SUPPLIERCODE,
+    nvl(iovqty, 0) as INVOICENUMBER,
+    d.order_user_code as ORDERUSERCODE,
+    sku.sku_size as SKUSIZE,
+    decode(d.is_cod, '1', '是', '否') as ISCODSTRING,
+    NVL(NVL(SKU.NAME, SKU.EN_NAME),'') || ' ' || nvl(SKU.COLOR,'') || ' ' || nvl(SKU.SKU_SIZE,'') AS CONCATFIELD,
+    sku.color as COLOR,
+    sku.code as skuCodeStr,
+    sta.RULE_CODE as ruleCode    
+from 
+    t_wh_sta_delivery_info d,
+    t_wh_sta sta
+    left join (
+        select sta.id sta_id, count(1) iovqty
+        from t_wh_sta_invoice inv, t_wh_sta sta
+        where inv.sta_id = sta.id
+        #if($staId)
+        and sta.id = :staId 
+        #end
+        #if($plId)
+        and sta.picking_list_id = :plId      
+        #end
+        #if(!$staId && !$plId) 
+        and sta.id = -1
+        #end
+        group by sta.id
+    ) siov
+    on siov.sta_id = sta.id,
+    t_wh_sta_picking_list pl,
+    t_wh_stv stv,
+    t_wh_stv_line l,
+    t_ma_transportator t,
+    t_au_operation_unit ou,
+    t_bi_channel s
+    left join t_bi_channel_special_action sa on sa.channel_id = s.id and sa.type = 20,
+    t_bi_inv_sku sku,
+    t_wh_location loc
+where 
+	d.id = sta.id
+    and pl.id = sta.picking_list_id
+    and stv.sta_id = sta.id
+    and l.stv_id = stv.id
+    and sku.id = l.sku_id
+    and loc.id = l.location_id
+    and ou.id = sta.main_wh_id
+    and sta.owner = s.code
+    and d.lpcode = t.exp_code
+    and sta.status != 17
+    #if($staId)
+    and sta.id = :staId 
+    #end
+    #if($plId)
+    and pl.id = :plId
+    #end
+    #if(!$staId && !$plId) 
+    and sta.id = -1
+    #end
+group by 
+    sta.id,
+    t.name,
+    nvl(sa.shop_name,
+    s.name),
+    nvl(sa.SEND_WAREHOUSE_NAME, ou.name),
+   return_transno,
+    d.receiver,
+    d.address,
+    d.province,
+    d.city,
+    d.district,
+    sta.create_time,
+    nvl(sa.rtn_address,
+    s.RTN_WAREHOUSE_ADDRESS),
+    case
+    when d.mobile is null then
+    d.telephone
+    when d.telephone is null then
+    d.mobile
+    else
+    d.telephone || ',' || d.mobile
+    end,
+    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone),
+    d.remark,
+    sta.ORDER_CREATE_TIME,
+    sta.slip_code,
+    sta.slip_code1,
+    d.STORE_COM_IS_NEED_INVOICE,
+    sta.slip_code2,
+    sta.code,
+    d.zipcode,
+    nvl(sta.order_total_actual, sta.total_actual),
+    d.TRANSFER_FEE,
+    pl.code,
+    sa.IS_NOT_DISPLAY_SUM,
+    sta.pg_index,
+    sta.idx1,
+    sta.idx2,
+    sku.KEY_PROPERTIES,
+    loc.code,
+    sku.name,
+    sku.ext_code1,
+    sku.SUPPLIER_CODE,
+    sku.bar_code,
+    nvl(iovqty, 0),
+    sa.contacts,
+    sa.img_semacode,
+    sa.ext3,
+    sta.memo,
+    d.order_user_code,
+    sku.sku_size,
+    d.is_cod,
+    sku.color,
+    sku.en_name,
+    sku.ext_code2,
+    sku.code,
+    sta.RULE_CODE,
+    d.RETURN_TRACKING_NO,
+    sta.idx1 || '-' || sta.idx2       
+order by sta.pg_index, sku.ext_code1
+     			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="StaLine.findPackagedPageShowLocation" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+select 
+	sta.id as STAID,
+	sta.idx1 || '-' || sta.idx2 as batchIndex,
+    t.name as TRANS_NAME,
+    nvl(sa.shop_name, '宝尊电商') as PRINTSHOPNAME,
+    nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME,
+    TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE,
+    d.receiver as RECEIVER,
+    sa.contacts as RTN_CONTACTS,
+    d.address as ADDRESS,
+    d.address as cppAddress,
+    sta.create_time as RETURNTIME,
+	d.return_transno as returnTransno,
+    d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE,
+    d.province province,
+    d.city city,
+    d.district district,
+    nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS,
+    sa.img_semacode as IMG_SEMACODE,
+    sa.ext3 as IMG_LOGOTMALL,
+    case
+    when d.mobile is null then
+    d.telephone
+    when d.telephone is null then
+    d.mobile
+    else
+    d.telephone || ',' || d.mobile
+    end as MOBILE,
+    nvl(sa.contacts_phone,s.telephone) as TELEPHONE,
+    d.remark as MEMO,
+    sta.slip_code as SLIP_CODE,
+    sta.slip_code1 as SLIPCODE1,
+    sta.slip_code2 as SLIPCODE2,
+    sta.code as CODE,
+    nvl(sta.memo, '无') as STA_MEMO,
+    d.zipcode as ZIPCODE,
+    nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL,
+    d.TRANSFER_FEE as TRANSFER_FEE,
+    pl.code as PLCODE,
+    sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM,
+    sta.pg_index as pgindex,
+    sku.KEY_PROPERTIES as KEYPROPERTIES,
+    loc.code as LOCATIONCODE,
+    sum(l.quantity) as QUANTITY,
+    sku.name as SKUNAME,
+    sku.ext_code1 as JMCODE,
+    sku.bar_code as BARCODE,
+    sku.SUPPLIER_CODE as SUPPLIERCODE,
+    nvl(iovqty, 0) as INVOICENUMBER,
+    d.order_user_code as ORDERUSERCODE,
+    sku.sku_size as SKUSIZE,
+    decode(d.is_cod, '1', '是', '否') as ISCODSTRING,
+    sku.color as COLOR       
+from 
+    t_wh_sta_delivery_info d,
+    t_wh_sta sta
+    left join (
+        select sta.id sta_id, count(1) iovqty
+        from t_wh_sta_invoice inv, t_wh_sta sta
+        where inv.sta_id = sta.id
+        #if($staId)
+        and sta.id = :staId 
+        #end
+        #if($plId)
+        and sta.picking_list_id = :plId      
+        #end
+        #if($ppId)
+        and sta.picking_package_id = :ppId      
+        #end
+        #if(!$staId && !$plId) 
+        and sta.id = -1
+        #end
+        group by sta.id
+    ) siov
+    on siov.sta_id = sta.id,
+    t_wh_sta_picking_list pl,
+    t_wh_picking_package pp,
+    t_wh_stv stv,
+    t_wh_stv_line l,
+    t_ma_transportator t,
+    t_au_operation_unit ou,
+    t_bi_channel s
+    left join t_bi_channel_special_action sa on sa.channel_id = s.id and sa.type = 20,
+    t_bi_inv_sku sku,
+    t_wh_location loc
+where 
+	d.id = sta.id
+    and pl.id = sta.picking_list_id
+    and pp.id = sta.picking_package_id
+    and pp.picking_list_id = pl.id
+    and stv.sta_id = sta.id
+    and l.stv_id = stv.id
+    and sku.id = l.sku_id
+    and loc.id = l.location_id
+    and ou.id = sta.main_wh_id
+    and sta.owner = s.code
+    and d.lpcode = t.exp_code
+    and sta.status != 17
+    #if($staId)
+    and sta.id = :staId 
+    #end
+    #if($plId)
+    and pl.id = :plId
+    #end
+    #if($ppId)
+    and pp.id = :ppId
+    #end
+    #if(!$staId && !$plId) 
+    and sta.id = -1
+    #end
+group by 
+    sta.id,t.name,
+    nvl(sa.shop_name,
+    '宝尊电商'),
+    nvl(sa.SEND_WAREHOUSE_NAME, ou.name),
+    d.receiver,
+    d.address,
+    d.province,
+    d.return_transno,
+    sta.create_time,
+    d.city,
+    d.district,
+    nvl(sa.rtn_address,
+    s.RTN_WAREHOUSE_ADDRESS),
+    case
+    when d.mobile is null then
+    d.telephone
+    when d.telephone is null then
+    d.mobile
+    else
+    d.telephone || ',' || d.mobile
+    end,
+    nvl(sa.contacts_phone,s.telephone),
+    d.remark,
+    sta.ORDER_CREATE_TIME,
+    sta.slip_code,
+    sta.slip_code1,
+    d.STORE_COM_IS_NEED_INVOICE,
+    sta.slip_code2,
+    sta.code,
+    d.zipcode,
+    nvl(sta.order_total_actual, sta.total_actual),
+    d.TRANSFER_FEE,
+    pl.code,
+    sa.IS_NOT_DISPLAY_SUM,
+    sta.pg_index,
+    sta.idx1,
+    sta.idx2,
+    sku.KEY_PROPERTIES,
+    loc.code,
+    sku.name,
+    sku.ext_code1,
+    sku.SUPPLIER_CODE,
+    sku.bar_code,
+    nvl(iovqty, 0),
+    sa.contacts,
+    sa.img_semacode,
+    sa.ext3,
+    sta.memo,
+    d.order_user_code,
+    sku.sku_size,
+    d.is_cod,
+    sku.color,
+    sku.en_name,
+    sta.idx1 || '-' || sta.idx2     
+order by sta.pg_index, sku.ext_code1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="StaLine.getAdidasSpecialCustomValue" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+select 
+	sta.id as STAID,
+	al.sku_id,
+  al.skuname,
+  nvl(al.color,sku.color) as COLOR,
+	sta.idx1 || '-' || sta.idx2 as batchIndex,
+    t.name as TRANS_NAME,
+    nvl(sa.shop_name, s.name) as PRINTSHOPNAME,
+    nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME,
+    TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE,
+    sta.ORDER_CREATE_TIME as ORDERDATE_NEW,
+    d.receiver as RECEIVER,
+    sa.contacts as RTN_CONTACTS,
+    d.address as ADDRESS,
+    d.address as cppAddress,
+    sta.create_time as RETURNTIME,
+	return_Transno as returnTransno,
+    d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE,
+    d.province province,
+    d.city city,
+    d.district district,
+    nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS,
+    sa.img_semacode as IMG_SEMACODE,
+    sa.ext3 as IMG_LOGOTMALL,
+    case
+    when d.mobile is null then
+    d.telephone
+    when d.telephone is null then
+    d.mobile
+    else
+    d.telephone || ',' || d.mobile
+    end as MOBILE,
+    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone) as TELEPHONE,
+    d.remark as MEMO,
+    sta.slip_code as SLIP_CODE,
+    sta.slip_code1 as SLIPCODE1,
+    sta.slip_code2 as SLIPCODE2,
+    sta.code as CODE,
+    nvl(sta.memo, '无') as STA_MEMO,
+    d.zipcode as ZIPCODE,
+    nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL,
+    nvl(d.TRANSFER_FEE,0) as TRANSFER_FEE,
+    pl.code as PLCODE,
+    sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM,
+    sta.pg_index as pgindex,
+    sku.KEY_PROPERTIES as KEYPROPERTIES,
+    loc.code as LOCATIONCODE,
+    sum(l.quantity) as QUANTITY,
+    nvl(sku.ext_code1,sku.bar_code) as JMCODE,
+    sku.bar_code as BARCODE,
+    sku.SUPPLIER_CODE as SUPPLIERCODE,
+    nvl(iovqty, 0) as INVOICENUMBER,
+    d.order_user_code as ORDERUSERCODE,
+    sku.sku_size as SKUSIZE,
+    decode(d.is_cod, '1', '是', '否') as ISCODSTRING 
+from 
+    t_wh_sta_delivery_info d,
+    t_wh_sta sta
+    left join (
+        select sta.id sta_id, count(1) iovqty
+        from t_wh_sta_invoice inv, t_wh_sta sta
+        where inv.sta_id = sta.id
+        #if($staId)
+        and sta.id = :staId
+        #end
+        #if($plId)
+        and sta.picking_list_id = :plId        
+        #end
+        #if(!$staId && !$plId) 
+        and sta.id = -1
+        #end
+        group by sta.id
+    ) siov
+    on siov.sta_id = sta.id,
+    t_wh_sta_picking_list pl,
+    t_wh_stv stv,
+    t_wh_stv_line l,
+    t_ma_transportator t,
+    t_au_operation_unit ou,
+    t_bi_channel s
+    left join t_bi_channel_special_action sa on sa.channel_id = s.id and sa.type = 20,
+    t_bi_inv_sku sku 
+    left join (
+         select line.sta_id,line.sku_id,line.color,line.skuname from t_wh_sta_line line,t_wh_sta a2
+         where a2.id = line.sta_id
+         #if($staId)
+        and a2.id = :staId
+        #end
+        #if($plId)
+        and a2.picking_list_id = :plId   
+        #end
+        #if(!$staId && !$plId) 
+        and a2.id = -1
+        #end
+         group by line.sta_id,line.sku_id,line.color,line.skuname
+    ) al on al.sku_id = sku.id,
+    t_wh_location loc
+    
+where 
+	d.id = sta.id
+	and al.sta_id = sta.id
+    and pl.id = sta.picking_list_id
+    and stv.sta_id = sta.id
+    and l.stv_id = stv.id
+    and sku.id = l.sku_id
+    and loc.id = l.location_id
+    and ou.id = sta.main_wh_id
+    and sta.owner = s.code
+    and d.lpcode = t.exp_code
+    and sta.status != 17
+    #if($staId)
+    and sta.id = :staId
+    #end
+    #if($plId)
+    and pl.id = :plId
+    #end
+    #if(!$staId && !$plId) 
+    and sta.id = -1
+    #end
+group by 
+    sta.id,
+    t.name,
+    nvl(sa.shop_name,
+    s.name),
+    nvl(sa.SEND_WAREHOUSE_NAME, ou.name),
+    d.receiver,
+    d.address,
+    d.province,
+	return_Transno,
+    d.city,
+    d.district,
+    sta.create_time,
+    nvl(sa.rtn_address,
+    s.RTN_WAREHOUSE_ADDRESS),
+    case
+    when d.mobile is null then
+    d.telephone
+    when d.telephone is null then
+    d.mobile
+    else
+    d.telephone || ',' || d.mobile
+    end,
+    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone),
+    d.remark,
+    sta.ORDER_CREATE_TIME,
+     sta.ORDER_CREATE_TIME,
+    sta.slip_code,
+    sta.slip_code1,
+    d.STORE_COM_IS_NEED_INVOICE,
+    sta.slip_code2,
+    sta.code,
+    d.zipcode,
+    nvl(sta.order_total_actual, sta.total_actual),
+    d.TRANSFER_FEE,
+    pl.code,
+    sa.IS_NOT_DISPLAY_SUM,
+    sta.pg_index,
+    sta.idx1,
+    sta.idx2,
+    sku.KEY_PROPERTIES,
+    loc.code,
+    sku.ext_code1,
+    sku.SUPPLIER_CODE,
+    sku.bar_code,
+    nvl(iovqty, 0),
+    sa.contacts,
+    sa.img_semacode,
+    sa.ext3,
+    sta.memo,
+    d.order_user_code,
+    sku.sku_size,
+    d.is_cod,
+    sku.color,
+    sku.en_name,
+    sta.idx1 || '-' || sta.idx2,
+    al.sku_id,
+    al.skuname,
+    al.color      
+order by sta.pg_index, sku.ext_code1
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- mk装箱单定制 -->
+	<bean id="StaLine.getMkPackingPageNoLocation" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+		select 
+			sta.id as STAID,
+			al.sku_id,
+		  al.skuname,
+		  nvl(al.color,sku.color) as COLOR,
+			sta.idx1 || '-' || sta.idx2 as batchIndex,
+			
+		    t.name as TRANS_NAME,
+		    nvl(sa.shop_name, s.name) as PRINTSHOPNAME,
+		    nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME,
+		    TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE,
+		    d.receiver as RECEIVER,
+		    sa.contacts as RTN_CONTACTS,
+		    d.address as ADDRESS,
+		    d.address as cppAddress,
+		    sta.create_time as RETURNTIME,
+		    d.return_transno as returnTransno,
+		    d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE,
+		    d.province province,
+		    d.city city,
+		    d.district district,
+		    sta.create_time as RETURNTIME,
+		    nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS,
+		    sa.img_semacode as IMG_SEMACODE,
+		    sa.ext3 as IMG_LOGOTMALL,
+		    case
+		    when d.mobile is null then
+		    d.telephone
+		    when d.telephone is null then
+		    d.mobile
+		    else
+		    d.telephone || ',' || d.mobile
+		    end as MOBILE,
+		    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone) as TELEPHONE,
+		    d.remark as MEMO,
+		    sta.slip_code as SLIP_CODE,
+		    sta.slip_code1 as SLIPCODE1,
+		    sta.slip_code2 as SLIPCODE2,
+		    sta.code as CODE,
+		    al.total_actual as STATPRICE,
+		    nvl(sta.memo, '无') as STA_MEMO,
+		    d.zipcode as ZIPCODE,
+		    nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL,
+		    nvl(d.TRANSFER_FEE,0) as TRANSFER_FEE,
+		    pl.code as PLCODE,
+		    sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM,
+		    sta.pg_index as pgindex,
+		    sku.KEY_PROPERTIES as KEYPROPERTIES,
+		    
+		    sum(l.quantity) as QUANTITY,
+		    nvl(sku.ext_code1,sku.bar_code) as JMCODE,
+		    sku.bar_code as BARCODE,
+		    sku.SUPPLIER_CODE as SUPPLIERCODE,
+		    nvl(iovqty, 0) as INVOICENUMBER,
+		    d.order_user_code as ORDERUSERCODE,
+		    sku.sku_size as SKUSIZE,
+		    decode(d.is_cod, '1', '是', '否') as ISCODSTRING,
+		    sta.is_print_price||'' as ISPRINTPRICE,
+      		nvl(p.amt,0) as AMT
+		from 
+		    t_wh_sta_delivery_info d
+		    left join (select pay.amt,pay.sta_id from T_WH_STA_PAYMENT pay,t_wh_sta sta
+		        where pay.sta_id = sta.id  
+		     		and pay.type=100
+		        #if($staId)
+		        and sta.id = :staId
+		        #end
+		        #if($plId)
+		        and sta.picking_list_id = :plId        
+		        #end
+		        #if(!$staId && !$plId) 
+		        and sta.id = -1
+		        #end
+		    )  p
+		    on p.sta_id=d.id,
+		    t_wh_sta sta
+		    left join (
+		        select sta.id sta_id, count(1) iovqty
+		        from t_wh_sta_invoice inv, t_wh_sta sta
+		        where inv.sta_id = sta.id
+		        #if($staId)
+		        and sta.id = :staId
+		        #end
+		        #if($plId)
+		        and sta.picking_list_id = :plId        
+		        #end
+		        #if(!$staId && !$plId) 
+		        and sta.id = -1
+		        #end
+		        group by sta.id
+		    ) siov
+		    on siov.sta_id = sta.id,
+		    t_wh_sta_picking_list pl,
+		    t_wh_stv stv,
+		    t_wh_stv_line l,
+		    t_ma_transportator t,
+		    t_au_operation_unit ou,
+		    t_bi_channel s
+		    left join t_bi_channel_special_action sa on sa.channel_id = s.id and sa.type = 20,
+		    t_bi_inv_sku sku 
+		    left join (
+		         select line.sta_id,line.sku_id,line.color,line.skuname , line.total_actual from t_wh_sta_line line,t_wh_sta a2
+		         where a2.id = line.sta_id
+		         #if($staId)
+		        and a2.id = :staId
+		        #end
+		        #if($plId)
+		        and a2.picking_list_id = :plId   
+		        #end
+		        #if(!$staId && !$plId) 
+		        and a2.id = -1
+		        #end
+		         group by line.sta_id,line.sku_id,line.color,line.skuname,line.total_actual
+		    ) al on al.sku_id = sku.id
+		where 
+			d.id = sta.id
+			and al.sta_id = sta.id
+		    and pl.id = sta.picking_list_id
+		    and stv.sta_id = sta.id
+		    and l.stv_id = stv.id
+		    and sku.id = l.sku_id
+		    and ou.id = sta.main_wh_id
+		    and sta.owner = s.code
+		    and d.lpcode = t.exp_code
+		    and sta.status != 17
+		    #if($staId)
+		    and sta.id = :staId
+		    #end
+		    #if($plId)
+		    and pl.id = :plId
+		    #end
+		    #if(!$staId && !$plId) 
+		    and sta.id = -1
+		    #end
+		group by 
+		    sta.id,
+		    t.name,
+		    nvl(sa.shop_name,
+		    s.name),
+		    nvl(sa.SEND_WAREHOUSE_NAME, ou.name),
+		    d.receiver,
+		    d.address,
+		    d.return_transno,
+		    d.province,
+		    d.city,
+		    sta.create_time,
+		    d.district,
+		    nvl(sa.rtn_address,
+		    s.RTN_WAREHOUSE_ADDRESS),
+		    case
+		    when d.mobile is null then
+		    d.telephone
+		    when d.telephone is null then
+		    d.mobile
+		    else
+		    d.telephone || ',' || d.mobile
+		    end,
+		    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone),
+		    d.remark,
+		    sta.ORDER_CREATE_TIME,
+		    sta.slip_code,
+		    sta.slip_code1,
+		    d.STORE_COM_IS_NEED_INVOICE,
+		    sta.slip_code2,
+		    sta.code,
+		    d.zipcode,
+		    nvl(sta.order_total_actual, sta.total_actual),
+		    d.TRANSFER_FEE,
+		    pl.code,
+		    sa.IS_NOT_DISPLAY_SUM,
+		    sta.pg_index,
+		    sta.idx1,
+		    sta.idx2,
+		    sku.KEY_PROPERTIES,
+		    sku.ext_code1,
+		    sku.SUPPLIER_CODE,
+		    sku.bar_code,
+		    nvl(iovqty, 0),
+		    sa.contacts,
+		    sa.img_semacode,
+		    sa.ext3,
+		    sta.memo,
+		    d.order_user_code,
+		    sku.sku_size,
+		    d.is_cod,
+		    sku.color,
+		    sku.en_name,
+		    sta.idx1 || '-' || sta.idx2,
+		    al.sku_id,
+		    al.skuname,
+		    al.total_actual,
+		    al.color,
+		    sta.is_print_price,
+      		nvl(p.amt,0)
+			order by sta.pg_index, sku.ext_code1
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- 锐步定制 -->
+	<bean id="StaLine.getReebokSpecialCustomValue" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+					select 
+						sta.id as STAID,
+						al.sku_id,
+						nvl(al.skuname,sku.name) AS skuname, 
+						nvl(al.color,sku.color) as COLOR,
+						sta.idx1 || '-' || sta.idx2 as batchIndex,
+					    t.name as TRANS_NAME,
+					    nvl(sa.shop_name, s.name) as PRINTSHOPNAME,
+					    nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME,
+					    TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE,
+					    d.receiver as RECEIVER,
+					    sa.contacts as RTN_CONTACTS,
+					    d.address as ADDRESS,
+					    d.address as cppAddress,
+					    sta.create_time as RETURNTIME,
+		   				d.return_transno as returnTransno,
+					    d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE,
+					    d.province province,
+					    d.city city,
+					    d.district district,
+					    nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS,
+					    sa.img_semacode as IMG_SEMACODE,
+					    sa.ext3 as IMG_LOGOTMALL,
+					    case
+					    when d.mobile is null then
+					    d.telephone
+					    when d.telephone is null then
+					    d.mobile
+					    else
+					    d.telephone || ',' || d.mobile
+					    end as MOBILE,
+					    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone) as TELEPHONE,
+					    d.remark as MEMO,
+					    sta.slip_code as SLIP_CODE,
+					    sta.slip_code1 as SLIPCODE1,
+					    sta.slip_code2 as SLIPCODE2,
+					    sta.code as CODE,
+					    al.total_actual as STATPRICE,
+					    nvl(sta.memo, '无') as STA_MEMO,
+					    d.zipcode as ZIPCODE,
+					    nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL,
+					    nvl(d.TRANSFER_FEE,0) as TRANSFER_FEE,
+					    pl.code as PLCODE,
+					    sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM,
+					    sta.pg_index as pgindex,
+					    sku.KEY_PROPERTIES as KEYPROPERTIES,
+					    loc.code as LOCATIONCODE,
+					    sum(l.quantity) as QUANTITY,
+					    nvl(sku.ext_code1,sku.bar_code) as JMCODE,
+					    sku.bar_code as BARCODE,
+					    sku.SUPPLIER_CODE as SUPPLIERCODE,
+					    nvl(iovqty, 0) as INVOICENUMBER,
+					    d.order_user_code as ORDERUSERCODE,
+					    nvl(al.line_size,sku.sku_size) as SKUSIZE,
+					    nvl(nvl(al.skuname,sku.name),'') || ',' || nvl(sku.key_properties,'') AS CONCATFIELD,
+					    decode(d.is_cod, '1', '是', '否') as ISCODSTRING
+					from 
+					    t_wh_sta_delivery_info d,
+					    t_wh_sta sta
+					    left join (
+					        select sta.id sta_id, count(1) iovqty
+					        from t_wh_sta_invoice inv, t_wh_sta sta
+					        where inv.sta_id = sta.id
+					        #if($staId)
+					        and sta.id = :staId
+					        #end
+					        #if($plId)
+					        and sta.picking_list_id = :plId        
+					        #end
+					        #if(!$staId && !$plId) 
+					        and sta.id = -1
+					        #end
+					        group by sta.id
+					    ) siov
+					    on siov.sta_id = sta.id,
+					    t_wh_sta_picking_list pl,
+					    t_wh_stv stv,
+					    t_wh_stv_line l,
+					    t_ma_transportator t,
+					    t_au_operation_unit ou,
+					    t_bi_channel s
+					    left join t_bi_channel_special_action sa on sa.channel_id = s.id and sa.type = 20,
+					    t_bi_inv_sku sku 
+					    left join (
+					 select  line.sta_id,line.sku_id,line.color,line.skuname,line.line_size,line.total_actual from wms.t_wh_sta_line line,wms.t_wh_sta a2
+                        where a2.id = line.sta_id
+                 		  #if($staId)
+					        and a2.id = :staId
+					        #end
+					        #if($plId)
+					        and a2.picking_list_id = :plId   
+					        #end
+					        #if(!$staId && !$plId) 
+					        and a2.id = -1
+					        #end
+                   		    and line.id  in (
+                   				select min(sss.id)  from t_wh_sta_line sss,t_wh_sta ssta where sss.sta_id=ssta.id    
+                   				 #if($staId)
+					        		and ssta.id = :staId
+					        	#end
+					       		#if($plId)
+					       			 and ssta.picking_list_id = :plId   
+					        	#end
+					       		#if(!$staId && !$plId) 
+					        		and ssta.id = -1
+					       		#end
+                   			    group by sss.sta_id,sss.sku_id  having count(sss.id)>=1
+                        )
+                    group by line.sta_id,line.sku_id,line.color,line.skuname,line.total_actual,line.line_size
+					    ) al on al.sku_id = sku.id,
+					    t_wh_location loc
+					where 
+						d.id = sta.id
+						and al.sta_id = sta.id
+					    and pl.id = sta.picking_list_id
+					    and stv.sta_id = sta.id
+					    and l.stv_id = stv.id
+					    and sku.id = l.sku_id
+					    and loc.id = l.location_id
+					    and ou.id = sta.main_wh_id
+					    and sta.owner = s.code
+					    and d.lpcode = t.exp_code
+					    and sta.status != 17
+					    #if($staId)
+					    and sta.id = :staId
+					    #end
+					    #if($plId)
+					    and pl.id = :plId
+					    #end
+					    #if(!$staId && !$plId) 
+					    and sta.id = -1
+					    #end
+					group by 
+					    sta.id,
+					    t.name,
+					    nvl(sa.shop_name,
+					    s.name),
+					    nvl(sa.SEND_WAREHOUSE_NAME, ou.name),
+					    d.receiver,
+					    d.address,
+					    d.province,
+					    d.city,
+		    			return_Transno,
+		    			sta.create_time,
+					    d.district,
+					    nvl(sa.rtn_address,
+					    s.RTN_WAREHOUSE_ADDRESS),
+					    case
+					    when d.mobile is null then
+					    d.telephone
+					    when d.telephone is null then
+					    d.mobile
+					    else
+					    d.telephone || ',' || d.mobile
+					    end,
+					    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone),
+					    d.remark,
+					    sta.ORDER_CREATE_TIME,
+					    sta.slip_code,
+					    sta.slip_code1,
+					    d.STORE_COM_IS_NEED_INVOICE,
+					    sta.slip_code2,
+					    sta.code,
+					    d.zipcode,
+					    nvl(sta.order_total_actual, sta.total_actual),
+					    d.TRANSFER_FEE,
+					    pl.code,
+					    sa.IS_NOT_DISPLAY_SUM,
+					    sta.pg_index,
+					    sta.idx1,
+					    sta.idx2,
+					    sta.create_time,
+					    sku.KEY_PROPERTIES,
+					    loc.code,
+					    sku.ext_code1,
+					    sku.SUPPLIER_CODE,
+					    sku.bar_code,
+					    nvl(iovqty, 0),
+					    sa.contacts,
+					    sa.img_semacode,
+					    sa.ext3,
+					    sta.memo,
+					    d.order_user_code,
+					    sku.sku_size,
+					    d.is_cod,
+					    sku.color,
+					    sku.en_name,
+					    sta.idx1 || '-' || sta.idx2,
+					    al.sku_id,
+					    al.skuname,
+					    al.total_actual,
+					    al.color,
+						al.line_size,
+						sku.name        
+					order by sta.pg_index, sku.ext_code1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- GoPro定制 -->
+	<bean id="StaLine.getGoProSpecialCustomValue" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+					select 
+						sta.id as STAID, 
+						sta.idx1 || '-' || sta.idx2 as batchIndex, 
+						t.name as TRANS_NAME, 
+						nvl(sa.shop_name, s.name) as PRINTSHOPNAME, 
+						nvl(sa.SEND_WAREHOUSE_NAME, ou.name) as OUNAME, 
+						TO_CHAR(sta.ORDER_CREATE_TIME,'YYYY-MM-DD') as ORDERDATE, 
+						d.receiver as RECEIVER, 
+						sa.contacts as RTN_CONTACTS, 
+						d.address as ADDRESS, 
+						d.address as cppAddress,
+						sta.create_time as RETURNTIME,
+		    			return_Transno as returnTransno,
+						d.STORE_COM_IS_NEED_INVOICE as ISSEEDINVOICE, 
+						d.province province, 
+						d.city city, 
+						d.district district, 
+						sku.ext_code2 as UPCCODE, 
+						nvl(sa.rtn_address, s.RTN_WAREHOUSE_ADDRESS) as RTN_WAREHOUSE_ADDRESS, 
+						sa.img_semacode as IMG_SEMACODE, 
+						sa.ext3 as IMG_LOGOTMALL, 
+						nvl(d.province||d.city||d.district||d.address, '') AS RECEIVERADDRESS, 
+						sku.code AS skuCodeStr,
+						case
+							when d.mobile is null 
+						then 
+							d.telephone
+							when d.telephone is null 
+						then
+							d.mobile
+						else
+							d.telephone || ',' || d.mobile
+						end as MOBILE, 
+						nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone) as TELEPHONE, 
+						d.remark as MEMO, 
+					    sta.slip_code as SLIP_CODE, 
+					    sta.slip_code1 as SLIPCODE1, 
+					    sta.slip_code2 as SLIPCODE2, 
+					    sta.code as CODE, 
+					    nvl(sta.memo, '无') as STA_MEMO, 
+					    d.zipcode as ZIPCODE, 
+					    nvl(sta.order_total_actual, sta.total_actual) as TOTAL_ACTUAL, 
+					    d.TRANSFER_FEE as TRANSFER_FEE, 
+					    pl.code as PLCODE, 
+					    sa.IS_NOT_DISPLAY_SUM as ISNOTDISPLAYSUM, 
+					    sta.pg_index as pgindex, 
+					    sku.KEY_PROPERTIES as KEYPROPERTIES, 
+					    loc.code as LOCATIONCODE, 
+					    sum(l.quantity) as QUANTITY, 
+					    case
+					    	when sku.name is null 
+					    then
+					    	sku.en_name 
+					    else 
+					        sku.name
+					    end as SKUNAME, 
+					    sku.ext_code1 as JMCODE, 
+					    sku.bar_code as BARCODE, 
+					    sku.SUPPLIER_CODE as SUPPLIERCODE, 
+					    nvl(iovqty, 0) as INVOICENUMBER, 
+					    d.order_user_code as ORDERUSERCODE, 
+					    sku.sku_size as SKUSIZE, 
+					    decode(d.is_cod, '1', '是', '否') as ISCODSTRING, 
+					    NVL(NVL(SKU.NAME, SKU.EN_NAME),'') || ' ' || nvl(SKU.COLOR,'') || ' ' || nvl(SKU.SKU_SIZE,'') AS CONCATFIELD, 
+					    sku.color as COLOR 
+					from 
+					    t_wh_sta_delivery_info d,
+					    t_wh_sta sta
+					    left join (
+							select 
+								sta.id sta_id, count(1) iovqty
+					        from 
+					        	t_wh_sta_invoice inv, t_wh_sta sta
+					        where 
+					        	inv.sta_id = sta.id
+						        #if($staId)
+						        	and sta.id = :staId 
+						        #end
+						        #if($plId)
+						        	and sta.picking_list_id = :plId 
+						        #end
+						        #if(!$staId && !$plId) 
+						        	and sta.id = -1
+						        #end
+					        group by 
+					        	sta.id
+					    ) siov
+					    on siov.sta_id = sta.id,
+					    t_wh_sta_picking_list pl,
+					    t_wh_stv stv,
+					    t_wh_stv_line l,
+					    t_ma_transportator t,
+					    t_au_operation_unit ou,
+					    t_bi_channel s left join t_bi_channel_special_action sa on sa.channel_id = s.id and sa.type = 20,
+					    t_bi_inv_sku sku,
+					    t_wh_location loc
+					where 
+						d.id = sta.id
+					    and pl.id = sta.picking_list_id
+					    and stv.sta_id = sta.id
+					    and l.stv_id = stv.id
+					    and sku.id = l.sku_id
+					    and loc.id = l.location_id
+					    and ou.id = sta.main_wh_id
+					    and sta.owner = s.code
+					    and d.lpcode = t.exp_code
+					    and sta.status != 17
+					    #if($staId)
+					    	and sta.id = :staId 
+					    #end
+					    #if($plId)
+					    	and pl.id = :plId
+					    #end
+					    #if(!$staId && !$plId) 
+					    	and sta.id = -1
+					    #end
+					group by 
+					    sta.id,
+					    t.name,
+					    nvl(sa.shop_name,s.name),
+					    nvl(sa.SEND_WAREHOUSE_NAME, ou.name),
+					    d.receiver,
+					    d.address,
+					    sta.create_time,
+					    d.province,
+					    return_Transno,
+					    d.city,
+					    d.district,
+					    nvl(sa.rtn_address,s.RTN_WAREHOUSE_ADDRESS),
+					    case
+					    	when d.mobile is null then
+					    	d.telephone
+					    	when d.telephone is null then
+					    	d.mobile
+					    else
+					    	d.telephone || ',' || d.mobile
+					    end,
+					    nvl(nvl(sa.contacts_phone, sa.contacts_phone1), s.telephone),
+					    d.remark,
+					    sta.ORDER_CREATE_TIME,
+					    sta.slip_code,
+					    sta.slip_code1,
+					    d.STORE_COM_IS_NEED_INVOICE,
+					    sta.slip_code2,
+					    sta.code,
+					    d.zipcode,
+					    nvl(sta.order_total_actual, sta.total_actual),
+					    d.TRANSFER_FEE,
+					    pl.code,
+					    sa.IS_NOT_DISPLAY_SUM,
+					    sta.pg_index,
+					    sta.idx1,
+					    sta.idx2,
+					    sku.KEY_PROPERTIES,
+					    loc.code,
+					    sku.name,
+					    sku.ext_code1,
+					    sku.SUPPLIER_CODE,
+					    sku.bar_code,
+					    nvl(iovqty, 0),
+					    sa.contacts,
+					    sa.img_semacode,
+					    sa.ext3,
+					    sta.memo,
+					    d.order_user_code,
+					    sku.sku_size,
+					    d.is_cod,
+					    sku.color,
+					    sku.en_name,
+					    sku.ext_code2,
+					    sta.idx1 || '-' || sta.idx2,
+					    nvl(d.province||d.city||d.district||d.address, ''),
+					    sku.code  
+					order by 
+						sta.pg_index, sku.ext_code1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

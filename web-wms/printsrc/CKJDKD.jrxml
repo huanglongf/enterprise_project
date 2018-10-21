@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="JDKD" language="groovy" pageWidth="297" pageHeight="337" columnWidth="297" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="75"/>
+	<field name="trackingNo" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="mobile" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="amount" class="java.lang.String"/>
+	<field name="sender" class="java.lang.String"/>
+	<field name="senderTel" class="java.lang.String"/>
+	<field name="senderAddress" class="java.lang.String"/>
+	<field name="printTime" class="java.lang.String"/>
+	<field name="remark" class="java.lang.String"/>
+	<field name="refSlipCode" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="337" splitType="Stretch">
+			<componentElement>
+				<reportElement x="60" y="13" width="217" height="35" isRemoveLineWhenBlank="true"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="2" barHeight="45">
+					<jr:codeExpression><![CDATA[$F{trackingNo}+"-1-1-"]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="83" y="48" width="176" height="14"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}+"-1-1-"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="34" y="67" width="50" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[收方信息:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="81" width="30" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[姓名:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="57" y="81" width="37" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="113" y="81" width="30" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[电话:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="223" y="67" width="53" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[代收金额:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="136" y="81" width="85" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telephone}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="57" y="93" width="164" height="29" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="34" y="93" width="30" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[地址:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="223" y="81" width="13" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[￥]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="236" y="81" width="34" height="15"/>
+				<textElement>
+					<font fontName="宋体" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="270" y="81" width="13" height="15"/>
+				<textElement>
+					<font fontName="宋体" isBold="true"/>
+				</textElement>
+				<text><![CDATA[元]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="223" y="136" width="53" height="16"/>
+				<textElement>
+					<font fontName="宋体" isBold="true"/>
+				</textElement>
+				<text><![CDATA[客户签字:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="122" width="50" height="14"/>
+				<textElement>
+					<font fontName="宋体" isBold="true"/>
+				</textElement>
+				<text><![CDATA[寄方信息:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="148" width="30" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[地址:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="57" y="136" width="37" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sender}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="113" y="136" width="30" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[电话:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="57" y="148" width="160" height="22" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{senderAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="34" y="136" width="30" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[姓名:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="136" y="136" width="85" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{senderTel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="191" y="166" width="94" height="13"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{printTime}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="113" y="181" width="43" height="22"/>
+				<textElement>
+					<font fontName="宋体" isBold="true"/>
+				</textElement>
+				<text><![CDATA[运单号:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="154" y="181" width="126" height="22"/>
+				<textElement textAlignment="Left">
+					<font fontName="宋体" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="36" y="196" width="35" height="13"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[订单号:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="209" width="35" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="219" width="162" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remark}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="36" y="219" width="28" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[备注:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="138" y="209" width="81" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telephone}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="115" y="209" width="28" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[电话:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="209" width="28" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[姓名:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="71" y="196" width="73" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{refSlipCode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="225" y="203" width="51" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[代收金额:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="272" y="219" width="11" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[元]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="225" y="219" width="11" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[￥]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="238" y="219" width="32" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="36" y="254" width="48" height="20"/>
+				<textElement>
+					<font fontName="宋体" isBold="true"/>
+				</textElement>
+				<text><![CDATA[寄方信息:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="268" width="35" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sender}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="280" width="97" height="21" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{senderAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="36" y="280" width="28" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[地址:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="138" y="268" width="79" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{senderTel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="115" y="268" width="28" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[电话:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="36" y="268" width="28" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[姓名:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="187" y="242" width="106" height="26" isRemoveLineWhenBlank="true"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="4" barHeight="125">
+					<jr:codeExpression><![CDATA[$F{trackingNo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="95" y="243" width="73" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{refSlipCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="213" y="277" width="86" height="21"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{printTime}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="216" y="267" width="73" height="18"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="59" y="230" width="146" height="13" isRemoveLineWhenBlank="true"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="2" barHeight="10">
+					<jr:codeExpression><![CDATA[$F{refSlipCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<staticText>
+				<reportElement x="220" y="101" width="62" height="40"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="23" isBold="true"/>
+				</textElement>
+				<text><![CDATA[1/1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="34" y="165" width="102" height="13" forecolor="#FF0066"/>
+				<textElement>
+					<font fontName="宋体" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[备注:不得拆内包装验货]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

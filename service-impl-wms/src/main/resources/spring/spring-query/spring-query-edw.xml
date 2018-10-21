@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean id="BiChannel.findEdwTbiChannel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select 
+									t.id as id,
+									t.customer_id as customerId,
+									t.code as code,
+									t.name as name,
+									t.telephone as telephone,
+									t.address as address,
+									t.zipcode as zipcode,
+									t.rtn_warehouse_address as rtnWarehouseAddress,
+									t.is_not_display_sum as isNds,
+									t.sms_template as smsTemplate,
+									t.is_sms as isM,
+									t.vmi_code as vmiCode,
+									t.vmi_wh_source as vmiWHSource,
+									t.shop_code as shopCode,
+									t.is_marger as isMa,
+									t.is_return_need_package as isRnp,
+									t.is_jd_ol_order as isJdoo,
+									t.status as statusString,
+									t.create_time as createTime,
+									t.last_modify_time as lastModifyTime  
+									from t_bi_channel t 
+									where t.last_modify_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="User.findEdwTauUser" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select 
+							t.id as id,
+							t.create_time as createTime,
+							t.email as email,
+							t.is_acc_non_expired as isAne,
+							t.is_acc_non_locked as isAnl,
+							t.is_enabled as isEn,
+							t.is_system as isSys,
+							t.job_number as jobNumber,
+							t.latest_access_time as latestAccessTime,
+							t.latest_update_time as latestUpdateTime,
+							t.login_name as loginName,
+							t.phone as phone,
+							t.user_name as userName
+							from t_au_user t 
+							where 
+							t.latest_access_time >= trunc(sysdate) -1 or
+							t.latest_update_time >= trunc(sysdate) -1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!--t_au_operation_unit  -->
+	<bean id="OperationUnit.findEdwTauOperationUnit" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select t.id               as id,
+						       t.code             as code,
+						       t.ou_comment       as ouComment,
+						       t.full_name        as fullName,
+						       t.is_available     as isAvailableInt,
+						       t.name             as name,
+						       t.version          as version,
+						       t.ou_type_id       as ouTypeid,
+						       t.parent_ou_id     as parentUnitid,
+						       t.last_modify_time as lastModifyTime
+						 	   from t_au_operation_unit t 
+						  where t.last_modify_time >= trunc(sysdate) -1
+						  
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!--t_bi_brand  -->
+	<bean id="Brand.findEdwTbiBrand" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select t.id           as id,
+						       t.code         as code,
+						       t.name         as name,
+						       t.en_name      as nameEng,
+						       t.create_time  as createTime,
+						       t.is_available as isAvailableInt,
+						       t.last_modify_time as lastModifyTime
+						 	   from t_bi_brand t  
+						  where t.last_modify_time >= trunc(sysdate) -1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- t_sf_confirm_order_queue_log -->
+	<bean id="SfConfirmOrderQueueLog.findEdwTsfConfirmOrderOueueLog"
+		class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select t.id          as id,
+						       t.checkword   as checkWord,
+						       t.create_time as createTime,
+						       t.mailno      as mailno,
+						       t.order_id    as orderId,
+						       t.sta_code    as staCode,
+						       t.weight      as weight,
+						       t.filter1     as filter1,
+						       t.filter2     as filter2,
+						       t.filter3     as filter3,
+						       t.finish_time as finishTime,
+						       t.filter4     as filter4
+						  from t_sf_confirm_order_queue_log t 
+						  where  
+						  t.finish_time >= trunc(sysdate) -1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- t_bi_inv_sku -->
+	<bean id="Sku.findEdwSku" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select sku.id                 as id,
+						       sku.bar_code           as barCode,
+						       sku.code               as code,
+						       sku.ext_code1          as extensionCode1,
+						       sku.ext_code2          as extensionCode2,
+						       sku.ext_code3          as extensionCode3,
+						       sku.jm_code            as jmCode,
+						       sku.key_properties     as keyProperties,
+						       sku.name               as name,
+						       sku.supplier_code      as supplierCode,
+						       sku.brand_id           as brandId,
+						       sku.product_id         as productId,
+						       sku.en_name            as enName,
+						       sku.update_time        as updateTime,
+						       sku.color              as color,
+						       sku.sku_size           as skuSize,
+						       sku.ext_prop1          as extensionCode1,
+						       sku.ext_code2          as extensionCode1,
+						       sku.customer_id        as customerId,
+						       sku.warranty_card_type as warrantyCardTypeInt,
+						       sku.width              as width,
+						       sku.height             as height,
+						       sku.length             as length,
+						       sku.is_sn_sku          as isSnSkuInt,
+						       sku.sales_model        as salesModel,
+						       sku.gross_weight       as grossWeight,
+						       sku.store_mode         as storemodeInt,
+						       sku.is_gift            as isGiftInt,
+						       sku.is_railway         as deliveryTypeInt,
+						       sku.sku_categories_id  as skuCategoriesId,
+						       sku.customer_sku_code  as customerSkuCode,
+						       sku.list_price         as listPrice,
+						       sku.last_modify_time   as lastModifyTime
+						 	   from t_bi_inv_sku sku
+						       where 
+						       sku.last_modify_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- t_bi_warehouse-->
+	<bean id="Warehouse.findEdwTbiWarehouse" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select 
+							   t.id    as id,
+						       t.wh_avail_size      as availSize,
+						       t.fax                as fax,
+						       t.is_share           as isShareInt,
+						       t.manage_mode        as manageModeInt,
+						       t.op_mode            as opModeInt,
+						       t.oth_contact1       as otherContact1,
+						       t.phone              as phone,
+						       t.pic                as pic,
+						       t.pic_contact        as picContact,
+						       t.wh_size            as whSize,
+						       t.worker_num         as workerNum,
+						       t.ou_id              as ouId,
+						       t.departure          as departure,
+						       t.is_need_wrapstuff  as isNeedWrapStuffInt,
+						       t.so_count_model_id  as soCountModelId,
+						       t.vmi_source         as vmiSource,
+						       t.vmi_sourcewh       as vmiSourceWh,
+						       t.is_manual_weighing as isManualWeighingInt,
+						       t.address            as address,
+						       t.is_checked_barcode as isCheckedBarcodeInt,
+						       t.is_auto_commit     as isAutoCommit,
+						       t.city               as city,
+						       t.is_sf_ol_order     as isSfOlOrderInt,
+						       t.province           as province,
+						       t.zipcode            as zipcode,
+						       t.sf_wh_code         as sfWhCode,
+						       t.city_code          as cityCode,
+						       t.is_mq_invoice      as isMqInvoiceInt,
+						       t.is_out_invoice     as isOutinvoiceInt,
+						       t.is_ems_ol_order    as isEmsOlOrderInt,
+						       t.wh_sale_ocp_type   as saleOcpTypeInt,
+						       t.is_support_package as supportPackageSku,
+						       t.is_support_seckill as isSupportSeckillInt,
+						       t.is_close_rollover  as isCloseRollover,
+						       t.is_ol_sto          as isOlStoInt,
+						       t.is_zto_ol_order    as isZtoOlOrderInt,
+						       t.customer_id        as customerId,
+						       t.last_modify_time   as LastModifyTime
+  							   from t_bi_warehouse t 
+  							   where t.last_modify_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- t_wh_sta-->
+	<bean id="StockTransApplication.findEdwTwhSta" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select sta.id                   as id,
+					       sta.bi_seq_no            as businessSeqNo,
+					       sta.code                 as code,
+					       sta.create_time          as createTime,
+					       sta.finish_time          as finishTime,
+					       sta.inbound_time         as inboundTime,
+					       sta.is_need_occupied     as isNeedOccupiedInt,
+                 		   replace(sta.memo,chr(13)||chr(10),'')  as  memo,
+					       sta.outbound_time        as outboundTime,
+					       sta.owner                as owner,
+					       sta.slip_code            as slipCode,
+					       sta.slip_type            as refSlipTypeInt,
+					       sta.status               as intStaStatus,
+					       sta.total_actual         as totalActual,
+					       sta.type                 as intStaType,
+					       sta.creator_id           as creatorId,
+					       sta.ho_list_id           as hoListId,
+					       sta.in_operator_id       as inboundOperatorId,
+					       sta.main_wh_id           as mainWhId,
+					       sta.out_operator_id      as outboundOperatorId,
+					       sta.picking_list_id      as pickingListId,
+					       sta.skus                 as skus,
+					       sta.pg_index             as pgIndex,
+					       sta.vmi_rc_status        as vmiRCStatusInt,
+					       sta.currency             as currency,
+					       sta.total_gtp            as totalGtp,
+					       sta.check_time           as checkTime,
+					       sta.sku_qty              as skuQty,
+					       sta.is_sn                as isSnInt,
+					       sta.is_special_packaging as isSpecialPackagingInt,
+					       sta.slip_code1           as slipCode1,
+					       sta.slip_code2           as slipCode2,
+					       sta.sys_update_time      as sysUpdateTime,
+					       sta.activity_source      as activitySource,
+					       sta.sku_max_length       as skuMaxLength,
+					       sta.is_rail_way          as deliveryTypeInt,
+					       sta.is_sed_kill          as isSedKillInt,
+					       sta.sku_categories_id    as skuCategoriesInt,
+					       sta.is_merge             as isMergeInt,
+					       sta.tracking_and_sku     as trackingAndSku,
+					       sta.picking_type         as pickingTypeInt,
+					       sta.order_create_time    as orderCreateTime,
+					       sta.order_total_actual   as orderTotalActual,
+					       sta.order_transfer_free  as orderTransferFreeInt,
+					       sta.channel_list         as channelList,
+					       sta.last_modify_time     as lastModifyTime
+					  from t_wh_sta sta 
+					  where 
+					  sta.last_modify_time >= trunc(sysdate) - 1 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+	<!-- t_wh_sta_delivery_info-->
+	<bean id="StaDeliveryInfo.findEdwTwhStaDeliveryInfo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					  select t.id                        as id,
+					         replace( t.address,chr(13)||chr(10),'') as address,
+					         t.city                      as city,
+					         t.country                   as country,
+					         t.district                  as district,
+					         t.lpcode                    as lpcode,
+					         t.mobile                    as modile,
+					         t.province                  as province,
+					         t.receiver                  as receiver,
+					         t.store_com_is_need_invoice as storeComIsNeedInvoiceInt,
+					         t.telephone                 as telephone,
+					         t.tracking_no               as tracking,
+					         t.transfer_cost             as transferCost,
+					         t.transfer_fee              as transferFee,
+					         t.zipcode                   as zipcode,
+					         t.weight                    as weight,
+					         t.is_cod                    as isCodInt,
+					         t.ext_trans_order_id        as extTransOrderId,
+					         t.trans_city_code           as transCityCode,
+					         t.is_more_package           as isMorePackageInt,
+					         t.trans_time_type           as transTimeTypeInt,
+					         t.trans_type                as transTypeInt,
+					         t.order_user_code           as orderUserCode,
+					         t.insurance_amount          as insuranceAmount,
+					         t.is_trans_cod_pos          as isCodPosInt,
+					         t.last_modify_time          as lastModifyTime
+					    from t_wh_sta_delivery_info t
+					   where t.id= :staId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- t_wh_sta_line-->
+	<bean id="StaLine.findEdwTwhStaLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select t.id                      as id,
+					       t.complete_quantity       as completeQuantity,
+					       t.owner                   as owner,
+					       t.quantity                as quantity,
+					       t.sku_cost                as stuCost,
+					       t.total_actual            as totalActual,
+					       t.inv_status_id           as invInvstatusId,
+					       t.sku_id                  as skuId,
+					       t.sta_id                  as staId,
+					       t.unit_price              as unitPrice,
+					       t.order_total_actual      as orderTotalActual,
+					       t.order_total_bf_discount as orderTotalBfDiscount,
+					       t.list_price              as listPrice,
+					       t.skuname                 as skuName
+					  from t_wh_sta_line t  where t.sta_id = :staId					
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- t_wh_stv-->
+	<bean id="StockTransVoucher.findEdwTwhStv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select t.id               as id,
+					       t.business_seq_no  as businessSeqNo,
+					       t.code             as code,
+					       t.create_time      as createTime,
+					       t.direction        as directionInt,
+					       t.finish_time      as finishTime,
+					       t.owner            as owner,
+					       t.status           as statusInt,
+					       t.creator_id       as creatorId,
+					       t.operator_id      as operatorId,
+					       t.sta_id           as staId,
+					       t.transtype_id     as transactionTypeId,
+					       t.wh_id            as whId,
+					       t.Last_Modify_Time as last_Modify_Time
+					  from t_wh_stv t
+					 where t.sta_id= :staId 					 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- t_wh_stv_line-->
+	<bean id="StvLine.findEdwTwhStvLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select t.id            as id,
+					       t.batch_code    as batchCode,
+					       t.direction     as directionInt,
+					       t.owner         as owner,
+					       t.quantity      as quantity,
+					       t.sku_cost      as skuCost,
+					       t.district_id   as districtId,
+					       t.inv_status_id as invStatusId,
+					       t.location_id   as locationId,
+					       t.sku_id        as skuId,
+					       t.staline_id    as stalineId,
+					       t.stv_id        as stvId,
+					       t.transtype_id  as transtypeId,
+					       t.wh_id         as whId,
+					       t.inbound_time  as inboundTime
+					  from t_wh_stv_line t
+					 where t.stv_id = :stvId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="WarehouseLocation.findEdwTwhLocation" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select  
+							l.id as id,
+							l.barcode as barCode,
+							l.capacity_ratio as capaRatio,
+							l.capacity as capacity,
+							l.code as code,
+							l.dim_c as dimC,
+							l.dim_x as dimX,
+							l.dim_y as dimY,
+							l.dim_z as dimZ,
+							l.is_available as isAvailableInt,
+							l.is_disputable as isDisputableInt,
+							l.is_locked as isLockedInt,
+							l.manual_code as manualCode,
+							l.type as sortingModeInt,
+							l.sys_compile_code as sysCompileCode,
+							l.district_id as districtId,
+							l.ou_id as ouid 
+							from t_wh_location l where 
+							l.last_modify_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="PackageInfo.findEdwTwhPackageInfo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select 
+							t.id as id,
+							t.is_checked as isCheckedInt,
+							t.lpcode as lpCode,
+							t.tracking_no as trackingNo,
+							t.transfer_cost as transferCose,
+							t.weight as weight,
+							t.sta_delivery_info_id as staDeliveryInfoId,
+							t.status as pgStatus,
+							t.create_time as createTime
+							from t_wh_package_info t where 
+							t.last_modify_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="HandOverList.findEdwTwhStaHoList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select 
+								t.id as id,
+								t.bill_count as billCount,
+								t.code as code,
+								t.create_time as createTime,
+								t.hand_over_time as handOverTime,
+								t.lpcode as lpcode,
+								t.package_count as packageCount,
+								t.party_a_operator as partyAOperator,
+								t.party_b_operator as partyBOperator,
+								t.party_a_mobile as paytyAMobile,
+								t.party_b_mobile as paytyBMobile,
+								t.party_b_passport as paytyBPassPort,
+								t.status as hoIntStatus,
+								t.total_weight as totalWeight,
+								t.modifer_id as modifierId,
+								t.operator_id as operatorId,
+								t.ou_id as ouId
+								from t_wh_sta_ho_list t where 
+								t.last_modify_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="HandOverListLine.findEdwTwhStaHoListLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select 
+								t.id as id,
+								t.status as lineIntStatus,
+								t.tracking_no as trackingNo,
+								t.weight as weight,
+								t.ho_list_id as hoListId,
+								t.sta_id as staId 
+								from t_wh_sta_ho_list_line t
+								where t.ho_list_id = :hoid
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="WhInfoTimeRef.findEdwTwhInfoTimeRef" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select 
+								t.id as id,
+								t.bill_type as billTypeInt,
+								t.node_type as nodeTypeInt,
+								t.slip_code as slipCode,
+								t.execution_time as executionTime,
+								t.create_id as createId 
+								from t_wh_info_time_ref t 
+								where t.execution_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StockTransTxLog.findStockTransTxLogList2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+               		select distinct st.inventory_check_id id, c.code staCode
+					 from t_wh_st_log st, t_wh_inv_check c
+					where st.tran_time > sysdate - 3
+					  and st.inventory_check_id = c.id
+					  and c.type = 2
+					  and st.ocp_code is null
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StockTransTxLog.updateOcpById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_st_log set ocp_code='Y' where inventory_check_id = :invId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransTxLog.findEdwTwhStLog" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select 
+									l.id as id,
+									l.direction as intDirection,
+									l.district_id as districtId,
+									l.invs_tatus_id as invStatusId,
+									l.location_id as locationId,
+									l.owner as owner,
+									l.quantity as quantity,
+									l.sku_id as skuId,
+									l.stv_id as stvId,
+									l.tran_time as transactionTime,
+									l.wh_id as warehouseOuId,
+									l.transtype_id as transactionTypeid,
+									l.inbound_time as inboundTime,
+									l.batch_code as batchCode 
+									from t_wh_st_log l 
+									where l.tran_time >= trunc(sysdate) - 1 
+									order by l.tran_time desc 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StaAdditionalLine.findEdwTwhStaAddLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+							select 
+										l.id as id,
+										l.create_time as createTime,
+										l.lp_code as lpcode,
+										l.owner as owner,
+										l.quantity as quantity,
+										l.sku_cost as skuCost,
+										l.tracking_no as trackingNo,
+										l.sku_id as skuId,
+										l.sta_id as staId 
+										from t_wh_sta_add_line l  
+										where 
+										l.create_time >= trunc(sysdate) - 1  
+										order by l.create_time desc 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Inventory.findEdwTwhInventory" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select 
+								i.id as id,
+								i.batch_code as batchCode,
+								i.inbound_time as inboundTime,
+								i.is_occupied as isOccupiedInt,
+								i.occupation_code as occupationCode,
+								i.inv_owner as owner,
+								i.quantity as quantity,
+								i.sku_cost as skuCost,
+								i.district_id as districtId,
+								i.location_id as locationId,
+								i.ou_id as whOuId,
+								i.sku_id as skuId,
+								i.status_id as statusId,
+								i.version as versionDate,
+								i.production_date as productionDate,
+								i.valid_date as validDate,
+								i.expire_date as expireDate 
+								from t_wh_sku_inventory i 
+								where 
+				                i.sku_id = :skuid  
+				                and i.inv_owner = :owner 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="SkuBarcode.findEdwTbiInvSkuBarcode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+						select 
+									t.id as id,
+									t.barcode as barcode,
+									t.sku_id as skuId,
+									t.customer_id as customerId
+									from t_bi_inv_sku_barcode t 
+									where 
+									t.last_modify_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="PickingList.findEdwTwhStaPickingList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					select 
+								t.id as id,
+								t.check_bill_count as checkedBillCount,
+								t.check_sku_qty as checkedSkuQty,
+								t.check_time as checkedTime,
+								t.code as code,
+								t.create_time as createTime,
+								t.executed_time as executedTime,
+								t.picking_time as pickingTime,
+								t.plan_bill_count as planBillCount,
+								t.plan_sku_qty as planSkuQty,
+								t.sorting_mode as sortingModeInt,
+								t.status as statusInt,
+								t.out_creater_id as crtUserName,
+								t.out_operator_id as operUserName,
+								t.wh_id as whid,
+								t.output_count as outputCount,
+								t.check_mode as intCheckMode,
+								t.lpcode as lpcode,
+								t.flag_name as flagName,
+								t.trans_type as transTypeInt,
+								t.trans_time_type as transTimeTypeInt,
+								t.wh_add_status as whStatusInt,
+								t.wh_add_type as whTypeInt,
+								t.is_invoice_num as invoiceNum,
+								t.is_postposition_packing_page as isPPP,
+								t.is_postposition_express_bill as isPEB,
+								t.is_invoice as isInvoiceInt,
+								t.send_city as city,
+								t.to_location as toLocation,
+								t.special_type as specialTypeInt
+								from t_wh_sta_picking_list t 
+								where t.executed_time >= trunc(sysdate) - 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="StockTransTxLog.findEdwTwhStLogToSkuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+			                  select 
+					                  DISTINCT l.sku_id as skuId,
+					                  l.owner as owner 
+					                  from t_wh_st_log l 
+					                  where l.tran_time >= trunc(sysdate) - 1 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhInfoTimeRef.findWhInfoTimeListBySlipCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[  
+			  select 
+			  sta.code    as code,
+              sta.slip_code  as refSlipCode,
+              t.execution_time as executionTime,
+              decode(t.node_type,null,'',1,'新建',2,'配货',3,'核对',4,'出库',5,'已完成',6,'取消未处理',7,'取消已处理',8,'首次打印装箱清单',
+                    9,'打印物流面单',10,'打印拣货单1',11,'打印拣货单2',12,'未开始拣货',13,'正在拣货',14,'拣货完成',15,'部分转入',
+                     20,'配货失败',30,'收货数据导入',31,'确认收货',33,'收货审核',34,'上架',35,'关闭') intStatus,
+              u.USER_NAME     as operator
+         from T_WH_INFO_TIME_REF t
+         
+         left join t_wh_sta sta on sta.slip_code = t.slip_code
+         left join t_au_user u on u.id=t.create_id
+        where 1=1
+        
+          #if($ouId)
+ 					and t.ou_id=:ouId
+ 		  #end
+ 		   #if($code)
+ 					 and sta.code=:code
+ 		  #end
+        and t.slip_Code=:slipCode
+         		
+           group by sta.code,sta.slip_code,t.execution_time,t.node_type,u.user_name         
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 菜鸟仓SN商品管理 -->
+	<bean id="StockTransVoucher.findStvIdByStaWithSkuAndDirection" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					 select id from t_wh_stv v where  v.sta_id = (select id from t_wh_sta a where a.code =:staCode)
+					 #if($type)
+ 						and (type=:type or type is null)
+ 					 #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransVoucher.findStvIdByStaIdUnique" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					 select id from t_wh_stv v where  
+					    v.sta_id = (select id from t_wh_sta a where a.code =:staCode)
+					    and rownum=1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransVoucher.findProcessStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+					 select stv.id from t_wh_stv stv where  
+					    stv.sta_id= :staId
+					    and stv.status = 1
+					    and stv.direction = 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

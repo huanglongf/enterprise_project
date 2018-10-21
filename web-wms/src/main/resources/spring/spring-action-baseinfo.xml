@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+>
+	<bean id="operationCenterAction" class="com.jumbo.web.action.baseinfo.OperationCenterAction" scope="request" />
+	<bean id="companyAction" class="com.jumbo.web.action.baseinfo.CompanyAction" scope="request" />
+	<bean id="warehouseBaseinfoAction" class="com.jumbo.web.action.baseinfo.WarehouseBaseinfoAction" scope="request" />
+	<bean id="carServiceAction" class="com.jumbo.web.action.baseinfo.CarServiceAction" scope="request" />
+	<bean id="warehouseShopMaintainAction" class="com.jumbo.web.action.baseinfo.WarehouseShopMaintainAction" scope="request" />
+	<bean id="companyShopAction" class="com.jumbo.web.action.baseinfo.CompanyShopAction" scope="request" />
+	<bean id="salesReportFormAction" class="com.jumbo.web.action.baseinfo.SalesReportFormAction" scope="request" />
+	<bean id="biChannelInfoAction" class="com.jumbo.web.action.baseinfo.BiChannelInfoAction" scope="request" />
+	<bean id="skuModifyLogAction" class="com.jumbo.web.action.baseinfo.SkuModifyLogAction" scope="request" />
+	<bean id="sfNextMorningConfigAction" class="com.jumbo.web.action.baseinfo.SfNextMorningConfigAction" scope="request" />
+	<bean id="nikeTodaySendConfigAction" class="com.jumbo.web.action.baseinfo.NikeTodaySendConfigAction" scope="request" />
+	<bean id="checkPingAction" class="com.jumbo.web.action.checkPing.CheckPingAction" scope="request" />
+</beans>

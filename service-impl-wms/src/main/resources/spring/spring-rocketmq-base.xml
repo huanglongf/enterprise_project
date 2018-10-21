@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+	
+	<!--producerGroup 生产者组 -->
+	<!--namesrvAddr  命名服务器地址，多个采用分号分隔-->
+	<!--producerInstanceName  生产者实例对象-->
+	
+	<bean id="producer" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQProducerInit" init-method="init" destroy-method="destroy" >
+		<property name="producerGroup" value="producer_group1" />
+		<property name="namesrvAddr" value="${producerSubscribe.namesrvAddr}"/>
+		<property name="producerInstanceName" value="producerServer" />
+	</bean>
+	<!--consumerGroup 消费者群组  -->
+	<!--namesrvAddr 命名服务器地址,多个采用分号分隔  -->
+	<!--consumerInstanceName  消费者实例对象(若一台服务器上启动多个消费者，建议将实例区分开)-->
+	<!--subscription  -->
+		<!-- 多个订阅主题使用json格式 eg: {'test':'baozun || test_tag','key':'value'}-->
+		<!-- 如果无二级标签，因符合json key:value格式，所以配置如：'three':'*' -->
+	<!--threadMin 消费者开启线程数-->
+	<!--threadMax 消费者开启线程数-->
+	<!--consumeMessageBatchMaxSize  单次拉取最大消息量-->
+	<!--consumeFromWhere  消费起始位置-->
+	<!--messageHandler  业务处理类集合-->
+	<!-- 	'wms32hub_sale_outbount':'oms||pac' -->
+	<!-- <bean id="wms3_group1" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="wms3_group1" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.hub2wms3.salesorder.notify}:'*',${mq.wms3.mq.rtn.outbount.yh} :'*',${mq.wms3.mq.rtn.outbount.lf}:'*',${mq.pac.wms.queue}:'*',${mq.wms3.test.order}:'*',${mq.wms3.create.sta.oms}:'*',${mq.wms3.create.sta.pac}:'*',${mq.pacs2wms3.createSta.request}:'*'}" />
+		<property name="threadMin" value="50"/>
+		<property name="threadMax" value="50"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="messageHandler" ref="messageHandler" />
+	</bean> -->
+	
+	<!-- 直连订单接受非ad 1 -->
+	<bean id="${cg.mq.hub2wms3.salesorder.notify}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.hub2wms3.salesorder.notify}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.hub2wms3.salesorder.notify}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler1" />
+	</bean>
+	 <!-- 非直连订单接受非ad 2 -->
+	<bean id="${cg.mq.pac.wms.queue}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.pac.wms.queue}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.pac.wms.queue}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler2" />
+	</bean>
+	<!-- 出库反馈 越海  WLB 3-->     
+	<bean id="${cg.mq.wms3.mq.rtn.outbount.yh}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.mq.rtn.outbount.yh}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.wms3.mq.rtn.outbount.yh} :'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler3" />
+	</bean>
+	
+	<!-- 出库反馈 LF 4-->
+	<bean id="${cg.mq.wms3.mq.rtn.outbount.lf}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.mq.rtn.outbount.lf}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.wms3.mq.rtn.outbount.lf}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler4" />
+	</bean>
+	
+	  <!-- 直连创单  5-->
+	<bean id="${cg.mq.wms3.create.sta.oms}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.create.sta.oms}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.wms3.create.sta.oms}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler5" />
+	</bean>
+	
+	<!--非直连创单  6-->
+	<bean id="${cg.mq.wms3.create.sta.pac}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.create.sta.pac}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.wms3.create.sta.pac}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler6" />
+	</bean>
+	
+	
+	 <!-- 创单成功请求反馈  7-->
+	<bean id="${cg.mq.pacs2wms3.createSta.request}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.pacs2wms3.createSta.request}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.pacs2wms3.createSta.request}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler7" />
+	</bean>
+	
+	
+		 <!--test  8-->
+	<bean id="${cg.mq.wms3.test.order}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.test.order}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.wms3.test.order}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler8" />
+	</bean>
+	
+	<!-- 获取运单号  9-->
+	<bean id="${cg.mq.wms3.get.transNo}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.get.transNo}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.wms3.get.transNo}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler9" />
+	</bean>
+	
+	
+	<bean id="${cg.mq.wms3.create.pickinglist}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.create.pickinglist}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.mq.wms3.create.pickinglist}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler10" />
+	</bean>
+	
+        <!--zhanyong 10-->
+	<bean id="${cg.mq.wms3.occupy.inventory}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.occupy.inventory}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.wms3.occupy.inventory}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler11" />
+	</bean>
+	
+	
+	<bean id="${cg.mq.wms3.outbound_pickinglist}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.outbound_pickinglist}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.mq.wms3.outbound_pickinglist}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler12" />
+	</bean>
+	
+	<bean id="${cg.mq.im2wms3.inventory.sku.full}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.im2wms3.inventory.sku.full}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.im2wms3.inventory.sku.full}:'*'}" />
+		<property name="threadMin" value="1"/>
+		<property name="threadMax" value="1"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler13" />
+	</bean>
+	<!-- nike.inbound hub 收货接受指令 -->
+	<bean id="${cg.mq.wms3.nike.inbound.hub}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.nike.inbound.hub}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.wms3.nike.inbound.hub}:'*'}" />
+		<property name="threadMin" value="5"/>
+		<property name="threadMax" value="5"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler14" />
+	</bean>
+	
+	<!--nike.nikeQianHaiSkuInfo hub 商品接收 -->
+	<bean id="${cg.mq.wms3.nike.goods.master}" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="${cg.mq.wms3.nike.goods.master}" />
+		<property name="namesrvAddr" value="${consumer.namesrvAddr}"/>
+		<property name="consumerInstanceName" value="consumerServer1" />
+		<property name="subscription" value="{${mq.wms3.nike.goods.master}:'*'}" />
+		<property name="threadMin" value="5"/>
+		<property name="threadMax" value="5"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_LAST_OFFSET"/>
+		<property name="isserverManger" value="${mq.is.server.manger}" />
+		<property name="messageHandler" ref="messageHandler15" />
+	</bean>
+	
+		
+	<!--consumerGroup 消费者群组  -->
+	<!--namesrvAddr 命名服务器地址,多个采用分号分隔  -->
+	<!--consumerInstanceName  消费者实例对象(若一台服务器上启动多个消费者，必须将实例区分开)-->
+	<!--subscription  -->
+		<!-- 多个订阅主题使用json格式 eg: {'test':'baozun || test_tag'}-->
+		<!-- 如果无二级标签，因符合json key:value格式，所以配置如：'three':'*' -->
+	<!--threadMin 消费者开启线程数-->
+	<!--threadMax 消费者开启线程数-->
+	<!--consumeMessageBatchMaxSize  单次拉取最大消息量-->
+	<!--consumeFromWhere  消费起始位置-->
+	<!-- isserverManger 业务系统服务治理功能是否交由HUB处理 只有开启服务治理功能的系统将此值设置为true 默认false-->
+	<!--messageHandler  业务处理类集合 ,'three':'*','one':'one_tags||one_tags2','six':'one_tags1||one_tags2'-->
+	<!-- <bean id="tankun-consumer2" class="com.baozun.scm.baseservice.message.rocketmq.service.init.RocketMQConcurrentlyConsumerInit" init-method="init" destroy-method="destroy">
+		<property name="consumerGroup" value="tankun-consumer2" />
+		<property name="namesrvAddr" value="10.88.26.79:9876"/>
+		<property name="consumerInstanceName" value="consumerServer2" />
+		<property name="subscription" value="{'tankun_test_two':'*'}" />
+		<property name="threadMin" value="5"/>
+		<property name="threadMax" value="5"/>
+		<property name="consumeMessageBatchMaxSize" value="120" />
+		<property name="consumeFromWhere" value="CONSUME_FROM_FIRST_OFFSET"/>
+		<property name="isserverManger" value="false" />
+		<property name="messageHandler" ref="messageHandler1" />
+	</bean>
+	 -->
+	
+	
+    <import resource="spring-message-handle.xml"/>
+</beans>

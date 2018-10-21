@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="gucci_gift_card" language="groovy" pageWidth="468" pageHeight="326" whenNoDataType="AllSectionsNoDetail" columnWidth="412" leftMargin="28" rightMargin="28" topMargin="28" bottomMargin="28" >
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="gucciGiftValue" class="java.lang.String"/>
+	<title>
+		<band height="270" splitType="Stretch">
+			<textField>
+				<reportElement x="62" y="4" width="294" height="242" />
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none" lineSpacing="1_1_2">
+					<font fontName="华文行楷" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{gucciGiftValue}+"\t\n\t"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

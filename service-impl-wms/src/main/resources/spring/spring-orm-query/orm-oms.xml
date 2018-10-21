@@ -1,0 +1,39 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+	<named-query name="EtamOmsInvRule.findByBrandSize">
+		<query><![CDATA[select s from EtamOmsInvRule s where s.sizes = :sizes and s.brand = :brand]]></query>
+	</named-query>
+
+	<named-query name="EtamOmsInvRule.findByBar9Color">
+		<query><![CDATA[select s from EtamOmsInvRule s where s.bar9 = :bar9 and s.color = :color]]></query>
+	</named-query>
+
+	<named-query name="Sku.getSkuByExtensionCode1">
+		<query><![CDATA[select sku from Sku sku where sku.extensionCode1=:extensionCode1 ]]></query>
+	</named-query>
+
+	<named-query name="InventoryCheck.findinvCheckBySlipCode">
+		<query><![CDATA[select i from InventoryCheck i where i.slipCode = :slipCode]]></query>
+	</named-query>
+	<named-query
+		name="GodivaInventoryAdjustmentLine.findGodivaInventoryAdjustmentLineById">
+		<query><![CDATA[select i from GodivaInventoryAdjustmentLine i where i.godivaInventoryAdjustment.id = :godId]]></query>
+	</named-query>
+
+	<named-query name="GodivaInventoryAdjustment.findAdjustments">
+		<query><![CDATA[select i from GodivaInventoryAdjustment i where i.shopId = :shopId and i.type=:type and i.adjustmentKey=:adjustKey and i.status in(1)]]></query>
+	</named-query>
+
+	<named-query name="Inventory.finInventoriesByinvOwner">
+		<query><![CDATA[select i from Inventory i where i.owner=:invOwner and i.ou.id=:ouId and (i.occupationCode is NULL or i.occupationCode = '')]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.finrefSlipCode">
+		<query><![CDATA[select s from StockTransApplication s where s.refSlipCode=:refSlipCode and s.type=21]]></query>
+	</named-query>
+
+	<named-query name="CarrierConsignmentData.findDataByStatus">
+		<query><![CDATA[select tc from CarrierConsignmentData as tc where tc.status=0]]></query>
+	</named-query>
+
+</entity-mappings>

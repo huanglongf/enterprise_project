@@ -1,0 +1,29 @@
+<project name="wms.web" basedir="." default="deploy" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<property name="jasper.dir" value="${basedir}/src/main/resources/jasperprint" />
+	<path id="maven-ant-tasks.classpath" path="${basedir}/lib/ant/maven-ant-tasks-2.0.10.jar" />
+	<path id="ant-contrib.classpath" path="${basedir}/lib/ant/ant-contrib-1.0b3.jar" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="ant-contrib.classpath" />
+
+	<target name="deploy" depends="compile-jasper">
+	</target>
+
+	<target name="compile-jasper">
+		<artifact:dependencies filesetId="project.dep.fileset" useScope="runtime">
+			<pom file="pom.xml" />
+		</artifact:dependencies>
+		<taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask">
+			<classpath>
+				<fileset refid="project.dep.fileset" />
+			</classpath>
+		</taskdef>
+		<delete dir="${jasper.dir}" />
+		<mkdir dir="${jasper.dir}" />
+		<jrc srcdir="${basedir}/printsrc" destdir="${jasper.dir}">
+			<classpath>
+				<fileset refid="project.dep.fileset" />
+			</classpath>
+		</jrc>
+	</target>
+
+</project>

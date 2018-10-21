@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="packing_list_gucci_detail" language="groovy" pageWidth="545" pageHeight="700" columnWidth="545" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" >
+	<property name="ireport.zoom" value="1.24184264611831"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="gucciSkuName" class="java.lang.String"/>
+	<field name="skuCode" class="java.lang.String"/>
+	<field name="size" class="java.lang.String"/>
+	<field name="keyProperty" class="java.lang.String"/>
+	<field name="qty1" class="java.lang.String"/>
+	<field name="totalQty" class="java.lang.String"/>
+	<field name="staMemo" class="java.lang.String"/>
+	<field name="skuStyleCode" class="java.lang.String"/>
+	<field name="unitPrice" class="java.lang.String"/>
+	<field name="isPrintPrice" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="18" width="191" height="16" />
+				<textElement>
+					<font fontName="华文细黑" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[商品名称]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="18" width="62" height="16" />
+				<textElement>
+					<font fontName="华文细黑" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[商品编码]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="18" width="52" height="16" />
+				<textElement textAlignment="Center">
+					<font fontName="华文细黑" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[颜色]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="18" width="52" height="16" />
+				<textElement textAlignment="Center">
+					<font fontName="华文细黑" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[尺码]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="451" y="18" width="52" height="16" />
+				<textElement textAlignment="Center">
+					<font fontName="华文细黑" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[数量]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="1" width="542" height="1" forecolor="#666666" />
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="192" y="18" width="97" height="16" />
+				<textElement>
+					<font fontName="华文细黑" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[商品货号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="502" y="18" width="42" height="16" >
+					<printWhenExpression><![CDATA[$F{isPrintPrice}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="华文细黑" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[单价]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="2" y="3" width="191" height="20" />
+				<textElement>
+					<font fontName="华文细黑" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gucciSkuName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="288" y="3" width="62" height="20" />
+				<textElement verticalAlignment="Top">
+					<font fontName="Futura-Book" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{skuCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="349" y="3" width="52" height="20" />
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Futura-Book" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keyProperty}.split(",")[0]]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="400" y="3" width="52" height="20" />
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Futura-Book" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{size}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="451" y="3" width="52" height="20" />
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Futura-Book" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qty1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="192" y="3" width="97" height="20" />
+				<textElement verticalAlignment="Top">
+					<font fontName="Futura-Book" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{skuStyleCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="502" y="3" width="42" height="20" >
+					<printWhenExpression><![CDATA[$F{isPrintPrice}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Futura-Book" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="38" splitType="Stretch">
+			<line>
+				<reportElement x="2" y="16" width="542" height="1" forecolor="#666666" backcolor="#FFFFFF" />
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

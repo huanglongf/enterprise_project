@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+>
+	
+	<bean id="skuTypeAction" class="com.jumbo.web.action.automaticEquipment.SkuTypeAction" scope="request" />
+	
+	<bean id="zoonAction" class="com.jumbo.web.action.automaticEquipment.ZoonAction" scope="request" />
+	
+	<bean id="threadAction" class="com.jumbo.web.action.automaticEquipment.ThreadAction" scope="request" />
+	
+	<bean id="priorityChangelOmsAction" class="com.jumbo.web.action.automaticEquipment.PriorityChangelOmsAction" scope="request" />
+	
+	<!-- 集货管理 -->
+	<bean id="warehouseShippingAction" class="com.jumbo.web.action.automaticEquipment.WarehouseShippingAction" scope="request"></bean>
+	
+	<bean id="popUpAreaAction" class="com.jumbo.web.action.automaticEquipment.PopUpAreaAction" scope="request" />
+	
+	<bean id="inboundRoleAction" class="com.jumbo.web.action.automaticEquipment.InboundRoleAction" scope="request" />
+	
+	<bean id="inboundBoxCancelAction" class="com.jumbo.web.action.automaticEquipment.InboundBoxCancelAction" scope="request" />
+	
+	<!-- WCS 数据维护 -->
+	<bean id="wcsMaintainAction" class="com.jumbo.web.action.automaticEquipment.WcsMaintainAction" scope="request" />
+	
+	<bean id="zoonOcpSortAction" class="com.jumbo.web.action.automaticEquipment.ZoonOcpSortAction" scope="request"></bean>
+</beans>

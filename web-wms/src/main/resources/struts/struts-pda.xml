@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="pda" extends="root" namespace="/pda">
+		<interceptors>
+			<interceptor name="pdaAuth" class="com.jumbo.web.action.pda.interceptor.PdaAuthInterceptor" />
+
+			<interceptor-stack name="pdaStack">
+				<interceptor-ref name="pdaAuth"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="pdaStack"></default-interceptor-ref>
+
+		<action name="login" class="pdaLoginAction" method="login">
+			<result>/pda/login.jsp</result>
+		</action>
+
+		<action name="userlogin" class="pdaLoginAction" method="userLogin">
+			<result name="success" type="redirect">/pda/menu.do</result>
+			<result name="error">/pda/login.jsp</result>
+		</action>
+
+		<action name="menu" class="pdaMenuAction" method="menu">
+			<result>/pda/menu.jsp</result>
+		</action>
+		
+		<action name="pdaExit" class="pdaLoginAction" method="pdaExit" >
+			<result type="redirect">/pda/login.jsp</result>
+		</action>
+
+        <action name="pdaTransitInnerIndex" class="pdaShelvesAction" method="pdaTransitInnerIndex">
+			<result>/pda/pda_transit_inner.jsp</result>
+		</action>
+		
+		
+		<action name="pdaTransitInnerIndexcheckLoc" class="pdaShelvesAction" method="pdaTransitInnerIndexcheckLoc">
+		</action>
+
+		<!-- pda 上架 S -->
+		<action name="pageRedirectGood" class="pdaShelvesAction" method="pageRedirectGood">
+			<result>/pda/shelves/pda_good_gradually.jsp</result>
+		</action>
+		<action name="pageRedirectGoodBatch" class="pdaShelvesAction" method="pageRedirectGoodBatch">
+			<result>/pda/shelves/pda_good_batch.jsp</result>
+		</action>
+		<action name="pageRedirectGoodRen" class="pdaShelvesAction" method="pageRedirectGoodRen">
+			<result>/pda/shelves/pda_good_gradually_ren.jsp</result>
+		</action>
+		<action name="pageRedirectGoodBatchRen" class="pdaShelvesAction" method="pageRedirectGoodBatchRen">
+			<result>/pda/shelves/pda_good_batch_ren.jsp</result>
+		</action>
+		<action name="pageRedirectIncomplete" class="pdaShelvesAction" method="pageRedirectIncomplete">
+			<result>/pda/shelves/pda_incomplete.jsp</result>
+		</action>
+		<action name="initMongodbWhShelvesInfo" class="pdaShelvesAction" method="initMongodbWhShelvesInfo">
+		</action>
+		<action name="checkSkuShou" class="pdaShelvesAction" method="checkSkuShou">
+		</action>
+		<action name="checkSkuShouPro" class="pdaShelvesAction" method="checkSkuShouPro">
+		</action>
+		<action name="initMongodbWhShelvesInfoShou" class="pdaShelvesAction" method="initMongodbWhShelvesInfoShou">
+		</action>
+		<action name="verifyAndRecommend" class="pdaShelvesAction" method="verifyAndRecommend">
+		</action>
+		<action name="scanSku" class="pdaShelvesAction" method="scanSku">
+		</action>
+		<action name="scanSku2" class="pdaShelvesAction" method="scanSku2">
+		</action>
+		<action name="scanSkuIncomplete" class="pdaShelvesAction" method="scanSkuIncomplete">
+		</action>
+		<action name="cancelSkuIncomplete" class="pdaShelvesAction" method="cancelSkuIncomplete">
+		</action>
+		<action name="cancelSku" class="pdaShelvesAction" method="cancelSku">
+		</action>
+		<action name="locationShelves" class="pdaShelvesAction" method="locationShelves">
+		</action>
+		<action name="locationShelvesShou" class="pdaShelvesAction" method="locationShelvesShou">
+		</action>
+		<action name="locationShelvesDmgCode" class="pdaShelvesAction" method="locationShelvesDmgCode">
+		</action>
+		<action name="initMongodbWhShelvesInfoIncomplete" class="pdaShelvesAction" method="initMongodbWhShelvesInfoIncomplete">
+		</action>
+		<action name="verifyLocation" class="pdaShelvesAction" method="verifyLocation">
+		</action>
+		
+		<!-- pda 上架 E -->
+		
+		<action name="pageReceiveByBox" class="pdaReceiveAction" method="pageReceiveByBox">
+			<result>/pda/receive/pda_receiveByBox.jsp</result>
+		</action>
+		
+		<action name="pageReceiveByBoxTag" class="pdaReceiveAction" method="pageReceiveByBoxTag">
+			<result>/pda/receive/pda_receiveByBoxTag2.jsp</result>
+		</action>
+		
+		<action name="pageRedirect" class="pdaMenuAction" method="menu">
+			<result>/pda/picking/pda_picking.jsp</result>
+		</action>
+		<action name="toCollection" class="pdaMenuAction" method="menu">
+			<result>/pda/goodsCollection/pda_collection.jsp</result>
+		</action>
+		<action name="toCollectionMove" class="pdaPickingAction" method="toCollectionMove">
+			<result>/pda/goodsCollection/pda_collectionMove.jsp</result>
+		</action>
+		<action name="toCollectionNoticeWcs" class="pdaMenuAction" method="menu">
+			<result>/pda/goodsCollection/pda_collectionNoticeWcs.jsp</result>
+		</action>
+
+        <action name="pageReceive" class="pdaReceiveAction" method="menu">
+			<result>/pda/receive/pda_receive.jsp</result>
+		</action>
+		
+		<action name="pageRedirectPickingSuggestion" class="pdaMenuAction" method="menu">
+			<result>/pda/picking/pda_picking_sku_suggestion.jsp</result>
+		</action>
+		
+		
+		<action name="outBoundHands" class="pdaMenuAction" method="menu">
+			<result>/pda/pda_outBoundHands.jsp</result>
+		</action>
+		
+		<action name="outBoundHandsCurrency" class="pdaMenuAction" method="menu">
+			<result>/pda/pda_outBoundHandsCurrency.jsp</result>
+		</action>
+		
+		<action name="toCollectionMoveByBox" class="pdaPickingAction" method="toCollectionMove">
+			<result>/pda/goodsCollection/pda_collectionMoveByBox.jsp</result>
+		</action>
+		<action name="toCollectionMoveTwoPicking" class="pdaReceiveAction" method="menu">
+			<result>/pda/goodsCollection/pda_collectionMoveByPickingOver.jsp</result>
+		</action>
+		<action name="returnWareHousePicking" class="pdaReceiveAction" method="menu">
+			<result>/pda/picking/pda_return_wareHouse_picking.jsp</result>
+		</action>
+		
+		<action name="pageBoxMove" class="pdaMenuAction" method="menu">
+			<result>/pda/picking/pda_boxMove.jsp</result>
+		</action>
+	
+		<action name="inventoryQuery" class="pdaReceiveAction" method="menu">
+			<result>/pda/pda_inventory_query.jsp</result>
+		</action>
+		
+		<action name="pageReceiveByBoxNike" class="pdaReceiveAction" method="pageReceiveByBox">
+			<result>/pda/receive/pda_receiveByBox_Nike.jsp</result>
+		</action>
+		
+		<action name="pageRedirectGoodRenNike" class="pdaShelvesAction" method="pageRedirectGoodRen">
+			<result>/pda/shelves/pda_good_gradually_ren_nike.jsp</result>
+		</action>
+		
+		<action name="pageRedirectGoodBatchRenNike" class="pdaShelvesAction" method="pageRedirectGoodBatchRen">
+			<result>/pda/shelves/pda_good_batch_ren_nike.jsp</result>
+		</action>
+		
+		<action name="pageRedirectPdaBoxBind" class="pdaBoxBindAction" method="pageRedirectPdaBoxBind">
+			<result>/pda/shelves/pda_box_bind.jsp</result>
+		</action>
+		<action name="checkbindpickinglist" class="pdaBoxBindAction" method="checkBindPickingList"/>
+		<action name="bindbatchandturnbox" class="pdaBoxBindAction" method="bindBatchAndTurnbox" />
+		<action name="pickingListAndZoneOver" class="pdaBoxBindAction" method="pickingListAndZoneOver"></action>
+		<action name="entrucking" class="pdaEntruckingAction" method="menu">
+			<result>/pda/pda_entrucking.jsp</result>
+		</action>
+		<action name="pdaReceiveByBox" class="pdaReceiveAction" method="pdaReceiveByBox"></action>
+		
+	    <action name="pdaReceiveByBoxCheckSkus" class="pdaReceiveAction" method="pdaReceiveByBoxCheckSkus"></action>
+		
+		
+		<action name="checkTag" class="pdaReceiveAction" method="checkTag"></action>
+		
+		<action name="initMongodbWhPickingInfo" class="pdaPickingAction" method="initMongodbWhPickingInfo"></action>
+		
+		<action name="checkPickingCode" class="pdaPickingAction" method="checkPickingCode"></action>
+		
+		<action name="initMongodbWhReceiveInfo" class="pdaReceiveAction" method="initMongodbWhReceiveInfo"></action>
+		<action name="checkTrackingNo" class="pdaReceiveAction" method="checkTrackingNo"></action>
+		<action name="checkTrackingNoCurrency" class="pdaReceiveAction" method="checkTrackingNoCurrency"></action>
+		
+		<action name="pdaCheckLocation" class="pdaReceiveAction" method="checkSkuBarCode"></action>
+		
+		<action name="pdaFindSku" class="pdaReceiveAction" method="pdaFindSku"></action>
+		<action name="pdaExecuteTransitInner" class="pdaReceiveAction" method="pdaExecuteTransitInner"></action>
+		<action name="pdaCheckSendlocationCode" class="pdaReceiveAction" method="pdaCheckSendlocationCode"></action>
+		
+		<action name="checkLocation" class="pdaReceiveAction" method="checkLocation"></action>
+		<action name="pdaOutBoundHand" class="pdaReceiveAction" method="pdaOutBoundHand"></action>
+		
+		<action name="pdaOutBoundHandCurrency" class="pdaReceiveAction" method="pdaOutBoundHandCurrency"></action>
+		
+		<action name="pdaOutBoundHandNum" class="pdaReceiveAction" method="pdaOutBoundHandNum"></action>
+		
+		<action name="pdaOutBoundHandCurrencyNum" class="pdaReceiveAction" method="pdaOutBoundHandCurrencyNum"></action>
+		
+		<action name="getTransportatorPda" class="pdaReceiveAction" method="getTransportatorPda"></action>
+		<action name="findLicensePlateNumber" class="pdaEntruckingAction" method="findLicensePlateNumber"></action>
+		<action name="trucking" class="pdaEntruckingAction" method="trucking"></action>
+		<action name="truckingConfirm" class="pdaEntruckingAction" method="truckingConfirm"></action>
+		
+		<action name="initMongodbWhcartonBox" class="pdaReceiveAction" method="initMongodbWhcartonBox"></action>
+		<action name="initMongodbWhcartonBox1" class="pdaReceiveAction" method="initMongodbWhcartonBox1"></action>
+		<action name="verifySku" class="pdaReceiveAction" method="verifySku"></action>
+		
+		<action name="updateMogodbRestQty" class="pdaReceiveAction" method="updateMogodbRestQty"></action>
+		
+		<action name="findBySn" class="pdaReceiveAction" method="findBySn"></action>
+		
+		<action name="findPDASkuByBarCode" class="pdaReceiveAction" method="findPDASkuByBarCode"></action>
+		
+		<action name="packingfindbyNO" class="pdaReceiveAction" method="packingfindbyNO"></action>
+		
+		<action name="findMongodbByRestQty" class="pdaReceiveAction" method="findMongodbByRestQty"></action>
+		
+		<action name="findMongodbByRestQtyAndBarCode" class="pdaReceiveAction" method="findMongodbByRestQtyAndBarCode"></action>
+		
+		<action name="cartonASNOk" class="pdaReceiveAction" method="cartonASNOk"></action>
+		
+		<action name="asnOver" class="pdaReceiveAction" method="asnOver"></action>
+				
+	    <action name="mongodbfindQtyByCode" class="pdaReceiveAction" method="mongodbfindQtyByCode"></action>
+		
+		<action name="getImperfectByChannel" class="pdaReceiveAction" method="getImperfectByChannel"></action>
+		
+		<action name="getImperfectByOuId" class="pdaReceiveAction" method="getImperfectByOuId"></action>
+		
+		<action name="getByImperfectLine" class="pdaReceiveAction" method="getByImperfectLine"></action>
+		
+		<action name="findLocationByPickingCode" class="pdaPickingAction" method="findLocationByPickingCode"></action>
+		
+		<!-- <action name="pickingSku" class="pdaPickingAction" method="pickingSku"></action> -->
+		
+		
+		<action name="checkSkuBarCode" class="pdaPickingAction" method="checkSkuBarCode"></action>
+		<action name="updateWhPickingStatusByPicking" class="pdaPickingAction" method="updateWhPickingStatusByPicking"></action>
+		<action name="checkStaAndBatch" class="pdaPickingAction" method="checkStaAndBatch"></action>
+		
+		<action name="findShortByPickingCode" class="pdaPickingAction" method="findShortByPickingCode"></action>
+		<action name="pickingBatchOver" class="pdaPickingAction" method="pickingBatchOver"></action>
+		<action name="checkBox" class="pdaPickingAction" method="checkBox"></action>
+		<action name="returnWhCheckBox" class="pdaPickingAction" method="returnWhCheckBox"></action>
+		<action name="checkCollectionBox" class="pdaPickingAction" method="checkCollectionBox"></action>
+		<action name="collectionBox" class="pdaPickingAction" method="collectionBox"></action>
+		<action name="moveCollectionBox" class="pdaPickingAction" method="moveCollectionBox"></action>
+		<action name="bindBoxByBoxCode" class="pdaPickingAction" method="bindBoxByBoxCode"></action>
+		<action name="findBindBoxByPickingCode" class="pdaPickingAction" method="findBindBoxByPickingCode"></action>
+		<action name="returnWhousePickingBatchOver" class="pdaPickingAction" method="returnWhousePickingBatchOver"></action>
+		<!-- 库位未集满 释放 -->
+		<action name="moveCollectionBox2" class="pdaPickingAction" method="moveCollectionBox2"></action>
+		<action name="anewRecommendCollection" class="pdaPickingAction" method="anewRecommendCollection"></action>
+		<action name="getPickingNum" class="pdaPickingAction" method="getPickingNum"></action>
+		<action name="queryCollectionBoxStatus" class="pdaPickingAction" method="queryCollectionBoxStatus"></action>
+		
+		<action name="findTwoPickingOver" class="pdaPickingAction" method="findTwoPickingOver"></action>
+		<action name="moveCollectionBoxByPickingOver" class="pdaPickingAction" method="moveCollectionBoxByPickingOver"></action>
+		
+		<action name="pdaFindStaLineBySuggestion" class="pdaPickingAction" method="pdaFindStaLineBySuggestion"></action>
+		<action name="pdaTwicePickingByBarcode" class="pdaPickingAction" method="pdaTwicePickingByBarcode"></action>
+		<action name="pdaResetBoxAndCollection" class="pdaPickingAction" method="pdaResetBoxAndCollection"></action>
+		<action name="getStaCodeBypbBatchCode" class="pdaPickingAction" method="getStaCodeBypbBatchCode"></action>
+		
+		<action name="pdaResetBox" class="pdaPickingAction" method="pdaResetBox"></action>
+		
+		<action name="getInventoryQty" class="pdaReceiveAction" method="getInventoryQty"></action>
+		
+		<action name="pdaReceiveByBoxForNike" class="pdaReceiveAction" method="pdaReceiveByBoxForNike"></action>
+		
+		<action name="checkSingleogin" class="pdaLoginAction" method="checkSingleogin"></action>
+		
+		<!-- 校验作业单状态 -->
+		<action name="checkStaStatus" class="pdaShelvesAction" method="checkStaStatus"></action>
+		
+	</package>
+</struts>

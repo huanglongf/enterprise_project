@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean id="Warehouse.findwhInfosForsoCountModel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[     
+				select ou.code code,ou.name name,somodel.name as soCountModelName from T_AU_OPERATION_UNIT ou, 
+		             T_AU_OPERATION_UNIT ou1,
+		             T_AU_OPERATION_UNIT_TYPE t,
+		             T_BI_WAREHOUSE w,
+		             T_SO_COUNT_MODEL somodel
+		             where ou.parent_ou_id = ou1.id
+		             and ou1.parent_ou_id = :cmpid
+		             and ou.OU_TYPE_ID = t.id
+		             and t.name='Warehouse'
+		             and w.so_count_model_id = somodel.id(+)
+		             and w.ou_id = ou.id
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Warehouse.updateSoModelByCompanyid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+				    update  T_BI_WAREHOUSE w set w.so_count_model_id = null where exists 
+					    (
+			            select 1 from T_BI_WAREHOUSE w,
+			                 T_AU_OPERATION_UNIT ou, 
+			                 T_AU_OPERATION_UNIT ou1,
+			                 T_AU_OPERATION_UNIT_TYPE t
+			                 where ou.parent_ou_id = ou1.id
+			                 and ou1.parent_ou_id = :cmpid
+			                 and ou.OU_TYPE_ID = t.id
+			                 and t.name='Warehouse'
+			                 and w.ou_id = ou.id
+					    )
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+</beans>

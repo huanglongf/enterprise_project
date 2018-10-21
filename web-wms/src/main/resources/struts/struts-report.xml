@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="report" extends="root" namespace="/report">
+		<action name="reportexportforsalesentry" class="salesReportExportAction"
+			method="entry">
+			<result>/frame/report-export-for-sales.jsp</result>
+		</action>
+		<action name="reportexportforsalessum" class="salesReportExportAction"
+			method="reportExportForSalesSum"></action>
+		<action name="reportexportforsalesdetial" class="salesReportExportAction"
+			method="reportExportForSalesDetial"></action>
+
+		<action name="timeInventory" class="reportTimInventoryExportAction"
+			method="entry">
+			<result>/frame/report-export-for-time-inventory.jsp</result>
+		</action>
+		<action name="timeinventoryreport" class="reportTimInventoryExportAction"
+			method="reportExportTimeInventory"></action>
+
+		<action name="lvsInventoryLog" class="reportLvsInventoryLogAction"
+			method="entry">
+			<result>/frame/report-export-for-lvs-inv-log.jsp</result>
+		</action>
+		<action name="lvsInventoryLogreport" class="reportLvsInventoryLogAction" method="reportExportLvsInvLog">
+			<result name="error">/frame/report-export-for-lvs-inv-log-result.jsp</result>
+		</action>
+
+		<action name="lvsrareport" class="reportLvsRaExportAction"
+			method="entry">
+			<result>/frame/report-export-for-lvs-ra.jsp</result>
+		</action>
+		<action name="lvsrareportExport" class="reportLvsRaExportAction"
+			method="reportExportRa"></action>
+
+		<action name="lvscurrentinvport" class="reportLevisCurrentInventoryExportAction"
+			method="entry">
+			<result>/frame/report-export-for-levis-current-inventory.jsp</result>
+		</action>
+		<action name="lvscurrentinvreportExport" class="reportLevisCurrentInventoryExportAction"
+			method="reportExportCurrentInventory"></action>
+
+		<action name="orderStatusCount" class="orderStatusReportAction"
+			method="entry">
+			<result>/frame/report/wh-order-status-count.jsp</result>
+		</action>
+		
+			<!-- 集货库位状态看板 -->
+		<action name="shippingCollectionBoard" class="warehouseShippingAction"
+			method="shippingCollection">
+			<result>/frame/automaticEquipment/shipping-collection-see-board.jsp</result>
+		</action>
+
+	</package>
+</struts>

@@ -1,0 +1,2099 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="warehouse" extends="root" namespace="/warehouse">
+		<!-- excel模板下载 -->
+		<action name="excelDownload" class="excelTemplateDownloadAction"
+			method="excelDownload">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+
+		<action name="invstatusentry" class="inventoryStatusAction">
+			<result>/frame/invstatus-maintain.jsp</result>
+		</action>
+		<action name="transactionMaintainEntry" class="transactionTypeAction"
+			method="transactionMaintainEntry">
+			<result>/frame/transtype-maintain.jsp</result>
+		</action>
+		<!-- 库区库位创建/编辑 -->
+		<action name="locationmaintainentry" class="locationMaintainAction"
+			method="locationMaintainEntry">
+			<result>/frame/location-maintain.jsp</result>
+		</action>
+		<action name="locationsofdistrict" class="locationMaintainAction"
+			method="getLocationsOfDistrict">
+			<result>/frame/include-district-maintain.jsp</result>
+		</action>
+		
+		<action name="locationtplexport" class="locationMaintainAction"
+			method="locationTPLExport" />
+		<action name="locationimport" class="locationMaintainAction"
+			method="locationImport">
+			<result>/frame/district-location-upload-result.jsp</result>
+		</action>
+		<!-- 库区库位容积管理 -->
+		<action name="locationcapacityentry" class="locationCapacityAction"
+			method="locationCapacityMaintainEntry">
+			<result>/frame/location-capacity-maintain.jsp</result>
+		</action>
+		<action name="locationsforupdateentry" class="locationCapacityAction"
+			method="locationsForUpdateEntry">
+			<result>/frame/include-location-transtype-maintain.jsp</result>
+		</action>
+		<!-- 库位作业类型设定 -->
+		<action name="locationtranmaintainentry" class="locationTranTypeAction"
+			method="locationTranMaintainEntry">
+			<result>/frame/location-transtype-maintain.jsp</result>
+		</action>
+		<action name="locationstransentry" class="locationTranTypeAction"
+			method="locationsTransEntry">
+			<result>/frame/include-location-transtype-maintain.jsp</result>
+		</action>
+		<action name="channelmaintain" class="channelAction">
+			<result>/frame/warehousechannel-maintain.jsp</result>
+		</action>
+		
+		<action name="locationVolume" class="locationTranTypeAction"
+			method="locationVolume">
+			<result>/frame/locationVolume.jsp</result>
+		</action>
+		
+		<action name="inChannelType" class="channelAction" method="inChannel">
+			<result>/frame/include-wh-channel-maintain.jsp</result>
+		</action>
+		<action name="outChannelType" class="channelAction" method="outChannel">
+			<result>/frame/include-wh-channel-maintain.jsp</result>
+		</action>
+		<action name="locationpickupmaintainentry" class="warehouselocationPickupAction"
+			method="locationPickupMaintainEntry">
+			<result>/frame/location-pickup-maintain.jsp</result>
+		</action>
+		<action name="includelocationtranstype" class="warehouselocationPickupAction"
+			method="includeLocationTranstype">
+			<result>/frame/include-location-transtype-maintain.jsp</result>
+		</action>
+		<action name="inventorymaintain" class="inventoryShareMaintainAction">
+			<result>/frame/inventory-share-maintain.jsp</result>
+		</action>
+		<action name="inventoryqueryentry" class="inventoryQueryAction"
+			method="inventoryQueryEntry">
+			<result>/frame/inventory-query.jsp</result>
+		</action>
+
+		<!-- 库存快照查询 -->
+		<action name="inventorysnapshotentry" class="inventorySnapshotAction"
+			method="inventorysnapshotEntry">
+			<result>/frame/inventory-Snapshot-inquires.jsp</result>
+		</action>
+		<action name="historicalQueryEntry" class="inventoryHistoricalQueryAction"
+			method="historicalQueryEntry">
+			<result>/frame/inventory-historical-query.jsp</result>
+		</action>
+
+		<!-- 库存明细查寻 -->
+		<action name="inventorydetailsqueryentry" class="inventoryQueryAction"
+			method="inventoryDetailsQueryEntry">
+			<result>/frame/inventory-details-query.jsp</result>
+		</action>
+
+		<!-- 入库作业采购经销入库 -->
+		<action name="purchaseentry" class="purchaseInboundAction"
+			method="purchaseEntry">
+			<result>/frame/inbound-purchase.jsp</result>
+		</action>
+		<action name="staimportforpurchase" class="purchaseInboundAction"
+			method="staImportForPurchase">
+			<result>/frame/inbound-purchase-upload-result.jsp</result>
+		</action>
+
+		<action name="staimportforrepair" class="purchaseInboundAction"
+			method="staImportForRepair">
+			<result>/frame/inbound-purchase-upload-result.jsp</result>
+		</action>
+
+		<action name="staImportForGI" class="purchaseInboundAction"
+			method="staImportForGI">
+			<result>/frame/inbound-purchase-upload-result.jsp</result>
+		</action>
+
+		<action name="inboundamountconfirmimport" class="purchaseInboundAction"
+			method="inboundAmountConfirmImport">
+			<result>/frame/inbound-purchase-confirm-result.jsp</result>
+		</action>
+
+		<action name="staexportforpurchase" class="purchaseInboundAction"
+			method="staExportForPurchase">
+		</action>
+
+
+		<action name="staGIExport" class="purchaseInboundAction"
+			method="staGIExport">
+		</action>
+
+
+		<action name="invExportForPurchase" class="purchaseInboundAction"
+			method="invExportForPurchase">
+		</action>
+
+		<action name="importPurchaseInbound" class="purchaseInboundAction"
+			method="importPurchaseInbound">
+			<result>/frame/inbound-purchase-result.jsp</result>
+		</action>
+		
+		<!-- 退换货入库SN号导入 -->
+		<action name="staSnImportToWeb" class="purchaseInboundAction"
+			method="staSnImportToWeb">
+			<result>/frame/return-inbound-result.jsp</result>
+		</action>
+		
+		<!-- 退换货入库 -->
+		<action name="returnentry" class="purchaseInboundAction"
+			method="purchaseEntry">
+			<result>/frame/inbound-return.jsp</result>
+		</action>
+		
+		<!--  定制化退换货入库 -->
+		<action name="returninboundentryimperfect" class="purchaseInboundImperfectAction"
+			method="purchaseEntry">
+			<result>/frame/return-inbound-imperfect.jsp</result>
+		</action>
+		<!--  批量导入上架 -->
+		<action name="returninboundentryshelvesimperfect" class="purchaseInboundImperfectAction"
+			method="shelvesimperfect">
+			<result>/frame/sta_inbound_shelves_imperfect.jsp</result>
+		</action>
+		<!--新退换货入库 -->
+		<action name="returninboundentry" class="purchaseInboundAction"
+			method="purchaseEntry">
+			<result>/frame/return-inbound.jsp</result>
+		</action>
+		<!--查询及补打残次品标签 -->
+		<action name="querysupplementimperfect" class="supplementImperfectAction"
+			method="purchaseEntry">
+			<result>/frame/query-supplement-imperfect.jsp</result>
+		</action>
+		<!--新建及打残次品标签 -->
+		<action name="addsupplementimperfect" class="supplementImperfectAction"
+			method="imperfectlist">
+			<result>/frame/add-supplement-imperfect.jsp</result>
+		</action>
+
+		<!-- 退换货入库解锁 -->
+		<action name="returnEntryUnlocked" class="purchaseInboundAction"
+			method="returnEntryUnlocked">
+			<result>/frame/inbound-return-unlocked.jsp</result>
+		</action>
+
+		<!-- 退回包裹等级 -->
+		<action name="returnpackage" class="returnPackageAction"
+			method="returnPackage">
+			<result>/frame/warehouse/return-package-register.jsp</result>
+		</action>
+		
+		<action name="queryreturnpackage" class="returnPackageAction"
+			method="queryReturnPackage">
+			<result>/frame/warehouse/return-package-query.jsp</result>
+		</action>
+
+		<!-- 销售出库作业 -->
+		<action name="generationDispatchList" class="salesGenerationDispatchListAction"
+			method="genDispatchListEntry">
+			<result>/frame/sales-generation-dispatch-list.jsp</result>
+		</action>
+
+		<action name="entryplcheck" class="salesPickingCheckAction"
+			method="entPlCheck">
+			<result>/frame/sales-picking-check.jsp</result>
+		</action>
+		<!-- 2件套装核对 -->
+		<action name="checkskupackage" class="salesCheckSkuPackageAction"
+			method="entPlCheck">
+			<result>/frame/sales-sku-package-check.jsp</result>
+		</action>
+		<!-- 单件核对 /大件 -->
+		<action name="checksinglebig" class="salesChecksingleAction"
+			method="checksinglebig">
+			<result>/frame/checkSingleSta/sales-picking-check-big.jsp</result>
+		</action>
+		<!-- 单件核对 fanht -->
+		<action name="checksingle" class="salesChecksingleAction"
+			method="entPlCheck">
+			<result>/frame/checkSingleSta/sales-picking-check.jsp</result>
+		</action>
+		<!-- O2O单件核对 fanht -->
+		<action name="checksingleOtwoo" class="salesChecksingleAction"
+			method="entPlCheckOtwoo">
+			<result>/frame/checkSingleSta/sales-picking-check-otwoo.jsp</result>
+		</action>
+		<!-- 单件核对 (运 营中心) -->
+		<action name="checksingleopc" class="salesChecksingleAction"
+			method="entPlCheck">
+			<result>/frame/checkSingleSta/sales-picking-checkopc.jsp</result>
+		</action>
+		<!-- 多件核对 fanht -->
+		<action name="checksorting" class="salesChecksingleAction"
+			method="entSortingCheck">
+			<result>/frame/sortingCheck/sales-dispatch-list-query.jsp</result>
+		</action>
+		<!-- 大件、奢侈品核对-->
+		<action name="checkBigLuxury" class="salesChecksingleAction"
+			method="entSortingCheck">
+			<result>/frame/sortingCheck/sales-dispatch-list-big-luxury-query.jsp</result>
+		</action>
+		<!-- O2OQS订单批量核对 -->
+		<action name="o2oqschecksorting" class="salesChecksingleAction"
+			method="entO2OQSSortingCheck">
+			<result>/frame/sortingCheck/sales-dispatch-list-o2oqs-query.jsp</result>
+		</action>
+		<!-- 多件核对(须要特殊包装) -->
+		<action name="giftchecksorting" class="salesChecksingleAction"
+			method="entGiftSortingCheck">
+			<result>/frame/sortingCheck/sales-dispatch-list-gift-query.jsp</result>
+		</action>
+		<!-- 多件核对(须要特殊包装_保税仓) -->
+		<action name="giftchecksortingCustoms" class="salesChecksingleAction"
+			method="entGiftSortingCheck">
+			<result>/frame/sortingCheck/sales-dispatch-list-gift-query-customs.jsp</result>
+		</action>
+		<!-- 多件核对(手工) -->
+		<action name="handworkchecksorting" class="salesChecksingleAction"
+			method="entHandwrokSortingCheck">
+			<result>/frame/sortingCheck/sales-dispatch-list-handwork-query.jsp</result>
+		</action>
+		<!-- 多件核对(后置送货单) -->
+		<action name="acheckpostprint" class="salesChecksingleAction"
+			method="aCheckPostPrint">
+			<result>/frame/sortingCheck/sales-dispatch-list-post-print.jsp</result>
+		</action>
+		<!-- 特殊处理订单重新处理-->
+		<action name="giftchecksorting2" class="speHanOrderAgainHanAcion"
+			method="orderAgainHanQuery">
+			<result>/frame/sortingCheck/special-handle-order-again-handle.jsp</result>
+		</action>
+		<!-- 分拣核对 运营中心 -->
+		<action name="checksortingopc" class="salesChecksingleAction"
+			method="entSortingCheck">
+			<result>/frame/sortingCheck/sales-dispatch-list-queryopc.jsp</result>
+		</action>
+		<!-- 销售出库作业 配货清单操作列表 -->
+		<action name="dispatchList" class="salesDispatchListAction"
+			method="dispatchListEntry">
+			<result>/frame/sales-dispatch-list.jsp</result>
+		</action>
+		<action name="plverifyentry" class="salesDispatchListAction"
+			method="plVerifyEntry">
+			<result>/frame/sales-dispatch-list-query.jsp</result>
+		</action>
+		<action name="cancelSta" class="salesCancelStaAction" method="cancelStaEntry">
+			<result>/frame/sales-cancel-sta.jsp</result>
+		</action>
+		<action name="outboundDispose" class="cancelledStaDisposeAction"
+			method="outboundDisposeEntry">
+			<result>/frame/sales-release-inventory.jsp</result>
+		</action>
+		<!-- 出库&称重&交接 fanht -->
+		<action name="salesOutboundHand" class="salesOutboundAction"
+			method="outboundEntry">
+			<result>/frame/sales-outbound-hand.jsp</result>
+		</action>
+		<action name="salesOutbound" class="salesOutboundAction"
+			method="outboundEntry">
+			<result>/frame/sales-outbound.jsp</result>
+		</action>
+
+		<!-- 交接清单导出 -->
+		<action name="findHandOverListExportReturnOrderRecord" class="invoiceRecordExportAction"
+			method="findHandOverListExportReturnOrderRecord">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="exportVMIInvoice" class="invoiceRecordExportAction"
+			method="exportVMIInvoice">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="exportSoInvoice" class="salesDispatchListAction"
+			method="exportSoInvoice">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+		<!-- agv导出 -->
+	    <action name="getExportAgv" class="salesDispatchListAction" method="getExportAgv">
+			    <result name="success" type="stream">
+						<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+						<param name="inputName">inputStream</param>
+						<param name="contentDisposition">attachment;filename="${fileName}"</param>
+						<param name="bufferSize">4096</param>
+				</result>
+	    </action>
+		
+		<action name="exportSoInvoices" class="printPickingListBulkAction"
+			method="exportSoInvoices">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+		<action name="exportSoInvoiceZip" class="salesDispatchListAction"
+			method="exportSoInvoiceZip">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+
+		<action name="exportdeliveryinfo" class="salesDispatchListAction"
+			method="exportDeliveryInfo">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="exportWmsInvoiceOrder" class="taxBatchInvoiceAction"
+			method="exportWmsInvoiceOrder">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="exportdeliveryinfoopc" class="operationCenterAction"
+			method="exportDeliveryInfo">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="exportdeliveryinfozip" class="salesDispatchListAction"
+			method="exportDeliveryInfoZip">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="dispatchModel1QueryList" class="salesDispatchListAction"
+			method="dispatchModel1QueryList">
+			<result>/frame/model1-dispatch-list-query.jsp</result>
+		</action>
+
+		<action name="expressOrderEdit" class="salesDispatchListAction"
+			method="expressOrderEdit">
+			<result>/frame/express-order-edit.jsp</result>
+		</action>
+		<action name="deliveryTime" class="deliveryTimeAction"
+			method="deliveryTimeList">
+			<result>/frame/delivery-time.jsp</result>
+		</action>
+		<action name="occupiedFailureOperation" class="occupiedFailureAction" method="redirectIndex">
+			<result>/frame/warehouse/occupied-failure-operation.jsp</result>
+		</action>
+		<action name="onceLibrary" class="salesDispatchListAction"
+			method="expressOrderEdit">
+			<result>/frame/once-library.jsp</result>
+		</action>
+		<!-- 物流交接 -->
+		<action name="exportTransInfo" class="handOverListQueryAction"
+			method="exportTransInfo" />
+		<action name="handoverQuery" class="handOverListQueryAction"
+			method="queryEntry">
+			<result>/frame/handover-list-query.jsp</result>
+		</action>
+		<!-- 合并发货渠道信息维护 -->
+		<action name="mergechannelsmaintain" class="biChannelCombineRefAction"
+			method="maintain">
+			<result>/frame/merge-channels-maintain.jsp</result>
+		</action>
+		<!-- 物流交接清单导出 -->
+		<action name="handOverListExport" class="handOverListQueryAction"
+			method="queryEntry">
+			<result>/frame/handover-list-export.jsp</result>
+		</action>
+		<action name="handOverListCreate" class="handOverListCreateAction"
+			method="importEntry">
+			<result>/frame/handover-list-import-create.jsp</result>
+		</action>
+		<action name="importTrackingNo" class="handOverListCreateAction"
+			method="importTrackingNo">
+			<result>/frame/handover-list-import-result.jsp</result>
+		</action>
+		<action name="transportatorModify" class="modifyTransportatorAction"
+			method="modifyTransportatorEntry">
+			<result>/frame/modify-transportator.jsp</result>
+		</action>
+		<!-- 库存日志查询 -->
+		<action name="inventorylogquery" class="inventoryLogQueryAction"
+			method="inventoryLogQuery">
+			<result>/frame/inventory-log-query.jsp</result>
+		</action>
+		<!-- 仓库其它出入库操作 -->
+		<action name="operationOthers" class="warehouseOperationOthersAction"
+			method="operationOthersEntry">
+			<result>/frame/warehouse-other-operate.jsp</result>
+		</action>
+		<action name="operationOthersQuery" class="warehouseOperationOthersAction"
+			method="operationOthersQuery">
+			<result>/frame/warehouse-other-query.jsp</result>
+		</action>
+		<action name="otherStaCreateImport" class="warehouseOperationOthersAction"
+			method="otherStaCreateImport">
+			<result>/frame/warehouse-other-operate-result.jsp</result>
+		</action>
+		<!-- 预定义入库操作 -->
+		<action name="operationPredefined" class="warehousePredefinedAction"
+			method="operationPredefined">
+			<result>/frame/warehouse-predefined-operate.jsp</result>
+		</action>
+		<action name="operationPredefinedQuery" class="warehousePredefinedAction"
+			method="operationPredefinedQuery">
+			<result>/frame/warehouse-predefined-query.jsp</result>
+		</action>
+		<action name="operationPredefinedCancel" class="warehousePredefinedAction"
+			method="operationPredefinedCancel">
+			<result>/frame/warehouse-predefined-cancel.jsp</result>
+		</action>
+		<action name="modifyroleStatus" class="warehousePredefinedAction"
+			method="modifyroleStatus">
+			<result>/frame/warehouse-predefined-cancel.jsp</result>
+		</action>
+		<action name="operationPredefinedRootQuery" class="warehousePredefinedAction"
+			method="operationPredefinedQuery">
+			<result>/frame/warehouse-predefined-query-root.jsp</result>
+		</action>
+		<action name="prodefinedStaCreateImport" class="warehousePredefinedAction"
+			method="prodefinedStaCreateImport">
+			<result>/frame/warehouse-predefined-operate-result.jsp</result>
+		</action>
+		<!-- VMI 作业 -->
+		<action name="vmiOperationQuery" class="warehousePredefinedAction"
+			method="vmiOperationQuery">
+			<result>/frame/vmi-operation-query.jsp</result>
+		</action>
+		<!-- 按箱收货 -->
+		<action name="whBoxInbound" class="warehouseBoxInboundAction"
+			method="whBoxInbound">
+			<result>/frame/wh-box-inbound.jsp</result>
+		</action>
+		<!-- 
+		<action name="importWhBoxInbound" class="warehouseBoxInboundAction"
+			method="importWhBoxInbound">
+			<result>/frame/wh-box-inbound-result.jsp</result>
+		</action> -->
+		<action name="importboxreceive" class="warehouseBoxInboundAction" method="importBoxReceive">
+			<result>/frame/wh-box-inbound-result.jsp</result>
+		</action>
+		
+		<!-- 历史作业单查询 -->
+		<action name="staQuery" class="historicalOrderInquiryAction"
+			method="orderQueryEntry">
+			<result>/frame/sta-query.jsp</result>
+		</action>
+		<!-- 统计作业单查询 -->
+		<action name="salesReportQuery" class="salesReportAction"
+			method="entry">
+			<result>/frame/salesReport.jsp</result>
+		</action>
+		<!--  作业单状态维护-->
+		<action name="staConditionMaintenance" class="historicalOrderInquiryAction"
+			method="orderQueryEntry">
+			<result>/frame/warehouse/operationSheet-state-maintenance.jsp</result>
+		</action>
+		
+		<!-- 作业单状态修改 -->
+			<action name="staUpdate" class="historicalOrderInquiryAction"
+			method="staStateModify">
+		</action>
+		
+		<!-- 历史作业单补打 -->
+		<action name="staQueryPrint" class="historicalOrderInquiryAction"
+			method="orderQueryEntry">
+			<result>/frame/sta-query-print.jsp</result>
+		</action>
+		
+		<action name="staQueryPrintNew" class="historicalOrderInquiryAction"
+			method="orderQueryEntryNew">
+			<result>/frame/sta-query-printNew.jsp</result>
+		</action>
+		
+		<action name="staQueryPrintPreNew" class="historicalOrderInquiryAction"
+			method="staQueryPrintPreNew">
+			<result>/frame/sta-query-printPreNew.jsp</result>
+		</action>
+
+		<action name="exportPoConfirmReport" class="historicalOrderInquiryAction"
+			method="exportPoConfirmReport" />
+
+		<action name="inventoryInitializeEntry" class="inventoryInitializeAction"
+			method="inventoryInitializeEntry">
+			<result>/frame/inventory-initialize.jsp</result>
+		</action>
+
+		<action name="importInitializeInventory" class="inventoryInitializeAction"
+			method="importInitializeInventory">
+			<result>/frame/inventory-initialize-result.jsp</result>
+		</action>
+
+		<!-- 库内移动 -->
+		<action name="transitInner" class="transitInnerAction" method="transitInnerEntry">
+			<result>/frame/transit-inner.jsp</result>
+		</action>
+		<action name="importTransitInner" class="transitInnerAction"
+			method="importTransitInner">
+			<result>/frame/transit-inner-result.jsp</result>
+		</action>
+		<!-- 库存锁定/解锁 -->
+		<action name="invLockAndUnlock" class="inventoryOccupyAction" method="invLockAndUnlockEntry">
+			<result>/frame/inventory-lock-unlock.jsp</result>
+		</action>
+		<!-- 税控发票导出 -->
+		<action name="taxInvoiceExport" class="taxInvoiceAction"
+			method="taxInvoiceExportEntry">
+			<result>/frame/tax-invoice-export.jsp</result>
+		</action>
+		<action name="exportStaSoInvoice" class="taxInvoiceAction"
+			method="exportStaSoInvoice"></action>
+			<!-- 销售|换货出库发票导出 -->
+			<action name="exportsoinvoiceforsalesreturnorder" class="taxInvoiceAction"
+			method="exportsoinvoiceforsalesreturnorder"></action>
+			
+		<action name="excTaxInvoiceExport" class="excTaxInvoiceAction"
+			method="excTaxInvoiceExportEntry">
+			<result>/frame/exc-tax-invoice-export.jsp</result>
+		</action>
+		<action name="exportExcStaSoInvoice" class="excTaxInvoiceAction"
+			method="exportExcStaSoInvoice"></action>
+
+		<action name="taxinvoiceexportsumentry" class="taxInvoiceSumAction"
+			method="taxInvoiceExportSum">
+			<result>/frame/tax-invoice-export-sum.jsp</result>
+		</action>
+				
+		<action name="burberryinvoiceexport" class="taxInvoiceAction"
+			method="burberryInvoiceExport">
+			<result>/frame/burberry-invoice-export.jsp</result>
+		</action>
+
+		<action name="exportburberryinvoice" class="taxInvoiceAction"
+			method="exportBurberryInvoice"></action>
+		<!-- 盘点 -->
+		<action name="invCkCreate" class="inventoryCheckCreateAction"
+			method="invCkCreateEntry">
+			<result>/frame/inventory-check-create.jsp</result>
+		</action>
+		<!-- 日常盘点 -->
+		<action name="dailyinventory" class="inventoryCheckCreateAction"
+			method="invCkCreateEntry">
+			<result>/frame/daily-inventory-create.jsp</result>
+		</action>
+		<action name="exportinventorycheck" class="inventoryCheckCreateAction"
+			method="exportInventoryCheck"></action>
+
+		<action name="invckhandel" class="inventoryCheckHandelAction"
+			method="invCKHandelEntry">
+			<result>/frame/inventory-check-handel.jsp</result>
+		</action>
+		<action name="invckmanagers" class="inventoryCheckHandelAction"
+			method="invCKHandelEntry">
+			<result>/frame/inventory-check-manager.jsp</result>
+		</action>
+		<action name="invckconfirmexe" class="inventoryCheckHandelAction" method="invCKHandelEntry">
+			<result>/frame/inventory-check-execute.jsp</result>
+		</action>
+
+		<action name="exportCheckOverage" class="inventoryCheckHandelAction"
+			method="exportCheckOverage">
+		</action>
+		<action name="exportPutawayTemplate" class="returnApplication" method="exportPutawayTemplate">
+		</action>
+		<action name="importCheckOverage" class="inventoryCheckHandelAction"
+			method="importCheckOverage">
+			<result>/frame/check-overage-import-result.jsp</result>
+		</action>
+
+		<action name="importinvcheck" class="inventoryCheckHandelAction"
+			method="importInvCheck">
+			<result>/frame/inventory-check-import-result.jsp</result>
+		</action>
+
+		<action name="invckquery" class="inventoryCheckQueryAction"
+			method="invCKQueryEntry">
+			<result>/frame/inventory-check-query.jsp</result>
+		</action>
+
+		<action name="inventorycheckbyimport" class="inventoryCheckCreateAction"
+			method="inventoryCheckByImport">
+			<result>/frame/inventory-check-import-location-result.jsp</result>
+		</action>
+
+
+		<!-- VMI大仓调拨-公司 -->
+		<action name="initToVMIFlittingCreate" class="vmiFlittingAction"
+			method="initToVMIFlittingCreate">
+			<result>/frame/VMI-flitting-create.jsp</result>
+		</action>
+		<action name="initToVMIFlittingQuery" class="vmiFlittingAction"
+			method="initToVMIFlittingQuery">
+			<result>/frame/VMI-flitting-query.jsp</result>
+		</action>
+		<action name="importVMIFlittingApplication" class="vmiFlittingAction"
+			method="importVMIFlittingApplication">
+			<result>/frame/VMI-flitting-create-import-result.jsp</result>
+		</action>
+		<!-- VMI大仓调拨-仓库 -->
+		<action name="initToVMIFlittingEnter" class="vmiFlittingAction"
+			method="initToVMIFlittingEnter">
+			<result>/frame/VMI-flitting-enter.jsp</result>
+		</action>
+
+		<action name="externalOutOutport" class="vmiFlittingAction"
+			method="externalOutOutport">
+		</action>
+
+		<action name="initToVMIFlittingOut" class="vmiFlittingAction"
+			method="initToVMIFlittingOut">
+			<result>/frame/VMI-flitting-out.jsp</result>
+		</action>
+		<action name="importVMIFlittingOutBoundSn" class="vmiFlittingAction"
+			method="importVMIFlittingOutBoundSn">
+			<result>/frame/VMI-flitting-out-import-result.jsp</result>
+		</action>
+		<!-- 公司库间移动 -->
+		<action name="intBetweenLibraryEdit" class="betweenLibraryMoveEditAction"
+			method="intBetweenLibraryEdit">
+			<result>/frame/betweenlibrary-move-application.jsp</result>
+		</action>
+
+		<action name="statransitcrossqueryentry" class="betweenLibraryMoveEditAction"
+			method="staTransitCrossQueryEntry">
+			<result>/frame/betweenlibrary-query.jsp</result>
+		</action>
+		<!-- 仓库库间移动 -->
+		<action name="externaltransentry" class="betweenLibraryMoveEditAction"
+			method="externalTransEntry">
+			<result>/frame/external-trans.jsp</result>
+		</action>
+		<action name="externalOutOfEntry" class="betweenLibraryMoveEditAction"
+			method="externalOutOfEntry">
+			<result>/frame/external-outof.jsp</result>
+		</action>
+
+		<action name="outboundSnImport" class="betweenLibraryMoveEditAction"
+			method="outboundSnImport">
+			<result>/frame/external-outof-result.jsp</result>
+		</action>
+		<action name="pdapurchasesnimport" class="pdaPurchaseAction"
+			method="pdaPurchaseSnImport">
+			<result>/frame/external-outof-result.jsp</result>
+		</action>
+		<action name="salesoutsnimport" class="salesChecksingleAction"
+			method="salesOutSnImport">
+			<result>/frame/sales-out-sn-result.jsp</result>
+		</action>
+
+		<action name="printstacode" class="pdaPurchaseAction" method="printStaCode">
+		</action>
+
+		<action name="externalInExport" class="betweenLibraryMoveEditAction"
+			method="externalInExport">
+		</action>
+
+		<action name="externalInImport" class="betweenLibraryMoveEditAction"
+			method="externalInImport">
+			<result>/frame/external-inof-result.jsp</result>
+		</action>
+		<!-- 物流维护 -->
+		<action name="salesTransSupport" class="salesTransSupportAction"
+			method="salesTransSupportEntry">
+			<result>/frame/sales-trans-support.jsp</result>
+		</action>
+
+		<action name="importBetweenLibraryMoveApplication" class="betweenLibraryMoveEditAction"
+			method="importBetweenLibraryMoveApplication">
+			<result>/frame/betweenlibrary-move-import-result.jsp</result>
+		</action>
+		
+		<action name="importOdoLine" class="odoAction"
+			method="importOdoLine">
+			<result>/frame/odo/import-odo-line-result.jsp</result>
+		</action>
+	  
+		<!-- 物流发货控制 -->
+		<action name="transCfgEntry" class="transDeliveryCfgAction"
+			method="transCfgEntry">
+			<result>/frame/trans-delivery-cfg.jsp</result>
+		</action>
+
+		<action name="snQuery" class="snQueryAction" method="snQueryEntry">
+			<result>/frame/sn_query.jsp</result>
+		</action>
+
+		<action name="snLogQuery" class="snQueryAction" method="snLogQuery">
+			<result>/frame/sn-log-query.jsp</result>
+		</action>
+
+		<!-- 商品查询 -->
+		<action name="commodityQuery" class="commodityAction" method="commodityQuery">
+			<result>/frame/commodity-query.jsp</result>
+		</action>
+		
+		<!-- 缺失三维商品查询 -->
+		<action name="tdIsNullQuery" class="commodityAction" method="commodityQuery">
+			<result>/frame/three-dimensional-null-query.jsp</result>
+		</action>
+
+		<action name="inventoryStatusChange" class="inventoryStatusChangeAction"
+			method="invStatusChangeEntry">
+			<result>/frame/inventory-status-change.jsp</result>
+		</action>
+
+		<action name="outSalesOrderImportEntry" class="outSalesOrderImportAction"
+			method="outSalesOrderImportEntry">
+			<result>/frame/out-sales-order-import.jsp</result>
+		</action>
+
+		<action name="importOutSalsOrder" class="outSalesOrderImportAction"
+			method="importOutSalsOrder">
+			<result>/frame/out-sales-order-import-result.jsp</result>
+		</action>
+
+		<action name="importInvStatusChange" class="inventoryStatusChangeAction"
+			method="importInvStatusChange">
+			<result>/frame/inventory-status-change-result.jsp</result>
+		</action>
+
+		<action name="pickingListMode1Export" class="salesDispatchListAction"
+			method="pickingListMode1Export" />
+
+		<action name="snsimport" class="warehouseOperationOthersAction"
+			method="snsImport">
+			<result>/frame/snsimport-upload-result.jsp</result>
+		</action>
+
+		<action name="snsimports" class="warehouseOperationOthersAction"
+			method="snImports">
+			<result>/frame/snsimport-upload-result.jsp</result>
+		</action>
+		<action name="skuquerylist" class="inventoryQueryAction"
+			method="findSkuInventory">
+			<result>/frame/snsimport-upload-result.jsp</result>
+		</action>
+
+		<action name="deliveryinfoexportentry" class="deliveryInfoExportAction"
+			method="deliveryInfoExportEntry">
+			<result>/frame/delivery-info-export.jsp</result>
+		</action>
+
+		<action name="pdaentry" class="pdaPostLogAction" method="ent">
+			<result>/frame/include-pda-post-log-detial.jsp</result>
+		</action>
+		<!-- pda 收货上架 -->
+		<action name="pdapurchaseentry" class="pdaPurchaseAction"
+			method="pdaPurchaseEntry">
+			<result>/frame/pda-purchase.jsp</result>
+		</action>
+
+		<action name="pdalogexport" class="pdaPostLogAction" method="pdaLogExport"></action>
+
+		<action name="deliveryinfoexportforaccount" class="deliveryInfoExportAction"
+			method="deliveryInfoExportForAccount"></action>
+
+		<action name="padcodeoperate" class="padcodeOperateAction">
+			<result>/frame/padcode-operate.jsp</result>
+		</action>
+
+
+		<!-- 配货清单 -->
+		<action name="pickingListQueryReturn" class="pickingListAction"
+			method="pickingListQueryReturn">
+			<result>/frame/picking-list-query-new.jsp</result>
+		</action>
+		
+			<action name="pickingListQuery" class="pickingListAction"
+			method="pickingListQuery">
+			<result>/frame/picking-list-query.jsp</result>
+		</action>
+		
+		<!-- 预定义出库 -->
+		<action name="operationOutCreate" class="predefinedOutAction"
+			method="operationOutCreate">
+			<result>/frame/predefined-out-create.jsp</result>
+		</action>
+		<action name="operationOutQuery" class="predefinedOutAction"
+			method="operationOutQuery">
+			<result>/frame/predefined-out-query.jsp</result>
+		</action>
+		<action name="createOperationOut" class="predefinedOutAction"
+			method="createOperationOut">
+			<result>/frame/predefined-out-create-result.jsp</result>
+		</action>
+		<!-- 保税仓 -->
+		<action name="baoshuiop" class="baoshuiAction"
+			method="baoShuiOpOut">
+			<result>/frame/baosui-out-query.jsp</result>
+		</action>
+		<action name="predefinedOutExport" class="predefinedOutAction"
+			method="predefinedOutExport"></action>
+		<action name="predefinedOutImport" class="predefinedOutAction"
+			method="predefinedOutImport">
+			<result>/frame/predefined-out-imput-result.jsp</result>
+		</action>
+		<action name="packagingMaterialsImport" class="predefinedOutAction"
+			method="packagingMaterialsImport">
+			<result>/frame/packaging-materials-imput-result.jsp</result>
+		</action>
+
+		<!-- VMI -->
+		<action name="vmiInvEntry" class="inventoryVMIAdjustmentHandelAction"
+			method="invCKHandelEntry">
+			<result>/frame/inventory-vmi-adjustment-handel.jsp</result>
+		</action>
+		<action name="exportVMIInventoryCheck" class="inventoryVMIAdjustmentHandelAction"
+			method="exportVMIInventoryCheck"></action>
+		<action name="importVMIInvCheck" class="inventoryVMIAdjustmentHandelAction"
+			method="importVMIInvCheck">
+			<result>/frame/inventory-check-vmi-import-result.jsp</result>
+		</action>
+
+		<action name="vmiInvCkQuery" class="inventoryVMIAdjustmentQueryAction"
+			method="vmiInvCKQueryEntry">
+			<result>/frame/inventory-vmi-adjustment-query.jsp</result>
+		</action>
+		
+		<action name="vmiRtoQuery" class="vmiRtoAction"
+			method="vmiRtoQueryEntry">
+			<result>/frame/vmi-rto-query.jsp</result>
+		</action>
+
+		<action name="vmitransfercreateentrty" class="vMIOwnerTransferAction"
+			method="createEntry">
+			<result>/frame/vmi-owner-transfer-create.jsp</result>
+		</action>
+		<action name="vmitransferimport" class="vMIOwnerTransferAction"
+			method="vmiTransferImport">
+			<result>/frame/vmi-owner-transfer-import-result.jsp</result>
+		</action>
+
+		<action name="productboxcountimport" class="productBoxMaintainAction"
+			method="productBoxCountImport">
+			<result>/frame/product-box-count-import-result.jsp</result>
+		</action>
+
+		<action name="vmitransferexecuteentrty" class="vMIOwnerTransferAction"
+			method="executeEntry">
+			<result>/frame/vmi-owner-transfer-execute.jsp</result>
+		</action>
+
+
+
+		<action name="vmioutboundadjustcreateentry" class="inventoryVMIAdjustmentHandelAction"
+			method="vmiOutboundAdjustCreateEntry">
+			<result>/frame/vmi-outbound-adjust-import.jsp</result>
+		</action>
+
+		<action name="vmioutboundadjustimport" class="inventoryVMIAdjustmentHandelAction"
+			method="vmiOutboundAdjustImport">
+			<result>/frame/vmi-owner-transfer-import-result.jsp</result>
+		</action>
+
+		<action name="vmiInboundImport" class="vmiCreateInboundStaAction"
+			method="vmiInboundImport">
+			<result>/frame/vmi-inbound-sta-import-result.jsp</result>
+		</action>
+
+		<action name="transProvideImport" class="transImportAction"
+			method="transProvideImport">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action> 
+		<!-- cheng.su -->
+		<action name="importImperfect" class="biChannelInfoAction"
+			method="importImperfect">
+			<result>/frame/import-imperfect-result.jsp</result>
+		</action>
+		<action name="importWarehouseImperfect" class="warehouseBaseinfoAction"
+			method="importWarehouseImperfect">
+			<result>/frame/import-imperfect-warehouse-result.jsp</result>
+		</action>  
+		<!--库位类型查询和维护  -->
+		<action name="locationtypequerymaintain" class="warehouseBaseinfoAction"
+			method="locationTypeQueryMaintain">
+			<result>/frame/warehouse/warehouse-type-query-maintain.jsp</result>
+		</action>
+		<!--库位类型查询和绑定维护  -->
+		<action name="locationtypebindingmaintain" class="warehouseBaseinfoAction"
+			method="locationTypeBindingMaintain">
+			<result>/frame/warehouse/warehouse-type-binding-maintain.jsp</result>
+		</action>  
+		<action name="initZoonSort" class="warehouseBaseinfoAction"
+			method="initZoonSort">
+			<result>/frame/warehouse/warehouse-zoon-sort.jsp</result>
+		</action>    
+		<action name="importImperfectWhy" class="biChannelInfoAction"
+			method="importImperfectWhy">
+			<result>/frame/import-imperfect-line-warehouse-result.jsp</result>
+		</action>
+
+		<action name="findAllWarehouse" class="biChannelInfoAction" method="findAllWarehouse"></action>
+
+		<action name="transProvinceImport" class="transImportAction"
+			method="transProvinceImport">
+			<result>/frame/lpcode-maintion-result.jsp</result>
+		</action> 
+		
+		<action name="vmiInboundSkuImport" class="vmiCreateInboundSkuAction"
+			method="vmiInboundSkuImport">
+			<result>/frame/vmi-inbound-sku-import-result.jsp</result>
+		</action>
+
+
+		<action name="vmiflittingunfreezeentrty" class="vmiFlittingAction"
+			method="unfreezeEntry">
+			<result>/frame/vmi-flitting-unfreeze.jsp</result>
+		</action>
+		<!-- vmi 退仓 -->
+
+		<action name="vmireturncreateentry" class="vmiReturnAction"
+			method="vmiReturnCreateEntry">
+			<result>/frame/vmi-return-create-entry.jsp</result>
+		</action>
+		<action name="vmireturnexecuteentry" class="vmiReturnAction"
+			method="vmiReturnExecuteEntry">
+			<result>/frame/vmi-return-execute-entry.jsp</result>
+		</action>
+		
+		<action name="vmiGucciReturnCreateEntry" class="vmiReturnAction"
+			method="vmiReturnCreateEntry">
+			<result>/frame/vmi-return-create-gucci.jsp</result>
+		</action>
+		<!-- 导出gucci退仓信息 -->
+		<action name="exportGucciRtoLineInfo" class="vmiReturnAction"
+			method="exportGucciRtoLineInfo"></action>
+		 <!--VMI退仓指令绑定  -->
+		<action name="vmireturnorderbinding" class="vmiReturnAction"
+			method="vmireturnorderbinding">
+			<result>/frame/vmi-return-binding.jsp</result>
+		</action>
+		
+		<action name="vmiReturnImportGucci" class="vmiReturnAction" method="vmiReturnImportGucci">
+			<result>/frame/vmi-gucci-rto-import-result.jsp</result>
+		</action>
+		
+		<action name="vmireturnplimport" class="vmiReturnAction" method="vmiReturnPlImport">
+			<result>/frame/vmi-owner-transfer-import-result.jsp</result>
+		</action>
+		
+		<action name="vmireturnimport" class="vmiReturnAction" method="vmiReturnImport">
+			<result>/frame/vmi-owner-transfer-import-result.jsp</result>
+		</action>
+		<action name="importSkuShelfLife" class="commodityAction" method="importSkuShelfLife ">
+			<result>/frame/vmi-owner-transfer-import-result.jsp</result>
+		</action>
+
+		<action name="printvmireturninfo" class="vmiReturnAction"
+			method="printVmiReturninfo">
+		</action>
+
+		<!-- vmi esprit po type import -->
+		<action name="espritPoTypeEntry" class="vmiEspritPOTypeAction"
+			method="vmiEspritPOTypeEntry">
+			<result>/frame/vmi-esprit-po-type-create.jsp</result>
+		</action>
+		<action name="importVMIPOType" class="vmiEspritPOTypeAction"
+			method="importVMIPOType">
+			<result>/frame/vmi-esprit-po-type-import-result.jsp</result>
+		</action>
+
+		<!-- VMI esprit invoice percentage -->
+		<action name="vmiInvoicePercentageEntry" class="vmiEspritInvoicePercentageAction"
+			method="vmiInvoicePercentageEntry">
+			<result>/frame/vmi-esprit-invoice-percentage-create.jsp</result>
+		</action>
+		<action name="vmiInvoicePercentageBD" class="vmiEspritInvoicePercentageAction"
+			method="vmiInvoicePercentageBD">
+			<result>/frame/vmi-esprit-invoice-percentage-bd.jsp</result>
+		</action>
+		<action name="importInvoicePertentage" class="vmiEspritInvoicePercentageAction"
+			method="importInvoicePertentage">
+			<result>/frame/vmi-esprit-invoice-percentage-import-result.jsp</result>
+		</action>
+
+		<!-- VMI Inbound -->
+		<action name="vmiCreateInboundSta" class="vmiCreateInboundStaAction"
+			method="vmiCreateInboundSta">
+			<result>/frame/vmi-inbound-sta-import.jsp</result>
+		</action>
+
+		<action name="vmiCreateInboundSku" class="vmiCreateInboundSkuAction"
+			method="vmiCreateInboundSku">
+			<result>/frame/vmi-inbound-sku-import.jsp</result>
+		</action>
+
+		<action name="msgOutboundOrderQuery" class="msgOutboundOrderAction"
+			method="msgOutboundOrderQueryEntry">
+			<result>/frame/msg-outbound-order.jsp</result>
+		</action>
+		<action name="msgOutboundOrderRootQuery" class="msgOutboundOrderAction"
+			method="msgOutboundOrderQueryEntry">
+			<result>/frame/msg-outbound-order-root.jsp</result>
+		</action>
+		<action name="findOutboundOrderCancelList" class="msgOutboundOrderCancelAction">
+			<result>/frame/vmi-outbound-order-cancel.jsp</result>
+		</action>
+		<action name="findOutboundOrderCancelRootList" class="msgOutboundOrderCancelAction">
+			<result>/frame/vmi-outbound-order-cancel-root.jsp</result>
+		</action>
+
+		<action name="entryoutboundpackageexe" class="outBoundPackageExeAction"
+			method="entExe">
+			<result>/frame/outbound_package_exe.jsp</result>
+		</action>
+		
+		<action name="crwExportExecl" class="outBoundPackageExeAction"
+			method="crwExportExeclIndex">
+			<result>/frame/crw-Export-Execl-index.jsp</result>
+		</action>
+
+		<action name="msgInboundOrderQuery" class="msgInboundOrderAction"
+			method="msgInboundOrderQueryEntry">
+			<result>/frame/msg-inbound-order.jsp</result>
+		</action>
+		<action name="msgInboundOrderRootQuery" class="msgInboundOrderAction"
+			method="msgInboundOrderQueryEntry">
+			<result>/frame/msg-inbound-order-root.jsp</result>
+		</action>
+		
+		<!--保税仓功能 -->
+		<action name="goodsImport" class="warehouseGoodsImportAction">
+			<result>/frame/warehouse-goods-import.jsp</result>
+		</action>
+		
+		<!-- 外包仓品牌仓库关联 -->
+		<action name="createOutsourcingWhAndBrandAssociation" class="warehousePredefinedAction"
+			method="createOutsourcingWhAndBrandAssociation">
+			<result>/frame/warehouse-outsourcingwh-association.jsp</result>
+		</action>
+		<!-- 配货失败订单批量导出缺货的SKU信息 -->
+		<action name="skuFailureExport" class="cancelledStaDisposeAction"
+			method="skuFailureExport">
+			<result>/frame/sku-distribution-failure-export.jsp</result>
+		</action>
+		<action name="exportskuDistributionOfFailureInfo" class="cancelledStaDisposeAction"
+			method="exportskuDistributionOfFailureInfo">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="warehouseReplenishStock" class="warehouseReplenishStockAction">
+			<result>/frame/warehouse-replenish-stock-info.jsp</result>
+		</action>
+		<action name="importwhReplenishStock" class="warehouseReplenishStockAction"
+			method="importwhReplenishStock">
+			<result>/frame/warehouse-replenish-stock-info-result.jsp</result>
+		</action>
+		<action name="skugroupcreateentry" class="skuGroupCreateAction"
+			method="skuGroupCreateEntry">
+			<result>/frame/sku_group_create.jsp</result>
+		</action>
+		<action name="skugroupcreateentry" class="skuGroupCreateAction"
+			method="skuGroupCreateEntry">
+			<result>/frame/sku_group_create.jsp</result>
+		</action>
+		<action name="recevingmovesuggest" class="recevingMoveSuggestAction"
+			method="recevingMoveSugEnrty">
+			<result>/frame/receving-move-suggest.jsp</result>
+		</action>
+		<action name="exportrecevingmovesuggest" class="recevingMoveSuggestAction"
+			method="suggestMove">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<action name="districtlocationprintentry" class="districtLocationPrintAction"
+			method="districtLocationPrintEntry">
+			<result>/frame/district-location-print.jsp</result>
+		</action>
+		<action name="skuMoveSuggset" class="skuMoveSuggestAction"
+			method="skuMoveSuggset">
+			<result>/frame/sku_move_suggest.jsp</result>
+		</action>
+		<action name="exportReplenishmentInfo" class="skuMoveSuggestAction"
+			method="exportReplenishmentInfo"></action>
+
+		<action name="skugroupqueryentry" class="skuGroupQueryAction"
+			method="skuGroupQueryEntry">
+			<result>/frame/sku-group-query.jsp</result>
+		</action>
+		<action name="skuprovidemaintainentry" class="skuProvideMaintainAction"
+			method="skuProvideMaintainEntry">
+			<result>/frame/sku-provide-maintain.jsp</result>
+		</action>
+
+		<action name="skuprovideinfopickingdistrictexport" class="skuProvideMaintainAction"
+			method="skuProvideInfoPickingDistrictExport"></action>
+		<action name="skuprovideinfounmaintainexport" class="skuProvideMaintainAction"
+			method="skuProvideInfoUnMaintainExport"></action>
+		<action name="unfinishedstaunmaintainproductexport" class="skuProvideMaintainAction"
+			method="unfinishedStaUnMaintainProductExport"></action>
+		<action name="skuprovideinfopickingdistrictexport1" class="skuProvideMaintainAction"
+			method="skuProvideInfoPickingDistrictExport1"></action>
+		<action name="skuprovideinfounmaintainexport1" class="skuProvideMaintainAction"
+			method="skuProvideInfoUnMaintainExport1"></action>
+		<action name="unfinishedstaunmaintainproductexport1" class="skuProvideMaintainAction"
+			method="unfinishedStaUnMaintainProductExport1"></action>
+		<action name="importskuprovidemaxmaintain" class="skuProvideMaintainAction"
+			method="importSkuProvideMaxMaintain">
+			<result>/frame/product-box-count-import-result.jsp</result>
+		</action>
+    <!--采购退货调整入库-确认收货  -->
+        <action name="procurementreturninbound" class="staInBoundAction"
+			method="procurementreturninbound">
+			<result>/frame/procurement-return-inbound-confirm.jsp</result>
+		</action>
+		<!--采购退货调整入库-执行上架  -->
+		<action name="procuremeninboundputaway" class="staInBoundAction"
+			method="procuremeninboundputaway">
+			<result>/frame/procurement-return-inbound-putaway.jsp</result>
+		</action>
+		<!-- 采购退货入库批量导入 上架-->
+		<action name="importProcurementInbound" class="returnApplication"
+			method="importProcurementInbound">
+			<result>/frame/inbound-purchase-upload-result.jsp</result>
+		</action>
+		<action name="skumovesuggsetpickingfailedentry" class="skuMoveSuggestPickingFailedAction"
+			method="skuMoveSuggsetPickingFailedEntry">
+			<result>/frame/sku_move_suggest_picking_failed.jsp</result>
+		</action>
+		<action name="skumovesuggestpickingfailedexport" class="skuMoveSuggestPickingFailedAction"
+			method="skuMovesuggestPickingFailedExport"></action>
+
+		<action name="pickingsuggestentry" class="pickingSuggestAction"
+			method="pickingSuggestEntry">
+			<result>/frame/picking_sku_suggestion.jsp</result>
+		</action>
+		<!-- 二次分拣建议 fanht -->
+		<action name="pickingSuggest" class="salesChecksingleAction"
+			method="pickingSuggestEntry">
+			<result>/frame/pickingSuggestion/picking_sku_suggestion_not_check.jsp</result>
+		</action>
+		<action name="pickingSuggestopc" class="salesChecksingleAction"
+			method="pickingSuggestEntry">
+			<result>/frame/pickingSuggestion/picking_sku_suggestionopc.jsp</result>
+		</action>
+		<action name="batchInfo" class="batchInfoAction" method="batchInfo">
+			<result>/frame/batch-sta-query.jsp</result>
+		</action>
+		<action name="exportPickingList" class="batchInfoAction"
+			method="exportPickingList"></action>
+		<action name="importRefreshPickingList" class="batchInfoAction"
+			method="importRefreshPickingList">
+			<result>/frame/refresh-picking-list-result.jsp</result>
+		</action>
+		<action name="importrefreshpickinglistsn" class="batchInfoAction"
+			method="importRefreshPickingListSN">
+			<result>/frame/refresh-picking-list-sn-result.jsp</result>
+		</action>
+
+		<action name="outboundpackagecreateentry" class="outboundPackageAction"
+			method="outboundPackageCreateEntry">
+			<result>/frame/outbound-package-create.jsp</result>
+		</action>
+		
+		<action name="showRtwDieKingLine" class="rtwDieKingLineAction"
+			method="showRtwDieKingLine">
+			<result>/frame/show-rtw-dieking-line.jsp</result>
+		</action>
+
+		<action name="nikeOrderFailure" class="nikeOrderQueryAction"
+			method="nikeOrderFailure">
+			<result>/frame/nike-order-query.jsp</result>
+		</action>
+		<action name="invoicerecordexportentry" class="invoiceRecordExportAction"
+			method="invoiceRecordExportEntry">
+			<result>/frame/invoice-record-export.jsp</result>
+		</action>
+		<action name="vmiinvoicerecordexportentry" class="invoiceRecordExportAction"
+			method="vmiInvoiceRecordExportEntry">
+			<result>/frame/invoice-vmi-export.jsp</result>
+		</action>
+		<action name="staLpcodeUpdate" class="staLpcodeUpdateAction"
+			method="staLpcodeUpdate">
+			<result>/frame/sta-lpcode-update.jsp</result>
+		</action>
+		<action name="handOverListCheck" class="handOverListCheckAction"
+			method="handOverListCheck">
+			<result>/frame/handover-list-check.jsp</result>
+		</action>
+	  <!-- 快递汇总信息查询 -->
+		<action name="expressCountInfo" class="expressOocRadarAction"
+			method="expressCountInfo">
+			<result>/frame/express-info-count-query.jsp</result>
+		</action>
+		<action name="workLineNoCreate" class="workLineNoAction"
+			method="workLineNoCreate">
+			<result>/frame/work-line-no-create.jsp</result>
+		</action>
+
+		<action name="operatesGISku" class="GISkuOperatesAction"
+			method="operatesGISku">
+			<result>/frame/GI-query.jsp</result>
+		</action>
+
+		<!-- cache小票打印 -->
+		<action name="cacheTicketPrint" class="cacheTicketPrintAction"
+			method="cacheTicketPrint">
+			<result>/frame/cache-ticket-print.jsp</result>
+		</action>
+
+		<!-- 物理仓虚拟仓关系维护 -->
+		<action name="wareHouseVirtualRelationShip" class="wareHouseToVirtualAction"
+			method="wareHouseToVirtual">
+			<result>/frame/warehouse-virtual-operate.jsp</result>
+		</action>
+		
+		<!-- wms3.0数据导出 -->
+		<action name="wareHouseDataImport" class="wmsDataImportAction"
+			method="wareHouseDataImport">
+			<result>/frame/warehouse-data-import.jsp</result>
+		</action>
+		<!-- wms3.0数据导出下载 -->
+		<action name="downloadExportFile" class="wmsDataImportAction" 
+		    method="downloadExportFile">  
+           <result name="success" type="stream">  
+               <param name="contentType">application/octet-stream;charset=ISO8859-1</param>  
+               <param name="inputName">inputStream</param> 
+               <param name="contentDisposition">attachment;filename="${fileName}"</param>  
+               <param name="bufferSize">4096</param>  
+           </result>  
+        </action> 
+        
+        <action name="downloadBackUpInv" class="wmsDataImportAction" method="downloadBackUpInv">
+		   <result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		
+		<action name="productInfoMain" class="productInfoMainAction"
+			method="initProductInfo">
+			<result>/frame/product-info-maintain.jsp</result>
+		</action>
+		<!-- adidas -->
+		<action name="productInfoMain2" class="productInfoMainAction"
+			method="initProductInfo2">
+			<result>/frame/product-info-all.jsp</result>
+		</action>
+		
+		<action name="updateProductInfo" class="productInfoMainAction"
+			method="updateProductInfo">
+			<result>/frame/inner-output-product.jsp</result>
+		</action>
+		
+		<action name="updateProductInfo2" class="productInfoMainAction"
+			method="updateProductInfo">
+			<result>/frame/noDimensionResult.jsp</result>
+		</action>
+
+		<!-- 作业单入库 -->
+		<!-- 自动 -->
+		<action name="staInBound" class="staInBoundAction" method="staInBound">
+			<result>/frame/sta_inbound.jsp</result>
+		</action>
+		<!-- NIKE收货-导入箱号关系 -->
+		<action name="staNikeImport" class="staNikeImportAction" method="staNikeImport">
+			<result>/frame/sta_nike-import.jsp</result>
+		</action>
+		
+		<!-- NIKE收货-导入箱号关系 -->
+		<action name="importNikeRelation" class="staNikeImportAction" method="importNikeRelation">
+			<result>/frame/sta_nike-import-result.jsp</result>
+		</action>
+		
+		<!--version 2018-08-15   入库单纸箱数维护-->
+		<action name="staInBoundCartonNum" class="staInBoundAction" method="staInBoundCartonNum">
+			<result>/frame/warehouse/sta-carton-manager.jsp</result>
+		</action>
+		
+		<!-- 收货转仓-->
+		<action name="staInBoundTurn" class="staInBoundAction" method="staInBoundTurn">
+			<result>/frame/sta_inbound_turn.jsp</result>
+		</action>
+		<!-- 手动 -->
+		<action name="staInBoundHand" class="staInBoundAction" method="staInBoundHand">
+			<result>/frame/sta_inboundhand.jsp</result>
+		</action>
+		<!-- 手动 ——收货/星巴克-->
+		<action name="staHandInBoundStarbucks" class="staInBoundAction" method="staHandInBoundStarbucks">
+			<result>/frame/sta-inboundhand-starbucks.jsp</result>
+		</action>
+		<!--收货单关闭-->
+		<action name="staInBoundFinish" class="staInBoundAction" method="staInBound">
+			<result>/frame/sta_inboundfinish.jsp</result>
+		</action>
+
+		<action name="exportInBound" class="staInBoundAction" method="exportInBound"></action>
+		<action name="importStaInbound" class="staInBoundAction"
+			method="importStaInbound">
+			<result>/frame/sta-inbound-result.jsp</result>
+		</action>
+		<action name="importStaInboundTurn" class="staInBoundAction"
+			method="importStaInboundTurn">
+			<result>/frame/sta-inbound-result.jsp</result>
+		</action>
+		<action name="importSeedSn" class="seedSnAction"
+			method="importSeedSn">
+			<result>/frame/sku_child_sn_result.jsp</result>
+		</action>
+		<action name="staInBoundConfirm" class="staInBoundAction"
+			method="staInBoundConfirm">
+			<result>/frame/sta_inbound_confirm.jsp</result>
+		</action>
+		<action name="exportConfirmDiversity" class="staInBoundAction"
+			method="exportConfirmDiversity"></action>
+		<action name="exportSKUinfo" class="staInBoundAction" method="exportSKUinfo"></action>
+		<action name="importConfirmDiversity" class="staInBoundAction"
+			method="importConfirmDiversity">
+			<result>/frame/sta-inbound-confirm-result.jsp</result>
+		</action>
+		<!-- 入库-自动 -->
+		<action name="staInBoundShelves" class="staInBoundAction"
+			method="staInBoundShelves">
+			<result>/frame/sta_inbound_shelves.jsp</result>
+		</action>
+		<!-- 入库-手动 -->
+		<action name="staInBoundShelvesHand" class="staInBoundAction"
+			method="staInBoundShelves">
+			<result>/frame/sta_inbound_shelveshand.jsp</result>
+		</action>
+		<!-- 入库-上架审核 -->
+		<action name="staInBoundShelvesCheck" class="staInBoundAction"
+			method="staInBoundShelvesCheck">
+			<result>/frame/sta_inbound_shelvescheck.jsp</result>
+		</action>
+		<action name="staInBoundQuery" class="staInBoundAction" method="staInBoundQuery">
+			<result>/frame/sta_inbound_query.jsp</result>
+		</action>
+		<!-- PDA手动上架 -->
+		<action name="stainboundshelvespda" class="staInBoundAction"
+			method="staInBoundShelves">
+			<result>/frame/sta_inbound_pda_shelves.jsp</result>
+		</action>
+		<!-- 无条件确认收货-->
+		<action name="stanoconditionsreceipt" class="staInBoundAction"
+			method="noConditionsRepAction">
+			<result>/frame/sta_inbound_no_Conditions.jsp</result>
+		</action>
+		<!-- NIKE 人工调整导入 -->
+		<action name="nikeCheckFailure" class="nikeCheckQueryAction"
+			method="nikeCheckFailure">
+			<result>/frame/nike-check-import.jsp</result>
+		</action>
+		<action name="importNikecheckReceive" class="nikeCheckQueryAction"
+			method="importNikecheckReceive">
+			<result>/frame/nike-check-import-result.jsp</result>
+		</action>
+
+        <action name="starbucksjsp" class="nikeCheckQueryAction"
+			method="starbucksjsp">
+			<result>/frame/starbucks-index.jsp</result>
+		</action>
+
+
+
+		<action name="exportInboundShelves" class="staInBoundAction"
+			method="exportInboundShelves"></action>
+			<!-- 批量导出模板 -->
+			<action name="exportInboundShelvesImperfect" class="purchaseInboundImperfectAction"
+			method="exportInboundShelvesImperfect"></action>
+		<action name="importInboundShelves" class="staInBoundAction"
+			method="importInboundShelves">
+			<result>/frame/sta-inbound-shelves-result.jsp</result>
+		</action>
+		
+		
+		<action name="exportCRW" class="staInBoundAction"
+			method="exportCRW"></action>
+		
+		<action name="importInboundShelvesImperfect" class="purchaseInboundImperfectAction"
+			method="importInboundShelvesImperfect">
+			<result>/frame/sta-inbound-shelves-result.jsp</result>
+		</action>
+		<action name="batchdistribution" class="createPickingListAction"
+			method="batchDistribution">
+			<result>/frame/warehouse/pickinglist-plan.jsp</result>
+		</action>
+		<!--  pda拣货日志查询-->
+		<action name="pickingListLogQuery" class="createPickingListAction"
+			method="pickingListLogQuery">
+			<result>/frame/warehouse/pickinglist-logquery.jsp</result>
+		</action>
+		<action name="pickfailedManualpick" class="pickZoneEditAction"
+			method="pickfailedManualpick">
+			<result>/frame/warehouse/pickfailed-manualpick.jsp</result>
+		</action>
+		
+		<action name="pickshouManualpick" class="pickZoneEditAction"
+			method="pickShouManualPick">
+			<result>/frame/warehouse/sta_shou_pick.jsp</result>
+		</action>
+		<!-- 新仓库逻辑 ，配货清单 -->
+		<action name="createpickinglistsingle" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-single.jsp</result>
+		</action>
+		<action name="createpickinglistsecondary" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-secondary.jsp</result>
+		</action>
+		<action name="createpickinglistgroupbuying" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-groupbuying.jsp</result>
+		</action>
+		<action name="createpickinglistpackagesku" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-packagesku.jsp</result>
+		</action>
+		<action name="createpickinglistgroupbuyingopc" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-groupbuyingopc.jsp</result>
+		</action>
+		<action name="createpickinglistseckill" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-seckill.jsp</result>
+		</action>
+		<action name="pickinglistprint" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-print.jsp</result>
+		</action>
+		<action name="pickinglistquery" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-query.jsp</result>
+		</action>
+		<action name="whpickingrulemaintain" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-rule-maintain.jsp</result>
+		</action>
+		<action name="whcreatepickinglistbyrule" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist.jsp</result>
+		</action>
+		<!-- 配货清单待打印bin.hu -->
+		<action name="pickinglistprintstatus" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-print-status.jsp</result>
+		</action>
+		<!-- 配货清单待打印-团购cheng.su -->
+		<action name="pickinglistprintstatusbulk" class="printPickingListBulkAction"
+			method="printPickingListBulk">
+			<result>/frame/warehouse/pickinglist-print-status_bulk.jsp</result>
+		</action>
+		<action name="printpickinglistopc" class="createPickingListAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-printopc.jsp</result>
+		</action>
+		<action name="pickingListExportOut" class="createPickingListAction"
+			method="pickingListExportOut" />
+		<action name="seckillskumaintain" class="secKillSkuMaintainAction"
+			method="secKillSkuMaintain">
+			<result>/frame/warehouse/seckillsku-maintain.jsp</result>
+		</action>
+		<!-- QS商品维护 -->
+		<action name="skuQsmain" class="qsSkuMaintainAction"
+			method="qsSkuMaintain">
+			<result>/frame/warehouse/qssku-maintain.jsp</result>
+		</action>
+		<!-- 商品产地维护 -->
+		<action name="skuCountryOfOriginmain" class="skuCountryOfOriginMaintainAction"
+			method="skuCountryOfOriginmain">
+			<result>/frame/warehouse/skuCountryOfOrigin-maintain.jsp</result>
+		</action>
+		<!-- PDA操作日志 -->
+		<action name="pdaoperationlog" class="pdaLogAction" method="pageRedirect">
+			<result>/frame/pda-log.jsp</result>
+		</action>
+		<action name="pdaoperationerroredit" class="pdaLogAction"
+			method="pageRedirect">
+			<result>/frame/warehouse/pdaerroredit.jsp</result>
+		</action>
+		<action name="exportMergeInboundShelves" class="staInBoundAction"
+			method="exportMergeInboundShelves" />
+		<action name="importMergeInboundShelves" class="staInBoundAction"
+			method="importMergeInboundShelves">
+			<result>/frame/sta-inbound-shelves-result.jsp</result>
+		</action>
+		<action name="importInboundCertificateOfeceipt" class="staInBoundAction"
+			method="importInboundCertificateOfeceipt">
+			<result>/frame/sta-inbound-certificate.jsp</result>
+		</action>
+		<!-- 商品分类树维护 -->
+		<action name="skuCategoryMaintenance" class="skuCategoryMainAction"
+			method="skuCategoryMaintenance">
+			<result>/frame/group/skucategory-maintain.jsp</result>
+		</action>
+		<action name="printpickinglistseckill" class="printPickingListAction"
+			method="printPickingListSecKill">
+			<result>/frame/warehouse/seckillpickinglist-print.jsp</result>
+		</action>
+		<!-- 配货信息待打印 秒杀 -->
+		<action name="printpickinglistseckillstatus" class="printPickingListAction"
+			method="printPickingListSecKill">
+			<result>/frame/warehouse/seckillpickinglist-print-status.jsp</result>
+		</action>
+		<action name="printpickinglistseckillopc" class="printPickingListAction"
+			method="printPickingListSecKill">
+			<result>/frame/warehouse/seckillpickinglist-printopc.jsp</result>
+		</action>
+
+		<action name="exportstadeliver" class="printPickingListAction"
+			method="exportStaDeliver" />
+		<action name="importstadeliveryinfo" class="printPickingListAction"
+			method="importStaDeliveryInfo">
+			<result>/frame/warehouse/import-stadelivery-result.jsp</result>
+		</action>
+
+		<action name="stainfoinputexport" class="staInfoInputExportAction"
+			method="staInfoInputExport">
+			<result>/frame/sta-info-input-export.jsp</result>
+		</action>
+		<action name="salessendoutinfoexport" class="staInfoInputExportAction"
+			method="salesSendOutInfoExport" />
+		<action name="returnregisterinfoexport" class="staInfoInputExportAction"
+			method="returnRegisterInfoExport" />
+		<action name="inventoryreportkexport" class="staInfoInputExportAction" method="inventoryReportkExport" />
+		<action name="returnrequestinboundimport" class="staInfoInputExportAction" method="returnRequestInboundImport">
+        	<result>/frame/sta-return-inbound-result.jsp</result>
+        </action>
+
+		<!-- NIKE VMI 入库单 -->
+		<action name="nikevmiinbound" class="nikeVMIInboundAction"
+			method="nikeVmiInbound">
+			<result>/frame/nike-vmi-inbound.jsp</result>
+		</action>
+		<action name="importcreatenikevmiinbound" class="nikeVMIInboundAction"
+			method="importCreateNikeVMIInbound">
+			<result>/frame/nike-vmi-inbound-result.jsp</result>
+		</action>
+		<!--SN编辑 -->
+		<action name="snedit" class="snlistbycodeaction" method="back">
+			<result>/frame/warehouse/sncode-edit.jsp</result>
+		</action>
+		<!--SKU批量导入SKU -->
+		<action name="skuquery" class="inventoryQueryAction" method="inventoryQueryEntry">
+			<result>/frame/inventory-skuquery.jsp</result>
+		</action>
+		<!--批量导入sn号和子SN号对应关系 -->
+		<action name="seedSnQuery" class="seedSnAction" method="inventoryQueryEntry">
+			<result>/frame/seed_sn.jsp</result>
+		</action>
+		
+		<!-- 运营中心 ，配货清单 -->
+		<action name="createpickinglistsingleopc" class="createPickingListAction" method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-singleopc.jsp</result>
+		</action>
+		<action name="createpickinglistsecondaryopc" class="createPickingListAction" method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-secondaryopc.jsp</result>
+		</action>
+		<action name="seckillopc" class="createPickingListAction" method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-seckillopc.jsp</result>
+		</action>
+		<action name="createpickinglistpackageskuopc" class="createPickingListAction" method="pageRedirect">
+			<result>/frame/warehouse/pickinglist-packageopc.jsp</result>
+		</action>
+		<action name="seckillcheck" class="checkOutboundAction" method="secKillCheck">
+			<result>/frame/checkoutbound/seckill-checkoutbound.jsp</result>
+		</action>
+		<action name="seckillcheckopc" class="checkOutboundAction" method="secKillCheck">
+			<result>/frame/checkoutbound/seckill-checkoutboundopc.jsp</result>
+		</action>
+		<action name="innerreplenishreport" class="warehouseReplenishStockAction" method="innerReplenishReport">
+			<result>/frame/innerreplenish/warehouse-innerreplenish.jsp</result>
+		</action>
+		<action name="exportreplenishorder" class="warehouseReplenishStockAction" method="exportReplenishOrder" />
+		<action name="salesoutboundhandnew" class="salesOutboundAction" method="outboundEntry">
+			<result>/frame/warehouse/sales-outbound-hand.jsp</result>
+		</action>
+		<action name="bigLuxuryWeigh" class="salesOutboundAction" method="outboundEntry">
+			<result>/frame/warehouse/sales-outbound-hand-big-luxury.jsp</result>
+		</action>
+		<action name="o2oqsbatchoutbound" class="salesOutboundAction" method="outboundEntry">
+			<result>/frame/warehouse/o2oqs-batch-outbound.jsp</result>
+		</action>
+		<action name="packageskumaintain" class="packageSkuMaintainAction" method="packageSkuMaintain">
+			<result>/frame/warehouse/packagesku-maintain.jsp</result>
+		</action>
+		<!-- 配货清单拣货 bin.hu -->
+		<action name="pickingDieking" class="salesChecksingleAction" method="pickingSuggestEntry">
+			<result>/frame/pickingSuggestion/picking_sku_dieking.jsp</result>
+		</action>
+		<!-- NIKE 礼品卡打印 -->
+		<action name="printGift" class="printGiftAction"
+			method="orderQueryEntry">
+			<result>/frame/print_gift.jsp</result>
+		</action>
+		<action name="specialskumaintain" class="specialSkuMainTainAction" method="specialSkuCommon">
+			<result>/frame/specialsku/special-sku-maintain.jsp</result>
+		</action>
+		<!-- 配货清单分拣 bin.hu -->
+		<action name="pickingSeparation" class="salesChecksingleAction" method="pickingSuggestEntry">
+			<result>/frame/pickingSuggestion/picking_sku_separation.jsp</result>
+		</action>
+		<!-- 导入模板批量收货-->
+		<action name="importTemplateBatReceiving" class="importBatchReceivingAction"
+			method="importTemplateBatReceiving">
+			<result>/frame/import-batch-receiving.jsp</result>
+		</action>
+		<action name="importForBatchReceiving" class="importBatchReceivingAction" method="importForBatchReceiving">
+			<result>/frame/inbound-purchase-upload-result.jsp</result>
+		</action>
+		<action name="importNewForBatchReceiving" class="importBatchReceivingAction" method="importShelfLifeForBatchReceiving">
+			<result>/frame/inbound-purchase-upload-result.jsp</result>
+		</action>
+				
+		<!-- 渠道快递维护  xialong.fei-->
+		<action name="transAreaImport" class="transAreaGroupAction"
+			method="transAreaImport">
+			<result>/frame/trans-area-import-result.jsp</result>
+		</action> 
+		<action name="transServiceImport" class="transAreaGroupAction"
+			method="transServiceImport">
+			<result>/frame/trans-area-import-result.jsp</result>
+		</action> 
+		<action name="importTransRoleAccord" class="transRoleAccordAction"
+			method="importTransRoleAccord">
+			<result>/frame/trans-area-import-result.jsp</result>
+		</action> 
+		
+		<action name="transAreaUpdate" class="transAreaGroupAction"
+			method="transAreaUpdate">
+			<result>/frame/trans-area-import-result.jsp</result>
+		</action> 
+		
+		<action name="expTransAreaDetail" class="transAreaGroupAction" method="expTransAreaDetail"></action>
+		<action name="nikeimportprint" class="importPrintAction" method="redirectIndex">
+			<result>/frame/nike-import-print.jsp</result>
+		</action>
+		<action name="importthenprint" class="importPrintAction" method="importThenPrint">
+			<result>/frame/nike-import-print-result.jsp</result>
+		</action>
+		<action name="importRefSku" class="skuTagAction" method="importRefSku">
+			<result>/frame/inbound-purchase-upload-result.jsp</result>  
+		</action>
+		<!-- 后置打印 -->
+		<action name="channelpostprintconf" class="channelPostPrintConfAction" method="channelPostPrintConf">
+			<result>/frame/warehouse/channel-post-print-conf.jsp</result>
+		</action>
+		<action name="channelgroupmaintain" class="channelGroupAction" method="channelgroupmaintain">
+			<result>/frame/warehouse/channel-group-maintain.jsp</result>
+		</action>
+		<!-- 退货申请 -->
+		<action name="returnapplication" class="returnApplication" method="returnApplication">
+			<result>/frame/warehouse-return-application.jsp</result>
+		</action>
+		
+		<!-- AD异常包裹申请 -->
+		<action name="adreturnapplication" class="returnApplication" method="adReturnApplication">
+			<result>/frame/warehouse-return-application-ad.jsp</result>
+		</action>
+		
+		<!-- 预包装商品核对 -->
+		<action name="prepackagedskucheck" class="prePackagedRefMaintainAction" method="toCheckIndex">
+			<result>/frame/warehouse/prepackagedsku-check.jsp</result>
+		</action>
+		<!-- 预包装商品维护 -->
+		<action name="prepackagedskumain" class="prePackagedRefMaintainAction" method="toCheckIndex">
+			<result>/frame/warehouse/prepackagedsku-maintain.jsp</result>
+		</action>
+		<!-- 退货原因查询  -->
+		<action name="returnReason" class="returnReasonTypeAction" >
+			<result>/frame/return-reason-type.jsp</result>
+		</action>
+		<!-- 预定义入库关闭/取消   -->
+		<action name="updateTypeAndFinishTimeByid" class="warehousePredefinedAction"
+			method="updateTypeAndFinishTimeByid">
+			<result>/frame/warehouse-predefined-cancel.jsp</result>
+		</action>
+		<!--    -->
+		<action name="returnPackageegister" class="warehousePredefinedAction"
+			method="returnPackageegister">
+			<result>/frame/warehouse-predefined-cancel.jsp</result>
+		</action>
+		<!-- 虚拟仓收货 -->
+		<action name="virtualreceipt" class="staInBoundAction"
+			method="virtualReceipt">
+			<result>/frame/warehouse-virtual-receiptl.jsp</result>
+		</action>
+		<action name="importStaInboundShelves" class="staInBoundAction"
+			method="importStaInboundShelves">
+			<result>/frame/sta-inbound-shelves-result.jsp</result>
+		</action>
+		<action name="conveniencestoreexport" class="convenienceStoreExportAction" method="redirect">
+			<result>/frame/warehouse/conveniencestore-export.jsp</result>
+		</action>
+		<action name="exportconveniencestoreorderinfo" class="convenienceStoreExportAction"
+			method="exportConvenienceStoreOrderInfo">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		</action>
+		<!-- 耗材使用情况查询 -->
+		<action name="cmusequery" class="consumptiveMaterialUseQueryAction" method="redirect">
+			<result>/frame/warehouse/cmuse-query.jsp</result>
+		</action>
+		<!-- 激活失败卡券处理 -->
+		<action name="snCardCheck" class="salesSnCardCheckAction"
+			method="salesSnCardCheckEntry">
+			<result>/frame/snCardCheck/sales-sncard-check.jsp</result>
+		</action>
+		<action name="uploadReturnDoc" class="returnApplication"
+			method="uploadReturnDoc">
+			<result>/frame/trans-area-import-result.jsp</result>
+		</action> 
+		
+		<!-- 索赔 -->
+		<action name="initDamageQueryPage" class="compensationAction"
+			method="initDamageQueryPage">
+			<result>/frame/compensation/compensation-query.jsp</result>
+		</action> 
+		
+		<action name="initOdOQueryPage" class="odoAction"
+			method="initOdOQueryPage">
+			<result>/frame/odo/odo-create.jsp</result>
+		</action> 
+		<action name="createOutStaByOdoId" class="odoAction" method="createOutStaByOdoId">
+		</action> 
+		
+		<action name="checkService" class="loginAction"
+			method="checkService">
+			<result>/checkService.jsp</result>
+		</action> 
+		<action name="initCheckQueryPage" class="compensationAction"
+			method="initCheckQueryPage">
+			<result>/frame/compensation/compensation-check.jsp</result>
+		</action> 
+		
+		<!-- 用户仓库绑定导入-->
+		<action name="userWarehouseRefImport" class="transImportAction"
+			method="userWarehouseRefImport">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action> 
+		<!-- 自动化对接,单件小批次和周转箱绑定界面 -->
+		<action name="batchturnoverboxbind" class="autoOutboundTurnoverBoxAction" method="pageRedirect">
+			<result>/frame/warehouse/batch-turnoverbox-bind.jsp</result>
+		</action>
+		<!-- 根据配货清单编码释放周转箱 -->
+		<action name="releaseturnboxbypickinglist" class="autoOutboundTurnoverBoxAction" method="pageRedirect">
+			<result>/frame/warehouse/release-turnoverbox-bypc.jsp</result>
+		</action>
+		<action name="createturnoverbox" class="autoOutboundTurnoverBoxAction" method="pageRedirect">
+			<result>/frame/warehouse/create-turnoverbox.jsp</result>
+		</action>
+		<!-- 特殊商品作废 -->
+		<action name="particularComCancl3" class="skuTypeAction"
+			method="particularcommdycancle">
+			<result>/frame/warehouse/commodity.jsp</result>
+		</action>
+		<!-- 特殊商品sku导入 -->
+		<action name="particularCommoditySkuImport" class="purchaseInboundAction"
+			method="skuImport">
+			<result>/frame/snsimport-upload-result.jsp</result>
+		</action>
+		<action name="warehousesfnextmornigconfigexport" class="sfNextMorningConfigAction" method="exportSfNextMorningConfig">
+		</action>
+		<!-- 直连sf时效导出 -->
+		<action name="exportsfconfig" class="sfNextMorningConfigAction" method="exportSfConfig">
+		</action>
+		<!-- 直连sf时效导入 -->
+		<action name="importsfconfig" class="sfNextMorningConfigAction" method="importSfConfig">
+			<result>/frame/import_sf_config_result.jsp</result>
+		</action>
+		<action name="importsfnextmorningconfig" class="sfNextMorningConfigAction" method="importSfNextMorningConfig">
+			<result>/frame/warehouse/import_sf_next_morning_config_result.jsp</result>
+		</action>
+		<action name="exportNikeTodaySendConfig" class="nikeTodaySendConfigAction" method="exportNikeTodaySendConfig">
+		</action>
+		<action name="importNikeTodaySendConfig" class="nikeTodaySendConfigAction" method="importNikeTodaySendConfig">
+			<result>/frame/warehouse/import_sf_next_morning_config_result.jsp</result>
+		</action>
+		<action name="importAdPackage" class="warehouseBaseinfoAction" method="importAdPackage">
+			<result>/frame/warehouse/return-import-result.jsp</result>
+		</action>
+		<action name="exportAdPackage" class="warehouseBaseinfoAction" method="exportAdPackage">
+		</action>
+				<!--线下包裹 -->
+		<action name="offLinePackAgeManage" class="offLinePackageAction" method="pageRedirect">
+			<result>/frame/warehouse/offline-package-manage.jsp</result>
+		</action>
+		<action name="offLinePackAgeQuery" class="offLinePackageAction" method="pageRedirectQuery">
+			<result>/frame/warehouse/offline-package-query.jsp</result>
+		</action>
+		
+		<action name="zdhPiciManager" class="offLinePackageAction" method="zdhPiciManager">
+			<result>/frame/warehouse/zdh-pici-manager.jsp</result>
+		</action>
+		
+		<action name="zdhPiciImport" class="vmiReturnAction" method="zdhPiciImport">
+			<result>/frame/binding-import-result.jsp</result>
+		</action>
+		
+		
+		<!-- 系统维护 -->
+		<action name="outboundDataMaintain"  class="systemMaintainAction" method="outboundDataMaintain">
+			<!-- 直连出库数据维护 -->
+			<result>/frame/outbound-data-maintain.jsp</result>
+		</action>
+		<action name="openWmsConfirmOrderQueue"  class="systemMaintainAction" method="openWmsConfirmOrderQueue">
+			<!-- 直连创单维护 -->
+			<result>/frame/wmsConfirmOrderQueue.jsp</result>
+		</action>
+		
+		<action name="outboundReset"  class="systemMaintainAction" method="outboundReset">
+			<!-- 直连创单维护 -->
+			<result>/frame/wmsOutBoundReset.jsp</result>
+		</action>
+		
+		<action name="openTestClearjsp"  class="systemMaintainAction" method="openTestClearjsp">
+			<!-- 直连出库数据维护 -->
+			<result>/frame/pressure_testclear.jsp</result>
+		</action>
+		
+		
+		<action name="skusoutbound"  class="orderOutboundAction" method="skusOutbound">
+			<result>/frame/salesoutbound/skus_outbound.jsp</result>
+		</action>
+		<action name="skusoutboundCustoms"  class="orderOutboundAction" method="skusOutbound">
+			<result>/frame/salesoutbound/skus_outbound_customs.jsp</result>
+		</action>
+		<!-- 过仓失败次数重置 -->
+		<action name="passWarehouseFailList"  class="whFailCountReset" method="initWhFailCountResetPage">
+			<result>/frame/warehouse/wh_fail_count_reset.jsp</result>
+		</action>
+		<!-- 出库反馈PACS维护操作 -->
+		<action name="outboundFeedbackPacsOperate"  class="outBoundFeedBackPacs" method="initOperatePacsPage">
+			<result>/frame/warehouse/outbound_feedback_pacs_operate.jsp</result>
+		</action>
+		
+		<action name="exportClaimantInfo"  class="compensationAction" method="exportClaimantInfo"></action>
+		<!-- 批量导入退换货快递信息 -->
+		<action name="returnPackageImport"  class="returnPackageAction" method="importReturnPackage">
+			<result>/frame/warehouse/return-import-result.jsp</result>
+		</action>	
+		<action name="sortPickingQuery"  class="outBoundFeedBackPacs" method="initOperatePacsPage">
+			<result>/frame/warehouse/sortPicking-query.jsp</result>
+		</action>	
+		
+		<action name="goodsCollectionLogQuery"  class="outBoundFeedBackPacs" method="initOperatePacsPage">
+			<result>/frame/warehouse/goods-collection-log-query.jsp</result>
+		</action>	
+		
+		<!-- 优先发货城市配置 -->
+		<action name="prioritycityconfig" class="priorityShippedCityConfigAction" method="initConfigPage">
+			<result>/frame/warehouse/priority_city_config.jsp</result>
+		</action>
+		<action name="deliveryChangeConfigure" class="modifyTransportatorAction" method="deliveryChangeConfigureEntry">
+			<result>/frame/delivery-change-configure.jsp</result>
+		</action>
+		
+		<!--出入库SN号导入 -->
+		<action name="outofstoragesnimport" class="snlistbycodeaction" method="initOutOfStorageSnPage">
+			<result>/frame/warehouse/out-of-storage-sn-import.jsp</result>
+		</action>
+		<!-- 出入库SN号导入(菜鸟仓) -->
+		<action name="caiNiaoWhSnImport" class="warehouseOperationOthersAction" method="caiNiaoWhSnImport">
+			<result>/frame/cainiao_snimport-upload-result.jsp</result>
+		</action>
+		
+		<!-- LEVIS销售接口卡单重置批次号 -->
+		<action name="msgOutboundOrderResetPage" class="msgOutboundOrderAction" method="pageRedirect">
+			<result>/frame/warehouse/msgOutboundOrder-reset.jsp</result>
+		</action>
+		<action name="msgOutboundOrderReset" class="msgOutboundOrderAction" method="resetMsgOutboundOrderList">
+			<result>/frame/warehouse/msgOutboundOrder-reset.jsp</result>
+		</action>
+		<action name="staResetStatus" class="printPickingListAction" method="printPickingListSecKill">
+			<result>/frame/warehouse/sta_status_reset.jsp</result>
+		</action>
+		<!-- 作业单备份还原 -->
+		<action name="staRestore" class="printPickingListAction" method="staRestorePageRedirect">
+			<result>/frame/warehouse/sta_restore.jsp</result>
+		</action>
+		
+		
+		<action name="timedTaskManager" class="schedulerTaskAction" method="showTimedTaskManager">
+			<result>/frame/warehouse/timedtask-manager.jsp</result>
+		</action>
+		
+		<!-- 在库商品效期调整 -->
+		<action name="validityoperate" class="inventoryAdjustAction" method="validityOperate">
+			<result>/frame/inventory-validity-operate.jsp</result>
+		</action>
+		
+		<action name="initPdaCheckQueryPage" class="historicalOrderInquiryAction"
+			method="initPdaCheckQueryPage">
+			<result>/frame/pda-query.jsp</result>
+		</action>
+		
+		<action name="query" class="inventorySnapshotAction"
+			method="inventorysnapshotEntry">
+			<result>/frame/query.jsp</result>
+		</action>
+				
+		<!-- esprit批量转店 start -->
+		<action name="initEspritStorePage" class="espritStoreAction" method="initEspritStorePage">
+			<result name="success">/frame/warehouse/espritStore-edit.jsp</result>
+		</action>
+		<action name="vmireturncreateesprit" class="espritStoreAction" method="vmiReturnCreateEsprit">
+			<result name="success">/frame/vmi-return-create-esprit.jsp</result>
+		</action>
+		<!-- esprit批量转店 end -->
+		
+		<action name="skuInvAllocationPage" class="skuInvAllocationAction" method="pageRedirect">
+			<result>/frame/warehouse/nike-sku-inv-allocation.jsp</result>
+		</action>
+		<action name="importSkuTargetOwner" class="skuInvAllocationAction" method="importSkuTargetOwner">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action>
+		
+		<!-- converse转店退仓批量创建 -->
+		<action name="turnAndCreateStaConverse" class="vmiReturnAction" method="converseToShopAndShutout">
+			<result>/frame/vmi-toshop-return-converse.jsp</result>
+		</action>
+		<action name="vmiReturnImportConverse" class="vmiReturnAction" method="vmiReturnImportConverse">
+			<result>/frame/vmi-inbound-sta-import-result.jsp</result>
+		</action>
+		
+		<!-- 二次分拣建议-new -->
+		<action name="pickingSuggestNew" class="salesChecksingleAction"
+			method="pickingSuggestEntry">
+			<result>/frame/pickingSuggestion/picking_sku_suggestion_check.jsp</result>
+		</action>
+		
+		<!-- mq切换配置开关 -->
+		<action name="mqSwitchManager" class="messageConfigAction" method="mqSwitchManager">
+			<result>/frame/warehouse/mq-switch-manager.jsp</result>
+		</action>
+		<!-- mq切换配置开关 -->
+		
+		<!-- 出库单同步lmis导入 -->
+		<action name="orderOutBoundImport" class="orderOutBoundAction" method="orderOutBoundImport">
+			<result>/frame/warehouse/order-outbound-import.jsp</result>
+		</action>
+		<!-- 出库单同步lmis导入 -end-->
+		<!-- 导入出库单信息 -->
+		<action name="orderOutBoundDataToLmis" class="orderOutBoundAction" method="orderOutBoundDataToLmis">
+			<result>/frame/snsimport-upload-result.jsp</result>
+		</action>
+		<!-- 导入LF出库单信息-->
+		<action name="importLfConfig" class="lfStaConfigAction"
+			method="importLfConfig">
+			<result>/frame/lf-sta-outbound-result.jsp</result>
+		</action>
+		<!-- Adidas整批出库功能 -->
+		<action name="batchOutbound" class="salesOutboundAction" method="outboundEntry">
+			<result>/frame/adidas-batch-outbound.jsp</result>
+		</action>
+		
+		<!-- 退仓出库指令生成拣货任务 -->
+		<action name="outboundPickingTask" class="outBoundPickingTaskAction" method="outboundPickingTask">
+			<result>/frame/outbound_picking_task.jsp</result>
+		</action>
+		
+		<!-- 出库转物流变更查询-->
+		<action name="findDeliveryChangeLog" class="staDeliveryChangeLogAction" method="findDeliveryChangeLog">
+			<result>/frame/warehouse/delivery-change-log.jsp</result>
+		</action>
+		
+		<!-- 出库转物流变更查询-->
+		<action name="findDeliveryChangeLog" class="staDeliveryChangeLogAction" method="findDeliveryChangeLog">
+			<result>/frame/warehouse/delivery-change-log.jsp</result>
+		</action>
+		
+		<action name="uploadPrintTemplet" class="printTempletUploadAction" method="uploadPrintTemplet">
+			<result>/frame/warehouse/warehouse-upload-print-templet.jsp</result>
+		</action>
+		<!-- 上传打印模板 -->
+		<action name="importPrintTemplet" class="printTempletUploadAction" method="importPrintTemplet">
+			<result>/frame/warehouse-upload-print-templet-result.jsp</result>
+		</action>
+		
+		<action name="skuReplenishmentSuggest" class="skuMoveSuggestPickingFailedAction"
+			method="skuMoveSuggsetPickingFailedEntry">
+			<result>/frame/sku_move_suggest_picking_failed_new.jsp</result>
+		</action>
+		<action name="skuReplenishmentSuggestExport" class="skuMoveSuggestPickingFailedAction"
+			method="skuReplenishmentSuggestExport">
+		</action>
+		<action name="adreturnmanage" class="adPackageReturnAction"
+			method="adreturnmanage">
+			<result>/frame/return-ad-package-deal.jsp</result>
+		</action>
+		
+		<action name="poQuery" class="historicalOrderInquiryAction" method="orderQueryEntryNew">
+			<result>/frame/sta-po-query.jsp</result>
+		</action>
+
+		<!-- 区域绑定作业类型 -->
+		<action name="openDistriButionArea" class="distriButionAreaAction"
+			method="openDistriButionArea">
+			<result>/frame/warehouse/distri_bution_area.jsp</result>
+		</action>
+		<action name="saveDwhDistriButionAreaLocImport" class="distriButionAreaAction"
+			method="saveDwhDistriButionAreaLocImport">
+			<result>/frame/warehouse/distri_bution_area.jsp</result>
+		</action>
+	        <action name="exportDistriBution" class="distriButionAreaAction" method="exportDistriBution" />
+		
+		<action name="importSkuSupplierCode" class="specialSkuMainTainAction" method="importSkuSupplierCode" >
+			<result>/frame/warehouse/import-skuSupplierCode-result.jsp</result>
+		</action>
+		
+	       <action name="storeHouseCancel" class="historicalOrderInquiryAction" method="orderQueryEntryNew">
+			<result>/frame/store-house-cancel.jsp</result>
+	       </action>
+
+	        <action name="toRfidPage" class="rfidAction" method="toRfidPage" >
+			<result>/frame/rfid/save_rfid.jsp</result>
+		</action>
+
+	</package>
+</struts>

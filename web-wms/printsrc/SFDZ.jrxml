@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SFDZ" language="groovy" pageWidth="276" pageHeight="382" columnWidth="236" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.3310000000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="sender" class="java.lang.String">
+		<fieldDescription><![CDATA[sender]]></fieldDescription>
+	</field>
+	<field name="senderTel" class="java.lang.String"/>
+	<field name="senderAddress" class="java.lang.String">
+		<fieldDescription><![CDATA[senderAddress]]></fieldDescription>
+	</field>
+	<field name="receiver" class="java.lang.String">
+		<fieldDescription><![CDATA[receiver]]></fieldDescription>
+	</field>
+	<field name="mobile" class="java.lang.String">
+		<fieldDescription><![CDATA[mobile]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[id]]></fieldDescription>
+	</field>
+	<group name="group">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+		<groupHeader>
+			<band height="342">
+				<line>
+					<reportElement x="0" y="0" width="236" height="1"/>
+				</line>
+				<line>
+					<reportElement x="0" y="0" width="1" height="342"/>
+				</line>
+				<line>
+					<reportElement x="236" y="0" width="1" height="342"/>
+				</line>
+				<line>
+					<reportElement x="0" y="341" width="236" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="20" y="20" width="50" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[寄件人：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="56" width="50" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[电话：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="92" width="50" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[地址：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="180" width="50" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[收件人：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="253" width="50" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[地址：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="216" width="50" height="20"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<text><![CDATA[电话：]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="20" width="166" height="20"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{sender}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="92" width="166" height="88"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{senderAddress}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="56" width="166" height="20"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{senderTel}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="180" width="166" height="20"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="216" width="166" height="20"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{mobile}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="70" y="253" width="166" height="88"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+</jasperReport>

@@ -1,0 +1,161 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	
+	<named-query name="SkuType.getSkuTypeByName">
+		<query><![CDATA[select s from  SkuType as s where s.name= :skuTypeName AND (s.status = 0 OR s.status IS NULL) ]]></query>
+	</named-query>
+	
+	<named-query name="PopUpArea.getPopUpAreaByCode">
+		<query><![CDATA[select s from  PopUpArea as s where s.code= :code AND (s.status = 0 OR s.status IS NULL) ]]></query>
+	</named-query>
+	
+	<named-query name="PopUpArea.getPopUpAreaByCodeAndOuid">
+		<query><![CDATA[select s from  PopUpArea as s where s.code= :code  AND (s.status = 0 OR s.status IS NULL) ]]></query>
+	</named-query>
+	
+	<named-query name="PopUpArea.getPopUpAreaByBarCode">
+		<query><![CDATA[select s from  PopUpArea as s where s.barcode= :barcode AND (s.status = 0 OR s.status IS NULL) ]]></query>
+	</named-query>
+	
+	<named-query name="Zoon.getZoonByCode">
+		<query><![CDATA[select s from  Zoon as s where s.code= :code AND (s.status = 0 OR s.status IS NULL) ]]></query>
+	</named-query>
+	
+	<named-query name="ContainerPop.getContainerPopByCode">
+		<query><![CDATA[select s from  ContainerPop as s where s.containerCode= :code ]]></query>
+	</named-query>
+	
+	<named-query name="ShippingPoint.getPointByName">
+		<query><![CDATA[select s from  ShippingPoint as s where s.name= :name ]]></query>
+	</named-query>
+		
+	<named-query name="ShippingPoint.getPointByCode">
+		<query><![CDATA[select s from  ShippingPoint as s where s.code= :code ]]></query>
+	</named-query>
+	
+	<named-query name="ShippingPoint.getPointByWcsCode">
+		<query><![CDATA[select s from  ShippingPoint as s where s.wcsCode= :wcsCode ]]></query>
+	</named-query>
+	
+	<named-query name="ShippingPoint.getPointById">
+		<query><![CDATA[select s from  ShippingPoint as s where s.id= :id ]]></query>
+	</named-query>
+	
+	<named-query name="ShippingPointRoleLine.getPointRoleLineBySort">
+		<query><![CDATA[select s from  ShippingPointRoleLine as s where s.sort= :sort and s.ouId =:ouId ]]></query>
+	</named-query>
+	
+	<named-query name="CheckingSpaceRole.getCheckRoleLineBySort">
+		<query><![CDATA[select s from  CheckingSpaceRole as s where s.lv= :sort and s.whOuId =:ouId  and s.type =:type]]></query>
+	</named-query>
+	
+	<named-query name="WhPickingBatch.getPlzListByPickingListId">
+		<query><![CDATA[select s from  WhPickingBatch as s where s.pickingList.id= :pId ]]></query>
+	</named-query>
+	
+	
+	<named-query name="WhPickingBatch.getPlzListByPickingListId2">
+		<query><![CDATA[select s from  WhPickingBatch as s where s.pickingList.id= :pId and s.status=1]]></query>
+	</named-query>
+	
+	
+	<named-query name="WhPickingBatch.getPlzListByCode">
+		<query><![CDATA[select s from  WhPickingBatch as s where s.code= :code ]]></query>
+	</named-query>
+	
+	<named-query name="WhPickingBatch.getPlzListByBarCode">
+		<query><![CDATA[select s from  WhPickingBatch as s where s.barCode= :barCode ]]></query>
+	</named-query>
+	
+	<named-query name="WhPickingBatch.getPkListByBarCode">
+		<query><![CDATA[select s.pickingList from  WhPickingBatch as s where s.barCode= :barCode ]]></query>
+	</named-query>
+	
+	<named-query name="WhPickingBatch.getPlzListByPickingListIdAndStatus">
+		<query><![CDATA[select s from  WhPickingBatch as s where s.pickingList.id= :pId and s.status = :status ]]></query>
+	</named-query>
+	
+	<named-query name="WhPickingBatch.getPlzListByZoonCode">
+		<query><![CDATA[select s from  WhPickingBatch as s where s.pickingList.id= :pId and s.zoon.code = :zoonCode ]]></query>
+	</named-query>
+	
+	<named-query name="WarehouseLocation.getWarehouseLocationByPopUpAreaId">
+		<query><![CDATA[select s from  WarehouseLocation as s where s.popUpArea.id= :popUpAreaId ]]></query>
+	</named-query>
+	
+	<named-query name="InboundRole.getInboundRoleByPopUpAreaId">
+		<query><![CDATA[select s from  InboundRole as s where s.targetLocation.id= :popUpAreaId ]]></query>
+	</named-query>
+	
+	<named-query name="WhPickZoon.getWhPickZoonByZoonId">
+		<query><![CDATA[select s from  WhPickZoon as s where s.zoon.id= :zoonId ]]></query>
+	</named-query>
+	
+	<named-query name="WhContainer.getWcByPb">
+		<query><![CDATA[select wc from WhContainer as wc where wc.whPickingBatch.id = :pbId]]></query>
+	</named-query>
+	
+	<named-query name="WhContainer.getWhContainerByCode">
+		<query><![CDATA[select wc from WhContainer as wc where wc.code=:code]]></query>
+	</named-query>
+	
+	<named-query name="WhContainer.getWcByPbId">
+		<query><![CDATA[select wc from WhContainer as wc where wc.whPickingBatch.id = :pbId]]></query>
+	</named-query>
+	
+	<named-query name="WhContainer.getWcByPlIdAndCode">
+		<query><![CDATA[select wc from WhContainer as wc where wc.pickingList.id = :plId and wc.code= :code and wc.status =5]]></query>
+	</named-query>
+	
+	<named-query name="WhContainer.getWcByPickId">
+		<query><![CDATA[select wc from WhContainer as wc where wc.pickingList.id = :pickId and wc.status =5]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getOccupiedStaByPickId">
+		<query><![CDATA[select sta from StockTransApplication as sta where sta.pickingList.id = :pickId and sta.status =2]]></query>
+	</named-query>
+	
+	<named-query name="WhContainer.getWcByPickIdNoStatus">
+		<query><![CDATA[select wc.code from WhContainer as wc where wc.pickingList.id = :pickId group by code]]></query>
+	</named-query>
+	<named-query name="PickingOpLine.getPolListByPickingLineId">
+		<query><![CDATA[select s from  PickingOpLine as s where s.pickingLine.id= :plId ]]></query>
+	</named-query>
+	
+	<named-query name="PickingLine.getPickingLineListByPbId">
+		<query><![CDATA[select s.id from  PickingLine as s where s.whPickingBatch.id= :pbId ]]></query>
+	</named-query>
+	
+	<named-query name="SkuRfid.findSkuRFIDByStaId">
+		<query><![CDATA[select s from  SkuRfid as s where s.staId= :staId ]]></query>
+	</named-query>
+	
+	<named-query name="SkuRfidLog.findSkuRFIDByStaId">
+		<query><![CDATA[select s from  SkuRfidLog as s where s.staId= :staId ]]></query>
+	</named-query>
+	
+	<named-query name="GoodsCollection.getGoodsCollectionByCode">
+		<query><![CDATA[select s from  GoodsCollection as s where s.collectionCode= :code and s.physicalId.id= :ouId ]]></query>
+	</named-query>
+	<named-query name="GoodsCollection.findGoodsCollectionByCode">
+		<query><![CDATA[select s from  GoodsCollection as s where s.collectionCode= :code and s.physicalId.id= :ouId ]]></query>
+	</named-query>
+	<named-query name="GoodsCollection.querySortByOuId">
+		<query><![CDATA[select s from  GoodsCollection as s where s.physicalId.id= :ouId ]]></query>
+	</named-query>
+	
+	<named-query name="GoodsCollection.getGoodsCollectionByPickingCode">
+		<query><![CDATA[select s from  GoodsCollection as s where s.pickinglist.code= :pickingCode ]]></query>
+	</named-query>
+	
+	<named-query name="RtwDieking.findRtwDiekingListByCode">
+		<query><![CDATA[select rt from  RtwDieking  rt where rt.batchCode= :batchCode ]]></query>
+	</named-query>
+	
+	<named-query name="PickingOpLine.getPickingOpLineByRDCode">
+		<query><![CDATA[select s from  PickingOpLine as s where s.rtwDiekingCode= :batchCode ]]></query>
+	</named-query>
+	
+	<named-query name="WhContainer.getWcByDekingId">
+		<query><![CDATA[select wc from WhContainer as wc where wc.diekingId = :p3Id ]]></query>
+	</named-query>
+</entity-mappings>

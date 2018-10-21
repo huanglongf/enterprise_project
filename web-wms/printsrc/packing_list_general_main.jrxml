@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="packing_list_general_main" language="groovy" pageWidth="283" pageHeight="367" columnWidth="243" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"           >
+	<property name="ireport.zoom" value="2.1435888100000082"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="52"/>
+	<parameter name="subReport" class="java.lang.String" isForPrompting="false"/>
+	<field name="index" class="java.lang.String"/>
+	<field name="printshopname" class="java.lang.String"/>
+	<field name="soOutCode" class="java.lang.String"/>
+	<field name="invoiceNumber" class="java.lang.String"/>
+	<field name="lpCode" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="receiverAddress" class="java.lang.String"/>
+	<field name="soCode" class="java.lang.String"/>
+	<field name="lines" class="java.util.List"/>
+	<field name="transferFee" class="java.lang.String"/>
+	<field name="totalAmount" class="java.lang.String"/>
+	<field name="isNotDisplaySum" class="java.lang.String"/>
+	<field name="rtnAddress" class="java.lang.String"/>
+	<field name="shopTelephone" class="java.lang.String"/>
+	<field name="printTime1" class="java.lang.String"/>
+	<field name="batchNo" class="java.lang.String"/>
+	<field name="slipCode2" class="java.lang.String"/>
+	<field name="pgIndex" class="java.lang.String"/>
+	<group name="1Group">
+		<groupExpression><![CDATA[$F{index}]]></groupExpression>
+		<groupHeader>
+			<band height="120">
+				<subreport>
+					<reportElement key="subreport-1" x="3" y="6" width="238" height="90" isRemoveLineWhenBlank="true"           />
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<pageHeader>
+		<band height="106" splitType="Stretch">
+			<textField>
+				<reportElement x="35" y="0" width="118" height="15"           />
+				<textElement textAlignment="Center">
+					<font fontName="宋体"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{printshopname}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="32" width="50" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<text><![CDATA[订单号:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="43" width="50" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<text><![CDATA[快递公司:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="54" width="50" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<text><![CDATA[收件人:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="65" width="50" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<text><![CDATA[联系电话:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="76" width="50" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<text><![CDATA[收件地址:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="50" y="32" width="100" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{slipCode2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="50" y="43" width="100" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lpCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="50" y="54" width="100" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="50" y="65" width="100" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telephone}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="50" y="76" width="192" height="24"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiverAddress}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="151" y="25" width="90" height="30" isRemoveLineWhenBlank="true"           />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="0" barHeight="45">
+					<jr:codeExpression><![CDATA[$F{soCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="3" y="0" width="32" height="15"           />
+				<textElement>
+					<font fontName="宋体"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pgIndex}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="152" y="0" width="47" height="15"           />
+				<text><![CDATA[发票数量:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="198" y="0" width="42" height="15"           />
+				<textFieldExpression><![CDATA[$F{invoiceNumber}==null?"0":$F{invoiceNumber}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="159" y="55" width="74" height="12"           />
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{soCode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<pageFooter>
+		<band height="59" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="9" width="55" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<text><![CDATA[打印时间:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="21" width="55" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<text><![CDATA[退货联系电话:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="32" width="55" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<text><![CDATA[退货寄回地址:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="55" y="9" width="98" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{printTime1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="55" y="21" width="98" height="12"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{shopTelephone}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="55" y="32" width="98" height="24"           />
+				<textElement>
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rtnAddress}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="152" y="9" width="90" height="30" isRemoveLineWhenBlank="true"           />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="0" barHeight="45">
+					<jr:codeExpression><![CDATA[$F{batchNo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="38" width="74" height="12"           />
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{batchNo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

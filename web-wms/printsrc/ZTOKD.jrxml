@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report5" language="groovy" pageWidth="266" pageHeight="481" whenNoDataType="AllSectionsNoDetail" columnWidth="266" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" >
+	<property name="ireport.zoom" value="1.7715610000000086"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="317"/>
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" >
+		<queryString language="xPath">
+			<![CDATA[]]>
+		</queryString>
+		<field name="departure" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/departure]]></fieldDescription>
+		</field>
+		<field name="receiver" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/receiver]]></fieldDescription>
+		</field>
+		<field name="receverTel" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/receverTel]]></fieldDescription>
+		</field>
+		<field name="refSlipCode" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/refSlipCode]]></fieldDescription>
+		</field>
+		<field name="senderTel" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/senderTel]]></fieldDescription>
+		</field>
+		<field name="isRailway" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/isRailway]]></fieldDescription>
+		</field>
+		<field name="quantity" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/quantity]]></fieldDescription>
+		</field>
+		<field name="warehouseName" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/warehouseName]]></fieldDescription>
+		</field>
+		<field name="printTime" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/printTime]]></fieldDescription>
+		</field>
+		<field name="bigAddress" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/bigAddress]]></fieldDescription>
+		</field>
+		<field name="address" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/address]]></fieldDescription>
+		</field>
+		<field name="province" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/province]]></fieldDescription>
+		</field>
+		<field name="city" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/city]]></fieldDescription>
+		</field>
+		<field name="district" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/district]]></fieldDescription>
+		</field>
+		<field name="cmpName" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/cmpName]]></fieldDescription>
+		</field>
+		<field name="sender" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/sender]]></fieldDescription>
+		</field>
+		<field name="pgindex" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/pgindex]]></fieldDescription>
+		</field>
+		<field name="trackingNo" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/trackingNo]]></fieldDescription>
+		</field>
+		<field name="senderAddress" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/senderAddress]]></fieldDescription>
+		</field>
+		<field name="remark" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/remark]]></fieldDescription>
+		</field>
+		<field name="logoImg" class="java.lang.String">
+			<fieldDescription><![CDATA[/NameList/logoImg]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString language="xPath">
+		<![CDATA[/NameList/item]]>
+	</queryString>
+	<field name="departure" class="java.lang.String">
+		<fieldDescription><![CDATA[departure]]></fieldDescription>
+	</field>
+	<field name="receiver" class="java.lang.String">
+		<fieldDescription><![CDATA[receiver]]></fieldDescription>
+	</field>
+	<field name="receverTel" class="java.lang.String">
+		<fieldDescription><![CDATA[receverTel]]></fieldDescription>
+	</field>
+	<field name="refSlipCode" class="java.lang.String">
+		<fieldDescription><![CDATA[refSlipCode]]></fieldDescription>
+	</field>
+	<field name="senderTel" class="java.lang.String"/>
+	<field name="isRailway" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[isRailway]]></fieldDescription>
+	</field>
+	<field name="quantity" class="java.lang.String"/>
+	<field name="warehouseName" class="java.lang.String"/>
+	<field name="printTime" class="java.lang.String"/>
+	<field name="bigAddress" class="java.lang.String"/>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="province" class="java.lang.String"/>
+	<field name="city" class="java.lang.String">
+		<fieldDescription><![CDATA[city]]></fieldDescription>
+	</field>
+	<field name="district" class="java.lang.String">
+		<fieldDescription><![CDATA[district]]></fieldDescription>
+	</field>
+	<field name="cmpName" class="java.lang.String"/>
+	<field name="sender" class="java.lang.String"/>
+	<field name="pgindex" class="java.lang.String"/>
+	<field name="trackingNo" class="java.lang.String"/>
+	<field name="senderAddress" class="java.lang.String"/>
+	<field name="remark" class="java.lang.String"/>
+	<field name="logoImg" class="java.lang.String">
+		<fieldDescription><![CDATA[logoImg]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="1" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="470" splitType="Stretch">
+			<staticText>
+				<reportElement x="102" y="57" width="34" height="15" />
+				<textElement>
+					<font fontName="黑体" size="11" isBold="false" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[电话：]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="56" width="262" height="1" />
+			</line>
+			<line>
+				<reportElement x="3" y="274" width="262" height="1" />
+			</line>
+			<line>
+				<reportElement x="116" y="275" width="1" height="54" />
+			</line>
+			<line>
+				<reportElement x="121" y="2" width="1" height="54" />
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="124" y="4" width="139" height="24" forecolor="#000000" />
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="黑体" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="2" y="329" width="261" height="1" />
+			</line>
+			<line>
+				<reportElement x="2" y="372" width="218" height="1" />
+			</line>
+			<frame>
+				<reportElement mode="Transparent" x="2" y="2" width="262" height="468" isPrintInFirstWholeBand="true" />
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<line>
+					<reportElement x="120" y="27" width="142" height="1" />
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="40" y="55" width="60" height="15" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="黑体" size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+				</textField>
+				<textField  isBlankWhenNull="true">
+					<reportElement key="textField" x="127" y="56" width="134" height="12" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="黑体" size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{receverTel}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="55" width="49" height="15" />
+					<textElement textAlignment="Center">
+						<font fontName="黑体" size="11" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[收件人：]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="32" y="70" width="227" height="43" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="黑体" size="11" isBold="true" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="70" width="39" height="26" />
+					<textElement textAlignment="Center">
+						<font fontName="黑体" size="11" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[地址：]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="148" width="262" height="1" />
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="29" y="115" width="74" height="16" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="黑体" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{sender}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="138" y="115" width="59" height="16" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="黑体" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{senderTel}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="2" y="115" width="40" height="16" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="黑体" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[寄件人：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="102" y="115" width="47" height="16" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="黑体" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[联系方式：]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="195" y="115" width="26" height="16" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="黑体" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[日期：]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="216" y="115" width="46" height="16" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="黑体" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{printTime}]]></textFieldExpression>
+				</textField>
+				<textField  isBlankWhenNull="true">
+					<reportElement key="textField" x="24" y="130" width="203" height="16" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="黑体" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{senderAddress}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="130" width="27" height="16" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="黑体" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[地址：]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="210" width="262" height="1" />
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement key="city" style="table_TD" stretchType="RelativeToTallestObject" mode="Transparent" x="1" y="149" width="129" height="61" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None">
+						<font fontName="黑体" size="40" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="STSong-Light" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="28" y="215" width="218" height="40" />
+					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="2" barHeight="58">
+						<jr:codeExpression><![CDATA[$F{trackingNo}]]></jr:codeExpression>
+					</jr:barbecue>
+				</componentElement>
+				<textField isBlankWhenNull="true">
+					<reportElement x="39" y="254" width="176" height="14" forecolor="#000000" />
+					<textElement textAlignment="Center">
+						<font fontName="黑体" size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement mode="Opaque" x="117" y="282" width="144" height="29" />
+					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="2" barHeight="58">
+						<jr:codeExpression><![CDATA[$F{trackingNo}]]></jr:codeExpression>
+					</jr:barbecue>
+				</componentElement>
+				<textField isBlankWhenNull="true">
+					<reportElement x="124" y="309" width="132" height="14" forecolor="#000000" />
+					<textElement textAlignment="Center">
+						<font fontName="黑体" size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="218" y="328" width="1" height="140" />
+				</line>
+				<line>
+					<reportElement x="1" y="403" width="217" height="1" />
+				</line>
+				<line>
+					<reportElement x="1" y="437" width="218" height="1" />
+				</line>
+				<line>
+					<reportElement x="107" y="404" width="1" height="33" />
+				</line>
+				<staticText>
+					<reportElement x="1" y="333" width="38" height="11" />
+					<textElement textAlignment="Center">
+						<font fontName="黑体" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[收件人：]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="33" y="333" width="62" height="11" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="黑体" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="93" y="333" width="30" height="11" />
+					<textElement>
+						<font fontName="黑体" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[电话：]]></text>
+				</staticText>
+				<textField  isBlankWhenNull="true">
+					<reportElement key="textField" x="113" y="333" width="114" height="9" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="黑体" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{receverTel}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="346" width="30" height="11" />
+					<textElement textAlignment="Center">
+						<font fontName="黑体" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[地址：]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="24" y="346" width="194" height="24" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement>
+						<font fontName="黑体" size="8" isBold="true" pdfFontName="Helvetica" pdfEncoding="Cp1250" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="375" width="37" height="12" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="黑体" size="7" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[寄件人：]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="26" y="375" width="57" height="12" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="黑体" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{sender}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="114" y="375" width="50" height="12" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="黑体" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{senderTel}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="82" y="375" width="40" height="12" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="黑体" size="7" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[联系方式：]]></text>
+				</staticText>
+				<textField  isBlankWhenNull="true">
+					<reportElement key="textField" x="19" y="387" width="195" height="16" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="黑体" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{senderAddress}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="387" width="24" height="16" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="黑体" size="6" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[地址：]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="1" y="410" width="106" height="23" forecolor="#000000" />
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="黑体" size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="163" y="375" width="23" height="12" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="黑体" size="7" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[日期：]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="181" y="375" width="39" height="12" />
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="黑体" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{printTime}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" stretchType="RelativeToBandHeight" x="126" y="149" width="136" height="61" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font fontName="黑体" size="40" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{district}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="227" y="133" width="34" height="13" />
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="黑体" size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pgindex}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="227" y="132" width="5" height="15" />
+					<textElement textAlignment="Center">
+						<font fontName="黑体" size="11" isBold="true" isItalic="false"/>
+					</textElement>
+					<text><![CDATA[#]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement x="17" y="438" width="169" height="22" />
+					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="2" barHeight="30">
+						<jr:codeExpression><![CDATA[$F{refSlipCode}]]></jr:codeExpression>
+					</jr:barbecue>
+				</componentElement>
+				<staticText>
+					<reportElement x="220" y="330" width="38" height="27" />
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[签]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="220" y="357" width="38" height="27" />
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" markup="none">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[收]]></text>
+				</staticText>
+				<textField  isBlankWhenNull="true">
+					<reportElement key="textField" x="17" y="456" width="169" height="10" />
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="黑体" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{refSlipCode}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement x="2" y="113" width="262" height="1" />
+			</line>
+			<staticText>
+				<reportElement x="110" y="406" width="110" height="33" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" />
+				<textElement>
+					<font fontName="新宋体" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[您对此单的签收，代表您已验货，确认商品信息无误，包装完好，没有划痕，破损都表面质量问题。]]></text>
+			</staticText>
+		</band>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

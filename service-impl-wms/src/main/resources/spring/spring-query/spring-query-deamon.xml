@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"	
+	xmlns:loxia="http://loxia.benjamin.cn/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	 
+	  <bean id="StockTransApplication.getSkusByStaId" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+
+select count(1) || :split || stragg(sku_id||';'||qty) 
+from 
+(select l.sku_id,sum(l.quantity) as qty from t_wh_sta_line l where l.sta_id =:staId group by l.sku_id order by sku_id) 
+
+ 
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 <bean id="StockTransApplication.getSkuQtyByStaId" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+				select sum(l.quantity) from t_wh_sta_line l where l.sta_id =:staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 
+	 <bean id="StockTransApplication.getSkuWeightIsNull" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+				select count(sku.id) from t_wh_sta_line l,t_bi_inv_sku sku where l.sku_id=sku.id and sku.gross_weight is null and l.sta_id=:staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 <bean id="StockTransApplication.getStaAllSkuWeight" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+				select sum(sku.gross_weight*l.quantity) from t_wh_sta_line l,t_bi_inv_sku sku where l.sku_id= sku.id and l.sta_id=:staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 
+	 <bean id="StockTransApplication.getIsSnByStaId" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+			select decode((select wh.vmi_source
+                from t_bi_warehouse wh
+               where wh.ou_id = sta.main_wh_id),
+              null,
+              nvl((select max(sku.is_sn_sku)
+                    from t_wh_sta_line l, t_bi_inv_sku sku
+                   where l.sku_id = sku.id
+                     and sku.is_sn_sku = 1
+                     and l.sta_id = sta.id),
+                  0),
+              0)
+  				from t_wh_sta sta
+				where sta.id = :staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 
+	  <bean id="StockTransApplication.getIsSnOrExpByStaId" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+	 
+            select case when count(1)>0 then 1 else 0 end from t_wh_sta_line l, t_bi_inv_sku sku 
+            where l.sku_id = sku.id and sku.is_sn_sku = 1  and l.sta_id=:staId
+				 
+				 ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 
+	  <bean id="StockTransApplication.getIsSnOrExpByStaId1" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+	 
+            select case when count(1)>0 then 1 else 0 end from t_wh_sta_line l, t_bi_inv_sku sku 
+            where l.sku_id = sku.id and sku.store_mode=33  and l.sta_id=:staId
+				 
+				 ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 
+	 <bean id="StockTransApplication.getIsRFIDBySkuId" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+	 
+            select case when count(1)>0 then 1 else 0 end from t_wh_sta_line l, t_bi_inv_sku sku 
+            where l.sku_id = sku.id and sku.is_rfid=1  and l.sta_id=:staId
+				 
+				 ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 
+	 
+	 <bean id="StockTransApplication.getSkuMaxLengthByStaId" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+				select greatest(max(nvl(sku.length, 0)),
+                max(nvl(sku.width, 0)),
+                max(nvl(sku.height, 0)))
+				  from t_wh_sta_line l, t_bi_inv_sku sku
+				 where l.sku_id = sku.id
+				   and l.sta_id = :staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 <bean id="StockTransApplication.getIsRailWayByStaId" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+select decode(max(is_railway),null,0,max(is_railway))
+from t_wh_sta sta,
+t_wh_sta_line l,
+t_bi_inv_sku sku
+where 
+sta.id=l.sta_id
+and l.sku_id = sku.id
+and sku.is_railway != 0
+and sta.id = :staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 <bean id="StockTransApplication.updateStaLocked" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+					update t_wh_sta sta set 
+					sta.is_locked=1
+					where sta.id =:staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 <bean id="StockTransApplication.updateStaSedKill" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+					update t_wh_sta sta set 
+					#if("$!isSedKill"=="true")
+					    sta.is_sed_kill=1,
+					    sta.picking_type = 30
+					#else
+						sta.is_sed_kill=0,
+						sta.picking_type = case when sta.sku_qty = 1 then 1 else 10 end
+					#end
+					where sta.id =:staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 <bean id="SecKillSku.getSecKillSkuBySta" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sec.* from t_wh_sec_kill_sku sec,t_wh_sta sta where sec.skus=sta.skus and sta.main_wh_id = sec.ou_id and sta.id=:staId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="SecKillSkuCounter.addSecKillSkuCounterBySta" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							insert into T_WH_SEC_KILL_SKU_COUNTER (id,create_time,qty,skus,Ou_Id,sta_id)
+							select S_T_WH_SEC_KILL_SKU_COUNTER.NEXTVAL,sysdate,1, sta.skus, sta.main_wh_id,sta.id from t_wh_sta sta
+							where sta.id=:staId and sta.skus like :likeParam
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="StaLine.findSkuSN" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+						select count(1)
+						  from t_wh_sta_line l, t_bi_inv_sku sku
+						 where l.sku_id = sku.id
+						   and sku.is_sn_sku = 1
+						   and l.sta_id = :staId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="SkuCategories.findSkuCategoryBySta" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+					select tmsc.id,
+					       tmsc.is_picking_categories,
+					       tmsc.sed_pickingsku_qty,
+					       tmsc.sku_categories_name,
+					       tmsc.parent_sku_categories_id as parentId
+					  from T_MA_SKU_CATEGORIES tmsc
+					 start with (tmsc.id in
+					            (
+					              
+					              select nvl(sku.sku_categories_id,
+					                          (select id
+					                             from T_MA_SKU_CATEGORIES s
+					                            where s.parent_sku_categories_id is null))
+					                from t_wh_sta_line l, t_bi_inv_sku sku
+					               where l.sku_id = sku.id
+					                 and l.sta_id = :staId))
+					connect by prior tmsc.parent_sku_categories_id = tmsc.id
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransApplication.findStaById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+						select id,type as intStaType,status as intStaStatus from t_wh_sta where id=:staId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="SkuSizeConfig.findConfigBySkuQty" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select group_sku_qty_limit from t_wh_sku_size_config where min_size<= :skuMaxLength and max_size>:skuMaxLength
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="PackageSku.findPackageSkuListBySkus1System" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select id from(
+					  select id from t_wh_package_sku where instr(:skus,skus1)>0 
+					  and case when skus2 is null then 1 else instr(:skus,skus2) end > 0
+					  and case when skus3 is null then 1 else instr(:skus,skus3) end > 0
+					  and ou_id =:ouId
+					  and sku_qty = :skuQty
+					  and sta_total_sku_qty = :staTotalSkuQty
+					)where rownum = 1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="PackageSkuCounter.getPackageSkuCounter" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select id from t_wh_package_sku_counter where sta_total_sku_qty =:staTotalSkuQty
+					and sku_id =:skuId and ou_id = :ouId and sku_qty = :skuQty
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="PackageSkuCounter.addCounterById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_package_sku_counter set sta_qty = sta_qty+1 where id = :pscId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="PackageSkuCounter.addNewCounter" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					insert into t_wh_package_sku_counter (id,sta_total_sku_qty,sku_qty,sta_qty,ou_id,sku_id)
+					values(s_t_wh_package_sku_counter.nextval,2,2,1,:ouId,:skuId)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		 <!-- 将作业单跟新关联快递单的TO_ID -->
+	<!--  <bean id="StockTransApplication.updateStaToId" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+					update t_wh_sta sta set 
+					sta.to_id=:toId
+					where sta.code =:code
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 -->
+</beans>

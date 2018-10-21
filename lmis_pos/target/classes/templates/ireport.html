@@ -1,0 +1,41 @@
+<html>
+<head>
+<style media=print>  
+.Noprint{display:none;}<!--用本样式在打印时隐藏非打印项目-->  
+</style>
+<OBJECT classid=CLSID:8856F961-340A-11D0-A96B-00C04FD705A2 height=0 id=WebBrowser width=0 height=0>
+</OBJECT> 
+</head>
+
+<body>
+<script language="javascript"> 
+　　function printsetup(){ 
+	　　// 打印页面设置 
+	　　wb.execwb(8,1); 
+　　} 
+　　function printpreview(){ 
+	　　// 打印页面预览 　　　　 
+	　　wb.execwb(7,1);　　　　　 　　　　 
+　　} 
+　　function printit(){ 
+　　		if (confirm('确定打印吗？')) {
+　　			alert("111111");
+　　			wb.execwb(6,6);
+　　			alert("2222222");
+　　		} 
+　　} 
+</script> 
+<OBJECT classid="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2" height=0 id=wb name=wb width=0>
+</OBJECT>
+
+
+  </object> 
+<input type=button class="Noprint" name=button_print value="打印" onclick="javascript:printit()"/> 
+<input type=button class="Noprint" name=button_setup value="打印页面设置" onclick="javascript:printsetup();"/> 
+<input type=button class="Noprint" name=button_show value="打印预览" onclick="javascript:printpreview();"/> 
+<input type=button class="Noprint" name=button_fh value="关闭" onclick="javascript:window.close();"/>
+<center>你是谁？！</center>
+<div class="Noprint" align="center"> 你是谁1</div>
+<div align="center"> 你是谁2</div>
+</body>
+</html>

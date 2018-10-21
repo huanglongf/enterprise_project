@@ -1,0 +1,1235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean id="BiChannel.findRefShopByWhOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select ch.id,ch.name,ch.shop_code shopCode,ch.code, chooseOption.option_value as companyChName, ch.company_name as companyName
+					from T_BI_CHANNEL_WH_REF rf
+					 inner join T_BI_CHANNEL ch
+					    on rf.CHANNEL_ID = ch.ID
+					 left join t_sys_choose_option chooseOption
+					 	on ch.company_name = chooseOption.option_key
+					 where rf.WH_OU_ID = :whouid
+					 #if($name)
+					       and ch.name like '%$name%'
+					 #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannel.findAllByCustomer" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select ch.* from t_bi_channel ch
+				where 
+				#if($customerid)
+					ch.customer_id = :customerid
+				#else
+					ch.customer_id is null
+				#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannel.findAllByCustomers" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+           		select distinct l.* from (t_bi_channel_wh_ref f left join t_bi_warehouse e on f.wh_ou_id=e.id)
+           		left join t_bi_channel l on f.channel_id=l.id
+           		where f.channel_id in(select f.channel_id from t_bi_channel_wh_ref f where f.wh_ou_id= :startWarehouseId  intersect  select f2.channel_id from t_bi_channel_wh_ref f2 where  f2.wh_ou_id= :endWarehouseId)
+           	    order by l.name 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelCombineRef.findBiChannelCombineRef" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select
+						max(f.id) as id,max(t.name) as warehName,f.wh_ou_id as whId,l.name as channName,max(l.code) as channCode,max(f.exp_time) as expTime , max(f.channel_id) as hbChId, max(l.type) as chType, max(f.create_time) as createTime,count(*)
+				    from
+				    	 t_bi_channel_combine_ref f 
+				    left join
+				    	 t_bi_channel l on f.channel_id = l.id
+				    left join
+				    	 T_AU_OPERATION_UNIT t on t.id = f.wh_ou_id where to_char(f.exp_time,'yyyy-MM-dd') > to_char(sysdate,'yyyy-MM-dd') and t.parent_ou_id = :ouId group by l.name ,f.wh_ou_id having count(*)>=1 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelCombineRef.findBiChannelCombineChildrenRef" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select
+						 f.id,t.name as warehName,l1.name as channName,l.name as name, f.exp_time as expTime ,f.child_channel_id as childChannelIdList,f.create_time  as createTime
+				    from
+				    	 t_bi_channel_combine_ref f
+				    left join
+				    	 t_bi_channel l on f.child_channel_id = l.id
+           			left join
+				    	 t_bi_channel l1 on  f.channel_id = l1.id
+				    left join
+				    	 T_AU_OPERATION_UNIT t on t.id = f.wh_ou_id
+           			where
+           			  l1.id = :id and f.wh_ou_id = :whId and t.parent_ou_id = :ouId and to_char(f.exp_time,'yyyy-MM-dd') > to_char(sysdate,'yyyy-MM-dd')
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelSpecialAction.findTemplateType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select sa.template_type
+				from t_wh_sta_picking_list pl,
+				     t_wh_sta sta,
+				     t_bi_channel ch,
+				     t_bi_channel_special_action sa
+				where pl.id(+) = sta.picking_list_id
+				      and ch.code = sta.owner
+				      and sa.channel_id = ch.id
+				      and sa.type = 20
+				      #if($plid)
+				      	and pl.id = :plid
+				      #end
+				      #if($staid)
+				      	and sta.id = :staid
+				      #end
+					    #if(!$plid && !$staid) 
+					   	 and sta.id =-1
+					    #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelSpecialAction.findInvoiceType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select sa.template_type
+				  from t_wh_sta sta, t_bi_channel ch, t_bi_channel_special_action sa
+				 where sta.owner = ch.code
+				   and sa.channel_id = ch.id
+				   and sa.type = 1
+				 #if($staid)
+				   and sta.id = :staid
+				 #elseif($plid)
+				   and sta.picking_list_id = :plid
+				 #else
+				 	and sta.id = -1
+				 #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelSpecialAction.findInvoiceTypeByBatchNo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select sa.template_type
+		          from  t_wh_invoice_order t, t_bi_channel ch, t_bi_channel_special_action sa
+		         where t.owner = ch.code
+		           and sa.channel_id = ch.id
+		           and sa.type = 1
+		         #if($batchNo)
+		           and t.batch_code = :batchNo
+		         #end
+		         #if($wioIdList)
+				       and t.id in (
+				           #foreach($w in $wioIdList)
+					                     $w,
+				           #end
+				            -1)
+			    #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannel.findRefShopByOcOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+		  select ch.id,ch.name,ch.shop_code shopCode,ch.code, chooseOption.option_value as companyChName, ch.company_name as companyName
+          from T_BI_CHANNEL_WH_REF rf
+           inner join T_BI_CHANNEL ch
+              on rf.CHANNEL_ID = ch.ID
+           inner join t_au_operation_unit whou on whou.id = rf.wh_ou_id
+           inner join t_au_operation_unit ocou on whou.parent_ou_id = ocou.id
+           left join t_sys_choose_option chooseOption on ch.company_name = chooseOption.option_key
+           where ocou.id = :ocouid
+           #if($name)
+                 and ch.name like '%$name%'
+           #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannel.findRefShopByCmpOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+		  select ch.id,ch.name,ch.shop_code shopCode,ch.code, chooseOption.option_value as companyChName, ch.company_name as companyName
+          from T_BI_CHANNEL_WH_REF rf
+           inner join T_BI_CHANNEL ch
+              on rf.CHANNEL_ID = ch.ID
+           inner join t_au_operation_unit whou on whou.id = rf.wh_ou_id
+           inner join t_au_operation_unit ocou on whou.parent_ou_id = ocou.id
+           inner join t_au_operation_unit cmpou on cmpou.id = ocou.parent_ou_id
+           left join t_sys_choose_option chooseOption on ch.company_name = chooseOption.option_key
+           where cmpou.id = :cmpouid
+           #if($name)
+                 and ch.name like '%$name%'
+           #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 获取渠道列表  -->
+	<bean id="BiChannel.getBiChannelList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.status,t.id as id,t.code as code,t.name as name,t.address as address,tb.name as cName,tb.id as customerId, 
+					chooseOption.option_value as companyChName,
+					chooseOption.option_key as companyName
+					 from 
+          (select * from T_BI_CHANNEL where to_char(exp_time,'yyyy-MM-dd')  > to_char(sysdate,'yyyy-MM-dd') or exp_time is null ) t 
+          left join t_bi_customer tb on t.customer_id = tb.id
+          left join t_sys_choose_option chooseOption on t.company_name = chooseOption.option_key
+           where 1=1 and (t.status != 0 or t.status is null) 
+			           #if($code)
+			                 and t.code like '%$code%'
+			           #end
+			           #if($name)
+			                 and t.name like '%$name%'
+			           #end
+			           #if($cId)
+			                 and t.customer_id = :cId
+			           #end
+			           #if($companyName)
+			                 and t.company_name = :companyName
+			           #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 获取渠道残次原因列表  -->
+	<bean id="BiChannelImperfect.getBiChannelImperfectlList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				   select ct.*,ch.name as channelName from t_bi_channel_imperfect ct,t_bi_channel ch where ct.channel_id=ch.id 
+				    #if($channelId)
+			                and ct.channel_id=:channelId
+			           #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 根据仓库ID获取渠道残次原因列表  -->
+	<bean id="BiChannelImperfect.getBiChannelImperfectlListOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				   select ct.*,uni.name as channelName from t_bi_channel_imperfect ct,t_au_operation_unit uni where ct.ou_id=uni.id 
+				    #if($ouId)
+			                and ct.ou_id=:ouId
+			           #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannelImperfect.getBiChannelImperfectlOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				  select id,code,name from t_bi_channel_imperfect ct where 
+			                 ct.ou_id=:ouId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 残次查询补打  -->
+	<bean id="SkuImperfect.getSkuImperfectl" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+		 select sk.id as id,sk.create_time as createTime,sk.owner,sk.defect_code as defectCode,
+				 sk.defect_type as defectType,sk.defect_why as defectWhy,sk.status as status,sk.sku_id as skuId,
+				 sk.sta_id as staId,sku.jm_code as jmCode,sk.po_id,sk.factory_code,
+				 sk.memo,sn.sn as sn,line.qty as lineQty,sta.code as staCode,sta.slip_code as refSlipCode,sta.type as staType, carton.code as cartonCode,auser.user_name as userName,sku.code as skuCode
+				 from t_bi_inv_sku sku,t_wh_sku_imperfect sk left join t_wh_sta sta on sk.sta_id=sta.id 
+                 left join t_wh_sta_delivery_info inf on sta.id=inf.id 
+                 left join t_wh_sta_carton_line_sn sn on sn.dmg_code=sk.defect_code
+                 left join t_wh_sta_carton_line line on line.id=sn.cl_id
+                 left join t_wh_sta_carton carton on carton.id=line.c_id
+                 left join T_AU_USER auser on auser.id=carton.user_id
+                 where sk.sku_id=sku.id and sk.status=1 and sk.ou_id=:ouId  
+				  #if($slipCode)
+			                and sta.slip_code=:slipCode
+			           #end
+			            #if($owner)
+			                and sk.owner=:owner
+			           #end
+			            #if($receiver)
+			                and inf.receiver=:receiver
+			           #end
+			            #if($barCode)
+			                and sku.bar_code=:barCode
+			           #end
+			            #if($supplierCode)
+			                and sku.supplier_code=:supplierCode
+			           #end 
+                 #if($defectType)
+			                and sk.defect_type=:defectType
+			           #end 
+                 #if($defectCode)
+			                and sk.defect_code=:defectCode
+			           #end 
+                  #if($defectWhy)
+			                and sk.defect_why=:defectWhy
+			      #end
+			      #if($createTime)
+			                and sk.create_time>=:createTime
+			      #end
+			      #if($endTime)
+			                and sk.create_time<:endTime
+			      #end
+				  #if($cartonCode)
+				    and carton.code=:cartonCode
+				  #end
+				  #if($type)
+				    and sta.type=:type
+				  #end
+				  #if($staCode)
+				    and sta.code=:staCode
+				  #end
+				 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="SkuImperfect.findSkuImperfect" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+  select ski.owner,sta.code as staCode,sk.code as skuCode,sk.bar_code as barCode,sk.supplier_code as supplierCode,sk.name as skuName,
+ sk.key_properties,ski.defect_type,ski.defect_why,ski.defect_code,ski.po_id,ski.factory_code,ski.memo,ski.create_time ,ski.defect_code from t_bi_inv_sku sk,t_wh_sku_imperfect ski left join t_wh_sta sta on
+  ski.sta_id=sta.id where sk.id=ski.sku_id and ski.id=:id
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="SkuImperfect.findSkuImperfectStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select id from t_wh_sku_imperfect where sta_id=:staId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="SkuImperfect.findSkuImperfectBarCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+  select  ski.defect_code,ski.id,ski.sku_id,sk.bar_code from t_wh_sku_imperfect ski,t_bi_inv_sku sk
+   where ski.sku_id=sk.id and ski.defect_code=:defectCode and sk.bar_code=:barCode and ski.status=1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ImperfectCartonLine.findImperfectCartonLineCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+ select * from t_wh_imperfect_carton_line li,t_wh_sku_imperfect ski where li.imperfect_id=ski.id and ski.defect_code=:defectCode
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ImperfectCartonLine.findImperfectCartonLineStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+ select li.sku_id,li.carton_id,li.cartonline_id,li.imperfect_id from t_wh_carton car,t_wh_imperfect_carton_line li where car.id=li.carton_id and sta_id=:staId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<!-- 获取渠道残次类型列表  -->
+	<bean id="BiChannelImperfectLine.findBiChanneImperfectlLineList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				 select li.*,ct.name as imperfectName from t_bi_channel_imperfect ct,t_bi_channel_imperfect_line li where ct.id=li.imperfect_id and li.imperfect_id=:imperfectId
+				
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="BiChannel.getBiChannelListByTypeAndExpT" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.status,t.id as id,t.code as code,t.name as name,t.address as address,tb.name as cName,tb.id as customerId from 
+					(select * from T_BI_CHANNEL where to_char(exp_time,'yyyy-MM-dd')  > to_char(sysdate,'yyyy-MM-dd') or exp_time is null ) t 
+          			 left join t_bi_customer tb on t.customer_id = tb.id
+					where 1=1 and (t.type != 5 or type is null) and (t.status != 0 or t.status is null)
+			            #if($code)
+			                 and t.code like '%$code%'
+			           #end
+			           #if($name)
+			                 and t.name like '%$name%'
+			           #end
+			           #if($cId)
+			                 and t.customer_id = :cId
+			           #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<!-- 根据仓库获取渠道列表  （所有正常的渠道 type != 5）-->
+	<bean id="BiChannel.getBiChannelListByType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.type,t.status,t.id as id,t.code as code,t.name as name from 
+					(select * from T_BI_CHANNEL where to_char(exp_time,'yyyy-MM-dd')  > to_char(sysdate,'yyyy-MM-dd') or exp_time is null ) t 
+          			 left join T_BI_CHANNEL_WH_REF f on f.channel_id = t.id
+					where 1=1 and (t.type != 5 or type is null) and (t.status != 0 or t.status is null)  and f.wh_ou_id = :whId
+			           #if($name)
+			                 and t.name like '%$name%'
+			           #end 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 通过ID获取渠道信息-->
+	<bean id="BiChannel.findBiChannelById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+select t.id as id,t.code as code,t.name as name,t.address as address,t.customer_id as customerId,
+t.telephone as telephone,t.zipcode as zipcode,t.rtn_warehouse_address as rtnWarehouseAddress,
+t.is_sms as isSms,t.is_jd_ol_order as isJdolOrder,t.is_cartonsta_shop as isCartonStaShop,t.is_marger as isMarger,
+t.is_return_need_package as isReturnNeedPackage,t.trans_accounts_code as transAccountsCode,t.sf_jcustid,t.sf_jcusttag,
+t.is_not_val_in_batchcode as isNotValInBoundBachCode,
+t.SPECIAL_TYPE as intSpecialType, t.company_name as companyName,
+t.limit_so_channel_type as limitTypeInt,t.limit_pg_amount as limitAmount,t.vmi_code as vmiCode,
+t.vmi_source as vmiSource,t.vmi_wh_source as vmiWHSource,t.vmi_wh_source1 as vmiWhSource1,
+t.is_imperfect as isImperfect, t.is_imperfect_po_id as isImperfectPoId,t.is_imperfect_time as isImperfectTime,
+t.is_support_next_morning isSupportNextMorning,t.SKU_CATEGORIES as skuCategories,
+t.TRANS_ERROR_TO_EMS transErrorToEms,t.is_return_check_batch as isReturnCheckBatch,
+t.IS_SUPPORT_NOCANCEL_STA as isSupportNoCancelSta,
+t.is_pickinglist_by_loc as isPickinglistByLoc,
+t.is_pda as isPda,
+t.IS_PRINT_MACAO_HGD as isPrintMaCaoHGD,
+t.MONEY_LMIT as moneyLmit
+from T_BI_CHANNEL t where id = :id
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannel.findBiChannelByCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+select t.id as id,t.code as code,t.name as name,t.address as address,t.customer_id as customerId,
+t.telephone as telephone,t.zipcode as zipcode,t.rtn_warehouse_address as rtnWarehouseAddress,
+t.is_sms as isSms,t.is_jd_ol_order as isJdolOrder,t.is_marger as isMarger,
+t.is_return_need_package as isReturnNeedPackage,t.trans_accounts_code as transAccountsCode,
+t.is_not_val_in_batchcode as isNotValInBoundBachCode,
+t.SPECIAL_TYPE as intSpecialType, t.company_name as companyName,
+t.limit_so_channel_type as limitTypeInt,t.limit_pg_amount as limitAmount,t.vmi_code as vmiCode,
+t.vmi_source as vmiSource,t.vmi_wh_source as vmiWHSource,t.vmi_wh_source1 as vmiWhSource1, 
+t.is_imperfect as isImperfect,t.is_imperfect_po_id,t.is_imperfect_time
+from T_BI_CHANNEL t where code = :code
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannelImperfect.findImperfect" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+		select im.id,im.channel_id,im.name,im.code from t_bi_channel_imperfect im where im.channel_id=:channelId and im.is_locked !=1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="ImperfectStv.findImperfectStvLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+select li.id,li.bar_code as barCode,li.jm_code as jmCode,li.key_properties as keyProperties,
+li.name as skuName,li.supplier_code as jmskuCode,li.quantity as quantity,
+li.completequantity as completeQuantity,li.addquantity as addQuantity,li.skusn as isSnSku，
+li.status_name as intInvstatusName,status_id as intInvstatusId,li.sta_id,
+li.imperfect_name as imperfectName,li.imperfectline_name as imperfectlineName
+,li.defect_code as defectCode,sta.owner as owner,li.create_time as createTime,li.sn,li.po_id,li.factory_code
+ from t_wh_stv_imperfect_line li,t_wh_sta sta where li.sta_id=sta.id 
+ and li.sta_id=:staId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ImperfectStv.findSkuImperfectStv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+  select sta.owner,sta.code as staCode,stv.jm_code as skuCode,stv.bar_code as barCode,stv.supplier_code as supplierCode,stv.name as skuName,
+             stv.key_properties as keyProperties,stv.defect_code,stv.imperfect_name as defectType,stv.imperfectline_name as  defectWhy 
+                   from t_wh_stv_imperfect_line stv,t_wh_sta sta where stv.sta_id=sta.id and stv.id=:stvId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannelImperfectLine.findImperfectLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+		SELECT * FROM t_bi_channel_imperfect_line li where li.imperfect_id=:imperfectId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 通过ID获取渠道信息-->
+	<bean id="BiChannelSpecialAction.getBiChannelSpecialActionByCidType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.id as id,t.shop_name as shopName,t.rtn_address as rtnAddress,
+					t.contacts_phone as contactsPhone,t.contacts_phone1 as contactsPhone1,
+					t.contacts as contacts,t.is_not_display_sum as isNotDisplaySum,t.is_insurance as isInsurance,
+					t.min_insurance as minInsurance,t.max_insurance as maxInsurance, t.template_type as templateType,t.trans_add_memo as transAddMemo ,
+					t.CUSTOM_PRINT_CODE
+					from T_BI_CHANNEL_SPECIAL_ACTION t 
+					where t.channel_id = :id and t.type = :type
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<!-- 通过ID获取渠道类型为20、30的信息-->
+	<bean id="BiChannelSpecialAction.getBiChannelSpecialActionByChId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.* from T_BI_CHANNEL_SPECIAL_ACTION t where t.channel_id = :id and t.type in(20,30)
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 通过ID获取渠道类型为1的信息-->
+	<bean id="BiChannelSpecialAction.getBiChannelSpecialActionByType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.* from T_BI_CHANNEL_SPECIAL_ACTION t where t.channel_id = :id and t.type = 1
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannel.checkBiChannelByCodeOrName" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.* from T_BI_CHANNEL t where 1=1 
+					#if($code)
+			                 and t.code = :code 
+			        #end
+					#if($name)
+			                 and t.name = :name 
+			        #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.findBiChannelWhRefList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select ta.id as id,ta.code as code,ta.name as name 
+					from t_bi_warehouse tw,t_au_operation_unit ta 
+					where tw.ou_id = ta.id 
+					and tw.customer_id = :customerId order by ta.name asc
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChannelWhRef.findChannelWhRefListByChannelId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.channel_id as channelId,t.wh_ou_id as ouId,t.is_default_inbound_wh as isDefaultWh,
+					t.is_postposition_packing_page as isPostPage,t.is_postposition_express_bill as isPostBill,
+					t.sf_jcustid as sfJcustid,t.receive_prefix receivePrefix,t.is_post_qs as isPostQs,t.is_print_packagedetail isPrintPackageDetail,t.is_pingan_cover isPinganCover
+					from t_bi_channel_wh_ref t 
+					where t.channel_id = :channelId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChannelWhRef.deleteChannelWhRefByChannelId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					delete t_bi_channel_wh_ref t where t.channel_id = :channelId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChannelWhRef.updateChannelWhRefByChannelId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_bi_channel_wh_ref t  set t.wh_ou_id = :whId where t.channel_id = :channelId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChannelWhRef.findChannelWhRefListByChannelIdR" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.* 
+					from t_bi_channel_wh_ref t 
+					where t.channel_id = :channelId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!--根据月结账号查询  -->
+	<bean id="ChannelWhRef.findChannelWhRefListBySfJcustid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.* 
+					from t_bi_channel_wh_ref t 
+					where t.sf_jcustid = :sfJcustid
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 通过渠道编码与渠道行为类型获取对应的渠道行为-->
+	<bean id="BiChannelSpecialAction.getChannelActionByCodeAndType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select csa.* from t_bi_channel c, t_bi_channel_special_action csa 
+					where csa.channel_id = c.id 
+					#if($channelCode)
+						and c.code = :channelCode
+					#end
+					#if($type)
+					 	and csa.type = :type
+					#else
+						and csa.type = 30
+					#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannelCombineRef.findBiChannelCombineRefToExpTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+select stragg(t.child_channel_id) as childChannelIdList,t.channel_id as cId,count(1) from T_BI_CHANNEL_COMBINE_REF t 
+where to_char(t.exp_time,'yyyy-MM-dd') > to_char(sysdate,'yyyy-MM-dd') 
+and t.wh_ou_id = :whId
+group by t.channel_id having count(1)>0
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelCombineRef.deleteBiChannelCombineRefByChanId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						delete from T_BI_CHANNEL_COMBINE_REF where channel_id = :chanId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelCombineRef.getBiChannelCombineRefByChanId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select f.id as id,f.child_channel_id as hbChId from T_BI_CHANNEL_COMBINE_REF f where channel_id = :chanId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelCombineRef.updateBiChannelCombineRefByChanId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update  T_BI_CHANNEL_COMBINE_REF set wh_ou_id = :whId , exp_time  = :expTime where  id = :id
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelCombineRef.updateBiChannelRefByChanId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update  T_BI_CHANNEL_COMBINE_REF set wh_ou_id = :whId , exp_time  = :expTime where  channel_id = :chId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannel.getChannelCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.code  from t_bi_channel t where t.id in(
+		               	#foreach($id in $channelId)
+		               		$id,
+		               	#end
+		               -1)
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="BiChannelCombineRef.findMergerStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT stragg(sta.id) as staIdList,sta_info.address,sta_info.lpcode,sta_info.receiver,sta_info.mobile,
+					sta_info.district,sta_info.city,COUNT(1) 
+					FROM  t_wh_sta_delivery_info sta_info,t_wh_sta sta,t_wh_sta sta2,t_bi_warehouse w where 
+					sta.id = sta_info.id 
+					AND sta.group_sta_id = sta2.id(+)
+          		    AND sta2.picking_list_id is null
+					AND sta_info.Trans_Time_Type <> 5 
+					AND sta_info.Trans_Time_Type <> 6
+					AND sta_info.Trans_Time_Type <> 7 
+					AND sta.type <> 42  
+					AND sta.status = 2 
+					AND sta.picking_list_id is null 
+					AND sta.is_merge = 0
+					AND sta.ORDER_TYPE2 is null
+					AND (sta.IS_PRE_SALE is null or sta.IS_PRE_SALE = '0')
+					AND (sta.special_type <> 1 or sta.special_type is null)
+					AND sta.is_special_packaging <> 1 
+					AND (sta.picking_type = 1 OR sta.picking_type = 10 OR sta.picking_type = 20) 
+					AND (sta.group_sta_id is not null OR sta.group_sta_id is null) 
+					AND sta.create_time >= SYSDATE-7 
+					AND sta.create_time <= SYSDATE 
+					AND sta.main_wh_id = w.ou_id  
+					AND w.vmi_source is null 
+					AND W.OU_ID=:whId 
+					AND (sta_info.is_cod = 0 OR sta_info.is_cod is null) 
+					AND sta.owner in (
+	               	#foreach($code in $channelCode)
+	               		'$code',  
+	               	#end
+	               	 '-1') 
+					GROUP BY sta_info.address,sta_info.lpcode,sta_info.receiver,sta_info.mobile,sta_info.district,sta_info.city  
+					HAVING COUNT(1) > 1 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="BiChannelCombineRef.findOldStaList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.* from t_wh_sta t where t.id in (
+		               	#foreach($id in $staId)
+		               		$id,
+		               	#end
+		               -1) 
+						and t.group_sta_id is not null
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="BiChannelCombineRef.getSkuMaxLength" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select max(sta.sku_max_length) from t_wh_sta sta where sta.id in (
+			               	#foreach($id in $staId)
+			               		$id,
+			               	#end
+			               -1) 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChannelWhRef.updatePostPrintConf" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update t_bi_channel_wh_ref ref  set ref.is_postposition_packing_page = :isPostPackingPage,
+						ref.is_postposition_express_bill = :isPostExpressBill
+						where ref.wh_ou_id = :ouId
+						#if($channelId)
+						 and ref.channel_id = :channelId
+						#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChannelWhRef.findAllPostPrintConfByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select ref.channel_id as channelId, ref.is_postposition_packing_page as isPostPage,
+						ref.is_postposition_express_bill as isPostBill
+						from t_bi_channel_wh_ref ref
+						where (ref.is_postposition_packing_page = 1 or ref.is_postposition_express_bill = 1)
+						and ref.wh_ou_id = :ouId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 快递优先推荐关键字 -->
+	<bean id="TransPrioritySelection.findTrasPriSel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select * from t_bi_trans_PRIORITY_SELECTION 
+						#if($channelId)
+						 where channelId = :channelId
+						#end
+						
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransPrioritySelection.deleteAllTrasPriSel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						delete  from T_BI_TRANS_PRIORITY_SELECTION where channelId= :channelId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 退货申请 -->
+	<bean id="ReturnApplication.findReturnAppList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						  select
+						  	 to_char(a.create_time,'yyyy-MM-dd') as receiveDate,
+						     a.feed_back_time as feedBackTime,
+						  	 a.wh_ou_id,a.id,a.code,l.name as owner,a.owner as ownerCode ,a.RETURN_SLIP_CODE1,a.extended as staCode,a.SLIP_CODE as slipCode,a.slip_Code1,a.SLIP_CODE2 as slipCode2 ,a.RETURN_SLIP_CODE as returnSlipCode,
+           					 a.lpCode as lpCode,a.TRANK_NO as trankNo,a.CREATE_TIME,a.CREATE_USER_ID,a.RETURN_USER as returnUser,a.TELEPHONE as telephone,u.user_name as creataUserName,
+          				     a.extended2,a.SKU_QTY,a.LOCATION_CODE as locationCode,a.memo as memo ,decode(a.oms_status,1,'已创建',2,'拒收',3,'无法确认') as omsStatuss,a.oms_remark,decode(a.STATUS,0,'已作废',1,'已创建',2,'已提交',3,'已反馈') as statusName,
+          				     sta.status as status
+             			from
+             				 t_wh_return_application a 
+             			left join
+             				 t_au_user u on u.id= a.CREATE_USER_ID
+             			left join 
+             				 t_bi_channel l on l.code = a.owner
+             			left join
+             				 t_wh_sta sta on a.extended=sta.code
+             			where a.TRANK_NO is not null
+             			#if($ouId)
+							and a.WH_OU_ID = :ouId
+						#end
+						#if($owner)
+							and a.owner = :owner
+						#end
+						#if($code)
+							and a.CODE like :code
+						#end
+						#if($slipCode)
+							and a.SLIP_CODE  like :slipCode
+						#end
+						#if($slipCode2)
+							and a.SLIP_CODE2 like :slipCode2
+						#end
+						#if($statusName)
+							and a.STATUS = :statusName
+						#end
+						#if($trankNo)
+							and a.TRANK_NO like :trankNo
+						#end
+						#if($lpCode)
+							and a.LPCODE = :lpCode
+						#end
+						#if($returnUser)
+							and a.RETURN_USER like :returnUser
+						#end
+						#if($telephone)
+							and a.telephone like :telephone
+						#end
+						#if($startTime)
+							and a.CREATE_TIME >= :startTime
+						#end
+						#if($endTime)
+							and a.CREATE_TIME <= :endTime
+						#end
+						#if($feekBackstartTime)
+						   and a.feed_back_time>= :feekBackstartTime
+						#end
+						#if($feekBackendTime)
+						   and a.feed_back_time<= :feekBackendTime
+						#end
+						
+						#if($source)
+							and a.source = :source
+						#end
+						#if($omsStatus)
+							and a.oms_status = :omsStatus
+						#end
+						#if($staCode)
+							and a.extended = :staCode
+						#end
+						#if($status)
+							and sta.status=:status
+						#end
+						#if($brand)
+							and a.brand='1'
+						#else
+							and a.brand is null
+						#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 退货申请2 -->
+	<bean id="ReturnApplication.findReturnAppList2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						  select
+						  	 to_char(a.create_time,'yyyy-MM-dd') as receiveDate,
+						     a.feed_back_time as feedBackTime,
+						  	 a.wh_ou_id,a.id,a.code,l.name as owner,a.owner as ownerCode ,a.RETURN_SLIP_CODE1,a.extended as staCode,a.SLIP_CODE as slipCode,a.slip_Code1,a.SLIP_CODE2 as slipCode2 ,a.RETURN_SLIP_CODE as returnSlipCode,
+           					 a.lpCode as lpCode,a.TRANK_NO as trankNo,a.CREATE_TIME,a.CREATE_USER_ID,a.RETURN_USER as returnUser,a.TELEPHONE as telephone,u.user_name as creataUserName,
+          				     a.extended2,a.SKU_QTY,a.LOCATION_CODE as locationCode,a.memo as memo ,decode(a.oms_status,1,'已创建',2,'拒收',3,'无法确认') as omsStatuss,a.oms_remark,decode(a.STATUS,0,'已作废',1,'已创建',2,'已提交',3,'已反馈') as statusName,
+          				     sta.status as status
+             			from
+             				 t_wh_return_application a 
+             			left join
+             				 t_au_user u on u.id= a.CREATE_USER_ID
+             			left join 
+             				 t_bi_channel l on l.code = a.owner
+             			left join
+             				 t_wh_sta sta on a.extended=sta.code
+             			where a.TRANK_NO is not null
+             			#if($ouId)
+							and a.WH_OU_ID = :ouId
+						#end
+						#if($owner)
+							and a.owner = :owner
+						#end
+						#if($code)
+							and a.CODE like :code
+						#end
+						#if($slipCode)
+							and a.SLIP_CODE  like :slipCode
+						#end
+						#if($slipCode2)
+							and a.SLIP_CODE2 like :slipCode2
+						#end
+						#if($statusName)
+							and a.STATUS = :statusName
+						#end
+						#if($trankNo)
+							and a.TRANK_NO like :trankNo
+						#end
+						#if($lpCode)
+							and a.LPCODE = :lpCode
+						#end
+						#if($returnUser)
+							and a.RETURN_USER like :returnUser
+						#end
+						#if($telephone)
+							and a.telephone like :telephone
+						#end
+						#if($startTime)
+							and a.CREATE_TIME >= :startTime
+						#end
+						#if($endTime)
+							and a.CREATE_TIME <= :endTime
+						#end
+						#if($feekBackstartTime)
+						   and a.feed_back_time>= :feekBackstartTime
+						#end
+						#if($feekBackendTime)
+						   and a.feed_back_time<= :feekBackendTime
+						#end
+						
+						#if($source)
+							and a.source = :source
+						#end
+						#if($omsStatus)
+							and a.oms_status = :omsStatus
+						#end
+						#if($staCode)
+							and a.extended = :staCode
+						#end
+						#if($status)
+							and sta.status=:status
+						#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<!-- 退货申请 -->
+	<bean id="AdPackageLineDeal.adPackageList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						  select t.ID as id,t.AD_ORDER_ID as adOrderId,t.RETURN_INSTRUCTION as returnInstruction,t.EXTENDED as extended,t.LP_CODE as lpCode,
+						  t.TRANK_NO as trankNo,t.CREATE_TIME as createTime,t.LAST_UPDATE_TIME as lastUpdateTime,t.AD_ORDER_TYPE as adOrderType,
+						  t.AD_STATUS as adStatus,t.STATUS as status,decode(t.STATUS,'1','新建','2','处理中','3','已完成') as statusName,t.OP_USER as opUser,b.CODE as skuId,t.QUANTITY as quantity,t.WMS_STATUS as wmsStatus,
+						  t.WMS_ORDER_TYPE as wmsOrderType,t.REMARK as remark,t.WMS_ORDER_ID as wmsOrderId,t.OP_STATUS as opStatus,decode(t.OP_STATUS,'1','是','0','否') as opStatusName from t_ad_package_line_deal t,T_BI_INV_SKU b where t.SKU_ID=b.Id  
+						  #if($adOrderId)
+							and t.AD_ORDER_ID=:adOrderId
+						  #end
+						  #if($wmsOrderId)
+							and t.WMS_ORDER_ID=:wmsOrderId
+						  #end
+						  #if($extended)
+							and t.EXTENDED=:extended
+						  #end
+						  #if($adOrderType)
+							and t.AD_ORDER_TYPE=:adOrderType
+						  #end
+						  #if($status)
+							and t.STATUS=:status
+						  #end
+						  #if($trankNo)
+							and t.TRANK_NO=:trankNo
+						  #end
+						  #if($lpCode)
+							and t.LP_CODE=:lpCode
+						  #end
+						  #if($fromTime)
+							and t.CREATE_TIME>:fromTime
+						  #end
+						  #if($endTime)
+							and t.CREATE_TIME<:endTime
+						  #end
+						  #if($opStatus)
+							and t.OP_STATUS=:opStatus
+						  #end
+						  #if($skuId)
+							and b.CODE=:skuId
+						  #end
+						  
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	
+	<bean id="AdPackageLineDeal.adPackageDetail" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						  select t.ID as id,t.AD_ORDER_ID as adOrderId,t.RETURN_INSTRUCTION as returnInstruction,t.EXTENDED as extended,t.LP_CODE as lpCode,
+						  t.TRANK_NO as trankNo,t.CREATE_TIME as createTime,t.LAST_UPDATE_TIME as lastUpdateTime,t.AD_ORDER_TYPE as adOrderType,
+						  t.AD_STATUS as adStatus,t.STATUS as status,decode(t.STATUS,'1','新建','2','处理中','3','已完成') as statusName,t.OP_USER as opUser,t.SKU_ID as skuId,t.QUANTITY as quantity,t.WMS_STATUS as wmsStatus,
+						  t.WMS_ORDER_TYPE as wmsOrderType,t.REMARK as remark,t.WMS_ORDER_ID as wmsOrderId,t.OP_STATUS as opStatus,decode(t.OP_STATUS,'1','是','0','否') as opStatusName,t.AD_REMARK as adRemark from t_ad_package_line_deal t where t.ID=:id 
+						  
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="AdPackageLineDeal.adPackageCommit" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						  update t_ad_package_line_deal t set t.WMS_STATUS = :wmsStatus, t.REMARK = :remark,t.STATUS=2,t.OP_STATUS =1,t.IS_SEND = 0,t.OP_USER = :userName,t.NUM=0 where t.ID = :id
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="AdPackageLineDealLog.adPackageLog" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						  select t.ID as id,t.AD_ORDER_ID as adOrderId,t.RETURN_INSTRUCTION as returnInstruction,t.EXTENDED as extended,t.LP_CODE as lpCode,
+						  t.TRANK_NO as trankNo,t.CREATE_TIME as createTime,t.LAST_UPDATE_TIME as lastUpdateTime,t.AD_ORDER_TYPE as adOrderType,
+						  t.AD_STATUS as adStatus,t.STATUS as status,decode(t.STATUS,'1','新建','2','处理中','3','已完成') as statusName,t.OP_USER as opUser,t.SKU_ID as skuId,t.QUANTITY as quantity,t.WMS_STATUS as wmsStatus,
+						  t.WMS_ORDER_TYPE as wmsOrderType,t.REMARK as remark,t.WMS_ORDER_ID as wmsOrderId,t.OP_STATUS as opStatus,decode(t.OP_STATUS,'1','是','0','否') as opStatusName,t.AD_REMARK as adRemark, decode(t.TYPE,'1','WMS','2','800ts') as typeName from t_ad_package_line_deal_log t where t.AD_ORDER_ID=:adOrderId 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<!-- 退货申请 -->
+	<bean id="ReturnApplication.findReturnAppByTrackingNo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						  select
+						  	 a.id,a.code,l.name as owner,a.owner as ownerCode ,a.code as staCode,a.SLIP_CODE as slipCode,a.SLIP_CODE1 as slipCode1 ,a.RETURN_SLIP_CODE as returnSlipCode,
+           					 a.lpCode as lpCode,a.TRANK_NO as trankNo,a.CREATE_TIME,a.RETURN_USER as returnUser,a.TELEPHONE as telephone,u.user_name as creataUserName,
+          				     a.SKU_QTY,a.LOCATION_CODE as locationCode,a.memo as memo ,decode(a.oms_status,'1','已创建','2','拒收','无法确认') as omsStatusName ,a.oms_remark,decode(a.STATUS,0,'已作废',1,'已创建',2,'已提交',3,'已反馈') as statusName
+             			from
+             				 t_wh_return_application a 
+             			left join
+             				 t_au_user u on u.id= a.CREATE_USER_ID
+             			left join 
+             				 t_bi_channel l on l.code = a.owner
+             			where
+             				 a.WH_OU_ID = :ouId
+						and a.TRANK_NO =:trackingNo
+						order by a.status desc
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ReturnApplication.fingReturnSkuByRaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select e.wms_order_type as wmsOrderType,e.id,e.sku_id as skuId,us.name as statusName, e.qty as qty,e.sku_info as skuInfo, s.name as skuName,s.code as skuCode,s.bar_code as skuBarCode 
+				            from t_wh_return_application_line e left join t_bi_inv_sku s on s.id = e.sku_id
+				            left join T_WH_INVENTORY_STATUS us on us.id = e.inv_status_id 
+				            left join t_wh_return_application n on n.id = e.ra_id
+				             where e.ra_id = :raId
+             
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ReturnApplicationLine.deleteLineByRaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					delete from t_wh_return_application_line where ra_id = :raId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannel.findInvoiceCompany" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select chooseOption.option_key as companyName, chooseOption.option_value as companyChName from t_sys_choose_option chooseOption where chooseOption.category_code = 'companyInvoice'
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="BiChannel.findRefShopByWhOuIdAndCartonShop" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select ch.id,ch.name,ch.shop_code shopCode,ch.code, ch.company_name as companyName
+					from T_BI_CHANNEL_WH_REF rf
+					 inner join T_BI_CHANNEL ch
+					    on rf.CHANNEL_ID = ch.ID
+					 where rf.WH_OU_ID = :whouid
+					       and ch.Is_Cartonsta_Shop = :isCartonStaShop
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelBrandRef.insertBiChannelBrandRef" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					insert into T_BI_CHANNEL_BRAND_REF values(:channelId, :brandId)
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelBrandRef.deleteBiChannelBrandRef" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					delete T_BI_CHANNEL_BRAND_REF where channel_id = :channelId 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelBrandRef.getBrandIdListByShopId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select brand_id from T_BI_CHANNEL_BRAND_REF re where re.channel_id = :channelId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelBrandRef.findBiChannelBrandRefExists" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select count(1) from T_BI_CHANNEL_BRAND_REF re where re.channel_id = :channelId and re.brand_id = :brandId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="BiChannelSpecialAction.findCustomPtintCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select sa.CUSTOM_PRINT_CODE
+				from t_wh_sta_picking_list pl,
+				     t_wh_sta sta,
+				     t_bi_channel ch,
+				     t_bi_channel_special_action sa
+				where pl.id(+) = sta.picking_list_id
+				      and ch.code = sta.owner
+				      and sa.channel_id = ch.id
+				      and sa.type = 20
+				      #if($plid)
+				      	and pl.id = :plid
+				      #end
+				      #if($staid)
+				      	and sta.id = :staid
+				      #end
+					    #if(!$plid && !$staid) 
+					   	 and sta.id =-1
+					    #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

@@ -1,0 +1,1748 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+	<named-query name="StockTransApplication.getByCode">
+		<query><![CDATA[select sta from StockTransApplication as sta where sta.code = :code]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getByCode1">
+		<query><![CDATA[select sta from StockTransApplication as sta where sta.status!=17 and (sta.code = :code or sta.refSlipCode=:code) and  sta.mainWarehouse.id=:ouId]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getByCodeAndOuID">
+		<query><![CDATA[select sta from StockTransApplication as sta where sta.code = :code and sta.mainWarehouse.id=:ouId]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getdeblocking">
+		<query><![CDATA[select sta from StockTransApplication as sta where sta.isLocked=1 and sta.hkArriveTime is not null]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findGroupIdByStuId">
+		<query><![CDATA[select sta from StockTransApplication as sta where sta.id= :staId]]></query>
+	</named-query>
+	<named-query name="WmsOtherOutBoundInvNoticeOms.findOtherOutInvNoticeOmsByStaCode">
+		<query><![CDATA[select wto from WmsOtherOutBoundInvNoticeOms as wto where wto.staCode = :staCode]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCodeOuId">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.mainWarehouse.id=:ouId]]></query>
+	</named-query>
+	<named-query name="GiftLine.getLinesByStalineId">
+		<query><![CDATA[select l from GiftLine as l where l.staLine.id = :staId]]></query>
+	</named-query>
+	<named-query name="Sku.getSkuByBarcode">
+		<query><![CDATA[select t from Sku as t where t.barCode = :barCode]]></query>
+	</named-query>
+	<named-query name="Sku.getSkuListByBarcode">
+		<query><![CDATA[select t from Sku as t where t.barCode = :barCode]]></query>
+	</named-query>
+	<named-query name="TransEmsInfo.findByCmp">
+		<query><![CDATA[select t from TransEmsInfo as t where t.isCod = :isCod and t.type = :type]]></query>
+	</named-query>
+	<!-- new EMS  start -->
+	<!-- <named-query name="TransEmsInfoNew.findByCmp">
+		<query><![CDATA[select t from TransEmsInfoNew as t where t.isCod = :isCod]]></query>
+	</named-query>
+	<named-query name="TransEmsInfoNew.findByAllCmp">
+		<query><![CDATA[select t from TransEmsInfoNew as t where t.isCod = :isCod]]></query>
+	</named-query>
+	<named-query name="TransEmsInfoNew.findByAccount">
+		<query><![CDATA[select t from TransEmsInfoNew as t where t.isCod = :isCod and t.account=:account ]]></query>
+	</named-query> -->
+	<!-- end -->
+	<named-query name="TransEmsInfo.findByAllCmp">
+		<query><![CDATA[select t from TransEmsInfo as t where t.isCod = :isCod and  t.type = :type]]></query>
+	</named-query>
+	<named-query name="TransEmsInfo.findAccountByCmp">
+		<query><![CDATA[select t from TransEmsInfo as t where t.isCod = :isCod and t.isDefaultAccount=:isDefaultAccount and t.type = :type ]]></query>
+	</named-query>
+	<named-query name="TransEmsInfo.findByAccount">
+		<query><![CDATA[select t from TransEmsInfo as t where t.isCod = :isCod and t.account=:account and t.type = :type ]]></query>
+	</named-query>
+	<named-query name="InventoryCheckMoveLine.findInvCheckMoveList">
+		<query><![CDATA[select t from InventoryCheckMoveLine as t where t.inventoryCheck.id = :icId]]></query>
+	</named-query>
+
+	<named-query name="HandOverListLine.findByTrackingNo">
+		<query><![CDATA[select l from HandOverListLine l where l.trackingNo = :trackingNo and l.status = 1 and (l.hoList = 1 or l.hoList = 10)]]></query>
+	</named-query>
+	<named-query name="CompanyShopShare.findShopSharesHql">
+		<query><![CDATA[select l from CompanyShopShare l where l.groupCode = :groupCode order by l.sort ]]></query>
+	</named-query>
+	<named-query name="HandOverListLine.findByStaId">
+		<query><![CDATA[select l from HandOverListLine l where l.sta.id = :staId]]></query>
+	</named-query>
+	<named-query name="MsgType.findTypeListBySource">
+		<query><![CDATA[select l from MsgType l where l.source= :source and l.type = :type order by l.sort]]></query>
+	</named-query>
+	<named-query name="StaCancelNoticeOms.getByStaId">
+		<query><![CDATA[select l from StaCancelNoticeOms l where l.staId = :staId]]></query>
+	</named-query>
+	<named-query name="StaCancelNoticeOms.getToExeList">
+		<query><![CDATA[select l from StaCancelNoticeOms l where l.errorCount < :errorCount]]></query>
+	</named-query>
+	<named-query name="Inventory.findInventoryBySkuId">
+		<query><![CDATA[select sum(y.quantity) from Inventory as y where y.sku.id=:skuId ]]></query>
+	</named-query>
+	<named-query name="Inventory.findByOccupiedCode">
+		<query><![CDATA[select inv from Inventory as inv where inv.occupationCode=:occupiedCode]]></query>
+	</named-query>
+	<named-query name="StockTransTxLog.findByOccupiedCodeLog">
+		<query><![CDATA[select inv from StockTransTxLog as inv where inv.staCode=:staCode]]></query>
+	</named-query>
+	<named-query name="Inventory.findBySkuLocationAndStatus">
+		<query><![CDATA[select inv from Inventory as inv where inv.location.id=:locId and inv.sku.id=:skuId and inv.status.id =:statusId]]></query>
+	</named-query>
+	<named-query name="InventoryCheckDifferenceLine.findByInventoryCheck">
+		<query><![CDATA[select l from InventoryCheckDifferenceLine as l where l.inventoryCheck.id=:invCkId]]></query>
+	</named-query>
+	<named-query name="InventoryCheckDifferenceLine.findCheckOverageListByIcid">
+		<query><![CDATA[select l from InventoryCheckDifferenceLine as l where l.inventoryCheck.id=:invCkId and l.quantity>0]]></query>
+	</named-query>
+	<named-query
+		name="InventoryCheckDifferenceLine.findCheckOverageIsNullByIcid">
+		<query><![CDATA[select l from InventoryCheckDifferenceLine as l where l.inventoryCheck.id=:invCkId and l.quantity>0 and l.owner is null]]></query>
+	</named-query>
+
+
+    <named-query name="InvetoryChange.queryInvetoryChange">
+		<query><![CDATA[select l from InvetoryChange as l where l.status=1 and rownum<=300 order by id desc]]></query>
+	</named-query>
+	
+	
+	
+	<named-query name="InventoryCheckLine.findByInventoryCheck">
+		<query><![CDATA[select l from InventoryCheckLine as l where l.inventoryCheck.id=:icId]]></query>
+	</named-query>
+	<named-query name="InventoryCheckDifTotalLine.findByInventoryCheck">
+		<query><![CDATA[select l from InventoryCheckDifTotalLine as l where l.inventoryCheck.id=:icId]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findInvStatusForSale">
+		<query><![CDATA[select s from InventoryStatus as s where s.isForSale=true 
+		  and s.isAvailable=true
+		and s.isSystem=false and s.ou.id= :ouId ]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findByName">
+		<query><![CDATA[select s from InventoryStatus as s where s.name = :name and s.isAvailable=true and s.ou.id= :ouid ]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findByNameUnionSystem">
+		<query><![CDATA[select s from InventoryStatus as s where s.name = :name and s.isAvailable=true and s.ou.id= :ouid ]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findInvStatusListByCompany">
+		<query><![CDATA[select i from InventoryStatus as i where i.isAvailable=true and (i.isSystem=true or i.ou.id=:companyId) ]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findXSInvStatusByCompany">
+		<query><![CDATA[select i from InventoryStatus as i where rownum=1 and i.isForSale=true and i.isAvailable=true and (i.isSystem=true or i.ou.id=:companyId) ]]></query>
+	</named-query>
+
+	<named-query name="InventoryStatus.findInvStatusByCompanyANDName">
+		<query><![CDATA[select i from InventoryStatus as i where rownum=1 and i.isInCost=true and i.isAvailable=true and (i.isSystem=true or i.ou.id=:companyId) and i.name =:name ]]></query>
+	</named-query>
+
+	<named-query name="InventoryStatus.findBySkuOnLocation">
+		<query><![CDATA[select inv.status from Inventory as inv where inv.location.id=:locId and inv.sku.id=:skuId]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findInvStatusByOuid">
+		<query><![CDATA[ select i from InventoryStatus as i where i.isAvailable = true and (i.ou.id = :ouid or i.isSystem = true)]]></query>
+	</named-query>
+	<named-query name="PackageInfo.findByStaId">
+		<query><![CDATA[select p from PackageInfo as p where p.staDeliveryInfo.sta.id = :staId]]></query>
+	</named-query>
+	<named-query name="PackageInfo.findByTrackingNo">
+		<query><![CDATA[select p from PackageInfo as p where p.trackingNo = :trackingNo]]></query>
+	</named-query>
+	
+	<named-query name="PackageInfo.findPackageByOldTrackingNo">
+		<query><![CDATA[select p from PackageInfo as p where p.oldTrackingNo = :trackingNo]]></query>
+	</named-query>
+	
+	<named-query name="PackageInfo.findByTrackingNoIsHandover">
+		<query><![CDATA[select p from PackageInfo as p where p.trackingNo = :trackingNo and (p.isHandover is null or p.isHandover=1)]]></query>
+	</named-query>
+	<named-query name="PackageInfo.findByTrackingNos">
+		<query><![CDATA[select p from PackageInfo as p where p.trackingNo = :trackingNo and p.isHandover=1]]></query>
+	</named-query>
+	<named-query name="PackageInfo.findByTrackingNoAndStaID">
+		<query><![CDATA[select p from PackageInfo as p where p.trackingNo = :trackingNo and p.staDeliveryInfo.sta.id = :staId]]></query>
+	</named-query>
+	<named-query name="PickingList.findByStatus">
+		<query><![CDATA[select p from PickingList as p where p.status=:status and p.warehouse.id = :ouId and p.pickingMode = :pickingMode]]></query>
+	</named-query>
+	<named-query name="PickingList.findPickByCode">
+		<query><![CDATA[select p from PickingList p where p.code = :code]]></query>
+	</named-query>
+	<named-query name="PickingList.findAfDeLiveryList">
+		<query><![CDATA[select p from PickingList as p where 
+				(p.status=2 or p.status=20 or p.status=8 or p.status = 19) and p.warehouse.id = :ouId and p.pickingMode = :pickingMode]]></query>
+	</named-query>
+	<named-query name="PickingList.findOperatorPickingListByStatus">
+		<query><![CDATA[select p from PickingList as p where p.status=:status and p.warehouse.id = :ouId and p.operator.id=:operatorId]]></query>
+	</named-query>
+	<named-query name="PickingListPackage.findByPickingListId">
+		<query><![CDATA[select p from PickingListPackage as p where rownum=1 and p.pickingListId.id = :plId and p.status = 1]]></query>
+	</named-query>
+	<named-query name="PickingListPackage.findByTrackingNo">
+		<query><![CDATA[select p from PickingListPackage as p where p.trackingNo = :trackingNo]]></query>
+	</named-query>
+	<named-query name="PickingListPackage.findByTrackingNoAndStatus">
+		<query><![CDATA[select p from PickingListPackage as p where p.trackingNo = :trackingNo and p.status = :status]]></query>
+	</named-query>
+	<named-query name="PickingListPackage.findByPlIdAndStatus">
+		<query><![CDATA[select p from PickingListPackage as p where p.status=:status and p.pickingListId.id=:plId]]></query>
+	</named-query>
+	<named-query name="PickingListPackage.findByIdAndStatus">
+		<query><![CDATA[select p from PickingListPackage as p where p.status=:status and p.pickingListId.id=:plId and p.id=:plpId]]></query>
+	</named-query>
+	<named-query name="StaCreateQueue.findBySlipCode">
+		<query><![CDATA[select s from StaCreateQueue s where s.slipCode = :slipCode and s.source = :source]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCodeVmi">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.type=81 and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="StaCreateQueue.findBySlipCodeByType">
+		<query><![CDATA[select s from StaCreateQueue s where s.slipCode = :slipCode and s.source = :source and s.staType = :type]]></query>
+	</named-query>
+	<named-query name="StaCreateQueueLine.StaCreateQueueLine">
+		<query><![CDATA[select s from StaCreateQueueLine s where s.staCrateQueue.id = :scqId]]></query>
+	</named-query>
+	<named-query name="Sku.getByCode">
+		<query><![CDATA[select sku from Sku sku where sku.code=:code]]></query>
+	</named-query>
+	<named-query name="Sku.getByCodeAndCustomer">
+		<query><![CDATA[select sku from Sku sku where sku.code=:code and sku.customer.id = :customerId]]></query>
+	</named-query>
+	<named-query name="Sku.getByBarcode">
+		<query><![CDATA[select sku from Sku sku where sku.barCode=:barCode and sku.customer.id = :customerId ]]></query>
+	</named-query>
+	<named-query name="Sku.getByBarcodeNoId">
+		<query><![CDATA[select sku from Sku sku where sku.barCode=:barCode and sku.customer.id = :customerId and sku.id <>:id]]></query>
+	</named-query>
+	<named-query name="Sku.judgeSkuCodeNoId">
+		<query><![CDATA[select sku from Sku sku where sku.code=:code and sku.id <>:id]]></query>
+	</named-query>
+	<named-query name="Sku.judgeSkuCustomerSkuCodeNoId">
+		<query><![CDATA[select sku from Sku sku where sku.customerSkuCode=:customerSkuCode and sku.id <>:id]]></query>
+	</named-query>
+	
+	<named-query name="RelationNike.getBySysPid">
+		<query><![CDATA[select relationNike from RelationNike relationNike where relationNike.sysPid=:sysPid and relationNike.whOu.id =:whOuId ]]></query>
+	</named-query>
+	
+	<named-query name="RelationNike.findSysByPid">
+		<query><![CDATA[select relationNike from RelationNike relationNike where relationNike.sysPid=:sysPid  ]]></query>
+	</named-query>
+	
+	<named-query name="RelationNike.getByEnPid">
+		<query><![CDATA[select relationNike from RelationNike relationNike where relationNike.enPid=:enPid and relationNike.whOu.id =:whOuId ]]></query>
+	</named-query>
+	
+	
+	<named-query name="InventoryStatus.findInvStatusisForSale">
+		<query><![CDATA[select s from InventoryStatus as s where s.isForSale = :isForSale
+      and s.isAvailable=true
+    and s.isSystem=false and s.ou.id= :ouId ]]></query>
+	</named-query>
+	
+	<named-query name="InventoryStatus.findInvStatusisByOuId">
+		<query><![CDATA[select s from InventoryStatus as s where s.ou.id= :ouId and s.name=:statusName
+		]]></query>
+	</named-query>
+	
+	<named-query name="InventoryStatus.findInvStatusisForSales">
+		<query><![CDATA[select s from InventoryStatus as s where s.isForSale = :isForSale
+      and s.isAvailable=true
+    and s.isSystem=false and s.ou.id= :ouId and s.name='残次品' ]]></query>
+	</named-query>
+	
+	<named-query name="InventoryStatus.findGoodInvStatusisForSale">
+		<query><![CDATA[select s from InventoryStatus as s where s.isForSale = :isForSale
+      and s.isAvailable=true
+    and s.isSystem=false and s.ou.id= :ouId and s.description= :description]]></query>
+	</named-query>
+	<named-query name="StaDeliveryInfo.findByExtTransOrderId">
+		<query><![CDATA[select s from StaDeliveryInfo s where s.extTransOrderId = :orderid]]></query>
+	</named-query>
+
+	<named-query name="SkuSn.findSkuSnBySn">
+		<query><![CDATA[select sn from SkuSn sn where sn.sn=:sn and sn.ou.id=:ouid and sn.status = :status]]></query>
+	</named-query>
+	
+	
+	<named-query name="ImperfectStv.findImperfectStv">
+		<query><![CDATA[select s from ImperfectStv s where s.defectCode=:defectCode]]></query>
+	</named-query>
+	
+	
+
+	<named-query name="SkuSn.findSkuSnBySnAndStaId">
+		<query><![CDATA[select sn from SkuSn sn where sn.sn=:sn and sn.ou.id=:ouid and sn.staId=:staid and sn.status = :status]]></query>
+	</named-query>
+
+	<named-query name="SkuSn.findSkuSnListByStv">
+		<query><![CDATA[select sn from SkuSn sn where sn.stv.id=:stvId and sn.status = :status]]></query>
+	</named-query>
+
+	<named-query name="SkuSn.findSkuSnBySkuSn">
+		<query><![CDATA[select sn from SkuSn sn where sn.sn=:sn and sn.ou.id=:ouid and sn.sku.id = :skuId]]></query>
+	</named-query>
+	<named-query name="SkuSn.findSkuSnBySnSingle">
+		<query><![CDATA[select sn from SkuSn sn where sn.sn=:sn]]></query>
+	</named-query>
+	<named-query name="StaLine.findStaLineListByStaId">
+		<query><![CDATA[select stal from StaLine as stal where stal.sta.id=:staId 
+		and (stal.completeQuantity is null or stal.quantity!=stal.completeQuantity ) ]]></query>
+	</named-query>
+	
+	<named-query name="StaLine.findStaLineListByStaId2">
+		<query><![CDATA[select stal from StaLine as stal where stal.sta.id=:staId 
+		and (stal.completeQuantity is null or stal.quantity!=stal.completeQuantity ) ]]></query>
+	</named-query>
+	
+	<named-query name="StaLine.findByStaId">
+		<query><![CDATA[select stal from StaLine as stal where stal.sta.id=:staId]]></query>
+	</named-query>
+	<named-query name="Carton.findCartonByStaId">
+		<query><![CDATA[select c from Carton as c where c.sta.id = :staId]]></query>
+	</named-query>
+	<named-query name="Carton.findCartonLineByCarId">
+		<query><![CDATA[select c from CartonLine as c where c.carton.id = :Id]]></query>
+	</named-query>
+	<named-query name="QueueStaLine.findByStaIdIn">
+		<query><![CDATA[select stal from QueueStaLine as stal where stal.queueSta.id=:qstaId and stal.direction=1]]></query>
+	</named-query>
+	<named-query name="QueueStaLine.findByStaIddir">
+		<query><![CDATA[select stal from QueueStaLine as stal where stal.queueSta.id=:qstaId and stal.direction=2]]></query>
+	</named-query>
+	<named-query name="QueueStaLine.findByStaId">
+		<query><![CDATA[select stal from QueueStaLine as stal where stal.queueSta.id=:qstaId]]></query>
+	</named-query>
+	<named-query name="StaLine.findStaLineBySkuId">
+		<query><![CDATA[select stal from StaLine as stal where stal.sta.id=:staId and stal.sku.id=:skuId ]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaByPickingList">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.pickingList.id=:plId and sta.mainWarehouse.id=:ouid]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaStautsBySlipCode">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:refSlipCode and sta.type =81]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getChildStaByGroupId">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.groupSta.id = :groupId]]></query>
+	</named-query>
+	
+	
+	
+	<named-query name="StockTransApplication.getMergeStaById">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.groupSta.id = :id or sta.id = :id]]></query>
+	</named-query>
+
+	<named-query name="StockTransApplication.findStaByCode">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.code=:code]]></query>
+	</named-query>
+
+	<named-query name="StockTransApplication.findRntStaBySlipCode">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status!=17 and sta.type = 41]]></query>
+	</named-query>
+
+	<named-query name="StockTransApplication.findStaBySlipCode">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status!=17]]></query>
+	</named-query>
+	<!--  根据slip_code,type和status不为17 -->
+	<named-query name="StockTransApplication.findStaBySlipCodeConfirmOrder">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status!=17 and sta.type=:type]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getStasBySlipCode2">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.slipCode2=:slipCode2 and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaListBySlipCode">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status not in(15,17)]]></query>
+	</named-query>
+
+	<named-query name="StockTransApplication.findBySlipCode">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode]]></query>
+	</named-query>
+	
+	<named-query name="StockTransApplication.findStaBySlipCodeStatus">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.type=41 ]]></query>
+	</named-query>
+	
+	<named-query name="StockTransApplication.findBySlipCodeBySlipCode">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode]]></query>
+	</named-query>
+	
+	<named-query name="StockTransApplication.findBySlipCodeCancel">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status!=17 and sta.status!=10]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaByReSlipCode">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status!=17 and sta.status!=10 and sta.type in(21,42)]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCodeAndStatus">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status!=15 and sta.status!=17]]></query>
+	</named-query>
+		<named-query name="StockTransApplication.findBySlipCodeAndStatusCheck">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status!=15 and sta.status!=17 and sta.status!=10]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCodeStatus">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCode1">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.slipCode1=:slipCode1 and sta.type=21 and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCode1Inbound">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.slipCode1=:slipCode1  and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCode1AndStatus">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.slipCode1=:slipCode1 and sta.vmiRCStatus = 0 and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCode1AndFinished">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.slipCode1=:slipCode1 and sta.type=21 and sta.status=10]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCodeByType">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.type = :type]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getStaByOwner">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.type = :type and sta.owner = :owner and sta.status = :status]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findStvCreatedByStaId">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status!=10 ]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findStvCreatedByStaId2">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status=10 and stv.type=11 ]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findStvCreatedByStaId3">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status=10 and stv.type=11 ]]></query>
+	</named-query>
+	
+	<named-query name="StockTransVoucher.findByStaAndTypeAndStatus">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status=:status and stv.type=:type ]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findStvCreatedListByStaId">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status!=10 and stv.status!=0 ]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findStvFinishListByStaId">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status=10 ]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findByStvCode">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.code = :code ]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findByStaWithDirection">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status!=10 and stv.status!=0 and stv.direction = :direction]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findFinishByStaWithDirection">
+		<query><![CDATA[select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status=10 and stv.direction = :direction]]></query>
+	</named-query>
+	<named-query name="StvLine.findThereDifferences">
+		<query><![CDATA[ select s from StvLine as s where s.stv.id=:stvId and s.differenceQty != 0 ]]></query>
+	</named-query>
+	<named-query name="StvLine.findConfirmDiversityStvLine">
+		<query><![CDATA[ select s from StvLine as s where s.stv.id=:stvId and s.sku.id=:skuId and s.invStatus.name=:statusName and s.owner=:owner]]></query>
+	</named-query>
+
+	<named-query name="StvLine.findStvLinesByStaLineId">
+		<query><![CDATA[ select s from StvLine as s where s.staLine.id=:staLineId]]></query>
+	</named-query>
+	<named-query name="StvLine.findStvLineListByStvId">
+		<query><![CDATA[ select s from StvLine as s where s.stv.id=:stvId order by s.sku.id,s.invStatus.id,s.location.id]]></query>
+	</named-query>
+	<named-query name="StvLine.findStvLineLocationIsNullByStvId">
+		<query><![CDATA[ select s from StvLine as s where s.stv.id=:stvId and s.location is null]]></query>
+	</named-query>
+	<named-query name="TransactionType.findByCode">
+		<query><![CDATA[select t from TransactionType as t where t.code = :code]]></query>
+	</named-query>
+	<named-query name="TransactionType.findByCodeInOu">
+		<query><![CDATA[select t from TransactionType as t where t.code = :code and t.ou.id = :ouid]]></query>
+	</named-query>
+	<named-query name="WarehouseChannel.findByChannelCode">
+		<query><![CDATA[select wc from WarehouseChannel as wc where wc.code = :code]]></query>
+	</named-query>
+	<named-query name="WarehouseDistrict.findDistrictListByOuId">
+		<query><![CDATA[select i from WarehouseDistrict as i where i.ou.id = :ouId and ( i.isLocked is null or i.isLocked=false ) and i.isAvailable = true]]></query>
+	</named-query>
+	<named-query name="WarehouseDistrict.findDistrictListByType">
+		<query><![CDATA[select i from WarehouseDistrict as i where i.ou.id = :ouId and i.type= :type and ( i.isLocked is null or i.isLocked=false ) and i.isAvailable = true]]></query>
+	</named-query>
+	<named-query name="WarehouseDistrict.findDistrictByCodeAndOu">
+		<query><![CDATA[select i from WarehouseDistrict as i where i.code=:code and i.ou.id = :ouId and ( i.isLocked is null or i.isLocked=false ) ]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findLocationsListByDistrictId">
+		<query><![CDATA[select l from WarehouseLocation as l where l.district.id = :disId and  ( l.isLocked is null or l.isLocked=false ) ]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findWarehouseLocationByOuid">
+		<query><![CDATA[select l from WarehouseLocation as l where l.ou.id = :ouId and  ( l.isLocked is null or l.isLocked=false ) and l.isAvailable = true]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findOneWarehouseLocationByOuid">
+		<query><![CDATA[select l from WarehouseLocation as l where l.ou.id = :ouId and l.isAvailable=1 and ( l.isLocked is null or l.isLocked=false ) ]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findDisputableWl">
+		<query><![CDATA[select w from WarehouseLocation as w where w.ou.id=:ouId and w.isAvailable=true  and w.isDisputable=true]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findByLocationCode">
+		<query><![CDATA[select w from WarehouseLocation as w where w.ou.id=:ouId and w.code=:locationCode and w.isAvailable=true]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findLocationByCode">
+		<query><![CDATA[select w from WarehouseLocation as w where w.code=:code and w.ou.id=:ouId and w.isAvailable=true and 
+		 ( w.isLocked is null or w.isLocked=false ) ]]></query>
+	</named-query>
+	
+	<named-query name="WarehouseLocation.findLocationByCode2">
+		<query><![CDATA[select w from WarehouseLocation as w where w.code=:code and w.ou.id=:ouId ]]></query>
+	</named-query>
+
+	<named-query name="WarehouseLocation.findByTransactionType">
+		<query><![CDATA[ select l from WarehouseLocation as l join l.transactionTypes as t where l.code = :locCode and t.id = :ttId and l.ou.id = :ouId
+		  and (l.isLocked=false or l.isLocked is null)]]></query>
+	</named-query>
+	
+	<named-query name="WarehouseLocation.findByInvOwner">
+		<query><![CDATA[select distinct inv.location from Inventory as inv where inv.ou.id = :ouid and inv.owner = :owner]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findByInvBrand">
+		<query><![CDATA[select distinct inv.location from Inventory as inv where inv.ou.id = :ouid and inv.sku.brand.id = :brandId]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findLocationByDiId">
+		<query><![CDATA[select w from WarehouseLocation as w where w.ou.id = :ouId and w.district.id=:id]]></query>
+	</named-query>
+	
+	<named-query name="InventoryCheck.findInventoryCheckList">
+		<query><![CDATA[ select i from InventoryCheck as i where i.ou.id = :ouid and (i.status = 1 or i.status = 5)]]></query>
+	</named-query>
+	<named-query name="InventoryCheck.getInventoryCheckStatusList">
+		<query><![CDATA[ select i from InventoryCheck as i where i.ou.id=:ouid and i.status = 1 order by i.createTime asc]]></query>
+	</named-query>
+	<named-query name="InventoryCheck.getInventoryCheckStatus">
+		<query><![CDATA[ select i from InventoryCheck as i where i.ou.id=:ouid and i.status in(1,5) and (errorCount is null or errorCount < 4) order by i.createTime asc]]></query>
+	</named-query>
+	<named-query name="InventoryCheck.findInventoryCheckListByType">
+		<query><![CDATA[ select i from InventoryCheck as i where i.ou.id = :ouid and i.type=:type and (i.status = 1 or i.status = 5)]]></query>
+	</named-query>
+
+	<named-query name="InventoryCheck.findInventoryCheckListByTypes">
+		<query><![CDATA[ select i from InventoryCheck as i where i.ou.id = :ouid and (i.type=1 or i.type=5) and (i.status = 1 or i.status = 5)]]></query>
+	</named-query>
+
+	<named-query name="InventoryCheck.findInventoryCheckListManager">
+		<query><![CDATA[ select i from InventoryCheck as i where i.ou.id = :ouid and (i.type=1 or i.type =5 )and i.status = :status]]></query>
+	</named-query>
+
+	<named-query name="SkuBarcode.findBySkuId">
+		<query><![CDATA[ select d from SkuBarcode as d where d.sku.id = :skuId]]></query>
+	</named-query>
+
+	
+	<named-query name="StaDeliveryInfo.findStaDeliveryInfoByTrackingNo">
+		<query><![CDATA[ select d from StaDeliveryInfo as d where d.trackingNo = :trackingNo]]></query>
+	</named-query>
+
+	<named-query name="ITVMIInstruction.findInstructionByFileName">
+		<query><![CDATA[ select ins from ITVMIInstruction as ins where ins.fileName = :fileName 
+						and ins.sta is null and ins.staLine is null 
+						and ins.inventoryCheck is null and ins.icLine is null]]></query>
+	</named-query>
+
+	<named-query name="ESPTransferOrder.findTransferOrdersByStaId">
+		<query><![CDATA[ select ord from ESPTransferOrder as ord where ord.sta.id = :staId 
+							and ord.transferWHSta is null and ord.transferWHStaLine is null]]></query>
+	</named-query>
+
+	<named-query name="ESPTransferOrder.findTransferOrdersByInvId">
+		<query><![CDATA[ select ord from ESPTransferOrder as ord where ord.invCheck.id = :invId 
+							and ord.transferWHSta is null and ord.transferWHStaLine is null]]></query>
+	</named-query>
+
+	<named-query name="ESPOrder.findOrdersBySeqNumAndPO">
+		<query><![CDATA[ select ord from ESPOrder as ord where ord.headerSequenceNumber = :seqNum 
+							and ord.odPO= :po and ord.odStatusineDifile= :status
+							and ord.sta is null and (ord.staStatus=1 or ord.staStatus is null)]]></query>
+	</named-query>
+
+	<named-query name="ConverseVmiStockIn.findConverseInstructListByCartonNo">
+		<query><![CDATA[ select con from ConverseVmiStockIn as con where con.sta is null 
+						and con.staLine is null and con.cartonNo= :cartonNo
+		]]></query>
+	</named-query>
+	
+	
+
+	<named-query
+		name="CoachInboundInstructionData.findCoachInboundInstructBybarCode">
+		<query><![CDATA[ select con from CoachInboundInstructionData as con where con.sta is null 
+						and con.staLine is null and con.barCode= :barCode
+		]]></query>
+	</named-query>
+
+	<named-query name="ConverseVmiStockIn.findCVSByStaLineId">
+		<query><![CDATA[ select con from ConverseVmiStockIn as con where con.staLine.id= :staLineId
+		]]></query>
+	</named-query>
+
+	<named-query name="ConverseEverGreen.findEANbyUpc">
+		<query><![CDATA[ select sku from ConverseEverGreen as sku where sku.upc= :upc
+		]]></query>
+	</named-query>
+
+	<named-query name="ESPTransferOrder.findOrdersByStaIdEndWithO">
+		<query><![CDATA[ select ord from ESPTransferOrder as ord where ord.sta.id = :staId and ord.odStyle like '%O'
+						and ord.transferWHSta is null and ord.transferWHStaLine is null]]></query>
+	</named-query>
+
+	<named-query name="ESPTransferOrder.findOrdersByInvIdEndWithO">
+		<query><![CDATA[ select ord from ESPTransferOrder as ord where ord.invCheck.id = :invId and ord.odStyle like '%O'
+						and ord.transferWHSta is null and ord.transferWHStaLine is null]]></query>
+	</named-query>
+
+	<named-query name="ESPTransferOrder.findOrdersByStaIdNotEndWithO">
+		<query><![CDATA[ select ord from ESPTransferOrder as ord where ord.sta.id = :staId and ord.odStyle not like '%O'
+						and ord.transferWHSta is null and ord.transferWHStaLine is null]]></query>
+	</named-query>
+
+	<named-query name="ESPTransferOrder.findOrdersByInvIdNotEndWithO">
+		<query><![CDATA[ select ord from ESPTransferOrder as ord where ord.invCheck.id = :invId and ord.odStyle not like '%O'
+						and ord.transferWHSta is null and ord.transferWHStaLine is null]]></query>
+	</named-query>
+
+	<named-query name="ITVMIInstruction.findInstructionsByStaId">
+		<query><![CDATA[ select ins from ITVMIInstruction as ins where ins.sta.id = :staId]]></query>
+	</named-query>
+
+	<named-query name="ITVMIInstruction.findInstructionByStaLineId">
+		<query><![CDATA[ select ins from ITVMIInstruction as ins where ins.staLine.id = :lineId]]></query>
+	</named-query>
+
+	<named-query name="ITVMIInstruction.findInstructionByInvLineId">
+		<query><![CDATA[ select ins from ITVMIInstruction as ins where ins.icLine.id = :lineId]]></query>
+	</named-query>
+
+	<named-query name="ITVMIReceiveInfo.findReceiveInfosByStaId">
+		<query><![CDATA[ select infos from ITVMIReceiveInfo as infos where infos.sta.id = :staId and infos.status= :status]]></query>
+	</named-query>
+
+
+	<named-query name="TransDeliveryCfg.findByWhOuAndTrans">
+		<query><![CDATA[ select t from TransDeliveryCfg as t where t.transportator.id =:transId and t.ou.id=:whOuId]]></query>
+	</named-query>
+
+	<named-query name="PdaPostLog.findSavedLog">
+		<query><![CDATA[
+			select lg from PdaPostLog as lg 
+			where lg.code = :code 
+				and lg.pdaCode = :pdaCode
+				and lg.createTime = :createTime
+				and lg.sku.barCode = :skuBarcode
+				and lg.loc.code = :locCode
+		]]></query>
+	</named-query>
+
+	<named-query name="InventoryCheck.findByCode">
+		<query><![CDATA[
+			select ic from InventoryCheck as ic where ic.code = :code
+		]]></query>
+	</named-query>
+
+	<named-query name="StvLine.findBySkuBarcode">
+		<query><![CDATA[
+			select l from StvLine as l 
+			where l.sku.barCode = :skuBarcode and l.stv.sta.id= :staId
+					and l.stv.status = 1
+		]]></query>
+	</named-query>
+
+	<named-query name="StockTransVoucher.findPdaStv">
+		<query><![CDATA[
+			select stv from StockTransVoucher as stv 
+			where stv.isPda = true and stv.sta.id= :staId
+				  and stv.status = 1
+		]]></query>
+	</named-query>
+
+	<named-query name="InventoryCost.findCostByCmpIdSkuId">
+		<query><![CDATA[select i from InventoryCost as i where i.sku.id = :skuid and i.company.id = :cmpid]]></query>
+	</named-query>
+
+	<named-query name="ESPPoType.findByPo">
+		<query><![CDATA[select i from ESPPoType as i where i.po= :po]]></query>
+	</named-query>
+	
+	
+	<named-query name="ESPPoType.findByNum">
+		<query><![CDATA[select i from ESPPoType as i where i.invoiceNumber= :po]]></query>
+	</named-query>
+
+    
+
+	<named-query name="MsgInboundOrder.findByStaCode">
+		<query><![CDATA[select i from MsgInboundOrder as i where i.staCode = :staCode]]></query>
+	</named-query>
+	<named-query name="MsgInboundOrder.findInboundOrderByStatus">
+		<query><![CDATA[select i from MsgInboundOrder as i where i.source=:source and i.type=:type and i.status=:status]]></query>
+	</named-query>
+	<named-query name="MsgInboundOrder.findMsgReturnInboundByStatus">
+		<query><![CDATA[select o from MsgInboundOrder o where o.source=:source and o.type=:type and o.status = 1 and rownum<=300  ]]></query>
+	</named-query>
+
+	<named-query name="ESPInvoicePercentage.findByInvoice">
+		<query><![CDATA[select i from ESPInvoicePercentage as i where i.invoiceNum= :invoice]]></query>
+	</named-query>
+
+	<named-query name="ESPInvoiceBDPo.findByPo">
+		<query><![CDATA[select i from ESPInvoiceBDPo as i where i.po= :po order by id desc ]]></query>
+	</named-query>
+
+	<named-query name="ESPInvoiceBDPo.findByInvoiceAndPo">
+		<query><![CDATA[select i from ESPInvoiceBDPo as i where i.po= :po and i.invoiceNumber=:invoice]]></query>
+	</named-query>
+
+    <named-query name="ESPInvoiceBDPo.findByInvoice">
+		<query><![CDATA[select i from ESPInvoiceBDPo as i where i.invoiceNumber=:invoice]]></query>
+	</named-query>
+
+
+	<named-query name="MsgOutboundOrderLine.findeMsgOutLintBymsgOrderId2">
+		<query><![CDATA[select i from MsgOutboundOrderLine as i where i.msgOrder.id= :msgOrderId]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnOutbound.findByStaCode">
+		<query><![CDATA[select m from MsgRtnOutbound as m where m.staCode = :staCode]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnOutbound.findBySlipCode">
+		<query><![CDATA[select m from MsgRtnOutbound as m where m.slipCode = :slipCode]]></query>
+	</named-query>
+
+	<named-query name="StockTransApplication.findOutboundReturnRequest">
+		<query><![CDATA[select s from StockTransApplication s where s.status=1 and s.type=42 and s.refSlipCode=:slipCode]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findFailedSendStaByPlId">
+		<query><![CDATA[
+			select s from StockTransApplication s where (s.status = 2 or s.status = 20) and s.pickingList.id = :plid and s.staDeliveryInfo.trackingNo is null 
+		]]></query>
+	</named-query>
+	<named-query name="MsgInboundOrderLine.fomdMsgInboundOrderLineByOId">
+		<query><![CDATA[select s from MsgInboundOrderLine s where s.msgInOrder.id=:msgLineId]]></query>
+	</named-query>
+	<named-query name="MsgInboundOrder.findMsgInbounderListByBybatchId">
+		<query><![CDATA[select o from MsgInboundOrder o where o.batchId=:batchId and o.status=:status]]></query>
+	</named-query>
+	<named-query name="MsgRtnInboundOrderLine.findRtnOrderLineByRId">
+		<query><![CDATA[select o from MsgRtnInboundOrderLine o where o.msgRtnInOrder.id=:msgRtnLineId]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnReturn.queryByCanceledAndCreated">
+		<query><![CDATA[ select rtn from MsgRtnReturn rtn where (rtn.status=1 or rtn.status=0) and rtn.source=:source ]]></query>
+	</named-query>
+	<named-query name="MsgRtnReturnLine.queryByReturnId">
+		<query><![CDATA[ select rtn from MsgRtnReturnLine rtn where rtn.msgRtnInOrder.id=:rtnId ]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnAdjustment.queryByCanceledAndCreated">
+		<query><![CDATA[ select adj from MsgRtnAdjustment adj where (adj.status=1 or adj.status=0) and adj.source=:source ]]></query>
+	</named-query>
+	<named-query name="MsgRtnAdjustmentLine.queryLineByADJId">
+		<query><![CDATA[select i from MsgRtnAdjustmentLine as i where i.adjustment.id = :adjId order by qty]]></query>
+	</named-query>
+
+	<named-query name="LevisDeliveryOrder.findByPoCode">
+		<query><![CDATA[select d from LevisDeliveryOrder d where d.poCode = :poCode]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrder.findeMsgOutboundOrderBybatchId">
+		<query><![CDATA[select o from MsgOutboundOrder o where o.batchId=:batchId and o.status=:status]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrder.findOutBoundByStaCode">
+		<query><![CDATA[select o from MsgOutboundOrder o where o.staCode=:staCode]]></query>
+	</named-query>
+
+	<named-query name="EtamSku.findSkuBySku">
+		<query><![CDATA[select s from EtamSku as s where s.sku=:sku0]]></query>
+	</named-query>
+
+	<named-query name="ItochuMsgInboundOrder.findItochuMsgByBoxAndSku">
+		<query><![CDATA[select s from ItochuMsgInboundOrder as s where 
+		                       s.billNo=:billNo and s.boxNo = :boxNo and s.sku = :sku]]></query>
+	</named-query>
+
+	<named-query name="Warehouse.getWareHouseByVmiSource">
+		<query><![CDATA[select w from Warehouse as w where w.vmiSource=:source]]></query>
+	</named-query>
+
+	<named-query name="ZtoConfirmOrderQueue.findStaZtoQueue">
+		<query><![CDATA[select zto from ZtoConfirmOrderQueue as zto]]></query>
+	</named-query>
+
+	<named-query name="Warehouse.findWarehouseByVmiSource">
+		<query><![CDATA[select w from Warehouse as w where w.vmiSource = :vmiSource]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrder.findOutBoundList">
+		<query><![CDATA[select o from MsgOutboundOrder o where o.source=:source and o.status=2]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrder.getOutBoundListByBatchNo">
+		<query><![CDATA[select o from MsgOutboundOrder o where o.batchId= :batchId]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrderCancel.findOneVimCancelInfoByStatus">
+		<query><![CDATA[select l from MsgOutboundOrderCancel l where l.source=:source and (l.status=1 or l.status=0)]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrderCancel.findByStaCode">
+		<query><![CDATA[select l from MsgOutboundOrderCancel l where l.staCode=:staCode ]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrderCancel.findMsgOutboundOrderCancelList">
+		<query><![CDATA[select o from MsgOutboundOrderCancel o where o.source=:source and o.status=2]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrderCancel.findMsgOutboundOrderCancelBatch">
+		<query><![CDATA[select o from MsgOutboundOrderCancel o where o.batchId=:batchId and o.isCanceled is not null]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrderCancel.findMsgOutboundOrderCancelMail">
+		<query><![CDATA[select o from MsgOutboundOrderCancel o where o.errorCount>4 and o.isMail is null]]></query>
+	</named-query>
+
+	<named-query name="EtamRtnData.findAllEtamRtnDatas">
+		<query><![CDATA[ select e from EtamRtnData e ]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrderCancel.getByStaCode">
+		<query><![CDATA[select l from MsgOutboundOrderCancel l  where l.status=2 and l.isCanceled is null and l.staCode=:staCode]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrderCancel.getMsgCancelByStaCode">
+		<query><![CDATA[select l from MsgOutboundOrderCancel l  where l.staCode=:staCode and l.status=2 ]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnReturn.queryRtnBySourceAndByStatus">
+		<query><![CDATA[ select rtn from MsgRtnReturn rtn where (rtn.status=1) and rtn.source=:source ]]></query>
+	</named-query>
+
+	<named-query name="IdsLog.findIdslogBystatus">
+		<query><![CDATA[ select l from IdsLog l where l.status=:status and l.payLoad is not null]]></query>
+	</named-query>
+
+	<named-query name="StaAdditionalLine.findByStaId">
+		<query><![CDATA[ select t from StaAdditionalLine t where t.sta.id=:staid ]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findStvByStvId">
+		<query><![CDATA[
+			select stv from StockTransVoucher as stv 
+			where  stv.id= :stvId
+		]]></query>
+	</named-query>
+	<named-query name="Sku.getByAddBarcode">
+		<query><![CDATA[select sku from Sku sku, SkuBarcode bar where bar.barcode=:barcode and sku.id = bar.sku.id and sku.customer.id = :customerId]]></query>
+	</named-query>
+	<named-query name="WarehouseLocation.findwhLocationByCode">
+		<query><![CDATA[select w from WarehouseLocation as w where  w.code=:locationCode and w.ou.id = :ouid]]></query>
+	</named-query>
+	<named-query name="CKInventoryData.findCKInvDataByStatus">
+		<query><![CDATA[select c from CKInventoryData as c where c.status= :status and c.batchNum= :batchNum]]></query>
+	</named-query>
+
+	<named-query name="CKProductData.getCKProductDataBySkuCode">
+		<query><![CDATA[select c from CKProductData as c where c.skuCode= :skuCode]]></query>
+	</named-query>
+
+	<named-query name="CKInventoryData.findLocCodeNotExistInLocation">
+		<query><![CDATA[select c from CKInventoryData as c where c.status= :status and c.batchNum= :batchNum and c.branchCode not in (
+			select w.code from WarehouseLocation as w where w.ou.id= :ouId and w.isAvailable=1
+		)]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrderLine.findeMsgOutLintBymsgOrderId3">
+		<query><![CDATA[select i.unitPrice,i.qty,i.sku.extensionCode1 as skuCode from MsgOutboundOrderLine as i where i.msgOrder.id= :msgOrderId]]></query>
+	</named-query>
+
+
+	<named-query name="MsgOutboundOrder.findOutBoundBySlipCode">
+		<query><![CDATA[select o from MsgOutboundOrder o,StockTransApplication sta where sta.code = o.staCode and sta.refSlipCode = :slipCode and o.status in(-1,0,1,10) and sta.status != 17]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrder.findSlipCode">
+		<query><![CDATA[select o from MsgOutboundOrder o  where o.slipCode=:slipCode]]></query>
+	</named-query>
+
+	<named-query name="LocationInvStatus.findLocBystatus">
+		<query><![CDATA[ select l from LocationInvStatus l where l.invStatusID=:status and l.source= :vmiSource]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrder.findOutBoundByWlbCode">
+		<query><![CDATA[select o from MsgOutboundOrder o where o.wlbCode=:wlbCode]]></query>
+	</named-query>
+
+	<named-query name="ConverseProductInfo.findBySkuCode">
+		<query><![CDATA[select cp from ConverseProductInfo as cp where cp.skuCode= :SkuCode]]></query>
+	</named-query>
+
+	<named-query name="CoachProductData.getCPByStyleColorSize">
+		<query><![CDATA[select cp from CoachProductData as cp where cp.style= :style and cp.color= :color
+			and cp.size= :size]]></query>
+	</named-query>
+
+	<named-query name="CoachProductData.getCPByBarCode">
+		<query><![CDATA[select cp from CoachProductData as cp where cp.UPCCode= :skuCode ]]></query>
+	</named-query>
+
+	<named-query name="CacheProductData.getCCHCPBySkuCode">
+		<query><![CDATA[select cp from CacheProductData as cp where cp.itemsBarcode= :skuCode ]]></query>
+	</named-query>
+	<!-- <named-query name="CoachProductData.getUpccodeByStyle"> <query><![CDATA[select 
+		cp from CoachProductData as cp where cp.style= :styleNo and cp.color= :color 
+		]]></query> </named-query> -->
+
+	<named-query name="MsgSKUSync.findeMsgSKUSyncBybatchId">
+		<query><![CDATA[select o from MsgSKUSync o where o.batchId=:batchId and o.status=:status]]></query>
+	</named-query>
+
+	<named-query name="ConverseListPriceChange.getDataByStatus">
+		<query><![CDATA[select o from ConverseListPriceChange o where o.status= :status]]></query>
+	</named-query>
+
+	<named-query name="StaCreateQueueLine.findByScqId">
+		<query><![CDATA[select o from StaCreateQueueLine o where o.staCrateQueue.id=:scqId ]]></query>
+	</named-query>
+
+	<named-query name="MsgRaCancel.findBySource">
+		<query><![CDATA[select o from MsgRaCancel o where o.source=:source and o.status=:status ]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnInboundOrderLine.findRtnLineBySlipCodeAndSku">
+		<query><![CDATA[select o from MsgRtnInboundOrderLine o where 
+		                      o.msgRtnInOrder.refSlipCode=:slipCode 
+		                      and o.barcode=:skuBarCode
+		                      and o.outStatus=:invStatus]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnReturn.findReturnBySlipCode">
+		<query><![CDATA[select o from MsgRtnReturn o where o.refSlipCode=:slipCode ]]></query>
+	</named-query>
+
+
+	<named-query name="MsgRtnReturnLine.findLineBySlipCodeAndSkuBarCode">
+		<query><![CDATA[select o from MsgRtnReturnLine o where 
+		                      o.msgRtnInOrder.refSlipCode=:slipCode 
+		                      and o.skuId=:skuId]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnReturnLine.findReturnLinesByReturnId">
+		<query><![CDATA[select o from MsgRtnReturnLine o where 
+		                       o.msgRtnInOrder.id=:returnId 
+		          ]]></query>
+	</named-query>
+
+	<named-query name="MsgRtnInboundOrder.findInboundBySlipCode">
+		<query><![CDATA[select o from MsgRtnInboundOrder o where o.refSlipCode=:slipCode ]]></query>
+	</named-query>
+
+	<named-query name="SfOrderCancelQueue.findExtOrderByOu">
+		<query><![CDATA[select s from SfOrderCancelQueue s where s.cmpOu.id =:ouid and s.count <= :count ]]></query>
+	</named-query>
+
+	<named-query name="EMSConfirmOrderQueue.findExtOrder">
+		<query><![CDATA[select s from EMSConfirmOrderQueue s where s.exeCount <= :count ]]></query>
+	</named-query>
+	<!-- 万象 -->
+	<named-query name="WxConfirmOrderQueue.findExtOrder">
+		<query><![CDATA[select s from WxConfirmOrderQueue s where s.exeCount <= :count and (s.filter2 = 0 or s.filter2 is null)]]></query>
+	</named-query>
+	<!-- 万象 -->
+	<named-query name="WxConfirmOrderQueue.getWxOrderQueurLogByTrackingNo">
+		<query><![CDATA[select s from WxConfirmOrderQueue s where s.mailno = :trackingNo ]]></query>
+	</named-query>
+
+	<!-- CXC 查询新建和失败状态 -->
+	<named-query
+		name="CxcConfirmOrderQueue.getAllCxcOrderQueue">
+		<query><![CDATA[select cxc from CxcConfirmOrderQueue cxc]]></query>
+	</named-query>
+	
+	<!-- CXC 根据运单编号查询CXC订单确认队列-->
+	<named-query
+		name="CxcConfirmOrderQueue.getCxcConfirmOrderQueueByTransCode">
+		<query><![CDATA[select c from CxcConfirmOrderQueue c where c.bdCode = :transNo]]></query>
+	</named-query>
+
+
+	<named-query name="CacheStockTransferInData.getStockInListByParcelCode">
+		<query><![CDATA[select o from CacheStockTransferInData o where o.parcelCode = :parcelCode 
+						and o.sta.id is null and o.staLine.id is null]]></query>
+	</named-query>
+
+	<named-query name="CchStockTransConfirm.findConfirmByStatus">
+		<query><![CDATA[select o from CchStockTransConfirm o where o.status= :status and o.vmiCode = :vmiCode]]></query>
+	</named-query>
+
+	<named-query name="CchStockTransConfirmLine.findLineByConfirm">
+		<query><![CDATA[select o from CchStockTransConfirmLine o where o.stockTransConfirm.id= :confirmID]]></query>
+	</named-query>
+
+	<named-query name="CchStockReturnInfo.findReturnInfoByStatus">
+		<query><![CDATA[select o from CchStockReturnInfo o where o.status= :status and o.vmiCode = :vmiCode and o.warehouseCode is not null ]]></query>
+	</named-query>
+
+	<named-query name="CchStockReturnInfo.findReturnInfoByStatusAndStaId">
+		<query><![CDATA[select o from CchStockReturnInfo o where o.status= :status and o.vmiCode = :vmiCode and o.staId = :staId and o.warehouseCode is not null ]]></query>
+	</named-query>
+
+	<named-query name="CchStockReturnLine.findLineByStockReturn">
+		<query><![CDATA[select o from CchStockReturnLine o where o.returnInfo.id= :srId]]></query>
+	</named-query>
+
+	<named-query name="CchSales.findSalesByBatchNum">
+		<query><![CDATA[select o from CchSales o where o.batchNum= :batchNum and o.syncStatus= :status order by cchCode desc]]></query>
+	</named-query>
+
+	<named-query name="SfConfirmOrderQueue.findExtOrder">
+		<query><![CDATA[select q from SfConfirmOrderQueue q where q.exeCount <= :count]]></query>
+	</named-query>
+	<named-query name="JdConfirmOrderQueue.findExtOrder">
+		<query><![CDATA[select q from JdConfirmOrderQueue q where q.exeCount <= :count]]></query>
+	</named-query>
+
+	<named-query name="ZtoConfirmOrderQueue.findExtOrder">
+		<query><![CDATA[select q from ZtoConfirmOrderQueue q where q.exeCount <= :count]]></query>
+	</named-query>
+
+	<named-query name="TtkConfirmOrderQueue.findExtOrder">
+		<query><![CDATA[select q from TtkConfirmOrderQueue q where q.exeCount <= :count]]></query>
+	</named-query>
+
+	<named-query name="KerryConfirmOrderQueue.findExtOrder">
+		<query><![CDATA[select q from KerryConfirmOrderQueue q where q.exeCount <= :count]]></query>
+	</named-query>
+	
+	<named-query name="RfdConfirmOrderQueue.findExtOrder">
+		<query><![CDATA[select q from RfdConfirmOrderQueue q where q.exeCount <= :count]]></query>
+	</named-query>
+	
+	<named-query name="KerryConfirmOrderQueue.findKerryOrderByType">
+		<query><![CDATA[select q from KerryConfirmOrderQueue q where q.type = :type and q.exeCount <= :count]]></query>
+	</named-query>
+
+	<named-query name="KerryConfirmOrderQueue.findKerryOrderByStaCode">
+		<query><![CDATA[select q from KerryConfirmOrderQueue q where q.type = 1 and q.staCode = :staCode]]></query>
+	</named-query>
+
+	<named-query name="PhilipsInboundDelivery.getInboundDeliveryByCode">
+		<query><![CDATA[select o from PhilipsInboundDelivery o where o.inboundCode=:inboundCode]]></query>
+	</named-query>
+
+	<named-query name="PhilipsInboundDelivery.getInboundDeliveryByStatus">
+		<query><![CDATA[select o from PhilipsInboundDelivery o where o.status=:status]]></query>
+	</named-query>
+
+	<named-query name="PhilipsOutboundDelivery.getOutboundByStatus">
+		<query><![CDATA[select o from PhilipsOutboundDelivery o where o.status=:status and o.sta.id is null]]></query>
+	</named-query>
+
+	<named-query name="PhilipsOutboundDelivery.getOutboundByOrderCode">
+		<query><![CDATA[select o from PhilipsOutboundDelivery o where o.orderCode= :orderCode]]></query>
+	</named-query>
+
+	<named-query name="PhilipsOutboundDeliveryLine.getOutboundLineByOutId">
+		<query><![CDATA[select o from PhilipsOutboundDeliveryLine o where o.philipsOutDelivery.id= :outboundId]]></query>
+	</named-query>
+
+	<named-query name="PhilipsCustomerReturn.getCRByStatus">
+		<query><![CDATA[select o from PhilipsCustomerReturn o where o.status= :status]]></query>
+	</named-query>
+
+	<named-query name="PhilipsCustomerReturn.getCRByOrderCode">
+		<query><![CDATA[select o from PhilipsCustomerReturn o where o.orderCode= :orderCode]]></query>
+	</named-query>
+
+	<named-query name="PhilipsCustomerReturnLine.getCRLineByCRID">
+		<query><![CDATA[select o from PhilipsCustomerReturnLine o where o.pCustomerReturn.id= :crid]]></query>
+	</named-query>
+
+	<named-query name="PhilipsProvice.getProviecByCode">
+		<query><![CDATA[select o from PhilipsProvice o where o.code= :code]]></query>
+	</named-query>
+
+	<named-query name="WorkLineNo.queryWorkLineNoByOuid">
+		<query><![CDATA[select o from WorkLineNo o where o.wh.id= :ouid]]></query>
+	</named-query>
+
+	<named-query name="WorkLineNo.getWorkLineNoByCode">
+		<query><![CDATA[select o from WorkLineNo o where o.wh.id= :ouid and o.code= :code]]></query>
+	</named-query>
+
+	<named-query name="StockTransApplication.findStaByslipCodeandShopId">
+		<query><![CDATA[select a from StockTransApplication a where a.refSlipCode=:slipCode and a.owner=:owner ]]></query>
+	</named-query>
+	<named-query name="InventoryCheck.finInventoryCheckBySlipCodeandShop">
+		<query><![CDATA[select a from InventoryCheck a where a.slipCode=:slipCode and a.shop.id=:shopouId ]]></query>
+	</named-query>
+	<named-query name="MsgRtnOutboundLine.findMsgRtnOutboundLines">
+		<query><![CDATA[select a from MsgRtnOutboundLine a where a.msgOutbound.id=:msgid]]></query>
+	</named-query>
+	<named-query name="Warehouse.findAllWarehouse">
+		<query><![CDATA[select w from Warehouse w where w.ou.isAvailable= true]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaByCodeAndWhId">
+		<query><![CDATA[select s from StockTransApplication s where s.code=:code and s.mainWarehouse.id=:uniqueCode]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findLMStaByCodeAndWhId">
+		<query><![CDATA[select s from StockTransApplication s where s.code=:code and s.mainWarehouse.id=:uniqueCode and s.type = 31]]></query>
+	</named-query>
+	<named-query name="PickingList.getByCode">
+		<query><![CDATA[select p from PickingList p where p.code=:code]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findIfExistReturnOrder">
+		<query><![CDATA[select s from StockTransApplication s where (s.code = :code or s.refSlipCode = :code) and s.mainWarehouse.id= :uniqueCode and s.type in (61,101,102) and s.status=2]]></query>
+	</named-query>
+	<named-query name="NikeVmiStockInCommand.getByReferenceNo">
+		<query><![CDATA[select s from NikeVmiStockInCommand s where s.referenceNo=:referenceNo]]></query>
+	</named-query>
+	<named-query name="NikeVmiStockInCommand.getOneByReferenceNo">
+		<query><![CDATA[select s from NikeVmiStockInCommand s where s.referenceNo=:referenceNo]]></query>
+	</named-query>
+	<named-query name="PdaOrder.findNeedToPerformByType">
+		<query><![CDATA[select s from PdaOrder s where ((s.status=0 and s.createTime > (sysdate - 15/(24*60))) or (s.status=1 and (s.createTime > sysdate - 3))) and s.type=:type order by id]]></query>
+	</named-query>
+
+	<named-query name="PdaOrderLineSn.getByPdaOrderLine">
+		<query><![CDATA[select sn from PdaOrderLineSn sn where sn.pdaOrderLine.id=:pdaOrderLineId]]></query>
+	</named-query>
+
+	<named-query name="PdaOrderLine.findLineByPdaOrderId">
+		<query><![CDATA[select s from PdaOrderLine s where s.pdaOrder.id=:pdaOrderId ]]></query>
+	</named-query>
+	<named-query name="PdaOrderLine.findLineByCreate">
+		<query><![CDATA[select s from PdaOrderLine s where s.pdaOrder.id=:pdaOrderId and (s.status = 1 or s.status is null) ]]></query>
+	</named-query>
+
+	<!-- 查询合单情况下的子单 fanht -->
+	<named-query name="StockTransApplication.findGroupStaList">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.groupSta.id=:groupStaId]]></query>
+	</named-query>
+	<!-- 重复插入计数器表判断 fanht -->
+	<named-query name="GroupBuyingSkuCounter.findByStaId">
+		<query><![CDATA[select gc from GroupBuyingSkuCounter gc where gc.staId=:staId]]></query>
+	</named-query>
+	<named-query name="NikeCheckReceive.findToWriteFile">
+		<query><![CDATA[select t from  NikeCheckReceive t where t.status = :status]]></query>
+	</named-query>
+
+	<!-- 查询外包仓耗材数据 -->
+	<named-query name="MsgRtnOutAdditionalLine.getLineListByMsgRtnOutbound">
+		<query><![CDATA[select t from  MsgRtnOutAdditionalLine t where t.msgRtnOutbound.id = :msgRtnOutboundId ]]></query>
+	</named-query>
+	<!-- 查询所有需要生成明细的补货报表 -->
+	<named-query name="WhReplenish.findAllNeedDetailOrder">
+		<query><![CDATA[select wr from WhReplenish wr where wr.status = 1 or wr.status = 3]]></query>
+	</named-query>
+	<named-query name="WhReplenish.findOldWhReplenish">
+		<query><![CDATA[select wr from WhReplenish wr where wr.status = :status or wr.status = :status1 and wr.ou.id=:ouId]]></query>
+	</named-query>
+	<named-query name="PackageInfo.getByStaId">
+		<query><![CDATA[select pa from PackageInfo pa where pa.staDeliveryInfo.id = :staId]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrder.getByStaCode">
+		<query><![CDATA[select moo from MsgOutboundOrder moo where moo.staCode = :staCode]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrder.findLockedMsgOrder">
+		<query><![CDATA[select sta from StockTransApplication sta ,MsgOutboundOrder msg
+          where msg.staCode =sta.code
+          and (sta.type=21 or sta.type=42)
+           and msg.isLocked=1]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.getByPrimaryKeyAndOuId">
+		<query><![CDATA[select s from InventoryStatus s where s.id = :invId and s.ou.id = :ouId]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaBySlipCodeNotCancel">
+		<query><![CDATA[select s from StockTransApplication s where s.status not in(15,17) and s.refSlipCode = :code]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaByCodeNotCancel">
+		<query><![CDATA[select s from StockTransApplication s where s.status not in(15,17) and s.refSlipCode = :code]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaByCodeNotCancel1">
+		<query><![CDATA[select s from StockTransApplication s where s.status not in(10,15,17) and s.refSlipCode = :code]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getStaBySlipCode1">
+		<query><![CDATA[select s from StockTransApplication s where s.slipCode1 = :slipCode1 and s.type = 210]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getStaListBySlipCode1">
+		<query><![CDATA[select s from StockTransApplication s where s.slipCode1 = :slipCode1]]></query>
+	</named-query>
+	<named-query name="StvLine.findStvByStaId">
+		<query><![CDATA[ select stv from StockTransVoucher as stv where stv.sta.id=:staId]]></query>
+	</named-query>
+	<named-query name="InventoryCheck.getBySlipCode">
+		<query><![CDATA[ select t from InventoryCheck t where t.slipCode = :slipCode and t.status != 0]]></query>
+	</named-query>
+	<named-query name="IdsInventorySynchronousLine.findidsinvSynLine">
+		<query><![CDATA[select l from IdsInventorySynchronousLine l where l.idsInventorySynchronous.id=:invid]]></query>
+	</named-query>
+	<named-query name="QueueSta.queryBatchcodeSta">
+		<query><![CDATA[select q from QueueSta q where q.batchcode= :batchcode]]></query>
+	</named-query>
+	<named-query name="QueueSta.queryQueuesta">
+		<query><![CDATA[select q from QueueSta q where q.batchcode is not null and q.errorcount<5 order by q.batchcode ]]></query>
+	</named-query>
+	
+	<named-query name="QueueSta.queryByErrorCount">
+		<query><![CDATA[select q from QueueSta q where q.errorMqCount=1 ]]></query>
+	</named-query>
+	
+	<named-query name="QueueSta.findStaBySlipCodeNotCancel">
+		<query><![CDATA[select s from QueueSta s where s.ordercode = :code ]]></query>
+	</named-query>
+	<named-query name="QueueSta.getByStaBatchcode">
+		<query><![CDATA[select s from QueueSta s where mainwhouid = :ouid and batchcode = :batchcode ]]></query>
+	</named-query>
+	<named-query name="QueueSta.getByBatchcode">
+		<query><![CDATA[select s from QueueSta s where batchcode = :batchcode and errorcount<5]]></query>
+	</named-query>
+	<named-query name="QueueSta.findQueueStaSendMq">
+		<query><![CDATA[select s from QueueSta s where s.isAgainSendMq=1 ]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findByNameAndOu">
+		<query><![CDATA[select inv from InventoryStatus inv,OperationUnit u where u.id = :ouId and u.parentUnit.parentUnit.id=inv.ou.id and inv.name=:invName and inv.isAvailable = 1]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findByStatusIdAndOu">
+		<query><![CDATA[select inv from InventoryStatus inv,OperationUnit u where u.id = :ouId and u.parentUnit.parentUnit.id=inv.ou.id and inv.id=:statusId and inv.isAvailable = 1]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.getByNameAndWarehouse">
+		<query><![CDATA[select inv from InventoryStatus inv,Warehouse w where inv.name=:invName and inv.isAvailable = 1 and w.vmiSource=:vmiSource and w.vmiSourceWh=:vmiSourceWh and w.ou.parentUnit.parentUnit.id = inv.ou.id]]></query>
+	</named-query>
+	<named-query name="MsgInboundOrder.findVmiInboundNeedSend">
+		<query><![CDATA[select mio from MsgInboundOrder mio where mio.source = :vmiSource and mio.status in(0,1)]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrder.findVmiOutboundNeedSend">
+		<query><![CDATA[select moo from MsgOutboundOrder moo where moo.source = :vmiSource and moo.status in(0,1)]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrder.findCancelOutboundOrderToSf">
+		<query><![CDATA[select moo.staCode from MsgOutboundOrder moo where moo.source = :vmiSource and moo.status in(0)]]></query>
+	</named-query>
+	<named-query name="BiWarehouseAddStatus.getBiWarehouseStatus">
+		<query><![CDATA[select b from BiWarehouseAddStatus b where b.operationUnit.id = :ouId]]></query>
+	</named-query>
+	<named-query name="BiWarehouseAddStatus.findCompanyShopByInnerShopCode">
+		<query><![CDATA[select b from BiWarehouseAddStatus b where b.operationUnit.id = :ouId]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findWhStaByPlId">
+		<query><![CDATA[
+			select s from StockTransApplication s where s.pickingList.id = :plid 
+		]]></query>
+	</named-query>
+	<named-query name="Sku.getByBarcode1">
+		<query><![CDATA[select sku from Sku sku where sku.barCode=:barCode]]></query>
+	</named-query>
+	<named-query name="Sku.getByBarCodeAndCustomer">
+		<query><![CDATA[select s from Sku as s where s.barCode = :code and s.customer.id =:customerId]]></query>
+	</named-query>
+	<named-query name="Sku.getByExtCode1AndCustomer">
+		<query><![CDATA[select s from Sku as s where s.extensionCode1 = :code and s.customer.id =:customerId]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findSalesAviliableStatus">
+		<query><![CDATA[select inv from InventoryStatus inv,OperationUnit oun where oun.parentUnit.parentUnit.id = inv.ou.id and inv.name like '%良品%' and inv.isForSale = 1 and inv.isAvailable = 1 and oun.id = :ouId]]></query>
+	</named-query>
+	<named-query name="Warehouse.getWarehouseByVmiSourceWh">
+		<query><![CDATA[select w from Warehouse w where w.vmiSourceWh=:vmiSourceWh]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.findInventoryByWhAndName">
+		<query><![CDATA[select inv from InventoryStatus inv,MsgInventoryStatus st where st.source = :vmiSource and st.sourceWh = :vmiSourceWh and st.vmiStatus=:statusName and st.whStatus=inv.id]]></query>
+	</named-query>
+	<named-query name="GymboreeReceiveData.findReceiveDataByStatus">
+		<query><![CDATA[select rd from GymboreeReceiveData rd where rd.status=1]]></query>
+	</named-query>
+	<named-query name="BiChannel.getByvmiWHSource1">
+		<query><![CDATA[select rd from BiChannel rd where rd.vmiWHSource1=:vmiWHSource1]]></query>
+	</named-query>
+	<named-query name="MsgInboundOrder.findVmiInboundNeedSendHaveType">
+		<query><![CDATA[select mio from MsgInboundOrder mio,BiChannel c where mio.source = :vmiSource and mio.status in(0,1) and mio.type = 41
+		and c.vmiCode=:wh and c.id = mio.shopId]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrder.findVmiOutboundNeedSendHaveType">
+		<query><![CDATA[select moo from MsgOutboundOrder moo,BiChannel c where moo.source = :vmiSource and moo.status in(0,1) and moo.staType in(21,42) and moo.lpCode is not null
+		and c.vmiCode =:wh and c.id = moo.shopId]]></query>
+	</named-query>
+	<named-query name="IdsServerInformation.findServerInformationBySource">
+		<query><![CDATA[select rd from IdsServerInformation rd where rd.source=:source]]></query>
+	</named-query>
+	<named-query name="IdsServerInformation.findServerInformationByFacility">
+		<query><![CDATA[select rd from IdsServerInformation rd where rd.facility=:facility]]></query>
+	</named-query>
+	<named-query name="IdsServerInformation.findAll">
+		<query><![CDATA[select rd from IdsServerInformation rd where 1=1 order by rd.id desc]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaByNewStaId">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.groupSta.id = :id]]></query>
+	</named-query>
+	<named-query name="BiChannel.getByvmiWHSource">
+		<query><![CDATA[select rd from BiChannel rd where rd.vmiWHSource=:vmiWHSource]]></query>
+	</named-query>
+	<named-query name="ImportPrintData.selectAllData">
+		<query><![CDATA[select ipd from ImportPrintData ipd ]]></query>
+	</named-query>
+	<named-query name="SkuTag.findSkuTagByCode">
+		<query><![CDATA[select tag from SkuTag tag where tag.code=:tagCode ]]></query>
+	</named-query>
+	<named-query name="MsgRtnOutbound.getNeedExeReplenishOrder">
+		<query><![CDATA[select m from MsgRtnOutbound m,StockTransApplication sta where m.source=:vmiSource and m.status in(2,3) and m.staCode = sta.code and sta.status =10]]></query>
+	</named-query>
+	<named-query name="EbsInventory.queryEbsInventory">
+		<query><![CDATA[SELECT T FROM EbsInventory  T 
+                          WHERE NOT EXISTS (SELECT 1 FROM EbsInventory T1 WHERE TRUNC(T1.createTime) > TRUNC(T.createTime))  ]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaBySlipCode1">
+		<query><![CDATA[SELECT T FROM StockTransApplication T WHERE T.status in(10,4) and T.type=21 and T.slipCode1=:slipCode  ]]></query>
+	</named-query>
+	<named-query name="AutoPickingListRole.findAutoPLRoleByCode">
+		<query><![CDATA[select role from AutoPickingListRole role where role.code=:code ]]></query>
+	</named-query>
+	<named-query name="BiChannelGroup.findChannelGroupByCode">
+		<query><![CDATA[select group from BiChannelGroup group where group.code=:code ]]></query>
+	</named-query>
+	<named-query name="SkuSnLog.findSkuSnLogBySn">
+		<query><![CDATA[select n from SkuSnLog n where n.sn=:snNumber ]]></query>
+	</named-query>
+	<named-query name="StaLine.findStaLineQtyById">
+		<query><![CDATA[select n from StaLine n where n.id =:staLineId and n.completeQuantity = n.quantity]]></query>
+	</named-query>
+	<named-query name="MsgOmsSkuLog.findMsgOmsSkuLogByCode">
+		<query><![CDATA[select g from MsgOmsSkuLog g where g.extCode2 =:extcode2]]></query>
+	</named-query>
+	<named-query name="ReturnApplication.getReturnByCode">
+		<query><![CDATA[select g from ReturnApplication g where g.code =:code and g.satus!=3]]></query>
+	</named-query>
+	<named-query name="ReturnApplication.getReturnByCode2">
+		<query><![CDATA[select g from ReturnApplication g where g.code =:code]]></query>
+	</named-query>
+	<named-query name="ReturnApplication.getReturnByLpCode">
+		<query><![CDATA[select g from ReturnApplication g where g.trankNo=:lpCode]]></query>
+	</named-query>
+	
+	<named-query name="ReturnApplication.getReturnByLpCode1">
+		<query><![CDATA[select g from ReturnApplication g where g.trankNo=:lpCode]]></query>
+	</named-query>
+	
+	<named-query name="ESPDeliveryReceive.findReceiveOrdersByBatchNoAndPN">
+		<query><![CDATA[ select dr from ESPDeliveryReceive as dr where dr.hBatchNo = :batchNo 
+							and dr.pPickNo= :pickNo 
+							and dr.staId is null ]]></query>
+	</named-query>
+	<named-query name="WholeTaskLog.getByDate">
+		<query><![CDATA[select g from WholeTaskLog g where TRUNC(g.createTime) = TRUNC(sysdate) and g.status = 1]]></query>
+	</named-query>
+	<named-query name="CKReceive.getByReferenceNo">
+		<query><![CDATA[select s from CKReceive s where s.deliveryNo=:deliveryNo]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.findStvByStaId">
+		<query><![CDATA[ select stv from StockTransVoucher as stv where stv.sta.id=:staId and stv.status != 0]]></query>
+	</named-query>
+	<named-query name="WarehouseMsgSku.getMsgSkuByCode">
+		<query><![CDATA[ select u from WarehouseMsgSku as u where u.code=:code and u.status != 10 and u.whCode =:sourceWh]]></query>
+	</named-query>
+	<named-query name="WarehouseMsgSkuBarcode.getSkuBarcodeByMsgId">
+		<query><![CDATA[ select u from WarehouseMsgSkuBarcode as u where u.msgSku.id=:id ]]></query>
+	</named-query>
+	<named-query name="WarehouseMsgSku.getMsgSkuByErrorCount">
+		<query><![CDATA[ select u from WarehouseMsgSku as u where u.errorCount >=:errorCount and (u.status = 1 or u.status = 20)]]></query>
+	</named-query>
+	<named-query name="WhOrderSpecialExecute.getByQueueId">
+		<query><![CDATA[ select u from WhOrderSpecialExecute as u where u.queueSta.id =:qId]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCodeVmiConverse">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode1 and sta.type=81 and sta.owner=:owner and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="MsgInboundOrder.getMsgInboundByErrorCount">
+		<query><![CDATA[ select u from MsgInboundOrder as u where u.errorCount >=:errorCount and (u.isMail = 0 or u.isMail is null)]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrder.getMsgOutboundByErrorCount">
+		<query><![CDATA[ select u from MsgOutboundOrder as u where (u.errorCount >=:errorCount and (u.isMail = 0 or u.isMail is null)) or
+		(u.status in (0,1) and  u.createTime < (sysdate - 1/12) and (u.isMail = 0 or u.isMail is null) and u.source not in ('YH','HD'))]]></query>
+	</named-query>
+	<named-query name="MsgRtnInboundOrder.getRtnInboundByErrorCount">
+		<query><![CDATA[ select u from MsgRtnInboundOrder as u where (u.errorCount >=:errorCount and (u.isMail = 0 or u.isMail is null)) or
+(u.status in (0,1) and  u.createTime < (sysdate - 1/12) and (u.isMail = 0 or u.isMail is null))]]></query>
+	</named-query>
+	<named-query name="MsgRtnOutbound.getRtnOutboundByErrorCount">
+		<query><![CDATA[ select u from MsgRtnOutbound as u where  (u.errorCount >=:errorCount or  u.mqErrorCount >=3)  and (u.isMail = 0 or u.isMail is null)]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrderCancel.getOrderCancelByErrorCount">
+		<query><![CDATA[ select u from MsgOutboundOrderCancel as u where u.errorCount >=:errorCount and (u.isMail = 0 or u.isMail is null)]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findBySlipCodeOwner">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.owner=:owner and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="WarehouseMsgSku.getMsgSkuBySkuCodeAndWh">
+		<query><![CDATA[ select u from WarehouseMsgSku as u where u.code=:code and u.source =:source]]></query>
+	</named-query>
+	<named-query name="WarehouseMsgSku.getMsgSkuByWlbIdAndWh">
+		<query><![CDATA[ select u from WarehouseMsgSku as u where u.skuThreeplCode=:wlbId and u.whCode =:whCode]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getStaByWlbCode">
+		<query><![CDATA[ select a from StockTransApplication as a where a.wlbOrderCode=:orderCode and a.code =:code]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findAllStaByPickingListPackageId">
+		<query><![CDATA[select a from StockTransApplication as a where a.status = '3' and a.packageId.id =:plpId]]></query>
+	</named-query>
+	<named-query name="ShopStoreInfo.getShopStoreInfoByCode">
+		<query><![CDATA[ select s from ShopStoreInfo as s where s.code = :code]]></query>
+	</named-query>
+
+	<named-query name="NikeStockReceiveData.getTodoData">
+		<query><![CDATA[ select s from NikeStockReceiveData as s where s.status = 2]]></query>
+	</named-query>
+
+	<named-query name="MsgInboundOrder.getByWlbCode">
+		<query><![CDATA[ select s from MsgInboundOrder as s where s.wlbCode = :wlbCode]]></query>
+	</named-query>
+
+	<named-query name="MsgOutboundOrder.getByWlbCode">
+		<query><![CDATA[ select s from MsgOutboundOrder as s where s.wlbCode = :wlbCode]]></query>
+	</named-query>
+
+	<named-query name="MsgInboundOrder.getByCodeAndSource">
+		<query><![CDATA[ select s from MsgInboundOrder as s where s.staCode = :staCode and s.sourceWh =:source]]></query>
+	</named-query>
+	<!-- 万象 中间表数据 -->
+	<named-query name="WxConfirmOrderQueue.getWxConfirmOrderQueurByTrackingNo">
+		<query><![CDATA[select wx from WxConfirmOrderQueue as wx where wx.mailno = :trackingNo]]></query>
+	</named-query>
+	<named-query name="MsgOutboundOrder.getByCodeAndSource">
+		<query><![CDATA[ select s from MsgOutboundOrder as s where s.staCode = :staCode and s.sourceWh =:source]]></query>
+	</named-query>
+	<named-query name="WhThreePlAreaInfo.findAreaIdByName">
+		<query><![CDATA[ select s from WhThreePlAreaInfo as s where s.areaName = :areaName and s.parentId = (select a.areaId from WhThreePlAreaInfo as a where a.areaName = :city)]]></query>
+	</named-query>
+	<named-query name="ReturnPackage.getPackageByTrackingNo">
+		<query><![CDATA[ select s from ReturnPackage as s where s.trackingNo=:trackingNo)]]></query>
+	</named-query>
+	<named-query name="MsgInventoryStatus.findInventoryStatusByVmiStatus">
+		<query><![CDATA[select s from MsgInventoryStatus s where s.source=:source and s.vmiStatus=:vmiStatus and s.sourceWh=:sourceWh]]></query>
+	</named-query>
+	<named-query name="WmsRtnInOrderQueue.findStaByOrderCodeNotCancel">
+		<query><![CDATA[select s from WmsRtnInOrderQueue s where s.orderCode=:code]]></query>
+	</named-query>
+	<named-query name="WmsSalesOrderQueue.getOrderToSetFlagByOrderCode">
+		<query><![CDATA[select s from WmsSalesOrderQueue as  s where s.orderCode=:code]]></query>
+	</named-query>
+	
+	<named-query name="WmsSalesOrderQueue.queryErrorCount">
+		<query><![CDATA[select s from WmsSalesOrderQueue as  s where s.errorCount=1]]></query>
+	</named-query>
+	
+	<named-query name="WmsSalesOrderQueue.findWmsSalesOrderQueueSendMq">
+		<query><![CDATA[select s from WmsSalesOrderQueue as  s where s.isAgainSendMq=1]]></query>
+	</named-query>
+	
+	<named-query name="ReturnApplicationLine.getRtnLineByRtnId">
+		<query><![CDATA[select s from ReturnApplicationLine as  s where s.raId=:raId]]></query>
+	</named-query>
+	<named-query name="StockTransVoucher.getCanceledStvByStaId">
+		<query><![CDATA[select s from StockTransVoucher s where s.status=0 and s.sta.id=:staId]]></query>
+	</named-query>
+
+	<!-- 索赔 -->
+	<named-query name="SysCompensateCause.getSysCompensateCauseByCode">
+		<query><![CDATA[select s from SysCompensateCause s where s.code= :code]]></query>
+	</named-query>
+	<named-query name="SysCompensateType.getAllSysCompensateTypes">
+		<query><![CDATA[select s from SysCompensateType s ]]></query>
+	</named-query>
+	<named-query name="WhCompensation.getWhCompensationBySysCode">
+		<query><![CDATA[select s from WhCompensation s where s.systemCode= :sysCode]]></query>
+	</named-query>
+	<named-query name="WhCompensation.getWhCompensationByClaimCode">
+		<query><![CDATA[select s from WhCompensation s where s.claimCode= :claimCode and s.status != 17]]></query>
+	</named-query>
+	<!-- 根据名字查找物理仓 -->
+	<named-query name="PhysicalWarehouse.getPhyWarehouseByName">
+		<query><![CDATA[select s from PhysicalWarehouse s where s.name= :name]]></query>
+	</named-query>
+	<named-query name="SkuImperfect.getSkuImperfectSkuId">
+		<query><![CDATA[select sk from SkuImperfect sk where sk.defectCode=:defectCode and sk.sku.id=:skuId]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findStaNeedBind">
+		<query><![CDATA[select s from StockTransApplication s where s.refSlipCode=:slipCode and s.mainWarehouse.id=:ouId and s.type in(21,42) and s.pickingList.id =:pId]]></query>
+	</named-query>
+	<named-query
+		name="StockTransApplication.getStaListByPickingListAndBatchIndex">
+		<query><![CDATA[select s from StockTransApplication s where s.pickingList.id = :pId and s.idx1=:idx1]]></query>
+	</named-query>
+	<named-query
+		name="StockTransApplication.getStaListByPickingListAndRuleCode">
+		<query><![CDATA[select s from StockTransApplication s where s.pickingList.id = :pId and s.ruleCode=:ruleCode]]></query>
+	</named-query>
+	<named-query
+		name="StockTransApplication.getStaListByPickingBatch">
+		<query><![CDATA[select s from StockTransApplication s where s.whPickingBatch.id = :pbId ]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.getByContainCode">
+		<query><![CDATA[select sta from StockTransApplication as sta where sta.containerCode = :code and sta.type != 21 and sta.mainWarehouse.id=:ouid and sta.createTime > sysdate -180]]></query>
+	</named-query>
+	<named-query name="WhCompensation.getWhCompensationByerpOrderCode">
+		<query><![CDATA[select s from WhCompensation s where s.erpOrderCode= :erpOrderCode]]></query>
+	</named-query>
+	<named-query name="WhCompensation.getWhCompensationBytransCode">
+		<query><![CDATA[select s from WhCompensation s where s.transCode= :transCode and  s.transNumber= :transNumber]]></query>
+	</named-query>
+	<named-query name="NikeTurnCreate.findNikeTurnStatus">
+		<query><![CDATA[select sta from NikeTurnCreate as sta where sta.status = 1]]></query>
+	</named-query>
+	<named-query name="GymboreeWarehouse.getIdByFchrWarehouse">
+		<query><![CDATA[select sta from GymboreeWarehouse as sta where sta.fchrWhCode = :code and sta.fchrWarehouseID = :fchrWarehouseID]]></query>
+	</named-query>
+	<named-query name="StockTransApplication.findByTransOrder">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.transOrder.id=:transOrderId and sta.type=21 and sta.status!=17]]></query>
+	</named-query>
+	<named-query name="TransStaRecord.getByOrder">
+		<query><![CDATA[select sta from TransStaRecord sta where sta.orderId=:orderId]]></query>
+	</named-query>
+	<named-query name="SkuChildSn.getbySkuId">
+		<query><![CDATA[select sku from SkuChildSn sku where sku.skuId.id=:skuId and sku.sn=:sn]]></query>
+	</named-query>
+	<named-query name="SkuChildSn.getbyStatusSn">
+		<query><![CDATA[select sku from SkuChildSn sku where sku.skuId.id=:skuId and sku.sn=:sn and sku.status=:status]]></query>
+	</named-query>
+	<named-query name="PickingList.findIsCanCheckByPcode">
+		<query><![CDATA[select p from PickingList p where p.code=:pCode and p.warehouse.id=:ouId and p.status in(2,8) and p.checkMode in(1,2,3,5,10)]]></query>
+	</named-query>
+	<named-query name="SkuSn.getbyStvIdSkuIdStatus">
+		<query><![CDATA[select sn from SkuSn sn where sn.sku.id=:skuId and sn.stv.id=:stvId]]></query>
+	</named-query>
+	<named-query name="SkuChildSnLog.getbyStaIdSn">
+		<query><![CDATA[select sku from SkuChildSnLog sku where sku.sn=:sn and sku.staId.id=:staId]]></query>
+	</named-query>
+	<named-query name="SkuChildSnLog.getbyChildSn">
+		<query><![CDATA[select sku from SkuChildSnLog sku where sku.sn=:sn]]></query>
+	</named-query>
+	<named-query name="WmsConfirmOrderQueueLine.getListBycId">
+		<query><![CDATA[select line from WmsConfirmOrderQueueLine line where line.cId=:cId]]></query>
+	</named-query>
+	<named-query name="TransInfo.getAvailableTransInfo">
+		<query><![CDATA[select t from TransInfo t where t.isAvailable = 1]]></query>
+	</named-query>
+	<!-- 根据stadeliveryId查询包裹信息 -->
+	<named-query name="PackageInfo.findTrackingNoByStaDeId">
+		<query><![CDATA[select p from PackageInfo as p where p.staDeliveryInfo.id = :staDeliveryInfoId]]></query>
+	</named-query>
+	<named-query name="Sku.getByExtCode2AndCustomerAndShopId">
+		<query><![CDATA[select s from Sku s where s.extensionCode2 = :extCode2 and s.customer.id =:customerId and s.brand.id in (select r.brand.id from BiChannelBrandRef r where r.biChannel.id = :channelId)]]></query>
+	</named-query>
+	<named-query name="CnWmsStockInOrderLine.getByStoreInOrderId">
+		<query><![CDATA[select s from CnWmsStockInOrderLine s where s.stockInOrderNotify.id = :storeInOrderId]]></query>
+	</named-query>
+	<named-query name="CnWmsStockInOrderLine.getByOrderCodeAndItemId">
+		<query><![CDATA[select s from CnWmsStockInOrderLine s where s.stockInOrderNotify.orderCode = :orderCode and s.orderItemId=:orderItemId]]></query>
+	</named-query>
+	<named-query name="CnWmsStockInOrderNotify.getInboundOrdersByStatus">
+		<query><![CDATA[select s from CnWmsStockInOrderNotify s where s.status = :status ]]></query>
+	</named-query>
+	<named-query name="CnWmsStockInOrderNotify.getByOrderCode">
+		<query><![CDATA[select s from CnWmsStockInOrderNotify s where s.orderCode = :orderCode ]]></query>
+	</named-query>
+	<named-query name="CnWmsStockInOrderConfirm.getByOrderCode">
+		<query><![CDATA[select s from CnWmsStockInOrderConfirm s where s.orderCode = :orderCode and s.status=:status ]]></query>
+	</named-query>
+	<named-query name="CnWmsStockInOrderConfirm.getByStatus">
+		<query><![CDATA[select s from CnWmsStockInOrderConfirm s where s.status = :status  order by s.id ]]></query>
+	</named-query>
+	<named-query name="CnWmsOrderStatusUpload.getByOrderCodeAndUploadStatus">
+		<query><![CDATA[select s from CnWmsOrderStatusUpload s where s.orderCode = :orderCode and s.uploadStatus=:uploadStatus  order by s.id ]]></query>
+	</named-query>
+	<named-query name="CnWmsOrderStatusUpload.getByUploadStatus">
+		<query><![CDATA[select s from CnWmsOrderStatusUpload s where s.uploadStatus=:uploadStatus  order by s.id  ]]></query>
+	</named-query>
+	<named-query name="CnStockInOrderLine.getByStockInOrderConfirmId">
+		<query><![CDATA[select s from CnStockInOrderLine s where s.stockInOrderConfirm.id = :stockInOrderConfirmId  ]]></query>
+	</named-query>
+	<named-query name="CnStockInItemInventory.getByStockInItemLineId">
+		<query><![CDATA[select s from CnStockInItemInventory s where s.stockInOrderLine.id = :lineId  ]]></query>
+	</named-query>
+	<named-query name="CnWmsInventoryCount.getByStoreCode">
+		<query><![CDATA[select s from CnWmsInventoryCount s where s.storeCode = :storeCode  and s.status=:status  ]]></query>
+	</named-query>
+	<named-query name="CnWmsInventoryCount.getByStatus">
+		<query><![CDATA[select s from CnWmsInventoryCount s where s.status=:status  ]]></query>
+	</named-query>
+	<named-query name="CnInvCountReturnOrderItem.getByInvCountId">
+		<query><![CDATA[select s from CnInvCountReturnOrderItem s where s.cnInventoryCount.id = :invCountId  ]]></query>
+	</named-query>
+	<named-query name="StvLine.findStvLineByStvAndSku">
+		<query><![CDATA[select s from StvLine s where s.stv.id = :stvId and s.sku.id= :skuId  ]]></query>
+	</named-query>
+	<named-query name="StvLine.findStvLinesByStvAndSku">
+		<query><![CDATA[select s from StvLine s where s.stv.id = :stvId and s.sku.id= :skuId  ]]></query>
+	</named-query>
+	<named-query name="CjLgOrderCodeUrl.getCjLgOrderCodeUrlByStaId">
+		<query><![CDATA[select s from CjLgOrderCodeUrl s where s.staId= :staId  ]]></query>
+	</named-query>
+	<named-query name="CjLgOrderCodeUrl.getCjLgOrderCodeUrlByStatus1">
+		<query><![CDATA[select s from CjLgOrderCodeUrl s where s.status1= :status1 ]]></query>
+	</named-query>
+	<named-query name="CjLgOrderCodeUrl.getCjLgOrderCodeUrlByStatus2">
+		<query><![CDATA[select s from CjLgOrderCodeUrl s where s.status2= :status2 ]]></query>
+	</named-query>
+	<!-- 获取yamato反馈队列 -->
+	<named-query name="YamatoConfirmOrderQueue.getYamatoInfoSendHub">
+		<query><![CDATA[select y from YamatoConfirmOrderQueue y]]></query>
+	</named-query>
+	<!-- Gucci相关 -->
+	<named-query name="GucciVMIInstruction.findInstructionsByStatus">
+		<query><![CDATA[select s from GucciVMIInstruction s where s.status= :status]]></query>
+	</named-query>
+	<named-query name="GucciVMIInstruction.findByJDADocumentNo">
+		<query><![CDATA[select s from GucciVMIInstruction s where s.JDADocumentNumber= :JDADocumentNo]]></query>
+	</named-query>
+	<named-query name="GucciVMIInstruction.findInstructionsByStaId">
+		<query><![CDATA[select s from GucciVMIInstruction s where s.staId= :staId]]></query>
+	</named-query>
+	<named-query name="GucciVMIInstructionLine.findLinesByInstructionId">
+		<query><![CDATA[select s from GucciVMIInstructionLine s where s.gucciVMIInstruction.id= :vmiInId]]></query>
+	</named-query>
+	<named-query name="GucciVMIInFeedback.findInFeedbackByStatus">
+		<query><![CDATA[select s from GucciVMIInFeedback s where s.status= :status]]></query>
+	</named-query>
+	<named-query name="GucciVMIInFeedbackLine.findLinesByInFeedbackId">
+		<query><![CDATA[select s from GucciVMIInFeedbackLine s where s.gucciVMIInFeedback.id= :vmiInFbId]]></query>
+	</named-query>
+	<named-query name="StaLine.findByStaAndOrderLineNo">
+		<query><![CDATA[select s from StaLine s where s.sta.id= :staId and s.orderLineNo=:orderLineNo]]></query>
+	</named-query>
+	<named-query name="StvLine.findStvLinesByStvAndStaLine">
+		<query><![CDATA[select s from StvLine s where s.stv.id = :stvId and s.staLine.id= :staLineId  ]]></query>
+	</named-query>
+	<named-query name="GucciVMIRtnFBLine.findLinesByOutFeedbackId">
+		<query><![CDATA[select s from GucciVMIRtnFBLine s where s.gucciVMIRtnFBId.id= :vmiRtnFBId]]></query>
+	</named-query>
+	
+	<named-query name="NikeCartonNo.queryNikeCartonNo">
+		<query><![CDATA[select y from NikeCartonNo y where  y.trackingNo is not null and ROWNUM<2000 order by y.status,y.createTime desc]]></query>
+	</named-query>
+	
+	<named-query name="BiChannelSkuSupplies.findBiChannelSkuSupplies">
+		<query><![CDATA[select y from BiChannelSkuSupplies y where y.shopId=:shopId and y.skuId=:skuId]]></query>
+	</named-query>
+	
+	<named-query name="NikeCartonNo.findByTrackingNo">
+		<query><![CDATA[select y from NikeCartonNo y where y.trackingNo= :trackingNo]]></query>
+	</named-query>
+	<named-query name="NikeCartonNoLine.findByCartonNoId">
+		<query><![CDATA[select y from NikeCartonNoLine y where y.cartonNo.id= :cartonNoId]]></query>
+	</named-query>
+	<named-query name="BiChannel.getBiChannelListByPage">
+		<query><![CDATA[select l from BiChannel l ]]></query>
+	</named-query>
+	<named-query name="BiChannel.getBiChannelListByPageAndShopName">
+		<query><![CDATA[select l from BiChannel l where l.name like :shopName]]></query>
+	</named-query>
+	
+	<named-query name="StockTransApplication.findADBySlipCode1">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.slipCode1=:slipCode1 and sta.type=21]]></query>
+	</named-query>
+	
+	<named-query name="StockTransApplication.findAllUnFinishedBrandIns">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.owner=:owner and sta.type='81' and sta.status='1' order by sta.id]]></query>
+	</named-query>
+	<named-query name="WmsIMOccupiedAndRelease.getWmsIMOccupiedAndReleaseByStaCodeAndType">
+		<query><![CDATA[select sta from WmsIMOccupiedAndRelease sta where sta.staCode= :staCode and sta.type= :occType]]></query>
+	</named-query>
+	
+	<named-query name="PriorityChannelOms.findAllPriority">
+		<query><![CDATA[select p from PriorityChannelOms p where p.qty!=0]]></query>
+	</named-query>
+	
+	<named-query name="PriorityChannelOms.findAllPriorityByQty">
+		<query><![CDATA[select p from PriorityChannelOms p where p.qty=0]]></query>
+	</named-query>
+	
+	<named-query name="CreateOrderToPac.getCreateOrderToPacByCode">
+		<query><![CDATA[select cotp from CreateOrderToPac cotp where cotp.slipCode= :orderCode order by cotp.id desc]]></query>
+	</named-query>
+	<named-query name="CreateOrderToPac.getCreateOrderToPacByQstaId">
+		<query><![CDATA[select cotp from CreateOrderToPac cotp where cotp.qstaId= :qstaId order by cotp.id desc]]></query>
+	</named-query>
+	<named-query name="CreateOrderToPac.findOrderCreateOrderToPac">
+		<query><![CDATA[select cotp.id from CreateOrderToPac cotp where cotp.status= 0]]></query>
+	</named-query>
+	<named-query name="MsgRtnOutbound.getRtnOutboundByErrorCountAndSource">
+		<query><![CDATA[ select u from MsgRtnOutbound as u where  (u.errorCount >=:errorCount or  u.mqErrorCount >=3)  and (u.isMail = 0 or u.isMail is null) and u.source = :source]]></query>
+	</named-query>
+	
+	<named-query name="InboundAgvToHub.findAllByErrorCount">
+		<query><![CDATA[select hub from InboundAgvToHub as hub where hub.status=1 and (hub.errorCount is null or hub.errorCount<5) and rownum<=50 order by createTime desc]]></query>
+	</named-query>
+	
+	<named-query name="InboundAgvToHubLine.findAllByInAgvId">
+		<query><![CDATA[select line from InboundAgvToHubLine as line where inAgvId=:id ]]></query>
+	</named-query>
+	
+	<named-query name="Carton.findCartonByStaIdSort">
+		<query><![CDATA[select c from Carton as c where c.sta.id = :staId order by c.code]]></query>
+	</named-query>
+	
+	<named-query name="StockTransApplication.findBySlipCodeOuIdType">
+		<query><![CDATA[select sta from StockTransApplication sta where sta.refSlipCode=:slipCode and sta.mainWarehouse.id=:ouId and sta.type=:type]]></query>
+	</named-query>
+	
+	<named-query name="AgvSku.findAgvSkuByErrorCount">
+		<query><![CDATA[select s from AgvSku s where s.errorCount<5 and s.status=1 and rownum<=50 order by id desc ]]></query>
+	</named-query>
+	
+	<named-query name="PrintCustomize.findPcBytempletCode">
+		<query><![CDATA[select pc from PrintCustomize as pc where pc.templetCode = :templetCode]]></query>
+	</named-query>
+	
+	<named-query name="WhPingAnCover.findPingAnCoverToHub4">
+		<query><![CDATA[select pa from WhPingAnCover as pa where pa.status <>2 and rownum<=5000 and pa.coverErrorNumber<3]]></query>
+	</named-query>
+	
+	<named-query name="Odo.findCreateInBoundStaList">
+	    <query>
+	        <![CDATA[ 
+	        
+	            select odo from Odo as odo where odo.status in(3,6) and odo.errorCount<=5 and rownum<=50 order by id desc
+	            
+	        ]]>
+	    </query>
+	</named-query>
+	
+	<named-query name="Odo.findOdOByCode">
+	    <query>
+	        <![CDATA[ 
+	        
+	            select odo from Odo as odo where odo.code=:code
+	            
+	        ]]>
+	    </query>
+	</named-query>
+	
+	<named-query name="SkuBarcode.findByBarCode">
+		<query><![CDATA[select d from SkuBarcode as d where d.barcode = :barcode and d.sku.customer.id = :customerId]]></query>
+	</named-query>
+	
+	
+	<!-- 分配区域新建 -->
+	<named-query name="DistriButionArea.getDistriButionArea">
+		<query><![CDATA[select l from DistriButionArea as l where l.mainWhid = :mainWhid]]></query>
+	</named-query>
+	
+	<!-- 区域绑定作业类型 -->
+	<named-query name="DistriButionArea.judgeDistriButionArea">
+		<query><![CDATA[select l.distriButionAreaName from DistriButionArea as l where l.distriButionAreaCode = :distriButionAreaCode]]></query>
+	</named-query>
+	
+	<!-- 区域绑定作业类型 -->
+	<named-query name="DistriButionArea.repeatCheckDistriButionAreaName">
+		<query><![CDATA[select l.distriButionAreaCode from DistriButionArea as l where l.distriButionAreaName = :distriButionAreaName and l.mainWhid = :mainWhid]]></query>
+	</named-query>
+	
+	<named-query name="TransactionType.getTransActionType">
+		<query><![CDATA[select l from TransactionType as l where l.direction = 2]]></query>
+	</named-query>
+	
+	<named-query name="RelationNike.getByEnPidNoOu">
+		<query><![CDATA[select relationNike from RelationNike relationNike where relationNike.enPid=:enPid ]]></query>
+	</named-query>
+	
+	<named-query name="CustomsDeclaration.getCustomsDeclarationByStaCode">
+		<query><![CDATA[select d from CustomsDeclaration as d where d.wmsCode = :staCode]]></query>
+	</named-query>
+
+	
+	<named-query name="WmsCancelOrder.findWmsCancelOrderByStaCode">
+		<query><![CDATA[select can from WmsCancelOrder as can where can.staCode=:staCode]]></query>
+	</named-query>
+	
+	<named-query name="WmsCancelOrderLine.findCancelLineBycaId">
+		<query><![CDATA[select canl from WmsCancelOrderLine as canl where canl.cancelOrderId=:id]]></query>
+	</named-query>
+	
+</entity-mappings>

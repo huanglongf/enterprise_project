@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	
+	<bean id="VmiOrderOpLog.findByShopANDLog" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select o.* 
+					from t_vmi_order o , 
+							T_VMI_ORDER_OP_LOG  t 
+				        where o.order_Code=t.order_Code and o.shop_Id= :shopId and t.OP_TYPE= :opType 
+				        and t.msg_batch_id is null
+						order by o.create_Time
+		]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VMIOrder.updateOrderStatusById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[update T_VMI_ORDER set status = :toStatus where id= :orderId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="VMIOrder.findByShopANDOrderCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select o.* from t_vmi_order o , T_VMI_ORDER_OP_LOG  t 
+				        where o.order_Code=t.order_Code and o.shop_Id= :shopId and t.OP_TYPE= :opType 
+				        and t.msg_batch_id is null and t.order_code= :orderCode
+						order by o.create_Time
+		]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+<bean id="VmiOrderOpLog.queryVmiLogByCondition" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[       
+				 select
+				     l.id 
+				 	 , l.order_code as orderCode
+				 	 , l.order_create_time as orderCreateTime
+				 	 , l.op_type as opType
+				 	 , l.op_time as opTime
+				 	 , l.memo as memo
+				 from 
+				     t_vmi_order_op_log l
+				 where  
+				 	 l.shop_id =:shopId
+					 #if($orderCode)
+				    	and upper(l.order_code) like upper(:orderCode)
+                     #end
+                     #if($createTimeBegin)
+				    	and l.order_create_time >=:createTimeBegin
+                     #end
+                     #if($createTimeEnd)
+				    	and l.order_create_time <=:createTimeEnd
+                     #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+</beans>

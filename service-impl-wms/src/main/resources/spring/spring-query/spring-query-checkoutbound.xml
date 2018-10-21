@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+		<bean id="PickingList.getCheckOrderByCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select id
+						 from t_wh_sta_picking_list p
+						where p.check_mode = 5
+						  and p.status in (2, 8)
+						  and (p.wh_add_status is null or p.wh_add_status = 29)
+						  and p.code = :orderCode
+						  and p.wh_id = :ouId
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="WhContainer.getCheckOrderByCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select c.id
+						  from T_WH_CONTAINER C, T_WH_STA_PICKING_LIST p
+						 where c.code = :orderCode
+						   and c.p_id = p.id
+						   and p.status in (2, 8)
+						   and (p.wh_add_status is null or p.wh_add_status = 29)
+						   and p.check_mode = 5
+						   and p.wh_id = :ouId
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StockTransApplication.getCheckOrderByCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select sta.id
+						 from t_wh_sta sta, t_wh_sta_picking_list p
+						where sta.picking_list_id = p.id
+						  and p.status in (2, 8)
+						  and (p.wh_add_status is null or p.wh_add_status = 29)
+						  and p.check_mode in (1,2,3,10)
+						  and p.wh_id = :ouId
+						  and sta.slip_code = :orderCode
+						  and sta.status = 2
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="PickingList.findCheckInfoByPickingListCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+					 select pl.id plId,pl.code plCode,pl.status status,
+					 	 pl.IS_POSTPOSITION_EXPRESS_BILL isPostpositionExpressBill,
+						 sta.idx1 idx1,sta.idx2 idx2,
+						 sta.sku_qty skuQty,
+						 sta.status intStatus,
+						 di.lpcode lpCode,
+						 sta.slip_code orderCode,
+						 sta.owner owner,
+						 sta.pg_index pgIndex,
+						 sta.slip_code1 slipCode1,
+						 sta.code staCode,
+						 sta.id staId,
+						 '配货中' staStatus,
+						 sta.picking_type pickingType,
+						 sku1.bar_code cmCode,
+						 di.tracking_no transNo,
+						 line.id uniqueId,
+						 line.complete_quantity cQty,
+						 line.quantity qty,
+						 sku.bar_code barCode,
+						 sku.code code,
+						 sku.name name,
+						 sku.color colorSize,
+						 sku.key_properties keyProp,
+						 sku.is_sn_sku isSn,
+						 sku.jm_code supCode,
+						 tb.barcode bcCode
+					 from 
+					 	 t_wh_sta sta,t_wh_sta_picking_list pl,
+					     t_wh_sta_delivery_info di,t_bi_inv_sku sku,t_bi_inv_sku_barcode tb,t_wh_sta_line line,t_bi_inv_sku sku1
+					 where 
+						 pl.code=:code and sta.picking_list_id = pl.id
+						 and pl.status in(2,8)
+						 and sta.status = 2
+						 and sta.id = di.id
+						 and pl.check_mode = 5
+						 and line.sta_id = sta.id
+						 and line.sku_id = sku.id
+						 and line.quantity>0
+						 and sku.id = tb.sku_id(+)
+						 and sta.package_sku_id = sku1.id(+)
+						 and (pl.wh_add_status is null or pl.wh_add_status = 29)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="PickingList.findCheckInfoByContainerCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+				     select 
+					     pl.id plId,pl.code plCode,pl.status status,
+					     pl.IS_POSTPOSITION_EXPRESS_BILL isPostpositionExpressBill,
+						 sta.idx1 idx1,sta.idx2 idx2,
+						 sta.sku_qty skuQty,
+						 sta.status intStatus,
+						 di.lpcode lpCode,
+						 sta.slip_code orderCode,
+						 sta.owner owner,
+						 sta.pg_index pgIndex,
+						 sta.slip_code1 slipCode1,
+						 sta.code staCode,
+						 sta.id staId,
+						 '配货中' staStatus,
+						 sku1.bar_code cmCode,
+						 sta.picking_type pickingType,
+						 di.tracking_no transNo,
+						 line.id uniqueId,
+						 line.complete_quantity cQty,
+						 line.quantity qty,
+						 sku.bar_code barCode,
+						 sku.code code,
+						 sku.name name,
+						 sku.color colorSize,
+						 sku.key_properties keyProp,
+						 sku.is_sn_sku isSn,
+						 sku.jm_code supCode,
+						 tb.barcode bcCode
+            		 from 
+            			 t_wh_sta sta,t_wh_sta_picking_list pl,
+			             t_wh_sta_delivery_info di,t_bi_inv_sku sku,t_bi_inv_sku_barcode tb,t_wh_sta_line line,t_bi_inv_sku sku1,
+			             t_wh_container c,
+			             T_WH_PICKING_BATCH pb
+			         where 
+			             c.code = :code
+			           	and c.p2_id = pb.id
+			           and c.p_id = pl.id
+			           and pb.picking_id = pl.id
+			           and sta.pb_id = pb.id
+			           and sta.picking_list_id = pl.id
+			           and pl.status in(2,8)
+			           and sta.status = 2
+			           and pl.check_mode = 5
+			           and sta.id = di.id
+			           and line.sta_id = sta.id
+			           and line.sku_id = sku.id
+			           and line.quantity>0
+			           and sku.id = tb.sku_id(+)
+			           and sta.package_sku_id = sku1.id(+)
+			           and (pl.wh_add_status is null or pl.wh_add_status = 29)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="PickingList.findCheckInfoBySlipCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+					  select 
+               pl.id plId,pl.code plCode,pl.status status,
+               pl.IS_POSTPOSITION_EXPRESS_BILL isPostpositionExpressBill,
+             sta.idx1 idx1,sta.idx2 idx2,
+             sta.sku_qty skuQty,
+             sta.SPECIAL_TYPE ,
+             sta.status intStatus,
+             di.lpcode lpCode,
+             sta.slip_code orderCode,
+             sta.owner owner,
+             sta.pg_index pgIndex,
+             sta.slip_code1 slipCode1,
+             sta.code staCode,
+             sta.id staId,
+             '配货中' staStatus,
+             sku1.bar_code cmCode,
+             sta.picking_type pickingType,
+             di.tracking_no transNo,
+             line.id uniqueId,
+             line.complete_quantity cQty,
+             line.quantity qty,
+             sku.bar_code barCode,
+             sku.code code,
+             sku.name name,
+             sku.color colorSize,
+             sku.key_properties keyProp,
+             sku.is_sn_sku isSn,
+             sku.jm_code supCode,
+             decode(gift.giftNum, null, 0, 1) as isGift,
+             tb.barcode bcCode
+           from 
+             t_wh_sta sta,t_wh_sta_picking_list pl,
+               t_wh_sta_delivery_info di,t_bi_inv_sku sku,t_bi_inv_sku_barcode tb,t_wh_sta_line line,t_bi_inv_sku sku1,
+             (select gl.sta_line_id, count(1) giftNum
+               from t_wh_gift_line gl where gl.type=50
+              group by gl.sta_line_id) gift
+           where 
+             sta.slip_code =:code
+             and  line.id  =gift.sta_line_id(+)
+             and sta.picking_list_id = pl.id
+             and sta.id = di.id
+             and pl.check_mode in (1,2,3,10)
+             and pl.status in(2,8)
+             and sta.status = 2
+             and line.sta_id = sta.id
+             and line.sku_id = sku.id
+             and line.quantity>0
+             and sku.id = tb.sku_id(+)
+             and sta.package_sku_id = sku1.id(+)
+             and (pl.wh_add_status is null or pl.wh_add_status = 29)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="SkuSn.findIfCanUseBySn" class="loxia.dao.support。DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select sn.id from t_wh_sku_sn sn,t_wh_sta_line line
+						where line.id = :staLineId
+						and line.sku_id = sn.sku_id
+						and sn.sn = :sn
+						and sn.status = 5
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="PackageInfo.findInfoByTransNo" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select sta.slip_code  orderCode,
+						      pi.tracking_no transNo,
+						      sta.id         staId,
+						      pi.lpcode      lpcode,
+						      pi.id          pgId,
+						      sku.bar_code	 barCode,
+						      sta.IS_PRE_SALE as isPreSale,
+						      c.is_haocai as isHaoCai
+						 from t_wh_package_info pi, t_wh_sta sta,t_bi_channel c,t_bi_inv_sku sku
+						where pi.sta_delivery_info_id = sta.id
+						  and sta.picking_type in (1, 2, 10, 20)
+						  and pi.tracking_no = :transNo
+						  and sta.package_sku_id = sku.id(+)
+						  and sta.owner=c.code(+)
+						  #if("$!isSpPacking" == "true")
+							  and sta.status = 2
+							  and pi.status = 1 
+					      #end
+						  #if("$!isSpPacking" == "false")
+							  and sta.status = 3
+							  and pi.status = 1 
+						  #end
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StaDeliveryInfo.findNeedHandOverOrderSummary" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						 select 
+              o.lpCode lpCode,count(1) id 
+             from 
+              t_wh_outbound_pack o,t_wh_package_info p ,t_wh_sta sta  
+             where 
+                     o.package_id=p.id(+) 
+                     and p.sta_delivery_info_id=sta.id(+)  
+                     and (sta.is_pre_sale is null or sta.is_pre_sale='0') 
+                     and  (o.is_ho is null or o.is_ho = 0)
+                      #if($ouId)
+                        and o.ou_id = :ouId
+                      #end
+                      #if($userId)
+                        and o.creator_id = :userId
+                      #end
+                   group by o.lpCode
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StaLine.findCancelDetailBySta" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select inv.sku_id skuId, dl.quantity quantity, inv.quantity completeQuantity, inv.id id
+						  from t_wh_sku_inventory inv,
+						       (select sku_id, sum(line.order_qty) quantity
+						          from t_wh_sta_line line
+						         where sta_id = :staId
+						           and quantity = 0
+						         group by sku_id) dl
+						 where inv.occupation_code = :staCode and inv.sku_id = dl.sku_id
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="StaLine.findCancelLineBySta" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select id,sku_id, sum(line.order_qty) quantity
+						          from t_wh_sta_line line
+						         where sta_id = :staId
+						           and quantity = 0
+						         group by id,sku_id
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="StaLine.findNotCheckStaIdByCancelLine" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select distinct s.id 
+						from t_wh_sta s
+						where s.id not in(
+						select sta.id
+						from t_wh_sta sta,t_wh_sta_line l
+						where sta.id=l.sta_id
+						      and sta.picking_list_id= :pId
+						      and l.quantity=0
+						      )
+						      and s.picking_list_id= :pId
+						      and s.status =2
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="StaLine.findCancelLineByStaIdAndLineNo" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select line.id,line.order_qty from t_wh_sta_line line where line.sta_id=:staId and line.order_line_no=:lineNo
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		
+	<bean id="StaLine.findStaLineIsCancel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select  line.* from T_WH_STA_LINE line where line.is_cancel=:isCancel and line.sta_id=:staId and line.order_line_no=:lineNo
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		
+		<bean id="StaLine.findIfExistsErrorLine" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select count(1) from(
+						select sku_id,sum(qty) from (
+						select sku_id,sum(quantity) qty from t_wh_sta_line where sta_id = :staId group by sku_id
+						union all
+						select sku_id,-sum(quantity) qty from t_wh_sku_inventory inv where occupation_code = :staCode group by sku_id)
+						group by sku_id having sum(qty)<>0
+						)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="StaLine.findStaLineIsCancel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select  line.* from T_WH_STA_LINE line where line.is_cancel=:isCancel and line.sta_id=:staId and line.order_line_no=:lineNo
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+		
+		<bean id="StaLine.findLineAndSkuByStaId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+					   select line.quantity as quantity,line.owner as owner,sku.is_sn_sku as isSn,sku.store_mode as effectSku,sku.id as skuId  
+					   from t_wh_sta_line line,t_bi_inv_sku sku  
+                       where sku.id=line.sku_id and line.sta_id=:staId
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="StaLine.findResultForOperation" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select count(1) from t_wh_sta_line where quantity>0 and sta_id = (
+						select sta_id from t_wh_sta_line where id = :lId) and id <> :lId
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StaLine.findLineNOStringById" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[select stragg(order_line_no) from t_wh_sta_line where sta_id = :staId and quantity<>0]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="StaLine.findSkuCodeStringById" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[select stragg(sku.code) from t_wh_sta_line line inner join t_bi_inv_sku sku on sku.id=line.sku_id where sta_id = :staId and quantity<>0
+
+                    ]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="PickingList.findIsHaveReportMissingByPickingListCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+					 select count(1)
+					 from 
+					 	 t_wh_sta sta,t_wh_sta_picking_list pl,
+					     t_wh_sta_line line
+					 where 
+						 pl.code=:code and sta.picking_list_id = pl.id
+						 and pl.status in(2,8)
+						 and sta.status = 2
+						 and pl.check_mode = 5
+						 and line.sta_id = sta.id
+						 and line.quantity>0
+						 and sta.IS_HAVE_RE_MISS = 1
+						 and (pl.wh_add_status is null or pl.wh_add_status = 29)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="PickingList.findIsHaveReportMissingByContainerCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+				     select count(1)
+            		 from 
+            			 t_wh_sta sta,
+            			 t_wh_sta_picking_list pl,
+            			 t_wh_sta_line line,
+			             t_wh_container c,
+			             T_WH_PICKING_BATCH pb
+			         where 
+			             c.code = :code
+			           	and c.p2_id = pb.id
+			           and c.p_id = pl.id
+			           and pb.picking_id = pl.id
+			           and sta.pb_id = pb.id
+			           and sta.picking_list_id = pl.id
+			           and pl.status in(2,8)
+			           and sta.status = 2
+			           and pl.check_mode = 5
+			           and line.sta_id = sta.id
+			           and line.quantity>0
+			           and sta.IS_HAVE_RE_MISS = 1
+			           and (pl.wh_add_status is null or pl.wh_add_status = 29)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="PickingList.findIsHaveReportMissingBySlipCode" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+					 select count(1)
+					 from 
+					 	 t_wh_sta sta,t_wh_sta_picking_list pl,
+					  	 t_wh_sta_line line
+					 where 
+					 	 sta.slip_code = :code 
+					 	 and sta.picking_list_id = pl.id
+						 and pl.check_mode in (1,2,3,10)
+						 and pl.status in(2,8)
+						 and sta.status = 2
+						 and line.sta_id = sta.id
+						 and line.quantity>0
+						 and sta.IS_HAVE_RE_MISS = 1
+						 and (pl.wh_add_status is null or pl.wh_add_status = 29)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="PickingList.updateHavePrintFlag" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						update t_wh_sta_picking_list set IS_HAVE_PRINT = 1 where code =:plCode and is_have_print is null
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StvLine.deleteInvForAdLineCancel" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						delete from t_wh_stv_line where stv_id = (select id from t_wh_stv where sta_id= :staId)
+						and sku_id = (select sku_id from t_wh_sta_line where sta_id = :staId and order_line_no = :lineNo)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="Inventory.releaseInvForAdLineCancel" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						update t_wh_sku_inventory set is_occupied = null,occupation_code = null
+						where occupation_code = (select code from t_wh_sta where id = :staId)
+						and sku_id = (select sku_id from t_wh_sta_line where sta_id = :staId and order_line_no = :lineNo)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StockTransApplication.getAllOccupiedFailureOrder" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select * from (
+						select 
+							  sta.id id,
+							  sta.code code,
+						      sta.slip_code slipCode,
+						      sta.create_time createTime,
+						      sta.status intStaStatus,
+						      sta.owner owner,
+						      case
+						        when exists (select 1 from t_wh_sku_inventory where occupation_code = sta.code) then
+						         1
+						        else
+						         0
+						      end isHaveOccupation
+						 from t_wh_sta sta,t_bi_warehouse w,t_bi_customer c
+						where sta.type = 21
+						  and sta.main_wh_id = :ouId
+						  and sta.main_wh_id = w.ou_id
+						  and w.customer_id = c.id
+						  and c.code='adidas'
+						  #if($beginTime || $endTime)
+							#if($beginTime)
+								and sta.create_time > :beginTime
+							#end
+							#if($endTime)
+								and sta.create_time < :endTime
+							#end
+						  #else
+							and sta.create_time > sysdate - 90
+						  #end
+						  #if($owner)
+						  	and sta.owner = :owner
+						  #end
+						  #if($slipCode)
+						  	and sta.slip_code = :slipCode
+						  #end
+						  #if($intStatus)
+                              #if("$!intStatus"=="1")
+                                  and sta.status = :intStatus and sta.is_distribute_failed = 1
+                              #else
+                                  and sta.status = :intStatus
+                              #end
+						  #else
+             					  and (sta.status in (20, 25) or (sta.is_distribute_failed = 1 and sta.status = 1))
+						  #end
+						  )
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="Inventory.findSalesOutboundToOccupyInventoryForAd" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						select inv.*,stal.quantity as planOccupyQty
+						from t_wh_sku_inventory inv,
+						     t_wh_location l,
+						     t_wh_district dis,
+						     t_wh_inventory_status invs,
+						     t_bi_warehouse w,
+						     t_wh_district d,
+						     t_wh_sta sta,
+						     t_wh_sta_line stal
+						where inv.location_id = l.id 
+						      and inv.status_id = invs.id 
+						      and w.ou_id = sta.main_wh_id
+						      and l.ou_id = sta.main_wh_id 
+						      and sta.id = stal.sta_id 
+						      and w.ou_id = inv.ou_id
+						      and stal.sku_id = inv.sku_id
+						      and inv.inv_owner = stal.owner
+						      and invs.is_forsale = 1 
+						      and l.is_available = 1
+						      and nvl(l.is_locked,0)=0 
+						      and inv.quantity > 0 
+						      #if($wooCode)
+						      	and inv.occupation_code =:wooCode
+						      #else
+						      	and (inv.occupation_code is null or inv.occupation_code = '')
+						      #end
+						      and dis.id=l.DISTRICT_ID
+						      and dis.type!=5
+						      and exists(
+						          select 1 from t_wh_location_transtype lt, t_wh_transaction_type tt
+						          where lt.location_id = l.id and lt.transtype_id = tt.id
+						                and tt.code = 'SALES_OUTBOUND')
+						      and d.id = l.DISTRICT_ID
+						      and stal.id = :lineId
+						  #if("$!saleOcpType"=="2")
+						    order by inv.sku_id,stal.owner,inv.expire_date asc,d.code desc,l.code,inv.batch_code
+						  #else
+						    order by inv.sku_id,stal.owner,inv.expire_date asc,inv.batch_code,d.code desc,l.code
+						  #end
+						   for update of inv.id
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="Inventory.findNotZeroInvBySkuId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						select inv.* from t_wh_sku_inventory inv where inv.sku_id=:skuId and and inv.quantity>0
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="Inventory.findInvQtyBySkuId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						SELECT sum(inv.quantity) qty FROM t_wh_sku_inventory inv WHERE inv.sku_id= :skuId
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="Inventory.findInvQtyBySkuIdAndLocationId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						SELECT inv.sku_id,inv.location_id,inv.ou_id,l.name as owner,t.name as inventoryStatusName,sum(inv.quantity) as quantity FROM t_wh_sku_inventory inv
+						left join t_bi_channel l on l.code=inv.inv_owner left join T_WH_INVENTORY_STATUS t on t.id=inv.status_id
+						 WHERE inv.sku_id= :skuId and inv.ou_id=:ouId 
+						and inv.location_id=:locationId and inv.quantity>0 and (inv.is_occupied=0 or inv.is_occupied is null)
+						group by inv.sku_id,inv.location_id,inv.ou_id,l.name,t.name
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="Inventory.findInvQtyBySkuIdOwnerAndLocationId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						SELECT sum(inv.quantity) as quantity FROM t_wh_sku_inventory inv
+						 WHERE inv.sku_id= :skuId and inv.ou_id=:ouId  and inv.inv_owner=:owner and status_id=:statusId
+						and inv.location_id=:locationId and (inv.is_occupied=0 or inv.is_occupied is null)
+						
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		
+		<bean id="Inventory.findInvQtyBySkuIdOwnerAndLocationIdAll" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						SELECT sum(inv.quantity) as quantity FROM t_wh_sku_inventory inv
+						 WHERE inv.sku_id= :skuId and inv.ou_id=:ouId  and inv.inv_owner=:owner and status_id=:statusId
+						and inv.location_id=:locationId 
+						
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		
+		
+		<bean id="Inventory.findInvQtyBySkuIdOwnerAndLocationId2" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						SELECT inv.expire_date as expireDate FROM t_wh_sku_inventory inv
+						WHERE inv.sku_id= :skuId and inv.ou_id=:ouId  and inv.inv_owner=:owner and status_id=:statusId
+						and inv.location_id=:locationId and (inv.is_occupied=0 or inv.is_occupied is null) 
+						group by inv.expire_date
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="Inventory.findInvExpireDateQtyBySkuIdAndLocationId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						SELECT inv.expire_date as expireDate FROM t_wh_sku_inventory inv
+						left join t_bi_channel l on l.code=inv.inv_owner left join T_WH_INVENTORY_STATUS t on t.id=inv.status_id
+						 WHERE inv.sku_id= :skuId and inv.ou_id=:ouId 
+						and inv.location_id=:locationId and inv.quantity>0 and (inv.is_occupied=0 or inv.is_occupied is null)
+						group by inv.expire_date
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		
+		<bean id="Inventory.findLocBySingOrderAndOuId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+		               select a.locationId  from (
+						select inv.location_id as locationId,sum(inv.quantity) as qty,
+       sum(case when sta.type in(21,42) and sta.picking_type = 1 and sta.picking_list_id is null and  (sta.is_pre_sale is null or sta.is_pre_sale != 1) then inv.quantity else 0 end  ),
+       sum(case when sta.type in(21,42) and sta.picking_type = 1 and sta.picking_list_id is null and sta.is_pre_sale = 1 then inv.quantity else 0 end  )
+       
+from t_wh_sku_inventory inv left join t_wh_sta sta on sta.code = inv.occupation_code and sta.owner in(select l.code from t_bi_channel_wh_ref t,t_bi_channel l where t.wh_ou_id=:ouId and l.id=t.channel_id and l.is_pickinglist_by_loc=1 ) and sta.create_time >= sysdate - 30  
+,t_wh_inventory_status sts,t_wh_location loc
+#if($districtId)
+   ,t_wh_pick_zoon z
+#end
+#if($wh_districtId)
+   ,t_wh_district d
+#end
+
+where inv.status_id = sts.id
+	  and inv.location_id=loc.id
+      #if($districtId)
+         and z.wh_zoon_id= :districtId
+         and loc.zoon_id=z.id
+      #end
+      
+      #if($wh_districtId)
+       and loc.district_id=:wh_districtId
+       and d.id=loc.district_id
+     #end
+      and sts.is_forsale = 1
+      and inv.quantity >0
+      and inv.ou_id=:ouId
+group by inv.location_id
+having sum(inv.quantity) = sum(case when sta.type in(21,42) and sta.picking_type = 1 and sta.picking_list_id is null and (sta.is_pre_sale is null or sta.is_pre_sale != 1) then inv.quantity else 0 end  )
+       or 
+       sum(inv.quantity) = sum(case when sta.type in(21,42) and sta.picking_type = 1 and sta.picking_list_id is null and sta.is_pre_sale = 1 then inv.quantity else 0 end  )
+  ) a 
+  #if($num)
+  where a.qty>=:num
+  #end
+  
+						
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		
+		<bean id="Inventory.findSkuCountByLocId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						
+select case when count(1)=1 then 1 else 0 end  from (
+select t.sku_id from t_wh_sku_inventory t where t.location_id=:locId and t.ou_id=:ouId and t.quantity>0 group by t.sku_id)
+						
+						
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="Inventory.findOwnerCountByLocId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						
+	select case when count(1)=1 then 1 else 0 end  from (
+select t.inv_owner from t_wh_sku_inventory t where t.location_id=:locId and t.ou_id=:ouId and t.quantity>0 group by t.inv_owner)
+			
+						
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		<bean id="Inventory.findStaIdByLocId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+		               <![CDATA[
+						
+select sta.id as staId from t_wh_sku_inventory t left join t_wh_sta sta on sta.code=t.occupation_code where t.location_id=:locId and t.ou_id=:ouId and t.quantity>0
+			
+						
+						]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		
+		
+	
+		<bean id="StockTransApplication.releaseInventory" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						update t_wh_sku_inventory set is_occupied = null,occupation_code=null where occupation_code =:staCode
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StockTransApplication.updateStaToPartySend" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						update t_wh_sta sta
+						set sta.sku_qty = (select sum(quantity) from t_wh_sta_line where sta_id = sta.id),
+						sta.status = 2,
+						sta.total_actual = (select sum(total_actual) from t_wh_sta_line where quantity>0 and sta_id = sta.id),
+						sta.order_total_actual = (select sum(total_actual) from t_wh_sta_line where quantity>0 and sta_id = sta.id) 
+						where sta.id = :staId
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StaLine.updateLineToPartySend" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						update t_wh_Sta_line line set line.quantity=0
+						where sta_id =:staId and not exists(
+						select 1 from t_wh_sku_inventory where sku_id = line.sku_id
+						and occupation_code = :staCode)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StaLine.findShowOccDetail" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select 
+						sta.code code,
+						sta.slip_code slipCode,
+						sku.bar_code barCode,
+            			case when line.quantity=0 then 1 else 0 end isCancel,
+            			case when exists (select 1 from t_wh_sku_inventory where occupation_code = sta.code and sku_id = sku.id) then 1 else 0 end isHaveOccupation
+             			from t_wh_sta_line line,t_wh_sta sta,t_bi_inv_sku sku
+						where line.sta_id = sta.id and sta.id = :staId and line.sku_id = sku.id
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StaDeliveryInfo.findDeliveryInfoByTrNo">
+			<constructor-arg>
+				<value>
+				<![CDATA[
+					select 
+					t.id as id,
+					t.lpcode as lpCode,
+					t.weight as weight
+					 from t_wh_sta_delivery_info t where t.tracking_no=:trackingNo
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StockTransVoucher.deleteStvBySta" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						delete from t_wh_stv where sta_id = :staId
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StvLine.deleteStvLineBySta" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						delete from t_wh_stv_line where stv_id in(
+						select id from t_wh_stv where sta_id = :staId)
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StockTransApplication.updateGroupStaById" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+					update t_wh_sta set GROUP_STA_ID =null  where id=:staId
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>		
+		<bean id="AdConfirmOrder.getAllNeedConfirmCheckOrder" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select id from T_WH_AD_CONFIRM_ORDER order by id
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="StockTransApplication.updateResetToCreateFlag" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						update t_wh_sta set reset_to_create = null where slip_code=:slipCode and status = 15 and reset_to_create=1
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="PickingList.updatePickingListStatus" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						update T_WH_STA_PICKING_LIST t set t.STATUS = 20 where t.ID= :plId
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<bean id="SkuDeclaration.findSkuOriginByPlId" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+					<![CDATA[
+						select sku.code skuCode,od.origin
+						from t_wh_sta sta,t_wh_sta_line l,t_bi_inv_sku sku,t_wh_sku_declaration sd,T_WH_SKU_ORIGIN_DECLARATION od
+						where sta.id=l.sta_id
+						      and l.sku_id=sku.id
+						      and sku.code=sd.sku_code
+						      and sd.id=od.sku_declaration_id
+						      and sta.picking_list_id = :plId
+						group by  sku.code,od.origin	
+					]]>
+				</value>
+			</constructor-arg>
+		</bean>
+</beans>

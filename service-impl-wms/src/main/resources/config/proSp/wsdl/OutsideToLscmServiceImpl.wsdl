@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.warehouse.integration.sf.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="OutsideToLscmServiceService" targetNamespace="http://service.warehouse.integration.sf.com/">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://service.warehouse.integration.sf.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://service.warehouse.integration.sf.com/">
+<xsd:element name="yxToLscmService" type="tns:yxToLscmService"/>
+<xsd:complexType name="yxToLscmService">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="arg0" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="yxToLscmServiceResponse" type="tns:yxToLscmServiceResponse"/>
+<xsd:complexType name="yxToLscmServiceResponse">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="return" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="jyToLscmService" type="tns:jyToLscmService"/>
+<xsd:complexType name="jyToLscmService">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="arg0" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="jyToLscmServiceResponse" type="tns:jyToLscmServiceResponse"/>
+<xsd:complexType name="jyToLscmServiceResponse">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="return" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="outsideToLscmService" type="tns:outsideToLscmService"/>
+<xsd:complexType name="outsideToLscmService">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="arg0" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="outsideToLscmServiceResponse" type="tns:outsideToLscmServiceResponse"/>
+<xsd:complexType name="outsideToLscmServiceResponse">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="return" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="outsideToLscmService">
+    <wsdl:part element="tns:outsideToLscmService" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="jyToLscmServiceResponse">
+    <wsdl:part element="tns:jyToLscmServiceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="jyToLscmService">
+    <wsdl:part element="tns:jyToLscmService" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="yxToLscmServiceResponse">
+    <wsdl:part element="tns:yxToLscmServiceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="yxToLscmService">
+    <wsdl:part element="tns:yxToLscmService" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="outsideToLscmServiceResponse">
+    <wsdl:part element="tns:outsideToLscmServiceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IOutsideToLscmService">
+    <wsdl:operation name="yxToLscmService">
+      <wsdl:input message="tns:yxToLscmService" name="yxToLscmService">
+    </wsdl:input>
+      <wsdl:output message="tns:yxToLscmServiceResponse" name="yxToLscmServiceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="jyToLscmService">
+      <wsdl:input message="tns:jyToLscmService" name="jyToLscmService">
+    </wsdl:input>
+      <wsdl:output message="tns:jyToLscmServiceResponse" name="jyToLscmServiceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="outsideToLscmService">
+      <wsdl:input message="tns:outsideToLscmService" name="outsideToLscmService">
+    </wsdl:input>
+      <wsdl:output message="tns:outsideToLscmServiceResponse" name="outsideToLscmServiceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OutsideToLscmServiceServiceSoapBinding" type="tns:IOutsideToLscmService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="yxToLscmService">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="yxToLscmService">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="yxToLscmServiceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="jyToLscmService">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="jyToLscmService">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="jyToLscmServiceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="outsideToLscmService">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="outsideToLscmService">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="outsideToLscmServiceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OutsideToLscmServiceService">
+    <wsdl:port binding="tns:OutsideToLscmServiceServiceSoapBinding" name="OutsideToLscmServicePort">
+      <soap:address location="http://bsp.sf-express.com/bsp-wms/ws/OutsideToLscmServiceImpl"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

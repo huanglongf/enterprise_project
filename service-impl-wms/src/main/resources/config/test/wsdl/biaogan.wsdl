@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://server.webservices.chamayi.chamago.com"
+	xmlns:ns2="http://bean.server.webservices.chamayi.chamago.com"
+	xmlns:ns1="http://orderstatusclient.warehouse.webservices.chamayi.chamago.com"
+	xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:tns="http://server.webservices.chamayi.chamago.com"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://server.webservices.chamayi.chamago.com">
+			<xsd:element name="searchWarehouse">
+				<xsd:complexType />
+			</xsd:element>
+			<xsd:element name="searchWarehouseResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="ns1:ArrayOfWmsSPRecord" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="searchWarehouseBySkuId">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="searchWarehouseBySkuIdResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="ns1:ArrayOfWmsSPRecord" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="putANSFormWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="ns2:CmerpInputFromBg" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="ArrayOfString">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="string"
+						nillable="true" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:element name="putANSFormWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="ns2:WmsResultInfoToERP" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PutSOFromWMS">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="ns2:IdxSoTransaction" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="PutSOFromWMSResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="ns2:WmsResultInfoToERP" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="searchOrderStatus">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="searchOrderStatusResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="ns2:WmsResultInfoToERP" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="cancelOrder">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="cancelOrderResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="putInventoryAdjustment">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="ns2:InventoryAdjustment" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="putInventoryAdjustmentResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="ns2:WmsResultInfoToERP" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="moreSkuToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="moreSkuToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ansToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ansToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="singleSkuToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="singleSkuToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://orderstatusclient.warehouse.webservices.chamayi.chamago.com">
+			<xsd:complexType name="ArrayOfWmsSPRecord">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0"
+						name="WmsSPRecord" nillable="true" type="ns1:WmsSPRecord" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="WmsSPRecord">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="FIELD1" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD10" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD11" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD12" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD13" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD14" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD15" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD16" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD17" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD18" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD19" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD2" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD20" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD21" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD22" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD23" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD24" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD25" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD26" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD27" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD28" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD29" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD3" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD30" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD4" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD5" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD6" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD7" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD8" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="FIELD9" nillable="true"
+						type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://bean.server.webservices.chamayi.chamago.com">
+			<xsd:complexType name="CmerpInputFromBg">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="asnlineno" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="asnno" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="asnreference"
+						nillable="true" type="xsd:string" />
+					<xsd:element minOccurs="0" name="asnreference2"
+						nillable="true" type="xsd:string" />
+					<xsd:element minOccurs="0" name="asnreference3"
+						nillable="true" type="xsd:string" />
+					<xsd:element minOccurs="0" name="asnreference4"
+						nillable="true" type="xsd:string" />
+					<xsd:element minOccurs="0" name="asnreference5"
+						nillable="true" type="xsd:string" />
+					<xsd:element minOccurs="0" name="asntype" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="customerid" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="expectedQty" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="isIntact" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt01" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt02" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt03" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt04" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt05" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt06" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt07" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt08" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt09" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt10" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt11" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt12" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="notes" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="receivedQty" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="receivedtime"
+						nillable="true" type="xsd:string" />
+					<xsd:element minOccurs="0" name="sku" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="status" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="tid" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="warehouseid" nillable="true"
+						type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="WmsResultInfoToERP">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="resultInfo" nillable="true"
+						type="tns:ArrayOfString" />
+					<xsd:element minOccurs="0" name="returnCode" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="returnDesc" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="returnFlag" nillable="true"
+						type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="IdxSoTransaction">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="bgNo" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="carrierID" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="carrierName" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="customerId" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="flag" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="num" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="orderNo" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="shipNo" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="sku" nillable="true"
+						type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="InventoryAdjustment">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="adjNo" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="customerId" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="cycleCountNo"
+						nillable="true" type="xsd:string" />
+					<xsd:element minOccurs="0" name="fmqty" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt01" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt02" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt03" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt04" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt05" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt06" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt07" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt08" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt09" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt10" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt11" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="lotatt12" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="note" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="qty" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="reason" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="reasonCode" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="sku" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="time" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="toqty" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="type" nillable="true"
+						type="xsd:string" />
+					<xsd:element minOccurs="0" name="wareHouseId" nillable="true"
+						type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="searchWarehouseResponse">
+		<wsdl:part name="parameters" element="tns:searchWarehouseResponse" />
+	</wsdl:message>
+	<wsdl:message name="putANSFormWmsResponse">
+		<wsdl:part name="parameters" element="tns:putANSFormWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="cancelOrderRequest">
+		<wsdl:part name="parameters" element="tns:cancelOrder" />
+	</wsdl:message>
+	<wsdl:message name="ansToWmsResponse">
+		<wsdl:part name="parameters" element="tns:ansToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="soToWmsResponse">
+		<wsdl:part name="parameters" element="tns:soToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="searchWarehouseBySkuIdResponse">
+		<wsdl:part name="parameters" element="tns:searchWarehouseBySkuIdResponse" />
+	</wsdl:message>
+	<wsdl:message name="singleSkuToWmsRequest">
+		<wsdl:part name="parameters" element="tns:singleSkuToWms" />
+	</wsdl:message>
+	<wsdl:message name="soToWmsRequest">
+		<wsdl:part name="parameters" element="tns:soToWms" />
+	</wsdl:message>
+	<wsdl:message name="putANSFormWmsRequest">
+		<wsdl:part name="parameters" element="tns:putANSFormWms" />
+	</wsdl:message>
+	<wsdl:message name="moreSkuToWmsResponse">
+		<wsdl:part name="parameters" element="tns:moreSkuToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="PutSOFromWMSResponse">
+		<wsdl:part name="parameters" element="tns:PutSOFromWMSResponse" />
+	</wsdl:message>
+	<wsdl:message name="searchOrderStatusRequest">
+		<wsdl:part name="parameters" element="tns:searchOrderStatus" />
+	</wsdl:message>
+	<wsdl:message name="ansToWmsRequest">
+		<wsdl:part name="parameters" element="tns:ansToWms" />
+	</wsdl:message>
+	<wsdl:message name="cancelOrderResponse">
+		<wsdl:part name="parameters" element="tns:cancelOrderResponse" />
+	</wsdl:message>
+	<wsdl:message name="putInventoryAdjustmentResponse">
+		<wsdl:part name="parameters" element="tns:putInventoryAdjustmentResponse" />
+	</wsdl:message>
+	<wsdl:message name="searchWarehouseRequest">
+		<wsdl:part name="parameters" element="tns:searchWarehouse" />
+	</wsdl:message>
+	<wsdl:message name="searchOrderStatusResponse">
+		<wsdl:part name="parameters" element="tns:searchOrderStatusResponse" />
+	</wsdl:message>
+	<wsdl:message name="singleSkuToWmsResponse">
+		<wsdl:part name="parameters" element="tns:singleSkuToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="moreSkuToWmsRequest">
+		<wsdl:part name="parameters" element="tns:moreSkuToWms" />
+	</wsdl:message>
+	<wsdl:message name="searchWarehouseBySkuIdRequest">
+		<wsdl:part name="parameters" element="tns:searchWarehouseBySkuId" />
+	</wsdl:message>
+	<wsdl:message name="PutSOFromWMSRequest">
+		<wsdl:part name="parameters" element="tns:PutSOFromWMS" />
+	</wsdl:message>
+	<wsdl:message name="putInventoryAdjustmentRequest">
+		<wsdl:part name="parameters" element="tns:putInventoryAdjustment" />
+	</wsdl:message>
+	<wsdl:portType name="PushExpressInfoPortType">
+		<wsdl:operation name="searchWarehouse">
+			<wsdl:input name="searchWarehouseRequest" message="tns:searchWarehouseRequest" />
+			<wsdl:output name="searchWarehouseResponse" message="tns:searchWarehouseResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="searchWarehouseBySkuId">
+			<wsdl:input name="searchWarehouseBySkuIdRequest" message="tns:searchWarehouseBySkuIdRequest" />
+			<wsdl:output name="searchWarehouseBySkuIdResponse"
+				message="tns:searchWarehouseBySkuIdResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="putANSFormWms">
+			<wsdl:input name="putANSFormWmsRequest" message="tns:putANSFormWmsRequest" />
+			<wsdl:output name="putANSFormWmsResponse" message="tns:putANSFormWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="PutSOFromWMS">
+			<wsdl:input name="PutSOFromWMSRequest" message="tns:PutSOFromWMSRequest" />
+			<wsdl:output name="PutSOFromWMSResponse" message="tns:PutSOFromWMSResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="searchOrderStatus">
+			<wsdl:input name="searchOrderStatusRequest" message="tns:searchOrderStatusRequest" />
+			<wsdl:output name="searchOrderStatusResponse" message="tns:searchOrderStatusResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="cancelOrder">
+			<wsdl:input name="cancelOrderRequest" message="tns:cancelOrderRequest" />
+			<wsdl:output name="cancelOrderResponse" message="tns:cancelOrderResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="putInventoryAdjustment">
+			<wsdl:input name="putInventoryAdjustmentRequest" message="tns:putInventoryAdjustmentRequest" />
+			<wsdl:output name="putInventoryAdjustmentResponse"
+				message="tns:putInventoryAdjustmentResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="moreSkuToWms">
+			<wsdl:input name="moreSkuToWmsRequest" message="tns:moreSkuToWmsRequest" />
+			<wsdl:output name="moreSkuToWmsResponse" message="tns:moreSkuToWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="ansToWms">
+			<wsdl:input name="ansToWmsRequest" message="tns:ansToWmsRequest" />
+			<wsdl:output name="ansToWmsResponse" message="tns:ansToWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="soToWms">
+			<wsdl:input name="soToWmsRequest" message="tns:soToWmsRequest" />
+			<wsdl:output name="soToWmsResponse" message="tns:soToWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="singleSkuToWms">
+			<wsdl:input name="singleSkuToWmsRequest" message="tns:singleSkuToWmsRequest" />
+			<wsdl:output name="singleSkuToWmsResponse" message="tns:singleSkuToWmsResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PushExpressInfoHttpBinding" type="tns:PushExpressInfoPortType">
+		<wsdlsoap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="searchWarehouse">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="searchWarehouseRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="searchWarehouseResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="searchWarehouseBySkuId">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="searchWarehouseBySkuIdRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="searchWarehouseBySkuIdResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="putANSFormWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="putANSFormWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="putANSFormWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="PutSOFromWMS">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="PutSOFromWMSRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="PutSOFromWMSResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="searchOrderStatus">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="searchOrderStatusRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="searchOrderStatusResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="cancelOrder">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="cancelOrderRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="cancelOrderResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="putInventoryAdjustment">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="putInventoryAdjustmentRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="putInventoryAdjustmentResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="moreSkuToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="moreSkuToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="moreSkuToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ansToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="ansToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ansToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="soToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="soToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="soToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="singleSkuToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="singleSkuToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="singleSkuToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PushExpressInfo">
+		<wsdl:port name="PushExpressInfoHttpPort" binding="tns:PushExpressInfoHttpBinding">
+			<!--<wsdlsoap:address location="http://58.210.92.254:8092/bz/services/PushExpressInfo"/> -->
+			<wsdlsoap:address location="http://127.0.0.1/bz/services/PushExpressInfo" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

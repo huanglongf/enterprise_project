@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="SalesDataCommand.findSalesDataByDate" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+          select transDate,transNum,netQty,netAmount,avt,rtnAmt,rtnQty,acAmt,acQty from (
+				 	 select 
+				         sales.transDate,
+                         sales.transNum,
+                         sales.netQty,
+                         sales.netAmount,
+                         sales.avt,
+				         nvl(rtn.posSales,0) rtnAmt,
+				         nvl(rtn.rtnQty,0) rtnQty,
+				         sales.netAmount+nvl(rtn.posSales,0) acAmt,
+				         sales.netQty+nvl(rtn.rtnQty,0) acQty
+				         from 
+				         (select 
+							to_char(so.delivery_time,'yyyy-mm-dd') transDate,
+							count(distinct so.id) transNum,
+							sum(sol.requested_qty) netQty,
+							sum(ceil(sol.actual_price*sol.requested_qty*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END)*100)/100) netAmount,
+							round(sum(ceil(sol.actual_price*sol.requested_qty*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END)*100)/100)/count(distinct so.id),2) avt,
+							round(sum(sol.requested_qty)/count(distinct so.id),2) upt
+						from 
+							t_so_sales_order so,
+							t_so_so_line sol,
+							t_ma_tb_shop_info shop
+						where 
+							so.id=sol.so_id 
+							and so.rtn_request_id is null 
+							and sol.total>0
+							and so.delivery_time>=:fromDate
+							and so.delivery_time<:toDate
+							and (so.status=6 or so.status=15 or so.status=12) 
+							and so.shop_id=shop.id
+							and shop.ou_id = :ouid
+						group by to_char(so.delivery_time,'yyyy-mm-dd')
+						order by to_char(so.delivery_time,'yyyy-mm-dd')
+			            ) sales left join 
+			            (select 
+			              	to_char(ra.inbound_time,'yyyy-mm-dd') transDate,
+			              	sum(0-ral.requested_qty) rtnQty,
+							sum(0-round(ceil((ral.actual_price*ral.requested_qty)*100*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END))/100,2)) posSales
+						from
+							t_so_return_request ra,
+							t_so_return_request_line ral,
+							t_ma_tb_shop_info shop,
+							t_so_sales_order rootso,
+							t_so_so_line sol
+						where 
+							ra.so_id=rootso.id 
+							and rootso.shop_id=shop.id 
+							and ral.rr_id=ra.id 
+							and ra.type=1 
+							and ral.so_line_id=sol.id 
+							and (ra.status=5 or ra.status=16 or ra.status=20 or ra.status=17)
+							and ra.inbound_time>=:fromDate
+							and ra.inbound_time<:toDate	
+							and shop.ou_id = :ouid
+              
+		              	group by to_char(ra.inbound_time,'yyyy-mm-dd')) rtn 
+		              on sales.transDate=rtn.transDate 
+		              union all
+		            select 
+				         rtn.transDate,
+                         sales.transNum,
+                         sales.netQty,
+                         sales.netAmount,
+                         sales.avt,
+				         nvl(rtn.posSales,0) rtnAmt,
+				         nvl(rtn.rtnQty,0) rtnQty,
+				         nvl(rtn.posSales,0) acAmt,
+				         nvl(rtn.rtnQty,0) acQty
+				         from 
+				         (select 
+							to_char(so.delivery_time,'yyyy-mm-dd') transDate,
+							count(distinct so.id) transNum,
+							sum(sol.requested_qty) netQty,
+							sum(ceil(sol.actual_price*sol.requested_qty*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END)*100)/100) netAmount,
+							round(sum(ceil(sol.actual_price*sol.requested_qty*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END)*100)/100)/count(distinct so.id),2) avt,
+							round(sum(sol.requested_qty)/count(distinct so.id),2) upt
+						from 
+							t_so_sales_order so,
+							t_so_so_line sol,
+							t_ma_tb_shop_info shop
+						where 
+							so.id=sol.so_id 
+							and so.rtn_request_id is null 
+							and sol.total>0
+							and so.delivery_time>=:fromDate
+							and so.delivery_time<:toDate
+							and (so.status=6 or so.status=15 or so.status=12) 
+							and so.shop_id=shop.id
+							and shop.ou_id = :ouid
+						group by to_char(so.delivery_time,'yyyy-mm-dd')
+						order by to_char(so.delivery_time,'yyyy-mm-dd')
+			            ) sales right join 
+			            (select 
+			              	to_char(ra.inbound_time,'yyyy-mm-dd') transDate,
+			              	sum(0-ral.requested_qty) rtnQty,
+							sum(0-round(ceil((ral.actual_price*ral.requested_qty)*100*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END))/100,2)) posSales
+						from
+							t_so_return_request ra,
+							t_so_return_request_line ral,
+							t_ma_tb_shop_info shop,
+							t_so_sales_order rootso,
+							t_so_so_line sol
+						where 
+							ra.so_id=rootso.id 
+							and rootso.shop_id=shop.id 
+							and ral.rr_id=ra.id 
+							and ra.type=1 
+							and ral.so_line_id=sol.id 
+							and (ra.status=5 or ra.status=16 or ra.status=20 or ra.status=17)
+							and ra.inbound_time>=:fromDate
+							and ra.inbound_time<:toDate	
+							and shop.ou_id = :ouid
+		              	group by to_char(ra.inbound_time,'yyyy-mm-dd')) rtn 
+		              on sales.transDate=rtn.transDate where sales.transDate is null
+		         ) a order by a.transDate 
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SalesDataDetailCommand.findSalesDataDetail" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+				 	 select 
+						  so.delivery_time transDate,
+						  so.tb_payment_time payTime,
+						  substr(so.code,-10) transCode,
+						  so.outer_order_code pfTransNum,
+						  sku.supplier_sku_code productCode,
+						  sku.name productName,
+						  lvssku.productDesc productDesc,
+			              lvssku.productCate productCate,
+			              lvssku.productLine productLine,
+			              lvssku.consumerGroup consumerGroup,
+						  sref.key_properties keyProperties,
+						  sol.vmi_discount_code linePromotionCode,
+						  so.vmi_promotion_code promotionCode,
+						  sol.sku_list_price mdPrice,
+						  sol.unit_price unitPrice,
+						  sol.discount_fee discountFee,
+						  sol.requested_qty quantity,
+						  sol.actual_price actualPrice,
+						  so.actual_transfer_fee transferFee,
+						  wh.name as warehouseName,
+						  so.shop_id as shopId
+					from 
+						t_so_sales_order so
+							left join  t_wh_warehouse wh on so.warehouse_id = wh.id,
+						t_ma_tb_shop_info shop,
+						t_so_so_line sol,
+						t_ma_sku_reference sref,
+						t_ma_sku sku 
+						left join 
+			            (select product_code productCode,max(PRODUCT_DESCRIPTION) productDesc,max(PRODUCT_CATEGORY) productCate,max(PRODUCT_LINE) productLine,max(CONSUMER_GROUP) consumerGroup
+			             from t_lvs_sku_info group by product_code
+			             ) lvssku on replace(sku.supplier_sku_code,'-','')||'0'=lvssku.productCode
+					where 
+					  so.id=sol.so_id 
+					  and sku.id=sref.sku_id 
+					  and sol.jmsku_code=sref.jmsku_code 
+					  and so.rtn_request_id is null 
+					  and so.delivery_time>=:fromDate
+					  and so.delivery_time<:toDate
+					  and (so.status=6 or so.status=15 or so.status=12) 
+					  and so.shop_id= shop.id
+					  and shop.ou_id = :ouid
+					  #if ($productCode)
+					      and sku.supplier_sku_code like '$productCode%'
+					  #end
+					  #if ($promotion)
+					      and (sol.vmi_discount_code=:promotion or so.vmi_promotion_code=:promotion) 
+					  #end 
+					  #if ($productCate)
+					      and lvssku.productCate=:productCate 
+					  #end
+					  #if ($productLine)
+					      and lvssku.productLine=:productLine
+					  #end
+					  #if ($consumerGroup)
+					      and lvssku.consumerGroup=:consumerGroup 
+					  #end
+					order by so.code
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="Inventory.findLeivsCurrentInv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select 
+							     info.*,
+							     sku.name as skuName,
+							     sku.jm_code as jmCode,
+							     sku.code as skuCode,
+							     sku.supplier_code as supplierSkuCode,
+                   sku.bar_code as barCode,
+                   sku.key_properties as keyProperties,
+                   inv.qty as quantity,
+                   cost.list_price as skuCost,
+                   wname as warehouseName
+              from(select jmsku_code,pro_id,supplier_code,sum(qty) qty,wname
+              from (select inv.jmsku_code,
+                         inv.sku_id as pro_id,
+                         sku.supplier_code as supplier_code,
+                         sum(inv.onhand_qty) as qty,
+                         wh.name as wname
+                  from t_wh_inventory inv,
+                       t_ma_sku pro,
+                       t_bi_inv_sku sku,
+                       T_WH_STOCK_LOCATION loc,
+                       T_WH_STORAGE_DIVISION d,
+                       t_wh_warehouse wh
+                   where inv.sku_id = pro.id
+                                and inv.jmsku_code = sku.code
+                                and loc.id = inv.location_id
+                                and d.id = loc.division_id
+                                and d.warehouse_id = wh.id
+                                and sku.brand_id = 821
+                                and wh.id=380 
+                                and inv.shop_id=(
+                                    select sh.id from t_ma_tb_shop_info sh,t_au_operation_unit au
+                                    where sh.ou_id = au.id
+                                          and au.id = :shopid
+                                )
+                          group by inv.jmsku_code,inv.sku_id,sku.supplier_code,wh.name
+                          union 
+                          select sku.code as jmsku_code,
+                                 pro.id as pro_id,
+                                 sku.supplier_code as supplier_code,
+                                 sum(inv.quantity) qty,
+                                 wh.name as wname
+                          from t_wh_sku_inventory inv,
+                               t_au_operation_unit wh,
+                               t_bi_inv_sku sku,
+                               t_ma_sku pro
+                          where inv.sku_id = sku.id
+                                and wh.id = inv.OU_ID
+                                and sku.product_id = pro.id
+                                and pro.brand_id = 821 
+                                and inv.inv_owner=(
+                                    select sh.inner_shop_code from t_ma_tb_shop_info sh,t_au_operation_unit au
+                                    where sh.ou_id = au.id
+                                          and au.id = :shopid
+                                )
+                          group by sku.code,pro.id,sku.supplier_code,wh.name
+                        ) inv
+                        group by jmsku_code,pro_id,supplier_code,wname
+              )inv,
+              (select PRODUCT_CODE,
+                    min(PRODUCT_DESCRIPTION) as PRODUCT_DESCRIPTION,
+                    min(PRODUCT_CATEGORY) as PRODUCT_CATEGORY,
+                    min(PRODUCT_LINE) as PRODUCT_LINE,
+                    min(CONSUMER_GROUP) as CONSUMER_GROUP
+                  from t_lvs_sku_info info 
+                  group by PRODUCT_CODE) info,
+                  t_bi_inv_sku sku,
+                  t_ma_sku pro,
+                  t_ma_sku_cost cost
+              where 
+                  replace(inv.supplier_code,'-','')||'0' = info.PRODUCT_CODE(+)
+                  and inv.jmsku_code = sku.code
+                  and inv.pro_id = pro.id
+                  and pro.id = cost.id(+)
+                  and inv.qty > 0
+                #if($supplierSkuCode)
+                  and sku.supplier_code like '$supplierSkuCode%'
+                #end
+                #if($productCategory)
+                  and info.PRODUCT_CATEGORY = :productCategory
+                #end
+                #if($productLine)
+                  and info.PRODUCT_LINE = :productLine
+                #end
+                #if($consumerGroup)
+                  and info.CONSUMER_GROUP = :consumerGroup
+                #end
+					]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="Inventory.findSalesReportInvnentory" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select info.*,
+						       sku.name as skuName,
+						       sku.jm_code as jmCode,
+						       sku.code as skuCode,
+						       sku.supplier_code as supplierSkuCode,
+						       sku.bar_code as barCode,
+						       sku.key_properties as keyProperties,
+						       inv.quantity as quantity,
+						       cost.list_price as skuCost
+						from (select sku_id,sum(quantity) as quantity
+							 from (
+							 	select ss.sku_id,ss.quantity
+							    from t_wh_sku_inventory_snapshot ss,t_ma_tb_shop_info shop
+							    where ss.snapshot_time = (select max(snapshot_time) from t_wh_sku_inventory_snapshot 
+							                             where snapshot_time < :date)
+									and shop.inner_shop_code = ss.owner
+									and shop.ou_id = :ouid
+							    union all
+							    select lg.sku_id,sum(case when DIRECTION=1 then lg.quantity when lg.DIRECTION=2 then lg.quantity*(-1) end) as quantity
+							    from T_WH_ST_LOG lg,t_ma_tb_shop_info shop
+							    where lg.tran_time >= nvl((select max(snapshot_time) from  t_wh_sku_inventory_snapshot where snapshot_time < :date), to_date('19000101','yyyyMMdd'))
+							        and lg.tran_time < :date
+									and shop.inner_shop_code = lg.owner
+									and shop.ou_id = :ouid
+							    group by lg.sku_id
+							) tp 
+							group by tp.sku_id
+						) inv,
+							t_bi_inv_sku sku,
+							t_ma_sku pro,
+							t_ma_sku_cost cost,
+							(select PRODUCT_CODE,
+								min(PRODUCT_DESCRIPTION) as PRODUCT_DESCRIPTION,
+								min(PRODUCT_CATEGORY) as PRODUCT_CATEGORY,
+								min(PRODUCT_LINE) as PRODUCT_LINE,
+								min(CONSUMER_GROUP) as CONSUMER_GROUP
+							from t_lvs_sku_info info 
+							group by PRODUCT_CODE) info
+					  where inv.sku_id = sku.id
+					  		and sku.product_id = pro.id
+					  		and pro.id = cost.id(+)
+					  		and replace(sku.supplier_code,'-','')||'0' = info.PRODUCT_CODE(+)
+					  		#if($supplierSkuCode)
+					  			and sku.supplier_code like '$supplierSkuCode%'
+					  		#end
+					  		#if($productCategory)
+					  			and info.PRODUCT_CATEGORY = :productCategory
+					  		#end
+					  		#if($productLine)
+					  			and info.PRODUCT_LINE = :productLine
+					  		#end
+					  		#if($consumerGroup)
+					  			and info.CONSUMER_GROUP = :consumerGroup
+					  		#end
+					]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="Sku.findLvsSkuInfoByProductCategory" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[					
+					select distinct (i.product_category) as product_category from t_lvs_sku_info i
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="Sku.findLvsSkuInfoByProductLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[					
+					select distinct (i.PRODUCT_LINE) as PRODUCT_LINE from t_lvs_sku_info i
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="CoachProductData.findBarCodeByStyle" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[					
+					select distinct t.upccode from t_coach_product_data t where t.style= :styleNo and t.upccode not like '%*%'
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="Sku.findLvsSkuInfoByConsumerGroup" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[					
+					select distinct (i.CONSUMER_GROUP) as CONSUMER_GROUP from t_lvs_sku_info i
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="TransactionType.findNameByShop" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[					
+					select distinct tt.name
+					from t_wh_warehouse_shop_ref r,
+					     t_ma_tb_shop_info shop,
+					     t_au_operation_unit wh,
+					     t_au_operation_unit y,
+					     t_wh_transaction_type tt
+					where r.shop_id = shop.id
+						  and shop.ou_id = :ouid
+					      and r.wh_ou_id = wh.id
+					      and y.id = wh.parent_ou_id
+					      and (tt.ou_id = y.id or tt.is_system = 1)
+					      and tt.is_available = 1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SalesRaDataCommand.findRaData" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[					
+					select 
+						tmp.* from 
+						(
+						select 
+							ra.inbound_time as approveTime,
+							decode(ra.type,1,'退货','换货入') as raType,
+							decode(ra.type,1,replace(ra.code,'R','800'),replace(ra.code,'E','900')) as  raCode,
+							sol.sku_list_price mdPrice,
+							sol.actual_price actualPrice,
+							substr(rootso.code,3) transCode,
+							nvl(substr(rootso.outer_order_code,1,instr(rootso.outer_order_code,'_')-1),rootso.outer_order_code) pfTranNum,
+							sku.supplier_sku_code productCode,
+							sku.name as skuName,
+							lvssku.productDesc productDesc,
+							lvssku.productCate productCate,
+							lvssku.productLine productLine,
+							lvssku.consumerGroup consumerGroup,
+							sref.key_properties keyProperties,
+							0-ral.requested_qty quantity,
+							0-round(ceil((ral.actual_price*ral.requested_qty)*100*
+							(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END)
+							)/100,2) posSales,
+							0-round(ceil((ral.total_actual)*100*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END))/100,2) refundAmt
+						from
+							t_so_return_request ra,
+							t_so_return_request_line ral,
+							t_ma_tb_shop_info shop,
+							t_so_sales_order rootso,
+							t_so_so_line sol,
+							t_ma_sku_reference sref,
+							t_ma_sku sku 
+							left join 
+							(select product_code productCode,max(PRODUCT_DESCRIPTION) productDesc,max(PRODUCT_CATEGORY) productCate,max(PRODUCT_LINE) productLine,max(CONSUMER_GROUP) consumerGroup
+							        from t_lvs_sku_info group by product_code
+							        ) lvssku on replace(sku.supplier_sku_code,'-','')||'0'=lvssku.productCode
+						where 
+							ra.so_id=rootso.id 
+							and rootso.shop_id=shop.id 
+							and ral.rr_id=ra.id 
+							and ral.so_line_id=sol.id 
+							and ral.jmsku_code=sref.jmsku_code 
+							and sref.sku_id=sku.id 
+							and (ra.status=5 or ra.status=16 or ra.status=20 or ra.status=17)
+							and ra.inbound_time>=:fromDate
+							and ra.inbound_time<:toDate
+							and shop.ou_id = :ouid
+							#if($productCode)
+								and sku.supplier_sku_code like '$productCode%'
+							#end
+							#if($productCate)
+								and lvssku.productCate = :productCate
+							#end
+							#if($productLine)
+								and lvssku.productLine = :productLine
+							#end
+							#if($consumerGroup)
+								and lvssku.consumerGroup = :consumerGroup
+							#end
+						union 
+						select 
+							ra.inbound_time as approveTime,
+							'换货出' as raType,
+							replace(ra.code,'E','900') as raCode,
+							sol.sku_list_price mdPrice,
+							sol.actual_price actualPrice,
+							substr(rootso.code,3) transCode,
+							nvl(substr(rootso.outer_order_code,1,instr(rootso.outer_order_code,'_')-1),rootso.outer_order_code) pfTranNum,
+							sku.supplier_sku_code productCode,
+							sku.name as skuName,
+							lvssku.productDesc productDesc,
+							lvssku.productCate productCate,
+							lvssku.productLine productLine,
+							lvssku.consumerGroup consumerGroup,
+							sref.key_properties keyProperties,
+							ral.requested_qty quantity,
+							round(ceil((ral.actual_price*ral.requested_qty)*100*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END))/100,2) posSales,
+							0-round(ceil((ral.total_actual)*100*(CASE WHEN shop.id=601 THEN 0.995  ELSE 1 END))/100,2)  
+						from 
+							t_so_return_request ra,
+							t_so_return_request_line ral,
+							t_ma_tb_shop_info shop,
+							t_so_sales_order rootso,
+							t_so_so_line sol,
+							t_ma_sku_reference sref,
+							t_ma_sku sku 
+							left join 
+							(select product_code productCode,max(PRODUCT_DESCRIPTION) productDesc,max(PRODUCT_CATEGORY) productCate,max(PRODUCT_LINE) productLine,max(CONSUMER_GROUP) consumerGroup
+							        from t_lvs_sku_info group by product_code
+							        ) lvssku on replace(sku.supplier_sku_code,'-','')||'0'=lvssku.productCode
+						where 
+							ra.so_id=rootso.id 
+							and rootso.shop_id=shop.id 
+							and ral.rr_id=ra.id 
+							and ral.so_line_id=sol.id 
+							and ral.chg_jmsku_code=sref.jmsku_code 
+							and sref.sku_id=sku.id 
+							and ra.type=2
+							and (ra.status=5 or ra.status=16 or ra.status=20 or ra.status=17)
+							and ra.inbound_time>=:fromDate
+							and ra.inbound_time<:toDate
+							and shop.ou_id=:ouid
+							#if($productCode)
+								and sku.supplier_sku_code like '$productCode%'
+							#end
+							#if($productCate)
+								and lvssku.productCate = :productCate
+							#end
+							#if($productLine)
+								and lvssku.productLine = :productLine
+							#end
+							#if($consumerGroup)
+								and lvssku.consumerGroup = :consumerGroup
+							#end
+						) tmp 
+						order by tmp.approveTime,tmp.raCode,tmp.raType desc
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="StockTransTxLog.findLvsStockTransTxLogList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+				select 
+				   case when lg.DIRECTION = 1 then lg.quantity else 0 end as inQty,
+                   case when lg.DIRECTION = 2 then lg.quantity else 0 end as outQty,
+                   lg.id as id, 
+                   lg.owner as owner,
+                   lg.TRAN_TIME as transactionTime,
+                   ic.code as inventoryCheckCode,
+                   tt.name as transactionTypeName,
+                   dt.code as districtCode,
+                   ln.code as locationCode,
+                   nvl(sta.code,ic.code) as staCode,
+                   sta.operator as operator,
+                   sku.jm_code as jmCode,
+                   sku.SUPPLIER_CODE as supplierSkuCode,
+                   sku.code as skuCode,
+                   sku.name as skuName,
+                   sku.bar_code as barCode,
+                   invStatus.name as invStatus,
+                   sku.key_properties as keyProperties,
+                   info.*,
+                   wh.name as warehouseName
+                from T_WH_ST_LOG lg
+                 left join t_wh_inv_check ic on lg.inventory_check_id = ic.id
+                 left join T_WH_TRANSACTION_TYPE tt on  lg.transtype_id = tt.id
+                 left join T_WH_DISTRICT dt on lg.district_id = dt.id
+                 left join T_WH_LOCATION ln on lg.location_id = ln.id
+                 left join t_bi_inv_sku sku on lg.sku_id = sku.id
+                 left join T_WH_INVENTORY_STATUS invStatus on lg.INVS_TATUS_ID = invStatus.id
+	             left join (select stv.id as id,sta.code as code, u.USER_NAME as operator
+		                  from t_wh_stv stv 
+		                  join t_wh_sta sta on stv.sta_id=sta.id
+		                  left join T_AU_USER u on stv.operator_id=u.id  
+			            ) sta on lg.stv_id = sta.id 
+			     left join (select PRODUCT_CODE,min(PRODUCT_DESCRIPTION) as PRODUCT_DESCRIPTION,
+								min(PRODUCT_CATEGORY) as PRODUCT_CATEGORY,
+								min(PRODUCT_LINE) as PRODUCT_LINE,
+								min(CONSUMER_GROUP) as CONSUMER_GROUP
+							from t_lvs_sku_info info 
+							group by PRODUCT_CODE
+						) info on replace(sku.supplier_code,'-','')||'0' = info.PRODUCT_CODE
+				 ,t_ma_tb_shop_info shop,
+				  t_au_operation_unit wh
+			where lg.owner = shop.inner_shop_code
+				and wh.id = lg.wh_id
+				and tt.code != 'TRANSIT_INNER_IN'
+				and tt.code != 'TRANSIT_INNER_OUT'
+				and shop.ou_id = :ouid
+				#if($stockStartTime)
+					and lg.tran_time >= :stockStartTime
+				#end
+				#if($stockEndTime)
+					and lg.tran_time < :stockEndTime
+				#end
+				#if($transactionTypeName)
+				   and tt.name = :transactionTypeName 
+				#end
+				#if($invStatusId)
+					and invStatus.id = :invStatus
+				#end
+				#if($supplierSkuCode)
+		  			and sku.supplier_code like '$supplierSkuCode%'
+		  		#end
+		  		#if($productCategory)
+		  			and info.PRODUCT_CATEGORY = :productCategory
+		  		#end
+		  		#if($productLine)
+		  			and info.PRODUCT_LINE = :productLine
+		  		#end
+		  		#if($consumerGroup)
+		  			and info.CONSUMER_GROUP = :consumerGroup
+		  		#end
+		  		
+		  	union all
+		  		
+			select lg.pos_change_qty as inQty,
+			       lg.neg_change_qty as outQty,
+			       lg.id as id,
+			       '' owner,
+			       lg.op_time as transactionTime,
+			       '' as inventoryCheckCode,
+			       t.name as transactionTypeName,
+			       '' as districtCode,
+			       loc.code as locationCode,
+			       lg.ref_slip_code as staCode,
+			       '' as operator,
+			       sku.jm_code as jmCode,
+			       sku.SUPPLIER_CODE as supplierSkuCode,
+			       sku.code as skuCode,
+			       sku.name as skuName,
+			       sku.bar_code as barCode,
+			       sts.name as invStatus,
+			       sku.key_properties as keyProperties,
+			       info.*,
+			       w.name as warehouseName
+			from t_wh_operation_type t,T_WH_STOCK_LOCATION loc,T_WH_INV_STATUS sts,
+			     t_wh_operation_bill bl,t_wh_warehouse w,t_ma_tb_shop_info shop,
+			     t_wh_inventory_op_log lg
+			        left join t_bi_inv_sku sku on lg.jmsku_code = sku.code
+			        left join (select PRODUCT_CODE,min(PRODUCT_DESCRIPTION) as PRODUCT_DESCRIPTION,
+			                        min(PRODUCT_CATEGORY) as PRODUCT_CATEGORY,
+			                        min(PRODUCT_LINE) as PRODUCT_LINE,
+			                        min(CONSUMER_GROUP) as CONSUMER_GROUP
+			                      from t_lvs_sku_info info 
+			                      group by PRODUCT_CODE
+			                    ) info on replace(sku.supplier_code,'-','')||'0' = info.PRODUCT_CODE
+			where lg.operation_type_id = t.id 
+			      and shop.id = bl.shop_id
+			      and loc.id = lg.location_id
+			      and lg.inv_status_id = sts.id
+			      and bl.id = lg.ref_slip_id
+			      and bl.warehouse_id = w.id
+				  and shop.ou_id = :ouid
+				#if($stockStartTime)
+					and lg.op_time >= :stockStartTime
+				#end
+				#if($stockEndTime)
+					and lg.op_time < :stockEndTime
+				#end
+				#if($supplierSkuCode)
+		  			and sku.supplier_code like '$supplierSkuCode%'
+		  		#end
+		  		#if($productCategory)
+		  			and info.PRODUCT_CATEGORY = :productCategory
+		  		#end
+		  		#if($productLine)
+		  			and info.PRODUCT_LINE = :productLine
+		  		#end
+		  		#if($consumerGroup)
+		  			and info.CONSUMER_GROUP = :consumerGroup
+		  		#end
+			      
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+<bean id="OrderStatusCountCommand.findOrderStatusByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+select au.name whName,
+       count(1) totalQty,
+       sum(case when sta.status in (15,17) then 1 else 0 end) statusCaneclQty,
+       sum(case when sta.status = 1 then 1 else 0 end) statusNewQty,
+       sum(case when sta.status = 2 then 1 else 0 end) statusOcpQty,
+       sum(case when sta.status = 2 and sta.picking_list_id is not null then 1 else 0 end) statusBatchQty,
+       sum(case when sta.status = 3 then 1 else 0 end) statusCheckedQty,       
+       sum(case when sta.status = 4 then 1 else 0 end) statusOutboundQty,       
+       sum(case when sta.status = 10 then 1 else 0 end) statusFinishedQty 
+from t_wh_sta sta,t_au_operation_unit au 
+where sta.create_time >= to_date(:startdate,'yyyyMMddhh24miss')
+	  and sta.create_time < to_date(:enddate,'yyyyMMddhh24miss')
+      and sta.main_wh_id = au.id
+#if($ouid)
+ 	  and sta.main_wh_id = :ouid
+#end
+      and sta.type = 21
+group by au.name
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+<bean id="OrderStatusCountCommand.findTransOrderStatusByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+select au.name whName,nvl(d.lpcode,'空') lpcode,
+       count(1) totalQty,
+       sum(case when sta.status in (15,17) then 1 else 0 end) statusCaneclQty,
+       sum(case when sta.status = 1 then 1 else 0 end) statusNewQty,
+       sum(case when sta.status = 2 then 1 else 0 end) statusOcpQty,
+       sum(case when sta.status = 2 and sta.picking_list_id is not null then 1 else 0 end) statusBatchQty,
+       sum(case when sta.status = 3 then 1 else 0 end) statusCheckedQty,       
+       sum(case when sta.status = 4 then 1 else 0 end) statusOutboundQty,       
+       sum(case when sta.status = 10 then 1 else 0 end) statusFinishedQty 
+from t_wh_sta sta,t_au_operation_unit au ,t_wh_sta_delivery_info d
+where sta.create_time >= to_date(:startdate,'yyyyMMddhh24miss')
+	  and sta.create_time < to_date(:enddate,'yyyyMMddhh24miss')
+      and sta.main_wh_id = au.id
+      and sta.id = d.id
+#if($ouid)
+ 	  and sta.main_wh_id = :ouid
+#end
+      and sta.type = 21
+group by au.name,d.lpcode
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>	
+	
+<bean id="StockTransTxLog.findCountLvsStockTransTxLogList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+              select count(1) from (
+				select 
+				   1
+                from T_WH_ST_LOG lg
+                 left join t_wh_inv_check ic on lg.inventory_check_id = ic.id
+                 left join T_WH_TRANSACTION_TYPE tt on  lg.transtype_id = tt.id
+                 left join T_WH_DISTRICT dt on lg.district_id = dt.id
+                 left join T_WH_LOCATION ln on lg.location_id = ln.id
+                 left join t_bi_inv_sku sku on lg.sku_id = sku.id
+                 left join T_WH_INVENTORY_STATUS invStatus on lg.INVS_TATUS_ID = invStatus.id
+	             left join (select stv.id as id,sta.code as code, u.USER_NAME as operator
+		                  from t_wh_stv stv 
+		                  join t_wh_sta sta on stv.sta_id=sta.id
+		                  left join T_AU_USER u on stv.operator_id=u.id  
+			            ) sta on lg.stv_id = sta.id 
+			     left join (select PRODUCT_CODE,min(PRODUCT_DESCRIPTION) as PRODUCT_DESCRIPTION,
+								min(PRODUCT_CATEGORY) as PRODUCT_CATEGORY,
+								min(PRODUCT_LINE) as PRODUCT_LINE,
+								min(CONSUMER_GROUP) as CONSUMER_GROUP
+							from t_lvs_sku_info info 
+							group by PRODUCT_CODE
+						) info on replace(sku.supplier_code,'-','')||'0' = info.PRODUCT_CODE
+				 ,t_ma_tb_shop_info shop,
+				  t_au_operation_unit wh
+			where lg.owner = shop.inner_shop_code
+				and wh.id = lg.wh_id
+				and tt.code != 'TRANSIT_INNER_IN'
+				and tt.code != 'TRANSIT_INNER_OUT'
+				and shop.ou_id = :ouid
+				#if($stockStartTime)
+					and lg.tran_time >= :stockStartTime
+				#end
+				#if($stockEndTime)
+					and lg.tran_time < :stockEndTime
+				#end
+				#if($transactionTypeName)
+				   and tt.name = :transactionTypeName 
+				#end
+				#if($invStatusId)
+					and invStatus.id = :invStatus
+				#end
+				#if($supplierSkuCode)
+		  			and sku.supplier_code like '$supplierSkuCode%'
+		  		#end
+		  		#if($productCategory)
+		  			and info.PRODUCT_CATEGORY = :productCategory
+		  		#end
+		  		#if($productLine)
+		  			and info.PRODUCT_LINE = :productLine
+		  		#end
+		  		#if($consumerGroup)
+		  			and info.CONSUMER_GROUP = :consumerGroup
+		  		#end
+		  		
+		  	union all
+		  		
+			select 1
+			from t_wh_operation_type t,T_WH_STOCK_LOCATION loc,T_WH_INV_STATUS sts,
+			     t_wh_operation_bill bl,t_wh_warehouse w,t_ma_tb_shop_info shop,
+			     t_wh_inventory_op_log lg
+			        left join t_bi_inv_sku sku on lg.jmsku_code = sku.code
+			        left join (select PRODUCT_CODE,min(PRODUCT_DESCRIPTION) as PRODUCT_DESCRIPTION,
+			                        min(PRODUCT_CATEGORY) as PRODUCT_CATEGORY,
+			                        min(PRODUCT_LINE) as PRODUCT_LINE,
+			                        min(CONSUMER_GROUP) as CONSUMER_GROUP
+			                      from t_lvs_sku_info info 
+			                      group by PRODUCT_CODE
+			                    ) info on replace(sku.supplier_code,'-','')||'0' = info.PRODUCT_CODE
+			where lg.operation_type_id = t.id 
+			      and shop.id = bl.shop_id
+			      and loc.id = lg.location_id
+			      and lg.inv_status_id = sts.id
+			      and bl.id = lg.ref_slip_id
+			      and bl.warehouse_id = w.id
+				  and shop.ou_id = :ouid
+				#if($stockStartTime)
+					and lg.op_time >= :stockStartTime
+				#end
+				#if($stockEndTime)
+					and lg.op_time < :stockEndTime
+				#end
+				#if($supplierSkuCode)
+		  			and sku.supplier_code like '$supplierSkuCode%'
+		  		#end
+		  		#if($productCategory)
+		  			and info.PRODUCT_CATEGORY = :productCategory
+		  		#end
+		  		#if($productLine)
+		  			and info.PRODUCT_LINE = :productLine
+		  		#end
+		  		#if($consumerGroup)
+		  			and info.CONSUMER_GROUP = :consumerGroup
+		  		#end
+			      ) tmp
+			]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

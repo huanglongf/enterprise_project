@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="import_entry_main" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="0" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="473"/>
+	<parameter name="subReport" class="java.lang.String" isForPrompting="false"/>
+	<field name="lines" class="java.util.List">
+		<fieldDescription><![CDATA[lines]]></fieldDescription>
+	</field>
+	<field name="index" class="java.lang.Integer">
+		<fieldDescription><![CDATA[index]]></fieldDescription>
+	</field>
+	<field name="staCode" class="java.lang.String"/>
+	<field name="printTime" class="java.lang.String"/>
+	<field name="slipCode2" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="mobile" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="zipcode" class="java.lang.String"/>
+	<field name="logoUrl" class="java.lang.String"/>
+	<field name="trackingNo" class="java.lang.String"/>
+	<field name="weight" class="java.math.BigDecimal"/>
+	<field name="totalPrice" class="java.math.BigDecimal"/>
+	<field name="num" class="java.lang.Integer"/>
+	<field name="unitName" class="java.lang.String"/>
+	<field name="packageCount" class="java.lang.String"/>
+	<variable name="totalCount" class="java.lang.Integer" incrementType="Report" calculation="Sum"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="535" height="43" />
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="18"/>
+				</textElement>
+				<text><![CDATA[Commercial Invoice]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="243">
+			<staticText>
+				<reportElement x="0" y="9" width="92" height="15" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[SELLER : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="23" width="92" height="15" />
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Tax ID/VAT No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="23" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Master Shipment ID :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="37" width="92" height="15" />
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Shipper's Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="37" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<text><![CDATA[Invoice No.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="51" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Print Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="65" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Order No.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="79" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Payment Term :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="79" width="100" height="15" />
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Prepaid]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="93" width="92" height="13" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Phone :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="93" width="150" height="13" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[(852) 2751 4988]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="93" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Term of Sale : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="93" width="100" height="15" />
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[DDP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="107" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Reason for Export :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="107" width="100" height="15" />
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Sale]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="132" width="288" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[SHIP TO :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="146" width="92" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tax ID/ VAT No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="132" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[SHIP FROM : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="146" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Tax ID/ VAT No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="160" width="92" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Receiver's Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="160" width="95" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Contact Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="182" width="92" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Delivery Address :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="227" width="92" height="15" />
+				<text><![CDATA[Phone :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="290" y="227" width="94" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Phone :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="227" width="118" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[(852) 8212-2122]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="402" y="51" width="100" height="15" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{printTime}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="91" y="160" width="150" height="15" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="黑体"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="91" y="182" width="150" height="45" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="黑体"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="91" y="227" width="150" height="15" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telephone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="402" y="65" width="100" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{staCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="402" y="37" width="100" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{staCode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="92" y="37" width="150" height="13" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[NIKE HONG KONG LTD.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="49" width="150" height="13" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[30/F, Exchange Tower,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="61" width="150" height="13" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[33 Wang Chiu Road,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="160" width="118" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[BAOZUN 7F,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="174" width="118" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[36-42 Shan Mei Street,  ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="188" width="118" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Shatin New Territories,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="202" width="118" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Hong Kong S.A.R.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="73" width="150" height="13" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Kowloon Bay,Hong Kong]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="273">
+			<subreport isUsingCache="true">
+				<reportElement x="2" y="5" width="532" height="261" isPrintInFirstWholeBand="true" />
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="214">
+			<staticText>
+				<reportElement x="291" y="110" width="103" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Total Net Weight:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="40" width="103" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Freight:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="13" width="145" height="25" />
+				<text><![CDATA[Additional Coments:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="54" width="103" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Insurance:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="433" y="96" width="25" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unitName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="82" width="103" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Total Invoice Amount:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="397" y="140" width="35" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="507" y="140" width="26" height="15" />
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{packageCount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="397" y="82" width="136" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalPrice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="397" y="96" width="35" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="96" width="103" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Total Quantity:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="458" y="96" width="45" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Currency:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="397" y="26" width="136" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalPrice}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="397" y="68" width="136" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="145" y="140" width="146" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="37" width="145" height="25" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Declaration Statement:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="458" y="126" width="50" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Total # of ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="140" width="145" height="15" />
+				<text><![CDATA[Waybill Number:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="433" y="110" width="20" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[KG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="145" y="96" width="145" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[SF Express]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="433" y="140" width="20" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[KG]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="397" y="110" width="35" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="68" width="103" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Others:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="40" width="136" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="96" width="145" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Carrier:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="140" width="103" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Total Gross Weight:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="458" y="140" width="50" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Packages:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="502" y="96" width="31" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[HKD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="397" y="54" width="136" height="15" />
+				<textElement textAlignment="Right">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[0]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="187" width="560" height="15" />
+				<textElement textAlignment="Left">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[We hereby certify the information on this declaration is true and correct; and the contents of this shipment are as stated above.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="165" width="536" height="15" />
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA["Shipment Contains no Solid Wood Packing Material"]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="26" width="103" height="15" />
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Invoice Line Total:]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

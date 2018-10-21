@@ -1,0 +1,12 @@
+/* Write your styles */
+.msg {
+	height:12px;
+	padding:0px;
+  	margin:0px 0px 2px 0px;
+}
+.msg-font {
+	height:12px;
+	padding:0px;
+  	margin:0px;
+  	font-size:12px;
+}

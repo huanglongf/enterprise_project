@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="nike_shipping_label" language="groovy" pageWidth="283" pageHeight="340" columnWidth="243" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"  >
+	<property name="ireport.zoom" value="2.3579476910000037"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="packList" class="java.lang.String"/>
+	<field name="packSlipNo" class="java.lang.String"/>
+	<field name="divisionCodeTranslation" class="java.lang.String"/>
+	<field name="nfsStoreCode" class="java.lang.String"/>
+	<field name="address1" class="java.lang.String"/>
+	<field name="containerId" class="java.lang.String"/>
+	<field name="packQty" class="java.lang.String"/>
+	<field name="cartonCode" class="java.lang.String"/>
+	<field name="orderDefine" class="java.lang.String"/>
+	<field name="crd" class="java.lang.String"/>
+	<field name="address2" class="java.lang.String"/>
+	<field name="address3" class="java.lang.String"/>
+	<field name="address4" class="java.lang.String"/>
+	<field name="whCode" class="java.lang.String"/>
+	<detail>
+		<band height="300" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement mode="Opaque" x="0" y="0" width="40" height="35" forecolor="#FFFFFF" backcolor="#000000"  />
+				<textElement markup="none">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Plant:1028"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="35" width="36" height="20"  />
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[City:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="54" width="242" height="1"  />
+			</line>
+			<componentElement>
+				<reportElement mode="Opaque" x="0" y="56" width="97" height="13"  />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barHeight="18">
+					<jr:codeExpression><![CDATA[$F{packList}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<staticText>
+				<reportElement x="1" y="69" width="100" height="14"  />
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pack List#(Load#):
+
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="83" width="75" height="14"  />
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pick Ticket No:
+]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="98" width="242" height="1"  />
+			</line>
+			<staticText>
+				<reportElement x="177" y="83" width="22" height="16"  />
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[BU:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="99" width="43" height="14"  />
+				<text><![CDATA[Ship To:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="113" width="36" height="15"  />
+				<text><![CDATA[To:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="131" y="105" width="32" height="14"  />
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{crd}==null?"":"CRD:"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="198" width="242" height="1"  />
+			</line>
+			<rectangle>
+				<reportElement x="10" y="201" width="78" height="30"  />
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="94" y="199" width="56" height="16"  />
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Container ID:
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="94" y="215" width="47" height="16"  />
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Pack Qty:
+]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="1" y="233" width="242" height="29"  />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barHeight="33">
+					<jr:codeExpression><![CDATA[$F{cartonCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<image>
+				<reportElement x="0" y="275" width="79" height="25"  />
+				<imageExpression><![CDATA["print_img/BaoZunLogoNew.jpg"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="40" y="0" width="203" height="54"  />
+				<textElement>
+					<font size="38"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="97" y="56" width="166" height="25"  />
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{packList}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="76" y="82" width="100" height="15"  />
+				<textFieldExpression><![CDATA[$F{packSlipNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="199" y="82" width="44" height="16"  />
+				<textFieldExpression><![CDATA[$F{divisionCodeTranslation}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="44" y="100" width="87" height="16"  />
+				<textFieldExpression><![CDATA[$F{nfsStoreCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1" y="128" width="242" height="69"  />
+				<textFieldExpression><![CDATA[$F{address1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="151" y="199" width="70" height="16"  />
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{containerId}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="140" y="215" width="56" height="16"  />
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{packQty}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="73" y="262" width="100" height="13"  />
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cartonCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="10" y="208" width="78" height="21"  />
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderDefine}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="162" y="105" width="81" height="14"  />
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{crd}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="193" y="215" width="67" height="16"  />
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{whCode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

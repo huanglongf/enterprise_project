@@ -1,0 +1,144 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jms="http://www.springframework.org/schema/jms"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						  http://www.springframework.org/schema/beans/spring-beans-2.0.xsd 
+						  http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms-3.0.xsd
+						  http://activemq.apache.org/schema/core
+						  http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+	
+	<!-- receive guess return_receiving-->
+    <jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+    <jms:listener destination="${bh2wmsGuessReturnReceivingDestination}" ref="guessManager" subscription="guessReturnReceivingmsg" method="customerReturnReceiving" />
+	</jms:listener-container>
+    <!-- receive guess inv-movement msg-->
+    <jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${guessEcomAdjDestination}" ref="guessManager" subscription="GuessEcomAdjDatamsg" method="GuessEcomAdjData" />
+	</jms:listener-container> 
+     <!-- receive guess deliverycon-firmation msg-->
+   <jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+    <jms:listener destination="${bh2wmsGuessDeliveryDestination}" ref="guessManager" subscription="guessCustomerDeliveryMsg" method="customerDeliveryConfirmation" />
+	</jms:listener-container>
+	<!-- Gymboree ship -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsGymboreeShipDestination}" ref="gymboreeTaskManager" subscription="gymboreeshipmsg" method="receiveOutboundMsg" />
+	</jms:listener-container>
+	<!-- Gymboree PerformanceCancel -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsGymboreePerformancecancelDestination}" ref="gymboreeTaskManager" subscription="gymboreeperformancecancelmsg" method="receiveCancelMsg" />
+	</jms:listener-container>
+	<!-- Gymboree PerformanceRetrun -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsGymboreePerformancereturnDestination}" ref="gymboreeTaskManager" subscription="gymboreeperformancereturnmsg" method="receiveRtnInboundMsg" />
+	</jms:listener-container>
+	<!-- Gymboree OtherinoutStock -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsGymboreeOtherinoutstockDestination}" ref="gymboreeTask" subscription="gymboreeotherinoutstockmsg" method="receiveOtherInOut" />
+	</jms:listener-container>
+	<!-- Gymboree Outstock -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsGymboreeOutstockDestination}" ref="gymboreeTask" subscription="gymboreeoutstockmsg" method="rtnOutboundRecieveAndCreate" />
+	</jms:listener-container>
+	<!-- Gymboree Instock -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsGymboreeInoutvouchDestination}" ref="gymboreeTask" subscription="gymboreeinstockmsg" method="createInboundOrderAndExe" />
+	</jms:listener-container>
+	<!-- Gymboree Warehouse -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsGymboreeWarehouseDestination}" ref="gymboreeTaskManager" subscription="gymboreeWarehousemsg" method="receiveGymboreeWarehouseMsg" />
+	</jms:listener-container>
+	
+	<!-- Cache Stock Transfer -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${cacheStockTransferInDestination}" ref="cacheParseDataManager" subscription="cachestocktransfermsg" method="receiveCacheStockTransferInByMq" />
+	</jms:listener-container>
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${gdvOutboundconfirmDestination}" ref="wareHouseManagerProxy" subscription="gdvoutboundconfirmmsg" method="gdvOutboundconfirm" />
+	</jms:listener-container>
+
+	<!-- Godiva Ordercancelcon -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${gdvOrdercancelconfirmDestination}" ref="gdvParseDataManager" subscription="gdvordercancelmsg" method="receiveGodivaOrdercancelByMq" />
+	</jms:listener-container>
+
+	<!-- Godiva InventoryAdjustment -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${gdvInventoryAdjustmentDestination}" ref="wareHouseManagerProxy" subscription="gdvInventoryadjustmentmsg" method="godivaInventoryAdjustment" />
+	</jms:listener-container>
+	<!-- Godiva InventoryMovement -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${gdvInventoryMovementDestination}" ref="wareHouseManagerProxy" subscription="gdvInventoryadjustmentmsg" method="godivaInventoryMovement" />
+	</jms:listener-container>
+
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${conversePriceDestination}" ref="converseVmiReceiveManager" subscription="converseECPriceContrast" method="receiveProductPriceByMq" />
+	</jms:listener-container>
+
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bocbasePriceProductionDestination}" ref="masterDataManager" subscription="bocMsasterDatasmsg" method="receivePriceData" />
+	</jms:listener-container>
+
+	<!-- receive boc bocinvsnapshot msg -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bocinvsnapshotDataDestination}" ref="bocInterfaceManager" subscription="bocMsasterDatasmsg" method="receiveInventorySnapshot" />
+	</jms:listener-container>
+
+	<!-- receive boc OrderoutboundConfirm msg -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bocbaseOrderoutboundConfirmDestination}" ref="bocInterfaceManager" subscription="bocMsasterDatasmsg" method="bocExecuteOrderOutbound" />
+	</jms:listener-container>
+
+	<!-- receive boc ReturnorderInbound msg -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bocbasebaseReturnorderInboundDestination}" ref="bocInterfaceManager" subscription="bocMsasterDatasmsg" method="bocExecuteReturnOrderInbound" />
+	</jms:listener-container>
+	<!-- receive boc bocOrderCancleConfirm msg -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2omsBaseOrcanconationDestination}" ref="masterDataManager" subscription="bocMsasterDatasmsg" method="receiveOrderCancelConfirmation" />
+	</jms:listener-container>
+
+	<!-- receive gdvinvsnapshotData msg -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${gdvinvsnapshotDataDestination}" ref="godivaManagerProxy" subscription="bocMsasterDatasmsg" method="godivaExecuteInventoryChecks" />
+	</jms:listener-container>
+	<!-- receive aeo skuMaster msg <jms:listener-container client-id="${oms2bhAeoSkuProductionId}" concurrency="1" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted"> <jms:listener destination="${oms2bhAeoSkuProductionDestination}" 
+		ref="idsManager" subscription="bocMsasterDatasmsg" method="receiveAEOSkuMasterByMq" /> </jms:listener-container> -->
+	<!-- receive guess skuMaster msg 
+	<jms:listener-container client-id="${bh2omsGuessProductMasterProductionId}" concurrency="1" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2omsGuessProductMasterProductionDestination}" ref="guessManagerProxy" subscription="guessSkuMasterMsg" method="receiveProductMasterByMq" />
+	</jms:listener-container>-->
+	
+	<!-- JD -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsjdwaybilsenqueueDestination}" ref="jdManagerProxy" subscription="jdBillSendMsg" method="receiveBillOrderMq" />
+	</jms:listener-container>
+
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsjdwaybillcodequeueDestination}" ref="jdManagerProxy" subscription="jdBillCodeMsg" method="receiveBillCodeMq" />
+	</jms:listener-container>
+
+	<!-- receive boc inv-movement msg -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${bh2wmsInvMovementDestination}" ref="masterDataManager" subscription="bocInvMovementmsg" method="receiveInventoryMovement" />
+	</jms:listener-container>
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted">
+		<jms:listener destination="${afLfInvInfoDestination}" ref="aFManager" subscription="saveAfLfInvInfomsg" method="saveAfLfInvInfo" />
+	</jms:listener-container>
+	<!-- wx shipments msg -->
+    <jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted"> 
+ 		<jms:listener destination="${bh2wmsCainiaoLogisticsConsignQueueDestination}" ref="threePLManager" subscription="wxshipmentsinfomsg" method="wxShipmentsReturnInfoMsg" /> 
+ 	</jms:listener-container>
+ 	<!-- receive lifeng inventory -->
+	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted"> 
+ 		<jms:listener destination="${hub2wmsUaLfInventoryDestination}" ref="itochuUAManager" subscription="saveUaInventorymsg" method="receiveWhUaInventoryByMq" /> 
+ 	</jms:listener-container>
+ 	<jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted"> 
+ 		<jms:listener destination="${hub2wmslfinventory}" ref="lfManager" subscription="saveLfInventorymsg" method="receiveWhLFInventoryByMq" /> 
+ 	</jms:listener-container>  
+ 	
+ 	<!-- receive guess inventory -->
+	 <jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted"> 
+ 		<jms:listener destination="${bh2wmsGuessInventoryDestination}" ref="guessManager" subscription="saveGuessInventorymsg" method="receiveWhGuessInventoryByMq" /> 
+ 	</jms:listener-container>
+ 	 <jms:listener-container concurrency="1-5" connection-factory="bhJmsFactory" destination-type="queue" acknowledge="transacted"> 
+ 		<jms:listener destination="${bh2wmsGuessInventoryRetailDestination}" ref="guessManager" subscription="saveGuessInventoryRetailmsg" method="receiveWhGuessInventoryRetailByMq" /> 
+ 	</jms:listener-container>
+</beans>

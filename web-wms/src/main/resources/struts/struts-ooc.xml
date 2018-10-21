@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="ooc" extends="root" namespace="/ooc">
+		<action name="initStatusCodePage" class="expressStatusCodeAction" method="initStatusCodePage">
+			<result>/frame/expressRadar/express-status-code.jsp</result>
+		</action>
+		<action name="deleteStatusCode" class="expressStatusCodeAction" method="deleteStatusCode"></action>
+		
+		<action name="saveStatusCode" class="expressStatusCodeAction" method="saveStatusCode"></action>
+		
+		<action name="updateStatusCode" class="expressStatusCodeAction" method="updateStatusCode"></action>
+		
+		
+		<action name="initRadarAreaPage" class="radarAreaAction"
+			method="initRadarAreaPage">
+			<result>/frame/expressRadar/express-city-edit.jsp</result>
+		</action>
+		<action name="initRadarTimeRulePage" class="expressOocRadarAction" method="manager">
+			<result>/frame/expressRadar/express-period.jsp</result>
+		</action>
+		<action name="initRadarWarningReasonPage" class="expressOocRadarAction" method="manager">
+			<result>/frame/expressRadar/express-warning-reason.jsp</result>
+		</action>
+		<action name="initExpressOrderQueryPage" class="expressOrderQueryAction"
+			method="initExpressOrderQueryPage">
+			<result>/frame/expressRadar/express-order-query.jsp</result>
+		</action>
+	</package>
+</struts>

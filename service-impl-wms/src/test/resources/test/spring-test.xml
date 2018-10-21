@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://activemq.apache.org/schema/core
+		http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+	<context:annotation-config />
+	<tx:annotation-driven order="10" />
+	<amq:connectionFactory id="bhJmsFactory" brokerURL="${mq.broker.url}" userName="${mq.username}" password="${mq.password}" />
+
+	<bean id="configBean" class="com.baozun.zkpro.ZookeeperConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/zk.properties</value>
+
+			</list>
+		</property>
+		<!-- 重写zookeeper中的配置 -->
+		<property name="overrideLocaltions">
+			<list>
+				<value>classpath:/ext.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+		<!-- <property name="jdbcUrl" value="jdbc:oracle:thin:@10.88.32.7:1521:scmdev" />
+		<property name="user" value="wms" />
+		<property name="password" value="wms1234" /> -->
+		<property name="jdbcUrl" value="${db.jdbcUrl}" />
+		<property name="user" value="${db.user}" />
+		<property name="password" value="${db.password}" />
+		<property name="minPoolSize" value="${c3p0.minPoolSize}"></property>
+		<property name="maxPoolSize" value="${c3p0.maxPoolSize}"></property>
+		<property name="initialPoolSize" value="${c3p0.initialPoolSize}"></property>
+		<property name="maxIdleTime" value="${c3p0.maxIdleTime}"></property>
+		<property name="acquireIncrement" value="${c3p0.acquireIncrement}"></property>
+		<property name="idleConnectionTestPeriod" value="${c3p0.idleConnectionTestPeriod}"></property>
+		<property name="maxStatements" value="${c3p0.maxStatements}"></property>
+	</bean>
+    
+	<bean id="pageQueryProvider" class="loxia.dao.support.OraclePageQueryProvider" />
+    <bean id="serverRecoverService" class="com.baozun.server.service.ServerRecoverServiceImpl" />
+
+	<bean id="encryptorFactory" class="loxia.support.encryptor.EncryptorFactory">
+		<property name="defaultEncryptor">
+			<value>NULL</value>
+		</property>
+	</bean>
+	<bean id="excelManipulatorFactory" class="loxia.support.excel.ExcelWmsManipulatorFactory">
+		<property name="config">
+			<value>wms-excel-template.xml</value>
+		</property>
+	</bean>
+
+	<bean class="loxia.dao.support.XmlDynamicNamedQueryProvider">
+		<property name="configFileList">
+			<list>
+				<value>classpath*:spring/spring-query/spring-query-*.xml</value>
+				<value>classpath*:spring/spring-query/spring-query-*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="configLocation" class="loxia.orm.hibernate3.ConfigLocation">
+		<property name="packagesToScan">
+			<list>
+				<value>com.jumbo.wms.model</value>
+				<value>com.jumbo.pms.model</value>
+			</list>
+		</property>
+		<property name="mappingLocations">
+			<list>
+				<value>classpath*:spring/spring-orm-query/orm-*.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="initSystemConfig" class="com.jumbo.InitSystemConfig">
+		<constructor-arg>
+			<value>30000</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>180000</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>${excel.rows.limit}</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="httpClient" class="com.jumbo.util.HttpClientUtil" init-method="init">
+		<property name="connectTime" value="${http.connectTime}" />
+		<property name="readTime" value="${http.readTime}" />
+	</bean>
+	
+	<import resource="spring-import-test.xml"/>
+</beans>

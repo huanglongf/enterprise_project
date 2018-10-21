@@ -1,0 +1,720 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.whsOutPlan.dao.PosWhsOutPlanMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject"
+		id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan"
+		id="PosWhsOutPlanMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+		<result column="schedule_date" property="scheduleDate"
+			jdbcType="VARCHAR" />
+		<result column="planned_out" property="plannedOut" jdbcType="INTEGER" />
+		<result column="planned_out_shoe" property="plannedOutShoe"
+			jdbcType="INTEGER" />
+		<result column="planned_out_address" property="plannedOutAddress"
+			jdbcType="INTEGER" />
+		<result column="planned_out_accessory" property="plannedOutAccessory"
+			jdbcType="INTEGER" />
+		<result column="related_task_no" property="relatedTaskNo"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.whsOutPlan.model.PosWhsOutPlanLog"
+		id="PosWhsOutPlanLogMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="task_no" property="taskNo" jdbcType="VARCHAR" />
+		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="amount" property="amount" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.whsOutPlan.model.ViewPosWhsOutPlan"
+		id="ViewPosWhsOutPlanMap">
+		<result column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+		<result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+		<result column="whs_name" property="whsName" jdbcType="VARCHAR" />
+		<result column="schedule_date" property="scheduleDate"
+			jdbcType="VARCHAR" />
+		<result column="planned_out" property="plannedOut" jdbcType="INTEGER" />
+		<result column="planned_out_shoe" property="plannedOutShoe"
+			jdbcType="INTEGER" />
+		<result column="planned_out_address" property="plannedOutAddress"
+			jdbcType="INTEGER" />
+		<result column="planned_out_accessory" property="plannedOutAccessory"
+			jdbcType="INTEGER" />
+		<result column="related_task_no" property="relatedTaskNo"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		whs_code,
+		schedule_date,
+		planned_out,
+		planned_out_shoe,
+		planned_out_address,
+		planned_out_accessory,
+		related_task_no
+	</sql>
+	<sql id="Base_Column_List_Log">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		task_no,
+		file_name,
+		amount,
+		remark
+	</sql>
+	<sql id="ViewPosWhsOutPlan_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		whs_code,
+		whs_name,
+		schedule_date,
+		planned_out,
+		planned_out_shoe,
+		planned_out_address,
+		planned_out_accessory,
+		related_task_no
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			whs_code,
+			schedule_date,
+			planned_out,
+			planned_out_shoe,
+			planned_out_address,
+			planned_out_accessory,
+			related_task_no
+		</trim>
+	</sql>
+	<sql id="Create_Column_List_Log">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			task_no,
+			file_name,
+			amount,
+			remark,
+			schedule_date
+		</trim>
+	</sql>
+	<insert id="createBatchLog" parameterType="java.util.List">
+		INSERT INTO pos_whs_out_plan_log
+		<include refid="Create_Column_List_Log"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy,
+				jdbcType=VARCHAR},
+				false,
+				#{isdisabled},
+				1,
+				#{obj.pwrOrg,
+				jdbcType=VARCHAR},
+				#{obj.taskNo, jdbcType=VARCHAR},
+				#{obj.fileName,
+				jdbcType=VARCHAR},
+				#{obj.amount, jdbcType=INTEGER},
+				#{obj.remark,
+				jdbcType=VARCHAR},
+				#{obj.scheduleDate,
+				jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<insert id="create" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan">
+		INSERT INTO pos_whs_out_plan
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{whsCode,
+			jdbcType=VARCHAR},
+			#{scheduleDate, jdbcType=VARCHAR},
+			#{plannedOut,
+			jdbcType=INTEGER},
+			#{plannedOutShoe, jdbcType=INTEGER},
+			#{plannedOutAddress, jdbcType=INTEGER},
+			#{plannedOutAccessory,
+			jdbcType=INTEGER},
+			#{relatedTaskNo, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan">
+		INSERT INTO pos_whs_out_plan
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy,
+				jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.whsCode, jdbcType=VARCHAR},
+				#{obj.scheduleDate,
+				jdbcType=VARCHAR},
+				#{obj.plannedOut, jdbcType=INTEGER},
+				#{obj.plannedOutShoe, jdbcType=INTEGER},
+				#{obj.plannedOutAddress,
+				jdbcType=INTEGER},
+				#{obj.plannedOutAccessory, jdbcType=INTEGER},
+				#{obj.relatedTaskNo, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan"
+		resultType="java.util.Map">
+		SELECT
+		id,
+		date_format(create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+		create_by,
+		date_format(update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		whs_code,
+		(select
+		whs_name from pos_whs
+		where whs_code=pos_whs_out_plan.whs_code) as
+		whs_name,
+		date_format(schedule_date,'%Y-%m-%d') as schedule_date,
+		planned_out,
+		planned_out_shoe,
+		planned_out_address,
+		planned_out_accessory,
+		related_task_no
+		FROM pos_whs_out_plan
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime!=null">
+				AND create_time = #{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy!=null and createBy!=''">
+				AND create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime!=null">
+				AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy!=null and updateBy!=''">
+				AND update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="isDeleted!=null">
+				AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+			</if>
+			<if test="isDisabled!=null">
+				AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="pwrOrg!=null and pwrOrg!=''">
+				AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+			</if>
+			<if test="whsCode!=null and whsCode!=''">
+				AND whs_code = #{whsCode, jdbcType=VARCHAR}
+			</if>
+			<if test="scheduleDate!=null and scheduleDate!=''">
+				AND schedule_date = #{scheduleDate, jdbcType=VARCHAR}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				AND schedule_date >= #{startDate, jdbcType=VARCHAR}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+	        <![CDATA[
+	            AND schedule_date <= #{endDate, jdbcType=VARCHAR}
+	            ]]>
+			</if>
+			<if test="plannedOut!=null">
+				AND planned_out = #{plannedOut, jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutShoe!=null">
+				AND planned_out_shoe = #{plannedOutShoe,
+				jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutAddress!=null">
+				AND planned_out_address = #{plannedOutAddress,
+				jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutAccessory!=null">
+				AND planned_out_accessory = #{plannedOutAccessory,
+				jdbcType=INTEGER}
+			</if>
+			<if test="relatedTaskNo!=null and relatedTaskNo!=''">
+				AND related_task_no = #{relatedTaskNo, jdbcType=VARCHAR}
+			</if>
+		</trim>
+		order by schedule_date desc,whs_code
+	</select>
+	<select id="retrieveViewPosWhsOutPlan" parameterType="com.lmis.pos.whsOutPlan.model.ViewPosWhsOutPlan"
+		resultMap="ViewPosWhsOutPlanMap">
+		SELECT
+		<include refid="ViewPosWhsOutPlan_Column_List" />
+		FROM view_pos_whs_out_plan
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime!=null">
+				AND create_time = #{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy!=null and createBy!=''">
+				AND create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime!=null">
+				AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy!=null and updateBy!=''">
+				AND update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="isDeleted!=null">
+				AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+			</if>
+			<if test="isDisabled!=null">
+				AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="pwrOrg!=null and pwrOrg!=''">
+				AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+			</if>
+			<if test="whsCode!=null and whsCode!=''">
+				AND whs_code = #{whsCode, jdbcType=VARCHAR}
+			</if>
+			<if test="whsName!=null and whsName!=''">
+				AND whs_name = #{whsName, jdbcType=VARCHAR}
+			</if>
+			<if test="scheduleDate!=null and scheduleDate!=''">
+				AND schedule_date = #{scheduleDate, jdbcType=VARCHAR}
+			</if>
+			<if test="plannedOut!=null">
+				AND planned_out = #{plannedOut, jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutShoe!=null">
+				AND planned_out_shoe = #{plannedOutShoe,
+				jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutAddress!=null">
+				AND planned_out_address = #{plannedOutAddress,
+				jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutAccessory!=null">
+				AND planned_out_accessory = #{plannedOutAccessory,
+				jdbcType=INTEGER}
+			</if>
+			<if test="relatedTaskNo!=null and relatedTaskNo!=''">
+				AND related_task_no = #{relatedTaskNo, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+	<update id="update" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan">
+		UPDATE pos_whs_out_plan
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="isDeleted!=null">
+				is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+			</if>
+			<if test="isDisabled!=null">
+				is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+			</if>
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+			<if test="whsCode!=null and whsCode!=''">
+				whs_code = #{whsCode, jdbcType=VARCHAR},
+			</if>
+			<if test="scheduleDate!=null and scheduleDate!=''">
+				schedule_date = #{scheduleDate, jdbcType=VARCHAR},
+			</if>
+			<if test="plannedOut!=null">
+				planned_out = #{plannedOut, jdbcType=INTEGER},
+			</if>
+			<if test="plannedOutShoe!=null">
+				planned_out_shoe = #{plannedOutShoe, jdbcType=INTEGER},
+			</if>
+			<if test="plannedOutAddress!=null">
+				planned_out_address = #{plannedOutAddress,
+				jdbcType=INTEGER},
+			</if>
+			<if test="plannedOutAccessory!=null">
+				planned_out_accessory = #{plannedOutAccessory,
+				jdbcType=INTEGER},
+			</if>
+			<if test="relatedTaskNo!=null and relatedTaskNo!=''">
+				related_task_no = #{relatedTaskNo, jdbcType=VARCHAR},
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan">
+		UPDATE pos_whs_out_plan
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+			whs_code = #{whsCode, jdbcType=VARCHAR},
+			schedule_date =
+			#{scheduleDate, jdbcType=VARCHAR},
+			planned_out = #{plannedOut,
+			jdbcType=INTEGER},
+			planned_out_shoe = #{plannedOutShoe,
+			jdbcType=INTEGER},
+			planned_out_address = #{plannedOutAddress,
+			jdbcType=INTEGER},
+			planned_out_accessory = #{plannedOutAccessory,
+			jdbcType=INTEGER},
+			related_task_no = #{relatedTaskNo,
+			jdbcType=VARCHAR},
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan">
+		UPDATE pos_whs_out_plan
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			is_deleted = true,
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan">
+		UPDATE pos_whs_out_plan
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+			update_by = #{updateBy, jdbcType=VARCHAR},
+			<if test="isDisabled!=null">
+				is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+			</if>
+			<if test="version!=null">
+				version = version + 1,
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan">
+		DELETE FROM pos_whs_out_plan
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+	<select id="uuid" resultType="String">
+		select UUID()
+	</select>
+	<select id="selectAllocate" resultType="java.util.Map"
+		parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan">
+		select * from pos_whs_allocate where crd=#{scheduleDate}
+		and whs_code=#{whsCode} limit 1;
+	</select>
+
+	<select id="retrieveLog" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlanLog"
+		resultType="java.util.Map">
+		SELECT
+		task_no,
+		sum(amount) as amount,
+		file_name,
+		id,
+		create_by,
+		date_format(create_time,'%Y-%m-%d %H:%i:%s') as create_time
+		FROM
+		pos_whs_out_plan_log
+		where is_disabled=0
+		<if test="startDate!=null and startDate!=''">
+			AND date_format(create_time,'%Y-%m-%d') >= #{startDate,
+			jdbcType=VARCHAR}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+	        <![CDATA[
+	            AND date_format(create_time,'%Y-%m-%d') <= #{endDate, jdbcType=VARCHAR}
+	            ]]>
+		</if>
+		group
+		by task_no order by create_time desc
+	</select>
+
+	<delete id="logicalDeleteLog" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlanLog">
+		delete from
+		pos_whs_out_plan_log where task_no=#{taskNo}
+	</delete>
+
+	<select id="checkPosWhsList" resultType="java.util.Map">
+		select whs_code as
+		code,whs_name as name from pos_whs where is_deleted=0 and
+		is_disabled=0
+	</select>
+	<select id="findSkutypeOutrate" resultType="java.util.Map"
+		parameterType="String">
+		select sku_type as type,outrate from
+		pos_whs_skutype_outrate where
+		whs_code=#{whsCode}
+	</select>
+	<select id="findWhsOutrate" resultType="java.util.Map">
+		SELECT
+		w.whs_code AS code,
+		w.outrate,
+		s.sku_type,
+		s.outrate AS skuOutrateas
+		FROM
+		(SELECT * FROM
+		pos_whs_outrate
+		WHERE
+		batch_id = (
+		SELECT
+		max(batch_id)
+		FROM
+		pos_whs_outrate
+		)
+		) w
+		LEFT JOIN (
+		SELECT
+		*
+		FROM
+		pos_whs_skutype_outrate where batch_id = (
+		SELECT
+		max(batch_id)
+		FROM
+		pos_whs_skutype_outrate
+		)
+		) s ON w.whs_code = s.whs_code
+		LEFT JOIN pos_whs wh ON wh.whs_code = w.whs_code
+		AND w.is_deleted = 0
+		AND w.is_disabled = 0
+		AND s.is_deleted = 0
+		AND s.is_disabled = 0
+		AND wh.is_deleted = 0
+		AND wh.is_disabled = 0
+		AND wh.po_allocate_priority = 1
+
+		ORDER BY
+		wh.po_allocate_priority,
+		w.whs_code
+
+	</select>
+	<select id="retrieveAsMap" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlan"
+		resultType="java.util.Map">
+		SELECT
+		id,
+		date_format(create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+		create_by,
+		date_format(update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		whs_code,
+		(select
+		whs_name from pos_whs
+		where whs_code=pos_whs_out_plan.whs_code) as
+		whs_name,
+		schedule_date,
+		planned_out,
+		planned_out_shoe,
+		planned_out_address,
+		planned_out_accessory,
+		related_task_no
+		FROM
+		pos_whs_out_plan
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="id!=null and id!=''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="createTime!=null">
+				AND create_time = #{createTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="createBy!=null and createBy!=''">
+				AND create_by = #{createBy, jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime!=null">
+				AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateBy!=null and updateBy!=''">
+				AND update_by = #{updateBy, jdbcType=VARCHAR}
+			</if>
+			<if test="isDeleted!=null">
+				AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+			</if>
+			<if test="isDisabled!=null">
+				AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+			</if>
+			<if test="version!=null">
+				AND version = #{version, jdbcType=INTEGER}
+			</if>
+			<if test="pwrOrg!=null and pwrOrg!=''">
+				AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+			</if>
+			<if test="whsCode!=null and whsCode!=''">
+				AND whs_code = #{whsCode, jdbcType=VARCHAR}
+			</if>
+			<if test="scheduleDate!=null and scheduleDate!=''">
+				AND schedule_date = #{scheduleDate, jdbcType=VARCHAR}
+			</if>
+			<if test="startDate!=null and startDate!=''">
+				AND schedule_date >= #{startDate, jdbcType=VARCHAR}
+			</if>
+			<if test="endDate!=null and endDate!=''">
+	        <![CDATA[
+	            AND schedule_date <= #{endDate, jdbcType=VARCHAR}
+	            ]]>
+			</if>
+			<if test="plannedOut!=null">
+				AND planned_out = #{plannedOut, jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutShoe!=null">
+				AND planned_out_shoe = #{plannedOutShoe,
+				jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutAddress!=null">
+				AND planned_out_address = #{plannedOutAddress,
+				jdbcType=INTEGER}
+			</if>
+			<if test="plannedOutAccessory!=null">
+				AND planned_out_accessory = #{plannedOutAccessory,
+				jdbcType=INTEGER}
+			</if>
+			<if test="relatedTaskNo!=null and relatedTaskNo!=''">
+				AND related_task_no = #{relatedTaskNo, jdbcType=VARCHAR}
+			</if>
+		</trim>
+		order by schedule_date desc,whs_code
+	</select>
+
+	<select id="selectPlanBatch" parameterType="String" resultType="java.util.Map">
+		select * from pos_whs_out_plan where schedule_date =#{scheduleDate}
+	</select>
+
+	<delete id="deletePlanBatch">
+		delete from pos_whs_out_plan where schedule_date in (
+		<foreach collection="datelist" item="date" separator=",">
+			#{date}
+		</foreach>
+		)
+	</delete>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xsi:schemaLocation="http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- <context:component-scan base-package="com.jumbo.manager" />
+	<context:annotation-config />
+	<mongo:mongo host="${mongodb.host}" port="${mongodb.port}"></mongo:mongo>
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg ref="mongo" />
+		<constructor-arg name="databaseName" value="${mongodb.databaseName}" />
+	</bean>
+	<mongo:repositories base-package="com.jumbo.mongo.dao" /> -->
+	
+	<!-- 工厂模式 多数据源 -->
+	<context:component-scan base-package="com.jumbo.manager" />
+	<context:annotation-config />
+    <!-- <mongo:mongo id="one" host="${mongodb.host}" port="${mongodb.port}"></mongo:mongo> -->
+	<mongo:mongo id="one" replica-set="${mongodb.newhosts}"  write-concern="SAFE">
+		<mongo:options 
+			connections-per-host="${wms.connections.per.host}"
+			threads-allowed-to-block-for-connection-multiplier="${wms.threads.allowed.multiplier}"
+			 />
+	</mongo:mongo>
+	
+	<mongo:db-factory id="f1" dbname="${mongodb.databaseName}" username="${mongodb.username}" password="${mongodb.password}" mongo-ref="one"/>
+	<mongo:mapping-converter db-factory-ref="f1" base-package="com.jumbo.manager"/>
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg ref="f1"  name="mongoDbFactory"/>
+	</bean>
+	<mongo:repositories base-package="com.jumbo.mongo.dao" mongo-template-ref="mongoTemplate" />
+
+</beans>

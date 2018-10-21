@@ -1,0 +1,122 @@
+<project name="wms.web" basedir="." default="deploy" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+	<property name="resources" value="${basedir}/src/main/resources" />
+	<property name="signed" value="${basedir}/target/signed" />
+	<property name="webCommon" value="${basedir}/src/main/webapp/common" />
+	<property name="jasper.dir" value="${basedir}/src/main/resources/jasperprint" />
+	<path id="maven-ant-tasks.classpath" path="${basedir}/lib/ant/maven-ant-tasks-2.0.10.jar" />
+	<path id="ant-contrib.classpath" path="${basedir}/lib/ant/ant-contrib-1.0b3.jar" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="ant-contrib.classpath" />
+
+	<target name="deploy" depends="compile-jasper">
+		<tstamp>
+		    <format property="systemTime" pattern="yyMMddHHmmss" locale="en"/>
+		</tstamp>
+		<replace file ="${webCommon}/common-include.jsp"  token="VERSION_00000001" value="${systemTime}"/>
+	</target>
+
+	<target name="genselfkey">
+		<delete file="jumbo-scm.key" />
+		<genkey alias="jumboscm" keystore="jumbo-scm.key" storepass="jscm123456" dname="CN=Jumbo-SCM, OU=BaoZun, O=BaoZun, L=Shanghai, ST=Shanghai, C=CN" />
+	</target>
+
+	<target name="jarApplet" depends="genselfkey">
+		<copy todir="${basedir}/target/classes/com/jumbo/util/comm">
+			<fileset file="${resources}/com/jumbo/util/comm/*.properties" />
+		</copy>
+		<delete file="${basedir}/target/jasperreports-3.5.2-applet.jar" />
+		<delete file="${basedir}/target/comapplet.jar" />
+		<delete file="${basedir}/target/opencvapplet.jar" />
+		<delete file="${basedir}/target/opencvapplet_back.jar" />
+		<delete file="${basedir}/target/opencvimgapplet.jar" />
+		<delete file="${basedir}/target/cubiScan.jar" />
+		<delete file="${basedir}/target/jreTestApplet.jar" />
+		<jar jarfile="${basedir}/target/jreTestApplet.jar" basedir="${basedir}/target/classes">
+			<include name="com/jumbo/util/comm/JreTestApplet.class" />
+		</jar>
+		<jar jarfile="${basedir}/target/jasperreports-3.5.2-applet.jar" basedir="${basedir}/target/classes">
+			<include name="com/jumbo/util/comm/JasperPrintApplet*.class" />
+			<include name="com/jumbo/util/comm/messages*.properties" />
+		</jar>
+		<jar jarfile="${basedir}/target/comapplet.jar" basedir="${basedir}/target/classes">
+			<include name="com/jumbo/util/comm/CommSR232Applet.class" />
+			<include name="com/jumbo/util/comm/PosApplet.class" />
+			<include name="com/jumbo/util/comm/StartBackPosUtil.class" />
+		</jar>
+		<jar jarfile="${basedir}/target/opencvapplet.jar" basedir="${basedir}/target/classes">
+			<include name="com/jumbo/util/comm/OpenCvApplet.class" />
+			<include name="com/jumbo/util/comm/OpenCvApplet$TimerAction.class" />
+			<include name="com/jumbo/util/comm/testMessages*.properties" />
+		</jar>
+		<jar jarfile="${basedir}/target/opencvapplet_back.jar" basedir="${basedir}/target/classes">
+			<include name="com/jumbo/util/comm/OpenCvApplet.class" />
+			<include name="com/jumbo/util/comm/OpenCvApplet$TimerAction.class" />
+			<include name="com/jumbo/util/comm/messages*.properties" />
+		</jar>
+		<jar jarfile="${basedir}/target/opencvimgapplet.jar" basedir="${basedir}/target/classes">
+			<include name="com/jumbo/util/comm/OpenCvImgApplet.class" />
+		</jar>
+		<jar jarfile="${basedir}/target/cubiScan.jar" basedir="${basedir}/target/classes">
+			<include name="com/jumbo/util/comm/CubiScanApplet.class" />
+		</jar>
+	</target>
+
+	<target name="signeApplet" depends="jarApplet">
+		<mkdir dir="${signed}" />
+		<delete file="${signed}/jasperreports-3.5.2-applet.jar" />
+		<delete file="${signed}/cubiScan.jar" />
+		<delete file="${signed}/comapplet.jar" />
+		<delete file="${signed}/opencvapplet.jar" />
+		<delete file="${signed}/opencvapplet_back.jar" />
+		<delete file="${signed}/opencvimgapplet.jar" />
+		<delete file="${signed}/jreTestApplet.jar" />
+		<signjar jar="${basedir}/target/jreTestApplet.jar" signedjar="${signed}/jreTestApplet.jar" alias="jumboscm" keystore="jumbo-scm.key" storepass="jscm123456" />
+		<signjar jar="${basedir}/target/comapplet.jar" signedjar="${signed}/comapplet.jar" alias="jumboscm" keystore="jumbo-scm.key" storepass="jscm123456" />
+		<signjar jar="${basedir}/target/jasperreports-3.5.2-applet.jar" signedjar="${signed}/jasperreports-3.5.2-applet.jar" alias="jumboscm" keystore="jumbo-scm.key" storepass="jscm123456" />
+		<signjar jar="${basedir}/target/opencvapplet.jar" signedjar="${signed}/opencvapplet.jar" alias="jumboscm" keystore="jumbo-scm.key" storepass="jscm123456" />
+		<signjar jar="${basedir}/target/opencvapplet_back.jar" signedjar="${signed}/opencvapplet_back.jar" alias="jumboscm" keystore="jumbo-scm.key" storepass="jscm123456" />
+		<signjar jar="${basedir}/target/opencvimgapplet.jar" signedjar="${signed}/opencvimgapplet.jar" alias="jumboscm" keystore="jumbo-scm.key" storepass="jscm123456" />
+		<signjar jar="${basedir}/target/cubiScan.jar" signedjar="${signed}/cubiScan.jar" alias="jumboscm" keystore="jumbo-scm.key" storepass="jscm123456" />
+	</target>
+
+	<target name="compile-jasper">
+		<artifact:dependencies filesetId="project.dep.fileset" useScope="runtime">
+			<pom file="pom.xml" />
+		</artifact:dependencies>
+		<taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask">
+			<classpath>
+				<fileset refid="project.dep.fileset" />
+			</classpath>
+		</taskdef>
+		<delete dir="${jasper.dir}" />
+		<mkdir dir="${jasper.dir}" />
+		<jrc srcdir="${basedir}/printsrc" destdir="${jasper.dir}">
+			<classpath>
+				<fileset refid="project.dep.fileset" />
+			</classpath>
+		</jrc>
+	</target>
+	
+	      
+	<target name="local-test-compile-jasper">
+		<artifact:dependencies filesetId="project.dep.fileset" useScope="runtime">
+			<pom file="pom.xml" />
+		</artifact:dependencies>
+		<taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask">
+			<classpath>
+				<fileset refid="project.dep.fileset" />
+			</classpath>
+		</taskdef>
+		<delete dir="${basedir}/tmpJasperprint" />
+		<mkdir dir="${basedir}/tmpJasperprint" />
+		<jrc srcdir="${basedir}/tmpPrintSrc" destdir="${basedir}/tmpJasperprint">
+			<classpath>
+				<fileset refid="project.dep.fileset" />
+			</classpath>
+		</jrc>
+	</target>
+  
+	      
+
+
+</project>

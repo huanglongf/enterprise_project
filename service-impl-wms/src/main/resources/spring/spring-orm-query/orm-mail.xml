@@ -1,0 +1,20 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+	<named-query name="MailTemplateParamCustomParam.findByTemplateId">
+		<query><![CDATA[select p from MailTemplateParamCustomParam as p where p.mailTemplate.id = :mtid]]></query>
+	</named-query>
+
+	<named-query name="MailTemplateParamAttachParam.findByTemplateId">
+		<query><![CDATA[select p from MailTemplateParamAttachParam as p where p.mailTemplate.id = :mtid]]></query>
+	</named-query>
+
+	<named-query name="MailTemplate.findByCode">
+		<query><![CDATA[select p from MailTemplate as p where p.code = :code]]></query>
+	</named-query>
+	
+	<named-query name="MailTemplate.findTemplateByCode">
+		<query><![CDATA[select p from MailTemplate as p where p.code = :code and p.mailType = 3 and p.isAvailable = 1]]></query>
+	</named-query>
+	
+</entity-mappings>

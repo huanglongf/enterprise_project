@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://activemq.apache.org/schema/core
+		http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+	<context:annotation-config />
+
+	<tx:annotation-driven order="10" />
+
+
+	<bean id="configBean"
+		class="com.baozun.zkpro.ZookeeperConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/zk.properties</value>
+				
+			</list>
+		</property>
+		<!-- 重写zookeeper中的配置 -->
+		<property name="overrideLocaltions">
+			<list>
+				<value>classpath:/ext.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="excelManipulatorFactory" class="loxia.support.excel.ExcelManipulatorFactory">
+		<property name="config">
+			<value>wms-excel-template.xml</value>
+		</property>
+	</bean>
+
+	<import resource="spring-import.xml" />
+
+</beans>

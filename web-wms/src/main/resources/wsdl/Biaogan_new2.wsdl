@@ -1,0 +1,1308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://BML"
+	xmlns:tns="http://BML" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:soap12="http://www.w3.org/2003/05/soap-envelope" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soapenc11="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:soapenc12="http://www.w3.org/2003/05/soap-encoding" xmlns:soap11="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://BML">
+			<xsd:element name="StockQuery">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="StockQueryResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NoticeOfArrivalAssign">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NoticeOfArrivalAssignResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soFeeBack">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soFeeBackResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ansToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ansToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="invoiceFeeBack">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="invoiceFeeBackResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderDetailQueryById">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderDetailQueryByIdResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ansToWmsbyPage">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ansToWmsbyPageResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderDetailQueryToday">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderDetailQueryTodayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NoticeOfArrivalQueryToday">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NoticeOfArrivalQueryTodayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CancelOrderBySoNo">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CancelOrderBySoNoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="billToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="billToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NoticeOfArrivalQueryById">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NoticeOfArrivalQueryByIdResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="invoiceToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="invoiceToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderDetailQueryYesterday">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderDetailQueryYesterdayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderCollectionYesterday">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderCollectionYesterdayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NoticeOfArrivalQueryYesterday">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NoticeOfArrivalQueryYesterdayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soFeeBackCheck">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soFeeBackCheckResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="searchOrderStatus">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="searchOrderStatusResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ShipmentInfoQueryByOrderId">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ShipmentInfoQueryByOrderIdResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="snFeeBack">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="snFeeBackResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AcceptEDIResult">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="AcceptEDIResultResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="cancelOrderRX">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="cancelOrderRXResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CancelAsnRX">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CancelAsnRXResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ShipmentInfoQueryByDate">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ShipmentInfoQueryByDateResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CancelOrderBySku">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in3"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="CancelOrderBySkuResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderCollectionToday">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OrderCollectionTodayResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soToWmsbyPage">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="soToWmsbyPageResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="UrgentOrderBySoNo">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="UrgentOrderBySoNoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="singleSkuToWms">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="singleSkuToWmsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="StockQueryBySku">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="StockQueryBySkuResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="invoiceFromBZ">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in2"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="invoiceFromBZResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="deliveryFeeBack">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="in0"
+							nillable="true" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="in1"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="deliveryFeeBackResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="out"
+							nillable="true" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="invoiceFeeBackResponse">
+		<wsdl:part name="parameters" element="tns:invoiceFeeBackResponse" />
+	</wsdl:message>
+	<wsdl:message name="OrderCollectionYesterdayResponse">
+		<wsdl:part name="parameters" element="tns:OrderCollectionYesterdayResponse" />
+	</wsdl:message>
+	<wsdl:message name="OrderDetailQueryYesterdayRequest">
+		<wsdl:part name="parameters" element="tns:OrderDetailQueryYesterday" />
+	</wsdl:message>
+	<wsdl:message name="snFeeBackResponse">
+		<wsdl:part name="parameters" element="tns:snFeeBackResponse" />
+	</wsdl:message>
+	<wsdl:message name="NoticeOfArrivalAssignRequest">
+		<wsdl:part name="parameters" element="tns:NoticeOfArrivalAssign" />
+	</wsdl:message>
+	<wsdl:message name="invoiceFromBZResponse">
+		<wsdl:part name="parameters" element="tns:invoiceFromBZResponse" />
+	</wsdl:message>
+	<wsdl:message name="NoticeOfArrivalQueryByIdRequest">
+		<wsdl:part name="parameters" element="tns:NoticeOfArrivalQueryById" />
+	</wsdl:message>
+	<wsdl:message name="NoticeOfArrivalQueryYesterdayResponse">
+		<wsdl:part name="parameters" element="tns:NoticeOfArrivalQueryYesterdayResponse" />
+	</wsdl:message>
+	<wsdl:message name="searchOrderStatusRequest">
+		<wsdl:part name="parameters" element="tns:searchOrderStatus" />
+	</wsdl:message>
+	<wsdl:message name="OrderDetailQueryTodayRequest">
+		<wsdl:part name="parameters" element="tns:OrderDetailQueryToday" />
+	</wsdl:message>
+	<wsdl:message name="OrderCollectionTodayRequest">
+		<wsdl:part name="parameters" element="tns:OrderCollectionToday" />
+	</wsdl:message>
+	<wsdl:message name="ShipmentInfoQueryByOrderIdRequest">
+		<wsdl:part name="parameters" element="tns:ShipmentInfoQueryByOrderId" />
+	</wsdl:message>
+	<wsdl:message name="singleSkuToWmsRequest">
+		<wsdl:part name="parameters" element="tns:singleSkuToWms" />
+	</wsdl:message>
+	<wsdl:message name="billToWmsResponse">
+		<wsdl:part name="parameters" element="tns:billToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="deliveryFeeBackResponse">
+		<wsdl:part name="parameters" element="tns:deliveryFeeBackResponse" />
+	</wsdl:message>
+	<wsdl:message name="CancelOrderBySoNoResponse">
+		<wsdl:part name="parameters" element="tns:CancelOrderBySoNoResponse" />
+	</wsdl:message>
+	<wsdl:message name="NoticeOfArrivalQueryTodayRequest">
+		<wsdl:part name="parameters" element="tns:NoticeOfArrivalQueryToday" />
+	</wsdl:message>
+	<wsdl:message name="AcceptEDIResultResponse">
+		<wsdl:part name="parameters" element="tns:AcceptEDIResultResponse" />
+	</wsdl:message>
+	<wsdl:message name="ansToWmsbyPageResponse">
+		<wsdl:part name="parameters" element="tns:ansToWmsbyPageResponse" />
+	</wsdl:message>
+	<wsdl:message name="NoticeOfArrivalQueryYesterdayRequest">
+		<wsdl:part name="parameters" element="tns:NoticeOfArrivalQueryYesterday" />
+	</wsdl:message>
+	<wsdl:message name="CancelOrderBySoNoRequest">
+		<wsdl:part name="parameters" element="tns:CancelOrderBySoNo" />
+	</wsdl:message>
+	<wsdl:message name="soToWmsbyPageResponse">
+		<wsdl:part name="parameters" element="tns:soToWmsbyPageResponse" />
+	</wsdl:message>
+	<wsdl:message name="AcceptEDIResultRequest">
+		<wsdl:part name="parameters" element="tns:AcceptEDIResult" />
+	</wsdl:message>
+	<wsdl:message name="OrderDetailQueryByIdResponse">
+		<wsdl:part name="parameters" element="tns:OrderDetailQueryByIdResponse" />
+	</wsdl:message>
+	<wsdl:message name="OrderDetailQueryTodayResponse">
+		<wsdl:part name="parameters" element="tns:OrderDetailQueryTodayResponse" />
+	</wsdl:message>
+	<wsdl:message name="soToWmsResponse">
+		<wsdl:part name="parameters" element="tns:soToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="cancelOrderRXResponse">
+		<wsdl:part name="parameters" element="tns:cancelOrderRXResponse" />
+	</wsdl:message>
+	<wsdl:message name="UrgentOrderBySoNoRequest">
+		<wsdl:part name="parameters" element="tns:UrgentOrderBySoNo" />
+	</wsdl:message>
+	<wsdl:message name="ansToWmsResponse">
+		<wsdl:part name="parameters" element="tns:ansToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="NoticeOfArrivalAssignResponse">
+		<wsdl:part name="parameters" element="tns:NoticeOfArrivalAssignResponse" />
+	</wsdl:message>
+	<wsdl:message name="singleSkuToWmsResponse">
+		<wsdl:part name="parameters" element="tns:singleSkuToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="invoiceToWmsResponse">
+		<wsdl:part name="parameters" element="tns:invoiceToWmsResponse" />
+	</wsdl:message>
+	<wsdl:message name="soFeeBackCheckResponse">
+		<wsdl:part name="parameters" element="tns:soFeeBackCheckResponse" />
+	</wsdl:message>
+	<wsdl:message name="invoiceFromBZRequest">
+		<wsdl:part name="parameters" element="tns:invoiceFromBZ" />
+	</wsdl:message>
+	<wsdl:message name="NoticeOfArrivalQueryByIdResponse">
+		<wsdl:part name="parameters" element="tns:NoticeOfArrivalQueryByIdResponse" />
+	</wsdl:message>
+	<wsdl:message name="soToWmsbyPageRequest">
+		<wsdl:part name="parameters" element="tns:soToWmsbyPage" />
+	</wsdl:message>
+	<wsdl:message name="soFeeBackRequest">
+		<wsdl:part name="parameters" element="tns:soFeeBack" />
+	</wsdl:message>
+	<wsdl:message name="soFeeBackCheckRequest">
+		<wsdl:part name="parameters" element="tns:soFeeBackCheck" />
+	</wsdl:message>
+	<wsdl:message name="cancelOrderRXRequest">
+		<wsdl:part name="parameters" element="tns:cancelOrderRX" />
+	</wsdl:message>
+	<wsdl:message name="NoticeOfArrivalQueryTodayResponse">
+		<wsdl:part name="parameters" element="tns:NoticeOfArrivalQueryTodayResponse" />
+	</wsdl:message>
+	<wsdl:message name="searchOrderStatusResponse">
+		<wsdl:part name="parameters" element="tns:searchOrderStatusResponse" />
+	</wsdl:message>
+	<wsdl:message name="ansToWmsRequest">
+		<wsdl:part name="parameters" element="tns:ansToWms" />
+	</wsdl:message>
+	<wsdl:message name="soFeeBackResponse">
+		<wsdl:part name="parameters" element="tns:soFeeBackResponse" />
+	</wsdl:message>
+	<wsdl:message name="CancelOrderBySkuRequest">
+		<wsdl:part name="parameters" element="tns:CancelOrderBySku" />
+	</wsdl:message>
+	<wsdl:message name="CancelAsnRXRequest">
+		<wsdl:part name="parameters" element="tns:CancelAsnRX" />
+	</wsdl:message>
+	<wsdl:message name="CancelAsnRXResponse">
+		<wsdl:part name="parameters" element="tns:CancelAsnRXResponse" />
+	</wsdl:message>
+	<wsdl:message name="StockQueryBySkuResponse">
+		<wsdl:part name="parameters" element="tns:StockQueryBySkuResponse" />
+	</wsdl:message>
+	<wsdl:message name="billToWmsRequest">
+		<wsdl:part name="parameters" element="tns:billToWms" />
+	</wsdl:message>
+	<wsdl:message name="soToWmsRequest">
+		<wsdl:part name="parameters" element="tns:soToWms" />
+	</wsdl:message>
+	<wsdl:message name="ansToWmsbyPageRequest">
+		<wsdl:part name="parameters" element="tns:ansToWmsbyPage" />
+	</wsdl:message>
+	<wsdl:message name="invoiceToWmsRequest">
+		<wsdl:part name="parameters" element="tns:invoiceToWms" />
+	</wsdl:message>
+	<wsdl:message name="ShipmentInfoQueryByOrderIdResponse">
+		<wsdl:part name="parameters" element="tns:ShipmentInfoQueryByOrderIdResponse" />
+	</wsdl:message>
+	<wsdl:message name="deliveryFeeBackRequest">
+		<wsdl:part name="parameters" element="tns:deliveryFeeBack" />
+	</wsdl:message>
+	<wsdl:message name="ShipmentInfoQueryByDateRequest">
+		<wsdl:part name="parameters" element="tns:ShipmentInfoQueryByDate" />
+	</wsdl:message>
+	<wsdl:message name="StockQueryRequest">
+		<wsdl:part name="parameters" element="tns:StockQuery" />
+	</wsdl:message>
+	<wsdl:message name="OrderDetailQueryByIdRequest">
+		<wsdl:part name="parameters" element="tns:OrderDetailQueryById" />
+	</wsdl:message>
+	<wsdl:message name="StockQueryBySkuRequest">
+		<wsdl:part name="parameters" element="tns:StockQueryBySku" />
+	</wsdl:message>
+	<wsdl:message name="OrderDetailQueryYesterdayResponse">
+		<wsdl:part name="parameters" element="tns:OrderDetailQueryYesterdayResponse" />
+	</wsdl:message>
+	<wsdl:message name="UrgentOrderBySoNoResponse">
+		<wsdl:part name="parameters" element="tns:UrgentOrderBySoNoResponse" />
+	</wsdl:message>
+	<wsdl:message name="CancelOrderBySkuResponse">
+		<wsdl:part name="parameters" element="tns:CancelOrderBySkuResponse" />
+	</wsdl:message>
+	<wsdl:message name="ShipmentInfoQueryByDateResponse">
+		<wsdl:part name="parameters" element="tns:ShipmentInfoQueryByDateResponse" />
+	</wsdl:message>
+	<wsdl:message name="OrderCollectionYesterdayRequest">
+		<wsdl:part name="parameters" element="tns:OrderCollectionYesterday" />
+	</wsdl:message>
+	<wsdl:message name="OrderCollectionTodayResponse">
+		<wsdl:part name="parameters" element="tns:OrderCollectionTodayResponse" />
+	</wsdl:message>
+	<wsdl:message name="StockQueryResponse">
+		<wsdl:part name="parameters" element="tns:StockQueryResponse" />
+	</wsdl:message>
+	<wsdl:message name="invoiceFeeBackRequest">
+		<wsdl:part name="parameters" element="tns:invoiceFeeBack" />
+	</wsdl:message>
+	<wsdl:message name="snFeeBackRequest">
+		<wsdl:part name="parameters" element="tns:snFeeBack" />
+	</wsdl:message>
+	<wsdl:portType name="BMLQueryPortType">
+		<wsdl:operation name="StockQuery">
+			<wsdl:input name="StockQueryRequest" message="tns:StockQueryRequest" />
+			<wsdl:output name="StockQueryResponse" message="tns:StockQueryResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="NoticeOfArrivalAssign">
+			<wsdl:input name="NoticeOfArrivalAssignRequest" message="tns:NoticeOfArrivalAssignRequest" />
+			<wsdl:output name="NoticeOfArrivalAssignResponse"
+				message="tns:NoticeOfArrivalAssignResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="soFeeBack">
+			<wsdl:input name="soFeeBackRequest" message="tns:soFeeBackRequest" />
+			<wsdl:output name="soFeeBackResponse" message="tns:soFeeBackResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="ansToWms">
+			<wsdl:input name="ansToWmsRequest" message="tns:ansToWmsRequest" />
+			<wsdl:output name="ansToWmsResponse" message="tns:ansToWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="invoiceFeeBack">
+			<wsdl:input name="invoiceFeeBackRequest" message="tns:invoiceFeeBackRequest" />
+			<wsdl:output name="invoiceFeeBackResponse" message="tns:invoiceFeeBackResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="OrderDetailQueryById">
+			<wsdl:input name="OrderDetailQueryByIdRequest" message="tns:OrderDetailQueryByIdRequest" />
+			<wsdl:output name="OrderDetailQueryByIdResponse" message="tns:OrderDetailQueryByIdResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="ansToWmsbyPage">
+			<wsdl:input name="ansToWmsbyPageRequest" message="tns:ansToWmsbyPageRequest" />
+			<wsdl:output name="ansToWmsbyPageResponse" message="tns:ansToWmsbyPageResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="OrderDetailQueryToday">
+			<wsdl:input name="OrderDetailQueryTodayRequest" message="tns:OrderDetailQueryTodayRequest" />
+			<wsdl:output name="OrderDetailQueryTodayResponse"
+				message="tns:OrderDetailQueryTodayResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="NoticeOfArrivalQueryToday">
+			<wsdl:input name="NoticeOfArrivalQueryTodayRequest"
+				message="tns:NoticeOfArrivalQueryTodayRequest" />
+			<wsdl:output name="NoticeOfArrivalQueryTodayResponse"
+				message="tns:NoticeOfArrivalQueryTodayResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="CancelOrderBySoNo">
+			<wsdl:input name="CancelOrderBySoNoRequest" message="tns:CancelOrderBySoNoRequest" />
+			<wsdl:output name="CancelOrderBySoNoResponse" message="tns:CancelOrderBySoNoResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="billToWms">
+			<wsdl:input name="billToWmsRequest" message="tns:billToWmsRequest" />
+			<wsdl:output name="billToWmsResponse" message="tns:billToWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="NoticeOfArrivalQueryById">
+			<wsdl:input name="NoticeOfArrivalQueryByIdRequest"
+				message="tns:NoticeOfArrivalQueryByIdRequest" />
+			<wsdl:output name="NoticeOfArrivalQueryByIdResponse"
+				message="tns:NoticeOfArrivalQueryByIdResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="invoiceToWms">
+			<wsdl:input name="invoiceToWmsRequest" message="tns:invoiceToWmsRequest" />
+			<wsdl:output name="invoiceToWmsResponse" message="tns:invoiceToWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="OrderDetailQueryYesterday">
+			<wsdl:input name="OrderDetailQueryYesterdayRequest"
+				message="tns:OrderDetailQueryYesterdayRequest" />
+			<wsdl:output name="OrderDetailQueryYesterdayResponse"
+				message="tns:OrderDetailQueryYesterdayResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="OrderCollectionYesterday">
+			<wsdl:input name="OrderCollectionYesterdayRequest"
+				message="tns:OrderCollectionYesterdayRequest" />
+			<wsdl:output name="OrderCollectionYesterdayResponse"
+				message="tns:OrderCollectionYesterdayResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="NoticeOfArrivalQueryYesterday">
+			<wsdl:input name="NoticeOfArrivalQueryYesterdayRequest"
+				message="tns:NoticeOfArrivalQueryYesterdayRequest" />
+			<wsdl:output name="NoticeOfArrivalQueryYesterdayResponse"
+				message="tns:NoticeOfArrivalQueryYesterdayResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="soToWms">
+			<wsdl:input name="soToWmsRequest" message="tns:soToWmsRequest" />
+			<wsdl:output name="soToWmsResponse" message="tns:soToWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="soFeeBackCheck">
+			<wsdl:input name="soFeeBackCheckRequest" message="tns:soFeeBackCheckRequest" />
+			<wsdl:output name="soFeeBackCheckResponse" message="tns:soFeeBackCheckResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="searchOrderStatus">
+			<wsdl:input name="searchOrderStatusRequest" message="tns:searchOrderStatusRequest" />
+			<wsdl:output name="searchOrderStatusResponse" message="tns:searchOrderStatusResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="ShipmentInfoQueryByOrderId">
+			<wsdl:input name="ShipmentInfoQueryByOrderIdRequest"
+				message="tns:ShipmentInfoQueryByOrderIdRequest" />
+			<wsdl:output name="ShipmentInfoQueryByOrderIdResponse"
+				message="tns:ShipmentInfoQueryByOrderIdResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="snFeeBack">
+			<wsdl:input name="snFeeBackRequest" message="tns:snFeeBackRequest" />
+			<wsdl:output name="snFeeBackResponse" message="tns:snFeeBackResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="AcceptEDIResult">
+			<wsdl:input name="AcceptEDIResultRequest" message="tns:AcceptEDIResultRequest" />
+			<wsdl:output name="AcceptEDIResultResponse" message="tns:AcceptEDIResultResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="cancelOrderRX">
+			<wsdl:input name="cancelOrderRXRequest" message="tns:cancelOrderRXRequest" />
+			<wsdl:output name="cancelOrderRXResponse" message="tns:cancelOrderRXResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="CancelAsnRX">
+			<wsdl:input name="CancelAsnRXRequest" message="tns:CancelAsnRXRequest" />
+			<wsdl:output name="CancelAsnRXResponse" message="tns:CancelAsnRXResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="ShipmentInfoQueryByDate">
+			<wsdl:input name="ShipmentInfoQueryByDateRequest" message="tns:ShipmentInfoQueryByDateRequest" />
+			<wsdl:output name="ShipmentInfoQueryByDateResponse"
+				message="tns:ShipmentInfoQueryByDateResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="CancelOrderBySku">
+			<wsdl:input name="CancelOrderBySkuRequest" message="tns:CancelOrderBySkuRequest" />
+			<wsdl:output name="CancelOrderBySkuResponse" message="tns:CancelOrderBySkuResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="OrderCollectionToday">
+			<wsdl:input name="OrderCollectionTodayRequest" message="tns:OrderCollectionTodayRequest" />
+			<wsdl:output name="OrderCollectionTodayResponse" message="tns:OrderCollectionTodayResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="soToWmsbyPage">
+			<wsdl:input name="soToWmsbyPageRequest" message="tns:soToWmsbyPageRequest" />
+			<wsdl:output name="soToWmsbyPageResponse" message="tns:soToWmsbyPageResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="UrgentOrderBySoNo">
+			<wsdl:input name="UrgentOrderBySoNoRequest" message="tns:UrgentOrderBySoNoRequest" />
+			<wsdl:output name="UrgentOrderBySoNoResponse" message="tns:UrgentOrderBySoNoResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="singleSkuToWms">
+			<wsdl:input name="singleSkuToWmsRequest" message="tns:singleSkuToWmsRequest" />
+			<wsdl:output name="singleSkuToWmsResponse" message="tns:singleSkuToWmsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="StockQueryBySku">
+			<wsdl:input name="StockQueryBySkuRequest" message="tns:StockQueryBySkuRequest" />
+			<wsdl:output name="StockQueryBySkuResponse" message="tns:StockQueryBySkuResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="invoiceFromBZ">
+			<wsdl:input name="invoiceFromBZRequest" message="tns:invoiceFromBZRequest" />
+			<wsdl:output name="invoiceFromBZResponse" message="tns:invoiceFromBZResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="deliveryFeeBack">
+			<wsdl:input name="deliveryFeeBackRequest" message="tns:deliveryFeeBackRequest" />
+			<wsdl:output name="deliveryFeeBackResponse" message="tns:deliveryFeeBackResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BMLQueryHttpBinding" type="tns:BMLQueryPortType">
+		<wsdlsoap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="StockQuery">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="StockQueryRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="StockQueryResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="NoticeOfArrivalAssign">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="NoticeOfArrivalAssignRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="NoticeOfArrivalAssignResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="soFeeBack">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="soFeeBackRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="soFeeBackResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ansToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="ansToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ansToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="invoiceFeeBack">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="invoiceFeeBackRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="invoiceFeeBackResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="OrderDetailQueryById">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="OrderDetailQueryByIdRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="OrderDetailQueryByIdResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ansToWmsbyPage">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="ansToWmsbyPageRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ansToWmsbyPageResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="OrderDetailQueryToday">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="OrderDetailQueryTodayRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="OrderDetailQueryTodayResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="NoticeOfArrivalQueryToday">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="NoticeOfArrivalQueryTodayRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="NoticeOfArrivalQueryTodayResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CancelOrderBySoNo">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="CancelOrderBySoNoRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="CancelOrderBySoNoResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="billToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="billToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="billToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="NoticeOfArrivalQueryById">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="NoticeOfArrivalQueryByIdRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="NoticeOfArrivalQueryByIdResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="invoiceToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="invoiceToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="invoiceToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="OrderDetailQueryYesterday">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="OrderDetailQueryYesterdayRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="OrderDetailQueryYesterdayResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="OrderCollectionYesterday">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="OrderCollectionYesterdayRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="OrderCollectionYesterdayResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="NoticeOfArrivalQueryYesterday">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="NoticeOfArrivalQueryYesterdayRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="NoticeOfArrivalQueryYesterdayResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="soToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="soToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="soToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="soFeeBackCheck">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="soFeeBackCheckRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="soFeeBackCheckResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="searchOrderStatus">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="searchOrderStatusRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="searchOrderStatusResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ShipmentInfoQueryByOrderId">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="ShipmentInfoQueryByOrderIdRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ShipmentInfoQueryByOrderIdResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="snFeeBack">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="snFeeBackRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="snFeeBackResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="AcceptEDIResult">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="AcceptEDIResultRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="AcceptEDIResultResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="cancelOrderRX">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="cancelOrderRXRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="cancelOrderRXResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CancelAsnRX">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="CancelAsnRXRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="CancelAsnRXResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ShipmentInfoQueryByDate">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="ShipmentInfoQueryByDateRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ShipmentInfoQueryByDateResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CancelOrderBySku">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="CancelOrderBySkuRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="CancelOrderBySkuResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="OrderCollectionToday">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="OrderCollectionTodayRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="OrderCollectionTodayResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="soToWmsbyPage">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="soToWmsbyPageRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="soToWmsbyPageResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="UrgentOrderBySoNo">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="UrgentOrderBySoNoRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="UrgentOrderBySoNoResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="singleSkuToWms">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="singleSkuToWmsRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="singleSkuToWmsResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="StockQueryBySku">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="StockQueryBySkuRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="StockQueryBySkuResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="invoiceFromBZ">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="invoiceFromBZRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="invoiceFromBZResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="deliveryFeeBack">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="deliveryFeeBackRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="deliveryFeeBackResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BMLQuery">
+		<wsdl:port name="BMLQueryHttpPort" binding="tns:BMLQueryHttpBinding">
+			<!-- <wsdlsoap:address location="http://58.210.118.230:9013/order/BMLservices/BMLQuery"/> -->
+				<wsdlsoap:address location="http://127.0.0.1/bz/services/PushExpressInfo" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

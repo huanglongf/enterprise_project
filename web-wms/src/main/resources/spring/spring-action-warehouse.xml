@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean id="inventoryStatusAction" class="com.jumbo.web.action.warehouse.InventoryStatusAction" scope="request" />
+	<bean id="transactionTypeAction" class="com.jumbo.web.action.warehouse.TransactionTypeAction" scope="request" />
+	<bean id="channelAction" class="com.jumbo.web.action.warehouse.ChannelAction" scope="request" />
+	<bean id="commodityAction" class="com.jumbo.web.action.warehouse.CommodityAction" scope="request" />
+	<bean id="pdaLoginAction" class="com.jumbo.web.action.pda.PdaLoginAction" scope="request" />
+	<bean id="pdaMenuAction" class="com.jumbo.web.action.pda.PdaMenuAction" scope="request" />
+	<bean id="inventoryShareMaintainAction" class="com.jumbo.web.action.warehouse.InventoryShareMaintainAction" scope="request" />
+	<bean id="locationCapacityAction" class="com.jumbo.web.action.warehouse.WarehouseLocationCapacityMaintainAction" scope="request" />
+	<bean id="locationMaintainAction" class="com.jumbo.web.action.warehouse.WarehouseLocationMaintainAction" scope="request" />
+	<bean id="locationTranTypeAction" class="com.jumbo.web.action.warehouse.WarehouseLocationTranTypeMaintainAction" scope="request" />
+    <bean id="warehouselocationPickupAction" class="com.jumbo.web.action.warehouse.WarehouselocationPickupAction" scope="request" />
+    <bean id="inventoryQueryAction" class="com.jumbo.web.action.warehouse.InventoryQueryAction" scope="request" />
+    <bean id="purchaseInboundAction" class="com.jumbo.web.action.warehouse.PurchaseInboundAction" scope="request" />
+    <bean id="adPackageReturnAction" class="com.jumbo.web.action.warehouse.AdPackageReturnAction" scope="request" />
+    <bean id="supplementImperfectAction" class="com.jumbo.web.action.warehouse.SupplementImperfectAction" scope="request" />
+    <bean id="purchaseInboundImperfectAction" class="com.jumbo.web.action.warehouse.PurchaseInboundImperfectAction" scope="request" />
+  	<bean id="salesDispatchListAction" class="com.jumbo.web.action.warehouse.SalesDispatchListAction" scope="request" />
+  	<bean id="salesGenerationDispatchListAction" class="com.jumbo.web.action.warehouse.SalesGenerationDispatchListAction" scope="request" />
+  	<bean id="salesCancelStaAction" class="com.jumbo.web.action.warehouse.SalesCancelStaAction" scope="request" />
+  	<bean id="inventorySnapshotAction" class="com.jumbo.web.action.warehouse.InventorySnapshotAction" scope="request" />
+  	<bean id="inventoryHistoricalQueryAction" class="com.jumbo.web.action.warehouse.InventoryHistoricalQueryAction" scope="request" />
+  	<bean id="cancelledStaDisposeAction" class="com.jumbo.web.action.warehouse.SalesCancelledStaDisposeAction" scope="request" />
+  	<bean id="salesOutboundAction" class="com.jumbo.web.action.warehouse.SalesOutboundAction" scope="request" />
+  	<bean id="handOverListQueryAction" class="com.jumbo.web.action.warehouse.HandOverListQueryAction" scope="request" />
+  	<bean id="handOverListCreateAction" class="com.jumbo.web.action.warehouse.HandOverListCreateAction" scope="request" />
+	<bean id="modifyTransportatorAction" class="com.jumbo.web.action.warehouse.ModifyTransportatorAction" scope="request" />
+	<bean id="inventoryLogQueryAction" class="com.jumbo.web.action.warehouse.InventoryLogQueryAction" scope="request" />
+	<bean id="warehouseOperationOthersAction" class="com.jumbo.web.action.warehouse.WarehouseOperationOthersAction" scope="request" />
+	<bean id="warehousePredefinedAction" class="com.jumbo.web.action.warehouse.WarehousePredefinedAction" scope="request" />
+	<bean id="warehouseBoxInboundAction" class="com.jumbo.web.action.warehouse.WarehouseBoxInboundAction" scope="request" />
+	<bean id="historicalOrderInquiryAction" class="com.jumbo.web.action.warehouse.HistoricalOrderInquiryAction" scope="request"></bean>
+	<bean id="inventoryInitializeAction" class="com.jumbo.web.action.warehouse.InventoryInitializeAction" scope="request"></bean>
+	<bean id="excelTemplateDownloadAction" class="com.jumbo.web.action.ExcelTemplateDownloadAction" scope="request"></bean>
+	<bean id="transitInnerAction" class="com.jumbo.web.action.warehouse.TransitInnerAction" scope="request"></bean>
+	<bean id="inventoryOccupyAction" class="com.jumbo.web.action.warehouse.InventoryOccupyAction" scope="request"></bean>
+	<bean id="taxInvoiceAction" class="com.jumbo.web.action.warehouse.TaxInvoiceAction" scope="request"></bean>
+	<bean id="taxBatchInvoiceAction" class="com.jumbo.web.action.warehouse.TaxBatchInvoiceAction" scope="request"></bean>
+	<bean id="vmiFlittingAction" class="com.jumbo.web.action.warehouse.VMIFlittingAction" scope="request"></bean>
+	<bean id="taxInvoiceSumAction" class="com.jumbo.web.action.warehouse.TaxInvoiceSumAction" scope="request"></bean>
+	<bean id="transDeliveryCfgAction" class="com.jumbo.web.action.warehouse.TransDeliveryCfgAction" scope="request"></bean>
+	<bean id="excTaxInvoiceAction" class="com.jumbo.web.action.warehouse.ExcTaxInvoiceAction" scope="request"></bean>
+	<bean id="inventoryCheckCreateAction" class="com.jumbo.web.action.warehouse.InventoryCheckCreateAction" scope="request"></bean>
+	<bean id="inventoryCheckHandelAction" class="com.jumbo.web.action.warehouse.InventoryCheckHandelAction" scope="request"></bean>
+	<bean id="inventoryCheckQueryAction" class="com.jumbo.web.action.warehouse.InventoryCheckQueryAction" scope="request"></bean>
+	<bean id="betweenLibraryMoveEditAction" class="com.jumbo.web.action.warehouse.BetweenLibraryMoveEditAction" scope="request"></bean>
+	<bean id="inventoryStatusChangeAction" class="com.jumbo.web.action.warehouse.InventoryStatusChangeAction" scope="request"></bean>
+	<bean id="outSalesOrderImportAction" class="com.jumbo.web.action.warehouse.OutSalesOrderImportAction" scope="request"></bean>
+	<bean id="transImportAction" class="com.jumbo.web.action.warehouse.TransImportAction" scope="request"></bean>
+	<bean id="salesTransSupportAction" class="com.jumbo.web.action.warehouse.SalesTransSupportAction" scope="request"></bean>
+	<bean id="snQueryAction" class="com.jumbo.web.action.warehouse.SnQueryAction" scope="request"></bean>
+	<bean id="deliveryInfoExportAction" class="com.jumbo.web.action.warehouse.DeliveryInfoExportAction" scope="request"></bean>
+	<bean id="pdaPostLogAction" class="com.jumbo.web.action.warehouse.PdaPostLogAction" scope="request"></bean>
+	<bean id="pdaPurchaseAction" class="com.jumbo.web.action.warehouse.PdaPurchaseAction" scope="request"></bean>
+	<bean id="warehouseLocationCascadeAction" class="com.jumbo.web.action.warehouse.WarehouseLocationCascadeAction" scope="request"></bean>
+	<bean id="inventoryVMIAdjustmentHandelAction" class="com.jumbo.web.action.warehouse.InventoryVMIAdjustmentHandelAction" scope="request"></bean>
+	<bean id="pdaInterfaceAction" class="com.jumbo.web.action.warehouse.PdaInterfaceAction" scope="request"></bean>
+	<bean id="inventoryVMIAdjustmentQueryAction" class="com.jumbo.web.action.warehouse.InventoryVMIAdjustmentQueryAction" scope="request"></bean>
+	<bean id="vmiRtoAction" class="com.jumbo.web.action.warehouse.VMIRtoAction" scope="request"></bean>
+	<bean id="padcodeOperateAction" class="com.jumbo.web.action.baseinfo.PadcodeOperateAction" scope="request" />
+	<bean id="vMIOwnerTransferAction" class="com.jumbo.web.action.warehouse.VMIOwnerTransferAction" scope="request" />
+	<bean id="vMIOwnerTransferQueryAction" class="com.jumbo.web.action.warehouse.VMIOwnerTransferQueryAction" scope="request" />
+	<bean id="vmiReturnAction" class="com.jumbo.web.action.warehouse.VMIReturnAction" scope="request" />
+	<bean id="vmiEspritPOTypeAction" class="com.jumbo.web.action.warehouse.VMIEspritPOTypeAction" scope="request" />
+	<bean id="vmiEspritInvoicePercentageAction" class="com.jumbo.web.action.warehouse.VMIEspritInvoicePercentageAction" scope="request" />
+	<bean id="shopInventoryQueryAction" class="com.jumbo.web.action.warehouse.ShopInventoryQueryAction" scope="request" />
+	<bean id="pickingListAction" class="com.jumbo.web.action.warehouse.PickingListAction" scope="request" />
+	<bean id="predefinedOutAction" class="com.jumbo.web.action.warehouse.PredefinedOutAction" scope="request" />
+	<bean id="msgOutboundOrderAction" class="com.jumbo.web.action.warehouse.MsgOutboundOrderAction" scope="request" />
+	<!-- 保税仓 -->
+	<bean id="baoshuiAction" class="com.jumbo.web.action.warehouse.BaoshuiAction" scope="request" />
+	
+	<bean id="msgOutboundOrderCancelAction" class="com.jumbo.web.action.warehouse.MsgOutboundOrderCancelAction" scope="request" />
+	<bean id="msgInboundOrderAction" class="com.jumbo.web.action.warehouse.MsgInboundOrderAction" scope="request" />
+	<bean id="outBoundPackageExeAction" class="com.jumbo.web.action.warehouse.OutBoundPackageExeAction" scope="request" />
+	<bean id="salesPickingCheckAction" class="com.jumbo.web.action.warehouse.SalesPickingCheckAction" scope="request" />
+	<!-- 单件核对 -->
+	<bean id="salesChecksingleAction" class="com.jumbo.web.action.warehouse.SalesChecksingleAction" scope="request" />
+	<!-- 特殊处理订单重新处理  -->
+	<bean id="speHanOrderAgainHanAcion" class="com.jumbo.web.action.warehouse.SpeHanOrderAgainHanAcion" scope="request" />
+	<bean id="warehouseReplenishStockAction" class="com.jumbo.web.action.warehouse.WarehouseReplenishStockAction" scope="request" />
+	<bean id="skuGroupCreateAction" class="com.jumbo.web.action.warehouse.SkuGroupCreateAction" scope="request" />
+	<bean id="outboundPackageAction" class="com.jumbo.web.action.warehouse.OutboundPackageAction" scope="request" />
+	<bean id="rtwDieKingLineAction" class="com.jumbo.web.action.warehouse.RtwDieKingLineAction" scope="request" />
+	<bean id="districtLocationPrintAction" class="com.jumbo.web.action.warehouse.DistrictLocationPrintAction" scope="request" />
+	<bean id="skuMoveSuggestAction" class="com.jumbo.web.action.warehouse.SkuMoveSuggestAction" scope="request" />
+	<bean id="skuGroupQueryAction" class="com.jumbo.web.action.warehouse.SkuGroupQueryAction" scope="request" />
+	<bean id="recevingMoveSuggestAction" class="com.jumbo.web.action.warehouse.RecevingMoveSuggestAction" scope="request" />
+	<bean id="productBoxMaintainAction" class="com.jumbo.web.action.baseinfo.ProductBoxMaintainAction" scope="request" />
+	<bean id="skuProvideMaintainAction" class="com.jumbo.web.action.warehouse.SkuProvideMaintainAction" scope="request" />
+	<bean id="skuMoveSuggestPickingFailedAction" class="com.jumbo.web.action.warehouse.SkuMoveSuggestPickingFailedAction" scope="request" />
+	<bean id="pickingSuggestAction" class="com.jumbo.web.action.warehouse.PickingSuggestAction" scope="request" />
+	<bean id="batchInfoAction" class="com.jumbo.web.action.warehouse.BatchInfoAction" scope="request" />
+	
+	<bean id="returnPackageAction" class="com.jumbo.web.action.warehouse.ReturnPackageAction" scope="request" />
+	
+	<bean id="vmiCreateInboundStaAction" class="com.jumbo.web.action.warehouse.VMICreateInboundStaAction" scope="request" />
+	<bean id="warehouseGoodsImportAction" class="com.jumbo.web.action.warehouse.WarehouseGoodsImportAction" scope="request" />
+	<bean id="vmiCreateInboundSkuAction" class="com.jumbo.web.action.warehouse.VMICreateInboundSkuAction" scope="request" />
+	<bean id="nikeOrderQueryAction" class="com.jumbo.web.action.warehouse.NikeOrderQueryAction" scope="request" />
+	<bean id="nikeCheckQueryAction" class="com.jumbo.web.action.warehouse.NikeCheckQueryAction" scope="request" />
+	<bean id="wmsAction" class="com.jumbo.web.action.externalInterface.WmsAction" scope="request" />
+	<bean id="invoiceRecordExportAction" class="com.jumbo.web.action.warehouse.InvoiceRecordExportAction" scope="request" />
+	<bean id="staLpcodeUpdateAction" class="com.jumbo.web.action.warehouse.StaLpcodeUpdateAction" scope="request" />
+	<bean id="handOverListCheckAction" class="com.jumbo.web.action.warehouse.HandOverListCheckAction" scope="request" />
+
+	<bean id="workLineNoAction" class="com.jumbo.web.action.warehouse.WorkLineNoAction" scope="request" />
+	<bean id="GISkuOperatesAction" class="com.jumbo.web.action.warehouse.GISkuOperatesAction" scope="request" />
+	<bean id="cacheTicketPrintAction" class="com.jumbo.web.action.warehouse.CacheTicketPrintAction" scope="request" />
+	<bean id="staInBoundAction" class="com.jumbo.web.action.warehouse.StaInBoundAction" scope="request" />
+	<bean id="staNikeImportAction" class="com.jumbo.web.action.warehouse.StaNikeImportAction" scope="request" />
+	<bean id="wareHouseToVirtualAction" class="com.jumbo.web.action.warehouse.WareHouseToVirtualAction" scope="request"/>
+	<bean id="productInfoMainAction" class="com.jumbo.web.action.warehouse.ProductInfoMainAction" scope="request"/>
+	<!-- 商品三维数据 -->
+	<bean id="productThreeDimensionalCollectAction" class="com.jumbo.web.action.baseinfo.ProductThreeDimensionalCollectAction" scope="request"/>
+	<bean id="staInfoInputExportAction" class="com.jumbo.web.action.warehouse.StaInfoInputExportAction" scope="request"/>
+	
+	<bean id="specialPackagingPrintAction" class="com.jumbo.web.action.warehouse.SpecialPackagingPrintAction" scope="request"/>
+	
+	<!-- 新增仓库逻辑 KJL -->
+	<bean id="createPickingListAction" class="com.jumbo.web.action.warehouse.CreatePickingListAction" scope="request"/>
+	<!-- 配货清单待打印-团购cheng.su -->
+	<bean id="printPickingListBulkAction" class="com.jumbo.web.action.warehouse.PrintPickingListBulkAction" scope="request"/>
+	<bean id="secKillSkuMaintainAction" class="com.jumbo.web.action.warehouse.SecKillSkuMaintainAction" scope="request"/>
+	<bean id="qsSkuMaintainAction" class="com.jumbo.web.action.warehouse.QsSkuMaintainAction" scope="request"/>
+	<bean id="skuCountryOfOriginMaintainAction" class="com.jumbo.web.action.warehouse.SkuCountryOfOriginMaintainAction" scope="request"/>
+	<bean id="checkOutboundAction" class="com.jumbo.web.action.warehouse.CheckOutboundAction" scope="request"/>
+	<!-- end -->
+	<!-- PDA日志 KJL -->
+	<bean id="pdaLogAction" class="com.jumbo.web.action.warehouse.PDALogAction" scope="request"/>
+	<bean id="skuCategoryMainAction" class="com.jumbo.web.action.warehouse.SkuCategoryMainAction" scope="request"/>
+	<bean id="printPickingListAction" class="com.jumbo.web.action.warehouse.PrintPickingListAction" scope="request"/>
+	
+	<!-- NIKE -->
+	<bean id="nikeVMIInboundAction" class="com.jumbo.web.action.warehouse.NikeVMIInboundAction" scope="request"/>
+	<!-- SN编辑 -->
+	<bean id="snlistbycodeaction" class="com.jumbo.web.action.warehouse.SnListBycodeAction" scope="request"></bean>
+	<!-- end -->
+	<!-- 套装组合商品维护 KJL-->
+	<bean id="packageSkuMaintainAction" class="com.jumbo.web.action.warehouse.PackageSkuMaintainAction" scope="request"></bean>
+	<bean id="salesCheckSkuPackageAction" class="com.jumbo.web.action.warehouse.SalesCheckSkuPackageAction" scope="request"></bean>
+	<!-- IDS -->
+	<bean id="idsServiceClientAction" class="com.jumbo.web.action.warehouse.IdsServiceClientAction" scope="request"></bean>
+	<bean id="sfWarehouseAction" class="com.jumbo.web.action.externalInterface.SfWarehouseAction" scope="request"></bean>
+	<bean id="sfTwWarehouseAction" class="com.jumbo.web.action.externalInterface.SfTwWarehouseAction" scope="request"></bean>
+	<!-- NIKE礼品卡打印 -->
+	<bean id="printGiftAction" class="com.jumbo.web.action.warehouse.PrintGiftAction" scope="request" />
+	<bean id="specialSkuMainTainAction" class="com.jumbo.web.action.warehouse.SpecialSkuMainTainAction" scope="request"></bean>
+	<bean id="stoTransNoAction" class="com.jumbo.web.action.warehouse.StoTransNoAction" scope="request" />
+	<!-- 导入模板批量收货 -->
+	<bean id="importBatchReceivingAction" class="com.jumbo.web.action.warehouse.ImportBatchReceivingAction" scope="request" />
+	<!-- 合并发货渠道信息 --> 
+	<bean id="biChannelCombineRefAction" class="com.jumbo.web.action.warehouse.BiChannelCombineRefAction" scope="request" />
+	<!-- 渠道快递维护 -->
+	<bean id="transRoleAction" class="com.jumbo.web.action.warehouse.TransRoleAction" scope="request"></bean>
+	<bean id="transportServiceAction" class="com.jumbo.web.action.warehouse.TransportServiceAction" scope="request"></bean>
+	<bean id="transAreaGroupAction" class="com.jumbo.web.action.warehouse.TransAreaGroupAction" scope="request" />
+	<bean id="skuTagAction" class="com.jumbo.web.action.warehouse.SkuTagAction" scope="request" />
+	<!-- 渠道快递规则状态变更 -->
+	<bean id="transRoleAccordAction" class="com.jumbo.web.action.warehouse.TransRoleAccordAction" scope="request" />
+	<!-- 配货规则维护 -->
+	<bean id="distributionRuleAction" class="com.jumbo.web.action.warehouse.DistributionRuleAction" scope="request" />
+	<!-- 导入打印 -->
+	<bean id="importPrintAction" class="com.jumbo.web.action.warehouse.ImportPrintAction" scope="request" />
+	<!-- 后置打印 -->
+	<bean id="channelPostPrintConfAction" class="com.jumbo.web.action.warehouse.ChannelPostPrintConfAction" scope="request"/>
+	<!-- 自动配货 -->
+	<bean id="autoPickingListRoleAction" class="com.jumbo.web.action.warehouse.AutoPickingListRoleAction" scope="request"/>
+	<bean id="channelGroupAction" class="com.jumbo.web.action.warehouse.ChannelGroupAction" scope="request"/>
+	<!-- 退货申请 -->
+	<bean id="returnApplication" class="com.jumbo.web.action.warehouse.WarehouseRentrnApplicationAction" scope="request"/>
+	<bean id="prePackagedRefMaintainAction" class="com.jumbo.web.action.warehouse.PrePackagedRefMaintainAction" scope="request"/>
+	 <!--退货原因查询   -->
+	<bean id="returnReasonTypeAction" class="com.jumbo.web.action.warehouse.ReturnReasonTypeAction" scope="request"></bean>
+	<!-- 新增秒杀订单计数器功能维护 -->
+	<bean id="addCounterMaintainAction" class="com.jumbo.web.action.warehouse.AddCounterMaintainAction" scope="request"></bean>
+	<bean id="convenienceStoreExportAction" class="com.jumbo.web.action.warehouse.ConvenienceStoreExportAction" scope="request"></bean>
+	<bean id="consumptiveMaterialUseQueryAction" class="com.jumbo.web.action.warehouse.ConsumptiveMaterialUseQueryAction" scope="request"></bean>
+	
+	<bean id="salesSnCardCheckAction" class="com.jumbo.web.action.warehouse.SalesSnCardCheckAction" scope="request" />
+	<!-- 升单处理 -->
+	<bean id="deliveryTimeAction" class="com.jumbo.web.action.warehouse.DeliveryTimeAction" scope="request"></bean>
+	<!-- 索赔 -->
+	<bean id="compensationAction" class="com.jumbo.web.action.compensation.CompensationAction" scope="request"></bean>
+	<bean id="autoOutboundTurnoverBoxAction" class="com.jumbo.web.action.warehouse.AutoOutboundTurnoverBoxAction" scope="request"></bean>
+		<!-- 线下包裹 -->
+	<bean id="offLinePackageAction" class="com.jumbo.web.action.warehouse.OffLinePackageAction" scope="request"></bean>
+	<!-- 系统维护 -->
+	<bean id="systemMaintainAction" class="com.jumbo.web.action.warehouse.SystemMaintainAction" scope="request"></bean>
+	<bean id="orderOutboundAction" class="com.jumbo.web.action.warehouse.salesOutbound.OrderOutboundAction" scope="request"></bean>
+	<!-- 导入SN号 -->
+	<bean id="seedSnAction" class="com.jumbo.web.action.warehouse.SeedSnAction" scope="request" />
+	
+	<!-- 过仓失败次数重置 -->
+	<bean id="whFailCountReset" class="com.jumbo.web.action.warehouse.WhFailCountResetAction" scope="request"></bean>
+	<!-- 出库反馈PACS -->
+	<bean id="outBoundFeedBackPacs" class="com.jumbo.web.action.warehouse.OutBoundFeedBackPacsAction" scope="request"></bean>
+	
+	<!-- PDA START -->
+	<bean id="pdaPickingAction" class="com.jumbo.web.action.pda.picking.PdaPickingAction" scope="request" />
+	<bean id="pdaShelvesAction" class="com.jumbo.web.action.pda.shelves.PdaShelvesAction" scope="request" />
+	<bean id="pdaReceiveAction" class="com.jumbo.web.action.pda.receive.PdaReceiveAction" scope="request" />
+	<bean id="pdaBoxBindAction" class="com.jumbo.web.action.pda.boxbind.PdaBoxBindAction" scope="request" />
+	<bean id="pdaEntruckingAction" class="com.jumbo.web.action.pda.PdaEntruckingAction" scope="request" />
+	
+	<!-- PDA END -->
+	<!-- 优先发货城市配置 -->
+	<bean id="priorityShippedCityConfigAction" class="com.jumbo.web.action.warehouse.PriorityShippedCityConfigAction" scope="request"></bean>
+	<bean id="occupiedFailureAction" class="com.jumbo.web.action.warehouse.OccupiedFailureAction" scope="request"></bean>
+	<!-- 定时任务配置查询及修改 -->
+	<bean id="schedulerTaskAction" class="com.jumbo.web.action.system.SchedulerTaskAction" scope="request"></bean>
+	
+	<!-- 库存调整 -->
+	<bean id="inventoryAdjustAction" class="com.jumbo.web.action.warehouse.InventoryAdjustAction" scope="request"></bean>
+	
+	<!--  -->
+	<bean id="espritStoreAction" class="com.jumbo.web.action.warehouse.EspritStoreAction" scope="request"></bean>
+	
+	<!-- WMS 数据导出 -->
+	<bean id="wmsDataImportAction" class="com.jumbo.web.action.wmsdataimport.WMSDataImportAction" scope="request" />
+	
+	<!-- 店铺SKU库存分配 -->
+	<bean id="skuInvAllocationAction" class="com.jumbo.web.action.warehouse.SkuInvAllocationAction" scope="request" />
+	
+	<bean id="messageConfigAction" class="com.jumbo.web.action.system.MessageConfigAction" scope="request" ></bean>
+	
+	<bean id="orderOutBoundAction" class="com.jumbo.web.action.automaticEquipment.OrderOutBoundAction" scope="request"/>
+	
+	<bean id="lfStaConfigAction" class="com.jumbo.web.action.baseinfo.LfStaConfigAction" scope="request"></bean>
+	
+	<!-- 退仓出库指令生成拣货任务 -->
+	<bean id="outBoundPickingTaskAction" class="com.jumbo.web.action.warehouse.OutBoundPickingTaskAction" scope="request" />
+	
+	<bean id="staDeliveryChangeLogAction" class="com.jumbo.web.action.warehouse.StaDeliveryChangeLogAction" scope="request"></bean>
+	
+	<bean id="printTempletUploadAction" class="com.jumbo.web.action.warehouse.PrintTempletUploadAction" scope="request"></bean>
+	
+	<bean id="odoAction" class="com.jumbo.web.action.odo.OdoAction" scope="request"></bean>
+        <!-- 区域绑定作业类型 -->
+	<bean id="distriButionAreaAction" class="com.jumbo.web.action.warehouse.DistriButionAreaAction" scope="request" />
+	<bean id="rfidAction" class="com.jumbo.web.action.rfid.RfidAction" scope="request"></bean>
+</beans>

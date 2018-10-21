@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.poSplitCollect.dao.PoSplitCollectOrderMainMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.common.model.PosPurchaseOrderMain" id="PosPurchaseOrderMainMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="bat_id" property="batId" jdbcType="VARCHAR" />
+		<result column="po_number" property="poNumber" jdbcType="VARCHAR" />
+		<result column="po_number1" property="poNumber1" jdbcType="VARCHAR" />
+		<result column="order_type" property="orderType" jdbcType="VARCHAR" />
+		<result column="total_qty" property="totalQty" jdbcType="INTEGER" />
+		<result column="crd_time" property="crdTime" jdbcType="VARCHAR" />
+		<result column="po_flag" property="poFlag" jdbcType="VARCHAR" />
+		<result column="log" property="log" jdbcType="VARCHAR" />
+		<result column="po_type" property="poType" jdbcType="VARCHAR" />
+		<result column="split_time" property="splitTime" jdbcType="TIMESTAMP" />
+		<result column="file_no" property="fileNo" jdbcType="VARCHAR" />
+		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="po_qty" property="poQty" jdbcType="INTEGER" />
+		<result column="is_split_totle_qty" property="isSplitTotleQty" jdbcType="INTEGER" />
+		<result column="is_split_po_qty" property="isSplitPoQty" jdbcType="INTEGER" />
+		<result column="create_by_user_name" property="createByUserName" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- <sql id="Base_Column_List">
+		ppom.id,
+		ppom.bat_id,
+		ppom.po_number,
+		ppom.po_number1,
+		ppom.order_type,
+		ppom.total_qty,
+		ppom.crd_time,
+		ppom.po_flag,
+		ppom.log,
+		ppom.po_type,
+		ppom.split_time,
+		ppom.create_time,
+		ppom.create_by,
+		ppom.update_time,
+		ppom.update_by,
+		ppom.is_deleted,
+		ppom.is_disabled,
+		ppom.file_no,
+		ppom.file_name,
+		ppom.po_qty,
+		ppom.is_split_totle_qty,
+		ppom.is_split_po_qty
+	</sql> -->
+	
+	<!-- 查询表格1数据 -->
+	<select id="selectPoOrderMainCollect" parameterType="com.lmis.pos.common.model.PosPurchaseOrderMain" resultType="com.lmis.pos.poSplitCollect.model.PosSplitAllocateTableOne">
+		SELECT
+	  		COUNT(DISTINCT file_no) AS fileNoCount,
+    		(select count(1) from (select count(1) from pos_purchase_order_main t WHERE 1=1
+    		<if test="id!=null and id!=''">
+	            AND t.id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND t.create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createTimeStart != null and createTimeStart != ''">
+	            AND DATE_FORMAT(t.create_time, '%Y-%m-%d %H:%i:%S') >= #{createTimeStart, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTimeEnd != null and createTimeEnd != ''">
+	            AND DATE_FORMAT(t.create_time, '%Y-%m-%d %H:%i:%S') &lt;= #{createTimeEnd, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileNo!=null and fileNo!=''">
+	            AND t.file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if> AND t.is_deleted = 0 group by t.po_number) c) as poQty,
+    		SUM(total_qty) AS totalQty,
+			SUM(is_split_totle_qty) AS isSplitTotleQty
+		FROM
+			pos_purchase_order_main WHERE 1=1
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createTimeStart != null and createTimeStart != ''">
+	            AND DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%S') >= #{createTimeStart, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTimeEnd != null and createTimeEnd != ''">
+	            AND DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%S') &lt;= #{createTimeEnd, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileNo!=null and fileNo!=''">
+	            AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if> AND is_deleted = 0
+	</select>
+</mapper>

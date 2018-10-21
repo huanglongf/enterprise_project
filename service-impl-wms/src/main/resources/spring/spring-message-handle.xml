@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:msg="http://www.springframework.org/schema/msghandle"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd 
+            http://www.springframework.org/schema/msghandle
+			http://www.springframework.org/schema/msghandle.xsd"
+			default-autowire="byName">
+
+	<!-- id 消费者业务逻辑处理类 -->
+	<!-- topic 消费者逻辑处理类订阅主题-->
+	<!-- tags 消费者逻辑处理类订阅标签，若生产者未提供标签，则采用 * 替代-->
+    
+    <!--id messageHandler  业务逻辑处理类集合-->
+	<!--name businessList  业务逻辑处理类参数-->
+	<!-- 所有的业务Bean对象集成至messageHandler中！！！！！！！ -->
+    <bean id="messageHandler" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	 <!-- 直连订单接受非ad1 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteWmsSalesOrder" topic="${mq.hub2wms3.salesorder.notify}" tags="*"/>
+            	 <!-- 非直连订单接受非ad2 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteOrderCreate" topic="${mq.pac.wms.queue}" tags="*"/>
+            	   <!-- 出库反馈 越海  WLB3 -->                                                             
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteRtnOutbountYh" topic="${mq.wms3.mq.rtn.outbount.yh}" tags="*"/>
+            	   <!-- 出库反馈 LF4 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteRtnOutbountLf" topic="${mq.wms3.mq.rtn.outbount.lf}" tags="*"/>
+            	  <!-- 直连创单5 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="createStaByIdOmsAndMq" topic="${mq.wms3.create.sta.oms}" tags="*"/>    
+            	  <!--非直连创单6-->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="createStaByIdPacAndMq" topic="${mq.wms3.create.sta.pac}" tags="*"/> 
+            	
+            	<!-- 创单成功请求反馈7 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteOrderCreateResponse" topic="${mq.pacs2wms3.createSta.request}" tags="*"/>  
+            	  <!--test 8 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="autoOutbound" topic="${mq.wms3.test.order}" tags="*"/>    
+            	  
+            </list>
+        </property>
+    </bean>
+
+
+
+    	<bean id="messageHandler1" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	 <!-- 直连订单接受非ad1 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteWmsSalesOrder" topic="${mq.mq.mq.hub2wms3.salesorder.notify}" tags="*"/>
+            </list>
+        </property>
+        </bean>
+        
+        <bean id="messageHandler2" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	 <!-- 非直连订单接受非ad2 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteOrderCreate" topic="${mq.mq.mq.pac.wms.queue}" tags="*"/>
+            </list>
+        </property>
+    	</bean>
+    	
+    	<bean id="messageHandler3" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	   <!-- 出库反馈 越海  WLB3 -->                                                             
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteRtnOutbountYh" topic="${mq.mq.mq.wms3.mq.rtn.outbount.yh}" tags="*"/>
+            </list>
+        </property>
+    	</bean>
+    	
+    	
+    	<bean id="messageHandler4" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	   <!-- 出库反馈 LF4 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteRtnOutbountLf" topic="${mq.mq.mq.wms3.mq.rtn.outbount.lf}" tags="*"/>
+            </list>
+        </property>
+    	</bean>
+    	
+    	<bean id="messageHandler5" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	  <!-- 直连创单5 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="createStaByIdOmsAndMq" topic="${mq.mq.mq.wms3.create.sta.oms}" tags="*"/>    
+            </list>
+        </property>
+    	</bean>
+    	
+    	<bean id="messageHandler6" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	  <!--非直连创单6-->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="createStaByIdPacAndMq" topic="${mq.mq.mq.wms3.create.sta.pac}" tags="*"/> 
+            </list>
+        </property>
+    	</bean>
+    	
+    	
+    <bean id="messageHandler7" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<!-- 创单成功请求反馈7 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteOrderCreateResponse" topic="${mq.mq.mq.pacs2wms3.createSta.request}" tags="*"/>  
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="messageHandler8" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	  <!--test 8 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="autoOutbound" topic="${mq.mq.mq.wms3.test.order}" tags="*"/>    
+            </list>
+        </property>
+    </bean>	
+     
+    <bean id="messageHandler9" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<!-- 获取运单号9 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteSetTransNoMQ" topic="${mq.mq.mq.wms3.get.transNo}" tags="*"/>  
+            </list>
+        </property>
+    </bean>  
+    
+    
+    <bean id="messageHandler10" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<!-- 获取运单号10 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="createPickingListByMQ" topic="${mq.mq.mq.wms3.create.pickinglist}" tags="*"/>  
+            </list>
+        </property>
+    </bean> 
+    
+     <bean id="messageHandler11" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<!-- yanyong 10 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteOccupyInventory" topic="${mq.wms3.occupy.inventory}" tags="*"/>  
+            </list>
+        </property>
+    </bean>  
+    
+    
+     <bean id="messageHandler12" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<msg:msghandle beanNameId="rocketMQOneService" method="autoOutBoundByAll" topic="${mq.mq.wms3.outbound_pickinglist}" tags="*"/>  
+            </list>
+        </property>
+    </bean>  
+    
+    <!-- 获取IM需要同步全量库存数据 -->
+     <bean id="messageHandler13" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<msg:msghandle beanNameId="rocketMQOneService" method="inventorySnapShotByIm" topic="${mq.im2wms3.inventory.sku.full}" tags="*"/>  
+            </list>
+        </property>
+    </bean>  
+    
+    <!--nike.inbound hub 收货接受指令 -->
+     <bean id="messageHandler14" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<msg:msghandle beanNameId="rocketMQOneService" method="nikeInboundHub" topic="${mq.wms3.nike.inbound.hub}" tags="*"/>  
+            </list>
+        </property>
+    </bean> 
+    
+    <!--nike.nikeQianHaiSkuInfo hub 商品接收 -->
+     <bean id="messageHandler15" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<msg:msghandle beanNameId="rocketMQOneService" method="nikeQianHaiSkuInfo" topic="${mq.wms3.nike.goods.master}" tags="*"/>  
+            </list>
+        </property>
+    </bean> 
+
+   <!--  消费者补偿类 開始 ==================================================================================================================================-->
+    <bean id="consumerCompensateService" class="com.baozun.scm.baseservice.message.rocketmq.service.compensate.ConsumerCompensateService">
+	<property name="handler" ref="messageHandlerAgain"></property>
+	</bean>
+	 <bean id="messageHandlerAgain" class="com.baozun.scm.baseservice.message.rocketmq.service.handle.MessageHandler">
+        <property name="businessList">
+            <list>
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteRtnOutbountYh" topic="${mq.mq.mq.wms3.mq.rtn.outbount.yh}" tags="*"/>
+                 <!-- 直连订单接受非ad1 -->
+                <msg:msghandle beanNameId="rocketMQOneService" method="excuteWmsSalesOrder" topic="${mq.mq.mq.hub2wms3.salesorder.notify}" tags="*"/>
+            	<!-- 非直连订单接受非ad2 -->
+            	<msg:msghandle beanNameId="rocketMQOneService" method="excuteOrderCreate" topic="${mq.mq.mq.pac.wms.queue}" tags="*"/>
+            </list>
+        </property>
+	</bean>
+	<!--  消费者补偿类 結束 ==================================================================================================================================-->
+	
+</beans>

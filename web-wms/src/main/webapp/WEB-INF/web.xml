@@ -1,0 +1,188 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+  <display-name>WMSPlatform</display-name>  
+  <!-- Spring -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath*:spring.xml
+		</param-value>
+	</context-param>		
+	<!-- Encoding Filter -->
+	<filter>
+        <filter-name>singleSignOnSessionFilter</filter-name>
+        <filter-class>
+            com.jumbo.web.filter.SingleSignOnSessionFilter
+        </filter-class>
+    </filter>
+    
+    <filter>
+        <filter-name>uacErrorFilter</filter-name>
+        <filter-class>
+            com.jumbo.web.filter.UacErrorFilter
+        </filter-class>
+    </filter>
+    
+	<filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>
+            org.springframework.web.filter.CharacterEncodingFilter
+        </filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+        	<param-name>forceEncoding</param-name>
+        	<param-value>true</param-value>
+        </init-param>
+    </filter>
+	<!-- URL Rewrite -->
+	<filter>
+       <filter-name>urlRewriteFilter</filter-name>
+       <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+
+       <init-param>
+	      <param-name>logLevel</param-name>
+	      <param-value>log4j</param-value>
+	   </init-param>
+    </filter>
+    <!-- AccountSet -->
+    <!--
+    <filter>
+		<filter-name>accountSetFilter</filter-name>
+		<filter-class>com.jumbo.web.AccountSetFilter</filter-class>
+	</filter>
+	-->
+	<!-- Spring Security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>	
+    
+	<!-- Struts2 -->
+	<filter> 
+	   <filter-name>StrutsPrepareFilter</filter-name> 
+	   <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareFilter</filter-class> 
+	</filter>
+
+	<filter> 
+	   <filter-name>StrutsExecuteFilter</filter-name> 
+	   <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsExecuteFilter</filter-class> 
+	</filter>
+	
+	<filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+	<filter-mapping>
+       <filter-name>urlRewriteFilter</filter-name>
+       <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+	<filter-mapping>
+       <filter-name>singleSignOnSessionFilter</filter-name>
+       <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter-mapping>
+       <filter-name>uacErrorFilter</filter-name>
+       <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!--
+    <filter-mapping>
+		<filter-name>accountSetFilter</filter-name>
+		<url-pattern>/j_spring_security_check</url-pattern>
+		<dispatcher>REQUEST</dispatcher> 
+        <dispatcher>FORWARD</dispatcher> 
+	</filter-mapping>	
+    -->
+    <!--
+    <filter-mapping>
+		<filter-name>accountSetFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+		<dispatcher>REQUEST</dispatcher> 
+        <dispatcher>FORWARD</dispatcher> 
+	</filter-mapping>	
+    -->
+    <filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher> 
+        <dispatcher>FORWARD</dispatcher> 
+	</filter-mapping>	
+	 
+	<filter-mapping>
+        <filter-name>StrutsPrepareFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher> 
+        <dispatcher>FORWARD</dispatcher> 
+    </filter-mapping>
+    
+	<filter-mapping>
+    	<filter-name>StrutsExecuteFilter</filter-name>
+   		<url-pattern>/*</url-pattern>
+   		<dispatcher>REQUEST</dispatcher> 
+        <dispatcher>FORWARD</dispatcher> 
+	</filter-mapping >
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+	    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+ 	<listener>
+	    <listener-class>com.jumbo.web.InitServletContextListener</listener-class>
+	</listener>
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+	<listener>
+	
+	<listener-class>com.baozun.scm.baseservice.account.oauth.OauthSingleSignOutHttpSessionListener</listener-class>
+		<!-- <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class> -->
+	</listener>
+	
+	<listener>
+   		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+   	</listener>
+	
+	<servlet>
+		<servlet-name>CXFServlet</servlet-name>
+		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>CXFServlet</servlet-name>
+		<url-pattern>/webservice/*</url-pattern>
+	</servlet-mapping>
+
+	
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+	
+	<jsp-config> 
+      <jsp-property-group> 
+        <url-pattern>*.jsp</url-pattern> 
+        <!-- <el-ignored>true</el-ignored> --> 
+      </jsp-property-group> 
+    </jsp-config> 
+	
+	<!-- Welcome files -->
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<error-page>  
+ 		<error-code>401</error-code>  
+ 		<location>/WEB-INF/401.html</location>  
+	</error-page>  
+	
+</web-app>

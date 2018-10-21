@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+	<dubbo:service interface="com.jumbo.wms.manager.expressDelivery.logistics.TransOnLineFactory" ref="transOnLineFactory" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressDelivery.ChannelInsuranceManager" ref="channelInsuranceManager" />
+	
+	<dubbo:service interface="com.jumbo.wms.manager.task.TaskOmsOutManager" ref="taskOmsOutManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.QstaManager" ref="qstaManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.QueueStaManagerProxy" ref="queueStaManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.hub2wms.RtnOrderManager" ref="rtnOrderManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.system.SequenceManager" ref="sequenceManager" />
+    <dubbo:service interface="com.jumbo.wms.manager.task.ThreePLManager" ref="threePLManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.operationcenter.ScanSkuRecordManager" ref="scanSkuRecordManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.SecKillSkuManager" ref="secKillSkuManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.SkuSizeConfigManager" ref="skuSizeConfigManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.PickingListPrintManager" ref="pickingListPrintManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.boc.BocInterfaceManagerProxy" ref="bocInterfaceManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.CheckOutBoundManager" ref="checkOutBoundManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.print.StaPrintManager" ref="staPrintManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WhReplenishManager" ref="whReplenishManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.PackageSkuManager" ref="packageSkuManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.sforder.SfOrderTaskManager" ref="sfOrderTaskManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.ytoorder.YtoOrderTaskManager" ref="ytoOrderTaskManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.kerry.KerryOrderTaskManager" ref="kerryOrderTaskManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.rfd.RfdOrderTaskManager" ref="rfdOrderTaskManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.TransInfoManager" ref="transInfoManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.CreatePickingListManagerProxy" ref="createPickingListManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.vmi.godivaData.GodivaManagerProxy" ref="godivaManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.StarbucksManagerProxy" ref="starbucksManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WarehouseReturnManager" ref="warehouseReturnManager" />
+	<dubbo:service interface="com.jumbo.webservice.ids.manager.IdsManagerProxy" ref="idsManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.TaskSfManager" ref="taskSfManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.sf.tw.TaskSfTwManager" ref="taskSfTwManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.stoorder.StoOrderTaskManager" ref="stoOrderTaskManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.SpecialSkuManager" ref="specialSkuManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.af.AFManager" ref="aFManager" />
+ 	<dubbo:service interface="com.jumbo.wms.manager.trans.TransSuggestManagerProxy" ref="transSuggestManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.TransportServiceManager" ref="transportServiceManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.SkuTagManager" ref="skuTagManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.TransAreaGroupManager" ref="transAreaGroupManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.TransRoleManager" ref="transRoleManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.ChannelPostPrintConfManager" ref="channelPostPrintConfManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.AutoPickingListRoleManager" ref="autoPickingListRoleManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.ChannelGroupManager" ref="channelGroupManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.PrePackagedSkuRefManager" ref="prePackagedSkuRefManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.ReturnReasonTypeManager" ref="reasonTypeManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.AddCounterMaintainManager" ref="addCounterMaintainManager" />
+	<dubbo:service interface="com.jumbo.webservice.pda.manager.PdaManager" ref="pdaManager" />
+	<dubbo:service interface="com.jumbo.webservice.pda.manager.PdaOperationManager" ref="pdaOperationManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WareHouseOutBoundManager" ref="warehouseOutBoundManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.authorization.AuthorizationManager" ref="authorizationManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.DropDownListManager" ref="dropDownListManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.baseinfo.MenuManager" ref="menuManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.system.SystemManager" ref="systemManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.baseinfo.BaseinfoManager" ref="baseinfoManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.archive.ArchiveManager" ref="archiveManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.system.ChooseOptionManager" ref="chooseOptionManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.TransactionTypeManager" ref="transactionTypeManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.vmi.ckData.CKParseDataManagerProxy" ref="cKParseDataManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WareHouseManagerExe" ref="wareHouseManagerExe" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WareHouseManagerExecute" ref="wareHouseManagerExecute" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WareHouseManagerQuery" ref="wareHouseManagerQuery" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WareHouseManager" ref="wareHouseManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WareHouseManagerCancel" ref="wareHouseManagerCancel" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.VMIRtoManager" ref="vmiRtoManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.InventoryOccupyManager" ref="inventoryOccupyManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.OperationUnitManager" ref="operationUnitManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.PickingListManager" ref="pickingListManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.PickingListPackageManager" ref="pickingListPackageManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.SkuSnManager" ref="skuSnManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WareHouseManagerProxy" ref="wareHouseManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.ChannelManager" ref="whChannelManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.channel.ChannelCombineRefManager" ref="channelRefManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.report.ReportManager" ref="reportManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WareHouseLocationManager" ref="wareHouseLocationManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.vmi.espData.ESPOrderManager" ref="espOrderManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.BatchReceivingManagerProxy" ref="bachBatchReceivingManagerProxy" />
+	<dubbo:service interface="com.jumbo.webservice.biaogan.manager.InOutBoundManager" ref="inOutBoundManager" />
+	<dubbo:service interface="com.jumbo.webservice.nike.manager.NikeOrderManager" ref="nikeOrderManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WhmanagerNotTransactional" ref="whmanagerNotTransactional" />
+	<dubbo:service interface="com.jumbo.webservice.ids.manager.IdsManager" ref="idsManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.TaskManager" ref="k3Executor" />
+	<dubbo:service interface="com.jumbo.webservice.outsourcingWH.manager.OutsourcingWHManager" ref="outsourcingWHManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.StaCancelManager" ref="staCancelManager" />
+	<dubbo:service interface="com.jumbo.wms.daemon.TaskManagerProxy" ref="taskManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.pda.PdaTaskManager" ref="pdaTaskManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.mq.MqManagerProxy" ref="mqManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.vmi.coachData.CoachParseDataManagerProxy" ref="coachParseDataManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.excel.ExcelReadManager" ref="excelReadManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.excel.ExcelValidateManager" ref="excelValidateManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.excel.ExcelWriterManager" ref="excelWriterManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.SkuCategoryManager" ref="skuCategoryManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.baseinfo.SkuModifyLogManager" ref="skuModifyLogManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.channel.ChannelManager" ref="channelManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.TransRoleAccordManager" ref="transRoleAccordManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WhBoxInboundManager" ref="whBoxInboundManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressDelivery.TransOlManager" ref="transOlManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressDelivery.TransOlManagerProxy" ref="transOlManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.sku.SkuManager" ref="skuManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressDelivery.TransManager" ref="transManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.print.data.WarehousePrintData" ref="warehousePrintData" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.ShopStoreInfoManager" ref="shopStoreInfoManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressRadar.ExpressRadarManager" ref="expressRadarManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressRadar.TransRouteManager" ref="transRouteManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressRadar.ExpressStatusCodeManager" ref="expressStatusCodeManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressRadar.SysRouteStatusCodeManager" ref="sysRouteStatusCodeManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressRadar.RadarAreaManager" ref="radarAreaManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressRadar.ExpressOocRadarManager" ref="expressOocRadarManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.ConsumptiveMaterialUseQueryCommandManager" ref="consumptiveMaterialUseQueryCommandManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressRadar.ExpressOrderQueryManager" ref="expressOrderQueryManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.expressRadar.TransRouteStatusManager" ref="transRouteStatusManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.WhTransOlConfigManager" ref="whTransOlConfigManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.pickZone.NewInventoryOccupyManager" ref="newInventoryOccupyManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.pickZone.PickZoneEditManager" ref="pickZoneEditManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.compensation.CompensationManager" ref="compensationManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.automaticEquipment.AutoBaseInfoManager" ref="autoBaseInfoManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.inventorySnapshot.InventorySnapshotManagerProxy" ref="inventorySnapshotManagerProxy" />
+	<dubbo:service interface="com.jumbo.wms.manager.inventorySnapshot.InventorySnapshotManager" ref="inventorySnapshotManager" />
+	
+	
+	<!-- ######################## task dubbo ############################## -->
+	<dubbo:service ref="expressRadarTask" interface="com.jumbo.wms.daemon.ExpressRadarTask" />
+ 	<dubbo:service ref="idsInterfaceTask" interface="com.jumbo.wms.daemon.IDSInterfaceTask" />
+ 	<dubbo:service ref="backUpTaskLockLog" interface="com.jumbo.wms.daemon.BackUpTaskLockLog" />
+ 	<dubbo:service ref="compenSateTask" interface="com.jumbo.wms.daemon.CompenSateTask" />
+	<dubbo:service ref="secKillTask" interface="com.jumbo.wms.daemon.SecKillTask" />
+	<dubbo:service ref="cathKidstonTask" interface="com.jumbo.wms.daemon.CathKidstonTask" />
+	<dubbo:service ref="cancelOrderTask" interface="com.jumbo.wms.daemon.CancelOrderTask" />
+	<dubbo:service ref="totalJNJInvTask" interface="com.jumbo.wms.daemon.JNJInvTask" />
+	<dubbo:service ref="totalZeroInvTask" interface="com.jumbo.wms.daemon.TotalZeroInvTask" />
+	<dubbo:service ref="totalRealtimeInvTask" interface="com.jumbo.wms.daemon.TotalRealtimeInvTask" />
+	<dubbo:service ref="totalInvTask" interface="com.jumbo.wms.daemon.TotalInvTask" />
+	<dubbo:service ref="converseYxTask" interface="com.jumbo.wms.daemon.ConverseYxTask" />
+	<dubbo:service ref="sfOrderTask" interface="com.jumbo.wms.daemon.SfOrderTask" />
+	<dubbo:service ref="ytoOrderTask" interface="com.jumbo.wms.daemon.YtoOrderTask" />
+	<dubbo:service ref="kerryOrderTask" interface="com.jumbo.wms.daemon.KerryOrderTask" />
+	<dubbo:service ref="rfdOrderTask" interface="com.jumbo.wms.daemon.RfdOrderTask" />
+	<dubbo:service ref="whTask" interface="com.jumbo.wms.daemon.WhReplenishTask" />
+	<dubbo:service ref="taskCreateSta" interface="com.jumbo.wms.daemon.TaskCreateSta" />
+	<dubbo:service ref="ztoOrderTask" interface="com.jumbo.wms.daemon.ZtoOrderTask" />
+	<dubbo:service ref="gymboreeTask" interface="com.jumbo.wms.daemon.GymboreeTask" />
+	<dubbo:service ref="shelfLifeTask" interface="com.jumbo.wms.daemon.ShelfLifeTask" />
+	<dubbo:service ref="taskOms" interface="com.jumbo.wms.daemon.TaskOms" />
+	<dubbo:service ref="stoOrderTask" interface="com.jumbo.wms.daemon.StoOrderTask" />
+	<dubbo:service ref="taskSf" interface="com.jumbo.wms.daemon.TaskSf" />
+	<dubbo:service ref="taskSfTw" interface="com.jumbo.wms.daemon.TaskSfTw" />
+	<dubbo:service ref="jdOrderTask" interface="com.jumbo.wms.daemon.JdOrderTask" />
+	<dubbo:service ref="autoPickingTask" interface="com.jumbo.wms.daemon.AutoPickingTask" />
+	<dubbo:service ref="threePLTask" interface="com.jumbo.wms.daemon.ThreePLTask" />
+	<dubbo:service ref="mergeStaTask" interface="com.jumbo.wms.daemon.MergeStaTask" />
+	<dubbo:service ref="invTask" interface="com.jumbo.wms.daemon.InvTask" />
+	<dubbo:service ref="taskGuess" interface="com.jumbo.wms.daemon.TaskGuess" />
+	<dubbo:service ref="IdsTask" interface="com.jumbo.wms.daemon.IdsTask" /> 
+	<dubbo:service ref="taskItochu" interface="com.jumbo.wms.daemon.TaskItochu" />
+	<dubbo:service ref="taskItochuIDS" interface="com.jumbo.wms.daemon.TaskItochuIDS" />
+	<dubbo:service ref="taskOutsourcingWH" interface="com.jumbo.wms.daemon.TaskOutsourcingWH" />
+	<dubbo:service ref="biaoganTask" interface="com.jumbo.wms.daemon.TaskBiaogan" />
+	<dubbo:service ref="bocTask" interface="com.jumbo.wms.daemon.BocTask" />
+	<dubbo:service ref="pdaTask" interface="com.jumbo.wms.daemon.PdaTask" />
+	<dubbo:service ref="idsTask" interface="com.jumbo.wms.daemon.IdsTask" />
+	<dubbo:service ref="levisTask" interface="com.jumbo.wms.daemon.LevisTask" />
+	<dubbo:service ref="itTask" interface="com.jumbo.wms.daemon.ItTask" />
+	<dubbo:service ref="espTask" interface="com.jumbo.wms.daemon.EspritTask" />
+	<dubbo:service ref="nikeTask" interface="com.jumbo.wms.daemon.NikeTask" />
+	<dubbo:service ref="checkStaRepetitiveTask" interface="com.jumbo.wms.daemon.CheckStaRepetitiveTask" />
+	<dubbo:service ref="transRoleAccordTask" interface="com.jumbo.wms.daemon.TransRoleAccordTask" />
+	<dubbo:service ref="arriveTimeTask" interface="com.jumbo.wms.daemon.ArriveTimeTask" />
+	<dubbo:service ref="converseTask" interface="com.jumbo.wms.daemon.ConverseTask" />
+	<dubbo:service ref="cchTask" interface="com.jumbo.wms.daemon.CCHTask" />
+	<dubbo:service ref="emsTask" interface="com.jumbo.wms.daemon.EmsTask" />
+	<dubbo:service ref="ckTask" interface="com.jumbo.wms.daemon.CKTask" />
+	<dubbo:service ref="edwTask" interface="com.jumbo.wms.daemon.EdwTask" />
+	<dubbo:service ref="vmiDefaultTask" interface="com.jumbo.wms.daemon.VmiDefaultTask" />
+	<dubbo:service ref="vmiInventoryTask" interface="com.jumbo.wms.daemon.VmiInventoryTask" />
+	<dubbo:service ref="pumaTask" interface="com.jumbo.wms.daemon.PumaTask" />
+	<dubbo:service ref="ttkOrderTask" interface="com.jumbo.wms.daemon.TtkOrderTask" />
+	<dubbo:service ref="taskItochuUA" interface="com.jumbo.wms.daemon.TaskItochuUA" />
+	<dubbo:service ref="archiveTask" interface="com.jumbo.wms.manager.task.archive.ArchiveTask" />
+<!-- 	<dubbo:service ref="edwUpLoadTask" interface="com.jumbo.wms.daemon.EdwUpLoadTask" /> -->
+	<dubbo:service ref="wxOrderTask" interface="com.jumbo.wms.daemon.WxOrderTask" />
+	<dubbo:service ref="snManager" interface="com.jumbo.wms.manager.sn.SnManager" />
+	<dubbo:service ref="ocpOrderEmailInform" interface="com.jumbo.wms.daemon.OcpOrderEmailInform" />
+	<dubbo:service ref="upgradeTask" interface="com.jumbo.wms.daemon.UpgradeTask" />
+	<dubbo:service ref="createStaTaskManager" interface="com.jumbo.wms.manager.hub2wms.CreateStaTaskManager" />
+	<dubbo:service ref="emsTaskManager" interface="com.jumbo.wms.manager.task.ems.EmsTaskManager" />
+	<dubbo:service ref="mongoDBSfLogisticsManager" interface="com.jumbo.wms.manager.MongoDBSfLogisticsManager" />
+	<dubbo:service ref="totalInvToPACTask" interface="com.jumbo.wms.daemon.TotalInvToPACTask" />
+	<dubbo:service ref="outboundInfoManager" interface="com.jumbo.wms.manager.outbound.OutboundInfoManager" />
+	<dubbo:service ref="otherInvToOmsTask" interface="com.jumbo.wms.daemon.OtherInvToOmsTask" />
+	<dubbo:service ref="msgOrderCancelTask" interface="com.jumbo.wms.daemon.MsgOrderCancelTask" />
+	<dubbo:service ref="hubWmsService" interface="com.jumbo.wms.manager.hub2wms.HubWmsService"/>
+	<dubbo:service ref="hubWmsManager" interface="com.jumbo.wms.manager.hub2wms.HubWmsManager"/>
+	<dubbo:service ref="dmsWmsManager" interface="com.jumbo.wms.manager.dms.DmsWmsManager"/>
+	<dubbo:service ref="mongoDBInventoryManager" interface="com.jumbo.wms.manager.MongoDBInventoryManager"/>
+	<dubbo:service ref="rtnOrderTask" interface="com.jumbo.wms.daemon.RtnOrderTask" />
+	<dubbo:service ref="invoiceOrderTask" interface="com.jumbo.wms.daemon.InvoiceOrderTask" />
+	<dubbo:service ref="guessManager" interface="com.jumbo.wms.manager.vmi.guess.GuessManager" />
+	<dubbo:service ref="schedulerTaskManager" interface="com.jumbo.wms.manager.system.SchedulerTaskManager" />
+	<dubbo:service ref="fillInInvoiceManagerProxy" interface="com.jumbo.wms.manager.warehouse.FillInInvoiceManagerProxy" />
+	<dubbo:service ref="fillInInvoiceManager" interface="com.jumbo.wms.manager.warehouse.FillInInvoiceManager" />
+	<dubbo:service ref="wmsInvChangeToOmsManager" interface="com.jumbo.wms.manager.task.inventoryTransactionToOms.WmsInvChangeToOmsManager" />
+	<dubbo:service ref="sfNextMorningConfigManager" interface="com.jumbo.wms.manager.warehouse.SfNextMorningConfigManager"/>
+	<dubbo:service ref="msgToWcsManager" interface="com.jumbo.wms.manager.automaticEquipment.MsgToWcsManager"/>
+	<dubbo:service ref="adCheckManager" interface="com.jumbo.wms.manager.outbound.AdCheckManager"/>
+	<dubbo:service ref="commonLogRecordManager" interface="com.jumbo.wms.manager.CommonLogRecordManager"/>
+	<dubbo:service ref="baseQueryThreadPoolManager" interface="com.jumbo.wms.manager.warehouse.BaseQueryThreadPoolManager"/>
+	<!-- yamato物流信息推送hub -->
+	<dubbo:service ref="yamatoTransInfoToHub"  interface="com.jumbo.wms.daemon.YamatoTransInfoToHub" />
+	<dubbo:service ref="yamatoTransToHubManager"  interface="com.jumbo.wms.manager.ymt2hub.YamatoTransToHubManager" />
+	<dubbo:service ref="threadUtilManager"  interface="com.jumbo.wms.manager.thread.ThreadUtilManager" />
+	<!-- **************** 云栈 start***************** -->
+	<dubbo:service ref="transAliWaybill" interface="com.jumbo.wms.manager.expressDelivery.logistics.TransAliWaybill"/>
+	<!-- **************** 云栈 end  ***************** --> 
+	<!-- **************** 定时任务推送NIKE定制化 ***************** -->
+	<dubbo:service ref="nikeCartonNoTask" interface="com.jumbo.wms.manager.task.NikeCartonNo.NikeCartonNoTask" />
+	
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.QueueStaManagerExecute" ref="queueStaManagerExecute" />
+	<dubbo:service interface="com.jumbo.wms.manager.pda.PdaPickingManager" ref="pdaPickingManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.pda.PdaReceiveManager" ref="pdaReceiveManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.pda.PdaShelvesManager" ref="pdaShelvesManager" />
+	<dubbo:service ref="reebokTask" interface="com.jumbo.wms.daemon.ReebokTask" />
+	
+		<!-- PMS APP -->
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.api.ApiWarehouseManager" ref="apiWarehouseManager" />
+	<dubbo:service interface="com.jumbo.pms.manager.app.AppParcelManager" ref="appParcelManager" />
+	<dubbo:service interface="com.jumbo.pms.manager.api.ApiPackageManager" ref="apiPackageManager" />
+	<dubbo:service interface="com.jumbo.pms.manager.app.ParcelManagerTask" ref="parcelManagerTask" />
+	<dubbo:service interface="com.jumbo.pms.manager.api.ApiShipmentManager" ref="apiShipmentManager" />
+	<dubbo:service interface="com.jumbo.pms.manager.app.ParcelInfoManagerTask" ref="parcelInfoManagerTask" />
+	<dubbo:service interface="com.jumbo.pms.manager.SysInterfaceQueueManager" ref="sysInterfaceQueueManager" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.inventoryTransactionToOms.InventoryTransactionToOmsTaskManager" ref="inventoryTransactionToOmsTaskManager"/> 
+	<dubbo:service ref="autoOutboundTurnboxManager" interface="com.jumbo.wms.manager.warehouse.AutoOutboundTurnboxManager"/>
+	<dubbo:service interface="com.baozun.monitor.bean.MonitorService" ref="monitorService" />
+	<dubbo:service interface="com.jumbo.wms.daemon.CxcOrderTask" ref="cxcOrderTask" />
+	<dubbo:service ref="adidasTask" interface="com.jumbo.wms.daemon.AdidasTask" />
+	<dubbo:service ref="reebokTask" interface="com.jumbo.wms.daemon.ReebokTask" />
+	<dubbo:service ref="gncTask" interface="com.jumbo.wms.daemon.GncTask" />
+		<dubbo:service ref="mqTask" interface="com.jumbo.wms.daemon.MqTask" />
+		<!-- 声明需要暴露的优先发货城市配置服务接口 -->
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.PriorityShippedCityConfigManager" ref="priorityShippedCityConfigManager" />
+	<!-- 声明需要暴露的菜鸟仓查询单据序列号信息服务接口 -->
+	<dubbo:service interface="com.jumbo.wms.daemon.CaiNiaoConsignmentSnTask" ref="caiNiaoConsignmentSnTask" />
+	<!-- 声明需要暴露的Lmis服务接口 -->
+	<dubbo:service interface="com.jumbo.wms.manager.lmis.LmisManager" ref="lmisManager" />
+	<!-- RMI接口切换dubbo -->
+	<dubbo:service ref="wmsToOmsRmiServer" interface="com.jumbo.rmiservice.RmiService"/>
+	<!-- WMS外包仓接口 -->
+	<dubbo:service ref="wmsThreePLManager" interface="com.jumbo.wms.manager.hub2wms.WmsThreePLManager"/>
+	<dubbo:service ref="cnInterfaceTask" interface="com.jumbo.wms.daemon.CnInterfaceTask"/>
+	<dubbo:service ref="cnInterfaceProxyTask" interface="com.jumbo.wms.daemon.CnInterfaceProxyTask"/>
+	<dubbo:service ref="cnjhTask" interface="com.jumbo.wms.daemon.CnjhTask"/>
+	<!-- Gucci-->
+	<dubbo:service ref="gucciTask" interface="com.jumbo.wms.daemon.GucciTask"/>
+	<dubbo:service ref="gucciManager" interface="com.jumbo.wms.manager.vmi.gucciData.GucciManager" />
+	<!-- wms数据导出 -->
+	<dubbo:service ref="wmsDataImportManager" interface="com.jumbo.wms.manager.wmsdataimport.WMSDataImportManager"/>
+	<!-- 库存流水推送上位系统相关定时任务-->
+	<dubbo:service ref="skuInvFlowTask" interface="com.jumbo.wms.daemon.SkuInvFlowTask"/>
+	<!-- 服务运行状态摘除与恢复 -->
+	<dubbo:service interface="com.baozun.server.manager.ServerRecoverService" ref="serverRecoverService"/>
+	<!-- MQ功能切换开关 -->
+	<dubbo:service interface="com.jumbo.wms.manager.mq.MessageConfigManager" ref="messageConfigManager"/>
+	<dubbo:service interface="com.jumbo.wms.manager.task.SendMqByPacAndTomsTask" ref="sendMqByPacAndToms" />
+	<dubbo:service interface="com.jumbo.wms.manager.task.SendMqByPacAndTomsTask" ref="sendMqTomsByMqLogTime" />
+	<dubbo:service ref="starbucksTask" interface="com.jumbo.wms.daemon.StarbucksTask"/>
+	<!-- 区域占用库存优化，临时配置，需要迁移至单独的dubbo,by fxl -->
+	<dubbo:service interface="com.jumbo.wms.manager.warehouse.AreaOcpStaManager" ref="areaOcpStaManager" />
+    <!-- Nike预售修改地址重新获取运单号 --> 
+    <dubbo:service ref="orderAddInfoTaks" interface="com.jumbo.wms.daemon.OrderAddInfoTaks"/>
+    <!-- 获取运单号  MQ--> 
+    <dubbo:service ref="gainTransNoMQTask" interface="com.jumbo.wms.daemon.GainTransNoMQTask"/> 
+    
+    <!-- ************************* 线程池维护 ******************** -->
+	<dubbo:service interface="com.jumbo.wms.manager.thread.ThreadUtilManager" ref="threadUtilManager" />
+	
+	<!-- ************************* 店铺维护 ******************** -->
+	<dubbo:service interface="com.jumbo.wms.manager.priorityChannelOms.PriorityChannelOmsUtilManager" ref="priorityChannelOmsUtilManager" />
+
+	
+
+
+
+    <!-- ************************* 定时任务执行情况 ******************** -->
+    <dubbo:service ref="newTaskLogManager" interface="com.baozun.scm.upperservice.wms3.task.NewTaskLogManager"/> 
+    <dubbo:service ref="newWarningManager" interface="com.baozun.scm.upperservice.wms3.task.NewTaskLogManager"/> 
+    
+    
+    <dubbo:service ref="adapterTask" interface="com.jumbo.wms.daemon.AdapterTask"/>
+    <!-- HUB4.0 标准对接【非销售类】 -->
+    <dubbo:service ref="wmsOrderServiceToHub4Manager" interface="com.jumbo.wms.manager.hub4.WmsOrderServiceToHub4Manager"/>
+    <dubbo:service ref="wms2Hub4AllocationService" interface="com.jumbo.wms.manager.hub4.Wms2Hub4AllocationService"/>
+    <dubbo:service ref="wms2TomsService" interface="com.jumbo.wms.manager.oms.Wms2TomsService" executes="10"/>
+    <dubbo:service ref="rfidManager" interface="interface="com.jumbo.wms.manager.rfid.RfidManager""/>
+    
+</beans>

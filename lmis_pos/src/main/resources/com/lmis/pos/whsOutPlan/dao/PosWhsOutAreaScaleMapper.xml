@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.whsOutPlan.dao.PosWhsOutAreaScaleMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject"
+		id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="PosWhsOutPlanAreaScaleMap"  type="com.lmis.pos.whsOutPlan.model.PosWhsOutPlanAreaScale"  extends="PersistentObjectMap">
+	 <!-- 子字段类型 -->
+		<result column="sku_ggg" property="skuGgg" jdbcType="VARCHAR" />
+	    <result column="sku_category" property="skuCategory" jdbcType="VARCHAR" />
+		<result column="gndr_age_desc" property="gndrAgeDesc" jdbcType="VARCHAR" />
+		<result column="gbl_cat_sum_desc" property="gblCatSumDesc" jdbcType="VARCHAR" />
+		<result column="gbl_cat_core_focs_desc" property="gblCatCoreFocsDesc" jdbcType="VARCHAR" />
+		<result column="size" property="size" jdbcType="VARCHAR" />
+	    <result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+		<result column="rate" property="rate" jdbcType="DECIMAL" />
+		<result column="whs_name" property="whsName" jdbcType="VARCHAR" />
+		<result column="sale_domain" property="saleDomain" jdbcType="VARCHAR" />
+	</resultMap>
+    <sql id="Base_Column_List">
+	   	pwrl.sku_ggg sku_ggg,
+	    pwrl.sku_category sku_category,
+	    pwrl.gndr_age_desc gndr_age_desc,
+	    pwrl.gbl_cat_sum_desc gbl_cat_sum_desc,
+	    pwrl.gbl_cat_core_focs_desc gbl_cat_core_focs_desc,
+	    pwrl.size size,
+	    pwrl.whs_code whs_code,
+	    pwrl.rate,
+        pw.whs_name whs_name,
+        pw.sale_domain sale_domain
+	</sql>
+	<select id="selectPosWhsOutAreaScale" parameterType="com.lmis.pos.whsOutPlan.model.PosWhsOutPlanAreaScale" resultMap="PosWhsOutPlanAreaScaleMap">
+	  select  <include refid="Base_Column_List" />  from pos_whs_rate_loadin pwrl join pos_whs pw on pwrl.whs_code = pw.whs_code
+	  <trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="skuGgg != null and skuGgg != '' ">
+	             pwrl.sku_ggg like CONCAT(CONCAT('%',#{skuGgg},'%'))
+	        </if>
+	        <if test="size!=null and size != '' ">
+	           AND pwrl.size = #{size,jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	
+	<!-- 导入数据 -->
+	<insert id="savePosWhsOutAreaScaleInfo" parameterType="java.util.List">
+		INSERT INTO pos_whs_rate_loadin
+		(
+		sku_ggg,
+		sku_category,
+		gndr_age_desc,
+		gbl_cat_sum_desc,
+		gbl_cat_core_focs_desc,
+		size,
+		whs_code,
+		rate)
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				#{obj.skuGgg, jdbcType=VARCHAR},
+				#{obj.skuCategory, jdbcType=VARCHAR},
+				#{obj.gndrAgeDesc, jdbcType=VARCHAR},
+				#{obj.gblCatSumDesc, jdbcType=VARCHAR},
+				#{obj.gblCatCoreFocsDesc, jdbcType=VARCHAR},
+				#{obj.size, jdbcType=VARCHAR},
+				#{obj.whs_code, jdbcType=VARCHAR},
+				#{obj.rate, jdbcType=DECIMAL},	
+			</trim>
+		</foreach>
+	</insert>
+</mapper>

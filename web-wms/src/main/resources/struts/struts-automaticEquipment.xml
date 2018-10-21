@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="auto" extends="root" namespace="/auto">
+		<action name="initSkuTypeByPage" class="skuTypeAction" method="initSkuTypeByPage">
+			<result name="success">/frame/automaticEquipment/sku-type-edit.jsp</result>
+		</action>
+		<action name="saveSkuType" class="skuTypeAction" method="saveSkuType"/>
+		
+		<action name="updateSkuType" class="skuTypeAction" method="updateSkuType"/>
+		
+		<action name="skuTypeImport" class="skuTypeAction" method="skuTypeImport">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action>
+		
+		
+		<action name="skuSpTypeImport" class="skuTypeAction" method="skuSpTypeImport">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action>
+		<action name="channelSkuSpTypeImport" class="skuTypeAction" method="channelSkuSpTypeImport">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action>
+		
+		
+		<action name="importCollection" class="warehouseShippingAction" method="importCollection">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action>
+		
+		<action name="initZoonPage" class="zoonAction" method="initZoonPage">
+			<result name="success">/frame/automaticEquipment/zoon-edit.jsp</result>
+		</action>
+		
+		<action name="findAutoWh" class="zoonAction" method="findAutoWh"/>
+		
+		<action name="findZoonByOuId" class="zoonAction" method="findZoonByOuId"/>
+		
+		<action name="findDistrictByOuId" class="zoonAction" method="findDistrictByOuId"/>
+		
+		<action name="saveZoon" class="zoonAction" method="saveZoon"/>
+		
+		<action name="updateZoonByIds" class="zoonAction" method="updateZoonByIds"/>
+		
+		<action name="initPopUpAreaPage" class="popUpAreaAction" method="initPopUpAreaPage">
+			<result name="success">/frame/automaticEquipment/popUpArea-edit.jsp</result>
+		</action>
+		
+		<!-- WCS 数据维护 -->
+		<action name="initWcsMaintainPage" class="wcsMaintainAction" method="initWcsMaintainPage">
+			<result name="success">/frame/automaticEquipment/wcs_data_maintain.jsp</result>
+		</action>
+		
+		
+		<action name="savePopUpArea" class="popUpAreaAction" method="savePopUpArea"/>
+		
+		<action name="updatePopUpArea" class="popUpAreaAction" method="updatePopUpArea"/>
+		
+		<action name="updatePopUpAreaByIds" class="popUpAreaAction" method="updatePopUpAreaByIds"/>
+		<!-- 集货管理 -->
+		<action name="shippingrole" class="warehouseShippingAction"
+			method="shippingrolePoint">
+			<result>/frame/automaticEquipment/shipping-role.jsp</result>
+		</action>
+		<action name="shippingCollection" class="warehouseShippingAction"
+			method="shippingCollection">
+			<result>/frame/automaticEquipment/shipping-point-collection.jsp</result>
+		</action>
+		
+		<action name="shippingCollectionQuery" class="warehouseShippingAction"
+			method="shippingCollection">
+			<result>/frame/automaticEquipment/shipping-point-collection-query.jsp</result>
+		</action>
+		
+		<action name="shippingpoint" class="warehouseShippingAction"
+			method="shippingrolePoint">
+			<result>/frame/automaticEquipment/shipping-point.jsp</result>
+		</action>
+		
+		<!-- 集货规则明细导入-->
+		<action name="importShippingRole" class="warehouseShippingAction"
+			method="importShippingRole">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action> 
+		
+		<!-- 上架规则 start -->
+		<action name="initInboundRolePage" class="inboundRoleAction" method="initInboundRolePage">
+			<result name="success">/frame/automaticEquipment/inboundRole-edit.jsp</result>
+		</action>
+		
+		<action name="findChannelByAutoWh" class="inboundRoleAction" method="findChannelByAutoWh"/>
+		<action name="findLocationByZoon" class="inboundRoleAction" method="findLocationByZoon"/>
+		<action name="saveInboundRole" class="inboundRoleAction" method="saveInboundRole"/>
+		<action name="updateInboundRoleByIds" class="inboundRoleAction" method="updateInboundRoleByIds"/>
+		<action name="deleteInboundRoleByIds" class="inboundRoleAction" method="deleteInboundRoleByIds"/>
+		<action name="findSkuTypeJson" class="inboundRoleAction" method="findSkuTypeJson"/>
+		
+		<action name="inboundRoleImport" class="inboundRoleAction" method="inboundRoleImport">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action>
+		
+		<!-- 上架规则 end -->
+		
+		<action name="bindManyBatchAndTurnbox" class="autoOutboundTurnoverBoxAction" method="bindManyBatchAndTurnbox"></action>
+		<action name="findPickingListZoneByParams" class="autoOutboundTurnoverBoxAction" method="findPickingListZoneByParams"></action>
+		<action name="pickingListAndZoneOver" class="autoOutboundTurnoverBoxAction" method="pickingListAndZoneOver"></action>
+		
+		<!-- 手工绑定货箱目的出库   start -->
+		<action name="handrefcarton" class="warehouseShippingAction"
+			method="shippingrolePoint">
+			<result>/frame/automaticEquipment/handrefcarton.jsp</result>
+		</action>
+		
+		<action name="locationAndPopUpImport" class="popUpAreaAction" method="locationAndPopUpImport">
+			<result>/frame/elesin-usenum-import-result.jsp</result>
+		</action>
+		<action name="initmanybatchturnoverboxbind" class="autoOutboundTurnoverBoxAction" method="pageRedirect">
+			<result>/frame/automaticEquipment/many-batch-turnoverbox-bind.jsp</result>
+		</action>
+		<action name="initManyBatchZoneOver" class="autoOutboundTurnoverBoxAction" method="pageRedirect">
+			<result>/frame/automaticEquipment/many-batch-picking-over.jsp</result>
+		</action>
+		<action name="bindManyBatchAndTurnbox" class="autoOutboundTurnoverBoxAction" method="bindManyBatchAndTurnbox"></action>
+		<action name="findPickingListZoneByParams" class="autoOutboundTurnoverBoxAction" method="findPickingListZoneByParams"></action>
+		<action name="pickingListAndZoneOver" class="autoOutboundTurnoverBoxAction" method="pickingListAndZoneOver"></action>
+		<action name="findOccupyOu" class="autoOutboundTurnoverBoxAction" method="findOccupyOu"></action>
+		<action name="resetBoxStatus" class="autoOutboundTurnoverBoxAction" method="resetBoxStatus"></action>
+		
+		<!-- 手工绑定货箱目的出库    end -->
+		<!-- 复核工作台规则（单件）-->
+		<action name="checkSpaceRole" class="warehouseShippingAction" method="initcheckSpaceRole">
+			<result name="success">/frame/automaticEquipment/check-space-role.jsp</result>
+		</action>
+		<!-- 分拣播种墙规则（多件）-->
+		<action name="bozSpaceRole" class="warehouseShippingAction" method="initcheckSpaceRole">
+			<result name="success">/frame/automaticEquipment/boz-space-role.jsp</result>
+		</action>
+		
+		<!-- 货箱流向取消 start -->
+		<action name="initInboundBoxCancelPage" class="inboundBoxCancelAction" method="initInboundBoxCancelPage">
+			<result>/frame/automaticEquipment/inbound_box_cancel.jsp</result>
+		</action>
+		<action name="cancelAutoBox" class="inboundBoxCancelAction" method="cancelAutoBox"></action>
+		<!-- 货箱流向取消 end -->
+		<action name="ocpinvManager" class="zoonOcpSortAction" method="ocpinvManager">
+			<result>/frame/automaticEquipment/occupy-inv-manager.jsp</result>
+		</action>
+	</package>
+</struts>

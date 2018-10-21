@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:loxia="http://loxia.benjamin.cn/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- staId 获取快递单列表 fanht -->
+	<bean id="ChooseOption.getTransportNos" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select pi.tracking_no as code
+				  from t_wh_package_info pi
+				 where pi.sta_delivery_info_id = :staId
+				 order by pi.tracking_no
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- 获取快递供应商平台编码、名称 -->
+	<bean id="ChooseOption.findPlatformList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select t.platform_code code, t.platform_code name
+				  from t_ma_transportator t
+				 where t.exp_code is not null
+				   and t.platform_code is not null
+				   and t.life_cycle_status = 1
+				 group by t.platform_code
+				 order by t.platform_code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="ChooseOption.findAdOrderType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select AD_NAME as adName from t_ad_package
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ChooseOption.findWmsResult" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select AD_RESULT as adResult from t_ad_package where AD_NAME=:wmsOrderType
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- 根据组织编号，获取行业列表 -->
+	<bean id="ChooseOption.findIndustryByOuid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select c.*
+				  from t_au_operation_unit      wh,
+				       t_au_operation_unit      dp,
+				       t_au_operation_unit      c,
+				       t_au_operation_unit_type ut
+				 where wh.id = :ouid
+				   and wh.parent_ou_id = dp.id
+				   and dp.parent_ou_id = c.parent_ou_id
+				   and c.ou_type_id = ut.id
+				   and ut.name = 'Division'
+				 order by c.name
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SysLoginLog.findSystemLoginLogPagByCommandSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select s.*, u.USER_NAME from T_SYS_LOGIN_LOG s, T_AU_USER u
+					where s.LOGIN_NAME=u.LOGIN_NAME
+					#if($loginName)
+					and Upper(s.LOGIN_NAME) like Upper(:loginName)
+					#end
+					#if($userName)
+					and upper(u.USER_NAME) like upper(:userName)
+					#end
+					#if($jobNumber)
+					and upper(u.JOB_NUMBER) like upper(:jobNumber)
+					#end
+					#if("$!isEnabled"=="")
+					#else
+					and u.IS_ENABLED=:isEnabled
+					#end
+					#if($groupId)
+					and exists ( select ur.id  from T_AU_USER_GROUP_RELATION ur where ur.user_id=u.id and ur.group_id=:groupId)
+					#end
+					#if($loginTimeFrom)
+					and s.LOGIN_TIME>=:loginTimeFrom
+					#end
+					#if($loginTimeTo)
+					and s.LOGIN_TIME<=:loginTimeTo
+					#end
+					#if($loginStatus)
+                    and s.LOGIN_STATUS=:loginStatus
+                    #end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChooseOption.findTransportator" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select exp_code as code , name as name,platform_code as platformCode  from t_ma_transportator where exp_code is not null and life_cycle_status = 1
+				#if($expCode)
+				and exp_code=:expCode
+				#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ChooseOption.optionrulelist" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select distinct(t.standard_code) as standardCode from T_WH_VEHICLE_STANDARD t
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChooseOption.getVMIWarehouse" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+          		 select wh.ou_id,tunit.name from t_bi_warehouse wh,T_AU_OPERATION_UNIT tunit where wh.vmi_source is not null
+                 and tunit.is_available = 1
+                 and wh.ou_id = tunit.id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChooseOption.findAllTransportator" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select exp_code as CODE ,id as ID from t_ma_transportator where exp_code is not null and life_cycle_status = 1]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ChooseOption.findInventoryStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				SELECT s.id AS statusId, s.name AS statusName
+				  FROM T_WH_INVENTORY_STATUS S
+				 WHERE S.OU_ID =
+				       (SELECT D.ID
+				          FROM (SELECT *
+				                  FROM T_AU_OPERATION_UNIT U
+				                CONNECT BY PRIOR U.PARENT_OU_ID = U.ID
+				                 START WITH U.ID = :whId) D
+				         WHERE D.OU_TYPE_ID = (SELECT T.ID
+				                                 FROM T_AU_OPERATION_UNIT_TYPE T
+				                                WHERE T.NAME = 'Company'))
+				      #if("$!isAvailable"=="true")
+					  	and s.is_available = 1
+					  #end
+				                                
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ChooseOption.queryPadcodeOperate" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select id,option_value from t_sys_choose_option co
+				where category_code='pdaMachineCode' 
+				#if($code)
+					and upper(option_value) like upper( :code )
+				#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SequenceCounter.getNextBySequence" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select $seqName .nextval from dual
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ChooseOption.findPreOption" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				   select 
+					       distinct o.category_code,
+					       o.category_name,
+					       o.category_available,
+					       o.option_description,
+					       o.package_name,
+                 nvl((select distinct option_value from t_sys_choose_option where category_code='optionStatus' and option_key=o.category_available ),'可用') as optionStatusText
+					  from t_sys_choose_option o
+					 where 
+					   #if($flag==1)
+					     package_name is null
+					   #end
+					   #if($flag==2)
+					     package_name is not null
+					   #end				   
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 店铺出库发送信息 KJL -->
+	<bean id="SmsQueue.getNeedSendSmsList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select * from T_SYS_SMS_QUEUE sq
+					where sq.ERROR_COUNT<3 and sq.msg_id is null
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 信息发送失败，更新失败次数 KJL -->
+	<bean id="SmsQueue.updateErrorCountById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_sys_sms_queue set error_count = error_count+1 where id = :id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 查询调用接口成功的SmsQueue,具有MsgId KJL -->
+	<bean id="SmsQueue.getSmsQueueHaveMsgIdList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select * from t_sys_sms_queue sq where sq.msg_id is not null or sq.error_count=3 or sq.owner is null
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- KJL -->
+	<bean id="SmsQueue.updateTheQueueSetFailedById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_sys_sms_queue set error_count = 3 where id = :id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="ChooseOption.updateSortNo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+update t_sys_choose_option co set co.sort_no = 
+decode((select id from (select id from t_sys_choose_option t where t.category_code=:categoryCode order by t.sort_no desc) where rownum = 1),co.id,1,co.sort_no+1) 
+where co.category_code=:categoryCode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<!--查询行政部门分页  -->
+	<bean id="ChooseOption.getChooseOptionByCodePage" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT o.*
+						FROM T_SYS_CHOOSE_OPTION o
+						WHERE o.category_code=:categoryCode 
+						#if($optionValue)
+						AND o.option_value LIKE '%$optionValue%' 
+						#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+</beans>

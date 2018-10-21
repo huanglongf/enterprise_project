@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="trunk_main_for_cathkidston_shop" language="groovy" pageWidth="578" pageHeight="402" columnWidth="489" leftMargin="53" rightMargin="36" topMargin="0" bottomMargin="0" >
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="subReport" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[subReport]]></parameterDescription>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<field name="pgIndex" class="java.lang.String"/>
+	<field name="soCode" class="java.lang.String"/>
+	<field name="orderUserCode" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="receiverAddress" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="batchNo" class="java.lang.String"/>
+	<field name="lines" class="java.util.List">
+		<fieldDescription><![CDATA[lines]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="243" splitType="Stretch">
+			<textField>
+				<reportElement  x="0" y="3" width="54" height="31"/>
+				<textElement>
+					<font fontName="宋体" size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pgIndex}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="37" y="63" width="193" height="16"/>
+				<textElement>
+					<font fontName="宋体" size="11" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{soCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="36" y="80" width="193" height="14"/>
+				<textElement>
+					<font fontName="宋体" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderUserCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="36" y="118" width="193" height="14"/>
+				<textElement>
+					<font fontName="宋体" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<textField  isBlankWhenNull="true">
+				<reportElement  x="3" y="148" width="148" height="51" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font fontName="宋体" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telephone}]]></textFieldExpression>
+			</textField>
+			<textField  isBlankWhenNull="true">
+				<reportElement  x="169" y="134" width="150" height="65" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font fontName="宋体" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiverAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="341" y="192" width="147" height="15"/>
+				<textElement>
+					<font fontName="宋体" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{batchNo}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement  x="27" y="43" width="180" height="27"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="1" barHeight="0">
+					<jr:codeExpression><![CDATA[$F{soCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement  x="331" y="164" width="158" height="27"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="3" barHeight="75">
+					<jr:codeExpression><![CDATA[$F{batchNo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="159" splitType="Stretch">
+			<subreport isUsingCache="true">
+				<reportElement  x="0" y="0" width="489" height="159" isPrintWhenDetailOverflows="true"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

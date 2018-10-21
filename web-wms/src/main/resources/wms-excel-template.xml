@@ -1,0 +1,2473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sheets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="exceltemplate-1.0.xsd">
+	<sheet name="staexptplforpurchase">
+		<block start="A1" end="F1">
+			<cell position="B1" dataName="createTime" />
+			<cell position="D1" dataName="code" mandatory="true" />
+			<cell position="F1" dataName="refSlipCode" mandatory="true" />
+		</block>
+		<block start="A3" end="F3" dataName="staLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmcode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="jmskuCode" />
+			<cell position="F3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+
+
+	<sheet name="staexptplforpurchaseSheet2">
+		<block start="A2" end="F2" dataName="staLinesSheet2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A2" dataName="barCode" />
+			<cell position="B2" dataName="jmcode" />
+			<cell position="C2" dataName="keyProperties" />
+			<cell position="D2" dataName="skuName" />
+			<cell position="E2" dataName="jmskuCode" />
+			<cell position="F2" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="coachInvoiceSheet">
+		<block start="A2" end="G2" dataName="data" loop="true"  loopClass="com.jumbo.wms.model.warehouse.StaInvoiceCommand">
+			<cell position="A2" dataName="invoiceDate" />
+			<cell position="B2" dataName="refSlipCode" />
+			<cell position="C2" dataName="identificationNumber" />
+			<cell position="D2" dataName="address" />
+			<cell position="E2" dataName="telephone" />
+			<cell position="F2" dataName="payer" />
+			<cell position="G2" dataName="item" />
+			<cell position="H2" dataName="unitPrice" />
+			<cell position="I2" dataName="qty" />
+			<cell position="J2" dataName="amt" />
+			<cell position="K2" dataName="companyName" />
+		</block>
+	</sheet>
+
+	<sheet name="msSnReporySheet">
+		<block start="A2" end="E2" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.MsSnReportCommand">
+			<cell position="A2" dataName="sn" />
+			<cell position="B2" dataName="mobile" />
+			<cell position="C2" dataName="purchaseDate" />
+			<cell position="D2" dataName="skuName" />
+			<cell position="E2" dataName="purchaseSource" />
+		</block>
+	</sheet>
+
+	<!-- box -->
+	<sheet name="productForBoxSheet">
+		<block start="A4" end="B4" dataName="products" loop="true"
+			loopClass="com.jumbo.wms.model.baseinfo.Sku">
+			<cell position="A4" dataName="code" mandatory="true" />
+			<cell position="B4" dataName="boxQty" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- sheet1 -->
+	<sheet name="skuProvidePickingsheet">
+		<block start="A4" end="F4" dataName="skus" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A4" dataName="code" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="districtCode" />
+			<cell position="E4" dataName="quantity" />
+			<cell position="F4" dataName="warningPre" />
+		</block>
+	</sheet>
+	<sheet name="skuProvidePickingsheet1">
+		<block start="A4" end="G4" dataName="skus" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A4" dataName="code" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="districtCode" />
+			<cell position="E4" dataName="quantity" />
+			<cell position="F4" dataName="warningPre" />
+			<cell position="G4" dataName="shopOwner" />
+		</block>
+	</sheet>
+	<!-- sheet2 -->
+	<sheet name="skuProvideUnMaintainsheet">
+		<block start="A4" end="E4" dataName="skus" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A4" dataName="code" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="quantity" />
+			<cell position="E4" dataName="warningPre" />
+		</block>
+	</sheet>
+	<sheet name="skuProvideUnMaintainsheet1">
+		<block start="A4" end="F4" dataName="skus" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A4" dataName="code" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="quantity" />
+			<cell position="E4" dataName="warningPre" />
+			<cell position="F4" dataName="shopOwner" />
+		</block>
+	</sheet>
+
+	<!-- sheet3 -->
+	<sheet name="unfinishedSkuProvideUnMaintainsheet">
+		<block start="A4" end="E4" dataName="skus" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A4" dataName="code" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="quantity" />
+			<cell position="E4" dataName="warningPre" />
+		</block>
+	</sheet>
+	
+	<sheet name="unfinishedSkuProvideUnMaintainsheet1">
+		<block start="A4" end="F4" dataName="skus" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A4" dataName="code" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="quantity" />
+			<cell position="E4" dataName="warningPre" />
+			<cell position="F4" dataName="shopOwner" />
+		</block>
+	</sheet>
+	<!-- improt -->
+	<sheet name="skuProvideMaintainSheet">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="E5" dataName="skus" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A5" dataName="code" mandatory="true" />
+			<cell position="B5" dataName="districtCode" mandatory="true" />
+			<cell position="C5" dataName="quantity" mandatory="true" />
+			<cell position="D5" dataName="warningPre" mandatory="true" />
+			<cell position="E5" dataName="shopOwner" />
+		</block>
+	</sheet>
+
+	<sheet name="recevingMoveSuggestSheet2">
+		<block start="A2" end="G2" dataName="inbound" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A2" dataName="skuCode" />
+			<cell position="B2" dataName="barCode" />
+			<cell position="C2" dataName="supplierCode" />
+			<cell position="D2" dataName="districtCode" />
+			<cell position="E2" dataName="locationCode" />
+			<cell position="F2" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<sheet name="recevingMoveSuggestSheet1">
+		<block start="A4" end="F4" dataName="outbound" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="skuCode" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="districtCode" />
+			<cell position="E4" dataName="locationCode" />
+			<cell position="F4" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<!-- 预定义入库 导出 -->
+	<sheet name="predefinedstaexptplforpurchase">
+		<block start="A1" end="F1">
+			<cell position="B1" dataName="createTime" />
+			<cell position="D1" dataName="code" mandatory="true" />
+			<cell position="F1" dataName="refSlipCode" mandatory="true" />
+		</block>
+		<block start="A3" end="G3" dataName="staLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmcode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="jmskuCode" />
+			<cell position="F3" dataName="status" />
+			<cell position="G3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="predefinedstaexptplforpurchaseSheet2">
+		<block start="A2" end="G2" dataName="staLinesSheet2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A2" dataName="barCode" />
+			<cell position="B2" dataName="jmcode" />
+			<cell position="C2" dataName="keyProperties" />
+			<cell position="D2" dataName="skuName" />
+			<cell position="E2" dataName="jmskuCode" />
+			<cell position="F2" dataName="status" />
+			<cell position="G2" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+
+	<!-- 库间入库导出 -->
+	<sheet name="externalInWriterSheet1">
+		<block start="A1" end="F1">
+			<cell position="B1" dataName="createTime" />
+			<cell position="D1" dataName="code" mandatory="true" />
+		</block>
+		<block start="A3" end="H3" dataName="outStvl" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmcode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="jmskuCode" />
+			<cell position="F3" dataName="owner" />
+			<cell position="G3" dataName="status" />
+			<cell position="H3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="externalInWriterSheet2">
+		<block start="A2" end="A2" dataName="outSkuSN" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuSnLogCommand">
+			<cell position="A2" dataName="sn" />
+		</block>
+	</sheet>
+
+	<!-- 预定义出库 -->
+	<sheet name="predefinedOutSheet1">
+		<block start="A1" end="F1">
+			<cell position="B1" dataName="createTime" />
+			<cell position="D1" dataName="code" mandatory="true" />
+		</block>
+		<block start="A3" end="G3" dataName="outStvl" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmcode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="jmskuCode" />
+			<cell position="F3" dataName="status" />
+			<cell position="G3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+	<sheet name="predefinedOutSheet2">
+		<block start="A2" end="B2" dataName="stvLines2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A2" dataName="sns" mandatory="true" />
+			<cell position="B2" dataName="invStatus.name" mandatory="true" />
+			<cell position="C2" dataName="location.code" mandatory="true" />
+		</block>
+	</sheet>
+	<sheet name="predefinedOutSheet3">
+		<block start="A1" end="F1">
+			<cell position="D1" dataName="code" type="string" mandatory="true" />
+		</block>
+		<block start="A3" end="I3" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A3" dataName="sku.barCode" />
+			<cell position="B3" dataName="sku.jmCode" />
+			<cell position="C3" dataName="sku.keyProperties" />
+			<cell position="D3" dataName="sku.name" />
+			<cell position="E3" dataName="sku.supplierCode" />
+			<cell position="F3" dataName="invStatus.name" />
+			<cell position="G3" dataName="staLine.quantity" mandatory="true" />
+			<cell position="H3" dataName="location.code" mandatory="true" />
+			<cell position="I3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+	<!-- -->
+	<sheet name="packagingMaterialsSheet">
+		<block start="A4" end="B4" dataName="pmList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaAdditionalLine">
+			<cell position="A4" dataName="sku.barCode" mandatory="true" />
+			<cell position="B4" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- 库间入库导入 -->
+	<sheet name="externalInExportSheet1">
+		<block start="A1" end="F1">
+			<cell position="D1" dataName="code" type="string" mandatory="true" />
+		</block>
+		<block start="A3" end="J3" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A3" dataName="sku.barCode" />
+			<cell position="B3" dataName="sku.jmCode" />
+			<cell position="C3" dataName="sku.keyProperties" />
+			<cell position="D3" dataName="sku.name" />
+			<cell position="E3" dataName="sku.supplierCode" />
+			<cell position="F3" dataName="owner" />
+			<cell position="G3" dataName="invStatus.name" />
+			<cell position="H3" dataName="staLine.quantity" mandatory="true" />
+			<cell position="I3" dataName="location.code" mandatory="true" />
+			<cell position="J3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="externalInExportSheet2">
+		<block start="A2" end="B2" dataName="stvLines2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A2" dataName="sns" mandatory="true" />
+			<cell position="B2" dataName="location.code" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- 预定义入库 导入 -->
+	<sheet name="predefinedstaimptplforpurchase">
+		<block start="A1" end="F1">
+			<cell position="D1" dataName="code" type="string" mandatory="true" />
+			<cell position="F1" dataName="refSlipCode" type="string" />
+		</block>
+		<block start="A3" end="I3" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A3" dataName="sku.barCode" />
+			<cell position="B3" dataName="sku.jmCode" />
+			<cell position="C3" dataName="sku.keyProperties" />
+			<cell position="D3" dataName="sku.name" />
+			<cell position="E3" dataName="sku.supplierCode" />
+			<cell position="F3" dataName="invStatus.name" />
+			<cell position="G3" dataName="staLine.quantity" mandatory="true" />
+			<cell position="H3" dataName="location.code" mandatory="true" />
+			<cell position="I3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+	
+	<sheet name="predefinedstaimptplforpurchase2">
+		<block start="A2" end="I2" dataName="stvLines2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A2" dataName="sku.barCode" />
+			<cell position="B2" dataName="sku.jmCode" />
+			<cell position="C2" dataName="sku.keyProperties" />
+			<cell position="D2" dataName="sku.name" />
+			<cell position="E2" dataName="sku.supplierCode" />
+			<cell position="F2" dataName="invStatus.name" />
+			<cell position="G2" dataName="staLine.quantity" mandatory="true" />
+			<cell position="H2" dataName="location.code" mandatory="true" />
+			<cell position="I2" dataName="sns" mandatory="true" />
+		</block>
+	</sheet>
+	<!-- -->
+	<!-- 送修入库 导入 -->
+	<sheet name="repairstaexptplforpurchase">
+		<block start="A4" end="D4" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="sku.barCode" />
+			<cell position="B4" dataName="location.code"  />
+			<cell position="C4" dataName="invStatus.name" />
+			<cell position="D4" dataName="quantity" />
+			<cell position="E4" dataName="strPoductionDate"/>
+			<cell position="F4" dataName="strExpireDate"/>
+		</block>
+	</sheet>
+   <sheet name="repairstaexptplforpurchase2">
+		<block start="A4" end="D4" dataName="stvLinesn" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="sku.barCode" />
+			<cell position="B4" dataName="location.code" />
+			<cell position="C4" dataName="invStatus.name" />
+			<cell position="D4" dataName="sns" />
+			<cell position="E4" dataName="strPoductionDate"/>
+			<cell position="F4" dataName="strExpireDate"/>
+		</block>
+	</sheet>
+
+	<sheet name="virtualInBoundShelvesExport">
+		<block start="A4" end="H4" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="barCode" />
+			<cell position="B4" dataName="jmCode" />
+			<cell position="C4" dataName="skuName" />
+			<cell position="D4" dataName="owner" />
+			<cell position="E4" dataName="intInvstatusName"  />
+			<cell position="F4" dataName="isShelfManagement" />
+			<cell position="G4" dataName="quantity"/>
+			<cell position="H4" dataName="districtCode"/> 
+		</block>
+	</sheet>
+   <sheet name="virtualInBoundShelvesSNExport">
+		<block start="A4" end="H4" dataName="stvLinesn" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="barCode" />
+			<cell position="B4" dataName="jmCode" />
+			<cell position="C4" dataName="skuName" />
+			<cell position="D4" dataName="owner" />
+			<cell position="E4" dataName="intInvstatusName"  />
+			<cell position="F4" dataName="isShelfManagement" />
+			<cell position="G4" dataName="quantity"/>
+			<cell position="H4" dataName="districtCode"/> 
+		</block>
+	</sheet>
+	
+	<sheet name="virtualInBoundShelvesImport">
+		<block start="A4" end="H4" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="sku.barCode" />
+			<cell position="B4" dataName="sku.jmCode" />
+			<cell position="C4" dataName="sku.name" />
+			<cell position="D4" dataName="owner" />
+			<cell position="E4" dataName="invStatus.name"  />
+			<cell position="F4" dataName="isShelfManagement" />
+			<cell position="G4" dataName="quantity" mandatory="true"/>
+			<cell position="H4" dataName="location.code" mandatory="true"/>
+		</block>
+	</sheet>
+   <sheet name="virtualInBoundShelvesSNImport">
+		<block start="A4" end="H4" dataName="stvLinesn" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="sku.barCode" />
+			<cell position="B4" dataName="sku.jmCode" />
+			<cell position="C4" dataName="sku.name" />
+			<cell position="D4" dataName="owner" />
+			<cell position="E4" dataName="invStatus.name"  />
+			<cell position="F4" dataName="isShelfManagement" />
+			<cell position="G4" dataName="quantity" mandatory="true"/>
+			<cell position="H4" dataName="location.code" mandatory="true"/>
+		</block>
+	</sheet>
+	<sheet name="staimptplforpurchase">
+		<block start="A1" end="F1">
+			<cell position="D1" dataName="code" type="string" mandatory="true" />
+			<cell position="F1" dataName="refSlipCode" type="string" />
+		</block>
+		<block start="A3" end="H3" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A3" dataName="sku.barCode" />
+			<cell position="B3" dataName="sku.jmCode" />
+			<cell position="C3" dataName="sku.keyProperties" />
+			<cell position="D3" dataName="sku.name" />
+			<cell position="E3" dataName="sku.supplierCode" />
+			<cell position="F3" dataName="staLine.quantity" mandatory="true" />
+			<cell position="G3" dataName="location.code" mandatory="true" />
+			<cell position="H3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+
+
+
+	<sheet name="staimptplforpurchase2">
+		<block start="A2" end="A2" dataName="stvLines2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A2" dataName="sku.barCode" />
+			<cell position="B2" dataName="sku.jmCode" />
+			<cell position="C2" dataName="sku.keyProperties" />
+			<cell position="D2" dataName="sku.name" />
+			<cell position="E2" dataName="sku.supplierCode" />
+			<cell position="F2" dataName="staLine.quantity" mandatory="true" />
+			<cell position="G2" dataName="location.code" mandatory="true" />
+			<cell position="H2" dataName="sns" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="staGIimport">
+		<block start="A1" end="F1">
+			<cell position="D1" dataName="code" type="string" mandatory="true" />
+			<cell position="F1" dataName="refSlipCode" type="string" />
+		</block>
+		<block start="A3" end="H3" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLine">
+			<cell position="A3" dataName="sku.barCode" />
+			<cell position="B3" dataName="sku.jmCode" />
+			<cell position="C3" dataName="sku.keyProperties" />
+			<cell position="D3" dataName="sku.name" />
+			<cell position="E3" dataName="sku.supplierCode" />
+			<cell position="F3" dataName="staLine.quantity" mandatory="true" />
+			<cell position="G3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="trackingNoImpForHandOverList">
+		<block start="A4" end="A4" dataName="trackingNoList" loop="true">
+			<cell position="A4" dataName="trackingNo" type="string"
+				mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="inventortImportSheet">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="F5" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A5" dataName="barCode" mandatory="true" />
+			<cell position="B5" dataName="invOwner" mandatory="true" />
+			<cell position="C5" dataName="locationCode" mandatory="true" />
+			<cell position="D5" dataName="quantity" mandatory="true" />
+			<cell position="E5" dataName="skuCost" mandatory="true" />
+			<cell position="F5" dataName="invStatusName" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="inventortImportSheet2">
+		<block start="A2" end="F2" dataName="invSheet2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A2" dataName="barCode" mandatory="true" />
+			<cell position="B2" dataName="invOwner" mandatory="true" />
+			<cell position="C2" dataName="locationCode" mandatory="true" />
+			<cell position="D2" dataName="skuCost" mandatory="true" />
+			<cell position="E2" dataName="invStatusName" mandatory="true" />
+			<cell position="F2" dataName="sn" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="transitInnerImportSheet1">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="E5" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A5" dataName="barCode" mandatory="true" />
+			<cell position="B5" dataName="invOwner" mandatory="true" />
+			<cell position="C5" dataName="locationCode" mandatory="true" />
+			<cell position="D5" dataName="quantity" mandatory="true" />
+			<cell position="E5" dataName="invStatusName" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="transitInnerImportSheet2">
+		<block start="A4" end="E4" dataName="inv2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A4" dataName="barCode" mandatory="true" />
+			<cell position="B4" dataName="invOwner" mandatory="true" />
+			<cell position="C4" dataName="locationCode" mandatory="true" />
+			<cell position="D4" dataName="quantity" mandatory="true" />
+			<cell position="E4" dataName="invStatusName" mandatory="true" />
+			<cell position="F4" dataName="poductionDate"/>
+			<cell position="G4" dataName="sexpireDate"/>
+		</block>
+	</sheet>
+
+	<sheet name="inventoryStatusChangeSheet1">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="E5" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A5" dataName="barCode" mandatory="true" />
+			<cell position="B5" dataName="locationCode" mandatory="true" />
+			<cell position="C5" dataName="quantity" mandatory="true" />
+			<cell position="D5" dataName="invStatusName" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="inventoryStatusChangeSheet2">
+		<block start="A4" end="E4" dataName="inv2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A4" dataName="barCode" mandatory="true" />
+			<cell position="B4" dataName="locationCode" mandatory="true" />
+			<cell position="C4" dataName="quantity" mandatory="true" />
+			<cell position="D4" dataName="invStatusName" mandatory="true" />
+			<cell position="E4" dataName="poductionDate"/>
+			<cell position="F4" dataName="sexpireDate"/>
+		</block>
+	</sheet>
+
+	<sheet name="inventoryCheckExport">
+		<block start="A4" end="D4" dataName="inventory"  loop="true" loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A4" dataName="locationCode" />
+			<cell position="B4" dataName="skuCode" />
+			<cell position="C4" dataName="barCode" />
+			<cell position="D4" dataName="skuName" />
+		</block>
+	</sheet>
+
+	<sheet name="checkOverageExport">
+		<block start="A3" end="D1">
+			<cell position="B3" dataName="createTime" />
+			<cell position="D3" dataName="code" mandatory="true" />
+		</block>
+		<block start="A5" end="G5" dataName="invCk" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCheckDifferenceLineCommand">
+			<cell position="A5" dataName="locationCode" />
+			<cell position="B5" dataName="skuCode" />
+			<cell position="C5" dataName="barcode" />
+			<cell position="D5" dataName="skuName" />
+			<cell position="E5" dataName="quantity" />
+			<cell position="F5" dataName="owner" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="checkOverageImport">
+		<block start="A5" end="F5" dataName="invCk" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCheckDifferenceLineCommand">
+			<cell position="A5" dataName="locationCode" mandatory="true" />
+			<cell position="B5" dataName="skuCode" mandatory="true" />
+			<cell position="E5" dataName="quantity" mandatory="true" />
+			<cell position="F5" dataName="owner" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="inventoryCheckImport">
+		<block start="A4" end="E4" dataName="inventory" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A4" dataName="locationCode" mandatory="true" />
+			<cell position="B4" dataName="skuCode" mandatory="true" />
+			<cell position="E4" dataName="confirmQty" mandatory="true" />
+			<cell position="F4" dataName="invStatusName" mandatory="true" />
+			<cell position="G4" dataName="poductionDate" />
+			<cell position="H4" dataName="sexpireDate" />
+		</block>
+	</sheet>
+
+	<sheet name="inventoryCheckSheet2Import">
+		<block start="A2" end="E2" dataName="inventorySn" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A2" dataName="locationCode" mandatory="true" />
+			<cell position="B2" dataName="skuCode" mandatory="true" />
+			<cell position="E2" dataName="sn" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- 物流面单导出 暂时用来应急处理打印遇到的问题 -->
+	<sheet name="deliveryInfoExport">
+		<block start="A2" end="O2" dataName="deliverylist" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaDeliveryInfoCommand">
+			<cell position="A2" dataName="receiver" />
+			<cell position="B2" dataName="zipcode" />
+			<cell position="C2" dataName="address" />
+			<cell position="D2" dataName="province" />
+			<cell position="E2" dataName="city" />
+			<cell position="F2" dataName="refSlipCode" />
+			<cell position="G2" dataName="ownerproduct" />
+			<cell position="H2" dataName="owner" />
+			<cell position="I2" dataName="telephone" />
+			<cell position="J2" dataName="amount" />
+			<cell position="K2" dataName="expName" />
+			<cell position="L2" dataName="strAmount" />
+			<cell position="M2" dataName="pgindex" />
+			<cell position="N2" dataName="count" />
+			<cell position="O2" dataName="disAddr" />
+		</block>
+	</sheet>
+	<sheet name="deliveryInfoExportForAccount">
+		<block start="A2" end="M2" dataName="packageInfoList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.PackageInfoCommand">
+			<cell position="A2" dataName="expName" />
+			<cell position="B2" dataName="warehouseName" />
+			<cell position="C2" dataName="owner" />
+			<cell position="D2" dataName="outboundTime" />
+			<cell position="E2" dataName="refSlipCode" />
+			<cell position="F2" dataName="handoverCode" />
+			<cell position="G2" dataName="trackingNo" />
+			<cell position="H2" dataName="weight" />
+			<cell position="I2" dataName="province" />
+			<cell position="J2" dataName="city" />
+			<cell position="K2" dataName="receiver" />
+			<cell position="L2" dataName="totalActual" />
+			<cell position="M2" dataName="transTimeType" />
+		</block>
+	</sheet>
+
+	<!--物流交接清单导出 -->
+	<sheet name="handOverListExport">
+		<block start="A2" end="M2" dataName="handOverLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.HandOverListLineCommand">
+			<cell position="A2" dataName="code" />
+			<cell position="B2" dataName="lpCode" />
+			<cell position="C2" dataName="trackingNo" />
+			<cell position="D2" dataName="owner" />
+			<cell position="E2" dataName="weight" />
+			<cell position="F2" dataName="city" />
+			<cell position="G2" dataName="zipcode" />
+			<cell position="H2" dataName="receiver" />
+			<cell position="I2" dataName="address" />
+			<cell position="J2" dataName="mobile" />
+			<cell position="K2" dataName="totalActual" />
+			<cell position="L2" dataName="refSlipCode" />
+			<cell position="M2" dataName="barcode" />
+			<cell position="N2" dataName="transTimeType"/>			
+		</block>
+	</sheet>
+	<sheet name="vmiInvoiceExport">
+		<block start="A2" end="Q2" dataName="invoiceList" loop="true"
+			loopClass="com.jumbo.wms.model.vmi.warehouse.MsgInvoice">
+			<cell position="A2" dataName="id" />
+			<cell position="B2" dataName="staCode" />
+			<cell position="C2" dataName="invoiceTime" />
+			<cell position="D2" dataName="payer" />
+			<cell position="E2" dataName="item1" />
+			<cell position="F2" dataName="unitPrice1" />
+			<cell position="G2" dataName="qty1" />
+			<cell position="H2" dataName="amt1" />
+			<cell position="I2" dataName="item2" />
+			<cell position="J2" dataName="unitPrice2" />
+			<cell position="K2" dataName="qty2" />
+			<cell position="L2" dataName="amt2" />
+			<cell position="M2" dataName="item3" />
+			<cell position="N2" dataName="unitPrice3" />
+			<cell position="O2" dataName="qty3" />
+			<cell position="P2" dataName="amt3" />
+			<cell position="Q2" dataName="remark" />
+			<cell position="R2" dataName="payee" />
+			<cell position="S2" dataName="drawer" />
+		</block>
+	</sheet>
+
+	<sheet name="handOverLineExport">
+		<block start="A2" end="L2" dataName="handOverLine" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.HandOverListLineCommand">
+			<cell position="A2" dataName="trackingNo" />
+			<cell position="B2" dataName="owner" />
+			<cell position="C2" dataName="weight" />
+			<cell position="D2" dataName="city" />
+			<cell position="E2" dataName="zipcode" />
+			<cell position="F2" dataName="receiver" />
+			<cell position="G2" dataName="address" />
+			<cell position="H2" dataName="mobile" />
+			<cell position="I2" dataName="totalActual" />
+			<cell position="J2" dataName="refSlipCode" />
+			<cell position="K2" dataName="weight" />
+			<cell position="L2" dataName="barcode" />
+		</block>
+	</sheet>
+
+	<sheet name="padposterrorlogs">
+		<block start="A2" end="E2" dataName="padlogs" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.PdaPostLog">
+			<cell position="A2" dataName="pdaCode" />
+			<cell position="B2" dataName="createTime" />
+			<cell position="C2" dataName="postCode" />
+			<cell position="D2" dataName="locationCode" />
+			<cell position="E2" dataName="qty" />
+		</block>
+	</sheet>
+
+	<sheet name="locationimpexptpl">
+		<block start="A2" end="G2" dataName="locations" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.WarehouseLocation">
+			<cell position="A2" dataName="dimX" />
+			<cell position="B2" dataName="dimY" />
+			<cell position="C2" dataName="dimZ" />
+			<cell position="D2" dataName="dimC" />
+			<cell position="E2" dataName="barCode" />
+			<cell position="F2" dataName="manualCode" />
+			<cell position="G2" dataName="popUpAreaCode" />
+
+		</block>
+	</sheet>
+	<sheet name="betweenLibaryImportSheet">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="B5" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.BetweenLabaryMoveCommand">
+			<cell position="A5" dataName="code" mandatory="true" />
+			<cell position="B5" dataName="moveQuantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="outSalesOrderSheet1Import">
+		<block start="A5" end="O5" dataName="sta" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StockTransApplicationCommand">
+			<cell position="A5" dataName="refSlipCode" mandatory="true" />
+			<cell position="B5" dataName="owner" mandatory="true" />
+			<cell position="C5" dataName="totalActual" mandatory="true" />
+			<cell position="D5" dataName="country" mandatory="true" />
+			<cell position="E5" dataName="address" mandatory="true" />
+			<cell position="F5" dataName="province" mandatory="true" />
+			<cell position="G5" dataName="city" mandatory="true" />
+			<cell position="H5" dataName="district" mandatory="true" />
+			<cell position="I5" dataName="mobile" mandatory="true" />
+			<cell position="J5" dataName="telephone"/>
+			<cell position="K5" dataName="receiver" mandatory="true" />
+			<cell position="L5" dataName="transferFee" mandatory="true" />
+			<cell position="M5" dataName="zipcode" mandatory="true" />
+			<cell position="N5" dataName="lpcode" />
+			<cell position="O5" dataName="memo" />
+		</block>
+	</sheet>
+
+	<sheet name="outSalesOrderSheet2Import">
+		<block start="A3" end="C3" dataName="line" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A3" dataName="slipCode" mandatory="true" />
+			<cell position="B3" dataName="jmskuCode" mandatory="true" />
+			<cell position="C3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="otherStaImport">
+		<block start="B3" end="B5" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="D5" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A5" dataName="skuCode" mandatory="true" />
+			<cell position="B5" dataName="locationCode" mandatory="true" />
+			<cell position="C5" dataName="intInvstatusName" mandatory="true" />
+			<cell position="D5" dataName="quantity" mandatory="true" />
+			<cell position="E5" dataName="strPoductionDate"/>
+			<cell position="F5" dataName="strExpireDate"/>
+		</block>
+	</sheet>
+	<sheet name="receiveAmountConfirmImportSheet1">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="B5" dataName="stvline1" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A5" dataName="skuCode" mandatory="true" />
+			<cell position="B5" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+	<sheet name="receiveAmountConfirmImportSheet2">
+		<block start="A2" end="B2" dataName="stvline2" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A2" dataName="skuCode" mandatory="true" />
+			<cell position="B2" dataName="sns" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- vmi 库存调整 出库 -->
+	<sheet name="outsheet">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="B5" dataName="outsheet" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCheckDifTotalLineCommand">
+			<cell position="A5" dataName="skuCode" mandatory="true" />
+			<cell position="B5" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+	<!-- vmi 库存调整 入库 -->
+	<sheet name="insheet"><!--AdjustInvinsheet AdjustInvoutsheet -->
+		<block start="A2" end="B2" dataName="insheet" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCheckDifTotalLineCommand">
+			<cell position="A2" dataName="skuCode" mandatory="true" />
+			<cell position="B2" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- vmi PO type -->
+	<sheet name="POTypeSheet">
+		<block start="A4" end="B4" dataName="POTypeSheet" loop="true"
+			loopClass="com.jumbo.wms.model.vmi.espData.ESPPoTypeCommand">
+			<cell position="A4" dataName="po" mandatory="true" />
+			<cell position="B4" dataName="typeName" mandatory="true" />
+			<cell position="C4" dataName="poStyle" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- vmi invoice percentage -->
+	<sheet name="InvoicePercentSheet">
+		<block start="A4" end="A4" dataName="InvoicePercentSheet" loop="true"
+			loopClass="com.jumbo.wms.model.vmi.espData.ESPInvoicePercentage">
+			<cell position="A4" dataName="invoiceNum" mandatory="true" />
+			<!-- <cell position="B4" dataName="dutyPercentage" mandatory="true" />
+			<cell position="C4" dataName="miscFeePercentage" mandatory="true" />
+			<cell position="D4" dataName="commPercentage" mandatory="true" /> -->
+		</block>
+	</sheet>
+
+
+	<sheet name="vmiownertransferimportsheet">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="B5" dataName="stalinecmds" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A5" dataName="skuCode" mandatory="true" />
+			<cell position="B5" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- vmi 退仓 -->
+	<sheet name="vmireturnsheet">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="D5" dataName="stalinecmds" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A5" dataName="skuCode" mandatory="true" />
+			<cell position="B5" dataName="location" mandatory="true" />
+			<cell position="C5" dataName="intInvstatusName" mandatory="true" />
+			<cell position="D5" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="locationsheet">
+		<block start="A4" end="A4" dataName="locs" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCheckLineCommand">
+			<cell position="A4" dataName="locationCode" mandatory="true" />
+		</block>
+	</sheet>
+
+
+	<sheet name="predefinedStaImport">
+		<block start="B3" end="B5" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="B5" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A5" dataName="skuCode" mandatory="true" />
+			<cell position="B5" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="predefinedOutImport">
+		<block start="B3" end="B5" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="C5" dataName="outStaLine" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A5" dataName="skuCode" mandatory="true" />
+			<cell position="B5" dataName="quantity" mandatory="true" />
+			<cell position="C5" dataName="intInvstatusName" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="pickingListMode1Export">
+		<block start="A1" end="G3">
+			<cell position="B2" dataName="createTime" />
+			<cell position="D2" dataName="whName" />
+			<cell position="G1" dataName="batchNumber" />
+			<cell position="G3" dataName="staCount" />
+			<cell position="G2" dataName="skuNumber" />
+			<cell position="B3" dataName="user" />
+		</block>
+		<block start="A5" end="H5" dataName="pl" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.PickingListCommand">
+			<cell position="A5" dataName="excelIndex" />
+			<cell position="B5" dataName="locationcode" />
+			<cell position="C5" dataName="barcode" />
+			<cell position="D5" dataName="supplierCode" />
+			<cell position="E5" dataName="skuname" />
+			<cell position="F5" dataName="keyproperties" />
+			<cell position="G5" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<sheet name="snsImport">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="B5" dataName="sns" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuSn">
+			<cell position="A5" dataName="sku.code" type="string" mandatory="true" />
+			<cell position="B5" dataName="sn" type="string" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="poConfirmExport">
+		<block start="A5" end="AC6">
+			<cell position="G5" dataName="applyTime" />
+			<cell position="I5" dataName="shopName" />
+			<cell position="R5" dataName="paymentDate" />
+			<cell position="X5" dataName="whName" />
+			<cell position="G6" dataName="planTime" />
+			<cell position="I6" dataName="supportName" />
+			<cell position="R6" dataName="arrivalType" />
+			<cell position="AC6" dataName="code" />
+			<cell position="AC5" dataName="batchCode" />
+			<cell position="X6" dataName="paymentType" />
+		</block>
+
+		<block start="A10" end="AC10" dataName="stvl" loop="true">
+			<cell position="A10" dataName="index" />
+			<cell position="C10" dataName="skuName" />
+			<cell position="H10" dataName="skuCode" />
+			<cell position="I10" dataName="brand" />
+			<cell position="R10" dataName="supplierCode" />
+			<cell position="Y10" dataName="planQty" />
+			<cell position="AB10" dataName="totalQty" />
+			<cell position="AC10" dataName="quantity" />
+		</block>
+		<block start="Y11" end="AC11">
+			<cell position="Y11" dataName="plqty" />
+			<cell position="AB11" dataName="totalQty" />
+			<cell position="AC11" dataName="qty" />
+		</block>
+	</sheet>
+
+	<sheet name="pdaLogExport">
+		<block start="B1" end="B1">
+			<cell position="B1" dataName="code" type="string" />
+		</block>
+		<block start="A3" end="G3" loop="true" dataName="logs"
+			loopClass="com.jumbo.wms.model.warehouse.PdaPostLogCommand">
+			<cell position="A3" dataName="skuBarcode" />
+			<cell position="B3" dataName="skuCode" />
+			<cell position="C3" dataName="skukeyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="skuSupplierCode" />
+			<cell position="F3" dataName="locCode" />
+			<cell position="G3" dataName="qty" />
+		</block>
+	</sheet>
+
+	<sheet name="pdaLogExportSheet2">
+		<block start="A2" end="G2" loop="true" dataName="stvls"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A2" dataName="barCode" />
+			<cell position="B2" dataName="skuCode" />
+			<cell position="C2" dataName="keyProperties" />
+			<cell position="D2" dataName="skuName" />
+			<cell position="E2" dataName="supplierCode" />
+			<cell position="F2" dataName="planQty" />
+			<cell position="G2" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<sheet name="outboundSnImport">
+		<block start="A4" end="A4" loop="true" dataName="sns">
+			<cell position="A4" dataName="sn" type="string" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="salesOutSnImport">
+		<block start="A4" end="B4" dataName="sns" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuSnCommand">
+			<cell position="A4" dataName="barcode" type="string" mandatory="true" />
+			<cell position="B4" dataName="sn" type="string" mandatory="true" />
+		</block>
+	</sheet>
+
+	<!-- pda收货sn号导入 -->
+	<sheet name="pdaPurchaseSnImport">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="B5" dataName="sns" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuSn">
+			<cell position="A5" dataName="sku.code" type="string" mandatory="true" />
+			<cell position="B5" dataName="sn" type="string" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="vmiInvCheckSheet1">
+		<block start="A4" end="D4" dataName="vmiAdjustInbound" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCheckDifTotalLineCommand">
+			<cell position="A4" dataName="skuCode" />
+			<cell position="B4" dataName="skuBarCode" />
+			<cell position="C4" dataName="skuName" />
+			<cell position="D4" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<sheet name="vmiInvCheckSheet2">
+		<block start="A2" end="D2" dataName="vmiAdjustOutbound" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCheckDifTotalLineCommand">
+			<cell position="A2" dataName="skuCode" />
+			<cell position="B2" dataName="skuBarCode" />
+			<cell position="C2" dataName="skuName" />
+			<cell position="D2" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<sheet name="vmiInvCheckImport1">
+		<block start="A4" end="H4" dataName="vmiAdjustImportInbound"
+			loop="true" loopClass="com.jumbo.wms.model.warehouse.InventoryCheckDifTotalLineCommand">
+			<cell position="A4" dataName="skuCode" mandatory="true" />
+			<cell position="B4" dataName="skuBarCode" mandatory="true" />
+			<cell position="D4" dataName="quantity" mandatory="true" />
+			<cell position="E4" dataName="locationCode" mandatory="true" />
+			<cell position="F4" dataName="inventoryStatusName" mandatory="true" />
+			<cell position="G4" dataName="poductionDate" />
+			<cell position="H4" dataName="sexpireDate" />
+		</block>
+	</sheet>
+
+	<sheet name="vmiInvCheckImport2">
+		<block start="A2" end="H2" dataName="vmiAdjustImportOutbound"
+			loop="true" loopClass="com.jumbo.wms.model.warehouse.InventoryCheckDifTotalLineCommand">
+			<cell position="A2" dataName="skuCode" mandatory="true" />
+			<cell position="B2" dataName="skuBarCode" mandatory="true" />
+			<cell position="D2" dataName="quantity" mandatory="true" />
+			<cell position="E2" dataName="locationCode" mandatory="true" />
+			<cell position="F2" dataName="inventoryStatusName" mandatory="true" />
+			<cell position="G2" dataName="poductionDate" />
+			<cell position="H2" dataName="sexpireDate" />
+		</block>
+	</sheet>
+
+	<!-- 销售报表导出 三个sheet的excel： 时段销售汇总报表，时段销售明细报表，查询条件 -->
+	<!-- 1. 时段销售汇总报表 -->
+	<sheet name="reportExportSumSheet">
+		<block start="B1" end="B4">
+			<cell position="B1" dataName="reportName" type="string" />
+			<cell position="B2" dataName="store" type="string" />
+			<cell position="B3" dataName="transStartTime" type="string"
+				mandatory="true" />
+			<cell position="B4" dataName="transEndTime" type="string"
+				mandatory="true" />
+		</block>
+		<block start="A8" end="F8" dataName="salesdatas" loop="true"
+			loopClass="com.jumbo.wms.model.report.SalesDataCommand">
+			<cell position="A8" dataName="transDate" />
+			<cell position="B8" dataName="transNum" />
+			<cell position="C8" dataName="netAmount" />
+			<cell position="D8" dataName="netQty" />
+			<cell position="E8" dataName="avt" />
+			<cell position="F8" dataName="upt" />
+			<cell position="G8" dataName="rtnAmt" />
+			<cell position="H8" dataName="rtnQty" />
+			<cell position="I8" dataName="acAmt" />
+			<cell position="J8" dataName="acQty" />
+
+		</block>
+	</sheet>
+
+	<!-- 2. 时段销售明细报表 -->
+	<sheet name="reportExportDetailSheet">
+		<block start="B3" end="B5">
+			<cell position="B3" dataName="store" type="string" />
+			<cell position="B4" dataName="transStartTime" type="string"
+				mandatory="true" />
+			<cell position="B5" dataName="transEndTime" type="string"
+				mandatory="true" />
+		</block>
+		<block start="A8" end="T8" dataName="salesdatas" loop="true"
+			loopClass="com.jumbo.wms.model.report.SalesDataDetailCommand">
+			<cell position="A8" dataName="transDate" />
+			<cell position="B8" dataName="payTime" />
+			<cell position="C8" dataName="transCode" />
+			<cell position="D8" dataName="pfTransNum" />
+			<cell position="E8" dataName="productCode" />
+			<cell position="F8" dataName="productName" />
+
+			<cell position="G8" dataName="productDesc" />
+			<cell position="H8" dataName="productCate" />
+			<cell position="I8" dataName="productLine" />
+			<cell position="J8" dataName="consumerGroup" />
+
+			<cell position="K8" dataName="size" />
+			<cell position="L8" dataName="inseam" />
+			<cell position="M8" dataName="transType" />
+			<cell position="N8" dataName="promotionCode" />
+			<cell position="O8" dataName="quantity" />
+			<cell position="P8" dataName="mdPrice" />
+			<cell position="Q8" dataName="actualPrice" />
+			<cell position="R8" dataName="discount" />
+			<cell position="S8" dataName="actualAmt" />
+			<cell position="T8" dataName="posPrice" />
+			<cell position="U8" dataName="posAmt" />
+			<cell position="V8" dataName="transferFee" />
+			<cell position="W8" dataName="warehouseName" />
+		</block>
+	</sheet>
+	
+	<sheet name="shopTimeInventory">
+		<block start="B1" end="B3">
+			<cell position="B1" dataName="reportName" type="string" />
+			<cell position="B2" dataName="shopName" type="string" />
+			<cell position="B3" dataName="exportTime" type="string" />
+		</block>
+		<block start="A6" end="I6" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A6" dataName="supplierSkuCode" />
+			<cell position="B6" dataName="skuName" />
+			<cell position="C6" dataName="productDescription" />
+			<cell position="D6" dataName="productCategory" />
+			<cell position="E6" dataName="productLine" />
+			<cell position="F6" dataName="consumerGroup" />
+			<cell position="G6" dataName="keyProperties" />
+			<cell position="H6" dataName="quantity" />
+			<cell position="I6" dataName="skuCost" />
+		</block>
+	</sheet>
+
+	<sheet name="shopCurrentInventory">
+		<block start="B1" end="B3">
+			<cell position="B1" dataName="reportName" type="string" />
+			<cell position="B2" dataName="shopName" type="string" />
+			<cell position="B3" dataName="exportTime" type="string" />
+		</block>
+		<block start="A6" end="I6" dataName="invs" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A6" dataName="supplierSkuCode" />
+			<cell position="B6" dataName="skuName" />
+			<cell position="C6" dataName="productDescription" />
+			<cell position="D6" dataName="productCategory" />
+			<cell position="E6" dataName="productLine" />
+			<cell position="F6" dataName="consumerGroup" />
+			<cell position="G6" dataName="keyProperties" />
+			<cell position="H6" dataName="quantity" />
+			<cell position="I6" dataName="skuCost" />
+			<cell position="J6" dataName="warehouseName" />
+		</block>
+	</sheet>
+
+	<sheet name="lvsInvnetoryLog">
+		<block start="B1" end="B3">
+			<cell position="B1" dataName="shopName" type="string" />
+			<cell position="B2" dataName="exportStartTime" type="string" />
+			<cell position="B3" dataName="exportEndTime" type="string" />
+		</block>
+		<block start="A6" end="P6" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StockTransTxLogCommand">
+			<cell position="A6" dataName="transactionTime" />
+			<cell position="B6" dataName="staCode" />
+			<cell position="C6" dataName="transactionTypeName" />
+			<cell position="D6" dataName="locationCode" />
+			<cell position="E6" dataName="supplierSkuCode" />
+			<cell position="F6" dataName="skuName" />
+			<cell position="G6" dataName="productDescription" />
+			<cell position="H6" dataName="productCategory" />
+			<cell position="I6" dataName="productLine" />
+			<cell position="J6" dataName="consumerGroup" />
+			<cell position="K6" dataName="barCode" />
+			<cell position="L6" dataName="keyProperties" />
+			<cell position="M6" dataName="inQty" />
+			<cell position="N6" dataName="outQty" />
+			<cell position="O6" dataName="invStatus" />
+			<cell position="P6" dataName="warehouseName" />
+		</block>
+	</sheet>
+
+	<sheet name="lvsRa">
+		<block start="B1" end="B3">
+			<cell position="B1" dataName="shopName" type="string" />
+			<cell position="B2" dataName="exportStartTime" type="string" />
+			<cell position="B3" dataName="exportEndTime" type="string" />
+		</block>
+		<block start="A6" end="P6" dataName="inv" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StockTransTxLogCommand">
+			<cell position="A6" dataName="approveTime" />
+			<cell position="B6" dataName="raType" />
+			<cell position="C6" dataName="raCode" />
+			<cell position="D6" dataName="transCode" />
+			<cell position="E6" dataName="pfTranNum" />
+			<cell position="F6" dataName="productCode" />
+			<cell position="G6" dataName="skuName" />
+			<cell position="H6" dataName="productDesc" />
+			<cell position="I6" dataName="productCate" />
+			<cell position="J6" dataName="productLine" />
+			<cell position="K6" dataName="consumerGroup" />
+			<cell position="L6" dataName="keyProperties" />
+			<cell position="M6" dataName="mdPrice" />
+			<cell position="N6" dataName="actualPrice" />
+			<cell position="O6" dataName="quantity" />
+			<cell position="P6" dataName="posSales" />
+			<cell position="Q6" dataName="refundAmt" />
+		</block>
+	</sheet>
+
+	<sheet name="vmiOpcExpSheet1">
+		<block start="A1" end="F1">
+			<cell position="B1" dataName="createTime" />
+			<cell position="D1" dataName="code" mandatory="true" />
+		</block>
+		<block start="A3" end="J3" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmCode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="supplierSkuCode" />
+			<cell position="F3" dataName="invOwner" />
+			<cell position="G3" dataName="inventoryStatusName" />
+			<cell position="H3" dataName="initQty" />
+			<cell position="I3" dataName="locationCode" />
+			<cell position="J3" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<sheet name="etamSizeRuleSheet1">
+		<block start="A4" end="C4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.oms.EtamOmsInvRule">
+			<cell position="A4" dataName="brand" />
+			<cell position="B4" dataName="sizes" />
+			<cell position="C4" dataName="qty" />
+		</block>
+	</sheet>
+
+	<sheet name="etamBar9RuleSheet1">
+		<block start="A4" end="C4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.oms.EtamOmsInvRule">
+			<cell position="A4" dataName="bar9" />
+			<cell position="B4" dataName="color" />
+			<cell position="C4" dataName="qty" />
+		</block>
+	</sheet>
+
+	<sheet name="invWriterForPurchase1">
+		<block start="A2" end="E2" dataName="stvLineSheet" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A2" dataName="barCode" />
+			<cell position="B2" dataName="skuCode" />
+			<cell position="C2" dataName="skuName" />
+			<cell position="D2" dataName="supplierCode" />
+			<cell position="E2" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<sheet name="invReaderForPurchaseSheet1">
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="C5" dataName="listData" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A5" dataName="skuCode" />
+			<cell position="B5" dataName="locationCode" />
+			<cell position="C5" dataName="quantity" />
+		</block>
+	</sheet>
+
+	<sheet name="snSkuReadForPurchaseSheet1">
+		<block start="A4" end="C4" dataName="listData" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaSnImportCommand">
+			<cell position="A4" dataName="barCode" mandatory="true" />
+			<cell position="B4" dataName="snNumber" mandatory="true" />
+			<cell position="C4" dataName="intInvstatusName" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="whReplenishStockSheet1">
+		<block start="A2" end="D2" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.WarehouseLocationCommand">
+			<cell position="A2" dataName="code" />
+			<cell position="B2" dataName="capacity" />
+			<cell position="C2" dataName="capaRatioNum" />
+			<cell position="D2" dataName="warningNumber" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="skuReplenishmentSummarySheet1">
+		<block start="A4" end="J4" dataName="summary" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuReplenishmentCommand">
+			<cell position="A4" dataName="skuCode" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="jmCode" />
+			<cell position="E4" dataName="boxQty" />
+			<cell position="F4" dataName="districtCode" />
+			<cell position="G4" dataName="maxQty" />
+			<cell position="H4" dataName="warningPre" />
+			<cell position="I4" dataName="invQty" />
+			<cell position="J4" dataName="replenishmentQty" />
+		</block>
+	</sheet>
+
+
+	<sheet name="skuReplenishmentDetailInSheet2">
+		<block start="A4" end="G4" dataName="detailIn" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuReplenishmentCommand">
+			<cell position="A4" dataName="skuCode" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="jmCode" />
+			<cell position="E4" dataName="districtCode" />
+			<cell position="F4" dataName="locationCode" />
+			<cell position="G4" dataName="replenishmentQty" />
+		</block>
+	</sheet>
+
+
+	<sheet name="skuReplenishmentDetailOutSheet3">
+		<block start="A4" end="C4" dataName="detailOut" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuReplenishmentCommand">
+			<cell position="A4" dataName="skuCode" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="jmCode" />
+			<cell position="E4" dataName="districtCode" />
+			<cell position="F4" dataName="locationCode" />
+			<cell position="G4" dataName="replenishmentQty" />
+		</block>
+	</sheet>
+
+	<!-- 配货失败补货 fanht S -->
+	<sheet name="exportSkuReplenishSheet1">
+		<block start="A4" end="F4" dataName="summary" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuReplenishmentCommand">
+			<cell position="A4" dataName="skuCode" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="jmCode" />
+			<cell position="E4" dataName="skuSize" />
+			<cell position="F4" dataName="recommenDistrictCode" />
+			<cell position="G4" dataName="replenishmentQty" />
+			<cell position="H4" dataName="owner" />
+			<cell position="I4" dataName="name" />
+		</block>
+	</sheet>
+	<sheet name="exportSkuReplenishSheet2">
+		<block start="A4" end="I4" dataName="detail" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuReplenishmentCommand">
+			<cell position="A4" dataName="skuCode" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="skuSize" />
+			<cell position="E4" dataName="groomCode" />
+			<cell position="F4" dataName="replenishmentQty" />
+			<cell position="G4" dataName="locationCode" />
+			<cell position="H4" dataName="maxReplenishmentQty" />
+			<cell position="I4" dataName="owner" />
+			<cell position="J4" dataName="stock" />
+		</block>
+	</sheet>
+	<!-- 配货失败补货 fanht E -->
+
+	<sheet name="pickingListWriterSheet">
+		<block start="A2" end="S2" dataName="list" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.PickingListCommand">
+			<cell position="A2" dataName="code" />
+			<cell position="B2" dataName="slipCode" />
+			<cell position="C2" dataName="tbCode" />
+			<cell position="D2" dataName="paymentTime" />
+			<cell position="E2" dataName="staCode" />
+			<cell position="F2" dataName="receiver" />
+			<cell position="G2" dataName="zipcode" />
+			<cell position="H2" dataName="receiveAddress" />
+			<cell position="I2" dataName="province" />
+			<cell position="J2" dataName="city" />
+			<cell position="K2" dataName="temp" />
+			<cell position="L2" dataName="owner" />
+			<cell position="M2" dataName="telephone" />
+			<cell position="N2" dataName="mobile" />
+			<cell position="O2" dataName="transferFee" />
+			<cell position="P2" dataName="totalActual" />
+			<cell position="Q2" dataName="lpcode" />
+			<cell position="R2" dataName="skuname" />
+			<cell position="S2" dataName="skuCode" />
+			<cell position="T2" dataName="supplierCode" />
+			<cell position="U2" dataName="keyproperties" />
+			<cell position="V2" dataName="barcode" />
+			<cell position="W2" dataName="quantity" />
+			<cell position="X2" dataName="memo" />
+		</block>
+	</sheet>
+
+	<sheet name="pickingListImport">
+		<block start="A2" end="F2" dataName="list" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.PickingListCommand">
+			<cell position="A2" dataName="code" mandatory="true" />
+			<cell position="B2" dataName="slipCode" mandatory="true" />
+			<cell position="C2" dataName="staCode" mandatory="true" />
+			<cell position="D2" dataName="temp" mandatory="true" />
+			<cell position="E2" dataName="lpcode" mandatory="true" />
+			<cell position="F2" dataName="trackingNo" mandatory="true" />
+		</block>
+	</sheet>
+	<sheet name="pickingListSNImport">
+		<block start="A2" end="F2" dataName="list" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.PickingListCommand">
+			<cell position="A2" dataName="slipCode" mandatory="true" />
+			<cell position="B2" dataName="staCode" mandatory="true" />
+			<cell position="C2" dataName="temp" mandatory="true" />
+			<cell position="D2" dataName="lpcode" mandatory="true" />
+			<cell position="E2" dataName="trackingNo" mandatory="true" />
+			<cell position="F2" dataName="sns" />
+		</block>
+	</sheet>
+
+	<sheet name="coachParseProductImport">
+		<block start="A2" end="AZ2" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.vmi.coachData.CoachProductData">
+			<cell position="A2" dataName="defaultAlias" mandatory="true" />
+			<cell position="B2" dataName="style" mandatory="true" />
+			<cell position="C2" dataName="styleDesc" mandatory="true" />
+			<cell position="D2" dataName="color" mandatory="true" />
+			<cell position="E2" dataName="colorDesc" mandatory="true" />
+			<cell position="F2" dataName="styleColor" mandatory="true" />
+			<cell position="G2" dataName="department" mandatory="true" />
+			<cell position="H2" dataName="departmentDesc" mandatory="true" />
+			<cell position="I2" dataName="classs" mandatory="true" />
+			<cell position="J2" dataName="deptClass" mandatory="true" />
+			<cell position="K2" dataName="classDesc" mandatory="true" />
+			<cell position="L2" dataName="subClass" mandatory="true" />
+			<cell position="M2" dataName="deptClassSub" mandatory="true" />
+			<cell position="N2" dataName="subClassDesc" mandatory="true" />
+			<cell position="O2" dataName="styleIntroDate" mandatory="true" />
+			<cell position="P2" dataName="styleDeleteDate" mandatory="true" />
+			<cell position="Q2" dataName="introDate" mandatory="true" />
+			<cell position="R2" dataName="deleteDate" mandatory="true" />
+			<cell position="S2" dataName="rtlPrice" mandatory="true" />
+			<cell position="T2" dataName="rtlCurrencyCode" mandatory="true" />
+			<cell position="U2" dataName="colorGroupDesc" mandatory="true" />
+			<cell position="V2" dataName="masterCollection" mandatory="true" />
+			<cell position="W2" dataName="collectionDesc" mandatory="true" />
+			<cell position="X2" dataName="subCollection" mandatory="true" />
+			<cell position="Y2" dataName="subcollectionDesc" mandatory="true" />
+			<cell position="Z2" dataName="hardwareColor" mandatory="true" />
+			<cell position="AA2" dataName="hardwareColorDesc" mandatory="true" />
+			<cell position="AB2" dataName="material" mandatory="true" />
+			<cell position="AC2" dataName="materialDesc" mandatory="true" />
+			<cell position="AD2" dataName="silhouette" mandatory="true" />
+			<cell position="AE2" dataName="silhouetteDesc" mandatory="true" />
+			<cell position="AF2" dataName="signatureType" mandatory="true" />
+			<cell position="AG2" dataName="signatureTypeDesc" mandatory="true" />
+			<cell position="AH2" dataName="gender" mandatory="true" />
+			<cell position="AI2" dataName="genderDesc" mandatory="true" />
+			<cell position="AJ2" dataName="closureDesc" mandatory="true" />
+			<cell position="AK2" dataName="planExclusion" mandatory="true" />
+			<cell position="AL2" dataName="status" mandatory="true" />
+			<cell position="AM2" dataName="specialProduct" mandatory="true" />
+			<cell position="AN2" dataName="specialProductDesc" mandatory="true" />
+			<cell position="AO2" dataName="handbagSize" mandatory="true" />
+			<cell position="AP2" dataName="dimLengthCM" mandatory="true" />
+			<cell position="AQ2" dataName="dimHeightCM" mandatory="true" />
+			<cell position="AR2" dataName="dimWidthCM" mandatory="true" />
+			<cell position="AS2" dataName="parentStyle" mandatory="true" />
+			<cell position="AT2" dataName="styleGroup" mandatory="true" />
+			<cell position="AU2" dataName="essChannelExclusive" mandatory="true" />
+			<cell position="AV2" dataName="styleFsintroDate" mandatory="true" />
+			<cell position="AW2" dataName="factoryType" mandatory="true" />
+			<cell position="AX2" dataName="countryCode" mandatory="true" />
+			<cell position="AY2" dataName="sourceCode" mandatory="true" />
+			<cell position="AZ2" dataName="brand" mandatory="true" />
+			<cell position="BA2" dataName="UPCCode" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="coachParsePriceImport">
+		<block start="A2" end="B2" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.vmi.coachData.CoachPriceData">
+			<cell position="A2" dataName="style" mandatory="true" />
+			<cell position="B2" dataName="retailPrice" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="CoachInboundInstructionData">
+		<block start="B3" end="B5" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="E5" dataName="outStaLine" loop="true"
+			loopClass="com.jumbo.wms.model.vmi.coachData.CoachInboundInstructionData">
+			<cell position="A5" dataName="barCode" mandatory="true" />
+			<cell position="B5" dataName="quantity" mandatory="true" />
+			<cell position="C5" dataName="sta.refSlipCode"/>
+			<cell position="D5" dataName="sta.slipCode1"/>
+		</block>
+	</sheet>
+
+	<sheet name="CoachInboundSkuData">
+		<block start="A4" end="A4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.vmi.coachData.CoachInboundInstructionData">
+			<cell position="A4" dataName="barCode" mandatory="false" />
+		</block>
+	</sheet>
+	
+	<sheet name="WhTransProvideNo">
+		<block start="A4" end="A4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.WhTransProvideNo">
+			<cell position="A4" dataName="transno" mandatory="false" />
+		</block>
+	</sheet>
+
+	<sheet name="WhTransProvinceNo">
+		<block start="A4" end="B4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.WhTransAreaNo">
+			<cell position="A4" dataName="areaNumber" mandatory="false" />
+			<cell position="B4" dataName="province" mandatory="false" />
+		</block>
+	</sheet>
+	
+	<sheet name="TransAreaGroupDetial">
+		<block start="A4" end="C4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.trans.TransAreaGroupDetial">
+			<cell position="A4" dataName="province"/>
+			<cell position="B4" dataName="city"/>
+			<cell position="C4" dataName="district"/>
+		</block>
+	</sheet>
+	
+	<sheet name="TransServiceDetial">
+		<block start="A4" end="C4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.trans.TransportServiceArea">
+			<cell position="A4" dataName="province"/>
+			<cell position="B4" dataName="city"/>
+			<cell position="C4" dataName="district"/>
+		</block>
+	</sheet>
+	
+	<sheet name="whCoverageAreaSheet1">
+		<block start="A4" end="C4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.WarehouseCoverageAreaRef">
+			<cell position="A4" dataName="province"/>
+			<cell position="B4" dataName="city"/>
+			<cell position="C4" dataName="district"/>
+		</block>
+	</sheet>
+	
+	<sheet name="whBoxInboundSheet1">
+		<block start="A4" end="C4" dataName="staLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A4" dataName="slipCode" mandatory="true"/>
+			<cell position="B4" dataName="barCode" mandatory="true"/>
+			<cell position="C4" dataName="quantity" mandatory="true"/>
+		</block>
+	</sheet>
+	
+	<sheet name="transRoleAccordSheet1">
+		<block start="A4" end="D4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.trans.TransRoleAccordCommand">
+			<cell position="A4" dataName="roleCode" mandatory="true"/>
+			<cell position="B4" dataName="changeTime" mandatory="true"/>
+			<cell position="C4" dataName="strRoleIsAvailable" mandatory="true"/>
+			<cell position="D4" dataName="priority" mandatory="true"/>
+		</block>
+	</sheet>
+	
+	<sheet name="invInfoSheet1">
+        <block start="A1" end="T1" dataName="inv1" loop="true" loopClass="com.jumbo.wms.model.warehouse.InventoryReport">
+        	<cell position="A1" dataName="info1" />
+            <cell position="C1" dataName="info2" />
+            <cell position="F1" dataName="info3" />
+            <cell position="I1" dataName="info4" />
+            <cell position="J1" dataName="info5" />
+            <cell position="M1" dataName="info6" />
+            <cell position="N1" dataName="info7" />
+            <cell position="O1" dataName="info8" />
+            <cell position="P1" dataName="info9" />
+            <cell position="Q1" dataName="info10" />
+            <cell position="T1" dataName="info11" />
+        </block>
+    </sheet>
+    <sheet name="invInfoSheet2">
+        <block start="A1" end="T1" dataName="inv2" loop="true" loopClass="com.jumbo.wms.model.warehouse.InventoryReport">
+        	<cell position="A1" dataName="info1" />
+            <cell position="C1" dataName="info2" />
+            <cell position="F1" dataName="info3" />
+            <cell position="I1" dataName="info4" />
+            <cell position="J1" dataName="info5" />
+            <cell position="M1" dataName="info6" />
+            <cell position="N1" dataName="info7" />
+            <cell position="O1" dataName="info8" />
+            <cell position="P1" dataName="info9" />
+            <cell position="Q1" dataName="info10" />
+            <cell position="T1" dataName="info11" />
+        </block>
+    </sheet>
+
+	<sheet name="salesReportFormWriterSheet">
+		<block start="C1" end="E1">
+			<cell position="C1" dataName="outboundTime" />
+			<cell position="D1" dataName="to" />
+			<cell position="E1" dataName="endOutboundTime" />
+		</block>
+		<block start="B4" end="E4" dataName="SRF" loop="true"
+			loopClass="com.jumbo.wms.model.command.SalesReportFormCommand">
+			<cell position="B4" dataName="warehouse" />
+			<cell position="C4" dataName="shop" />
+			<cell position="D4" dataName="toWHOrderQty" />
+			<cell position="E4" dataName="outboundQty" />
+		</block>
+	</sheet>
+	
+	<sheet name="inboundExport">
+		<block start="B1" end="B1">
+			<cell position="B1" dataName="staCode" />
+		</block>
+		<block start="A3" end="J3" dataName="staLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmcode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="jmskuCode" />
+			<cell position="F3" dataName="owner" />
+			<cell position="G3" dataName="status" />
+			<cell position="H3" dataName="quantity" mandatory="true" />
+			<cell position="I3" dataName="isSku" />
+			<cell position="J3" dataName="isStore" />
+		</block>
+	</sheet>
+
+	<sheet name="inboundimptp">
+		<block start="A3" end="H3" dataName="stvLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A3" dataName="sku.barCode" />
+			<cell position="B3" dataName="sku.jmCode" />
+			<cell position="C3" dataName="sku.keyProperties" />
+			<cell position="D3" dataName="sku.name" />
+			<cell position="E3" dataName="sku.supplierCode" />
+			<cell position="F3" dataName="owner" />
+			<cell position="G3" dataName="invStatus.name" />
+			<cell position="H3" dataName="receiptQty" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="confirmDiversityExport">
+		<block start="B1" end="B1">
+			<cell position="B1" dataName="staCode" />
+		</block>
+		<block start="A3" end="J3" dataName="stvLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmCode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="supplierCode" />
+			<cell position="F3" dataName="owner" />
+			<cell position="G3" dataName="intInvstatusName" />
+			<cell position="H3" dataName="remainPlanQty" />
+			<cell position="I3" dataName="receiptQty" />
+			<cell position="J3" dataName="differenceQty" />
+		</block>
+	</sheet>
+
+	<sheet name="proInfoMaintainExport">
+		<block start="A2" end="A2" dataName="product" loop="true"
+			loopClass="com.jumbo.wms.model.baseinfo.Sku">
+			<cell position="A2" dataName="code" />
+		</block>
+	</sheet>
+
+	<sheet name="confirmDiversityImport">
+		<block start="A3" end="K3" dataName="stvLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A3" dataName="sku.barCode" />
+			<cell position="B3" dataName="sku.jmCode" />
+			<cell position="C3" dataName="sku.keyProperties" />
+			<cell position="D3" dataName="sku.name" />
+			<cell position="E3" dataName="sku.supplierCode" />
+			<cell position="F3" dataName="owner" />
+			<cell position="G3" dataName="invStatus.name" />
+			<cell position="H3" dataName="remainPlanQty" />
+			<cell position="I3" dataName="receiptQty" />
+			<cell position="J3" dataName="differenceQty" />
+			<cell position="K3" dataName="quantity" />
+		</block>
+	</sheet>
+	<sheet name="inBoundShelvesExport">
+		<block start="B1" end="B1">
+			<cell position="B1" dataName="staCode" />
+		</block>
+		<block start="A3" end="H3" dataName="stvLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmCode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="supplierCode" />
+			<cell position="F3" dataName="isShelfManagement" />
+			<cell position="G3" dataName="owner" />
+			<cell position="H3" dataName="intInvstatusName" />
+		</block>
+	</sheet>
+	<sheet name="inBoundShelvesImperfectExport">
+		<block start="A3" end="M3" dataName="stvLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A3" dataName="barCode" />
+			<cell position="B3" dataName="jmCode" />
+			<cell position="C3" dataName="keyProperties" />
+			<cell position="D3" dataName="skuName" />
+			<cell position="E3" dataName="supplierCode" />
+			<cell position="F3" dataName="isShelfManagement" />
+			<cell position="G3" dataName="owner" />
+			<cell position="H3" dataName="intInvstatusName" />
+			<cell position="L3" dataName="quantity" />
+			<cell position="M3" dataName="staCode" />
+		</block>
+	</sheet>
+	<sheet name="inBoundShelvesSNExport">
+		<block start="A2" end="H2" dataName="stvLineSNList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A2" dataName="barCode" />
+			<cell position="B2" dataName="jmCode" />
+			<cell position="C2" dataName="keyProperties" />
+			<cell position="D2" dataName="skuName" />
+			<cell position="E2" dataName="supplierCode" />
+			<cell position="F2" dataName="isShelfManagement" />
+			<cell position="G2" dataName="owner" />
+			<cell position="H2" dataName="intInvstatusName" />
+		</block>
+	</sheet>
+	<sheet name="inboundShelvesImport">
+		<block start="A3" end="L3" dataName="stvLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A3" dataName="sku.barCode" />
+			<cell position="B3" dataName="sku.jmCode" />
+			<cell position="C3" dataName="sku.keyProperties" />
+			<cell position="D3" dataName="sku.name" />
+			<cell position="E3" dataName="sku.supplierCode" />
+			<cell position="G3" dataName="owner" />
+			<cell position="H3" dataName="invStatus.name" />
+			<cell position="I3" dataName="strPoductionDate"/> 
+			<cell position="J3" dataName="strExpireDate"/>
+			<cell position="K3" dataName="location.code" mandatory="true" />
+			<cell position="L3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+	<sheet name="inboundShelvesSNImport">
+		<block start="A2" end="K2" dataName="stvLineSNList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A2" dataName="sku.barCode" />
+			<cell position="B2" dataName="sku.jmCode" />
+			<cell position="C2" dataName="sku.keyProperties" />
+			<cell position="D2" dataName="sku.name" />
+			<cell position="E2" dataName="sku.supplierCode" />
+			<cell position="G2" dataName="owner" />
+			<cell position="H2" dataName="invStatus.name" />
+			<cell position="I2" dataName="strPoductionDate"/>
+			<cell position="J2" dataName="strExpireDate"/>
+			<cell position="K2" dataName="location.code" mandatory="true" />
+			<cell position="L2" dataName="sns" mandatory="true" />
+		</block>
+	</sheet>
+	<!-- 商品信息维护导入 -->
+	<sheet name="productInfoMainImport">
+		<block start="A2" end="H2" dataName="pro" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A2" dataName="code" mandatory="true" />
+			<cell position="B2" dataName="length" mandatory="true" />
+			<cell position="C2" dataName="width" mandatory="true" />
+			<cell position="D2" dataName="height" mandatory="true" />
+			<cell position="E2" dataName="grossWeight" mandatory="true" />
+			<cell position="F2" dataName="skuCategoriesName" />
+			<cell position="G2" dataName="railwayStr" />
+			<cell position="H2" dataName="skuTypeName" />
+		</block>
+	</sheet>
+	<!-- NIKE商品信息维护导入 -->
+	<sheet name="nikeProductInfoMainImport">
+		<block start="A2" end="J2" dataName="pro" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A2" dataName="barCode" mandatory="true" />
+			<cell position="B2" dataName="supplierCode" />
+			<cell position="C2" dataName="keyProperties" />
+			<cell position="D2" dataName="name" />
+			<cell position="E2" dataName="brandName" />
+			<cell position="F2" dataName="skuCategoriesName" mandatory="true" />
+			<cell position="G2" dataName="height" mandatory="true" />
+			<cell position="H2" dataName="length" mandatory="true" />
+			<cell position="I2" dataName="width" mandatory="true" />
+			<cell position="J2" dataName="grossWeight" mandatory="true" />
+			<cell position="K2" dataName="packageBarCode" />
+		</block>
+	</sheet>
+	<!-- SN号编辑导入 -->
+	<sheet name="snnumberMainImport">
+		<block start="A5" end="B5" dataName="skusn" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuSn">
+			<cell position="A5" dataName="sku.code" mandatory="true" />
+			<cell position="B5" dataName="sn" mandatory="true" />
+		</block>
+	</sheet>
+	<sheet name="nikeCheckReceiveImport">
+		<block start="A3" end="C3" dataName="nike" loop="true"
+			loopClass="com.jumbo.wms.model.vmi.nikeData.NikeCheckReceive">
+			<cell position="A3" dataName="ownerCode" mandatory="true" />
+			<cell position="B3" dataName="upc" mandatory="true" />
+			<cell position="C3" dataName="quantity" mandatory="true" />
+		</block>
+	</sheet>
+
+	<sheet name="nakeVmiinboundImport">
+		<block start="A2" end="Z2" dataName="nike" loop="true"
+			loopClass="com.jumbo.wms.model.command.NikeVMIInboundCommand">
+			<cell position="B2" dataName="externOrderKey" />
+			<cell position="T2" dataName="upc" />
+			<cell position="U2" dataName="qtyShipped" />
+			<cell position="V2" dataName="labelNo" />
+		</block>
+	</sheet>
+	<!-- 物流面单号导入 -->
+	<sheet name="staDeliverExport">
+		<block start="A2" end="B2" dataName="staDelivery" loop="true"
+			loopClass="com.jumbo.wms.model.command.StaDeliverCommand">
+			<cell position="A2" dataName="slipCode" />
+			<cell position="B2" dataName="transNo" />
+		</block>
+	</sheet>
+	<sheet name="staDeliverImport">
+		<block start="A2" end="B2" dataName="staDelivery" loop="true"
+			loopClass="com.jumbo.wms.model.command.StaDeliverCommand">
+			<cell position="A2" dataName="slipCode" mandatory="true" />
+			<cell position="B2" dataName="transNo" mandatory="true" />
+		</block>
+	</sheet>
+	<sheet name="whReplenishReportExport">
+		<block start="A4" end="M4" dataName="wrLineList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.WhReplenishLineCommand">
+			<cell position="A4" dataName="barCode" />
+			<cell position="B4" dataName="outDistrictCode" />
+			<cell position="C4" dataName="outLocationCode" />
+			<cell position="D4" dataName="outLocCurrentInv" />
+			<cell position="E4" dataName="outQty" />
+			<cell position="F4" dataName="inDistrictCode" />
+			<cell position="G4" dataName="maxStore" />
+			<cell position="H4" dataName="inDisCurrentInv" />
+			<cell position="I4" dataName="warningPre" />
+			<cell position="J4" dataName="inLocationCode" />
+			<cell position="K4" dataName="inLocationCode1" />
+			<cell position="L4" dataName="inLocationCode2" />
+			<cell position="M4" dataName="inQty" />
+		</block>
+	</sheet>
+
+	<sheet name="salesSendOutInfoSheet1">
+		<block start="A3" end="X3" dataName="staList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StockTransApplicationCommand">
+			<cell position="A3" dataName="owner" />
+			<cell position="B3" dataName="code" />
+			<cell position="C3" dataName="refSlipCode" />
+			<cell position="D3" dataName="outerOrderCode" />
+			<cell position="E3" dataName="strType" />
+			<cell position="F3" dataName="totalActual" />
+			<cell position="G3" dataName="skuTotalActual" />
+			<cell position="H3" dataName="transferFee" />
+			<cell position="I3" dataName="skuQty" />
+			<cell position="J3" dataName="createTime" />
+			<cell position="K3" dataName="supplierCode" />
+			<cell position="L3" dataName="skuName" />
+			<cell position="M3" dataName="skuCode" />
+			<cell position="N3" dataName="barCode" />
+			<cell position="O3" dataName="quantity" />
+			<cell position="P3" dataName="receiver" />
+			<cell position="Q3" dataName="telephone" />
+			<cell position="R3" dataName="mobile" />
+			<cell position="S3" dataName="province" />
+			<cell position="T3" dataName="city" />
+			<cell position="U3" dataName="district" />
+			<cell position="V3" dataName="address" />
+			<cell position="W3" dataName="zipcode" />
+			<cell position="X3" dataName="memo" />
+		</block>
+	</sheet>
+
+	<sheet name="returnRegisterInfoSheet1">
+		<block start="A2" end="J2" dataName="staList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StockTransApplicationCommand">
+			<cell position="A2" dataName="createTime" />
+			<cell position="B2" dataName="code" />
+			<cell position="C2" dataName="outerOrderCode" />
+			<cell position="D2" dataName="refSlipCode" />
+			<cell position="E2" dataName="optionValue" />
+			<cell position="F2" dataName="barCode" />
+			<cell position="G2" dataName="skuCode" />
+			<cell position="H2" dataName="supplierCode" />
+			<cell position="I2" dataName="invStrutsName" />
+			<cell position="J2" dataName="quantity" />
+		</block>
+	</sheet>
+	<sheet name="inventoryReportkSheet1">
+        <block start="A2" end="L2" dataName="invList" loop="true" loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+            <cell position="A2" dataName="skuCode" />
+			<cell position="B2" dataName="jmCode" />
+			<cell position="C2" dataName="barCode" />
+			<cell position="D2" dataName="keyProperties" />
+			<cell position="E2" dataName="skuName" />
+			<cell position="F2" dataName="supplierSkuCode" />
+			<cell position="G2" dataName="supplierSkuCode" />
+			<cell position="H2" dataName="inventoryStatusName"/>
+			<cell position="I2" dataName="owner"  />
+			<cell position="J2" dataName="brandName" />
+			<cell position="K2" dataName="quantity" />
+			<cell position="L2" dataName="sn" />
+        </block>
+    </sheet>
+	<sheet name="orderLineImport">
+	<block start="B3" end="B5" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+		<block start="A5" end="D5" dataName="staList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StaLineCommand">
+			<cell position="A5" dataName="skuCode" mandatory="true" />
+			<cell position="B5" dataName="location" mandatory="true" />
+			<cell position="C5" dataName="intInvstatusName" />
+			<cell position="D5" dataName="quantity" />
+		</block>
+	</sheet>
+	
+	<sheet name="soInvoiceExport">
+		<block start="A2" end="Q2" dataName="invoiceList" loop="true" loopClass="com.jumbo.wms.model.warehouse.StaInvoiceCommand">
+			<cell position="A2" dataName="invoiceDate" />
+			<cell position="B2" dataName="payer" />
+			<cell position="C2" dataName="identificationNumber" />
+			<cell position="D2" dataName="address" />
+			<cell position="E2" dataName="telephone" />
+			<cell position="F2" dataName="item" />
+			<cell position="G2" dataName="unitPrice" />
+			<cell position="H2" dataName="qty" />
+			<cell position="I2" dataName="amt" />
+			<cell position="R2" dataName="memo" />
+			<cell position="S2" dataName="payee" />
+			<cell position="T2" dataName="drawer" />
+			<cell position="U2" dataName="companyName" />
+		</block>
+	</sheet>
+	
+	<sheet name="burberryInvoiceExport">
+		<block start="A2" end="J2" dataName="invoiceList" loop="true" loopClass="com.jumbo.wms.model.warehouse.StaInvoiceCommand">
+			<cell position="A2" dataName="seqNo" />
+			<cell position="B2" dataName="staCode" />
+			<cell position="C2" dataName="refSlipCode" />
+			<cell position="D2" dataName="totalAmt" />
+			<cell position="E2" dataName="payer" />
+			<cell position="F2" dataName="memo" />
+			<cell position="G2" dataName="item" />
+			<cell position="H2" dataName="qty" />
+			<cell position="I2" dataName="unitPrice" />
+			<cell position="J2" dataName="amt" />
+			<cell position="L2" dataName="companyName" />
+		</block>
+	</sheet>
+	<sheet name="resultRequestInbountImport">
+        <block start="A2" end="J2" dataName="staList" loop="true" loopClass="com.jumbo.wms.model.warehouse.StockTransApplicationCommand">
+            <cell position="A2" dataName="createTime" />
+			<cell position="B2" dataName="code" />
+			<cell position="C2" dataName="soCode" />
+			<cell position="D2" dataName="outerOrderCode" />
+			<cell position="E2" dataName="refSlipCode" />
+			<cell position="F2" dataName="optionValue" />
+			<cell position="G2" dataName="barCode" />
+			<cell position="H2" dataName="skuCode" />
+			<cell position="I2" dataName="supplierCode"/>
+			<cell position="J2" dataName="invStrutsName"  />
+			<cell position="K2" dataName="sn" />
+			<cell position="L2" dataName="quantity" />
+			<cell position="M2" dataName="inboundTime" mandatory="true"/>
+			<cell position="N2" dataName="sn"  />
+			<cell position="O2" dataName="lpcode" mandatory="true"/>
+			<cell position="P2" dataName="trackingNo" mandatory="true"/>
+			<cell position="Q2" dataName="inboundInfo" mandatory="true"/>
+			<cell position="R2" dataName="memo" />
+        </block>
+    </sheet>
+   	<!--保质期商品导入 -->
+	<sheet name="skuShelfLifesheet">
+		<block start="A5" end="C5" dataName="skuList" loop="true"
+			loopClass="com.jumbo.wms.model.baseinfo.Sku">
+			<cell position="A5" dataName="barCode"  mandatory="true"/>
+			<cell position="B5" dataName="validDate" mandatory="true"/>
+			<cell position="C5" dataName="name" mandatory="true"/>
+		</block>
+		<block start="B3" end="B3" dataName="type">
+			<cell position="B3" dataName="type" type="string" mandatory="true" />
+		</block>
+	</sheet>
+	<!-- 模板导入批量收货 -->
+	<sheet name="importforbatchreceivingsheet">
+		<block start="A4" end="D4" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="staCode"/>
+			<cell position="B4" dataName="sku.barCode" />
+			<cell position="C4" dataName="location.code"  />
+			<cell position="D4" dataName="invStatus.name" />
+			<cell position="E4" dataName="quantity" />
+		</block>
+	</sheet>
+	<!--  保质期模板导入批量收货 -->
+	<sheet name="importShelfLifeforbatchreceivingsheet">
+		<block start="A4" end="F4" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A4" dataName="staCode"/>
+			<cell position="B4" dataName="sku.barCode" />
+			<cell position="C4" dataName="location.code"  />
+			<cell position="D4" dataName="invStatus.name" />
+			<cell position="E4" dataName="quantity" />
+			<cell position="F4" dataName="sexpireDate" />
+		</block>
+	</sheet>
+	
+	<!-- 导入EXCEL打印面单 -->
+	<sheet name="importPrintSheet">
+		<block start="A3" end="F3" dataName="infoLines" loop="true" loopClass="com.jumbo.wms.model.warehouse.ImportPrintData">
+			<cell position="A3" dataName="sender"/>
+			<cell position="B3" dataName="senderTel"/>
+			<cell position="C3" dataName="senderAddress"/>
+			<cell position="D3" dataName="receiver"/>
+			<cell position="E3" dataName="mobile"/>
+			<cell position="F3" dataName="address"/>
+		</block>
+	</sheet>
+	<!-- 商品标签导入关联Sku -->
+	<sheet name="importRefSkuSheet">
+		<block start="A2" end="G2" dataName="refSkus" loop="true" loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A2" dataName="code"/>
+			<cell position="B2" dataName="name"/>
+			<cell position="C2" dataName="barCode"/>
+			<cell position="D2" dataName="brandName"/>
+			<cell position="E2" dataName="customerName"/>
+			<cell position="F2" dataName="extensionCode1"/>
+			<cell position="G2" dataName="extensionCode2"/>
+		</block>
+	</sheet>
+	<!-- 导出强生实时库存EXCEL -->
+	<sheet name="exportJNJInv">
+		<block start="A2" end="H2" dataName="invList" loop="true" loopClass="com.jumbo.wms.model.command.JohnsonInventoryCommand">
+			<cell position="A2" dataName="stockDate" mandatory="true"/>
+			<cell position="B2" dataName="prodCode" mandatory="true"/>
+			<cell position="C2" dataName="prodName" mandatory="true"/>
+			<cell position="D2" dataName="prodQuantity" />
+			<cell position="E2" dataName="prodUnit" />
+			<cell position="F2" dataName="prodNum" />
+			<cell position="G2" dataName="stockType"/>
+			<cell position="H2" dataName="remark" />
+		</block>
+	</sheet>
+	<!-- 导出便利店自提EXCEL -->
+	<sheet name="convenienceStoreOrderInfoExport">
+		<block start="A2" end="I2" dataName="orderInfo" loop="true" loopClass="com.jumbo.wms.model.warehouse.ConvenienceStoreOrderInfo">
+			<cell position="A2" dataName="erpOrderCode" />
+			<cell position="B2" dataName="address" />
+			<cell position="C2" dataName="trackingNo" />
+			<cell position="D2" dataName="receiver" />
+			<cell position="E2" dataName="telephone" />
+			<cell position="F2" dataName="outboundTime" />
+			<cell position="G2" dataName="weight"/>
+			<cell position="H2" dataName="memo" />
+			<cell position="I2" dataName="lpCode" />
+		</block>
+	</sheet>
+	<!--配货失败  缺货信息导出  -->
+	   <sheet name="staDistributionFailureExport">
+			<block start="A2" end="I2" dataName="failureInfo" loop="true" loopClass="com.jumbo.wms.model.warehouse.StaErrorLineCommand">
+				<cell position="A2" dataName="code" />
+				<cell position="B2" dataName="slipCode2" />
+				<cell position="C2" dataName="createTime" />
+				<cell position="D2" dataName="skuName" />
+				<cell position="E2" dataName="skuCode" />
+				<cell position="F2" dataName="barCode" />
+				<cell position="G2" dataName="supplierCode" />
+				<cell position="H2" dataName="keyProperties" />
+				<cell position="I2" dataName="quantity" />
+			</block>
+		</sheet>
+			<!--sku批量导入获取库存  -->
+<sheet name="skuInvnetory">
+		<block start="A2" end="G2" dataName="command" loop="true" loopClass="com.jumbo.wms.model.warehouse.InventoryCommand">
+			<cell position="A2" dataName="barCode" />
+			<cell position="B2" dataName="supplierSkuCode" />
+			<cell position="C2" dataName="invOwner" />
+			<cell position="D2" dataName="salesAvailQty" />
+			<cell position="E2" dataName="lockQty" />
+			<cell position="F2" dataName="availQty" />
+			<cell position="G2" dataName="skuSize" />
+		</block>
+	</sheet>
+	<!-- 库区导出 -->
+	<sheet name="pickZone">
+		<block start="A2" end="D2" dataName="pickZoneInfoList" loop="true" loopClass="com.jumbo.wms.model.command.pickZone.WhPickZoneInfoCommand">
+			<cell position="A2" dataName="location" />
+			<cell position="B2" dataName="district" />
+			<cell position="C2" dataName="code" />
+			<cell position="D2" dataName="sort" />
+		</block>
+	</sheet>
+	<!-- 库区导入 -->
+	<sheet name="pickZoneImport">
+		<block start="A2" end="D2" dataName="pickZoneUpload" loop="true" loopClass="com.jumbo.wms.model.command.pickZone.WhPickZoneInfoCommand">
+			<cell position="A2" dataName="location" />
+			<cell position="B2" dataName="district" />
+			<cell position="C2" dataName="code" />
+			<cell position="D2" dataName="sort" />
+		</block>
+	</sheet>
+	 
+  <!-- 采购退货入库上架批量导入 -->
+	<sheet name="importInboundPutawaysheet">
+		<block start="A2" end="K2" dataName="stvLines" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A2" dataName="staCode" />
+			<cell position="B2" dataName="barCode" />
+			<cell position="C2" dataName="skuCode" />
+			<cell position="D2" dataName="keyProperties" />
+			<cell position="E2" dataName="skuName" />
+			<cell position="F2" dataName="supplierCode" />
+			<cell position="G2" dataName="intInvstatusName" />
+			<cell position="H2" dataName="totalQuantity"/>
+			<cell position="I2" dataName="locationCode"/>
+			<cell position="J2" dataName="strPoductionDate"/>
+			<cell position="K2" dataName="strExpireDate"/>
+			<cell position="L2" dataName="receiptQty"/>
+		</block>
+	</sheet>
+    <!-- 导出反向采购退货入库待上架 -->
+	<sheet name="procurementrenurninboudputawayExport">
+	    <block start="A2" end="H2" dataName="stvLineList" loop="true" loopClass="com.jumbo.wms.model.warehouse.StvLineCommand">
+			<cell position="A2" dataName="staCode" />
+			<cell position="B2" dataName="barCode" />
+			<cell position="C2" dataName="skuCode" />
+			<cell position="D2" dataName="keyProperties" />
+			<cell position="E2" dataName="skuName" />
+			<cell position="F2" dataName="supplierCode" />
+			<cell position="G2" dataName="intInvstatusName" />
+			<cell position="H2" dataName="totalQuantity"/>
+		</block>
+	</sheet>
+		<!-- 用户仓库导入 -->
+	<sheet name="userWarehouseImport">
+		<block start="A4" end="B4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.command.UserCommand">
+			<cell position="A4" dataName="loginName"/>
+			<cell position="B4" dataName="warehouseName" />
+		</block>
+	</sheet>
+	
+	<!-- 集货规则明细导入 -->
+	<sheet name="shippingRoleImprot">
+		<block start="A4" end="B4" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.command.automaticEquipment.ShippingPointRoleLineCommand">
+			<cell position="A4" dataName="lpcode" />
+			<cell position="B4" dataName="province"/>
+			<cell position="C4" dataName="city"/>
+			<cell position="D4" dataName="district"/>
+			<cell position="E4" dataName="sort"/>
+			<cell position="F4" dataName="timeTypeStr"/>
+			<cell position="G4" dataName="owner"/>
+			<cell position="H4" dataName="isCodStr"/>
+			<cell position="I4" dataName="staType"/>
+			<cell position="J4" dataName="staCode"/>
+			<cell position="K4" dataName="pointName"/>
+		</block>
+	</sheet>
+	
+	
+	
+	<sheet name="shippingCollectionReaderImprot">
+		<block start="A2" end="C2" dataName="data" loop="true"
+			loopClass="com.jumbo.wms.model.automaticEquipment.GoodsCollection">
+			<cell position="A2" dataName="collectionCode" />
+			<cell position="B2" dataName="sort" />
+			<cell position="C2" dataName="popUpCode" />
+		</block>
+	</sheet>
+	
+	<!-- 特殊商品作废sku导入 -->
+	<sheet name="skuImport">
+		<block start="A4" end="B4" dataName="skuList" loop="true"
+			loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A4" dataName="barCode" />
+		</block>
+	</sheet>
+	<!-- SF次晨达导入导出 -->
+	<sheet name="sfNextMorningConfigSheet">
+		<block start="A3" end="C3" dataName="configList" loop="true" loopClass="com.jumbo.wms.model.warehouse.SfNextMorningConfig">
+			<cell position="A3" dataName="province"/>
+			<cell position="B3" dataName="city"/>
+			<cell position="C3" dataName="district"/>
+		</block>
+	</sheet>
+	<!-- SF时效导入导出 -->
+	<sheet name="sfConfigSheet">
+		<block start="A3" end="C3" dataName="configList" loop="true" loopClass="com.jumbo.wms.model.warehouse.SfNextMorningConfig">
+			<cell position="A3" dataName="province"/>
+			<cell position="B3" dataName="city"/>
+			<cell position="C3" dataName="timeTypeString"/>
+		</block>
+	</sheet>
+	<!-- NIKE当日达导入导出 -->
+	<sheet name="nikeTodaySendConfigSheet">
+		<block start="A3" end="G3" dataName="configList" loop="true" loopClass="com.jumbo.wms.model.LitreSingle">
+			<cell position="A3" dataName="totalActual"/>
+			<cell position="B3" dataName="province"/>
+			<cell position="C3" dataName="city"/>
+			<cell position="D3" dataName="district"/>
+			<cell position="E3" dataName="owner"/>
+			<cell position="F3" dataName="startTime"/>
+			<cell position="G3" dataName="endTime"/>
+		</block>
+	</sheet>
+	<!-- 导出索赔信息 -->
+	<sheet name="claimantInfo">
+		<block start="A2" end="AA2" dataName="claimantList" loop="true" loopClass="com.jumbo.wms.model.compensation.WhCompensationCommand">
+			<cell position="A2" dataName="claimCode"/>
+			<cell position="B2" dataName="omsOrderCode"/>
+			<cell position="C2" dataName="claimStatus"/>
+			<cell position="D2" dataName="claimTypeName"/>
+			<cell position="E2" dataName="claimReasonNmae"/>
+			<cell position="F2" dataName="shopOwner"/>
+			<cell position="G2" dataName="transName"/>
+			<cell position="H2" dataName="transNumber"/>
+			<cell position="I2" dataName="totalClaimAmt"/>
+			<cell position="J2" dataName="logisticsepartmentAmt"/>
+			<cell position="K2" dataName="expressDeliveryAmt"/>
+			<cell position="L2" dataName="warn"/>
+			<cell position="M2" dataName="warehouseName"/>
+			<cell position="N2" dataName="staFinishDate"/>
+			<cell position="O2" dataName="createUserName"/>
+			<cell position="P2" dataName="createTime"/>
+			<cell position="Q2" dataName="userName"/>
+			<cell position="R2" dataName="lastModifyTime"/>
+			<cell position="S2" dataName="fileUrl"/>
+			<cell position="T2" dataName="remark"/>
+			<cell position="U2" dataName="disposeRemark"/>
+			<cell position="V2" dataName="receiver"/>
+			<cell position="W2" dataName="mobile"/>
+			<cell position="X2" dataName="receiverAddress"/>
+			<cell position="Y2" dataName="commodityCode"/>
+			<cell position="Z2" dataName="commodityName"/>
+			<cell position="AA2" dataName="material"/>
+		</block>
+	</sheet>
+	<!-- PDA拣货短拣导出 -->
+	<sheet name="pdaSortPickingExcel">
+		<block start="A2" end="M2" dataName="pdaSortPickingList" loop="true"
+			loopClass="com.jumbo.wms.model.pda.PdaSortPickingCommand">
+			<cell position="A2" dataName="pickingCode" />
+			<cell position="B2" dataName="pickingZoonCode" />
+			<cell position="C2" dataName="locCode" />
+			<cell position="D2" dataName="skuName" />
+			<cell position="E2" dataName="skuCode" />
+			<cell position="F2" dataName="supplierCode" />
+			<cell position="G2" dataName="keyProperties" />
+			<cell position="H2" dataName="barCode" />
+			<cell position="I2" dataName="planQty" />
+			<cell position="J2" dataName="qty" />
+			<cell position="K2" dataName="sortQty" />
+			<cell position="L2" dataName="executionTime" />
+			<cell position="M2" dataName="loginName" />
+		</block>
+	</sheet>
+	
+	<sheet name="cartonListByCRWWriterExport">
+		<block start="A2" end="H2" dataName="cartonList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StockTransApplicationCommand">
+			<cell position="A2" dataName="planLastOutboundTime1" />
+			<cell position="B2" dataName="seqno" />
+			<cell position="C2" dataName="slipCode2" />
+			<cell position="D2" dataName="packSlipNo" />
+			<cell position="E2" dataName="refSlipCode" />
+			<cell position="F2" dataName="cartonCode" />
+			<cell position="G2" dataName="extCode2" />
+			<cell position="H2" dataName="quantity" />
+		</block>
+	</sheet>
+	
+	
+	<sheet name="agvWriterExport">
+		<block start="A2" end="B2" dataName="pickingListCommand" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.PickingListCommand">
+			<cell position="A2" dataName="agv1" />
+			<cell position="B2" dataName="agv2" />
+			<cell position="C2" dataName="agv3" />
+			<cell position="D2" dataName="agv4" />
+			<cell position="E2" dataName="agv5" />
+			<cell position="F2" dataName="agv6" />
+			<cell position="G2" dataName="agv7" />
+			<cell position="H2" dataName="agv8" />
+			<cell position="I2" dataName="agv9" />
+			<cell position="J2" dataName="agv10" />
+			<cell position="K2" dataName="agv11" />
+		</block>
+	</sheet>
+	
+	
+	
+	<sheet name="cartonReportListByCRWWriterExport">
+		<block start="A2" end="H2" dataName="cartonReportList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StockTransApplicationCommand">
+			<cell position="A2" dataName="planLastOutboundTime1" />
+			<cell position="B2" dataName="slipCode2" />
+			<cell position="C2" dataName="packSlipNo" />
+			<cell position="D2" dataName="refSlipCode" />
+			<cell position="E2" dataName="slipCode1" />
+			<cell position="F2" dataName="nfsStoreCode" />
+			<cell position="G2" dataName="divisionCode" />
+			<cell position="H2" dataName="extCode2" />
+			<cell position="I2" dataName="nikeQty" />
+			<cell position="J2" dataName="quantity" />
+			<cell position="K2" dataName="varianceQty" />
+		</block>
+	</sheet>
+	
+	<sheet name="importStaByOwnerWriter">
+		<block start="A2" end="K2" dataName="staList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.StockTransApplicationCommand">
+			<cell position="A2" dataName="intStaType" mandatory="true" />
+			<cell position="B2" dataName="owner" mandatory="true" />
+			<cell position="C2" dataName="ownerOuName" mandatory="true" />
+			<cell position="D2" dataName="strType" mandatory="true" />
+			<cell position="E2" dataName="intStaStatus" mandatory="true" />
+			<cell position="F2" dataName="statusName" mandatory="true" />
+			<cell position="G2" dataName="code" mandatory="true" />
+			<cell position="H2" dataName="orderCode" mandatory="true" />
+			<cell position="I2" dataName="slipCode1" mandatory="true" />
+			<cell position="J2" dataName="slipCode2" mandatory="true" />
+			<cell position="K2" dataName="startTime" mandatory="true" />
+		</block>
+	</sheet>
+	
+	<!-- 导出gucci退仓明细信息 -->
+	<sheet name="gucciRtoLineInfo">
+		<block start="A4" end="E4" dataName="gucciRtoLineList" loop="true" loopClass="com.jumbo.wms.model.vmi.Default.VmiRtoLineCommand">
+			<cell position="A4" dataName="slipCode"/>
+			<cell position="B4" dataName="skuCode"/>
+			<cell position="C4" dataName="skuBarcode"/>
+			<cell position="D4" dataName="qty"/>
+			<cell position="E4" dataName="invStatus"/>
+			
+		</block>
+	</sheet>
+	
+	<sheet name="exportSkuReplenishSuggestSheet">
+	<block start="A4" end="F4" dataName="list" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.SkuReplenishmentCommand">
+			<cell position="A4" dataName="skuCode" />
+			<cell position="B4" dataName="barCode" />
+			<cell position="C4" dataName="supplierCode" />
+			<cell position="D4" dataName="jmCode" />
+			<cell position="E4" dataName="skuSize" />
+			<cell position="F4" dataName="staCode" />
+			<cell position="G4" dataName="replenishmentQty" />
+			<cell position="H4" dataName="recommenDistrictCode" />
+			<cell position="I4" dataName="owner" />
+			<cell position="J4" dataName="name" />
+		</block>
+	</sheet>
+	
+
+	<!-- 导出分配区域绑定库位 -->
+	<sheet name="distriButionWriterSheet">
+	<block start="A4" end="D4" dataName="dwhDistriButionAreaLocWriteList" loop="true"
+			loopClass="com.jumbo.wms.model.warehouse.DwhDistriButionAreaLocCommand">
+			<cell position="A4" dataName="codeName" />
+			<cell position="B4" dataName="code" />
+			<cell position="C4" dataName="distriButionCode" />
+			<cell position="D4" dataName="distriButionName" />
+   </block>
+   </sheet>
+	<!-- ad异常包裹导入 -->
+	<sheet name="adPackageExport">
+		<block start="A4" end="C4" dataName="adPackage" loop="true"
+			loopClass="com.jumbo.wms.model.AdPackage">
+			<cell position="A4" dataName="adName" mandatory="true" />
+			<cell position="B4" dataName="adResult" mandatory="true" />
+		</block>
+	</sheet>
+
+
+	<sheet name="threeDimensionalSkuInfo">
+		<block start="A2" end="AA2" dataName="skuList" loop="true" loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A2" dataName="staCode"/>
+			<cell position="B2" dataName="slipCode"/>
+			<cell position="C2" dataName="slipCode1"/>
+			<cell position="D2" dataName="staType"/>
+			<cell position="E2" dataName="owner"/>
+			<cell position="F2" dataName="code"/>
+			<cell position="G2" dataName="name"/>
+			<cell position="H2" dataName="supplierCode"/>
+			<cell position="I2" dataName="brandName"/>
+			<cell position="J2" dataName="length"/>
+			<cell position="K2" dataName="width"/>
+			<cell position="L2" dataName="height"/>
+			<cell position="M2" dataName="grossWeight"/>
+			<cell position="N2" dataName="isConsumable"/>
+			<cell position="O2" dataName="packageSkuName"/>
+			<cell position="P2" dataName="packageBarCode"/>
+			<cell position="Q2" dataName="categoryName"/>
+			<cell position="R2" dataName="isRail"/>
+			<cell position="S2" dataName="skuTypeName"/>
+		</block>
+	</sheet>
+	
+	
+	<sheet name="noThreeDimensionalSku">
+		<block start="A2" end="P2" dataName="skuList" loop="true" loopClass="com.jumbo.wms.model.command.SkuCommand">
+			<cell position="A2" dataName="pinkingListId"/>
+			<cell position="B2" dataName="owner"/>
+			<cell position="C2" dataName="code"/>
+			<cell position="D2" dataName="name"/>
+			<cell position="E2" dataName="supplierCode"/>
+			<cell position="F2" dataName="brandName"/>
+			<cell position="G2" dataName="length"/>
+			<cell position="H2" dataName="width"/>
+			<cell position="I2" dataName="height"/>
+			<cell position="J2" dataName="grossWeight"/>
+			<cell position="K2" dataName="isConsumable"/>
+			<cell position="L2" dataName="packageSkuName"/>
+			<cell position="M2" dataName="packageBarCode"/>
+			<cell position="N2" dataName="categoryName"/>
+			<cell position="O2" dataName="isRail"/>
+			<cell position="P2" dataName="skuTypeName"/>
+		</block>
+	</sheet>
+</sheets>
+
+

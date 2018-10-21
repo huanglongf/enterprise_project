@@ -1,0 +1,46 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	
+	<named-query name="CnSkuInfo.getCnSkuInfoListByWaiting">
+		<query><![CDATA[select s from CnSkuInfo as s where s.status= 0]]></query>
+	</named-query>
+	<named-query name="CnSkuInfo.getCnSkuInfoListByVersion">
+		<query><![CDATA[select s from CnSkuInfo as s where s.itemVersion= :itemVersion and s.itemId= :itemId and s.ownerUserId= :ownerUserId]]></query>
+	</named-query>
+	<named-query name="CnSkuInfo.getCnSkuInfoListByItemid">
+		<query><![CDATA[select s from CnSkuInfo as s where s.itemId= :itemId and s.ownerUserId= :ownerUserId]]></query>
+	</named-query>
+	<named-query name="CnSnSample.getCnSnSampleByCnSkuInfo">
+		<query><![CDATA[select s from CnSnSample as s where s.cnSkuInfo.id= :skuInfoId]]></query>
+	</named-query>
+	<named-query name="CnSnSampleRule.getCnSnSampleRuleByCnSnSample">
+		<query><![CDATA[select s from CnSnSampleRule as s where s.cnSnSample.id= :snSampleId]]></query>
+	</named-query>
+	<named-query name="CnOutOrderNotify.getNewCnOutOrderNotify">
+		<query><![CDATA[select s from CnOutOrderNotify as s where s.status= 0]]></query>
+	</named-query>
+	<named-query name="CnOutReceiverInfo.getCnOutReceiverInfoByNotifyId">
+		<query><![CDATA[select s from CnOutReceiverInfo as s where s.cnOutOrderNotify.id= :notifyId]]></query>
+	</named-query>
+	<named-query name="CnOutOrderItem.getCnOutOrderItemByNotifyId">
+		<query><![CDATA[select s from CnOutOrderItem as s where s.cnOutOrderNotify.id= :notifyId]]></query>
+	</named-query>
+	<named-query name="CnOutOrderNotify.getCnOutOrderNotifyByOrderCode">
+		<query><![CDATA[select s from CnOutOrderNotify as s where s.orderCode = :orderCode]]></query>
+	</named-query>
+	<named-query name="CnSkuInfo.getCnSkuInfoBySkuCode">
+		<query><![CDATA[select s from CnSkuInfo as s where s.skuCode = :skuCode order by s.itemVersion desc]]></query>
+	</named-query>
+	<named-query name="CnOrderProperty.getCnOrderPropertyByOrderCode">
+		<query><![CDATA[select s from CnOrderProperty as s where s.orderCode = :orderCode]]></query>
+	</named-query>
+	<named-query name="CnOrderProperty.getCnOrderPropertyByOrderCodeAndType">
+		<query><![CDATA[select s from CnOrderProperty as s where s.orderCode = :orderCode and s.orderType= :orderType]]></query>
+	</named-query>
+	<named-query name="CnMsgConfirmReply.getCnMsgConfirmReplyByNew">
+		<query><![CDATA[select s from CnMsgConfirmReply s where s.status= 0  ]]></query>
+	</named-query>
+	<named-query name="CnCancelOrderLog.getCnCancelOrderLogByOrderCode">
+		<query><![CDATA[select s from CnCancelOrderLog s where s.status= 1 and s.orderCode = :orderCode  ]]></query>
+	</named-query>
+</entity-mappings>

@@ -1,0 +1,15 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	<named-query name="TransRoute.getTransRouteByParam">
+		<query><![CDATA[select count(d.id) from TransRoute as d where d.expressCode = :expressCode and d.operateTime = :operateTime]]></query>
+	</named-query>
+	
+	<named-query name="RadarTransNo.getRadarTransNoByExpressCode">
+		<query><![CDATA[select distinct rtn from RadarTransNo as rtn where rtn.expressCode = :expressCode]]></query>
+	</named-query>
+	
+	<named-query name="TransRouteStatus.getTransRouteStatusByExpressCode">
+		<query><![CDATA[select  trs from TransRouteStatus as trs where trs.transRoute.expressCode = :expressCode]]></query>
+	</named-query>
+	
+</entity-mappings>

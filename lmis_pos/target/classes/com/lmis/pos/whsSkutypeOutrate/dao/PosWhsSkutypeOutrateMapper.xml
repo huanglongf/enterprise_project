@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.whsSkutypeOutrate.dao.PosWhsSkutypeOutrateMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate" id="PosWhsSkutypeOutrateMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="batch_id" property="batchId" jdbcType="INTEGER" />
+		<result column="whs_code" property="whsCode" jdbcType="VARCHAR" />
+		<result column="sku_type" property="skuType" jdbcType="VARCHAR" />
+		<result column="out_by_skutype" property="outBySkutype" jdbcType="DECIMAL" />
+		<result column="out_by_all" property="outByAll" jdbcType="DECIMAL" />
+		<result column="outrate" property="outrate" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		batch_id,
+		whs_code,
+		sku_type,
+		out_by_skutype,
+		out_by_all,
+		outrate
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			batch_id,
+			whs_code,
+			sku_type,
+			out_by_skutype,
+			out_by_all,
+			outrate
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate">
+		INSERT INTO pos_whs_skutype_outrate
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{batchId, jdbcType=INTEGER},
+			#{whsCode, jdbcType=VARCHAR},
+			#{skuType, jdbcType=VARCHAR},
+			#{outBySkutype, jdbcType=DECIMAL},
+			#{outByAll, jdbcType=DECIMAL},
+			#{outrate, jdbcType=DECIMAL},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_whs_skutype_outrate
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.batchId, jdbcType=INTEGER},
+				#{obj.whsCode, jdbcType=VARCHAR},
+				#{obj.skuType, jdbcType=VARCHAR},
+				#{obj.outBySkutype, jdbcType=DECIMAL},
+				#{obj.outByAll, jdbcType=DECIMAL},
+				#{obj.outrate, jdbcType=DECIMAL},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate" resultMap="PosWhsSkutypeOutrateMap">
+		SELECT <include refid="Base_Column_List" /> FROM pos_whs_skutype_outrate
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="batchId!=null">
+	            AND batch_id = #{batchId, jdbcType=INTEGER}
+	        </if>
+	        <if test="whsCode!=null and whsCode!=''">
+	            AND whs_code = #{whsCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="skuType!=null and skuType!=''">
+	            AND sku_type = #{skuType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="outBySkutype!=null">
+	            AND out_by_skutype = #{outBySkutype, jdbcType=DECIMAL}
+	        </if>
+	        <if test="outByAll!=null">
+	            AND out_by_all = #{outByAll, jdbcType=DECIMAL}
+	        </if>
+	        <if test="outrate!=null">
+	            AND outrate = #{outrate, jdbcType=DECIMAL}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate">
+		UPDATE pos_whs_skutype_outrate
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="batchId!=null">
+	            batch_id = #{batchId, jdbcType=INTEGER},
+	        </if>
+	        <if test="whsCode!=null and whsCode!=''">
+	            whs_code = #{whsCode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="skuType!=null and skuType!=''">
+	            sku_type = #{skuType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="outBySkutype!=null">
+	            out_by_skutype = #{outBySkutype, jdbcType=DECIMAL},
+	        </if>
+	        <if test="outByAll!=null">
+	            out_by_all = #{outByAll, jdbcType=DECIMAL},
+	        </if>
+	        <if test="outrate!=null">
+	            outrate = #{outrate, jdbcType=DECIMAL},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate">
+		UPDATE pos_whs_skutype_outrate
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	batch_id = #{batchId, jdbcType=INTEGER},
+        	whs_code = #{whsCode, jdbcType=VARCHAR},
+        	sku_type = #{skuType, jdbcType=VARCHAR},
+        	out_by_skutype = #{outBySkutype, jdbcType=DECIMAL},
+        	out_by_all = #{outByAll, jdbcType=DECIMAL},
+        	outrate = #{outrate, jdbcType=DECIMAL},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate">
+		UPDATE pos_whs_skutype_outrate
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate">
+		UPDATE pos_whs_skutype_outrate
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate">
+		DELETE FROM pos_whs_skutype_outrate
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+	    </trim>
+	</delete>
+	
+	<select id="selectPosWhsSkutypeOutrate" parameterType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate" resultType="com.lmis.pos.whsSkutypeOutrate.model.PosWhsSkutypeOutrate">
+		SELECT
+			o.whs_code whsCode,
+			w.whs_name whsName,
+			b.`name` skuType,
+			o.out_by_skutype outBySkutype,
+			o.out_by_all outByAll,
+			o.outrate outrate,
+			o.update_time updateTime
+		FROM
+			pos_whs_skutype_outrate o,
+			pos_whs w,
+			pos_whs_butype b
+		WHERE
+			o.whs_code = w.whs_code
+		AND o.sku_type = b.`code`
+		AND o.batch_id = (
+				SELECT
+					MAX(batch_id)
+				FROM
+					pos_whs_skutype_outrate
+			)
+	</select>
+	
+	
+</mapper>

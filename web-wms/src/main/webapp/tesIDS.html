@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>HTTP TEST</title>
+<script type="text/ecmascript" src="http://files.cnblogs.com/mofish/md5.js"></script>
+<script type="text/javascript">    
+ 
+
+	function back(){
+		// var hash = hex_md5("Key=IDS_UA_TEST&RequestTime=20170606153406&Sign=74C347BF62400C49622A2CF9983B84D4&Version=4.0&ServiceType=logistic_order_status");  
+		 var key=myform.key.value;  
+		 var BZsign=myform.BZsign.value;  
+		  var serviceType=myform.serviceType.value;  
+		  //  var date=myform.requestTime.value;  
+		   var date=  Date.parse(new Date());//new Date();
+		 var Version = "4.0";
+		 var  postsign = "Key="+key+"&RequestTime="+date+"&Sign="+BZsign+"&Version="+Version+"&ServiceType="+serviceType;
+		  var hash = hex_md5(postsign);
+		 // alert(postsign);
+		 myform.sign.value = hash;
+		 myform.requestTime.value=date;
+		 var sign =  myform.sign.value;
+		  var RequestTime = myform.requestTime.value;
+		// alert(hash);
+		// alert(sign+"--"+RequestTime);
+	}
+</script> 
+<style>
+body {
+	TEXT-ALIGN: center;
+}
+
+.error {
+	color: red;
+}
+
+.hide {
+	display: none;
+}
+
+</style>
+</head>
+
+<body >
+		<!-- https://test-wms.baozun.cn/scm/rest/ids -->
+		<!-- http://localhost:8080/wms/rest/ids -->
+			<form action="https://scm.baozun.cn/scm/rest/ids" method="post" target='iframe' name = "myform">
+			 	<table>
+			 		<tr>
+			 		
+			 			<td class="label">key:</td>
+						<td>
+							<input type="text"  trim="true" name="key" id= "key" value="IDS_LEVIS_PRO" ></input>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">BZsign:</td>
+						<td>
+							<input type="text"  trim="true" name="BZsign" id = "BZsign" value="7CmCiAPcjj3ctAiZX7ftU4iHls6NKI2i"></input>
+						</td>
+							<td>
+							<input type="text" trim="true" name="sign" id = "sign"  hidden ="true"></input>
+						</td>
+					</tr>
+					<tr>
+						
+						<td>
+							<input type="text"  trim="true" name="requestTime" id = "requestTime" hidden ="true"></input>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">version:</td>
+						<td>
+							<input type="text"  trim="true" name="version" id = "version" value="4.0"></input>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">serviceType:</td>
+						<td>
+							<input type="text" trim="true" name="serviceType" id = "serviceType" value="logistic_order_status"></input>
+						</td>
+					</tr>
+					<tr>
+						<td class="label">data:</td>
+						<td>
+							<textarea trim="true" name="data" id = "data"  rows="10" cols="50"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" name = "sub" onClick="back()" ></input>
+						</td>
+					</tr>
+			 	</table>
+			 	</form>
+          <div id='iframe'></div>
+</body>
+</html>

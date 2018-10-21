@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:amq="http://activemq.apache.org/schema/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://activemq.apache.org/schema/core
+		http://activemq.apache.org/schema/core/activemq-core-5.5.0.xsd">
+
+
+
+	<import resource="spring-dubbo.xml" />
+	<import resource="spring/spring-task-lock.xml" />
+	<import resource="spring/spring-zk.xml" />
+	
+	<import resource="spring/spring-manager-excel.xml" />
+	<import resource="spring/spring-manager-task.xml" />
+	<import resource="spring/spring-manager-dubbo.xml" />
+	<import resource="spring/spring-dao.xml" />
+	<import resource="spring/spring-manager.xml" />
+	<import resource="spring/spring-listener.xml" />
+	<import resource="spring/spring-rmi-client.xml" />
+	<import resource="spring/spring-rmi-service.xml" />
+	<import resource="spring/spring-active-mq-receiver.xml" />
+	<import resource="spring/spring-active-mq-sender.xml" />
+	<import resource="spring/spring-mongodb.xml"/>
+	<import resource="spring/spring-rocketmq-callback.xml"/>
+	<import resource="spring/spring-rocketmq-base.xml"/>
+</beans>

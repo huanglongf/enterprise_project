@@ -1,0 +1,43 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	
+	<named-query name="Parcel.findByCode">
+		<query><![CDATA[select o from Parcel as o where o.code= :code]]></query>
+	</named-query>
+	
+	<named-query name="Parcel.findByOuterOrderCode">
+		<query><![CDATA[select o from Parcel as o where o.outerOrderCode= :outerOrderCode]]></query>
+	</named-query>
+	
+	<named-query name="SysInterfaceQueue.findByStatusAndTypeWithSys">
+		<query><![CDATA[select s from SysInterfaceQueue s where s.status = :status and s.type = :type and s.targetSys= :targetSys and (s.errorCount is null or s.errorCount <= 3) and s.mailNo is not null and s.lpcode is not null]]></query>
+	</named-query>
+	
+	<named-query name="SysInterfaceQueue.findByStatusAndTypeWithSysAlsoCode">
+		<query><![CDATA[select s from SysInterfaceQueue s where s.status = :status and s.type = :type and s.targetSys= :targetSys and (s.errorCount is null or s.errorCount <= 3)]]></query>
+	</named-query>
+	
+	<named-query name="BranchLibrary.findBySlipCode">
+		<query><![CDATA[select o from BranchLibrary as o where o.slipCode= :slipCode]]></query>
+	</named-query>
+	
+	<named-query name="LogisticsProviderBranchRelation.findByBlIdAndPriority">
+		<query><![CDATA[select o from LogisticsProviderBranchRelation as o where o.branchLibrary.id= :blId and o.priority = :priority]]></query>
+	</named-query>
+	
+	<named-query name="LogisticsProviderBranchRelation.findByBlId">
+		<query><![CDATA[select o from LogisticsProviderBranchRelation as o where o.branchLibrary.id= :blId]]></query>
+	</named-query>
+	
+	<named-query name="ParcelInfo.findByShipmentId">
+		<query><![CDATA[select o from ParcelInfo as o where o.shipmentId= :shipmentId]]></query>
+	</named-query>
+	
+	<named-query name="Shipment.findByOmsOrderCode">
+		<query><![CDATA[select o from Shipment as o where o.omsOrderCode= :omsOrderCode and o.type = :type]]></query>
+	</named-query>
+	
+	<named-query name="Shipment.findByOmsRaCode">
+		<query><![CDATA[select o from Shipment as o where o.omsRaCode= :omsRaCode and o.type = :type]]></query>
+	</named-query>
+</entity-mappings>

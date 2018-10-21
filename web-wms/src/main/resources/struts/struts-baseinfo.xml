@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="baseinfo" extends="root" namespace="/base">
+		<action name="companymodify" class="companyAction">
+			<result>/frame/company-modify.jsp</result>
+		</action>
+		<action name="operationcentermodify" class="operationCenterAction">
+			<result>/frame/operationcenter-modify.jsp</result>
+		</action>
+		<action name="warehousemodify" class="warehouseBaseinfoAction">
+			<result>/frame/warehouse-modify.jsp</result>
+		</action>
+		<action name="importCoverageArea" class="warehouseBaseinfoAction" method="importCoverageArea">
+			<result>/frame/warehouse-coverage-area-import-result.jsp</result>
+		</action>
+		<action name="coverImportCoverageArea" class="warehouseBaseinfoAction" method="coverImportCoverageArea">
+			<result>/frame/warehouse-coverage-area-import-result.jsp</result>
+		</action>
+		<action name="warehouseshopmaintain" class="warehouseShopMaintainAction">
+			<result>/frame/warehouse-shop-maintain.jsp</result>
+		</action>
+
+		<action name="companyshopmodify" class="companyShopAction">
+			<result>/frame/companyshop-info.jsp</result>
+		</action>
+
+		<action name="productboxentry" class="productBoxMaintainAction">
+			<result>/frame/product-box-maintain.jsp</result>
+		</action>
+		
+		<action name="carService" class="carServiceAction" method="carService">
+			<result>/frame/warehouse-carService.jsp</result>
+		</action>
+		
+		
+		<!-- 商品三维数据采集 -->
+		<action name="productThreeDimensionalCollect" class="productThreeDimensionalCollectAction">
+			<result>/frame/product-three-dimensional-collect.jsp</result>
+		</action>
+		
+		
+		
+		<action name="salesReportForm" class="salesReportFormAction"
+			method="salesReportForm">
+			<result>/frame/sales-report-form.jsp</result>
+		</action>
+		<action name="exportSalesReportForm" class="salesReportFormAction"  method="exportSalesReportForm"></action>
+		<action name="initSkuModifyLogInfo" class="skuModifyLogAction"  method="initSkuModifyLogInfo">
+			<result>/frame/sku-modify-log.jsp</result>
+		</action>
+		<action name="checkPingAction" class="checkPingAction">
+			<result>/frame/checkPing/check-ping.jsp</result>
+		</action>
+	</package>
+</struts>

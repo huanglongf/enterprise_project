@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.common.dao.PoDataMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.common.model.PoData" id="ServiceDataFileLogMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="file_path" property="filePath" jdbcType="VARCHAR" />
+		<result column="file_name" property="fileName" jdbcType="VARCHAR" />
+		<result column="data_count" property="dataCount" jdbcType="BIGINT" />
+		<result column="ops_count" property="opsCount" jdbcType="BIGINT" />
+		<result column="ops_status" property="opsStatus" jdbcType="INTEGER" />
+		<result column="ops_error_info" property="opsErrorInfo" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<select id="callProPodataDeal" parameterType="com.lmis.pos.common.model.CallAbleModel" 
+			resultType="com.lmis.pos.common.model.CallAbleModel" statementType="CALLABLE" timeout="180">
+	    {
+	        call pro_podata_deal(
+	            #{batIdParam,mode=IN,jdbcType=VARCHAR},
+	            #{userParam,mode=IN,jdbcType=VARCHAR},
+	            #{outResult,mode=OUT,jdbcType=INTEGER},
+	            #{outResultReason,mode=OUT,jdbcType=VARCHAR}
+	        )
+	    }
+    </select>
+    <sql id="sql_retrieve_where">
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="batId!=null and batId!=''">
+	            AND bat_id = #{batId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileNo != null and fileNo != ''">
+	            AND file_no = #{fileNo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileName != null and fileName != ''">
+	            AND file_name = #{fileName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="soldTo!=null and soldTo!=''">
+	            AND sold_to = #{soldTo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="shipTo!=null and shipTo!=''">
+	            AND ship_to = #{shipTo, jdbcType=VARCHAR}
+	        </if>
+	        <if test="orderType!=null and orderType!=''">
+	            AND order_type = #{orderType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="vNumber!=null and vNumber!=''">
+	            AND v_number = #{vNumber, jdbcType=VARCHAR}
+	        </if>
+	        <if test="door!=null and door!=''">
+	            AND door = #{door, jdbcType=VARCHAR}
+	        </if>
+	        <if test="crdTime!=null and crdTime!=''">
+	            AND crd_time = #{crdTime, jdbcType=VARCHAR}
+	        </if>
+	        <if test="cancelTime!=null and cancelTime!=''">
+	            AND cancel_time = #{cancelTime, jdbcType=VARCHAR}
+	        </if>
+	        <if test="salesOrg!=null and salesOrg!=''">
+	            AND sales_org = #{salesOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="plant!=null and plant!=''">
+	            AND plant = #{plant, jdbcType=VARCHAR}
+	        </if>
+	        <if test="poNumber!=null and poNumber!=''">
+	            AND po_number = #{poNumber, jdbcType=VARCHAR}
+	        </if>
+	        <if test="contract!=null and contract!=''">
+	            AND contract = #{contract, jdbcType=VARCHAR}
+	        </if>
+	        <if test="prodCode!=null and prodCode!=''">
+	            AND prod_code = #{prodCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="launchDate!=null and launchDate!=''">
+	            AND launch_date = #{launchDate, jdbcType=VARCHAR}
+	        </if>
+	        <if test="prodSize!=null and prodSize!=''">
+	            AND prod_size = #{prodSize, jdbcType=VARCHAR}
+	        </if>
+	        <if test="prodQty!=null">
+	            AND prod_qty = #{prodQty, jdbcType=INTEGER}
+	        </if>
+	        <if test="rowNumber!=null">
+	            AND row_number = #{rowNumber, jdbcType=INTEGER}
+	        </if>
+	        <if test="version!=null">
+	            AND version = #{version, jdbcType=INTEGER}
+	        </if>
+	        <if test="pwrOrg!=null and pwrOrg!=''">
+	            AND pwr_org = #{pwrOrg, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isDeleted!=null">
+	            AND is_deleted = #{isDeleted, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="isDisabled!=null">
+	            AND is_disabled = #{isDisabled, jdbcType=BOOLEAN}
+	        </if>
+	        <if test="proFlag!=null">
+	            AND pro_flag = #{proFlag, jdbcType=INTEGER}
+	        </if>
+	        <if test="proRemark!=null and proRemark!=''">
+	            AND pro_remark = #{proRemark, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+    </sql>
+	<select id="retrieveAsMap" parameterType="com.lmis.pos.common.model.PosPurchaseOrderTemporary" resultType="java.util.HashMap">
+		SELECT 
+			id,
+			bat_id,
+			file_no,
+			file_name,
+			sold_to,
+			ship_to,
+			order_type,
+			v_number,
+			door,
+			crd_time,
+			cancel_time,
+			sales_org,
+			plant,
+			po_number,
+			contract,
+			prod_code,
+			launch_date,
+			prod_size,
+			prod_qty,
+			row_number,
+			version,
+			pwr_org,
+			create_time,
+			update_time,
+			create_by,
+			update_by,
+			is_deleted,
+			is_disabled,
+			pro_flag,
+			pro_remark
+		FROM pos_purchase_order_temporary
+		<include refid="sql_retrieve_where"/>
+	</select>
+</mapper>

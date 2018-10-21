@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+>
+	
+	<bean id="expressStatusCodeAction" class="com.jumbo.web.action.expressRadar.ExpressStatusCodeAction" scope="request" />
+	<bean id="sysRouteStatusCodeAction" class="com.jumbo.web.action.expressRadar.SysRouteStatusCodeAction" scope="request" />
+	<bean id="radarAreaAction" class="com.jumbo.web.action.expressRadar.RadarAreaAction" scope="request" />
+	<bean id="expressOocRadarAction" class="com.jumbo.web.action.expressRadar.ExpressOocRadarAction" scope="request" />
+	<bean id="expressOrderQueryAction" class="com.jumbo.web.action.expressRadar.ExpressOrderQueryAction" scope="request" />
+</beans>

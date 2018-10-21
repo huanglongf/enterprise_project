@@ -1,0 +1,210 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	<named-query name="AccountSet.findAll">
+		<query><![CDATA[select acs from AccountSet as acs order by id]]></query>
+	</named-query>
+	<named-query name="OperationUnit.getByCode">
+		<query><![CDATA[select o from OperationUnit as o where o.code = :code]]></query>
+	</named-query>
+	<named-query name="InventoryStatus.getByName">
+		<query><![CDATA[select s from InventoryStatus as s where s.name = :name and s.ou.id = :cmpouid]]></query>
+	</named-query>
+	<named-query name="TransSfInfo.findTransSfInfoDefault">
+		<query><![CDATA[select t from TransSfInfo t where  t.isDefault = :default]]></query>
+	</named-query>
+	<named-query name="TransSfInfo.findTransSfInfoJCustid">
+		<query><![CDATA[select t from TransSfInfo t where t.jCustid =:jCustid]]></query>
+	</named-query>
+	<named-query name="TransSfInfo.findTransSfInfoSpecialUse">
+		<query><![CDATA[select t from TransSfInfo t where t.specialUse =:specialCode]]></query>
+	</named-query>
+	<named-query name="Company.getByOuId">
+		<query><![CDATA[select c from Company as c where c.ou.id = :ouid]]></query>
+	</named-query>
+	<named-query name="Customer.getByCode">
+		<query><![CDATA[select c from Customer as c where c.code = :code]]></query>
+	</named-query>
+	<named-query name="OperationUnit.getAllWhByCmpOuId">
+		<query><![CDATA[select whou from OperationUnit as whou where whou.parentUnit.parentUnit.id = :cmpouid]]></query>
+	</named-query>
+	<named-query name="Sku.getByJmCode">
+		<query><![CDATA[select sku from Sku sku where sku.jmCode = :jmcode]]></query>
+	</named-query>
+	
+	<named-query name="Sku.getBysupplierCode">
+		<query><![CDATA[select sku from Sku sku where sku.supplierCode = :supplierCode]]></query>
+	</named-query>
+	
+	<named-query name="Sku.getByCustomerSkuCode">
+		<query><![CDATA[select sku from Sku sku where sku.customerSkuCode = :customerSkuCode and sku.customer.id = :customerId]]></query>
+	</named-query>
+	<named-query name="Sku.getByExtCode1AndCustomerId">
+		<query><![CDATA[select sku from Sku sku where sku.extensionCode1 = :extCode1 and sku.customer.id = :customerId]]></query>
+	</named-query>
+	<named-query name="Sku.getByExtCode2AndCustomerId">
+		<query><![CDATA[select sku from Sku sku where sku.extensionCode2 = :extCode2 and sku.customer.id = :customerId]]></query>
+	</named-query>
+	<named-query name="BiChannelSpecialAction.getChannelByAndType">
+		<query><![CDATA[select sa from BiChannelSpecialAction as sa where sa.channcel.id = :channelId and sa.type=:type]]></query>
+	</named-query>
+	<named-query name="Customer.getByWhouid">
+		<query><![CDATA[select w.customer from Warehouse as w where w.ou.id=:whouid]]></query>
+	</named-query>
+
+	<named-query name="OperationCenter.getByOuId">
+		<query><![CDATA[select oc from OperationCenter as oc where oc.ou.id = :ouid]]></query>
+	</named-query>
+
+	<named-query name="OperationUnit.findAllByType">
+		<query><![CDATA[select o from OperationUnit as o where o.ouType.name=:type order by o.name]]></query>
+	</named-query>
+
+	<named-query name="InterfaceSecurityInfo.findUseringUserBySource">
+		<query><![CDATA[select i from InterfaceSecurityInfo as i where i.source = :source and i.status = 1 and i.expDate >= :date]]></query>
+	</named-query>
+
+	<named-query name="SkuBarcode.findByMainBarcode">
+		<query><![CDATA[select c from SkuBarcode as c where c.sku.barCode=:mainBarcode and c.sku.customer.id = :customerId]]></query>
+	</named-query>
+	
+	<named-query name="SkuCategories.getBySkuCategoriesName">
+		<query><![CDATA[select c from SkuCategories as c where c.skuCategoriesName=:skuCategoriesName]]></query>
+	</named-query>
+	<named-query name="Warehouse.getByOuId">
+		<query><![CDATA[select wh from Warehouse as wh where wh.ou.id = :ouid]]></query>
+	</named-query>
+	
+	<named-query name="Warehouse.getIsAreaOcpInvAll">
+		<query><![CDATA[select wh from Warehouse as wh where wh.isAreaOcpInv =1]]></query>
+	</named-query>
+	
+    <named-query name="WhTransProvideNo.getByTranNo">
+		<query><![CDATA[select wh from WhTransProvideNo as wh where wh.transno = :transno and wh.staid is null]]></query>
+	</named-query>
+
+	<named-query name="Warehouse.getAllBySource">
+		<query><![CDATA[select w from Warehouse w where w.vmiSource = :source]]></query>
+	</named-query>
+
+	<named-query name="Warehouse.findWarehouseByOUCode">
+		<query><![CDATA[select wh from Warehouse as wh where wh.ou.code = :code]]></query>
+	</named-query>
+	
+	<named-query name="Transportator.findAll">
+		<query><![CDATA[select t from Transportator as t where t.lifeCycleStatus = 1]]></query>
+	</named-query>
+
+	<named-query name="Transportator.findByCode">
+		<query><![CDATA[select t from Transportator as t where t.lifeCycleStatus = 1 and t.expCode=:expCode]]></query>
+	</named-query>
+
+	<named-query name="Transportator.findTransportatorByNameAndId">
+		<query><![CDATA[select t from Transportator as t where t.name = :name and t.id <> :id]]></query>
+	</named-query>
+
+	<named-query name="Transportator.findTransportatorByExpCodeAndId">
+		<query><![CDATA[select t from Transportator as t where t.expCode = :expCode and t.id <> :id]]></query>
+	</named-query>
+
+	<named-query name="Transportator.findTransportatorByName">
+		<query><![CDATA[select t from Transportator as t where t.name = :name]]></query>
+	</named-query>
+
+	<named-query name="Transportator.findTransportatorByExpCode">
+		<query><![CDATA[select t from Transportator as t where t.expCode = :expCode]]></query>
+	</named-query>
+	<named-query name="Transportator.findTransportatorByCode">
+		<query><![CDATA[select t from Transportator as t where t.code = :code]]></query>
+	</named-query>
+
+	<named-query name="Transportator.findTransportatorIsSupportCod">
+		<query><![CDATA[select t from Transportator as t where t.id = :id and t.lifeCycleStatus = 1 and t.isSupportCod = true]]></query>
+	</named-query>
+
+	<named-query name="Transportator.findTransportatorIsSupportCodByCode">
+		<query><![CDATA[select t from Transportator as t where t.expCode=:expCode and t.lifeCycleStatus = 1 and t.isSupportCod = true]]></query>
+	</named-query>
+
+	<named-query name="District.findAll">
+		<query><![CDATA[select distinct d from District as d where d.district is not null order by d.province desc,d.city]]></query>
+	</named-query>
+
+	<named-query name="Brand.findBrandByName">
+		<query><![CDATA[select b from Brand as b where b.name = :brandName]]></query>
+	</named-query>
+
+	<named-query name="Brand.findBrandByNameAndId">
+		<query><![CDATA[select b from Brand as b where b.name = :brandName and b.id <> :id]]></query>
+	</named-query>
+
+	<named-query name="Brand.getByCode">
+		<query><![CDATA[select b from Brand as b where b.code = :brandCode]]></query>
+	</named-query>
+
+	<named-query name="InterfaceSecurityInfo.findUseringByName">
+		<query><![CDATA[select s from InterfaceSecurityInfo as s 
+						where s.username = :username and s.source = :source 
+						and s.status = com.jumbo.wms.model.baseinfo.InterfaceSecurityInfoStatus.USING
+						and s.expDate >= :date
+				]]></query>
+	</named-query>
+
+	<named-query name="InterfaceSecurityInfo.findByName">
+		<query><![CDATA[select s from InterfaceSecurityInfo as s 
+						where s.username = :username
+						and s.status = com.jumbo.wms.model.baseinfo.InterfaceSecurityInfoStatus.USING
+						and s.expDate >= :date
+				]]></query>
+	</named-query>
+
+	<named-query name="Transportator.findByPlatformCode">
+		<query><![CDATA[select s from Transportator as s where s.platformCode = :platformCode and s.lifeCycleStatus = com.jumbo.wms.model.DefaultLifeCycleStatus.CREATED]]></query>
+	</named-query>
+
+	<named-query name="District.findDistrictForSf">
+		<query><![CDATA[select s from District as s where s.province = :province and s.city = :city]]></query>
+	</named-query>
+	<named-query name="District.findProvince">
+		<query><![CDATA[select s from District as s where s.province = :province]]></query>
+	</named-query>
+	<named-query name="BocStoreReference.findBocStoreReferenceBySource">
+		<query><![CDATA[select c from BocStoreReference c where c.source=:source]]></query>
+	</named-query>
+	<named-query name="MasterData.findMasterData">
+		<query><![CDATA[select c from MasterData c where c.upc=:upc]]></query>
+	</named-query>
+	<named-query name="TransLpcodeWhRef.getWhCarrierByLpCodeAndSource">
+		<query><![CDATA[select tlr from TransLpcodeWhRef tlr where tlr.lpCode=:lpCode and tlr.source=:source]]></query>
+	</named-query>
+	<named-query name="TransLpcodeWhRef.getLpCodeByWhAndCarrier">
+		<query><![CDATA[select tlr from TransLpcodeWhRef tlr where tlr.carrier=:carrier and tlr.source=:source]]></query>
+	</named-query>
+	<named-query name="Sku.getByExtCode2AndCustomer">
+		<query><![CDATA[select s from Sku as s where s.extensionCode2 = :extCode2 and s.customer.id =:cusId]]></query>
+	</named-query>
+	<named-query name="Sku.getSkuListByExtCode2AndCustomer">
+		<query><![CDATA[select s from Sku as s where s.extensionCode2 = :extCode2 and s.customer.id =:cusId]]></query>
+	</named-query>
+	
+	<named-query name="SkuModifyLog.getSkuModifyLogAll">
+		<query><![CDATA[select s from SkuModifyLog as s 
+		]]></query>
+	</named-query>
+	<named-query name="WhTransProvideNo.getByTranNoAndStaIdAndLpcode">
+		<query><![CDATA[
+				select wh from WhTransProvideNo as wh where wh.transno = :transno and wh.staid = :staid and wh.lpcode = :lpcode
+		]]></query>
+	</named-query>
+	<named-query name="Sku.findGuessMaterial">
+		<query><![CDATA[select s from Sku s where s.supplierCode=:supplierCode  and s.length=:length  and s.width=:width and s.height=:height]]></query>
+	</named-query>
+	<!-- PDA上架 S -->
+	<named-query name="PdaStaShelvesPlan.getByCidByName">
+		<query><![CDATA[select p from PdaStaShelvesPlan p where p.staCarton.id=:cId and p.status=0]]></query>
+	</named-query>
+	<!-- PDA上架 S2 -->
+	<named-query name="PdaStaShelvesPlan.getByCidByName2">
+		<query><![CDATA[select p from PdaStaShelvesPlan p where p.staCarton.id=:cId]]></query>
+	</named-query>
+	<!--  PDA上架 E-->
+</entity-mappings>

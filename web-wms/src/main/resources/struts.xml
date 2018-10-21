@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	<package name="default" extends="struts-default">
+		<result-types>
+			<result-type name="json" class="loxia.web.struts2.result.JsonResult"/>
+			<result-type name="streamx" class="com.jumbo.web.result.StreamResult"/>
+		</result-types>
+		
+		<interceptors>
+			<interceptor name="exceptionEx" class="com.jumbo.web.interceptor.ExceptionInterceptor"/>
+			<interceptor name="excelExportLimit" class="com.jumbo.web.interceptor.ExcelExportLimitInterceptor"/>
+			<interceptor name="paramsEx" class="loxia.web.struts2.interceptor.ParametersExInterceptor"/>
+			<interceptor name="ognlNullHandlerInterceptor" class="com.jumbo.web.interceptor.OgnlNullHandlerInterceptor"/>
+			<interceptor name="authorization" class="com.jumbo.web.interceptor.AuthorizationInterceptor"/>
+			<!--<interceptor name="accountSet" class="com.jumbo.web.interceptor.AccountSetInterceptor"/>-->
+			
+			<interceptor-stack name="defaultStack">
+            <interceptor-ref name="exceptionEx"><param name="debug">true</param></interceptor-ref>
+            <!-- <interceptor-ref name="accountSet"/> -->
+            <interceptor-ref name="alias"/>
+            <interceptor-ref name="servletConfig"/>
+            <interceptor-ref name="i18n"/>
+            <interceptor-ref name="prepare"/>
+            <interceptor-ref name="chain"/>
+            <interceptor-ref name="debugging"/>
+            <interceptor-ref name="scopedModelDriven"/>
+            <interceptor-ref name="modelDriven"/>                        
+            <interceptor-ref name="fileUpload"/>
+            <interceptor-ref name="checkbox"/>
+            <interceptor-ref name="multiselect"/>
+            <interceptor-ref name="staticParams"/>
+            <interceptor-ref name="actionMappingParams"/>
+            <interceptor-ref name="paramsEx">
+              <param name="ordered">true</param>
+              <param name="excludeParams">dojo\..*,^struts\..*</param>
+            </interceptor-ref>
+            <interceptor-ref name="ognlNullHandlerInterceptor"/>
+            <interceptor-ref name="authorization"/>        
+            <interceptor-ref name="conversionError"/>
+            <interceptor-ref name="validation">
+                <param name="excludeMethods">input,back,cancel,browse</param>
+            </interceptor-ref>
+            <interceptor-ref name="workflow">
+                <param name="excludeMethods">input,back,cancel,browse</param>
+            </interceptor-ref>
+            <interceptor-ref name="excelExportLimit"></interceptor-ref>
+        </interceptor-stack>
+		</interceptors>		
+		<global-results>
+			<result name="error">/error.jsp</result>
+			<result name="json" type="json">
+				<param name="charSet">UTF-8</param>
+			</result>		
+			<result name="print" type="streamx">
+				<param name="contentType">application/octet-stream</param>
+			</result>	
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception" result="error"/>
+		</global-exception-mappings>
+	</package>
+	
+	<package name="root" extends="default" namespace="/">
+		<global-results>
+			<result name="main" type="redirectAction">
+				<param name="actionName">main</param>
+			</result>
+		</global-results>
+		<action name="main" class="mainAction">
+			<result>/main.jsp</result>
+		</action>
+		<action name="top" class="mainAction" method="top">
+			<result>/common/top.jsp</result>
+		</action>
+		<action name="logout" class="logoutAction" method="logout">
+			<result>/login.jsp</result>
+		</action>
+	</package>
+	<package name="manage" extends="default" namespace="/manage">		
+		<action name="dslist" class="dataSourceManageAction" method="dslist">
+			<result>/manage/datasource-list.jsp</result>
+		</action>
+		<action name="dbmetas" class="dataSourceManageAction" method="dbmetas" />
+		<action name="tablemetas" class="dataSourceManageAction" method="tablemetas" />
+		<action name="dsdetail" class="dataSourceManageAction" method="dsdetail">
+			<result>/manage/datasource-detail.jsp</result>
+		</action>
+		<action name="hqlquery" class="dataSourceManageAction" method="hqlquery">
+			<result>/manage/hql-query-result.jsp</result>
+		</action>
+		<action name="hqlquerydetail" class="dataSourceManageAction" method="hqlquerydetail"/>
+		<action name="sqlquery" class="dataSourceManageAction" method="sqlquery">
+			<result>/manage/sql-query-result.jsp</result>
+		</action>
+	</package>
+	<include file="struts/struts-interface-json.xml" />
+	<include file="struts/struts-json.xml" />
+	<include file="struts/struts-authorization.xml" />
+	<include file="struts/struts-system.xml" />
+	<include file="struts/struts-baseinfo.xml" />
+	<include file="struts/struts-warehouse.xml" />
+	<include file="struts/struts-report.xml" />
+	<include file="struts/struts-operationcenter.xml" />
+	<include file="struts/struts-ooc.xml" />
+	<include file="struts/struts-ocp.xml" />
+	<include file="struts/struts-pda.xml" />
+	<include file="struts/struts-automaticEquipment.xml" />
+	
+</struts>

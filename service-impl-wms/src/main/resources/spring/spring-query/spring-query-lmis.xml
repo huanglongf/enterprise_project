@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:loxia="http://loxia.benjamin.cn/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- lmis系统接口对接 -->                                   
+	<!-- 1、操作费接口 -->
+	<bean id="OperatingCost.findOperatingCostByTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+			   select * from (
+ 				    select (case 
+								when sta.slip_type = 99 then '无前置单据'
+								when sta.slip_type = 1 then '采购单'
+								when sta.slip_type = 2 then '销售单'
+								when sta.slip_type = 3 then '退换货申请'
+								when sta.slip_type = 4 then '外部退换货申请'
+								when sta.slip_type = 5 then '保质期商品'
+								when sta.slip_type = 300 then '反向NP调整入库' 
+						   end) order_type,
+						   to_char(stlog.tran_time,'yyyy-mm-dd hh24/mi/ss') operation,
+ 					       ch.code store_code, 
+ 					       ch.name store_name, 
+ 					       sta.code job_orderno, 
+ 					       sta.slip_code related_orderno , 
+ 					       tt.name job_type , 
+ 					       l.code  storaggelocation_code, 
+						   (case when stlog.direction = 1 then stlog.quantity else 0 end) in_num,
+                           (case when stlog.direction = 2 then stlog.quantity else 0 end) out_num,
+ 					       sku.jm_code item_number, 
+ 					       sku.code  sku_number,   
+ 					       sku.supplier_code art_no, 
+ 					       sku.name item_name,  
+						   (select (select c.name
+                                  from t_wh_sku_size_config c
+                                  where c.max_size > greatest(s.length, s.height, s.width)
+                                  and c.min_size <= greatest(s.length, s.height, s.width))
+                           from t_bi_inv_sku s where sku.id = s.id)  item_size,
+ 					       invs.name inventory_status,
+						   (case when sku.sp_type = 1 then  1 else 0 end) is_consumable,
+						   nvl(sta.slip_code2,sta.slip_code1)  platform_order,
+ 					       stlog.op_user_name  operator ,
+ 					       stlog.id upper_id,
+ 					       (case when wh.vmi_Source is null  then '0' else '1' end) warehouse_type,
+ 					       au.code warehouse_code,
+	                       au.name warehouse_name,
+	                       sta.slip_code epistatic_order,
+	                       sku.bar_code barcode,
+	                       sku.ext_code2   brand_docking_code,
+	                       (case when sta.is_special_packaging = 1 then  'Y' else 'N' end) qs_flag
+ 					from   t_wh_st_log stlog
+							left join t_wh_sta sta on stlog.sta_code = sta.code
+							left join t_bi_channel ch on sta.owner = ch.code
+							left join t_wh_transaction_type tt on  stlog.transtype_id = tt.id
+							left join t_wh_location l on stlog.location_id = l.id
+							left join t_bi_inv_sku sku on stlog.sku_id = sku.id
+							left join t_wh_inventory_status invs on stlog.invs_tatus_id = invs.id
+							left join t_au_operation_unit au on au.id= stlog.wh_id
+							left join t_bi_warehouse wh on au.id=wh.ou_id
+ 					where stlog.tran_time >=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')    
+ 					      and stlog.tran_time<to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+ 					      #if($orderType) 
+						      #if ($orderType == '无前置单据')
+								  and sta.slip_type = 99
+							  #end 
+ 					      	  #if ($orderType == '采购单')
+								  and sta.slip_type = 1
+							  #end
+							   #if ($orderType == '销售单')
+								  and sta.slip_type = 2
+							  #end
+							   #if ($orderType == '退换货申请')
+								  and sta.slip_type = 3
+							  #end
+							   #if ($orderType == '外部退换货申请')
+								  and sta.slip_type = 4
+							  #end
+							   #if ($orderType == '保质期商品')
+								  and sta.slip_type = 5
+							  #end
+							   #if ($orderType == '反向NP调整入库')
+								  and sta.slip_type = 300
+							  #end
+ 						  #end 
+ 						  #if($storecode) 
+ 					      	 and ch.shop_code = :storecode 
+ 						  #end 
+ 						  #if($type) 
+ 					 		 and op.option_value = :type 
+ 						  #end 
+ 				   ) data  order by data.upper_id
+ 				]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 2、耗材费接口 采购明细接口 -->
+	<bean id="MaterialFeePurchaseDetails.findMaterialFeePurchaseDetailsByTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+ 			       select  to_char(sta.inbound_time,'yyyy-mm-dd hh24/mi/ss') ib_time, 
+ 			               ch.code store_code, 
+ 			               ch.name store_name, 
+ 			               sta.supplier_name vendor,
+ 			               sta.slip_code  inbound_no,
+ 			               sku.bar_code barcode, 
+ 			               sku.jm_code bz_number,
+ 			               sku.code item_no,
+ 			               sku.name item_name,
+						   stal.quantity inbound_qty,
+						   stal.unit_price purchase_price,
+						   stal.unit_price*stal.quantity  inbound_money,
+						   to_char(stal.expire_date,'yyyy-mm-dd hh24/mi/ss') end_time,
+						   stal.id upper_id
+ 			       from t_wh_sta sta
+				          inner join t_wh_sta_line stal on sta.id = stal.sta_id
+                          inner join t_bi_channel ch on sta.owner = ch.code
+                          inner join t_bi_inv_sku sku on stal.sku_id = sku.id
+ 			        where sta.type = 11
+ 			              and sku.sp_type = 1
+ 			              and sta.inbound_time>=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')    
+ 					      and sta.inbound_time<to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+ 					      order by sta.id,stal.id
+ 				]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 3、耗材费接口  实际使用量接口 -->
+	<bean id="MaterialFeeActualUsage.findMaterialFeeActualUsageByTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			    	<![CDATA[
+ 			        select to_char(sta.inbound_time,'yyyy-mm-dd hh24/mi/ss') ib_time,
+ 			               to_char(sta.outbound_time,'yyyy-mm-dd hh24/mi/ss') ob_time, 
+ 			               ch.code store_code, 
+ 			               ch.name store_name, 
+ 			               sku.code  sku_code, 
+ 			               sku.name  sku_name, 
+ 			               add_line.quantity  use_amount, 
+ 			               sku.unit_name  use_amountunit,
+ 			               add_line.id upper_id,
+ 			               au.code warehosue_code,
+ 			               au.name warehosue_name,
+ 			               sta.slip_code epistatic_order,
+ 			               nvl(add_line.tracking_no,stad.tracking_no) express_number
+ 			        from t_wh_sta_add_line add_line
+					     inner join t_wh_sta sta on add_line.sta_id = sta.id
+					     inner join t_bi_channel ch on sta.owner = ch.code
+					     inner join t_bi_inv_sku sku on add_line.sku_id = sku.id
+					     inner join t_au_operation_unit au on sta.main_wh_id = au.id
+					     left join t_wh_sta_delivery_info stad on sta.id = stad.id
+ 			        where sta.outbound_time >=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')    
+ 					      and sta.outbound_time <to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+ 					      #if ($storecode) 
+ 					      	 and ch.shop_code = :storecode 
+ 						  #end 
+ 						  and add_line.quantity >0
+ 						  order by sta.id,add_line.id
+ 				]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 4、快递运单接口服务 -->
+	<bean id="ExpressWaybill.findExpressWaybillByTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			    	<![CDATA[
+		    select * from (
+		            --线上包裹
+		        	select ch.code  store_code,
+	                       ch.name store_name,
+	                       au.code warehouse_code,
+	                       au.name warehouse_name,
+	                       p.lpcode transport_code,
+	                       tr.name transport_name, 
+	                       sta.slip_code1 delivery_order,
+	                       sta.slip_code epistatic_order,
+	                      (case 
+	                          when sta.slip_type = 99 then '无前置单据'
+	                          when sta.slip_type = 1 then '采购单'
+	                          when sta.slip_type = 2 then '销售单'
+	                          when sta.slip_type = 3 then '退换货申请'
+	                          when sta.slip_type = 4 then '外部退换货申请'
+	                          when sta.slip_type = 5 then '保质期商品'
+	                          when sta.slip_type = 300 then '反向NP调整入库' 
+	                      end) order_type,
+	                       p.tracking_no express_number, 
+	                       (case 
+                                when sta.type in ('11','12','13','14','15','16','17','41','65','81','85','211','213','215') then '1'
+                                else '0'
+                           end) transport_direction,
+	                       '' itemtype_code, 
+	                       (case when tr.exp_code in('SF','SFCOD','SFDSTH','SFLY')   then
+                                 (select t.express_type||'' from t_bi_sf_expresstype  t
+                                  where t.trans_time_type=stad.trans_time_type 
+                                        and  t.trans_delivery_type=sta.is_rail_way
+                                        and  t.lpcode=tr.exp_code)     
+                              when  stad.trans_time_type = 1 then '普通'
+                              when  stad.trans_time_type = 3 then '及时达'
+                              when  stad.trans_time_type = 5 then '当日'
+                              when  stad.trans_time_type = 6 then '次日'
+                              when  stad.trans_time_type = 7 then '次晨'
+                              when  stad.trans_time_type = 8 then '云仓专配次日'
+                              when  stad.trans_time_type = 9 then '云仓专配隔日'
+                          end) itemtype_name,
+	                        to_char(sta.outbound_time,'yyyy-mm-dd hh24/mi/ss') transport_time, 
+	                       (case when stad.is_cod='0' then 0  else stad.transfer_fee+sta.total_actual end)||''  collection_on_delivery,
+	                       sta.order_total_actual||'' order_amount,       
+	                       '' sku_number,                
+	                       p.weight  weight,
+						   '' length,
+                           '' width,
+                           '' higth,                    
+                           '' volumn,
+	                       ch.address delivery_address,
+	                       stad.province  province,
+	                       stad.city city,
+	                       stad.district state,
+	                       (case when chs.is_insurance=1 and chs.min_insurance is null and chs.max_insurance is  null
+                                     and stad.insurance_amount>0 then '1'
+                                when chs.is_insurance=1 and chs.min_insurance is null 
+                                     and stad.insurance_amount<=chs.max_insurance  then '1' 
+                                when chs.is_insurance=1 and chs.max_insurance is  null 
+                                     and stad.insurance_amount>=chs.min_insurance  then '1'
+                                when chs.is_insurance=1 and stad.insurance_amount>=chs.min_insurance 
+                                     and stad.insurance_amount<=chs.min_insurance  then '1' 
+                          else '0' end)  insurance_flag,
+	                       stad.is_cod||'' cod_flag,
+	                       stad.receiver shiptoname,
+	                       stad.mobile phone,
+	                       stad.address address,
+	                       to_char(sta.finish_time,'yyyy-mm-dd hh24/mi/ss')  express_time, 
+	                       '' check_time,
+	                       to_char(sta.outbound_time,'yyyy-mm-dd hh24/mi/ss') weight_time,
+	                       sta.skus skus,
+	                       sta.id  staId,
+	                       to_char(sta.order_create_time,'yyyy-mm-dd hh24/mi/ss')   platform_order_time,
+	                       to_char(sta.payment_time,'yyyy-mm-dd hh24/mi/ss')      platform_pay_time,
+	                       (case when p.tracking_no=stad.tracking_no then '0' else '1' end )  k_flag,
+	                       p.id upper_id,
+	                       '0' package_type
+	                 from  t_wh_sta sta
+	                      inner join t_wh_sta_delivery_info stad on sta.id = stad.id
+	                      inner join t_wh_package_info p on  p.sta_delivery_info_id =sta.id
+	                      inner join t_bi_channel ch on sta.owner = ch.code
+	                      inner join t_au_operation_unit au on sta.main_wh_id = au.id
+	                      inner join t_ma_transportator tr on p.lpcode = tr.exp_code
+                          left join t_bi_channel_special_action chs on chs.channel_id=ch.id and chs.type=30						  
+                     where #if($timeType)
+								#if($timeType=='0')
+								      sta.create_time>=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')-90
+                                      and sta.create_time<=to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+									  and sta.outbound_time>=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')    
+						              and sta.outbound_time<to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+						              and sta.create_time>=sta.outbound_time -90
+								#end
+					       #end	
+					       #if($trackingNo)
+					           and  p.tracking_no=:trackingNo
+					       #end	
+					       #if($ownCode)
+					           and  sta.owner=:ownCode
+					       #end	
+					       #if($whCode)
+					           and  au.code=:whCode
+					       #end	
+					       and  sta.group_sta_id is null
+	                 union all
+	                 --线下包裹
+	                 select  ch.code  store_code,
+	                         ch.name store_name,
+	                         au.code warehouse_code,
+	                         au.name warehouse_name,
+	                         tr.exp_code transport_code,
+	                         tr.name transport_name, 
+							 '' delivery_order,
+	                        (select t.slip_code from t_wh_sta t where t.code=r.code) epistatic_order, 
+	                        (case 
+	                          when o.business_type = 1 then '转店'
+	                          when o.business_type = 2 then '样品领用'
+	                          when o.business_type = 3 then '补发'
+	                          when o.business_type = 4 then '零担物流'
+	                          when o.business_type = 5 then '公司件'
+	                          when o.business_type = 6 then '其他'
+	                        end) order_type,
+	                         tp.trans_no express_number, 
+	                         (case 
+                                 when r.type in ('11','12','13','14','15','16','17','41','65','81','85','211','213','215') then '1'
+                                 else '0'
+                             end) transport_direction ,
+							 '' itemtype_code ,
+							 (case when tr.exp_code in('SF','SFCOD','SFDSTH','SFLY')   then 
+							      (select nvl(t.express_type||'','1') from t_bi_sf_expresstype  t
+                                   where t.trans_time_type=o.time_type 
+                                        and  t.trans_delivery_type=o.is_land_trans
+                                        and  t.lpcode=o.transportator_code) 
+	                              when  o.time_type = 1 then '普通'
+	                              when  o.time_type = 3 then '及时达'
+	                              when  o.time_type = 5 then '当日'
+	                              when  o.time_type = 6 then '次日'
+	                              when  o.time_type = 7 then '次晨'
+	                              when  o.time_type = 8 then '云仓专配次日'
+	                              when  o.time_type = 9 then '云仓专配隔日' 
+	                         end) itemtype_name,
+	                        to_char(tp.create_time,'yyyy-mm-dd hh24/mi/ss') transport_time, 
+	                         '0' collection_on_delivery,
+	                         o.insurance_amount||'' order_amount,              
+	                         sku.bar_code||'' sku_number,              
+	                         tp.package_weight  weight,
+	                         sku.length||'' length,
+	                         sku.width||''  width,
+	                         sku.height||''  higth,
+	                         (case when tp.volume >0 then (tp.volume*1000000000)||'' else (sku.length*sku.width*sku.height)||'' end ) volumn,
+	                         o.s_address  delivery_address,
+	                         o.r_province  province,
+	                         o.r_city city,
+	                         o.r_area state,
+	                        (case when O.INSURANCE_AMOUNT >0  then '1' else '0' end) insurance_flag,
+	                         '0' cod_flag,
+	                         o.receiver shiptoname,
+	                         o.r_tel  phone,
+	                         o.r_address address,
+	                         to_char(o.last_modify_time,'yyyy-mm-dd hh24/mi/ss') express_time,
+	                         '' check_time,
+	                         to_char(tp.op_time,'yyyy-mm-dd hh24/mi/ss') weight_time,
+	                         '' skus,
+	                         0 staId,
+	                         '' platform_order_time,
+	                         '' platform_pay_time,
+	                         '0'  k_flag,
+	                         tp.id upper_id,
+	                         '1' package_type
+	                  from  t_wh_trans_package  tp  
+	                        left join t_wh_sta_record  r on tp.order_id = r.order_id
+	                        left join t_wh_trans_order o on tp.order_id = o.id
+	                        left join t_sys_choose_option n on n.option_key = o.cost_center_detail                        
+	                        left join t_bi_channel  ch on o.cost_center_detail=ch.code
+							left join t_bi_channel_special_action chs on chs.channel_id=ch.id and chs.type=30
+	                        left join t_ma_transportator tr on tr.exp_code=o.transportator_code                 
+	                        left join t_au_operation_unit au on o.ou_id = au.id
+	                        left join t_bi_inv_sku sku on tp.sku_id = sku.id                     
+	                  where tp.status = 1
+	                        #if($timeType)
+								#if($timeType=='0')
+	                                and tp.create_time >= to_timestamp(:startTime,'yyyy-mm-dd hh24missxff') 
+	                                and tp.create_time < to_timestamp(:endTime,'yyyy-mm-dd hh24missxff') 
+	                            #end
+					        #end	
+	                        #if($trackingNo)
+					           and  tp.trans_no=:trackingNo
+					        #end
+					         #if($ownCode)
+					           and  ch.code=:ownCode
+					       	#end	
+					      	#if($whCode)
+					           and  au.code=:whCode
+					      	#end		
+					   union all  
+					   --无包裹但是有运单信息
+					   select ch.code  store_code,
+                         ch.name store_name,
+                         au.code warehouse_code,
+                         au.name warehouse_name,
+                         stad.lpcode transport_code,
+                         tr.name transport_name, 
+                         sta.slip_code1 delivery_order,
+                         sta.slip_code epistatic_order,
+                        (case 
+                            when sta.slip_type = 99 then '无前置单据'
+                            when sta.slip_type = 1 then '采购单'
+                            when sta.slip_type = 2 then '销售单'
+                            when sta.slip_type = 3 then '退换货申请'
+                            when sta.slip_type = 4 then '外部退换货申请'
+                            when sta.slip_type = 5 then '保质期商品'
+                            when sta.slip_type = 300 then '反向NP调整入库' 
+                        end) order_type,
+                         stad.tracking_no express_number, 
+                         (case 
+                                when sta.type in ('11','12','13','14','15','16','17','41','65','81','85','211','213','215') then '1'
+                                else '0'
+                           end) transport_direction,
+                         '' itemtype_code, 
+                         (case when tr.exp_code in('SF','SFCOD','SFDSTH','SFLY')   then
+                                 (select t.express_type||'' from t_bi_sf_expresstype  t
+                                  where t.trans_time_type=stad.trans_time_type 
+                                        and  t.trans_delivery_type=sta.is_rail_way
+                                        and  t.lpcode=tr.exp_code)     
+                              when  stad.trans_time_type = 1 then '普通'
+                              when  stad.trans_time_type = 3 then '及时达'
+                              when  stad.trans_time_type = 5 then '当日'
+                              when  stad.trans_time_type = 6 then '次日'
+                              when  stad.trans_time_type = 7 then '次晨'
+                              when  stad.trans_time_type = 8 then '云仓专配次日'
+                              when  stad.trans_time_type = 9 then '云仓专配隔日'
+                          end) itemtype_name,
+                          to_char(sta.outbound_time,'yyyy-mm-dd hh24/mi/ss') transport_time, 
+                         (case when stad.is_cod='0' then 0  else stad.transfer_fee+sta.total_actual end)||''  collection_on_delivery,
+                         sta.order_total_actual||'' order_amount,       
+                         '' sku_number,                
+                         (case when stad.tracking_no is not null then (select c.weight from t_wh_carton c where c.tracking_no=stad.tracking_no) else 0  end)weight,
+                         '' length,
+                         '' width,
+                         '' higth,                    
+                         '' volumn,
+                         ch.address delivery_address,
+                         stad.province  province,
+                         stad.city city,
+                         stad.district state,
+                         (case when chs.is_insurance=1 and chs.min_insurance is null and chs.max_insurance is  null
+                                     and stad.insurance_amount>0 then '1'
+                                when chs.is_insurance=1 and chs.min_insurance is null 
+                                     and stad.insurance_amount<=chs.max_insurance  then '1' 
+                                when chs.is_insurance=1 and chs.max_insurance is  null 
+                                     and stad.insurance_amount>=chs.min_insurance  then '1'
+                                when chs.is_insurance=1 and stad.insurance_amount>=chs.min_insurance 
+                                     and stad.insurance_amount<=chs.min_insurance  then '1' 
+                          else '0' end)  insurance_flag,
+                         stad.is_cod||'' cod_flag,
+                         stad.receiver shiptoname,
+                         stad.mobile phone,
+                         stad.address address,
+                         to_char(sta.finish_time,'yyyy-mm-dd hh24/mi/ss')  express_time, 
+                         '' check_time,
+                         to_char(sta.outbound_time,'yyyy-mm-dd hh24/mi/ss') weight_time,
+                         sta.skus skus,
+                         sta.id  staId,
+                         to_char(sta.order_create_time,'yyyy-mm-dd hh24/mi/ss')   platform_order_time,
+                         to_char(sta.payment_time,'yyyy-mm-dd hh24/mi/ss')      platform_pay_time,
+                         '0'  k_flag,
+                         stad.id upper_id,
+                         '0' package_type
+                   from  t_wh_sta sta
+                        inner join t_wh_sta_delivery_info stad on sta.id = stad.id
+                        inner join t_bi_channel ch on sta.owner = ch.code
+                        inner join t_au_operation_unit au on sta.main_wh_id = au.id
+                        inner join t_ma_transportator tr on stad.lpcode = tr.exp_code
+                          left join t_bi_channel_special_action chs on chs.channel_id=ch.id and chs.type=30             
+                     where  #if($timeType)
+			                 #if($timeType=='0')
+			                      sta.create_time>=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')-90
+			                                      and sta.create_time<=to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+			                    and sta.outbound_time>=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')    
+			                          and sta.outbound_time<to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+			                          and sta.create_time>=sta.outbound_time -90
+			                #end
+			                 #end 
+			                 #if($trackingNo)
+			                     and  stad.tracking_no=:trackingNo
+			                 #end 
+			                 
+			                #if($ownCode)
+					           and  sta.owner=:ownCode
+					       	#end	
+					      	#if($whCode)
+					           and  au.code=:whCode
+					      	#end	
+			                 and  sta.group_sta_id is null
+			                 and  not exists (select p.id from t_wh_package_info p where  p.sta_delivery_info_id =sta.id)
+			                 and  sta.status=10
+			                 and  sta.type =21
+			                 and  stad.tracking_no is not null
+			       union all
+			       --转店退仓
+                   select ch.code  store_code,
+                         ch.name store_name,
+                         au.code warehouse_code,
+                         au.name warehouse_name,
+                         stad.lpcode transport_code,
+                         tr.name transport_name, 
+                         sta.slip_code1 delivery_order,
+                         sta.slip_code epistatic_order,
+                         '转店退仓' order_type,
+                         c.tracking_no express_number, 
+                         '0' transport_direction,
+                         '' itemtype_code, 
+                         (case when tr.exp_code in('SF','SFCOD','SFDSTH','SFLY')   then
+                                 (select t.express_type||'' from t_bi_sf_expresstype  t
+                                  where t.trans_time_type=stad.trans_time_type 
+                                        and  t.trans_delivery_type=sta.is_rail_way
+                                        and  t.lpcode=tr.exp_code)     
+                              when  stad.trans_time_type = 1 then '普通'
+                              when  stad.trans_time_type = 3 then '及时达'
+                              when  stad.trans_time_type = 5 then '当日'
+                              when  stad.trans_time_type = 6 then '次日'
+                              when  stad.trans_time_type = 7 then '次晨'
+                              when  stad.trans_time_type = 8 then '云仓专配次日'
+                              when  stad.trans_time_type = 9 then '云仓专配隔日'
+                          end) itemtype_name,
+                          to_char(sta.outbound_time,'yyyy-mm-dd hh24/mi/ss') transport_time, 
+                         (case when stad.is_cod='0' then 0  else stad.transfer_fee+sta.total_actual end)||''  collection_on_delivery,
+                         sta.order_total_actual||'' order_amount,       
+                         '' sku_number,                
+                         nvl(c.weight,0) weight,
+                         '' length,
+                         '' width,
+                         '' higth,                    
+                         '' volumn,
+                         ch.address delivery_address,
+                         stad.province  province,
+                         stad.city city,
+                         stad.district state,
+                         (case when chs.is_insurance=1 and chs.min_insurance is null and chs.max_insurance is  null
+                                     and stad.insurance_amount>0 then '1'
+                                when chs.is_insurance=1 and chs.min_insurance is null 
+                                     and stad.insurance_amount<=chs.max_insurance  then '1' 
+                                when chs.is_insurance=1 and chs.max_insurance is  null 
+                                     and stad.insurance_amount>=chs.min_insurance  then '1'
+                                when chs.is_insurance=1 and stad.insurance_amount>=chs.min_insurance 
+                                     and stad.insurance_amount<=chs.min_insurance  then '1' 
+                          else '0' end)  insurance_flag,
+                         stad.is_cod||'' cod_flag,
+                         stad.receiver shiptoname,
+                         stad.mobile phone,
+                         stad.address address,
+                         to_char(sta.finish_time,'yyyy-mm-dd hh24/mi/ss')  express_time, 
+                         '' check_time,
+                         to_char(sta.outbound_time,'yyyy-mm-dd hh24/mi/ss') weight_time,
+                         sta.skus skus,
+                         sta.id  staId,
+                         to_char(sta.order_create_time,'yyyy-mm-dd hh24/mi/ss')   platform_order_time,
+                         to_char(sta.payment_time,'yyyy-mm-dd hh24/mi/ss')      platform_pay_time,
+                         '0'  k_flag,
+                         stad.id upper_id,
+                         '0' package_type
+                   from  t_wh_sta sta
+                        inner join t_wh_sta_delivery_info stad on sta.id = stad.id
+                        inner join t_bi_channel ch on sta.owner = ch.code
+                        inner join t_au_operation_unit au on sta.main_wh_id = au.id
+                        inner join t_ma_transportator tr on stad.lpcode = tr.exp_code
+                        inner join t_wh_carton c on c.sta_id=sta.id
+                        left join t_bi_channel_special_action chs on chs.channel_id=ch.id and chs.type=30             
+                     where  #if($timeType)
+                               #if($timeType=='0')
+                                    sta.create_time>=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')-90
+                                                    and sta.create_time<=to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+                                  and sta.outbound_time>=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')    
+                                        and sta.outbound_time<to_timestamp(:endTime,'yyyy-mm-dd hh24missxff')
+                                        and sta.create_time>=sta.outbound_time -90
+                               #end
+                            #end 
+                       #if($trackingNo)
+                           and  c.tracking_no=:trackingNo
+                       #end 
+                        #if($ownCode)
+					           and  sta.owner=:ownCode
+					       #end	
+					       #if($whCode)
+					           and  au.code=:whCode
+					    #end	
+                       and  sta.status=10
+                       and  sta.type =102
+                       and  c.tracking_no is not null
+	                  ) data order by data.upper_id			   		   
+ 				]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 商品明细 -->
+	<bean id="OrderDetail.findOrderDetailsByIds" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			    	<![CDATA[
+		        	 select sku.code  sku_number,
+                            sku.bar_code  barcode,
+                            sku.name item_name,
+                            sku.key_properties extend_pro,
+                            sum(sl.quantity)  qty ,
+                            sl.unit_price unit_price,
+                            sl.unit_price*nvl(sum(sl.quantity),0) total_price       
+                      from t_wh_sta sta,t_wh_sta_line sl,t_wh_sta_delivery_info sdi,t_bi_inv_sku sku
+                      where  sta.id=sdi.id
+                             and sta.id=sl.sta_id
+                             and sl.sku_id=sku.id
+                             and sta.id = :staId
+                             and sdi.tracking_no=:trackingNo
+                             and sta.group_sta_id is null	
+		                     and sku.id in (
+								    #foreach( $id in $skuIds )
+			    				     $id
+			    				      ,
+								    #end
+								    -1
+								    ) 
+				      group by sku.code,sku.bar_code , sku.name,sku.key_properties,sl.unit_price
+ 				]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 转店退仓装箱商品明细 -->
+	<bean id="OrderDetail.findCartonDetialOrderDetailsByIds" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			    	<![CDATA[
+		        	 select sku.code  sku_number,
+                            sku.bar_code  barcode,
+                            sku.name item_name,
+                            sku.key_properties extend_pro,
+                            l.qty  qty ,
+                            '' unit_price,
+                            '' total_price 
+                      from t_wh_sta sta,t_wh_carton c ,t_wh_carton_line l ,t_bi_inv_sku sku
+                      where  sta.id=c.sta_id
+                             and c.id=l.carton_id
+                             and l.sku_id=sku.id
+                             and sta.id = :staId
+                             and c.tracking_no= :trackingNo
+ 				]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 5、仓储费接口服务 已不使用 -->
+	<bean id="WarehouseCharges.findWarehouseChargesByTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			    	<![CDATA[
+		    	  select   (case when wh.vmi_Source is null  then '0' else '1' end) warehouse_type,
+									'' start_time,
+									ch.code store_code,                                                               
+									ch.name store_name,
+									(case when ch.status ='0' then '1' else '0' end ) is_closed,
+									unit.code warehouse_code,
+									unit.name warehouse_name,
+									(case when phy_ref.phy_wh_id is null  then '逻辑仓' else '系统仓' end) system_warehouse，
+									zoon.code area_code,
+									zoon.name area_name,
+									sku.code sku_code,
+									cat.sku_categories_name item_type,
+									loc.code goods_area_code,
+									0 forests,
+									nvl(loc.capacity,0) volume,
+									inv.quantity qty
+					from (
+						  select tp.id as ou_id,tp.warehouseName,sku_id,owner,tp.location_id  ,sum(quantity) as quantity
+						  from (
+								select organise.id, organise.name warehouseName,ss.sku_id, ss.owner,'' location_id,ss.quantity
+								from T_AU_OPERATION_UNIT organise,t_wh_sku_inventory_snapshot ss
+								where ss.snapshot_time = (select max(snapshot_time) from  t_wh_sku_inventory_snapshot 
+														 where snapshot_time < to_date((to_char(:nextDate , 'yyyy-mm-dd')),'yyyy-mm-dd hh24/mi/ss'))
+														 and ORGANISE.ID = SS.WAREHOUSE_ID 
+								union all   
+								select organise.id,organise.name warehouseName,lg.sku_id,lg.owner,lg.location_id||''  as location_id ,sum(case when DIRECTION=1 then lg.quantity when lg.DIRECTION=2 then lg.quantity*(-1) end) as quantity
+								from T_AU_OPERATION_UNIT organise,T_WH_ST_LOG lg
+								where lg.tran_time >= nvl((select max(snapshot_time) from  t_wh_sku_inventory_snapshot where snapshot_time <  to_date((to_char(:nextDate, 'yyyy-mm-dd')),'yyyy-mm-dd hh24/mi/ss')), to_date('19000101','yyyyMMdd'))
+									 and lg.tran_time < to_date((to_char(:nextDate , 'yyyy-mm-dd')),'yyyy-mm-dd hh24/mi/ss')
+									 and ORGANISE.ID = LG.WH_ID
+									 group by organise.id,organise.name,lg.sku_id,lg.owner,lg.location_id
+							   ) tp 
+						  group by tp.id,tp.warehouseName,tp.sku_id,tp.owner,tp.location_id
+						) inv
+					 inner join t_bi_inv_sku sku on inv.sku_id = sku.id
+					 inner join t_bi_channel ch  on  inv.owner = ch.code 
+					 inner join t_au_operation_unit  unit on inv.ou_id =unit.id
+					 inner join t_bi_warehouse wh on unit.id=wh.ou_id  
+					 left  join t_wh_phy_warehouse_ref phy_ref on unit.id=phy_ref.ou_wh_id  
+					 left  join t_wh_zoon zoon on unit.id=zoon.ou_id 
+					 left  join t_ma_sku_categories cat on sku.sku_categories_id=cat.id
+					 left  join t_wh_location loc on inv.location_id=loc.id
+					 where inv.quantity != 0
+					       #if ($warehouseType) 
+	                             #if ($warehouseType == 0)
+									 and wh.vmi_Source is null
+								 #end
+								 #if ($warehouseType == 1)
+									 wh.vmi_Source is not null 
+								 #end
+	 						 #end 
+	 						 #if ($storeCode) 
+	 					      	 and sta.store_code = :storeCode 
+	 						 #end 
+	 						 #if($warehouseCode) 
+	 					 		 and unit.code = :warehouseCode 
+	 						 #end 
+	 						 #if($areaCode) 
+	 					 		 and zoon.code = :areaCode 
+	 						 #end 
+	 				 order by ch.id,unit.id,sku.id,loc.id
+ 				]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 5、仓储费接口服务 替代接口  需要全表扫描-->
+	<bean id="WarehouseCharges.findWarehouseChargesByRealtimeInv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			    	<![CDATA[
+					   select  (case when wh.vmi_Source is null  then '0' else '1' end) warehouse_type,
+			                  to_char(sysdate-1,'YYYY-MM-DD') start_time,
+			                  ch.code store_code,                                                               
+			                  ch.name store_name,
+			                  (case when ch.status ='0' then '1' else '0' end ) is_closed,
+			                  unit.code warehouse_code,
+			                  unit.name warehouse_name,
+			                  (case when phy_ref.phy_wh_id is null  then '逻辑仓' else '系统仓' end) system_warehouse，
+			                  zoon.code area_code,
+			                  zoon.name area_name,
+			                  sku.code sku_code,
+			                  cat.sku_categories_name item_type,
+			                  loc.code goods_area_code,
+			                  0 forests,
+			                  nvl(loc.capacity,0) volume,
+			                  inv.qty qty,
+			                  dis.code   l_code,
+                              loc.dim_x  x_code,
+                              loc.dim_y  y_code,
+                              loc.dim_z  z_code,
+                              loc.dim_c  c_code
+			          from T_WH_REALTIME_INV inv
+			                 inner join t_au_operation_unit  unit on inv.ou_id =unit.id
+			                 inner join t_bi_warehouse wh on unit.id=wh.ou_id  
+			                 inner join t_bi_channel ch  on  inv.inv_owner = ch.code 
+			                 inner join t_bi_inv_sku sku on inv.sku_id = sku.id
+			                 inner join t_wh_location loc on inv.location_id=loc.id
+			                 inner join t_wh_district dis on dis.id=loc.district_id
+			                 left  join t_wh_phy_warehouse_ref phy_ref on unit.id=phy_ref.ou_wh_id  
+			                 left  join t_wh_pick_zoon zoon on loc.zoon_id=zoon.id 
+			                 left  join t_ma_sku_categories cat on sku.sku_categories_id=cat.id
+			                 order by inv.id
+ 				]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 实时库存 -->
+	<bean id="RealTimeInventory.findRealTimeInventoryLists" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			      <![CDATA[
+		        	  select ou_id,inv_owner,location_id,sku_id,qty,inv_time from T_WH_REALTIME_INV order by id
+ 				   ]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 6、退货入库接口 -->
+	<bean id="ReturnStorage.findreturnStorageDataByTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			      <![CDATA[
+			      select * from (
+		        	    select sta.id id,
+		        	           au.code warehouse_code,
+						       au.name warehouse_name,
+						       sta.code  job_no,
+						       '退货入库' job_type,
+						       ch.code  store_code,
+						       ch.name  store_name,
+						       sta.slip_code   related_no,
+						       stad.tracking_no   waybill,
+						       sta.slip_code1  re_epistatic_order,
+						       sta.slip_code2   platform_no,
+						       sta.create_time create_time,
+						       sta.finish_time finish_time,
+						       (select  nvl(sum(s.quantity),0)  from t_wh_sta t,t_wh_sta_line s where t.id=s.sta_id and t.id=sta.id)  plan_qty,            
+                               (select  nvl(sum(s.complete_quantity),0)  from t_wh_sta t,t_wh_sta_line s where t.id=s.sta_id and t.id=sta.id)  actual_qty,   
+						       stad.lpcode transport_code,
+						       tr.name transport_name,
+						       '' itemtype_code,
+						       '' itemtype_name,
+						       ph.name physical_warehouse,
+						       u.user_name create_user,
+						       sta.unlock_user deblock_user,
+						       p.remarksb   remark,
+						       sta.order_total_actual||'' return_price
+						from (select t.id, t.owner, t.main_wh_id,t.code,t.slip_code,t.slip_code1,t.slip_code2，t.create_time,t.finish_time ,u2.user_name unlock_user,t.order_total_actual
+						      from t_wh_sta t left join t_au_user u2 on u2.login_name=t.unlock_user
+						      where t.type = '41'
+						            and t.finish_time >=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')     
+						            and t.finish_time <to_timestamp(:endTime,'yyyy-mm-dd hh24missxff') 
+						            and t.status=10
+						            #if ($related_no) 
+	 					      	      and t.slip_code = :related_no 
+	 						        #end 
+						      ) sta
+						inner join t_bi_channel ch on sta.owner = ch.code
+						inner join t_au_operation_unit au on sta.main_wh_id = au.id
+						inner join t_wh_sta_delivery_info stad on sta.id = stad.id
+						left  join t_ma_transportator tr on stad.lpcode = tr.exp_code
+						left  join t_wh_return_package p on p.sta_id=sta.id
+						left  join t_au_user u on  p.creator_id=u.id
+						left  join t_wh_physical_warehouse ph on ph.id=p.pw_id
+					  --有sta状态过滤 以下部分可以不要 
+						union all
+						select sta.id id,
+		        	           au.code warehouse_code,
+						       au.name warehouse_name,
+						       sta.code  job_no,
+						       '退货入库' job_type,
+						       ch.code  store_code,
+						       ch.name  store_name,
+						       sta.slip_code   related_no,
+						       stad.tracking_no   waybill,
+						       sta.slip_code1  re_epistatic_order,
+						       sta.slip_code2   platform_no,
+						       sta.create_time create_time,
+						       sta.finish_time finish_time,
+						       (select  nvl(sum(s.quantity),0)  from t_wh_sta t,t_wh_sta_line s where t.id=s.sta_id and t.id=sta.id)  plan_qty,            
+                               (select  nvl(sum(s.complete_quantity),0)  from t_wh_sta t,t_wh_sta_line s where t.id=s.sta_id and t.id=sta.id)  actual_qty,   
+						       stad.lpcode transport_code,
+						       tr.name transport_name,
+						       '' itemtype_code,
+						       '' itemtype_name,
+						       ph.name physical_warehouse,
+						       u.user_name create_user,
+						       sta.unlock_user deblock_user,
+						       p.remarksb   remark,
+						       sta.order_total_actual||'' return_price
+						from (select t.id, t.owner, t.main_wh_id,t.code,t.slip_code,t.slip_code1,t.slip_code2，t.create_time,t.finish_time ,u2.user_name unlock_user,t.order_total_actual 
+						      from t_wh_sta t left join t_au_user u2 on u2.login_name=t.unlock_user
+						      where t.type = '41'
+						            and t.inbound_time >=to_timestamp(:startTime,'yyyy-mm-dd hh24missxff')     
+						            and t.inbound_time <to_timestamp(:endTime,'yyyy-mm-dd hh24missxff') 
+						            and t.finish_time is null
+						            and t.status=10
+						            #if ($related_no) 
+	 					      	      and t.slip_code = :related_no 
+	 						        #end 
+						      ) sta
+						inner join t_bi_channel ch on sta.owner = ch.code
+						inner join t_au_operation_unit au on sta.main_wh_id = au.id
+						inner join t_wh_sta_delivery_info stad on sta.id = stad.id
+						inner join t_ma_transportator tr on stad.lpcode = tr.exp_code
+						left  join t_wh_return_package p on p.sta_id=sta.id
+						left  join t_au_user u on  p.creator_id=u.id
+						left  join t_wh_physical_warehouse ph on ph.id=p.pw_id
+						)data order by data.id
+ 				   ]]> 
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

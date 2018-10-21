@@ -1,0 +1,1248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="RadarTransNo.findRadarTransNoByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select rtn.id,rtn.order_code orderCode,rtn.owner,rtn.p_code pCode,
+						       rtn.lpcode,rtn.create_time createTime,rtn.EXPRESS_CODE expressCode
+						from T_OOC_RD_TRANS_NO rtn
+						where rtn.status = 1
+							and rtn.create_time>systimestamp-15
+					#if($store)
+						      and rtn.owner= :store
+					#end	
+					
+					#if($logistics)
+						      and rtn.lpcode in (
+						   	  	#foreach($lo in $logistics)
+									'$lo',
+								#end
+								'-1'
+						   	  )
+					#end	
+					#if($channelCode)
+						      and rtn.owner not in (
+						   	  	#foreach($lp in $channelCode)
+									'$lp',
+								#end
+								'-1'
+						   	  )
+					#end	
+						order by rtn.id asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTransNo.findTakesTimeoutExpress" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select rtn.id,rtn.express_code expressCode,rtn.lpcode,rtn.create_time createTime
+						from T_OOC_RD_TRANS_NO rtn
+						     join T_OOC_TRANS_ROUTE_STATUS trs on rtn.current_route_status=trs.id
+						     join T_OOC_RD_ROUTE_STATUS_REF rrsr on trs.ref_id=rrsr.id
+						     join T_SYS_ROUTE_STATUS_CODE srsc on rrsr.sys_rsc_id=srsc.id
+						where rtn.status=1
+						     and srsc.code='001'
+						     and rtn.create_time>systimestamp-3
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTransNo.findDeliveryTimeoutExpress" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select rtn.id,rtn.express_code expressCode,rtn.lpcode,rtn.create_time createTime,
+								rtn.TAKING_TIME takingTime,rtn.PWH_ID physicalWarehouseId,rrsr.TP_ID tpId,rtn.TRANS_TIME_TYPE transTimeType,
+								rtn.Destination_city destinationCity,rtn.Destination_province destinationProvince
+			            from T_OOC_RD_TRANS_NO rtn
+			                 join T_OOC_TRANS_ROUTE_STATUS trs on rtn.current_route_status=trs.id
+			                 join T_OOC_RD_ROUTE_STATUS_REF rrsr on trs.ref_id=rrsr.id
+			                 join T_SYS_ROUTE_STATUS_CODE srsc on rrsr.sys_rsc_id=srsc.id
+			                 
+			            where rtn.status != 99
+			            	 and rtn.TAKING_TIME is not null
+			                 and srsc.code != '001'
+			                 and rtn.id not in (
+			                 	 select tn.id
+		                         from T_OOC_RD_TRANS_NO tn
+		                              join T_OOC_TRANS_ROUTE_STATUS rs on tn.current_route_status=rs.id
+		                         where tn.status = 10
+		                             and rs.creare_time<systimestamp-1
+			                 )
+			                 and rtn.create_time>systimestamp-15
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTransNo.findOtherWarningExpress" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					  select rtn.id,rtn.express_code expressCode,rtn.lpcode,rtn.create_time createTime
+	                  from T_OOC_RD_TRANS_NO rtn
+	                       join T_OOC_TRANS_ROUTE_STATUS trs on rtn.current_route_status=trs.id
+	                       join T_OOC_RD_ROUTE_STATUS_REF rrsr on trs.ref_id=rrsr.id
+	                       join T_SYS_ROUTE_STATUS_CODE srsc on rrsr.sys_rsc_id=srsc.id
+	                  where 
+	                       srsc.code = :statusCode
+	                       and rtn.TAKING_TIME is not null
+	                       and rtn.create_time>systimestamp-20
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarWarningReasonLine.findWarningReasonLineByErrorCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select rwrl.id,rwrl.wr_id wrId,rwrl.warning_hour warningHour,lv.lv lvCode,lv.id lvId
+						from t_ooc_rd_warning_reason_line rwrl
+						     join T_SYS_RD_WARNING_LV lv on lv.id=rwrl.sw_id
+						     join t_ooc_rd_warning_reason rwr on rwr.id=rwrl.wr_id
+						     join T_SYS_RD_ERROR_CODE rec on rwr.rec_id=rec.id
+						where rwr.status=1
+							 and rec.code = :errorCode
+						order by lv.lv asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+<!-- 快递汇总信息查询  1-->
+	<bean id="RadarTransNo.findExpressInfoCount" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select detail.Destination_Province,detail.stayLanshou,detail.hasLanshou,detail.inTheTransif,detail.exceptionPiece,detail.totalPiece
+				          from
+				          (select rdNo.Destination_Province,
+										         sum(case when sc.code = '001' and rdNo.Current_Wr_Id is null  then 1 else 0 end) stayLanshou,
+										         sum(case when sc.code = '010' and rdNo.Current_Wr_Id is null  then 1 else 0 end) hasLanshou,
+										         sum(case when sc.code = '050' and rdNo.Current_Wr_Id is null  then 1 else 0 end) inTheTransif,
+										         sum(case when rdNo.Current_Wr_Id is not null then 1 else 0 end) exceptionPiece,
+										         sum(case when sc.code in('001','010','050') or rdNo.Current_Wr_Id is not null  then 1 else 0 end) totalPiece
+										    from t_ooc_rd_trans_no         rdNo,
+										         t_ooc_trans_route_status  rds,
+										         t_ooc_rd_route_status_ref rdRef,
+										         t_sys_route_status_code   sc,
+										          T_WH_PHYSICAL_WAREHOUSE wh,
+				                     (select ar.province from t_sys_radar_area ar group by ar.province) raaa,
+				                     (select arr.city from t_sys_radar_area arr group by arr.city) ct,
+				                                 t_bi_channel ch
+										   where rdNo.Current_Route_Status = rds.id
+										     and rds.ref_id = rdRef.id
+										     and rdRef.sys_rsc_id = sc.id
+										      and rdNo.Pwh_Id=wh.id 
+				                             and rdNo.Destination_Province=raaa.province
+				                             and ch.code=rdNo.Owner 
+				                             and ct.city=rdNo.Destination_City
+				                             and rdNo.Create_Time >= sysdate - 30
+                                     #if($lpcode)
+                                        and rdNo.lpcode = :lpcode
+                                     #end
+                                     #if($owner)
+                                        and ch.name = :owner 
+                                     #end
+                                     #if($destinationProvince)
+                                        and rdNo.Destination_Province = :destinationProvince
+                                     #end	
+                                     #if($physicalWarehouseId)
+                                        and rdNo.Pwh_Id = :physicalWarehouseId
+                                     #end	
+				       group by rdNo.Destination_Province)  detail
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 快递雷达省市详细信息 2-->
+	<bean id="RadarTransNo.findExpressDetailList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select detail.city,detail.stayLanshou,detail.hasLanshou,detail.inTheTransif,detail.exceptionPiece,detail.totalPiece 
+					from
+					(select raaa.city city,
+						         sum(case when sc.code = '001' and rdNo.Current_Wr_Id is null  then 1 else 0 end) stayLanshou,
+						         sum(case when sc.code = '010' and rdNo.Current_Wr_Id is null  then 1 else 0 end) hasLanshou,
+						         sum(case when sc.code = '050' and rdNo.Current_Wr_Id is null  then 1 else 0 end) inTheTransif,
+						         sum(case when rdNo.Current_Wr_Id is not null then 1 else 0 end) exceptionPiece,
+						         sum(case when sc.code in('001','010','050') or rdNo.Current_Wr_Id is not null  then 1 else 0 end) totalPiece
+						    from t_ooc_rd_trans_no         rdNo,
+						         t_ooc_trans_route_status  rds,
+						         t_ooc_rd_route_status_ref rdRef,
+						          T_WH_PHYSICAL_WAREHOUSE wh,
+						         t_sys_route_status_code   sc,
+						        (select ar.city from t_sys_radar_area ar group by ar.city) raaa,
+						         t_bi_channel ch
+						   where rdNo.Current_Route_Status = rds.id
+						     and rds.ref_id = rdRef.id
+						     and rdRef.sys_rsc_id = sc.id
+						      and rdNo.Pwh_Id=wh.id 
+						    and raaa.city=rdNo.Destination_City
+						     and ch.code=rdNo.Owner
+                                   #if($lpcode)
+                                        and rdNo.lpcode = :lpcode
+                                     #end
+                                     #if($owner)
+                                        and ch.name = :owner 
+                                     #end
+                                     #if($province)
+                                        and rdNo.Destination_Province = :province
+                                     #end	
+                                     #if($physicalWarehouseId)
+                                        and rdNo.Pwh_Id = :physicalWarehouseId
+                                     #end				
+							  group by raaa.city)  detail
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!--统计 快递汇总信息查询 数量1-->
+	<bean id="RadarTransNo.getExpreessTotal" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+       				 select '合计' destinationProvince, decode(sum(aaaa.stayLanshou),'',0,sum(aaaa.stayLanshou)) stayLanshou ,decode(sum(aaaa.hasLanshou),'',0,sum(aaaa.hasLanshou)) hasLanshou,decode(sum(aaaa.inTheTransif),'',0,sum(aaaa.inTheTransif)) inTheTransif,decode(sum(aaaa.exceptionPiece),'',0,sum(aaaa.exceptionPiece)) exceptionPiece,decode(sum(aaaa.totalPiece),'',0,sum(aaaa.totalPiece)) totalPiece from
+				             (select rdNo.Destination_Province,
+						        sum(case when  sc.code = '001' and rdNo.Current_Wr_Id is null  then 1 else 0 end) stayLanshou,
+						         sum(case when sc.code = '010' and rdNo.Current_Wr_Id is null  then 1 else 0 end) hasLanshou,
+						         sum(case when sc.code = '050' and rdNo.Current_Wr_Id is null  then 1 else 0 end) inTheTransif,
+						         sum(case when rdNo.Current_Wr_Id is not null then 1 else 0 end) exceptionPiece,
+						         sum(case when sc.code in('001','010','050') or rdNo.Current_Wr_Id is not null  then 1 else 0 end) totalPiece
+						    from t_ooc_rd_trans_no         rdNo,
+						         t_ooc_trans_route_status  rds,
+						         t_ooc_rd_route_status_ref rdRef,
+						         t_sys_route_status_code   sc,
+						          T_WH_PHYSICAL_WAREHOUSE wh,
+						         t_bi_channel ch,
+                     (select ar.province from t_sys_radar_area ar group by ar.province) raaa,
+                      (select arr.city from t_sys_radar_area arr group by arr.city) ct
+						   where rdNo.Current_Route_Status = rds.id
+						     and rds.ref_id = rdRef.id
+						     and rdRef.sys_rsc_id = sc.id
+						     and rdNo.Pwh_Id=wh.id 
+						     and ct.city=rdNo.Destination_City
+               				 and rdNo.Destination_Province=raaa.province
+               				 and ch.code=rdNo.Owner
+                                     #if($lpcode)
+                                        and rdNo.lpcode = :lpcode
+                                     #end
+                                     #if($owner)
+                                        and ch.name = :owner 
+                                     #end
+                                     #if($destinationProvince)
+                                        and rdNo.Destination_Province = :destinationProvince
+                                     #end	
+                                     #if($physicalWarehouseId)
+                                        and rdNo.Pwh_Id = :physicalWarehouseId
+                                     #end	
+				             group by rdNo.Destination_Province) aaaa
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 快递雷达状态详情 2-->
+	<bean id="RadarTransNo.findExpressStatusInfo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						 select TRUNC(10000+9000000*dbms_random.value)  as id,detail.lpName,detail.lpcode,detail.warehouseName,detail.stayLanshou,detail.hasLanshou,detail.inTheTransif,detail.exceptionPiece,detail.totalPiece 
+						          from
+						          (select tr.name as lpName,wh.name as warehouseName,tr.exp_code lpcode, 
+						                     sum(case when sc.code = '001' and rdNo.Current_Wr_Id is null  then 1 else 0 end) stayLanshou,
+						                     sum(case when sc.code = '010' and rdNo.Current_Wr_Id is null  then 1 else 0 end) hasLanshou,
+						                     sum(case when sc.code = '050' and rdNo.Current_Wr_Id is null  then 1 else 0 end) inTheTransif,
+						                     sum(case when rdNo.Current_Wr_Id is not null then 1 else 0 end) exceptionPiece,
+						                     sum(case when sc.code in('001','010','050') or rdNo.Current_Wr_Id is not null  then 1 else 0 end) totalPiece
+						                from t_ooc_rd_trans_no         rdNo,
+						                     t_ooc_trans_route_status  rds,
+						                     t_ooc_rd_route_status_ref rdRef,
+						                     t_sys_route_status_code   sc,
+						                     T_WH_PHYSICAL_WAREHOUSE wh,
+						                     (select ar.province from t_sys_radar_area ar group by ar.province) raaa,
+						                     (select arr.city from t_sys_radar_area arr group by arr.city) ct,
+						                     t_bi_channel ch,
+						                     T_MA_TRANSPORTATOR tr
+						               where rdNo.Current_Route_Status = rds.id
+						                 and rds.ref_id = rdRef.id
+						                 and rdRef.sys_rsc_id = sc.id
+						                 and rdNo.Pwh_Id=wh.id 
+						                 and ct.city=rdNo.Destination_City
+						                 and ch.code=rdNo.Owner
+						                 and tr.exp_code=rdNo.Lpcode
+						                 and raaa.province=rdNo.Destination_Province
+                             #if($province)
+                              and rdNo.Destination_Province = :province
+                            #end
+                            #if($lpcode)
+                                 and rdNo.Lpcode = :lpcode 
+                            #end 
+                            #if($owner)
+                                 and ch.name = :owner 
+                            #end
+                            #if($exceprtionStatus)
+                                and sc.code = :exceprtionStatus
+                                and rdNo.Current_Wr_Id is null 
+                            #else
+                              and rdNo.Current_Wr_Id is not null 
+                            #end  
+						                 group by tr.name,wh.name,tr.exp_code)  detail
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 异常件信息 -->
+	<bean id="RadarTransNo.findAllExpressExceptInfo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select detail.lpName,detail.lOverTime,detail.pOverTime,detail.customerReason,detail.changeL,detail.rejects,detail.spillage,detail.shortage,detail.totalPiece
+                          from
+                      (select tr.name lpName,
+                             sum(case when err.code='E00001' then 1 else 0 end ) lOverTime,
+                             sum(case when err.code='E00002' then 1 else 0 end ) pOverTime,
+                             sum(case when err.code='E01001' then 1 else 0 end ) customerReason,
+                             sum(case when err.code='E02001' then 1 else 0 end ) changeL,
+                             sum(case when err.code='E03001' then 1 else 0 end ) rejects,
+                             sum(case when err.code='E03002' then 1 else 0 end ) spillage,
+                             sum(case when err.code='E03003' then 1 else 0 end ) shortage,
+                             sum(case when err.code in ('E00001','E00002','E01001','E02001','E03001','E03002','E03003') then 1 else 0 end ) totalPiece
+                             from t_ooc_rd_trans_no       rdNo,
+                                  T_WH_PHYSICAL_WAREHOUSE wh,
+                                  T_OOC_RD_WARNING_REASON son,
+                                  T_SYS_RD_ERROR_CODE err,
+                                  (select ar.province from t_sys_radar_area ar group by ar.province) raaa,
+                                  (select arr.city from t_sys_radar_area arr group by arr.city) ct,
+                                   t_bi_channel ch ,
+                                  T_MA_TRANSPORTATOR      tr
+                            where tr.exp_code = rdNo.Lpcode
+                              and rdNo.Pwh_Id = wh.id
+                              and raaa.province=rdNo.Destination_Province
+                              and rdNo.Current_Wr_Id=son.id
+                              and son.rec_id=err.id 
+                              and ch.code=rdNo.Owner
+                              and ct.city=rdNo.Destination_City
+                              and rdNo.Current_Wr_Id is not null   
+                           #if($province)
+                          and rdNo.Destination_Province = :province
+                          #end
+                          #if($lpcode)
+                          and rdNo.Lpcode = :lpcode 
+                          #end
+                          #if($owner)
+                                 and ch.name = :owner 
+                            #end 
+                          #if($warehouseName)
+                          and wh.name= :warehouseName
+                          #end   
+                        group by tr.name) detail
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<!-- 初始化省 -->
+	<bean id="RadarTransNo.getExpressProvince" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+			select ar.province as destinationProvince from t_ooc_rd_trans_no rd,t_sys_radar_area ar where rd.destination_province=ar.province group by ar.province
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 初始化店铺-->
+	<bean id="RadarTransNo.getExpressOwner" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select distinct ch.name owner from T_OOC_RD_TRANS_NO rd,t_bi_channel ch where ch.code=rd.owner				
+					]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 初始发货仓-->
+	<bean id="RadarTransNo.getexpressWarehouse" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+             	  select distinct wa.id,wa.name as warehouseName from t_ooc_rd_trans_no rd,T_WH_PHYSICAL_WAREHOUSE wa where  rd.pwh_id=wa.id
+					]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="RadarTransNo.updateRadarTransNoStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_OOC_RD_TRANS_NO set status = :status ,last_modify_time=SYSDATE where express_code = :expressCode
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="RadarTransNo.updateRadarTransNoTakingTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_OOC_RD_TRANS_NO set TAKING_TIME = :takingTime ,last_modify_time=SYSDATE where express_code = :expressCode
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTransNo.updateRdTransNoWarning" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_OOC_RD_TRANS_NO set CURRENT_WR_ID = :warningReason,
+					#if($lvId)
+						      CURRENT_WRL_ID= :lvId,
+					#else
+						      CURRENT_WRL_ID = null,
+					#end
+						last_modify_time=SYSDATE where express_code = :expressCode
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="TransRouteStatus.updateRouteStatusWarningReason" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_OOC_TRANS_ROUTE_STATUS set WR_ID = :wrId ,
+					#if($remark)
+						      remark= :remark,
+					#else
+						      remark= null,
+					#end
+					#if($userId)
+						      C_MODIFY_USER_ID = :userId,
+					#else
+						      C_MODIFY_USER_ID = null,
+					#end
+						      
+						last_modify_time=SYSDATE where id in (select tr.current_route_status from T_OOC_RD_TRANS_NO tr where tr.express_Code=:expressCode)
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTransNo.updateRdTransNoRouteStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_OOC_RD_TRANS_NO set CURRENT_ROUTE_STATUS = :routeStatusId ,
+						last_modify_time=SYSDATE 
+						where express_code = :expressCode
+							  and CREATE_TIME > systimestamp-30
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTransNo.findRouteStatusByTimeAndExpressCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						 select max(trs.id)
+				         from T_OOC_TRANS_ROUTE_STATUS trs
+				         where trs.tr_id in (select tr.id
+				                               from t_ooc_trans_route tr
+				                              where tr.express_code = :expressCode
+				                                    and tr.last_modify_time >systimestamp-30)
+				                and trs.last_modify_time >systimestamp-30
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarRouteStatusRef.findRadarStatusRefByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select rrsr.id,ma.EXP_CODE expCode,ma.name logisticsName,
+						       rsc.code,rsc.name describe,rrsr.remark,rrsr.sys_rsc_id sysRscId,rrsr.status
+						from T_OOC_RD_ROUTE_STATUS_REF rrsr
+						     join T_SYS_ROUTE_STATUS_CODE rsc on rrsr.sys_rsc_id=rsc.id
+						     join T_MA_TRANSPORTATOR ma on rrsr.tp_id=ma.id
+						where (rrsr.status!=10 or rrsr.status is null)
+					#if($logisticsCode)
+						      and ma.EXP_CODE= :logisticsCode
+					#end
+					#if($sysRscId)
+						      and rrsr.SYS_RSC_ID= :sysRscId
+					#end
+					#if($describe)
+						      and rsc.NAME like '%$describe%'
+					#end
+					
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="RadarRouteStatusRef.updateRadarStatusRefStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_OOC_RD_ROUTE_STATUS_REF set status = :status 
+						where 
+					#if($ids)
+					      id in (
+					   	  	#foreach($id in $ids)
+								$id,
+							#end
+							-1
+					   	  )
+					#end	
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="RadarRouteStatusRef.updateRadarStatusRefRemark" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_OOC_RD_ROUTE_STATUS_REF set remark = :remark 
+						where 
+					#if($ids)
+					      id in (
+					   	  	#foreach($id in $ids)
+								$id,
+							#end
+							-1
+					   	  )
+					#end	
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="RadarRouteStatusRef.findRadarRouteStatusRefByExpressStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select rrsr.id,rsc.code
+					from T_OOC_RD_ROUTE_STATUS_REF rrsr
+					     join T_SYS_ROUTE_STATUS_CODE rsc on rrsr.sys_rsc_id=rsc.id
+					     join T_MA_TRANSPORTATOR ma on ma.id = rrsr.tp_id
+					where rsc.id in (
+					          select rsr.sys_rsc_id
+					          from  T_OOC_ROUTE_STATUS_ROLE rsr 
+					          where rsr.code=:expressStatus
+					      )
+					      and ma.exp_code=:logisticsCode
+					      and rrsr.status=1
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarRouteStatusRef.findRouteStatusRoleByExpressStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select rsr.id,rsc.code
+					from  T_OOC_ROUTE_STATUS_ROLE rsr,T_MA_TRANSPORTATOR ma,T_SYS_ROUTE_STATUS_CODE rsc
+					where rsr.code = :expressStatus
+					   and ma.id=rsr.t_id
+					   and rsr.sys_rsc_id=rsc.id
+					   and ma.exp_code = :logisticsCode
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarRouteStatusRef.findRadarRouteStatusRefByCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select rrsr.id
+					from T_OOC_RD_ROUTE_STATUS_REF rrsr
+					     join T_SYS_ROUTE_STATUS_CODE rsc on rrsr.sys_rsc_id=rsc.id
+					     join T_MA_TRANSPORTATOR ma on ma.id = rrsr.tp_id
+					where ma.exp_code=:logisticsCode
+						  and rsc.code=:code
+					      and rrsr.status=1
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="SysRouteStatusCode.findRouteStatusCodeByParam" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select srsc.id,srsc.code,srsc.name,srsc.description 
+						from T_SYS_ROUTE_STATUS_CODE srsc	
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+
+	<bean id="SysRadarArea.findRadarAreaByID" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sra.* 
+						from t_sys_radar_area sra
+						     
+						where sra.id in (
+							''
+			               	#foreach($id in $ids)
+			               		,'$id'
+			               	#end
+						)
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SysRadarArea.updateRadarAreaStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_sys_radar_area sra set sra.status = :status 
+					where sra.id in (
+							'-1'
+			               	#foreach($id in $ids)
+			               		,'$id'
+			               	#end
+						)
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SysRadarArea.findStatusByArea" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sra.status as status from t_sys_radar_area sra where 
+					sra.province = :province
+					 #if($city)
+	                       and sra.city = '$city'
+	                 #else
+	                 	   and sra.city is null
+	                  #end
+	                 and sra.status = '1'
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SysRadarArea.findRadarAreaByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sra.id, sra.province, sra.city 
+					from t_sys_radar_area sra 
+					where 
+					 sra.id is not null
+					 #if($province)
+						   and sra.province like '%$province%'
+	                  #end
+					 #if($city)
+	                       and sra.city like '%$city%'
+	                  #end
+	                 and sra.status = '1'
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="RadarTimeRule.findPhyWarehouseByLpcode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						phy.id as phyid,
+						phy.name as phyName  
+						from T_WH_PHYSICAL_WAREHOUSE phy
+						where phy.id in
+						(
+								 select distinct t.phy_wh_id 
+								 from t_wh_phy_warehouse_ref t 
+								 where t.ou_wh_id in 
+								 (
+								   select r.wh_ou_id from t_wh_warehouse_trans_ref r where r.trans_id = :id
+								 )
+						)
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="SysRadarArea.findRadarAreaProvince" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							select
+                 					  distinct t.province as province
+									from T_SYS_RADAR_AREA  t 
+									where t.status = 1
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="SysRadarArea.findRadarAreaCity" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select
+								t.city as city 
+								from T_SYS_RADAR_AREA t 
+								where 
+								t.province = :province 
+								and t.status = 1
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="PhysicalWarehouse.findPhysicalWarehouseByWhOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select pwh.id as id,
+						pwh.name as name
+						from T_WH_PHYSICAL_WAREHOUSE pwh join t_wh_phy_warehouse_ref pwhr
+						on pwh.id = pwhr.phy_wh_id
+						where pwhr.ou_wh_id = '$ouId'
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="SysRadarArea.findRadarAreaByProvinceCity" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sra.* from t_sys_radar_area 
+					sra where 1=1
+					 #if($province)
+						   and sra.province ='$province'
+	                  #end
+					 #if($city)
+	                       and sra.city = '$city'
+	                  #end
+	                 and sra.status = 1
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="SysRadarArea.findRadarAreaByVagueProvinceCity" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sra.* from t_sys_radar_area 
+					sra where 1=1
+					 #if($province)
+						   and sra.province like '$province%'
+	                  #end
+					 #if($city)
+	                       and sra.city like '$city%'
+	                  #end
+	                 and sra.status = 1
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<bean id="TransportService.getTransportServiceByTTE" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+							tb.id as id
+							from T_BI_TRANSPORT_SERVICE tb,
+							(
+							     select t.id as id from t_ma_transportator t 
+							     where 
+							     t.exp_code = :expcode
+							) t 
+							where 
+							tb.trans_id = t.id 
+							and tb.status = 1  
+							and tb.type = :type
+							and tb.time_type = :timetype  
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="RadarTimeRule.findRadarTimeRule" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select
+									tr.id as id,
+									ma.name as lpCode,
+									decode(ts.type,1,'普通',4,'航空',7,'电商特惠') as wlServiceString,
+									decode(ts.time_type,1,'普通',3,'及时达',5,'当日达',6,'次日达') as dateTimeTypeString,
+									pw.name as phyName,
+									sra.province as province,
+									sra.city as city,
+									tr.standard_date as dateTime,
+									tr.over_taking_time as overTakingTime,
+									u.user_name as userName
+									from 
+									T_OOC_RD_TIME_RULE tr 
+									left join T_SYS_RADAR_AREA sra on tr.sra_id = sra.id
+									left join T_AU_USER u on tr.create_user_id = u.id ,
+									T_WH_PHYSICAL_WAREHOUSE pw,
+									T_BI_TRANSPORT_SERVICE ts,
+									t_ma_transportator ma  
+									where 1=1
+									and tr.pwh_id = pw.id 
+									--and tr.create_user_id = u.id 
+									and tr.ts_id = ts.id 
+									and ma.id = ts.trans_id 
+									#if($lpcode)
+										and ma.exp_code = :lpcode
+									#end
+									#if($wlService)
+										and ts.type = :wlService
+									#end
+									#if($dateTimeType)
+										and ts.time_type = :dateTimeType
+									#end
+									#if($fjWh)
+										and pw.id = :fjWh
+									#end
+									#if($province)
+										and sra.province = :province
+									#end
+									#if($city)
+										and sra.city = :city
+									#end
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="SysRadarErrorCode.findRdErrorCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select
+								t.id as id,
+								t.name as name,
+								t.code as code 
+								from T_SYS_RD_ERROR_CODE t
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="SysRadarWarningLv.findRdWarningLv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select
+								t.id as id,
+								t.name as name,
+								t.lv as lv 
+								from T_SYS_RD_WARNING_LV t
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="RadarWarningReason.findRadarWarningReason" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select
+									t.id as id,
+									t.name as name,
+									lv.name as lvname,
+									t.remark as remark,
+									u.user_name as username 
+									from 
+									T_OOC_RD_WARNING_REASON t,
+									T_SYS_RD_WARNING_LV lv,
+									T_AU_USER u 
+									where t.status = 1 
+									and t.sw_id = lv.id  
+									and t.create_user_id = u.id 
+									#if($eid)
+										and t.rec_id = :eid 
+									#end
+									#if($lvid)
+										and t.sw_id = :lvid 
+									#end
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="SysRadarWarningLv.findRdWarningLvByLv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+								l.id as id,
+								l.name as name,
+								l.lv as lv 
+								from 
+								(
+								  select l.lv as lv from 
+								  T_OOC_RD_WARNING_REASON t,
+								  T_SYS_RD_WARNING_LV l 
+								  where t.id  = :id  
+								  and t.sw_id = l.id
+								) t,
+								T_SYS_RD_WARNING_LV l 
+								where 
+								l.lv >= t.lv
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="RadarWarningReasonLine.findRadarWarningReasonLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+								t.id as id,
+								l.name as lvCode,
+								t.warning_hour as warningHour,
+								t.memo as memo 
+								from 
+								t_Ooc_Rd_Warning_Reason_Line t,
+								T_SYS_RD_WARNING_LV l 
+								where 
+								t.wr_id = :id  
+								and t.sw_id = l.id 
+								order by l.lv asc 
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTransNo.findExpressInfoByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						radar.id as id,
+						radar.taking_time as takingTime,
+						radar.express_code as expressCode,
+           	 			transportator.full_name as lpCode,
+           	 			transportator.id as lpId,
+           				pwh.name as pwhName,
+           				pwh.id as pwhId,
+						radar.owner as owner,
+						radar.p_code as pcode,
+						radar.order_code as orderCode,
+						code.name as status,
+			            wr.name as warningType,
+			            lv.name as warningLv,
+			            radar.destination_province as province,
+						radar.destination_city as city,
+						radar.trans_time_type as timeType
+					from 
+						t_ooc_rd_trans_no radar
+						inner join t_wh_physical_warehouse pwh
+						on radar.pwh_id = pwh.id
+						left join t_ma_transportator transportator 
+						on radar.lpcode  = transportator.exp_code
+						left join t_ooc_rd_warning_reason wr
+						on radar.current_wr_id = wr.id
+						left join t_sys_rd_warning_lv lv
+            			on radar.current_wrl_id = lv.id 
+			            left join t_ooc_trans_route_status status
+			            on radar.current_route_status = status.id
+			            left join t_ooc_rd_route_status_ref ref
+			            on status.ref_id = ref.id
+			            left join t_sys_route_status_code code
+			            on ref.sys_rsc_id = code.id
+					where 
+						radar.id is not null
+						#if($lpCode)
+							and transportator.full_name =:lpCode
+						#end
+						#if($expressCode)
+							and radar.express_code =:expressCode
+						#end
+						#if($pcode)
+							and radar.p_code = :pcode
+						#end
+						
+						#if($pwhName)
+						 	and pwh.name = :pwhName
+						#end
+						#if($owner)
+						 	and radar.owner = :owner
+						#end
+						#if($province)
+							and radar.destination_province = :province
+						#end
+						#if($city)
+							and radar.destination_city = :city
+						#end
+						#if($status)
+							and code.name = :status
+						#end
+						#if($warningType)
+							and wr.name = :warningType
+						#end
+						#if($warningLv)
+							and lv.name = :warningLv
+						#end
+						#if($orderCode)
+							and radar.order_code = :orderCode
+						#end
+						#if($startDate)
+							and radar.taking_time > :startDate
+						#else
+							and radar.create_time > sysdate - 30
+						#end
+						#if($endDate)
+							and radar.taking_time < :endDate
+						#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTimeRule.findRadarTimeRuleByPwhIdAreaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select 
+						rule.id as id,
+						rule.standard_date as standardDate,
+						rule.over_taking_time as overTakingTime
+					from t_ooc_rd_time_rule rule,
+					T_BI_TRANSPORT_SERVICE ts
+					where 
+						rule.ts_id=ts.id
+						and rule.pwh_id = :expressPwhId
+						#if($sraId)
+							and rule.sra_id = :sraId
+						#end
+						and ts.trans_id = :tsId
+						and ts.time_type = :timeType
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransRoute.findTransRouteByExpressCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select 
+						tr.opcode as opcode,
+						tr.operate_time as operateTime,
+						tr.message as message
+					from t_ooc_trans_route tr 
+					where
+						tr.express_code = :expressCode
+					
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTransNo.findRadarTransNoById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select 
+						rd.receiver as receiver,
+						rd.mobile as mobile,
+						rd.telephone as telephone,
+						rd.address as address,
+						rd.order_code as orderCode
+					from t_ooc_rd_trans_no rd
+					where 
+						rd.id = :id
+					
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransRouteStatus.findOrderDetailByOrderCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select 
+						sku.name as name,
+						sku.key_properties as keyProperties,
+						sku.code as code,
+						sku.list_price as listPrice, 
+						sku.bar_code as barCode, 
+						sta.sku_Qty as count
+					from 
+						t_wh_sta_line line,
+						t_wh_sta sta,
+						T_BI_INV_SKU sku
+					where 
+						line.sta_id = sta.id
+						and sku.id = line.sku_id
+     					and sta.code= :orderCode
+					
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransRouteStatus.findLogisticsDetailByExpressCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select 
+						rd.receiver as receiver,
+						rd.mobile as mobile,
+						rd.address as address 
+					from t_ooc_rd_trans_no rd 
+					where 
+						rd.id =  :id
+					
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="TransRouteStatus.findExpressDetailByExpressCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select 
+						status.id as id,
+						status.creare_time as updateTime, 
+						code.name as status,
+						status.remark as remark,
+						wr.name as warningType,
+						u.user_name as modifyUser
+					from 
+						t_ooc_trans_route tr 
+						inner join t_ooc_trans_route_status status on tr.id = status.tr_id 
+						left join t_ooc_rd_route_status_ref ref on status.ref_id = ref.id
+						left join t_sys_route_status_code code on ref.sys_rsc_id = code.id
+						left join t_ooc_rd_warning_reason wr on status.wr_id = wr.id
+						left join t_au_user u on u.id = status.c_modify_user_id
+					where 
+						tr.express_code = :expressCode
+						order by status.id
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<bean id="TransRouteStatus.findExpressWarningByExpressCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select 
+						no.current_route_status as id,
+						wr.name as warningType, 
+						lv.name as warningLv,
+						u.user_name as modifyUser
+					from t_ooc_rd_trans_no no
+						left join t_ooc_rd_warning_reason wr on no.current_wr_id = wr.id
+						left join t_sys_rd_warning_lv lv on no.current_wrl_id = lv.id
+						left join t_ooc_trans_route_status status on no.current_route_status = status.id
+						left join t_au_user u on u.id = status.c_modify_user_id
+					where no.express_code = :expressCode
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarTimeRule.getRadarTimeRuleById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select
+									tr.id as id,
+									ma.exp_code as lpCode,
+									ts.type as wlService,
+									ts.time_type as dateTimeType,
+									pw.id as phyid,
+									sra.province as province,
+									sra.city as city,
+									tr.standard_date as dateTime,
+									tr.over_taking_time as overTakingTime
+									from 
+									T_OOC_RD_TIME_RULE tr left join T_SYS_RADAR_AREA sra on tr.sra_id = sra.id,
+									T_AU_USER u,
+									T_WH_PHYSICAL_WAREHOUSE pw,
+									T_BI_TRANSPORT_SERVICE ts,
+									t_ma_transportator ma  
+									where 1=1
+									and tr.pwh_id = pw.id 
+									and tr.create_user_id = u.id 
+									and tr.ts_id = ts.id 
+									and ma.id = ts.trans_id 
+									and tr.id = :id
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="RadarWarningReason.findRadarWarningReasonByName" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+			<![CDATA[
+					select wr.name 
+					from t_ooc_rd_warning_reason wr
+					where wr.name = :warningName
+					and wr.status = 1
+					
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="SysRadarErrorCode.findOrderErrorCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select
+						wr.id as id,
+						wr.name as name,
+						wr.code as code 
+					from t_ooc_rd_warning_reason wr
+             		where wr.status = 1
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="RadarTimeRule.checkRadarTimeRule" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+							t.id as id
+							from T_OOC_RD_TIME_RULE t 
+							where 
+							t.pwh_id = :pwhid
+							#if($sraid)
+								and t.sra_id = :sraid 
+							#end
+							#if($tsid)
+								and t.ts_id = :tsid 
+							#end
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

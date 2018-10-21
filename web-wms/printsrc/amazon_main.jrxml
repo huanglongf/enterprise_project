@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="amazon" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="15" >
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="466"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.callouts" value="##Fri Mar 29 18:03:18 CST 2013"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<parameterDescription><![CDATA[SUBREPORT_DIR]]></parameterDescription>
+		<defaultValueExpression><![CDATA["jasperprint/amazon_detail.jasper"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logImage" class="java.lang.String">
+		<parameterDescription><![CDATA[logImage]]></parameterDescription>
+		<defaultValueExpression><![CDATA["print_img/amazon_logo.jpg"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="xPath">
+		<![CDATA[/NameList/GoodsDetail]]>
+	</queryString>
+	<field name="lines" class="java.util.List">
+		<fieldDescription><![CDATA[lines]]></fieldDescription>
+	</field>
+	<field name="orderDate" class="java.lang.String"/>
+	<field name="soOutCode" class="java.lang.String"/>
+	<field name="code" class="java.lang.String"/>
+	<field name="totalAmount" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="receiverAddress" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="isSeedInvoice" class="java.lang.Boolean"/>
+	<field name="transferFee" class="java.lang.String"/>
+	<field name="batchNo" class="java.lang.String"/>
+	<field name="soCode" class="java.lang.String"/>
+	<group name="orderCode" isStartNewPage="true" isResetPageNumber="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{code}]]></groupExpression>
+		<groupHeader>
+			<band height="18">
+				<staticText>
+					<reportElement x="758" y="1" width="43" height="14" />
+					<textElement textAlignment="Right">
+						<font fontName="微软雅黑" size="10"/>
+					</textElement>
+					<text><![CDATA[数量]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="16" width="802" height="2" />
+				</line>
+				<staticText>
+					<reportElement x="23" y="1" width="93" height="14" />
+					<textElement>
+						<font fontName="微软雅黑" size="10"/>
+					</textElement>
+					<text><![CDATA[商品名称]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="676" y="1" width="83" height="14" />
+					<textElement>
+						<font fontName="微软雅黑" size="10"/>
+					</textElement>
+					<text><![CDATA[货号位]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="1" width="23" height="14" />
+					<textElement>
+						<font fontName="微软雅黑" size="10"/>
+					</textElement>
+					<text><![CDATA[序号]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="0" width="802" height="2" />
+				</line>
+			</band>
+		</groupHeader>
+	</group>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="121" splitType="Stretch">
+			<staticText>
+				<reportElement x="220" y="2" width="50" height="14" />
+				<textElement>
+					<font fontName="微软雅黑" size="10"/>
+				</textElement>
+				<text><![CDATA[定购日期：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="14" width="50" height="14" />
+				<textElement>
+					<font fontName="微软雅黑" size="10"/>
+				</textElement>
+				<text><![CDATA[发货仓库：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="38" width="40" height="14" />
+				<textElement>
+					<font fontName="微软雅黑" size="10"/>
+				</textElement>
+				<text><![CDATA[订单号：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="50" width="70" height="14" />
+				<textElement>
+					<font fontName="微软雅黑" size="10"/>
+				</textElement>
+				<text><![CDATA[是否已开发票：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="62" width="60" height="14" />
+				<textElement>
+					<font fontName="微软雅黑" size="10"/>
+				</textElement>
+				<text><![CDATA[收货人姓名：]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="525" y="52" width="272" height="48" />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="3" barHeight="70" evaluationTime="Band">
+					<jr:codeExpression><![CDATA[$F{soCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="269" y="2" width="163" height="14" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="269" y="14" width="163" height="14" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA["库房"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="269" y="26" width="163" height="14" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="259" y="38" width="173" height="14" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{soOutCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="50" width="209" height="14" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{isSeedInvoice} == null ? "否" : ($F{isSeedInvoice} ? "是" : "否")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="74" width="323" height="42" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA["地址："+$F{receiverAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="543" y="21" width="259" height="14" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA["姓名："+$F{receiver}+"，电话："+$F{telephone}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="220" y="26" width="50" height="14" />
+				<textElement>
+					<font fontName="微软雅黑" size="10"/>
+				</textElement>
+				<text><![CDATA[发货单号：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="279" y="62" width="153" height="14" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="68" y="100" width="82" height="16" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<text><![CDATA[亚马逊发货单]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="2" width="219" height="87" />
+				<imageExpression><![CDATA[$P{logImage}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="543" y="35" width="259" height="14" />
+				<textElement>
+					<font fontName="微软雅黑"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiverAddress}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="525" y="96" width="272" height="20" />
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{soCode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="802" height="30" />
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="26" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="802" height="2" />
+			</line>
+			<staticText>
+				<reportElement x="0" y="1" width="802" height="25" />
+				<textElement>
+					<font fontName="微软雅黑" size="8"/>
+				</textElement>
+				<text><![CDATA[非常感谢您在亚马逊网站(Z.cn)购物，我们期待您的再次光临！
+如果您想了解我们的自助退货货、商品验收、退换货政策/流程或者须要联系亚马逊客服中心，请点击网站首页“帮助”进行查看。]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="802" height="2" />
+			</line>
+			<componentElement>
+				<reportElement x="0" y="2" width="154" height="18" />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="8" barHeight="120">
+					<jr:codeExpression><![CDATA[$F{batchNo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField>
+				<reportElement x="151" y="1" width="153" height="14" />
+				<textElement>
+					<font fontName="微软雅黑" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{batchNo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

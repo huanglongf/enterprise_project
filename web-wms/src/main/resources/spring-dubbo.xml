@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="${dubbo.app.name}" />
+
+	<!-- 使用multicast广播注册中心暴露服务地址 -->
+	<!-- <dubbo:registry address="multicast://224.5.6.7:1234" /> -->
+
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry address="${dubbo.registry.address}" />
+
+	<!-- 用dubbo协议在20880端口暴露服务 -->
+<!-- 	<dubbo:protocol id="dubbo" name="dubbo" port="${dubbo.app.port}" /> -->
+	
+	<dubbo:consumer timeout="350000" check="true" version="${dubbo.default.version}" cluster="failfast" loadbalance="random"/>
+
+	<dubbo:monitor address="${dubbo.monitor.address}" />
+
+	<dubbo:reference cluster="failfast" url="${dubbo.local.server}" id="transOnLineFactory" interface="com.jumbo.wms.manager.expressDelivery.logistics.TransOnLineFactory" />
+	<dubbo:reference url="${dubbo.local.server}"  id="channelInsuranceManager" cluster="failfast" interface="com.jumbo.wms.manager.expressDelivery.ChannelInsuranceManager" />
+
+	<dubbo:reference url="${dubbo.local.server}"  id="odoManager" cluster="failfast" interface="com.jumbo.wms.manager.odo.OdoManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="checkListManager" cluster="failfast" interface="com.jumbo.wms.manager.checklist.CheckListManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="scanSkuRecordManager" cluster="failfast" interface="com.jumbo.wms.manager.operationcenter.ScanSkuRecordManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="secKillSkuManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.SecKillSkuManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="skuSizeConfigManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.SkuSizeConfigManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="pickingListPrintManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.PickingListPrintManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="bocInterfaceManager" cluster="failfast" interface="com.jumbo.wms.manager.boc.BocInterfaceManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="checkOutBoundManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.CheckOutBoundManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="staPrintManager" cluster="failfast" interface="com.jumbo.wms.manager.print.StaPrintManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="whReplenishManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WhReplenishManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="packageSkuManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.PackageSkuManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="sfOrderTaskManager" cluster="failfast" interface="com.jumbo.wms.manager.task.sforder.SfOrderTaskManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="createPickingListManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.CreatePickingListManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="godivaManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.vmi.godivaData.GodivaManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="starbucksManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.StarbucksManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="warehouseReturnManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WarehouseReturnManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="idsManagerProxy" cluster="failfast" interface="com.jumbo.webservice.ids.manager.IdsManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="taskSfManager" cluster="failfast" interface="com.jumbo.wms.manager.task.TaskSfManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="taskSfTwManager" cluster="failfast" interface="com.jumbo.wms.manager.task.sf.tw.TaskSfTwManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="stoOrderTaskManager" cluster="failfast" interface="com.jumbo.wms.manager.task.stoorder.StoOrderTaskManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="specialSkuManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.SpecialSkuManager" />
+<!-- 	<dubbo:reference url="${dubbo.local.server}"  id="afManagerImpl" cluster="failfast" interface="com.jumbo.wms.manager.af.AFManager" />
+ -->	
+ 	<dubbo:reference url="${dubbo.local.server}"  id="aFManager" cluster="failfast" interface="com.jumbo.wms.manager.af.AFManager" />
+ 	<dubbo:reference url="${dubbo.local.server}"  id="transSuggestManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.trans.TransSuggestManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="transportServiceManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.TransportServiceManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="skuTagManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.SkuTagManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="transAreaGroupManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.TransAreaGroupManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="transRoleManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.TransRoleManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="channelPostPrintConfManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.ChannelPostPrintConfManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="autoPickingListRoleManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.AutoPickingListRoleManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="channelGroupManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.ChannelGroupManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="prePackagedSkuRefManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.PrePackagedSkuRefManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="reasonTypeManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.ReturnReasonTypeManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="addCounterMaintainManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.AddCounterMaintainManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="pdaManager" cluster="failfast" interface="com.jumbo.webservice.pda.manager.PdaManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="pdaOperationManager" cluster="failfast" interface="com.jumbo.webservice.pda.manager.PdaOperationManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="warehouseOutBoundManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WareHouseOutBoundManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="authorizationManager" cluster="failfast" interface="com.jumbo.wms.manager.authorization.AuthorizationManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="dropDownListManager" cluster="failfast" interface="com.jumbo.wms.manager.DropDownListManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="menuManager" cluster="failfast" interface="com.jumbo.wms.manager.baseinfo.MenuManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="systemManager" cluster="failfast" interface="com.jumbo.wms.manager.system.SystemManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="baseinfoManager" cluster="failfast" interface="com.jumbo.wms.manager.baseinfo.BaseinfoManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="chooseOptionManager" cluster="failfast" interface="com.jumbo.wms.manager.system.ChooseOptionManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="transactionTypeManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.TransactionTypeManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="wareHouseManagerExe" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WareHouseManagerExe" />
+	<dubbo:reference url="${dubbo.local.server}"  id="wareHouseManagerExecute" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WareHouseManagerExecute" />
+	<dubbo:reference url="${dubbo.local.server}"  id="wareHouseManagerQuery" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WareHouseManagerQuery" />
+	<dubbo:reference url="${dubbo.local.server}"  id="wareHouseManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WareHouseManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="rtwDieKingLineManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.RtwDieKingLineManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="wareHouseManagerCancel" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WareHouseManagerCancel" />
+	<dubbo:reference url="${dubbo.local.server}"  id="vmiRtoManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.VMIRtoManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="inventoryOccupyManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.InventoryOccupyManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="operationUnitManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.OperationUnitManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="pickingListManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.PickingListManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="pickingListPackageManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.PickingListPackageManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="skuSnManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.SkuSnManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="wareHouseManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WareHouseManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="whChannelManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.ChannelManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="channelRefManager" cluster="failfast" interface=" com.jumbo.wms.manager.channel.ChannelCombineRefManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="reportManager" cluster="failfast" interface="com.jumbo.wms.manager.report.ReportManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="wareHouseLocationManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WareHouseLocationManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="espOrderManager" cluster="failfast" interface="com.jumbo.wms.manager.vmi.espData.ESPOrderManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="bachBatchReceivingManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.BatchReceivingManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="inOutBoundManager" cluster="failfast" interface="com.jumbo.webservice.biaogan.manager.InOutBoundManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="nikeOrderManager" cluster="failfast" interface="com.jumbo.webservice.nike.manager.NikeOrderManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="whmanagerNotTransactional" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WhmanagerNotTransactional" />
+	<dubbo:reference url="${dubbo.local.server}"  id="idsManager" cluster="failfast" interface="com.jumbo.webservice.ids.manager.IdsManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="k3Executor" cluster="failfast" interface="com.jumbo.wms.manager.task.TaskManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="outsourcingWHManager" cluster="failfast" interface="com.jumbo.webservice.outsourcingWH.manager.OutsourcingWHManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="staCancelManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.StaCancelManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="taskManagerProxy" cluster="failfast" interface="com.jumbo.wms.daemon.TaskManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="pdaTaskManager" cluster="failfast" interface="com.jumbo.wms.manager.task.pda.PdaTaskManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="mqManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.mq.MqManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="coachParseDataManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.vmi.coachData.CoachParseDataManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="excelReadManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.excel.ExcelReadManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="excelValidateManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.excel.ExcelValidateManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="excelWriterManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.excel.ExcelWriterManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="skuCategoryManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.SkuCategoryManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="skuModifyLogManager" cluster="failfast" interface="com.jumbo.wms.manager.baseinfo.SkuModifyLogManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="channelManager" cluster="failfast" interface="com.jumbo.wms.manager.channel.ChannelManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="transRoleAccordManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.TransRoleAccordManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="outboundInfoManager" cluster="failfast" interface="com.jumbo.wms.manager.outbound.OutboundInfoManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="whBoxInboundManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.WhBoxInboundManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="transOlManager" cluster="failfast" interface="com.jumbo.wms.manager.expressDelivery.TransOlManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="transOlManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.expressDelivery.TransOlManagerProxy" />
+	<dubbo:reference url="${dubbo.local.server}"  id="skuManager" cluster="failfast" interface="com.jumbo.wms.manager.sku.SkuManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="transManager" cluster="failfast" interface="com.jumbo.wms.manager.expressDelivery.TransManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="warehousePrintData" cluster="failfast" interface="com.jumbo.wms.manager.print.data.WarehousePrintData" />
+	<dubbo:reference url="${dubbo.local.server}"  id="shopStoreInfoManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.ShopStoreInfoManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="msgToWcsManager" cluster="failfast" interface="com.jumbo.wms.manager.automaticEquipment.MsgToWcsManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="printCustomizeManager" cluster="failfast" interface="com.jumbo.wms.manager.print.PrintCustomizeManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="customsDeclarationManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.CustomsDeclarationManager" />
+	
+	<dubbo:reference url="${dubbo.local.server}"  id="expressStatusCodeManager" cluster="failfast" interface="com.jumbo.wms.manager.expressRadar.ExpressStatusCodeManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="sysRouteStatusCodeManager" cluster="failfast" interface="com.jumbo.wms.manager.expressRadar.SysRouteStatusCodeManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="radarAreaManager" cluster="failfast" interface="com.jumbo.wms.manager.expressRadar.RadarAreaManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="expressOocRadarManager" cluster="failfast" interface="com.jumbo.wms.manager.expressRadar.ExpressOocRadarManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="consumptiveMaterialUseQueryCommandManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.ConsumptiveMaterialUseQueryCommandManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="expressOrderQueryManager" cluster="failfast" interface="com.jumbo.wms.manager.expressRadar.ExpressOrderQueryManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="snManager" cluster="failfast" interface="com.jumbo.wms.manager.sn.SnManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="schedulerTaskManager" cluster="failfast" interface="com.jumbo.wms.manager.system.SchedulerTaskManager"/>
+	<!-- 分区拣货 start-->
+	<dubbo:reference url="${dubbo.local.server}"  id="pickZoneEditManager" cluster="failfast" interface="com.jumbo.wms.manager.pickZone.PickZoneEditManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="fillInInvoiceManagerProxy" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.FillInInvoiceManagerProxy"  />
+	<dubbo:reference url="${dubbo.local.server}"  id="commonLogRecordManager" cluster="failfast" interface="com.jumbo.wms.manager.CommonLogRecordManager"  />
+	<!-- 分区拣货 end -->
+<!-- 	<dubbo:reference url="${dubbo.local.server}"  id="autoOutboundTurnboxManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.AutoOutboundTurnboxManager"  />
+ -->	
+	<!-- 索赔 start -->
+	<dubbo:reference url="${dubbo.local.server}"  id="compensationManager" cluster="failfast" interface="com.jumbo.wms.manager.compensation.CompensationManager" />
+	<!-- 索赔 end -->
+	
+	<!-- 系统监控 -->
+	<dubbo:reference url="${dubbo.local.server}"  id="monitorService" cluster="failfast" interface="com.baozun.monitor.bean.MonitorService" />
+	
+	<dubbo:reference url="${dubbo.local.server}"  id="pdaPickingManager" cluster="failfast" interface="com.jumbo.wms.manager.pda.PdaPickingManager" />
+	
+	<dubbo:reference url="${dubbo.local.server}"  id="pdaReceiveManager" cluster="failfast" interface="com.jumbo.wms.manager.pda.PdaReceiveManager" />
+	
+	<dubbo:reference url="${dubbo.local.server}"  id="pdaShelvesManager" cluster="failfast" interface="com.jumbo.wms.manager.pda.PdaShelvesManager" />
+	
+	<!-- Gucci -->
+	<dubbo:reference url="${dubbo.local.server}"  id="gucciManager" cluster="failfast" interface="com.jumbo.wms.manager.vmi.gucciData.GucciManager" />
+	
+	<!-- wms数据导出 -->
+	<dubbo:reference url="${dubbo.local.server}" id="wmsDataImportManager" check="false" interface="com.jumbo.wms.manager.wmsdataimport.WMSDataImportManager"/>
+	
+	<!-- ************************* 设备自动化 start ******************** -->
+	<dubbo:reference url="${dubbo.local.server}"  id="autoBaseInfoManager" cluster="failfast" interface="com.jumbo.wms.manager.automaticEquipment.AutoBaseInfoManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="autoOutboundTurnboxManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.AutoOutboundTurnboxManager" />
+	
+	<!-- ************************* 线程池维护 ******************** -->
+	<dubbo:reference url="${dubbo.local.server}"  id="threadUtilManager" cluster="failfast" interface="com.jumbo.wms.manager.thread.ThreadUtilManager" />
+	
+	<!-- ************************* 店铺维护 ******************** -->
+	<dubbo:reference url="${dubbo.local.server}"  id="priorityChannelOmsUtilManager" cluster="failfast" interface="com.jumbo.wms.manager.priorityChannelOms.PriorityChannelOmsUtilManager" />
+	
+	<!--************************* 设备自动化 end ***********************  -->
+	<dubbo:reference url="${dubbo.local.server}"  id="sfNextMorningConfigManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.SfNextMorningConfigManager" />
+	
+	<dubbo:reference url="${dubbo.local.server}"  id="hubWmsManager" cluster="failfast" interface="com.jumbo.wms.manager.hub2wms.HubWmsManager" />
+	
+	<!-- 调用HUB的dubbo servcie 接口- 自动化 -->
+	<dubbo:reference url="${dubbo.local.server}" id="hubWcsManager" cluster="failfast" interface="com.baozun.bizhub.manager.wcs.HubWcsManager" />
+	<dubbo:reference url="${dubbo.local.server}" id="adCheckManager" cluster="failfast" interface="com.jumbo.wms.manager.outbound.AdCheckManager" />	
+	<!-- queueStaManagerExecute-->
+	<dubbo:reference url="${dubbo.local.server}" id="queueStaManagerExecute" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.QueueStaManagerExecute" />
+	<!-- MQ切换开关 -->
+	<dubbo:reference url="${dubbo.local.server}" id="messageConfigManager" cluster="failfast" interface="com.jumbo.wms.manager.mq.MessageConfigManager" />
+	
+	<!-- 声明需要暴露的服务接口 -->
+	<dubbo:reference cluster="failfast" url="${dubbo.local.server}" id="taskOmsOutManager" interface="com.jumbo.wms.manager.task.TaskOmsOutManager" />
+	
+	<!--生成远程服务代理，可以和本地bean一样使用demoService -->
+	<!-- <dubbo:reference url="dubbo://localhost:20880"  id="demoManager" cluster="failfast" interface="com.baozun.bizhub.manager.DemoManager" cluster="failfast" loadbalance="consistenthash"/> -->
+
+	
+	<!-- 和本地bean一样实现服务 -->
+	<!-- <bean id="demoManager" class="com.baozun.bizhub.manager.DemoManagerImpl" /> -->
+
+	<!-- 扫描包中所有的方服务 -->
+	<!-- <dubbo:annotation package="com.baozun.bizhub.manager" /> -->
+
+	<!-- 声明需要暴露的优先发货城市配置服务接口 -->
+	<dubbo:reference url="${dubbo.local.server}"  id="priorityShippedCityConfigManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.PriorityShippedCityConfigManager" />
+	<dubbo:reference url="${dubbo.local.server}"  id="sendMqByPacAndToms" cluster="failfast" interface="com.jumbo.wms.manager.task.SendMqByPacAndTomsTask" />
+	<dubbo:reference url="${dubbo.local.server}"  id="sendMqTomsByMqLogTime" cluster="failfast" interface="com.jumbo.wms.manager.task.SendMqByPacAndTomsTask" />
+	
+	
+	<dubbo:reference url="${dubbo.local.server}"  id="baseQueryThreadPoolManager" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.BaseQueryThreadPoolManager"  />
+	<dubbo:reference url="${dubbo.local.server}"  id="lmisManager" cluster="failfast" interface="com.jumbo.wms.manager.lmis.LmisManager"  />
+	<dubbo:reference cluster="failfast" url="${dubbo.local.server}" id="newInventoryOccupyManager" interface="com.jumbo.wms.manager.pickZone.NewInventoryOccupyManager" />
+	
+	<dubbo:reference url="${dubbo.local.server}"  id="rfidManager" cluster="failfast" interface="com.jumbo.wms.manager.rfid.RfidManager"  />
+        <dubbo:reference url="${dubbo.local.server}"  id="distriButionAreaMagger" cluster="failfast" interface="com.jumbo.wms.manager.warehouse.DistriButionAreaManager" />
+</beans>

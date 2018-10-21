@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="510" pageHeight="277" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="510" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" >
+	<property name="ireport.zoom" value="1.3310000000000026"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="memo" class="java.lang.String">
+		<parameterDescription><![CDATA[memo]]></parameterDescription>
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<title>
+		<band height="277" splitType="Stretch">
+			<textField  isBlankWhenNull="true">
+				<reportElement  stretchType="RelativeToBandHeight" x="43" y="38" width="388" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Trade Gothic for Nike BdCn" size="13" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DEAR  "+$P{memo}+","]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

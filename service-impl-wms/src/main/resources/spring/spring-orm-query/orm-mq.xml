@@ -1,0 +1,12 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+	<named-query name="MqSkuPriceLog.findSendMqSkuPriceLog">
+		<query><![CDATA[select c from MqSkuPriceLog as c where c.msgBatchId is null and c.shopId = :shopId order by c.id asc]]></query>
+	</named-query>
+
+	<named-query name="MqMdPriceLog.findSendMqMdPriceLog">
+		<query><![CDATA[select c from MqMdPriceLog as c where c.msgBatchId is null and c.shopId = :shopId order by c.id asc]]></query>
+	</named-query>
+
+</entity-mappings>

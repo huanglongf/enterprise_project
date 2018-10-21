@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.serviceprovide.module.sf.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="B2CCustomizeServiceService" targetNamespace="http://service.serviceprovide.module.sf.com/">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://service.serviceprovide.module.sf.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://service.serviceprovide.module.sf.com/">
+<xsd:element name="filterOrderServiceForB2C" type="tns:filterOrderServiceForB2C"/>
+<xsd:complexType name="filterOrderServiceForB2C">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="xml" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="filterOrderServiceForB2CResponse" type="tns:filterOrderServiceForB2CResponse"/>
+<xsd:complexType name="filterOrderServiceForB2CResponse">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="return" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="confirmOrderService" type="tns:confirmOrderService"/>
+<xsd:complexType name="confirmOrderService">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="xml" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+<xsd:element name="confirmOrderServiceResponse" type="tns:confirmOrderServiceResponse"/>
+<xsd:complexType name="confirmOrderServiceResponse">
+<xsd:sequence>
+<xsd:element minOccurs="0" name="return" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="confirmOrderServiceResponse">
+    <wsdl:part element="tns:confirmOrderServiceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="confirmOrderService">
+    <wsdl:part element="tns:confirmOrderService" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="filterOrderServiceForB2CResponse">
+    <wsdl:part element="tns:filterOrderServiceForB2CResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="filterOrderServiceForB2C">
+    <wsdl:part element="tns:filterOrderServiceForB2C" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IB2CCustomizeService">
+    <wsdl:operation name="filterOrderServiceForB2C">
+      <wsdl:input message="tns:filterOrderServiceForB2C" name="filterOrderServiceForB2C">
+    </wsdl:input>
+      <wsdl:output message="tns:filterOrderServiceForB2CResponse" name="filterOrderServiceForB2CResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="confirmOrderService">
+      <wsdl:input message="tns:confirmOrderService" name="confirmOrderService">
+    </wsdl:input>
+      <wsdl:output message="tns:confirmOrderServiceResponse" name="confirmOrderServiceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="B2CCustomizeServiceServiceSoapBinding" type="tns:IB2CCustomizeService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="confirmOrderService">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="confirmOrderService">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="confirmOrderServiceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="filterOrderServiceForB2C">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="filterOrderServiceForB2C">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="filterOrderServiceForB2CResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="B2CCustomizeServiceService">
+    <wsdl:port binding="tns:B2CCustomizeServiceServiceSoapBinding" name="B2CCustomizeServicePort">
+      <soap:address location="http://219.134.187.154:9154/bsp-oip/ws/B2CCustomizeService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

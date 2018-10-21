@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+
+	<aop:aspectj-autoproxy />
+	<!-- <context:component-scan base-package="com.jumbo.wms.manager,com.jumbo.pms,com.jumbo.webservice,com.jumbo.rmiservice,com.jumbo.sysMonitor" /> -->
+<!-- 	<context:component-scan base-package="com.baozun.scm.baseservice.message.rocketmq.service" />
+ -->	
+ 	<context:component-scan base-package="com.jumbo.manager,com.jumbo.wms.manager,com.jumbo.pms,com.jumbo.webservice,com.jumbo.rmiservice,com.jumbo.sysMonitor,com.baozun.scm.baseservice.message.rocketmq.service" />
+	<context:annotation-config />
+<!-- <aop:config proxy-target-class="true" />
+ -->	
+ 	<bean class="com.jumbo.wms.manager.CodeGenerationAspect" />
+	<bean class="com.jumbo.cat.WmsAspect" />
+	<bean class="com.jumbo.wms.manager.aspect.DaoAspect" />
+
+ 
+ 
+	<!-- code pattern has these keys: property: the field which want to be filled with generated code prefix: not required,it can be a method String to get the prefix value method string pattern $method1#method2,the category value will be obj.method1().method2(); 
+		rewind: not required, can be these values:RESET_BY_DAY,RESET_BY_WEEK_OF_YEAR,RESET_BY_WEEK_OF_MONTH,RESET_BY_MONTH,RESET_BY_YEAR,RESET_NEVER default is RESET_NEVER seqName:not required, the default is the class name seqCategory: not required, it can be a method 
+		String to get the category value method string pattern $method1#method2,the category value will be obj.method1().method2(); category: not required, it can be a method String to get the category value method string pattern $method1#method2,the category value 
+		will be obj.method1().method2(); dateformat: not required, such as yyyyMMdd,it can be a method String suffix: same description with prefix except for place seqLength: the length to format the seq to String,it can be a method String to get the prefix value 
+		seperator: the seperator between the defferent part genCondition: not required, method string ,return Boolean ,if need code generator The return code will be: [prefix][seperator][category][seperator][date][seperator][suffix][seperator][seq]
+-->
+	<bean id="sequenceManager" class="com.jumbo.wms.manager.system.SequenceManagerImpl">
+		<property name="codePattern">
+			<map>
+				<!-- //One Example Here// <entry key="com.erry.model.sales.SalesOrder"> <map> <entry key="property" value="code" /> <entry key="seqLength" value="8" /> <entry key="start" value="1" /> </map> </entry>
+-->
+				<entry key="com.jumbo.wms.model.warehouse.StockTransApplication">
+					<map>
+						<entry key="prefix" value="$codePrefix" />
+						<!--<entry key="rewind" value="RESET_BY_MONTH" /> -->
+						<!--<entry key="dateformat" value="yyMM" /> -->
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="9" />
+						<!-- <entry key="start" value="000000001" /> -->
+						<entry key="sqlSequenceName" value="S_T_WH_STA_CODE" />
+					</map>
+				</entry>
+				<entry key="com.jumbo.wms.model.warehouse.PickingList">
+					<map>
+						<entry key="prefix" value="$codePrefix" />
+						<entry key="rewind" value="RESET_BY_DAY" />
+						<entry key="dateformat" value="yyMMdd" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="4" />
+						<entry key="start" value="0001" />
+					</map>
+				</entry>
+				<entry key="com.jumbo.wms.model.warehouse.InventoryCheck">
+					<map>
+						<entry key="prefix" value="$codePrefix" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="11" />
+						<entry key="sqlSequenceName" value="S_T_WH_IC_CODE" />
+					</map>
+				</entry>
+
+				<entry key="com.jumbo.webservice.sfOrder.command.SfOrder">
+					<map>
+						<entry key="prefix" value="BZ" />
+						<entry key="rewind" value="RESET_BY_DAY" />
+						<entry key="dateformat" value="yyMMdd" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="7" />
+						<entry key="start" value="0000001" />
+					</map>
+				</entry>
+
+				<entry key="com.jumbo.webservice.sfNew.model.SfOrder">
+					<map>
+						<entry key="prefix" value="BZ" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="13" />
+						<entry key="sqlSequenceName" value="S_T_SFORDER_SEQUENCE" />
+					</map>
+				</entry>
+
+				<entry key="com.jumbo.wms.model.finance.ReconciliationStatement">
+					<map>
+						<entry key="prefix" value="$codePrefix" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="6" />
+						<entry key="start" value="000001" />
+					</map>
+				</entry>
+				<entry key="com.jumbo.wms.model.baseinfo.Product">
+					<map>
+						<entry key="prefix" value="$codePrefix" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="5" />
+						<entry key="start" value="10000" />
+					</map>
+				</entry>
+				
+				<!-- PMS -->
+				<entry key="com.jumbo.pms.model.Parcel">
+					<map>
+						<entry key="prefix" value="P" />
+						<entry key="seperator" value="" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="8" />
+						<entry key="start" value="0001" />
+					</map>
+				</entry>
+				<entry key="com.jumbo.pms.model.parcel.ParcelInfo">
+					<map>
+						<entry key="prefix" value="P" />
+						<entry key="seperator" value="" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="8" />
+						<entry key="start" value="0001" />
+					</map>
+				</entry>
+				<entry key="com.jumbo.wms.model.warehouse.WmsInvoiceOrder">
+					<map>
+						<entry key="prefix" value="" />
+						<entry key="rewind" value="RESET_BY_DAY" />
+						<entry key="dateformat" value="yyyyMMdd" />
+						<entry key="property" value="batchCode" />
+						<entry key="seqLength" value="5" />
+						<entry key="start" value="00001" />
+					</map>
+				</entry>
+				
+				<entry key="com.jumbo.webservice.yto.command.YtoOrder">
+					<map>
+						<entry key="prefix" value="" />
+						<entry key="property" value="code" />
+						<entry key="seqLength" value="19" />
+						<entry key="sqlSequenceName" value="S_T_YTOORDER_SEQUENCE" />
+					</map>
+				</entry>
+				
+				<entry key="com.jumbo.wms.model.automaticEquipment.TurnoverBox">
+					<map>
+						<entry key="seqLength" value="11" />
+						<entry key="sqlSequenceName" value="S_TURNBOX_CODE_SEQUENCE" />
+					</map>
+				</entry>
+				
+		<!-- 		<entry key="com.jumbo.wms.model.warehouse.StockTransApplication">
+					<map>
+						<entry key="prefix" value="" />
+						<entry key="seperator" value="" />
+						<entry key="property" value="containerCode" />
+						<entry key="seqLength" value="8" />
+						<entry key="start" value="00000001" />
+						<entry key="sqlSequenceName" value="S_T_WH_STA_CONTAINER_CODE" />
+					</map>
+				</entry> -->
+				
+			</map>
+		</property>
+	</bean>
+
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages">
+		</property>
+	</bean>
+
+	<!-- <bean id="staListenerManager" class="com.jumbo.wms.manager.listener.StaListenerManagerImpl" /> -->
+	<bean id="taxMessageConverter" class="com.jumbo.util.mq.TaxMessageConverter" />
+	<bean id="smsTaskManager" class="com.jumbo.wms.manager.task.sms.SmsTaskManagerImpl"></bean> 
+	<bean id="taskOmsOutThread" class="com.jumbo.wms.manager.task.TaskOmsOutThread"></bean>
+	<!-- <bean id="jdManager" class="com.jumbo.wms.manager.vmi.jdData.JdManagerImpl" /> -->
+	<!-- <bean id="jdManagerProxy" class="com.jumbo.wms.manager.vmi.jdData.JdManagerProxyImpl" /> -->
+	<!-- <bean id="cacheParseDataManager" class="com.jumbo.wms.manager.vmi.cacheData.CacheParseDataManagerImpl" /> -->
+	<!-- <bean id="aFManager" class="com.jumbo.wms.manager.af.AFManagerImpl"/>  -->
+
+	 <bean id="vmiWarehouseFactory" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseFactoryImpl">
+		<property name="idsWh" ref="idsWh"></property>
+		<property name="biaoganWh" ref="biaoganWh"></property>
+		<property name="itochuWh" ref="itochuWh"></property>
+		<property name="ckWh" ref="ckWh"></property>
+		<property name="wlbWh" ref="wlbWh"></property>
+		<property name="itochuUAWh" ref="itochuUAWh"></property>
+		<property name="idsUAWh" ref="idsUAWh"></property>
+		<property name="gqsscmWh" ref="gqsscmWh"></property>
+		<property name="follieWh" ref="follieWh"></property>
+		<property name="wmfWh" ref="wmfWh"></property>
+		<property name="idsaeoWh" ref="idsaeoWh"></property>
+		<property name="sfWh" ref="sfWh"></property>
+		<property name="sfTwWh" ref="sfTwWh"></property>
+		<property name="godivaWh" ref="godivaWh"></property>
+		<property name="gymboreeWh" ref="gymboreeWh"></property>
+		<property name="idsafWh" ref="idsafWh"></property>
+		<property name="idsNikeWh" ref="idsNikeWh"></property>
+		<property name="idsNikeTmWh" ref="idsNikeTmWh"></property>
+		<property name="yhWh" ref="yhWh"></property>
+		<property name="newLook" ref="newLook"></property>
+		<property name="idsNBAUA" ref="idsNBAUA"></property>
+		<property name="guessWh" ref="guessWh"></property>
+		<property name="idsNBJ01" ref="idsNBJ01"></property>
+		<property name="idsHavi" ref="idsHavi"></property>
+		<property name="smWh" ref="smWh"></property>
+		<property name="IdsVSWh" ref="IdsVSWh"></property>
+		<property name="newLookJDWh" ref="newLookJDWh"></property>
+		<property name="sqWh" ref="sqWh"></property>
+		<property name="hdWh" ref="hdWh"></property>
+		<property name="cjWh" ref="cjWh"></property>
+		<property name="guessRetailWh" ref="guessRetailWh"></property>
+		<property name="spdzNBAWh" ref="spdzNBAWh"></property>
+		<property name="idsNikeTmWh2" ref="idsNikeTmWh2"></property>
+		<property name="idsNikeTmWh3" ref="idsNikeTmWh3"></property>
+		<property name="ztWh" ref="ztWh"></property>
+		<property name="isCancelTohub" ref="isCancelTohub"></property>
+		<property name="idsConverse" ref="idsConverse"></property>
+		
+		
+	</bean>
+	 <bean id="spdzNBAWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseSpdzNBA">
+		<property name="sourceCode" value="NBA-SPDZ-VMI"></property>
+	</bean>
+	<bean id="guessWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseGuess">
+		<property name="sourceCode" value="guess"></property>
+	</bean>
+	<bean id="guessRetailWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseGuessRetail">
+		<property name="sourceCode" value="guess001"></property>
+	</bean>
+	<bean id="wlbWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseWlb">
+		<property name="sourceCode" value="WLB"></property>
+	</bean>
+	
+	<bean id="smWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseSM">
+		<property name="sourceCode" value="SM"></property>
+	</bean>
+	
+	<bean id="yhWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseYH">
+		<property name="sourceCode" value="YH"></property>
+	</bean>
+	<bean id="hdWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseHD">
+		<property name="sourceCode" value="HD"></property>
+	</bean>
+	<bean id="cjWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseCJ">
+		<property name="sourceCode" value="CJ"></property>
+	</bean>
+	<bean id="sqWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseSQ">
+		<property name="sourceCode" value="MS_SQ"></property>
+	</bean>
+
+	<bean id="idsWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseIds">
+		<property name="sourceCode" value="IDS"></property>
+	</bean>
+
+	<bean id="biaoganWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseBiaogan">
+		<property name="sourceCode" value="BiaoGan"></property>
+	</bean>
+
+	<bean id="itochuWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseItochu">
+		<property name="sourceCode" value="ILC-SH"></property>
+	</bean>
+
+	<bean id="itochuUAWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseItochuUA">
+		<property name="sourceCode" value="ILC-SH-UA"></property>
+	</bean>
+
+	<bean id="idsUAWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseIDSUA">
+		<property name="sourceCode" value="IDS-SH-UA"></property>
+	</bean>
+	
+	<bean id="ckWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseCK">
+		<property name="sourceCode" value="cksource"></property>
+	</bean>
+
+	<bean id="gqsscmWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseGqsscm">
+		<property name="sourceCode" value="gqsscm"></property>
+	</bean>
+	<bean id="follieWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseFF">
+		<property name="sourceCode" value="follie"></property>
+	</bean>
+	<bean id="wmfWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseWMF">
+		<property name="sourceCode" value="wmf"></property>
+	</bean>
+	<bean id="sfWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseSF">
+		<property name="sourceCode" value="SF"></property>
+	</bean>
+	<bean id="sfTwWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseSfTw">
+		<property name="sourceCode" value="SFTW"></property>
+	</bean>
+	<bean id="idsNikeWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseNIKE">
+		<property name="sourceCode" value="IDS-NIKE"></property>
+	</bean>
+	
+	<bean id="idsNikeTmWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseNikeTm">
+		<property name="sourceCode" value="IDS-NIKE001"></property>
+	</bean>
+	
+	<bean id="idsNikeTmWh2" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseNikeTm2">
+		<property name="sourceCode" value="IDS-NIKE002"></property>
+	</bean>
+	<bean id="idsNikeTmWh3" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseNikeTm3">
+		<property name="sourceCode" value="IDS-NIKE003"></property>
+	</bean>
+	
+	
+	<bean id="gymboreeWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseGymboree">
+		<property name="sourceCode" value="GYMBOREE"></property>
+	</bean>
+	<bean id="newLook" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseNewLook">
+		<property name="sourceCode" value="NewLook"></property>
+	</bean>
+	<bean id="idsNBJ01" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseNBJ01">
+		<property name="sourceCode" value="NBJ01"></property>
+	</bean>
+	<bean id="idsHavi" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseGodivaHavi">
+		<property name="sourceCode" value="GODIVA-HAVI"></property>
+	</bean>
+	<bean id="idsNBAUA" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseIDSNBAUA">
+		<property name="sourceCode" value="IDS-SH-NBAUA"></property>
+	</bean>
+	<bean id="idsaeoWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseAEO">
+		<property name="sourceCode" value="AEO_IDS"></property>
+	</bean>
+	<bean id="godivaWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseGodiva">
+		<property name="sourceCode" value="GODIVASH"></property>
+	</bean>
+	<bean id="idsafWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseAF">
+		<property name="sourceCode" value="af"></property>
+	</bean>
+	<bean id="newLookJDWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseNewLookJD">
+		<property name="sourceCode" value="NewLookJD"></property>
+	</bean>
+	<bean id="IdsVSWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseIdsVSWh">
+		<property name="sourceCode" value="IDS-VS"></property>
+	</bean>
+	<bean id="ztWh" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseZT">
+		<property name="sourceCode" value="ZT"></property>
+	</bean>
+	<bean id="isCancelTohub" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseToHub">
+		
+	</bean>
+	<bean id="idsConverse" class="com.jumbo.wms.manager.vmi.warehouse.VmiWarehouseConverse">
+		<property name="sourceCode" value="IDS-CONVERSE"></property>
+	</bean>
+	
+	<!-- vmi inbound -->
+	<bean id="vmiFactory" class="com.jumbo.wms.manager.vmi.VmiFactoryImpl">
+		<property name="it" ref="vmiIt"></property>
+		<property name="esprit" ref="vmiEsprit"></property>
+		<property name="nike" ref="vmiNike"></property>
+		<property name="nike2" ref="vmiNike2"></property>
+		<property name="converse" ref="vmiConverse"></property>
+		<property name="vmiLevis" ref="vmiLevis"></property>
+		<property name="coach" ref="vmiCoach"></property>
+		<property name="cache" ref="vmiCache"></property>
+		<property name="follie" ref="vmiFollie"></property>
+		<property name="cacheBNB" ref="vmiCacheBNB"></property>
+		<property name="gymboree" ref="vmiGymboree"></property>
+		<property name="aeo" ref="vmiAeo"></property>
+		<property name="af" ref="vmiAf"></property>
+		<property name="puma" ref="vmiPuma"></property>
+		<property name="converseYx" ref="vmiConverseYx"></property>
+		<property name="cathkidston" ref="vmiCathKidston"></property>
+		<property name="guess" ref="vmiGuess"></property>
+		<property name="ec" ref="vmiec"></property>
+		<property name="gucci" ref="vmigucci"></property>
+		<property name="vmiDefault" ref="vmiDefault"></property>
+		<property name="levisChildren" ref="vmiLevisChildren"></property>
+	</bean>
+	<bean id="vmigucci" class="com.jumbo.wms.manager.vmi.VmiGucci">
+		<property name="vmiCode">
+			<list>
+				<value>gucci</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="vmiec" class="com.jumbo.wms.manager.vmi.VmiEC">
+		<property name="vmiCode">
+			<list>
+				<value>EC</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="vmiPuma" class="com.jumbo.wms.manager.vmi.VmiPuma">
+		<property name="vmiCode">
+			<list>
+				<value>puma</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="vmiConverseYx" class="com.jumbo.wms.manager.vmi.VmiConverseYx">
+		<property name="vmiCode">
+			<list>
+				<value>converseyx</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiIt" class="com.jumbo.wms.manager.vmi.VmiIt">
+		<property name="vmiCode">
+			<list>
+				<value>EITCN</value>
+				<value>EIXCN</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiGymboree" class="com.jumbo.wms.manager.vmi.VmiGymboree">
+		<property name="vmiCode">
+			<list>
+				<value>1200</value>
+				<value>1201</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="vmiEsprit" class="com.jumbo.wms.manager.vmi.VmiEsprit">
+		<property name="vmiCode">
+			<list>
+				<value>4046655000664</value>
+				<value>4046655009049</value>
+				<value>4046655009032</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="vmiNike" class="com.jumbo.wms.manager.vmi.VmiNike">
+		<property name="vmiCode">
+			<list>
+				<value>3688</value>
+				<value>3721</value>
+				<value>3251</value>
+				<value>3250</value>
+				<value>3259</value>
+				<value>3258</value>
+				<value>3938</value>
+				<value>3936</value>
+				<value>3937</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="vmiNike2" class="com.jumbo.wms.manager.vmi.VmiNike2">
+		<property name="vmiCode">
+			<list>
+				<value>1028</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="vmiLevis" class="com.jumbo.wms.manager.vmi.VmiLevis">
+		<property name="vmiCode">
+			<list>
+				<value>0020019205</value>
+				<value>0020022340</value>
+				<value>0020022600</value>
+				<value>0020025697</value>
+				<value>0020023525</value>
+				<value>0020026205</value>
+				<value>0020026208</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="vmiConverse" class="com.jumbo.wms.manager.vmi.VmiConverse">
+		<property name="vmiCode">
+			<list>
+				<value>1290</value>
+				<value>1291</value>
+				<value>4690</value>
+				<value>4691</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="vmiCoach" class="com.jumbo.wms.manager.vmi.VmiCoach">
+		<property name="vmiCode">
+			<list>
+				<value>coach</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="vmiCache" class="com.jumbo.wms.manager.vmi.VmiCache">
+		<property name="vmiCode">
+			<list>
+				<value>CCH</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiFollie" class="com.jumbo.wms.manager.vmi.VmiFollie">
+		<property name="vmiCode">
+			<list>
+				<value>follie</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiCacheBNB" class="com.jumbo.wms.manager.vmi.VmiCacheBNB">
+		<property name="vmiCode">
+			<list>
+				<value>BNB</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiAeo" class="com.jumbo.wms.manager.vmi.VmiAeo">
+		<property name="vmiCode">
+			<list>
+				<value>aeo</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiAf" class="com.jumbo.wms.manager.vmi.VmiAF">
+		<property name="vmiCode">
+			<list>
+				<value>af</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiCathKidston" class="com.jumbo.wms.manager.vmi.VmiCathKidston">
+		<property name="vmiCode">
+			<list>
+				<value>5751</value>
+			</list>
+		</property>
+	</bean>
+    <bean id="vmiGuess" class="com.jumbo.wms.manager.vmi.VmiGuess">
+		<property name="vmiCode">
+			<list>
+				<value>guess</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiDefault" class="com.jumbo.wms.manager.vmi.VmiDefault"/>
+	<bean id="vmiExtFactory" class="com.jumbo.wms.manager.vmi.ext.VmiExtFactoryImpl">
+		<property name="defaultExt" ref="vmiDefaultExt"></property>
+		<property name="pumaExt" ref="vmiPumaExt"></property>
+		<property name="speedoExt" ref="vmiSpeedoExt"></property>
+	</bean>
+	<bean id="vmiSpeedoExt" class="com.jumbo.wms.manager.vmi.ext.VmiSpeedoExt">
+		<property name="vmiCode">
+			<list>
+				<value>SPEEDO</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="vmiDefaultExt" class="com.jumbo.wms.manager.vmi.ext.VmiDefaultExt"/>
+	<bean id="vmiPumaExt" class="com.jumbo.wms.manager.vmi.ext.VmiPumaExt">
+		<property name="vmiCode">
+			<list>
+				<value>puma</value>
+				<value>puma_t</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="sysInit" class="com.baozun.monitor.init.MonitorInitBean"></bean>
+	
+	<!-- <bean id="lmisManager" class="com.jumbo.wms.manager.lmis.LmisManagerImpl"/> -->
+	<!-- <bean id="lmisThreadTaskManager" class="com.jumbo.wms.manager.lmis.LmisThreadTaskManagerImpl"/> -->
+	
+	<bean id="vmiLevisChildren" class="com.jumbo.wms.manager.vmi.VmiLevisChildren">
+		<property name="vmiCode">
+			<list>
+				<value>levisyx</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean  class="com.jumbo.util.SpringBeanFactory"></bean>
+</beans>

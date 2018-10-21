@@ -1,0 +1,72 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	<named-query name="User.findByLoginName">
+		<query><![CDATA[select u from User as u where UPPER(u.loginName) = UPPER(:loginName) 
+				and u.isAccNonExpired=true
+				and u.isPwdNonExpired=true
+				and u.isAccNonLocked=true
+				and u.isEnabled=true ]]></query>
+	</named-query>
+	<named-query name="User.findByjobNumber">
+		<query><![CDATA[select u from User as u where UPPER(u.jobNumber) = UPPER(:jobNumber)]]></query>
+	</named-query>
+	<named-query name="User.findUserListByLoginName">
+		<query><![CDATA[select u from User as u where UPPER(u.loginName) = UPPER(:loginName)]]></query>
+	</named-query>
+	<named-query name="User.findAllUserList">
+		<query><![CDATA[select u from User as u where 1=1]]></query>
+	</named-query>
+	<named-query name="UserGroup.findUserGroupList">
+		<query><![CDATA[select ug from UserGroup as ug order by ug.name]]></query>
+	</named-query>
+	<named-query name="UserRole.findDefaultUserRole">
+		<query><![CDATA[select ur from UserRole as ur where ur.user.id = :userId and ur.isDefault = true and ur.role.isAvailable = true]]></query>
+	</named-query>
+	<named-query name="UserRole.findUserRoleListByUserId">
+		<query><![CDATA[select ur from UserRole as ur where ur.user.id = :userId
+					and ur.role.isAvailable=true]]></query>
+	</named-query>
+	<named-query name="UserRole.findUserRole">
+		<query><![CDATA[select ur from UserRole as ur where ur.user.id = :userid and ur.role.id = :roleid ]]></query>
+	</named-query>
+	<named-query name="UserRole.findUserRoleByUserIdRoleIdAndOuId">
+		<query><![CDATA[select ur from UserRole as ur where ur.user.id = :userId and ur.role.id = :roleId and ur.ou.id= :ouId ]]></query>
+	</named-query>
+	<named-query name="Role.findRoleByID">
+		<query><![CDATA[select r from Role as r where r.id = :id]]></query>
+	</named-query>
+	<named-query name="Role.findRoleByName">
+		<query><![CDATA[select r from Role as r where upper(r.name) = upper(:name) and r.isAvailable=true]]></query>
+	</named-query>
+	<named-query name="MenuItem.findMenuItemByAcl">
+		<query><![CDATA[select m from MenuItem as m where m.acl = :acl]]></query>
+	</named-query>
+	<named-query name="OperationUnit.findOperationUnitList">
+		<query><![CDATA[select ou from OperationUnit as ou where ou.parentUnit.id = :id and ou.isAvailable = true]]></query>
+	</named-query>
+	<named-query name="OperationUnit.findByName">
+		<query><![CDATA[select ou from OperationUnit as ou where ou.name=:name and ou.isAvailable = true]]></query>
+	</named-query>
+	<named-query name="OperationUnit.findByNameIsExist">
+		<query><![CDATA[select ou from OperationUnit as ou where ou.name=:name and ou.isAvailable = true and ou.id <>:ouId]]></query>
+	</named-query>
+
+	<named-query name="OperationUnit.findOperationUnitListByCode">
+		<query><![CDATA[select o from OperationUnit as o where o.code = :code]]></query>
+	</named-query>
+	<named-query name="OperationUnit.findDivisionList">
+		<query><![CDATA[select ou from OperationUnit as ou where ou.isAvailable = true and ou.ouType.name='Division' and ou.parentUnit.id=:id ]]></query>
+	</named-query>
+	<named-query name="OperationUnit.findShopListByDivision">
+		<query><![CDATA[select ou from OperationUnit as ou where ou.isAvailable = true and ou.ouType.name='CompanyShop' and ou.parentUnit.id=:id ]]></query>
+	</named-query>
+	<named-query name="User.findByLoginNameForUac">
+		<query><![CDATA[select u from User as u where UPPER(u.loginName) = UPPER(:loginName) 
+				and u.isAccNonExpired=true
+				and u.isPwdNonExpired=true
+				and u.isAccNonLocked=true ]]></query>
+	</named-query>
+	<named-query name="UserRole.findUserRoleByStochastic">
+		<query><![CDATA[select ur from UserRole as ur where ur.user.id = :userId  and ur.role.isAvailable = true and ROWNUM =1]]></query>
+	</named-query>
+</entity-mappings>

@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="WhOcpOrderLine.findWhOcpOrderLineByWooId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select ool.id,ool.ocp_id ocpId,ool.sku_id skuId,
+						       ool.owner,ool.qty,ool.conform_qty conformQty,
+						       oo.wh_id ouId,oo.code ocpCode
+						from t_wh_ocp_order_line ool,t_wh_ocp_order oo
+						where oo.id=ool.ocp_id
+							#if($succeedOcp)
+							  and ool.conform_qty>0
+							#end
+							#if($wooLineId)
+							  and ool.id= :wooLineId
+							#end
+							#if($wooId)
+							  and ool.ocp_id = :wooId
+							#end
+							#if($qtyCheck)
+							  and ool.qty != ool.conform_qty
+							#end
+							#if($skuId)
+							  and ool.sku_id = :skuId
+							#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhOcpOrderLine.updateConformQtyByWoolId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_WH_OCP_ORDER_LINE ool set ool.conform_qty= ool.conform_qty - :conformQty
+						where ool.id = :woolId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhOcpOrder.findOcpOrderByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select oo.id,oo.code,oo.error_count errorCount,oo.status,oo.wh_id ouId,oo.OCP_BATCH_CODE ocpBatchCode
+						from T_WH_OCP_ORDER oo
+						where oo.status in (
+									#foreach( $st in $status )
+		 								$st ,
+									#end
+									-1
+								)
+						#if($ouId)
+							  and oo.wh_id = :ouId
+						#end
+						and create_time > sysdate -30
+						order by oo.id asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhOcpOrder.findOcpOrderStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select oo.id,oo.code,oo.error_count errorCount,oo.status,oo.wh_id ouId,oo.OCP_BATCH_CODE ocpBatchCode
+						from T_WH_OCP_ORDER oo
+						where oo.status =:status and oo.wh_id = :ouId
+						and create_time > sysdate -3
+						order by oo.id asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="WhPickZoon.findPickZoneList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select pick.id as id, pick.code as code, pick.name as name,z.id whZoonId,z.code whZoonCode,z.name whZoonName
+			            from t_wh_pick_zoon pick,t_wh_zoon z
+			            where pick.status = 1
+			            	  AND pick.wh_zoon_id = z.id(+)
+							  and pick.wh_ou_id = :ouId
+						#if($code)
+							and pick.code = :code
+						#end
+						#if($name)
+							and pick.name = :name
+						#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickZoon.findPickZoneByCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select pick.code as code, pick.name, pick.status as status
+						from t_wh_pick_zoon pick
+						where
+						pick.code = :code
+						and pick.wh_ou_id = :ouId
+						and pick.status = 1
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickZoon.findPickZoneInfo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select zone.id as id, zone.code as code, zone.name as name 
+						from t_wh_pick_zoon zone
+						where status = 1
+						and zone.wh_ou_id = :ouId
+						order by zone.id
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickZoon.findPickZoneInfoList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select  whLocation.id		as 	locationId,
+								whLocation.code 	as 	location, 
+								district.code 		as 	district, 
+								pickZone.code 		as 	code, 
+								pickZone.name 		as 	name, 
+								whLocation.sort 	as 	sort, 
+								whLocation.create_time as createTime, 
+								u.user_name 		as 	createUser 
+						from t_wh_location whLocation 
+							 inner join t_wh_pick_zoon pickZone on whLocation.zoon_id = pickZone.id 
+							 left join t_wh_district district on whLocation.district_id = district.id
+							 left join t_au_user u on whLocation.creator_id = u.id
+						where
+						pickZone.status = 1
+						and pickZone.wh_ou_id = :ouId
+						#if($location)
+							 and whLocation.code = :location
+						#end
+						#if($district)
+							 and district.code = :district
+						#end
+						#if($pickZoneCode)
+							 and pickZone.code = :pickZoneCode
+						#end
+						#if($pickZoneName)
+							 and pickZone.name = :pickZoneName
+						#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickZoon.findPickZoneInfoList2Excel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select  whLocation.id		as 	locationId,
+								whLocation.code 	as 	location, 
+								district.code 		as 	district, 
+								pickZone.code 		as 	code, 
+								whLocation.sort 	as 	sort
+						from t_wh_location whLocation 
+							 inner join t_wh_pick_zoon pickZone on whLocation.zoon_id = pickZone.id 
+							 left join t_wh_district district on whLocation.district_id = district.id
+						where
+						pickZone.status = 1
+						and pickZone.wh_ou_id = :ouId
+						#if($location)
+							 and whLocation.code = :location
+						#end
+						#if($district)
+							 and district.code = :district
+						#end
+						#if($pickZoneCode)
+							 and pickZone.code = :pickZoneCode
+						#end
+						#if($pickZoneName)
+							 and pickZone.name = :pickZoneName
+						#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- <bean id="WhPickZoon.findPickZoneInfo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select zone.id as id, zone.code as code, zone.name as name 
+						from t_wh_pick_zoon zone
+						where status = 1
+						order by zone.id
+						]]>
+			</value>
+		</constructor-arg>
+	</bean> -->
+	
+	<bean id="WhPickZoon.countLocation" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select count(*)
+						from (
+							select  whLocation.id		as 	locationId,
+								whLocation.code 	as 	location, 
+								district.code 		as 	district, 
+								pickZone.code 		as 	code, 
+								pickZone.name 		as 	name, 
+								whLocation.sort 	as 	sort
+							from t_wh_location whLocation 
+								 inner join t_wh_pick_zoon pickZone on whLocation.zoon_id = pickZone.id 
+								 left join t_wh_district district on whLocation.district_id = district.id
+							where
+							pickZone.status = 1
+							and pickZone.wh_ou_id = :ouId
+							#if($location)
+								 and whLocation.code = :location
+							#end
+							#if($district)
+								 and district.code = :district
+							#end
+							#if($pickZoneCode)
+								 and pickZone.code = :pickZoneCode
+							#end
+							#if($pickZoneName)
+								 and pickZone.name = :pickZoneName
+							#end
+							)
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhOcpOrder.findOcpOrderIdsByStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select oo.id
+						from T_WH_OCP_ORDER oo
+						where oo.status = :status
+						and create_time > sysdate - 30
+						#if($ouId)
+							  and oo.wh_id = :ouId
+						#end
+							  and (oo.error_count<=5 or oo.error_count is null)
+						order by oo.id asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhOcpOrder.queryInventoryByOcpCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select count(id) from t_wh_sku_inventory  y where y.occupation_code =:wooCode
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhOcpOrder.findOcpAreaByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sale_modle from t_wh_zoon_ocp_sort where ou_id =:ouId group by sale_modle 
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="WhOcpOrder.findExceptionOcpOrder" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select oo.id,oo.code,oo.error_count errorCount,oo.status,oo.wh_id ouId
+						from T_WH_OCP_ORDER oo
+						where oo.error_count > 5
+						order by oo.wh_id,oo.id asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhOcpOrder.findOcpStaIdByOcpCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select id from t_wh_sta a  where a.main_wh_id =:ouId and 
+						a.ocp_code =:wooCode and a.status in (1,20) and a.type in (21,42)
+						and a.create_time > sysdate - 90
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhOcpOrderExeLine.insertOoelByInv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						insert into t_wh_ocp_order_exe_line
+			               (id,
+			                ocp_id,
+			                sku_id,
+			                qty,
+			                location_id,
+			                inv_status_id,
+			                barch_code,
+			                inbound_time,
+			                expire_date,
+			                owner
+			                )
+			             select
+			                S_T_WH_OCP_ORDER_EXE_LINE.Nextval,
+			                :ocpId,
+			                SKU_ID,
+			                :qty,
+			                LOCATION_ID,
+			                STATUS_ID,
+			                BATCH_CODE,
+			                INBOUND_TIME,
+			                EXPIRE_DATE,
+			                INV_OWNER
+			             from 
+			               t_wh_sku_inventory i_rec
+			             where 
+			              i_rec.id = :invId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 根据库位ID获取拣货区ID -->
+	<bean id="WhPickZoon.findZoonIdsByLocationIds" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select distinct l.zoon_id 
+						from T_WH_LOCATION l
+						where l.id in (
+							#foreach( $id in $locationIds )
+		 								$id ,
+									#end
+									-1
+						)
+							and l.zoon_id is not null
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickZoon.updateStaZoonIdsByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_WH_STA sta set sta.zoon_list= :zoonIds  where sta.id= :staId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickZoon.findStasByZoonId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT sta.id
+						FROM t_wh_sta sta,t_wh_stv stv,t_wh_stv_line sl,t_wh_location l
+						WHERE sta.id=stv.sta_id
+						      AND stv.id=sl.stv_id
+						      AND sl.location_id=l.id
+						      AND sta.status  IN (2,3)
+						      AND l.zoon_id= :zoonId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickZoon.clearLocationZoonByZoonId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						UPDATE t_wh_location l SET l.zoon_id = NULL WHERE l.zoon_id = :zoonId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	
+	<!-- 根据占用批编码更新占用批状态 -->
+	<bean id="WhOcpOrder.updateOcpOrderStatusByOcpCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						update T_WH_OCP_ORDER set status= :status  where code= :ocpCode
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<!-- 查找库存上的库位编码和优先级 -->
+	<bean id="WarehouseLocation.findLocaSortAndCodeByInv" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select l.sort,l.code from   (
+				   select o.sort,o.code from t_wh_sku_inventory y  
+				  left join t_wh_location o on o.id = y.location_id
+				  where y.ou_id =:ouId and y.occupation_code =:staCode order by o.sort asc,o.code asc
+				  ) l where rownum = 1
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 判断仓库是否执行过线程占用 -->
+	<bean id="Warehouse.ocpIsWaitByOcpStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						case when ocp_time > sysdate - (:mine)/(24*60) and se.ocp_status = 2 
+					then 0
+						else 1
+					end as isWait
+					from t_wh_warehouse_ocp_ref se where ou_id =:whOuId 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<!-- 判断仓库是否执行过线程占用 -->
+	<bean id="Warehouse.updateIsOcpByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_warehouse_ocp_ref se set se.ocp_status =:status,ocp_time = sysdate where OU_ID=:ouId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 修改仓库占用信息-->
+	<bean id="Warehouse.updateWarehouseOpcStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_warehouse_ocp_ref se set se.ocp_status =:status,ocp_time = sysdate where ocp_status = 1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ZoonOcpSort.findZoonOcpSortList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select * from T_WH_ZOON_OCP_SORT t where ou_id=:ouId and sale_modle=:saleModle order by sort
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ZoonOcpOrder.findZoonOcpOrderList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select * from T_WH_ZOON_OCP_ORDER t where sta_id=:staId order by lev
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ZoonOcpOrderLine.findZoonOcpOrderLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select * from T_WH_ZOON_OCP_ORDER_line t where order_id=:orderId and status =:status order by sort
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransApplication.updateStaOcpResult" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+					update t_wh_sta sta set 
+					area_ocp_error_count = nvl(area_ocp_error_count,0) +1,
+					ocp_error_qty=nvl(area_ocp_error_count,0) +1,
+					sta.area_ocp_status=:areaOcpStatus,sta.area_ocp_memo=:areaOcpMemo, sta.next_ocp_time =  sysdate+15/(24*60),sta.IS_DISTRIBUTE_FAILED = 1
+					where sta.id =:staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 
+	 <bean id="StockTransApplication.updateStaOcpResultSec" class="loxia.dao.support.DynamicQueryHolder">
+	     <constructor-arg>
+	     <value>
+	       <![CDATA[
+					update t_wh_sta sta set 
+					sta.area_ocp_status=:areaOcpStatus,sta.area_ocp_memo=:areaOcpMemo
+					where sta.id =:staId
+	         ]]>
+	     </value>
+	   </constructor-arg>
+	 </bean>
+	 
+	 <bean id="ZoonOcpOrderLine.deleteOcpOrderLineByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					delete from T_WH_ZOON_OCP_ORDER_LINE where order_id =:staId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ZoonOcpOrderLine.findAllAreaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select zoon_code from T_WH_ZOON_OCP_ORDER_LINE  where ou_id =:ouId group by zoon_code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ZoonOcpOrderLine.findOcpStaByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select * from (
+					select order_id from T_WH_ZOON_OCP_ORDER_LINE  where ou_id =:ouId group by order_id ) where  rownum <= :account
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	 <bean id="StaLine.updateStaLineOcpArea" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_sta_line set ocp_area_code= ocp_area_code || :ocpAreaCode ,ocp_area_memo = ocp_area_memo || :ocpAreaMemo where sta_id =:staId 
+					#if($skuId)
+							 and sku_id =:skuId
+						#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		
+	<bean id="StaLine.updateStaLineOcpAreaNull" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_sta_line set ocp_area_code=:ocpAreaCode ,ocp_area_memo =:ocpAreaMemo where sta_id =:staId 
+					#if($skuId)
+							 and sku_id =:skuId
+						#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		
+		
+	 <bean id="StaLine.updateStaLineOcpAreaById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_sta_line set ocp_area_code = null ,ocp_area_memo  = null where sta_id =:staId 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+  <bean id="StaLine.findStaLineByOcp" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sku_id skuId,owner,ocp_area_code,quantity,ocp_area_memo from t_wh_sta_line  where sta_id =:staId and ocp_area_code is not null
+				]]>
+			</value>
+		</constructor-arg>
+  </bean>
+  
+   <bean id="StaLine.findStaLineGroupByOcp" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select sku_id skuId,sum(quantity) sumQty,owner from t_wh_sta_line  where sta_id =:staId group by sku_id,owner
+				]]>
+			</value>
+		</constructor-arg>
+  </bean>
+  
+  <bean id="StaLine.findByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select line.quantity,sku.code as skuCode,sku.ext_code2 as extCode2,line.owner,line.line_no
+					from t_wh_sta_line line left join t_bi_inv_sku sku on sku.id=line.sku_id where line.sta_id =:staId 
+				]]>
+			</value>
+		</constructor-arg>
+  </bean>
+	 
+  <bean id="Zoon.findAllZoonCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select code from t_wh_zoon where ou_id =:ouId and (status is null or status = 0) group by code
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<bean id="ZoonOcpSort.findZoonOcpSortByzoonCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+					t.id as id,
+					t.zoon_id as zoonId,
+					t.sale_modle as saleModle,
+					z.name as zoonCode,
+					t.sort as sort
+					from T_WH_ZOON_OCP_SORT t ,
+					t_wh_zoon z
+					where t.ou_id=:ouId  
+					and t.zoon_id=z.id 
+					#if($zoonCode)
+					and zoon_code=:zoonCode
+					#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ZoonOcpSort.findZoonOcpSortByZoonCodeAndsaleModel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+					count(1)
+					from T_WH_ZOON_OCP_SORT t where 
+					ou_id=:ouId  and zoon_code=:zoonCode  and sale_modle=:saleModel
+					
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ZoonOcpSort.findZoonOcpSortBySortAndsaleModel" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+					count(1)
+					from T_WH_ZOON_OCP_SORT t where 
+					ou_id=:ouId  and sort=:sort  and sale_modle=:saleModel
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaLine.findUnHandledOrFailedAreaSkuOcpQty" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				  select sum(qty) from 
+		            (
+		              select  l.quantity qty
+		              from t_wh_sta sta,t_wh_sta_ocp_line l
+		              where sta.id=l.sta_id
+		                   and sta.main_wh_id= :ouId
+		                   and sta.owner= :owner
+		                   and l.sku_id= :skuId
+		                   and sta.status=1
+		                   and sta.area_ocp_status=3
+		                   and sta.ocp_id is null
+		                   and l.ocp_code = :zoonCode
+		                   and sta.create_time>sysdate-3
+		             )
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StaLine.findMongDbInvListMinus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				  select t.ouId,t.owner,t.zoonCode,t.skuId ,nvl(sum(t.availQty),0) availQty from 
+		            (
+		              select  sta.main_wh_id as ouId,l.owner as owner,l.ocp_code as zoonCode,l.sku_id as skuId, l.quantity as availQty
+		              from t_wh_sta sta,t_wh_sta_ocp_line l
+		              where sta.id=l.sta_id
+		                   and sta.main_wh_id= :ouId
+		                   and sta.status=1
+		                   and sta.area_ocp_status=3
+		                   and sta.ocp_id is null
+		                   and l.ocp_code = :areaCode
+		                   and sta.create_time>sysdate-3
+		             ) t
+		         group by t.ouId,t.owner,t.zoonCode,t.skuId 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

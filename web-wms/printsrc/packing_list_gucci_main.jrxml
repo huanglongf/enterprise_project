@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="packing_list_gucci_main" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="1.3660269107301435"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="288"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\jinggang.chen\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="subReport" class="java.lang.String" isForPrompting="false"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="receiverAddress" class="java.lang.String"/>
+	<field name="soCode" class="java.lang.String"/>
+	<field name="orderDate" class="java.lang.String"/>
+	<field name="lpCode" class="java.lang.String"/>
+	<field name="remark" class="java.lang.String"/>
+	<field name="staMemo" class="java.lang.String"/>
+	<field name="lines" class="java.util.List"/>
+	<field name="index" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="slipCode2" class="java.lang.String"/>
+	<field name="slipCode1" class="java.lang.String"/>
+	<group name="1Group">
+		<groupExpression><![CDATA[$F{index}]]></groupExpression>
+		<groupHeader>
+			<band height="147" splitType="Stretch">
+				<subreport>
+					<reportElement key="subreport-1" x="2" y="9" width="545" height="124" isRemoveLineWhenBlank="true" />
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band splitType="Stretch"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="238" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="116" width="100" height="20" />
+				<textElement verticalAlignment="Middle">
+					<font fontName="华文细黑" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[客户信息]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="116" width="100" height="20" />
+				<textElement verticalAlignment="Middle">
+					<font fontName="华文细黑" size="12" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[订单概览]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="147" width="65" height="16" />
+				<textElement verticalAlignment="Top">
+					<font fontName="华文细黑" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[姓名:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="147" width="65" height="16" />
+				<textElement>
+					<font fontName="华文细黑" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[订单号:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="167" width="65" height="16" />
+				<textElement>
+					<font fontName="华文细黑" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[联系电话:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="167" width="65" height="16" />
+				<textElement>
+					<font fontName="华文细黑" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[订单日期:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="186" width="65" height="16" />
+				<textElement>
+					<font fontName="华文细黑" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[收货地址:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="186" width="65" height="16" />
+				<textElement>
+					<font fontName="华文细黑" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[运输方式:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="296" y="206" width="65" height="16" />
+				<textElement verticalAlignment="Top">
+					<font fontName="华文细黑" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[支付方式:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="30" y="147" width="247" height="16" />
+				<textElement verticalAlignment="Top">
+					<font fontName="华文细黑" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="53" y="167" width="236" height="16" />
+				<textElement verticalAlignment="Top">
+					<font fontName="Futura-Book" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telephone}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="53" y="186" width="236" height="16" />
+				<textElement verticalAlignment="Top">
+					<font fontName="华文细黑" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="337" y="147" width="218" height="16" >
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font fontName="Futura-Book" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{slipCode2}+"/"+$F{slipCode1}+"\n\n\t\t\n\t"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="167" width="196" height="16" />
+				<textElement verticalAlignment="Top">
+					<font fontName="Futura-Book" size="10" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="186" width="196" height="16" />
+				<textElement verticalAlignment="Top">
+					<font fontName="华文细黑" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lpCode}.contains("顺丰")?"顺丰":"EMS"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="348" y="206" width="196" height="16" />
+				<textElement verticalAlignment="Top">
+					<font fontName="华文细黑" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lpCode}.contains("货到付款")?"货到付款":"在线支付"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="293">
+			<staticText>
+				<reportElement x="193" y="278" width="356" height="12" />
+				<textElement>
+					<font fontName="华文细黑" size="8"/>
+				</textElement>
+				<text><![CDATA[ 周一至周日9am - 10pm 节假日9am - 6pm (春节假期除外)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="254" width="542" height="1" forecolor="#666666" />
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="174" y="260" width="77" height="12" />
+				<textElement textAlignment="Center">
+					<font fontName="华文细黑" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[400-821-0582
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="278" width="74" height="12" />
+				<textElement>
+					<font fontName="华文细黑" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[客服服务时间:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="152" y="232" width="253" height="16" />
+				<textElement textAlignment="Center">
+					<font fontName="华文细黑" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[请您妥善保管本货运单，以便退换货时核对并寄回。
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="260" width="218" height="12" />
+				<textElement>
+					<font fontName="华文细黑" size="8"/>
+				</textElement>
+				<text><![CDATA[contact@cn.customercare.gucci]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="139" y="260" width="50" height="12" />
+				<textElement>
+					<font fontName="华文细黑" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[客服热线:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="260" width="33" height="12" />
+				<textElement>
+					<font fontName="华文细黑" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[邮件:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="393" y="177" width="150" height="16" />
+				<textElement textAlignment="Center">
+					<font fontName="华文细黑" size="9"/>
+				</textElement>
+				<text><![CDATA[感谢选购古驰，扫码回复“服务”]]></text>
+			</staticText>
+			<image>
+				<reportElement x="380" y="1" width="175" height="175" />
+				<imageExpression><![CDATA["print_img/gucci.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="424" y="188" width="88" height="16" />
+				<textElement textAlignment="Center">
+					<font fontName="华文细黑" size="9"/>
+				</textElement>
+				<text><![CDATA[了解更多售后权益]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

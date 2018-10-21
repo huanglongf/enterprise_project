@@ -1,0 +1,997 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="OperationUnit.findOperationUnitListSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select ou.*,
+						out.DESCRIPTION as out_description,out.DISPLAY_NAME as out_display_name,out.NAME as out_name
+						from T_AU_OPERATION_UNIT ou inner join T_AU_OPERATION_UNIT_TYPE out on ou.OU_TYPE_ID=out.ID and ou.is_available=1 and out.name not in('Division','CompanyShop')
+						start with ou.PARENT_OU_ID is null
+						connect by ou.PARENT_OU_ID=prior ou.ID
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="OperationUnit.findOperationUnitByOuTypeIDSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  select * from t_au_operation_unit  where OU_TYPE_ID = :ouTypeId and is_available = :isAvailable order by name asc
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.findOperationUnitCountByCodeName" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  select count(*) from OperationUnit as o  where 1=1
+				#if($code)
+					and o.code = :code
+				#end
+				#if($name)
+					and o.name = :name
+				#end
+				#if($id)
+					and o.id != :id
+				#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnit.findBusinessShopToWhList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+
+select wh.id,wh.code from 
+t_wh_sku_inventory inv,
+T_AU_OPERATION_UNIT wh,
+t_bi_channel shop    
+where 
+inv.inv_owner=shop.code
+and shop.id=:shopId
+and inv.quantity!=0
+and inv.ou_id=wh.id
+and (wh.id=-1
+#foreach($sId in $whOuIds )
+or wh.id=$sId
+#end
+)
+union
+select wh.id,wh.code from 
+t_wh_sta sta,
+T_AU_OPERATION_UNIT wh,
+t_bi_channel shop
+where 
+sta.owner=shop.code
+and shop.id=:shopId
+and sta.status !=10 
+and sta.status !=17
+and sta.main_wh_id = wh.id
+and (wh.id = -1
+#foreach($sId in $whOuIds )
+or wh.id=$sId
+#end
+)
+
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnitType.findOperationUnitTypeList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+				select out.*from T_AU_OPERATION_UNIT_TYPE out  where out.IS_AVAILABLE=1
+				#if(!$containsRoot)
+                    and out.PARENT_OUT_ID is not null
+                #end
+                        start with out.PARENT_OUT_ID is null
+                        connect by out.PARENT_OUT_ID=prior out.ID
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Privilege.findPrivilegeAclByRoleId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[  
+                select rp.privilege_acl from t_au_role_privilege rp where rp.role_id=:roleId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Role.findRoleByRoleNameAndOuTypeId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select r from Role r where 1=1
+				#if($roleName)
+					and upper(r.name) like upper(:roleName)
+				#end
+				#if($ouTypeId)
+					and r.ouType.id = :ouTypeId
+				#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Role.findRoleByOuTypeIDSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select * from t_au_role  where OU_TYPE_ID = :ouTypeId and is_available = :isAvailable order by name asc
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="User.updateUserAccessTimeSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[update t_au_user set latest_access_time = :accessTime, version = version + 1 where login_name = :loginName
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="User.findUserListSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select distinct u.id,u.login_name,f.wh_ou_id as whOuId,u.user_name,u.email,u.is_enabled as isenabled ,ou.name as operationName,ouy.display_name 
+     as operationTypeName from t_au_user u,T_AU_OPERATION_UNIT ou ,T_AU_OPERATION_UNIT_TYPE  ouy ,
+     t_au_user_group_relation r,t_au_user_warehouse_ref f
+     where u.ou_id=ou.id and  ou.ou_type_id=ouy.id and f.user_id(+) = u.id and u.id=r.user_id(+) 
+					#if($loginName)						
+						and Upper(u.LOGIN_NAME) like Upper(:loginName)
+					#end
+					#if($userName)
+						and  Upper(u.user_name) like Upper(:userName)
+					#end
+					#if($email)
+						and Upper(u.email) like Upper(:email)
+					#end
+					#if($phone)
+						and u.phone like :phone
+					#end
+					#if($jobNumber)
+						and Upper(u.job_number) like Upper(:jobNumber)
+					#end
+					#if("$!isEnabled"=="")
+                    #else
+                    and u.is_enabled = :isEnabled
+                    #end
+					#if($groupId)
+						and r.group_id = :groupId
+					#end
+					#if($whOuId)
+						and f.wh_ou_id = :whOuId
+					#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="User.findUserListSqlNoGroup" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[ select  distinct u.id,u.login_name,u.user_name,u.email,u.is_enabled as isenabled ,ou.name as operationName,ouy.display_name 
+    as operationTypeName from t_au_user u,T_AU_OPERATION_UNIT ou ,T_AU_OPERATION_UNIT_TYPE  ouy
+     where u.ou_id=ou.id and  ou.ou_type_id=ouy.id 
+					#if($loginName)						
+						and Upper(u.LOGIN_NAME) like Upper(:loginName) 
+					#end
+					#if($userName)
+						and  u.user_name like :userName
+					#end
+					#if($email)
+						and u.email like :email
+					#end
+					#if($phone)
+						and u.phone like :phone
+					#end
+					#if($jobNumber)
+						and u.job_number like :jobNumber
+					#end
+				    #if($isEnabled)
+						and u.is_enabled = :isEnabled
+					#end	
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+
+	<bean id="User.findUserListByUserGroupCommand" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select distinct u.* from T_AU_USER u left join T_AU_USER_GROUP_RELATION ugr on u.id=ugr.USER_ID
+				where 1=1
+					#if($loginName)
+					and Upper(u.LOGIN_NAME) like Upper(:loginName)
+					#end
+					#if($userName)
+					and u.USER_NAME like :userName
+					#end
+					#if($jobNumber)
+					and u.JOB_NUMBER like :jobNumber
+					#end
+					#if($isEnabled)
+					and u.IS_ENABLED=:isEnabled
+					#end
+					#if($groupId)
+					and ugr.GROUP_ID=:groupId
+					#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserGroup.addUsers" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[insert into T_AU_USER_GROUP_RELATION (ID,GROUP_ID, USER_ID)
+					select S_T_AU_USER_GROUP_RELATION.nextval,$userGroupId,id from
+					( select u.id from t_au_user u where u.id in (
+					#foreach( $id in $userIds )
+    				$id 
+    				,
+					#end
+					-1
+					)
+					and u.id not in (
+					select ugr.USER_ID as id from T_AU_USER_GROUP_RELATION ugr where ugr.GROUP_ID=:userGroupId ) )
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserGroup.findUserGroupByName" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select g from UserGroup as g where g.name=:name
+				#if($id)
+				and g.id=:id
+				#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserGroup.removeUsers" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[delete from  T_AU_USER_GROUP_RELATION
+				where GROUP_ID=$userGroupId and USER_ID in (
+				#foreach( $id in $userIds )
+    				$id 
+    				,
+					#end
+					-1
+					) 
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserGroup.findUserGroupIdsWithUsers" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[select ugr.group_id from T_AU_USER_GROUP_RELATION ugr
+						where ugr.group_id in (
+						#foreach( $id in $ids )
+	    				$id 
+	    				,
+						#end
+						-1
+						) 
+						intersect 
+						select group_id from 
+						(
+						select ugr2.group_id,count(ugr2.user_id)
+						from T_AU_USER_GROUP_RELATION ugr2 
+						group by ugr2.group_id 
+						having count(ugr2.user_id)>0)
+				
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserRole.delUserRoleByUserIdSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[delete t_au_user_role  where user_id= :userId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserRole.deleteUserRolesByOu" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[delete t_au_user_role  where OU_ID= :ouId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserRole.updateUserRoleToDefault" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+					update T_AU_USER_ROLE set  IS_DEFAULT=(case  when ROLE_ID=:roleId and OU_ID=:ouId then 1 else 0 end) where USER_ID=:userId	
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="User.updateUserisEnabled" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+			update t_au_user set IS_ENABLED = :isEnabled,version=version+1 where
+					exists (select 1 from t_au_user_group_relation ur where ur.group_id = :userGroupId and ur.user_id=t_au_user.id ) 
+                ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserRole.deleteUserRoles" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				delete from t_au_user_role where role_id = :roleid and ou_id = :operationUnitid and
+					exists(select 1 from t_au_user_group_relation ur where ur.group_id = :userGroupid and ur.user_id = t_au_user_role.user_id)
+                       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="UserRole.addUserRoles" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				insert into t_au_user_role(id,is_default,user_id,ou_id,role_id,version)
+					select S_T_AU_USER_ROLE.nextval,0,user_id,ou_id,role_id,0 from
+					(
+					       select ugr.user_id,:operationUnitid as ou_id,:roleid as role_id from T_AU_USER_GROUP_RELATION ugr where ugr.group_id= :userGroupid
+					minus
+					       select ur.user_id,ur.ou_id,ur.role_id
+					              from t_au_user_role ur
+					                   where ur.user_id in (select ugr.user_id from T_AU_USER_GROUP_RELATION ugr where ugr.group_id= :userGroupid)
+					                   and ur.ou_id= :operationUnitid and ur.role_id= :roleid
+					)
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnit.findWarehouseByCompany" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+          	select wsr.is_default_send_wh isDefault,wh.*,decode(wsr.wh_ou_id,null,0,1) as isRef from 
+						T_AU_OPERATION_UNIT ou,
+            			T_AU_OPERATION_UNIT_TYPE tp,
+            			 t_bi_channel shop ,
+						T_AU_OPERATION_UNIT wh
+						left join T_WH_WAREHOUSE_SHOP_REF wsr on wh.id=wsr.wh_ou_id and wsr.shop_id=:shopId
+					where 
+						shop.id =:shopId
+						and ou.parent_ou_id=:companyId
+						and wh.parent_ou_id=ou.id
+						and wh.is_available=1
+            			and wh.OU_TYPE_ID = tp.id
+						and tp.name = 'Warehouse'
+						 and (shop.WH_MODEL is null or shop.WH_MODEL = 0)
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnit.findWarehouseByCompanyList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+          	
+select wh.* from 
+	T_AU_OPERATION_UNIT wh,
+	t_bi_channel shop,
+	T_WH_WAREHOUSE_SHOP_REF wsr
+where 
+	wh.id=wsr.wh_ou_id 
+	and wsr.shop_id=shop.id
+	#if($companyId)
+		and wh.id=:companyId
+	#end
+	#if($innerShopCode)
+		and shop.code=:innerShopCode
+	#end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnit.findOperationUnitWarehouseList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select o from OperationUnit o where o.id in (
+					#foreach( $id in $ouids)
+    				$id
+    				,
+					#end
+					-1
+					)
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 根据组织id查找组织对象 -->
+	<bean id="OperationUnit.findOperationUnitWarehouseopc" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select o from OperationUnit o where o.id = $ouid
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnit.findWarehouseOuListByComOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+                <![CDATA[
+					select wh.* from 
+						T_AU_OPERATION_UNIT wh,
+						T_AU_OPERATION_UNIT opc,
+						T_AU_OPERATION_UNIT_Type ouType
+					where wh.IS_AVAILABLE=1
+						and ouType.Name='Warehouse'
+						and ouType.Id=wh.ou_type_id
+						and wh.PARENT_OU_ID = opc.ID
+						
+						and opc.PARENT_OU_ID = :compId
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnitType.findChildOUPList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+				select out.*from T_AU_OPERATION_UNIT_TYPE out  where out.IS_AVAILABLE=1
+				#if($parentOUTId)
+                    and out.PARENT_OUT_ID =:parentOUTId
+                #end
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnit.findWarehouseByShop" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select wh.*,decode(rf.wh_ou_id,null,0,1) as isRef from 
+						  T_AU_OPERATION_UNIT wh ,
+                          T_WH_WAREHOUSE_SHOP_REF rf,
+                          t_bi_channel sh
+                          where sh.id = rf.shop_id and
+                                wh.id = rf.wh_ou_id and
+                                sh.ou_id = :shopId
+                                and wh.is_available=1
+						
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="ESPInvoicePercentage.findInvoicePercentList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+			select t from ESPInvoicePercentage t where 1=1
+				#if($startTime)
+					and t.version >= :startTime
+				#end
+				#if($endTime)
+					and t.version < :endTime
+				#end
+				#if($invoiceNum)
+					and t.invoiceNum= :invoiceNum
+				#end
+				#if($dutyPercentage)
+					and t.dutyPercentage= :dutyPercentage
+				#end
+				#if($miscFeePercentage)
+					and t.miscFeePercentage= :miscFeePercentage
+				#end
+				#if($commPercentage)
+					and t.commPercentage= :commPercentage
+				#end
+                ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="ESPInvoicePercentage.findESPInvoiceByPo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+select t.* from t_esprit_invoice_percentage t,T_WH_ESP_INVOICE_BD_PO bd
+where t.invoice_number=bd.invoice_number
+and bd.po=:po
+                ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="ESPInvoiceBDPo.findESPPoInvoiceBD" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[  
+			select * from T_WH_ESP_INVOICE_BD_PO t where 1=1
+				#if($invoiceNum)
+					and invoice_number= :invoiceNum
+				#end
+				#if($po)
+					and po = :po
+				#end
+                ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="SysPwdPolicy.findSysPwdPolicy" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select * from syspwdpolicy
+                 ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="OperationUnit.selectAllCompany" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select id as id,name as name from t_au_operation_unit where parent_ou_id = 2 and is_available=1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.selectCenterByCompanyId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select id as id,name as name from t_au_operation_unit where parent_ou_id = :comid and is_available = 1 and ou_type_id = 4
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.selectWarehouseByCenid" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select id as id,name as name from t_au_operation_unit where parent_ou_id = :cenid and is_available = 1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="PhysicalWarehouse.selectAllPhyWarehouse" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select id as id,name as name from t_wh_physical_warehouse
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.selectOperationUnitByPhyId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select OU_WH_ID as id from t_wh_phy_warehouse_ref
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.selectAllWarehouseByPhyId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						ou1.id,
+						'['||ou3.name||']['||ou2.name||']'||ou1.name as name 
+					from 
+						t_wh_phy_warehouse_ref t,
+						t_au_operation_unit ou1,
+						t_au_operation_unit ou2,
+						t_au_operation_unit ou3 
+					where 
+						ou1.id = t.ou_wh_id 
+						and ou1.parent_ou_id = ou2.id 
+						and ou2.parent_ou_id = ou3.id 
+						and t.phy_wh_id = :phyid
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.saveRelationShip" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					insert into t_wh_phy_warehouse_ref(phy_wh_id,ou_wh_id) 
+						select :phid,t.id from t_au_operation_unit t 
+					where t.id in (
+					#foreach($id in $list)
+					  $id,
+					#end
+					-1)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="OperationUnit.deleteRelationShip" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					delete from t_wh_phy_warehouse_ref where phy_wh_id = :phid
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="SkuTag.findSkuTagByPagination" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select tag.id,tag.code,tag.name,tag.description,tag.create_time,decode(tag.type,1,'任意匹配标签',2,'完全匹配标签',3,'包含匹配标签',5,'活动标签') as tagType,tag.status as tagStatus from t_bi_sku_tag tag
+					where 1=1
+					#if($name)
+						and tag.name like '%$name%'
+					#end
+					#if($code)
+						and tag.code = :code
+					#end
+					and ( tag.status = -1
+						#foreach($statu in $status)
+                        	or tag.status=$statu       
+                    	#end
+					) 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="AutoPickingListRole.findAutoPLRoleByPagination" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select role.id,role.code,role.name,role.create_time,role.status as roleStatus 
+					from t_wh_auto_pl_role role
+					where 1=1
+					#if($name)
+						and role.name like '%$name%'
+					#end
+					#if($code)
+						and role.code = :code
+					#end
+					and ( role.status = -1
+						#foreach($statu in $status)
+                        	or role.status=$statu        
+                    	#end
+					) 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="AutoPickingListRole.findAllPLRoleDetailByRoleId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select rd.id,rd.picking_type as type, decode(rd.picking_type,null,'',1,'单件',2,'套装组合',10,'多件',20,'团购',30,'秒杀','') as pickingTypeName,
+					sc.id as skuCategoryId, sc.sku_categories_name as skuCategoryName, ss.id as skuSizeId, ss.name as skuSizeName,
+					rd.sort, rd.min_order as minOrder, rd.max_order as maxOrder,rd.send_city as city,rd.is_sn as isSn,rd.IS_TRANS_AFTER as isTransAfter 
+				from t_wh_auto_pl_role_detial rd,
+					t_wh_auto_pl_role r,
+				  	t_wh_sku_size_config ss,
+				  	t_ma_sku_categories sc
+				where rd.role_id = r.id and rd.sku_size_config_id = ss.id(+) and rd.sku_category_id = sc.id(+) 
+					and r.id = :roleId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="AutoPickingListRole.getAutoPickingListRoleDetial" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						t.picking_type as type,t.sku_category_id as skuCategoryId,t.sku_size_config_id as skuSizeId,t.id as id,
+						t.max_order as maxOrder,t.min_order as minOrder,t.send_city as city,t.is_sn isSn,t.IS_TRANS_AFTER isTransAfter
+						from t_wh_auto_pl_role_detial t where t.role_id = :roleId order by t.sort asc
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Transportator.findTransportatorList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select t.* 
+						from t_ma_transportator t
+						where t.is_trans_after = 1
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="AutoPickingListRoleDetailTransportator.getAutoPickingListRoleDetailTransportator" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select roleid as roleId,tranid as tranId from t_wh_auto_role_transportator where roleid = :roleId 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+		<bean id="Transportator.findTransportatorListAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.*  from t_ma_transportator t
+						where t.exp_code not in ('SFCOD','EMSCOD','JDCOD')
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransportatorWeigth.findTransportatorListByWeight" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.*  from t_ma_transportator_weigth t
+					where t.ou_id=:ouId
+				    #if($expCode)
+                          and t.exp_code = :expCode 
+                  	#end
+						
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransportatorWeigth.findTransportatorWeigth" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.*  from t_ma_transportator_weigth t
+					where t.ou_id=:ouId
+				    #if($expCode)
+                          and t.exp_code = :expCode 
+                  	#end
+						
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="TransportatorWeigth.updateTransportatorWeigth" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_ma_transportator_weigth t set t.name=:name,t.expCode=:expCode and t.maxWeight=:maxWeight,t.weightDifferencePercent=:weightDifferencePercent 
+					where t.id=:id
+						
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="Transportator.findTransportatorListByAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					
+					select 
+						t.id as id,t.name as name,t.exp_code as expCode,t.K3_CODE as k3Code,t.COD_MAX_AMT as codMaxAmt ,t.platform_code as platformCode,t.code as code,t.full_name as fullName,
+						decode(t.life_cycle_status,'1','可用','0','禁用') as statusName,
+			            decode(t.is_support_cod,'1','是','0','否') as isSupportCodStr,
+			            t.jasper_onLine as jasperOnLine,t.jasper_normal as jasperNormal,
+			            decode(t.is_trans_after,'1','是','否') as isAfter,
+			            decode(t.is_region,'1','是','否') as isReg,
+			            t.create_time as createTime,t.last_modify_time as lastModifyTime
+           			from 
+           				t_ma_transportator t 
+           			where
+           				 t.code is not null 
+					 #if($lpCode)
+                          and t.platform_code = :lpCode 
+                  	 #end
+                  	 #if($lpName)
+                          and t.name = :lpName 
+                 	  #end
+                 	   #if($status)
+                          and t.life_cycle_status = :status 
+                 	  #end
+                 	   #if($isCod)
+                          and t.is_support_cod = :isCod 
+                 	  #end
+                 	  order by t.create_time desc
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<!-- 删除外包仓品牌与仓库关联数据 -->
+	<bean id="SkuWarehouseRef.deleteSkuWarehouseRef" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+						<![CDATA[
+		 		 delete from t_wh_msg_sku_wh_ref wr
+					 where wr.brand_id = :brandId and wr.source = :source
+					   and wr.source_wh = :sourcewh and wr.channel_Id= :channelId
+		 				]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<!-- 获取下拉框列表  品牌 用于查询-->
+		<bean id="SkuWarehouseRef.findByBrandName" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+						<![CDATA[
+		 		                             
+                   	select b.id as brandId, b.name as brandName
+						 from t_wh_msg_sku_wh_ref r, t_bi_brand b
+						 where r.brand_id = b.id
+						 group by b.name, b.id
+
+		 				]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<!-- 获取下拉框列表 店铺用于查询-->
+		<bean id="SkuWarehouseRef.findByChannelName" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+						<![CDATA[
+		 		                             
+                   	select c.id as channelId, c.name as channelName
+						  from t_wh_msg_sku_wh_ref tt, t_bi_channel c
+						 where c.id = tt.channel_id
+						 group by c.id, c.name
+
+		 				]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<!-- 加载 品牌下拉列表 用于新建-->
+		<bean id="SkuWarehouseRef.findBrandNameAll" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+						<![CDATA[
+		 		                             
+                    select b.id as brandId,b.name as brandName from t_bi_brand b
+
+		 				]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<!-- 加载所有店铺下拉列表 用于新建-->
+		<bean id="BiChannel.findChannelNameAll" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+						<![CDATA[
+		 		                             
+                     select c.id as id,c.name as name from t_bi_channel c
+
+		 				]]>
+				</value>
+			</constructor-arg>
+		</bean>
+	<!-- 查询外包仓品牌关联 -->
+	<bean id="SkuWarehouseRef.findSkuWarehouseRefListAll" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					  select r.source_wh as sourceWh,
+                        b.name      as brandName,
+                        b.id        as brandId,
+                        r.source    as source,
+                       c.name      as channelName,
+                       c.id        as channelId
+                  from t_wh_msg_sku_wh_ref r, t_bi_brand b,t_bi_channel c
+                   where r.brand_id = b.id
+                        and r.channel_id=c.id
+                   #if($brandId)
+                        and b.id = :brandId
+                   #end
+                   #if($sourcewh)
+                         and r.source_wh = :sourcewh 
+                   #end 
+                   #if($source)
+                          and r.source = :source 
+                   #end
+                   #if($channelId)
+                          and c.id = :channelId 
+                   #end
+                      
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 查询外包仓品牌关联 -->
+	<bean id="SkuWarehouseRef.findSkuWarehouseRefList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+                     select f.source as source,f.source_wh as sourceWh from t_wh_msg_sku_wh_ref f where f.source_wh= :sourcewh	 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 查询外包仓品牌 -->
+	<bean id="SkuWarehouseRef.findChannelBySourceWh" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+                     select l.VMI_WH_SOURCE1 as biannelSource,f.source as source,f.source_wh as sourceWh from t_wh_msg_sku_wh_ref f 
+                     left join t_bi_channel l on l.id = f.channel_id 
+                     where f.source_wh= :sourcewh and l.VMI_WH_SOURCE1 is not null
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 插入外包仓品牌仓库关联 -->
+		<bean id="SkuWarehouseRef.insertSkuWarehouseRef" class="loxia.dao.support.DynamicQueryHolder">
+			<constructor-arg>
+				<value>
+						<![CDATA[
+		 		       insert into t_wh_msg_sku_wh_ref (brand_id,source,source_wh,channel_id)  values (:brandId,:source,:sourcewh,:channelId) 
+		 				]]>
+				</value>
+			</constructor-arg>
+		</bean>
+		<!-- 升单操作 -->
+		<bean id="Transportator.findGenerStaLsingle" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					 select * from  t_ma_transportator trans,
+			            t_bi_transport_service ser,
+			            t_bi_transport_service_area ar
+			            where trans.id = ser.trans_id
+			            and ser.id = ar.trans_service_id
+			            and trans.exp_code =:lpCode 
+			            and ser.TIME_TYPE =:timeType
+			            and ar.province =:province
+			            and ar.city =:city
+			            and ar.district =:district
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="WmsInvoiceOrder.getSequenceIdForBatchCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select SEQ_FILL_IN_INOVICE_BATCHCODE.nextval from dual
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	
+	<bean id="WmsInvoiceOrder.getAllInvoiceOrderForId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.id from T_WH_INVOICE_ORDER t where t.lp_code is not null and t.trans_no is null
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

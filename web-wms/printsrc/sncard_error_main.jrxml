@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="sncard_error_main" language="groovy" pageWidth="310" pageHeight="440" columnWidth="300" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" >
+	<property name="ireport.zoom" value="1.6105100000000472"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="subReport" class="java.lang.String"/>
+	<field name="ouName" class="java.lang.String"/>
+	<field name="printTime" class="java.lang.String"/>
+	<field name="plCode" class="java.lang.String"/>
+	<field name="slipCode" class="java.lang.String"/>
+	<field name="code" class="java.lang.String"/>
+	<field name="code1" class="java.lang.String"/>
+	<field name="lines" class="java.util.List">
+		<fieldDescription><![CDATA[lines]]></fieldDescription>
+	</field>
+	<field name="code2" class="java.lang.String"/>
+	<group name="g1">
+		<groupHeader>
+			<band height="430">
+				<staticText>
+					<reportElement  x="11" y="6" width="37" height="17"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font fontName="黑体" size="10"/>
+					</textElement>
+					<text><![CDATA[仓库:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement  x="37" y="6" width="102" height="17"/>
+					<textElement>
+						<font fontName="黑体"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ouName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement  x="136" y="6" width="50" height="17"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font fontName="黑体" size="10"/>
+					</textElement>
+					<text><![CDATA[打印日期:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement  x="182" y="6" width="118" height="17"/>
+					<textElement>
+						<font fontName="黑体"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{printTime}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement  x="11" y="25" width="57" height="17"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font fontName="黑体" size="10"/>
+					</textElement>
+					<text><![CDATA[配货批次号:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement  x="68" y="25" width="200" height="17"/>
+					<textElement>
+						<font fontName="黑体"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{plCode}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement  x="11" y="44" width="57" height="17"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font fontName="黑体" size="10"/>
+					</textElement>
+					<text><![CDATA[相关单据号:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement  x="68" y="44" width="200" height="17"/>
+					<textElement>
+						<font fontName="黑体"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{slipCode}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement  x="5" y="67" width="278" height="1"/>
+				</line>
+				<staticText>
+					<reportElement  x="6" y="75" width="278" height="24"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="黑体" size="16" isBold="true"/>
+					</textElement>
+					<text><![CDATA[激活失败卡券补拣货单]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="128" y="139" width="57" height="17"/>
+					<box>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font fontName="黑体" size="10"/>
+					</textElement>
+					<text><![CDATA[作业单号：]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement  x="177" y="139" width="83" height="17"/>
+					<textElement>
+						<font fontName="黑体"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement  x="232" y="130" width="68" height="30"/>
+					<textElement>
+						<font fontName="黑体" size="18" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{code1}]]></textFieldExpression>
+				</textField>
+				<subreport isUsingCache="true">
+					<reportElement  x="3" y="162" width="282" height="266" isPrintInFirstWholeBand="true"/>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+				</subreport>
+				<componentElement>
+					<reportElement  x="128" y="103" width="147" height="29" isRemoveLineWhenBlank="true"/>
+					<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="2" barHeight="60">
+						<jr:codeExpression><![CDATA[$F{code2}]]></jr:codeExpression>
+					</jr:barbecue>
+				</componentElement>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+</jasperReport>

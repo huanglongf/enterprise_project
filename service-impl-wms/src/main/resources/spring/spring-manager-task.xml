@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<bean id="backUpTaskLockLog" class="com.jumbo.wms.manager.task.inv.BackUpTaskLockLogImpl" />
+	<bean id="compenSateTask" class="com.jumbo.wms.manager.task.inv.CompenSateTaskImpl" />
+	<bean id="idsInterfaceTask" class="com.jumbo.wms.manager.task.ids.IDSInterfaceTaskImpl" />
+	<bean id="secKillTask" class="com.jumbo.wms.manager.task.seckill.SecKillTaskImpl" />
+	<bean id="cathKidstonTask" class="com.jumbo.wms.manager.task.vmi.CathKidstonTaskImpl" />
+	<bean id="cancelOrderTask" class="com.jumbo.wms.manager.task.cancelorder.CancelOrderTaskImpl" />
+	<bean id="totalJNJInvTask" class="com.jumbo.wms.manager.task.inv.JNJInvTaskImpl" />
+	<bean id="totalInvTask" class="com.jumbo.wms.manager.task.inv.TotalInvTaskImpl" />
+	<bean id="threePLTask" class="com.jumbo.wms.manager.task.inv.ThreePLTaskImpl" />
+	<bean id="converseYxTask" class="com.jumbo.wms.manager.task.vmi.ConverseYxTaskImpl" />
+	<bean id="sfOrderTask" class="com.jumbo.wms.manager.task.sforder.SfOrderTaskImpl" />
+	<bean id="ytoOrderTask" class="com.jumbo.wms.manager.task.ytoorder.YtoOrderTaskImpl" />
+	<bean id="kerryOrderTask" class="com.jumbo.wms.manager.task.kerry.KerryOrderTaskImpl" />
+	<bean id="rfdOrderTask" class="com.jumbo.wms.manager.task.rfd.RfdOrderTaskImpl" />
+	<bean id="invoiceOrderTask" class="com.jumbo.wms.manager.task.invoiceOrder.InvoiceOrderTaskImpl" />
+	<bean id="whTask" class="com.jumbo.wms.manager.task.replenish.WhReplenishTaskImpl" />
+	<bean id="taskCreateSta" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskCreateStaImpl" />
+	<bean id="taskItochuIDS" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskItochuIDSImpl" />
+	<bean id="ztoOrderTask" class="com.jumbo.wms.manager.task.zto.ZtoOrderTaskImpl" />
+	<bean id="gymboreeTask" class="com.jumbo.wms.manager.task.vmi.GymboreeTaskImpl" />
+	<bean id="shelfLifeTask" class="com.jumbo.wms.manager.task.shelfLife.ShelfLifeTaskImpl" />
+	<bean id="taskOms" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskOmsImpl" />
+	<bean id="stoOrderTask" class="com.jumbo.wms.manager.task.stoorder.StoOrderTaskImpl" />
+	<bean id="taskSf" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskSfImpl" />
+	<bean id="taskSfTw" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskSfTwImpl" />
+	<bean id="jdOrderTask" class="com.jumbo.wms.manager.task.jd.JdOrderTaskImpl" />
+	<bean id="autoPickingTask" class="com.jumbo.wms.manager.task.autoPicking.AutoPickingTaskImpl" />
+	<bean id="mergeStaTask" class="com.jumbo.wms.manager.task.mergeSta.MergeStaTaskImpl" />
+	<bean id="invTask" class="com.jumbo.wms.manager.task.inv.InvTaskImpl" />
+	<bean id="taskGuess" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskGuessImpl" />
+	<bean id="taskItochu" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskItochuImpl" />
+	<bean id="taskOutsourcingWH" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskOutsourcingWHImpl" />
+	<bean id="biaoganTask" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskBiaoganImpl" />
+	<bean id="bocTask" class="com.jumbo.wms.manager.task.boc.BocTaskImpl" />
+	<bean id="pdaTask" class="com.jumbo.wms.manager.task.pda.PdaTaskImpl" />
+	<bean id="IdsTask" class="com.jumbo.wms.manager.task.ids.IdsTaskImpl" />
+	<bean id="idsTask" class="com.jumbo.wms.manager.task.ids.IdsTaskImpl" />
+	<bean id="edwTask" class="com.jumbo.wms.manager.task.edw.EdwTaskImpl" />
+<!-- 	<bean id="edwUpLoadTask" class="com.jumbo.wms.manager.task.edw.EdwUpLoadTaskImpl" /> -->
+	<bean id="vmiDefaultTask" class="com.jumbo.wms.manager.task.vmi.VmiDefaultTaskImpl" />
+	<bean id="vmiInventoryTask" class="com.jumbo.wms.manager.task.vmi.VmiInventoryTaskImpl" />
+	<bean id="pumaTask" class="com.jumbo.wms.manager.task.vmi.ext.PumaTaskImpl" />
+	<bean id="ttkOrderTask" class="com.jumbo.wms.manager.task.ttk.TtkOrderTaskImpl" />
+	<bean id="taskItochuUA" class="com.jumbo.wms.manager.task.vmiwarehouse.TaskItochuUAImpl" />
+	<bean id="wxOrderTask" class="com.jumbo.wms.manager.task.wx.WxOrderTaskImpl" />
+	<bean id="upgradeTask" class="com.jumbo.wms.manager.task.upgrade.UpgradeTaskImpl" />
+	<!-- <bean id="smsTask" class="com.jumbo.wms.manager.task.sms.SmsTask" /> -->
+	<!-- adidas -->
+	<bean id="adidasTask" class="com.jumbo.wms.manager.task.vmi.AdidasTaskImpl" />
+	<!-- reebok -->
+	<bean id="reebokTask" class="com.jumbo.wms.manager.task.vmi.ReeBokTaskImpl" />
+	<!-- gnc -->
+    <bean id="gncTask" class="com.jumbo.wms.manager.task.vmi.GncTaskImpl" />
+	
+       <bean id="mqTask" class="com.jumbo.wms.manager.task.vmi.MqTaskImpl" />
+  
+<!--     <bean id="producerCompensateService" class="com.baozun.scm.baseservice.message.rocketmq.service.compensate.ProducerCompensateService" />
+ -->    
+<!--     <bean id="consumerCompensateService" class="com.baozun.scm.baseservice.message.rocketmq.service.compensate.ConsumerCompensateService" />
+ -->	
+	<bean id="expressRadarTask" class="com.jumbo.wms.manager.task.expressRadar.ExpressRadarTaskImpl" />
+	<bean id="ocpOrderEmailInform" class="com.jumbo.wms.manager.task.OcpOrderEmailInformImpl" />
+	<bean id="createStaTaskManager" class="com.jumbo.wms.manager.hub2wms.CreateStaTaskManagerImpl" />
+	<bean id="msgOrderCancelTask" class="com.jumbo.wms.manager.task.hub2wms.MsgOrderCancelImpl" />
+	<bean id="totalInvToPACTask" class="com.jumbo.wms.manager.task.inv.TotalInvToPACTaskImpl" />
+	<bean id="otherInvToOmsTask" class="com.jumbo.wms.manager.task.otherInvToOms.OtherInvToOmsTaskImpl" />
+	
+	<!-- PMS -->
+	<bean id="parcelManagerTask" class="com.jumbo.pms.manager.app.ParcelManagerTaskImpl" />
+	<bean id="parcelInfoManagerTask" class="com.jumbo.pms.manager.app.ParcelInfoManagerTaskImpl" />
+	<bean id="sysInterfaceQueueManager" class="com.jumbo.pms.manager.SysInterfaceQueueManagerImpl" />
+	<bean id="wmsInvChangeToOmsManager" class="com.jumbo.wms.manager.task.inventoryTransactionToOms.WmsInvChangeToOmsManagerImpl"/>
+	
+	<!-- LMIS -->
+	<bean id="totalZeroInvTask" class="com.jumbo.wms.manager.task.lmis.TotalZeroInvTaskImpl" />
+	<bean id="totalRealtimeInvTask" class="com.jumbo.wms.manager.task.lmis.TotalRealtimeInvTaskImpl" />
+	
+	<!-- yamato -->
+	<bean id="yamatoTransInfoToHub" class="com.jumbo.wms.manager.task.yamato.YamatoTransInfoToHubImpl" />
+	
+	<bean id="nikeCartonNoTask" class="com.jumbo.wms.manager.task.NikeCartonNo.NikeCartonNoTaskImpl" />
+	<bean id="sendMqByPacAndToms" class="com.jumbo.wms.manager.task.SendMqByPacAndTomsTaskImpl" />
+	<bean id="sendMqTomsByMqLogTime" class="com.jumbo.wms.manager.task.SendMqByPacAndTomsTaskImpl" />
+	
+	<!-- 库存流水推送上位系统相关定时任务 -->
+	<bean id="skuInvFlowTask" class="com.jumbo.wms.manager.task.invflow.SkuInvFlowTaskImpl" />
+</beans>

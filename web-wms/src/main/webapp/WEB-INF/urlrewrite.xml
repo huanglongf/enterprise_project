@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlrewrite>
+	<rule>
+		<from>^/rest/(.*).json$</from>
+		<to last="true">/rest/$1\.do</to>
+	</rule>
+    <rule>
+		<from>^/webservice/(.*)$</from>
+ 		<to last="true">/webservice/$1</to>
+	</rule>
+
+    <rule>
+		<from>^/images/(.*)$</from>
+ 		<to last="true">/images/$1</to>
+	</rule>
+	<rule>
+		<from>^/scripts/(.*)$</from>
+		<to last="true">/scripts/$1</to>
+	</rule>
+	<rule>
+		<from>^/css/(.*)$</from>
+		<to last="true">/css/$1</to>
+	</rule>
+	
+	<rule>
+		<from>^/(.*)\.json$</from>
+		<to>/json/$1.do</to>
+	</rule>
+	<outbound-rule>
+		<from>^/json/(.*)\.do$</from>
+		<to>/$1.json</to>
+	</outbound-rule>
+	
+	<rule>
+		<from>^/rest/(.*)$</from>
+		<to>/rest/$1\.do</to>
+	</rule>
+	<rule>
+		<from>^/sftw/(.*).act$</from>
+		<to last="true">/sftw/$1\.do</to>
+	</rule>
+</urlrewrite>

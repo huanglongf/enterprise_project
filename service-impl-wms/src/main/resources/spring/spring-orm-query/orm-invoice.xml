@@ -1,0 +1,10 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+	<named-query name="StaInvoice.getBySta">
+		<query><![CDATA[select iv from StaInvoice as iv where iv.sta.id = :staId]]></query>
+	</named-query>
+	<named-query name="StaInvoiceLine.getByStaInvoiceId">
+		<query><![CDATA[select iv from StaInvoiceLine as iv where iv.staInvoice.id = :staInvoiceId]]></query>
+	</named-query>
+</entity-mappings>

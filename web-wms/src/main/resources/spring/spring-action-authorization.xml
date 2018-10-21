@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<bean id="operationUnitAction" class="com.jumbo.web.action.authorization.OperationUnitAction" scope="request" />
+	<bean id="userManageAction" class="com.jumbo.web.action.authorization.UserManageAction" scope="request" />
+	<bean id="roleManageAction" class="com.jumbo.web.action.authorization.RoleManageAction" scope="request" />
+	<bean id="userBatchManageAction" class="com.jumbo.web.action.authorization.UserBatchManageAction" scope="request" />
+	<bean id="userGroupAction" class="com.jumbo.web.action.authorization.UserGroupAction" scope="request" />
+	<bean id="shopStoreInfoAction" class="com.jumbo.web.action.warehouse.ShopStoreInfoAction" scope="request" />
+	<bean id="userSyncInfoAction" class="com.jumbo.web.action.authorization.UserSyncInfoAction" scope="request" />
+</beans>

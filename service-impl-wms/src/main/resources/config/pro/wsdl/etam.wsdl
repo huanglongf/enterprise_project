@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.bpl.com.cn/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.bpl.com.cn/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.bpl.com.cn/">
+      <s:element name="OrderCancel">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="order_code" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OrderCancelResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OrderCancelResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SecurityHeader" type="tns:SecurityHeader" />
+      <s:complexType name="SecurityHeader">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SecurityKey" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="string" nillable="true" type="s:string" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="OrderCancelSoapIn">
+    <wsdl:part name="parameters" element="tns:OrderCancel" />
+  </wsdl:message>
+  <wsdl:message name="OrderCancelSoapOut">
+    <wsdl:part name="parameters" element="tns:OrderCancelResponse" />
+  </wsdl:message>
+  <wsdl:message name="OrderCancelSecurityHeader">
+    <wsdl:part name="SecurityHeader" element="tns:SecurityHeader" />
+  </wsdl:message>
+  <wsdl:message name="OrderCancelHttpGetIn">
+    <wsdl:part name="order_code" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="OrderCancelHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="OrderCancelHttpPostIn">
+    <wsdl:part name="order_code" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="OrderCancelHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:portType name="ScaleAppSoap">
+    <wsdl:operation name="OrderCancel">
+      <wsdl:input message="tns:OrderCancelSoapIn" />
+      <wsdl:output message="tns:OrderCancelSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ScaleAppHttpGet">
+    <wsdl:operation name="OrderCancel">
+      <wsdl:input message="tns:OrderCancelHttpGetIn" />
+      <wsdl:output message="tns:OrderCancelHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="ScaleAppHttpPost">
+    <wsdl:operation name="OrderCancel">
+      <wsdl:input message="tns:OrderCancelHttpPostIn" />
+      <wsdl:output message="tns:OrderCancelHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ScaleAppSoap" type="tns:ScaleAppSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="OrderCancel">
+      <soap:operation soapAction="http://www.bpl.com.cn/OrderCancel" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:OrderCancelSecurityHeader" part="SecurityHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ScaleAppSoap12" type="tns:ScaleAppSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="OrderCancel">
+      <soap12:operation soapAction="http://www.bpl.com.cn/OrderCancel" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:OrderCancelSecurityHeader" part="SecurityHeader" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ScaleAppHttpGet" type="tns:ScaleAppHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="OrderCancel">
+      <http:operation location="/OrderCancel" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ScaleAppHttpPost" type="tns:ScaleAppHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="OrderCancel">
+      <http:operation location="/OrderCancel" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ScaleApp">
+    <wsdl:port name="ScaleAppSoap" binding="tns:ScaleAppSoap">
+      <soap:address location="http://140.206.180.212:82/EntApp/ScaleApp.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ScaleAppSoap12" binding="tns:ScaleAppSoap12">
+      <soap12:address location="http://140.206.180.212:82/EntApp/ScaleApp.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ScaleAppHttpGet" binding="tns:ScaleAppHttpGet">
+      <http:address location="http://140.206.180.212:82/EntApp/ScaleApp.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ScaleAppHttpPost" binding="tns:ScaleAppHttpPost">
+      <http:address location="http://140.206.180.212:82/EntApp/ScaleApp.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

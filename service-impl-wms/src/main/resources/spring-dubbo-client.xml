@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://code.alibabatech.com/schema/dubbo        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+	<!-- pacs服务端 -->
+	<dubbo:consumer timeout="350000" check="true" version="${dubbo.pacs.version}" cluster="failfast" loadbalance="random"/>
+	
+	<dubbo:reference url="${dubbo.nike.server}" id="nikeCartonNoManager"  check="false" cluster="failfast" interface="com.baozun.scm.customize.nike.manager.NikeCartonNoManager"/>
+	<dubbo:reference url="${dubbo.logistics.server}" id="transServiceManager"  check="false" cluster="failfast" interface="com.baozun.scm.primservice.logistics.manager.TransServiceManager"/>
+	<dubbo:reference url="${dubbo.logistics.server}" id="orderConfirmContentManager"  check="false" cluster="failfast" interface="com.baozun.scm.primservice.logistics.manager.OrderConfirmContentManager"/>
+	<dubbo:reference url="${dubbo.pacs.server}" id="rmi4Wms"  check="false" cluster="failfast" interface="com.jumbo.pac.manager.extsys.wms.rmi.Rmi4Wms" />
+	<!-- 菜鸟大宝 -->
+	<dubbo:reference url="${dubbo.local.server}" id="hubCainiaoWmsManager"  check="false" cluster="failfast" interface="com.baozun.bizhub.manager.taobao.HubCainiaoWmsManager" />
+	<!-- 韩国CJ -->
+	<dubbo:reference url="${dubbo.local.server}" id="taobaoManager"  check="false" cluster="failfast" interface="com.baozun.bizhub.manager.platform.taobao.TaobaoManager" />
+	<!-- esprit o2o -->
+	<dubbo:reference url="${dubbo.local.server}"  check="false" id="codeManager"  interface="com.baozun.scm.baseservice.sac.manager.CodeManager"/>
+	<dubbo:reference url="${dubbo.local.server}"  check="false" id="codeService"  interface="com.baozun.scm.baseservice.sac.service.CodeService"/>
+	<!-- yamato物流反馈调用hub接口 -->
+	<dubbo:reference url="${dubbo.local.server}"  check="false" id="logisticsOrderManager" cluster="failfast" interface="com.baozun.bizhub.manager.logisticsroute.LogisticsOrderManager" />
+	<!-- HUB星巴克卡订制信息 -->
+	<dubbo:reference url="${dubbo.local.server}" id="starbucksMsrCardManager"  check="false" cluster="failfast" interface="com.baozun.bizhub.manager.starbucks.StarbucksMsrCardManager" />
+    <dubbo:reference url="${dubbo.local.server}" id="hubWcsManager" cluster="failfast" interface="com.baozun.bizhub.manager.wcs.HubWcsManager" />
+    <!-- AD增量库存 -->
+	<dubbo:reference url="${dubbo.local.server}" id="adAmiIncInventoryManager"  check="false" cluster="failfast" interface="com.baozun.bizhub.manager.brand.ad.AdAmiIncInventoryManager" />
+   
+    <!--NIKE 礼品卡-->
+	<dubbo:reference url="${dubbo.local.server}"  check="false" id="nikeActivate"  interface="com.baozun.bizhub.manager.nike.NikeActivateManager"/>
+	
+	
+	<dubbo:reference url="${dubbo.local.server}"  check="false" id="adReturnOrderManager"  interface="com.baozun.bizhub.manager.brand.ad.AdReturnOrderManager"/>
+	
+</beans>

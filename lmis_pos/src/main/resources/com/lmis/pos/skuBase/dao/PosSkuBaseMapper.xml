@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.skuBase.dao.PosSkuBaseMapper">
+
+	<resultMap type="com.lmis.pos.skuBase.model.PosSkuBase" id="PosSkuBaseMap" >
+		<!-- 子类字段 -->
+		<result column="ID" property="id" jdbcType="VARCHAR" />
+		<result column="BAR_CODE" property="barCode" jdbcType="VARCHAR" />
+		<result column="CODE" property="code" jdbcType="VARCHAR" />
+		<result column="EXT_CODE1" property="extCode1" jdbcType="VARCHAR" />
+		<result column="EXT_CODE2" property="extCode2" jdbcType="VARCHAR" />
+		<result column="EXT_CODE3" property="extCode3" jdbcType="VARCHAR" />
+		<result column="JM_CODE" property="jmCode" jdbcType="VARCHAR" />
+		<result column="KEY_PROPERTIES" property="keyProperties" jdbcType="VARCHAR" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="SUPPLIER_CODE" property="supplierCode" jdbcType="VARCHAR" />
+		<result column="VERSION" property="version" jdbcType="VARCHAR" />
+		<result column="BRAND_ID" property="brandId" jdbcType="VARCHAR" />
+		<result column="PRODUCT_ID" property="productId" jdbcType="VARCHAR" />
+		<result column="EN_NAME" property="enName" jdbcType="VARCHAR" />
+		<result column="COLOR" property="color" jdbcType="VARCHAR" />
+		<result column="COLOR_NAME" property="colorName" jdbcType="VARCHAR" />
+		<result column="SKU_SIZE" property="skuSize" jdbcType="VARCHAR" />
+		<result column="PAPER_SKU_ID" property="paperSkuId" jdbcType="VARCHAR" />
+		<result column="EXT_PROP1" property="extProp1" jdbcType="VARCHAR" />
+		<result column="EXT_PROP2" property="extProp2" jdbcType="VARCHAR" />
+		<result column="EXT_PROP3" property="extProp3" jdbcType="VARCHAR" />
+		<result column="EXT_PROP4" property="extProp4" jdbcType="VARCHAR" />
+		<result column="EXT_PROP5" property="extProp5" jdbcType="VARCHAR" />
+		<result column="WARRANTY_CARD_TYPE" property="warrantyCardType" jdbcType="VARCHAR" />
+		<result column="CUSTOMER_ID" property="customerId" jdbcType="VARCHAR" />
+		<result column="WIDTH" property="width" jdbcType="VARCHAR" />
+		<result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+		<result column="LENGTH" property="length" jdbcType="VARCHAR" />
+		<result column="IS_SN_SKU" property="isSnSku" jdbcType="VARCHAR" />
+		<result column="SALES_MODEL" property="salesModel" jdbcType="VARCHAR" />
+		<result column="GROSS_WEIGHT" property="grossWeight" jdbcType="VARCHAR" />
+		<result column="BOX_QTY" property="boxQty" jdbcType="VARCHAR" />
+		<result column="STORE_MODE" property="storeMode" jdbcType="VARCHAR" />
+		<result column="IS_GIFT" property="isGift" jdbcType="VARCHAR" />
+		<result column="IS_RAILWAY" property="isRailway" jdbcType="VARCHAR" />
+		<result column="SKU_CATEGORIES_ID" property="skuCategoriesId" jdbcType="VARCHAR" />
+		<result column="CUSTOMER_SKU_CODE" property="customerSkuCode" jdbcType="VARCHAR" />
+		<result column="WARNING_DATE" property="warningDate" jdbcType="VARCHAR" />
+		<result column="VALID_DATE" property="validDate" jdbcType="VARCHAR" />
+		<result column="TIME_TYPE" property="timeType" jdbcType="VARCHAR" />
+		<result column="WARNING_DATE_LV1" property="warningDateLv1" jdbcType="VARCHAR" />
+		<result column="WARNING_DATE_LV2" property="warningDateLv2" jdbcType="VARCHAR" />
+		<result column="LIST_PRICE" property="listPrice" jdbcType="VARCHAR" />
+		<result column="INTERFACE_TYPE" property="interfaceType" jdbcType="VARCHAR" />
+		<result column="SN_TYPE" property="snType" jdbcType="VARCHAR" />
+		<result column="SN_CHECK_MODE" property="snCheckMode" jdbcType="VARCHAR" />
+		<result column="COUNTRY_OF_ORIGIN" property="countryOfOrigin" jdbcType="VARCHAR" />
+		<result column="SP_TYPE" property="spType" jdbcType="VARCHAR" />
+		<result column="CATEGORY" property="category" jdbcType="VARCHAR" />
+		<result column="SKU_TYPE_ID" property="skuTypeId" jdbcType="VARCHAR" />
+		<result column="BU" property="bu" jdbcType="VARCHAR" />
+		<result column="UNIT_NAME" property="unitName" jdbcType="VARCHAR" />
+		<result column="HTS_CODE" property="htsCode" jdbcType="VARCHAR" />
+		<result column="CUSTOMER_AND_EXT" property="customerAndExt" jdbcType="VARCHAR" />
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="THREEDIMENSIONA_LAST_TIME" property="threedimensionaLastTime" jdbcType="VARCHAR" />
+		<result column="CHILD_SN_QTY" property="childSnQty" jdbcType="VARCHAR" />
+		<result column="BU_TYPE" property="buType" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		a.ID,
+		a.BAR_CODE,
+		a.CODE,
+		a.EXT_CODE1,
+		a.EXT_CODE2,
+		a.EXT_CODE3,
+		a.JM_CODE,
+		a.KEY_PROPERTIES,
+		a.NAME,
+		a.SUPPLIER_CODE,
+		a.VERSION,
+		a.BRAND_ID,
+		a.PRODUCT_ID,
+		a.EN_NAME,
+		a.COLOR,
+		a.COLOR_NAME,
+		a.SKU_SIZE,
+		a.PAPER_SKU_ID,
+		a.EXT_PROP1,
+		a.EXT_PROP2,
+		a.EXT_PROP3,
+		a.EXT_PROP4,
+		a.EXT_PROP5,
+		a.WARRANTY_CARD_TYPE,
+		a.CUSTOMER_ID,
+		a.WIDTH,
+		a.HEIGHT,
+		a.LENGTH,
+		a.IS_SN_SKU,
+		a.SALES_MODEL,
+		a.GROSS_WEIGHT,
+		a.BOX_QTY,
+		a.STORE_MODE,
+		a.IS_GIFT,
+		a.IS_RAILWAY,
+		a.SKU_CATEGORIES_ID,
+		a.CUSTOMER_SKU_CODE,
+		a.WARNING_DATE,
+		a.VALID_DATE,
+		a.TIME_TYPE,
+		a.WARNING_DATE_LV1,
+		a.WARNING_DATE_LV2,
+		a.LIST_PRICE,
+		a.INTERFACE_TYPE,
+		a.SN_TYPE,
+		a.SN_CHECK_MODE,
+		a.COUNTRY_OF_ORIGIN,
+		a.SP_TYPE,
+		a.CATEGORY,
+		a.SKU_TYPE_ID,
+		a.BU,
+		a.UNIT_NAME,
+		a.HTS_CODE,
+		a.CUSTOMER_AND_EXT,
+		a.USER_ID,
+		a.THREEDIMENSIONA_LAST_TIME,
+		a.CHILD_SN_QTY,
+		a.BU_TYPE,
+		b.NAME AS buTypeDisplay
+	</sql>
+	
+	<select id="executeSelect" parameterType="com.lmis.pos.skuBase.model.PosSkuBase" resultMap="PosSkuBaseMap">
+		SELECT <include refid="Base_Column_List" /> FROM pos_sku_base a
+		LEFT JOIN  pos_whs_butype b ON b.code=a.BU_TYPE
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND a.ID = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="barCode!=null and barCode!=''">
+	            AND a.BAR_CODE = #{barCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="code!=null and code!=''">
+	            AND a.CODE = #{code, jdbcType=VARCHAR}
+	        </if>
+	        <if test="extCode1!=null and extCode1!=''">
+	            AND a.EXT_CODE1 = #{extCode1, jdbcType=VARCHAR}
+	        </if>
+	        <if test="extCode2!=null and extCode2!=''">
+	            AND a.EXT_CODE2 = #{extCode2, jdbcType=VARCHAR}
+	        </if>
+	        <if test="extCode3!=null and extCode3!=''">
+	            AND a.EXT_CODE3 = #{extCode3, jdbcType=VARCHAR}
+	        </if>
+	        <if test="jmCode!=null and jmCode!=''">
+	            AND a.JM_CODE = #{jmCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="keyProperties!=null and keyProperties!=''">
+	            AND a.KEY_PROPERTIES = #{keyProperties, jdbcType=VARCHAR}
+	        </if>
+	        <if test="name!=null and name!=''">
+	            AND a.NAME = #{name, jdbcType=VARCHAR}
+	        </if>
+	        <if test="supplierCode!=null and supplierCode!=''">
+	            AND a.SUPPLIER_CODE = #{supplierCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="version!=null and version!=''">
+	            AND a.VERSION = #{version, jdbcType=VARCHAR}
+	        </if>
+	        <if test="brandId!=null and brandId!=''">
+	            AND a.BRAND_ID = #{brandId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="productId!=null and productId!=''">
+	            AND a.PRODUCT_ID = #{productId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="enName!=null and enName!=''">
+	            AND a.EN_NAME = #{enName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="color!=null and color!=''">
+	            AND a.COLOR = #{color, jdbcType=VARCHAR}
+	        </if>
+	        <if test="colorName!=null and colorName!=''">
+	            AND a.COLOR_NAME = #{colorName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="skuSize!=null and skuSize!=''">
+	            AND a.SKU_SIZE = #{skuSize, jdbcType=VARCHAR}
+	        </if>
+	        <if test="paperSkuId!=null and paperSkuId!=''">
+	            AND a.PAPER_SKU_ID = #{paperSkuId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="extProp1!=null and extProp1!=''">
+	            AND a.EXT_PROP1 = #{extProp1, jdbcType=VARCHAR}
+	        </if>
+	        <if test="extProp2!=null and extProp2!=''">
+	            AND a.EXT_PROP2 = #{extProp2, jdbcType=VARCHAR}
+	        </if>
+	        <if test="extProp3!=null and extProp3!=''">
+	            AND a.EXT_PROP3 = #{extProp3, jdbcType=VARCHAR}
+	        </if>
+	        <if test="extProp4!=null and extProp4!=''">
+	            AND a.EXT_PROP4 = #{extProp4, jdbcType=VARCHAR}
+	        </if>
+	        <if test="extProp5!=null and extProp5!=''">
+	            AND a.EXT_PROP5 = #{extProp5, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warrantyCardType!=null and warrantyCardType!=''">
+	            AND a.WARRANTY_CARD_TYPE = #{warrantyCardType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="customerId!=null and customerId!=''">
+	            AND a.CUSTOMER_ID = #{customerId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="width!=null and width!=''">
+	            AND a.WIDTH = #{width, jdbcType=VARCHAR}
+	        </if>
+	        <if test="height!=null and height!=''">
+	            AND a.HEIGHT = #{height, jdbcType=VARCHAR}
+	        </if>
+	        <if test="length!=null and length!=''">
+	            AND a.LENGTH = #{length, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isSnSku!=null and isSnSku!=''">
+	            AND a.IS_SN_SKU = #{isSnSku, jdbcType=VARCHAR}
+	        </if>
+	        <if test="salesModel!=null and salesModel!=''">
+	            AND a.SALES_MODEL = #{salesModel, jdbcType=VARCHAR}
+	        </if>
+	        <if test="grossWeight!=null and grossWeight!=''">
+	            AND a.GROSS_WEIGHT = #{grossWeight, jdbcType=VARCHAR}
+	        </if>
+	        <if test="boxQty!=null and boxQty!=''">
+	            AND a.BOX_QTY = #{boxQty, jdbcType=VARCHAR}
+	        </if>
+	        <if test="storeMode!=null and storeMode!=''">
+	            AND a.STORE_MODE = #{storeMode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isGift!=null and isGift!=''">
+	            AND a.IS_GIFT = #{isGift, jdbcType=VARCHAR}
+	        </if>
+	        <if test="isRailway!=null and isRailway!=''">
+	            AND a.IS_RAILWAY = #{isRailway, jdbcType=VARCHAR}
+	        </if>
+	        <if test="skuCategoriesId!=null and skuCategoriesId!=''">
+	            AND a.SKU_CATEGORIES_ID = #{skuCategoriesId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="customerSkuCode!=null and customerSkuCode!=''">
+	            AND a.CUSTOMER_SKU_CODE = #{customerSkuCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warningDate!=null and warningDate!=''">
+	            AND a.WARNING_DATE = #{warningDate, jdbcType=VARCHAR}
+	        </if>
+	        <if test="validDate!=null and validDate!=''">
+	            AND a.VALID_DATE = #{validDate, jdbcType=VARCHAR}
+	        </if>
+	        <if test="timeType!=null and timeType!=''">
+	            AND a.TIME_TYPE = #{timeType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warningDateLv1!=null and warningDateLv1!=''">
+	            AND a.WARNING_DATE_LV1 = #{warningDateLv1, jdbcType=VARCHAR}
+	        </if>
+	        <if test="warningDateLv2!=null and warningDateLv2!=''">
+	            AND a.WARNING_DATE_LV2 = #{warningDateLv2, jdbcType=VARCHAR}
+	        </if>
+	        <if test="listPrice!=null and listPrice!=''">
+	            AND a.LIST_PRICE = #{listPrice, jdbcType=VARCHAR}
+	        </if>
+	        <if test="interfaceType!=null and interfaceType!=''">
+	            AND a.INTERFACE_TYPE = #{interfaceType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="snType!=null and snType!=''">
+	            AND a.SN_TYPE = #{snType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="snCheckMode!=null and snCheckMode!=''">
+	            AND a.SN_CHECK_MODE = #{snCheckMode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="countryOfOrigin!=null and countryOfOrigin!=''">
+	            AND a.COUNTRY_OF_ORIGIN = #{countryOfOrigin, jdbcType=VARCHAR}
+	        </if>
+	        <if test="spType!=null and spType!=''">
+	            AND a.SP_TYPE = #{spType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="category!=null and category!=''">
+	            AND a.CATEGORY = #{category, jdbcType=VARCHAR}
+	        </if>
+	        <if test="skuTypeId!=null and skuTypeId!=''">
+	            AND a.SKU_TYPE_ID = #{skuTypeId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="bu!=null and bu!=''">
+	            AND a.BU = #{bu, jdbcType=VARCHAR}
+	        </if>
+	        <if test="unitName!=null and unitName!=''">
+	            AND a.UNIT_NAME = #{unitName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="htsCode!=null and htsCode!=''">
+	            AND a.HTS_CODE = #{htsCode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="customerAndExt!=null and customerAndExt!=''">
+	            AND a.CUSTOMER_AND_EXT = #{customerAndExt, jdbcType=VARCHAR}
+	        </if>
+	        <if test="userId!=null and userId!=''">
+	            AND a.USER_ID = #{userId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="threedimensionaLastTime!=null and threedimensionaLastTime!=''">
+	            AND a.THREEDIMENSIONA_LAST_TIME = #{threedimensionaLastTime, jdbcType=VARCHAR}
+	        </if>
+	        <if test="childSnQty!=null and childSnQty!=''">
+	            AND a.CHILD_SN_QTY = #{childSnQty, jdbcType=VARCHAR}
+	        </if>
+	        <if test="buType!=null and buType!=''">
+	            AND a.BU_TYPE = #{buType, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:loxia="http://loxia.benjamin.cn/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	
+	<bean id="EtamOmsInvRule.findEtamOmsInvRule1ByPage" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select inv.* from t_etam_inv_rule inv
+					where inv.rule_type = 1 
+						#if ($brand)
+						  and upper(inv.brand) like upper(:brand)
+						#end
+						#if ($sizes)
+						  and upper(inv.sizes) like upper(:sizes)
+						#end
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="EtamOmsInvRule.findEtamOmsInvRule2ByPage" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select inv.* from t_etam_inv_rule inv
+					where inv.rule_type = 2
+						#if ($bar9)
+						  and upper(inv.bar9) like upper(:bar9)
+						#end
+						#if ($color)
+						  and upper(inv.color) like upper(:color)
+						#end
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="EtamOmsInvRule.cancelEtam" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					delete from t_etam_inv_rule where id=:id
+		       ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="MailLog.findMailLog" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+        <![CDATA[
+		        select * from T_MAIL_LOG t where
+					recipient ='bzhou@underarmour.com' 
+					--recipient ='wei.wang2@baozun.cn' 
+					and rownum < 2 order by id desc
+          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+</beans>

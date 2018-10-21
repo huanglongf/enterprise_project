@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:loxia="http://loxia.benjamin.cn/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="Parcel.findByLpcodeAndMailNo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							select a.id  as id,
+								       a.version,a.shipping_date,
+								       a.code,
+								       a.origin_code,
+								       a.destination_code,
+								       a.oms_order_code,
+								       a.outer_order_code,
+								       a.sender,
+								       a.sender_mobile,
+								       a.receiver,
+								       a.receiver_mobile,
+								       a.address,
+								       a.status as statusInteger,
+								       a.mail_no,
+								       a.lpcode,
+								       a.parcel_quantity,
+								       a.courier,
+								       a.shipment_contents,
+								       a.charges,
+								       a.is_cod,
+								       a.remark
+								  from T_WH_PARCEL a
+								 where a.mail_no = :mailNo
+								   and a.lpcode = :lpcode
+								    #if($outerOrderCode)
+								    	and a.outer_order_code = :outerOrderCode
+								    #end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Parcel.updateByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							UPDATE T_WH_PARCEL T SET T.STATUS = :status WHERE T.MAIL_NO = :mailNo and T.LPCODE = :lpcode
+									#if($outerOrderCode)
+								    	and t.outer_order_code = :outerOrderCode
+								    #end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Parcel.updateMailByLpcodeAndMailNo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							UPDATE T_WH_PARCEL T SET T.MAIL_NO = :slipMailNo, T.LPCODE = :slipLpcode, t.remark =t.remark|| :remark WHERE T.MAIL_NO = :mailNo and T.LPCODE = :lpcode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<bean id="SysInterfaceQueue.updateByLpcodeAndMailNo" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							UPDATE T_SYS_INTERFACE_QUEUE T SET T.STATUS = :status,t.remark = :remark,t.error_Code = :errorCode WHERE T.MAIL_NO = :mailNo and T.LPCODE = :lpcode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<bean id="SysInterfaceQueue.updateByCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							UPDATE T_SYS_INTERFACE_QUEUE T SET T.STATUS = :status,T.remark = :remark,T.error_code = :errorCode WHERE t.oms_order_code = :omsOrderCode and t.mail_no = :mailNo and t.lpcode = :lpCode
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Shipment.findByMultiCodeForResponse" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							              select ship.origin_code,ship.destination_code, p.code as parcelCode,
+													       p.lpcode as lpCode,
+													       p.mail_no as mailNo,
+													       ship.receiver as receiver,
+													       ship.receiver_mobile as receiverMobile,
+													       ship.address as receiverAddress,
+													       origin.contact as sender,
+													       origin.mobile as senderMobile,
+													       origin.address as shipperAddress,
+													       p.shipment_contents as shipmentContents,
+       													   origin.branch_name as shippingSignature,
+     													   '95338' as sfMobile,
+													       ship.parcel_count as quantity,
+											               case
+													         when origin.pay_method is not null then
+													          origin.pay_method
+													         else
+													          1
+													       end as chargeTo,
+													       case
+													         when p.delivery_time is not null then
+													          p.delivery_time
+													         else
+													          p.create_time
+													       end as shippingDate,       
+													       ship.remark as remarks,
+													       origin.region_code as originRegionCode,
+													       destination.region_code as destinationRegionCode,
+													       origin.account_no as accountNo,
+													       case
+													         when ship.oms_ra_code is not null then
+													          ship.oms_ra_code
+													         else
+													          ship.platform_order_code
+													       end as slipCode
+				                          from T_WH_PARCEL_INFO p
+				                          inner join T_WH_SHIPMENT ship ON ship.ID = p.SHIPMENT_ID
+				                          inner join T_MA_BRANCH_LIBRRARY origin on origin.slip_code = ship.origin_code
+				                          left join T_MA_BRANCH_LIBRRARY destination on destination.slip_code = ship.destination_code
+				                         where 1=1
+					                         #if($platformOrderCode)
+					                           and ship.PLATFORM_ORDER_CODE = :platformOrderCode
+					                         #end
+					                         #if($omsOrderCode)
+					                           and ship.OMS_ORDER_CODE = :omsOrderCode
+					                         #end
+					                         #if($platformRaCode)
+					                           and ship.PLATFORM_RA_CODE = :platformRaCode
+					                         #end
+					                         #if($omsRaCode)
+					                           and ship.OMS_RA_CODE = :omsRaCode
+					                         #end
+					                         #if($mailNo)
+					                           and p.mail_No = :mailNo
+					                         #end
+					                         #if($type)
+					                           and ship.TYPE =  = :type
+					                         #end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ParcelInfo.updateByCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							UPDATE T_WH_PARCEL_INFO T SET T.STATUS = :status
+							#if($signedTime)
+								,T.SIGNED_TIME = :signedTime
+							#end
+							#if($finishedTime)
+								,T.FINISHED_TIME = :finishedTime
+							#end
+							 WHERE T.CODE = :code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ParcelInfo.updateMailNoByCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							UPDATE T_WH_PARCEL_INFO T SET 
+								T.MAIL_NO = :mailNo
+							#if($lpcode)
+								,T.LPCODE = :lpcode
+							#end
+							 WHERE T.CODE = :code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ParcelInfo.findByLpcodeAndMailNoAndPFCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							select  p.id  as id from t_wh_shipment t, T_WH_PARCEL_INFO p
+			                         where t.id = p.shipment_id 
+				                         		and p.mail_no = :mailNo
+				                        	    and p.lpcode = :lpcode
+						                        #if($platformOrderCode)
+					                            	   and t.platform_order_code = :platformOrderCode
+					                            #end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Shipment.findByMultiCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							select  p.id  as id,p.parcel_count as parcelCount,p.remark as remark
+							 from T_WH_SHIPMENT p
+			                         where 1=1
+			                         #if($platformOrderCode)
+			                           and p.PLATFORM_ORDER_CODE = :platformOrderCode
+			                         #end
+			                         #if($omsOrderCode)
+			                           and p.OMS_ORDER_CODE = :omsOrderCode
+			                         #end
+			                         #if($platformRaCode)
+			                           and p.PLATFORM_RA_CODE = :platformRaCode
+			                         #end
+			                         #if($omsRaCode)
+			                           and p.OMS_RA_CODE = :omsRaCode
+			                         #end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ParcelInfo.findByCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							select  p.id  as id,
+				                       p.code as code,
+                              		   p.delivery_time as deliveryTime,
+				                       ship.origin_code as originCode,
+				                       ship.destination_code as destinationCode,
+				                       ship.oms_order_code as omsOrderCode,
+				                       ship.platform_order_code as platformOrderCode,
+				                       ship.platform_ra_code as platformRaCode,
+				                       ship.oms_ra_code as omsRaCode,
+				                       ship.sender as sender,
+				                       ship.sender_mobile as senderMobile,
+				                       ship.receiver as receiver,
+				                       ship.receiver_mobile as receiverMobile,
+				                       ship.address as address,
+				                       p.status as status,
+				                       p.mail_no as mailNo,
+				                       p.lpcode as lpcode,
+				                       ship.is_cod as isCod,
+
+				                       p.total_qty as parcelCount,
+				                       p.shipment_contents as shipmentContents,
+				                       ship.total_charges as totalCharges,
+                        		       ship.channel_code as channelCode,
+                                   	   ship.trans_time_type as transTimeType,
+                                  	   ship.source_sys as sourceSys,
+				                       p.remark as remark,
+                                       p.total_qty as totalQty
+				                  from T_WH_PARCEL_INFO p
+				                  inner join T_WH_SHIPMENT ship ON ship.ID = p.SHIPMENT_ID
+				                 where p.code = :code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ParcelInfo.findByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							select  p.id  as id,
+				                       p.code as code,
+                              		   p.delivery_time as deliveryTime,
+				                       ship.origin_code as originCode,
+				                       ship.destination_code as destinationCode,
+				                       ship.oms_order_code as omsOrderCode,
+				                       ship.platform_order_code as platformOrderCode,
+				                       ship.platform_ra_code as platformRaCode,
+				                       ship.oms_ra_code as omsRaCode,
+				                       ship.sender as sender,
+				                       ship.sender_mobile as senderMobile,
+				                       ship.receiver as receiver,
+				                       ship.receiver_mobile as receiverMobile,
+				                       ship.address as address,
+				                       p.status as status,
+				                       p.mail_no as mailNo,
+				                       p.lpcode as lpcode,
+				                       ship.is_cod as isCod,
+
+				                       p.total_qty as parcelCount,
+				                       p.shipment_contents as shipmentContents,
+				                       ship.total_charges as totalCharges,
+                        		       ship.channel_code as channelCode,
+                                   	   ship.trans_time_type as transTimeType,
+                                  	   ship.source_sys as sourceSys,
+				                       p.remark as remark,
+                                       p.total_qty as totalQty
+				                  from T_WH_PARCEL_INFO p
+				                  inner join T_WH_SHIPMENT ship ON ship.ID = p.SHIPMENT_ID
+				                 where 1=1
+				             	     #if($mailNo)
+			                           and p.mail_no = :mailNo
+			                         #end
+				             	     #if($lpCode)
+			                           and p.lpcode = :lpCode
+			                         #end
+				             	  	 and (1!= 1 
+										  #foreach($channelCode in $channelCodes)
+										      or  ship.channel_code = '$channelCode' 
+										  #end
+								 	  )
+				                 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Shipment.updateParcelCountById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							update t_wh_shipment t set t.parcel_count = (select count(1) from t_wh_parcel_info tt where tt.shipment_id = t.id) where t.id = :id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 根据运单号（必填） + 物流商编码（必填） + OMS订单号（可为空） 查询包裹信息 -->
+	<bean id="PackageInfo.findByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+							select sta.outbound_time  shipTime,
+								       sd.is_cod          isCod,
+								       p.tracking_no      trackNo,
+								       p.lpcode           lpCode,
+								       t.name             lpName,
+								       sd.trans_time_type transtimeType,
+								       sta.total_actual   totalCharges,
+								       sta.store_code    storeCode,
+								       sta.slip_code      omsCode,
+								       sta.slip_code2     orderCode,
+								       sd.receiver        receiver,
+								       sd.mobile          receiverPhone,
+                     				   sd.order_user_mail receiverEmail,
+								       sta.owner          shopCode,
+								       au.code            sourceCode,
+								       sta.sku_qty        totalQty
+								  from t_wh_sta               sta,
+								       t_wh_sta_delivery_info sd,
+								       t_wh_package_info      p,
+								       t_ma_transportator     t,
+								       t_au_operation_unit    au
+								 where p.sta_delivery_info_id = sd.id
+								   and sd.id = sta.id
+								   and t.exp_code = p.lpcode
+								   and au.id = sta.main_wh_id
+								   and p.lpcode = :lpCode
+								   and p.tracking_no = :trackingNo
+								   #if($omsOrderCode)
+								   		and sta.slip_code = :omsOrderCode
+								   #end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Warehouse.findWarehouseByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					  	select au.code        whCode,
+				                     w.pic          pic,
+				                     w.pic_contact  picContact,
+				                     w.phone        telphone,
+				                     w.province     province,
+				                     w.city         city,
+				                     w.district district,
+				                     w.address      address,
+				                     w.zipcode      zipcode,
+				                     w.oth_contact1,
+				                     w.oth_contact2,
+				                     w.oth_contact3
+				                from t_au_operation_unit au, T_BI_WAREHOUSE w
+											 where w.ou_id = au.id
+											   and au.id =  :whOuId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

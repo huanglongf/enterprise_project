@@ -1,0 +1,90 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/context
+        				http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            			http://cxf.apache.org/jaxws 
+            			http://cxf.apache.org/schemas/jaxws.xsd
+            			http://cxf.apache.org/jaxrs 
+            			http://cxf.apache.org/schemas/jaxrs.xsd
+            			http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+	<bean id="jaxbBean" class="org.apache.cxf.jaxb.JAXBDataBinding"
+		scope="prototype" />
+
+	<context:component-scan base-package="com.jumbo.webservice.biaogan.service">
+		<context:include-filter type="annotation"
+			expression="org.aspectj.lang.annotation.Aspect" />
+	</context:component-scan>
+
+	<aop:aspectj-autoproxy />
+	<bean class="com.jumbo.webservice.base.AuthenticationInteceptor" />
+
+	<bean id="biaoganService" class="com.jumbo.webservice.biaogan.service.BiaoganWebService" />
+	<bean id="nikeService" class="com.jumbo.webservice.nike.service.NikeWebService" />
+	<bean id="idsService" class="com.jumbo.webservice.ids.service.IdsService" />
+	<bean id="sfService" class="com.jumbo.webservice.sfOrder.service.SfWebService" />
+
+	<bean id="outsourcingWHService"
+		class="com.jumbo.webservice.outsourcingWH.service.OutsourcingWHService" />
+	
+	<jaxws:endpoint id="scansku"
+		implementor="com.jumbo.webservice.sku.service.ScanSkuServiceImpl" address="/scansku">
+		<jaxws:properties>
+			<entry key="schema-validation-enabled" value="true" />
+		</jaxws:properties>
+	</jaxws:endpoint>
+
+	<jaxws:endpoint id="pda"
+		implementor="com.jumbo.webservice.pda.PdaServiceImpl" address="/pda">
+		<jaxws:properties>
+			<entry key="schema-validation-enabled" value="true" />
+		</jaxws:properties>
+	</jaxws:endpoint>
+
+	<jaxws:endpoint id="biaoganAddress" implementor="#biaoganService"
+		address="/biaogan" />
+	<jaxws:endpoint id="sfOrder" implementor="#sfService"
+		address="/sf" />
+
+	<jaxws:endpoint id="nikeAddress" implementor="#nikeService"
+		address="/nike" /><!-- <jaxrs:server id="idsAddress" address="/idsService"> 
+		<jaxrs:serviceBeans> <ref bean="idsService" /> </jaxrs:serviceBeans> </jaxrs:server> -->
+
+	<jaxrs:server id="idsAddress" address="/idsService">
+		<jaxrs:serviceBeans>
+			<ref bean="idsService" />
+		</jaxrs:serviceBeans>
+
+		<jaxrs:extensionMappings>
+			<entry key="feed" value="application/atom+xml" />
+			<entry key="json" value="application/json" />
+			<entry key="xml" value="application/xml" />
+			<entry key="html" value="text/html" />
+		</jaxrs:extensionMappings>
+	</jaxrs:server>
+
+	<jaxrs:server id="outsourcingWHAddress" address="/outsourcingWHServiceRest">
+		<jaxrs:serviceBeans>
+			<ref bean="outsourcingWHService" />
+		</jaxrs:serviceBeans>
+
+		<jaxrs:extensionMappings>
+			<entry key="feed" value="application/atom+xml" />
+			<entry key="json" value="application/json" />
+			<entry key="xml" value="application/xml" />
+			<entry key="html" value="text/html" />
+		</jaxrs:extensionMappings>
+	</jaxrs:server>
+
+	<jaxws:endpoint id="outsourcingWHAddressWDSL"
+		implementor="#outsourcingWHService" address="/outsourcingWHService" />
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+</beans>

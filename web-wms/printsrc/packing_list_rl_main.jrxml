@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="packing_list_rl_main" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
+	<property name="ireport.zoom" value="0.9090909090909238"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="88"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\jinggang.chen\\Desktop\\rl\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="subReport" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="receiverAddress" class="java.lang.String"/>
+	<field name="orderDate" class="java.lang.String"/>
+	<field name="batchNo" class="java.lang.String"/>
+	<field name="code" class="java.lang.String"/>
+	<field name="lines" class="java.util.List"/>
+	<field name="transferFee" class="java.lang.String"/>
+	<field name="zipcode" class="java.lang.String"/>
+	<field name="slipCode2" class="java.lang.String"/>
+	<field name="soCode" class="java.lang.String"/>
+	<field name="printshopname2" class="java.lang.String"/>
+	<field name="qrCode" class="java.lang.String"/>
+	<field name="totalAmount" class="java.lang.String"/>
+	<field name="totalSkuListPrice" class="java.lang.String"/>
+	<field name="index" class="java.lang.String"/>
+	<field name="orderDate1" class="java.lang.String"/>
+	<group name="1Group">
+		<groupExpression><![CDATA[$F{index}]]></groupExpression>
+		<groupHeader>
+			<band height="155">
+				<subreport>
+					<reportElement key="subreport-1" x="25" y="4" width="510" height="147" isRemoveLineWhenBlank="true" />
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+					<subreportExpression><![CDATA[$P{subReport}]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="305" splitType="Stretch">
+			<staticText>
+				<reportElement x="25" y="115" width="56" height="18" />
+				<textElement>
+					<font fontName="黑体-繁" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[订单日期:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="81" y="115" width="100" height="18" />
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderDate1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="25" y="138" width="56" height="18" />
+				<textElement>
+					<font fontName="黑体-繁" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[收货地址:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="81" y="138" width="284" height="18" />
+				<textElement>
+					<font fontName="黑体-繁" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="81" y="155" width="156" height="18" />
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{telephone}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="81" y="172" width="284" height="36" >
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement>
+					<font fontName="黑体-繁" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiverAddress}+"\t\n\t"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="237" y="155" width="128" height="18" />
+				<textElement>
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{zipcode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="237" y="87" width="84" height="22" />
+				<textElement textAlignment="Center">
+					<font fontName="黑体-繁" size="13"/>
+				</textElement>
+				<text><![CDATA[发货清单]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement x="380" y="105" width="155" height="43" />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="1" barHeight="34">
+					<jr:codeExpression><![CDATA[$F{batchNo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<componentElement>
+				<reportElement x="380" y="170" width="155" height="43" />
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="1" barHeight="34">
+					<jr:codeExpression><![CDATA[$F{soCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="150" width="155" height="18" />
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{batchNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="380" y="215" width="155" height="18" />
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{soCode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="23" y="217" width="66" height="18" />
+				<box leftPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="黑体-繁" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[订单编号:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="235" width="66" height="18" />
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="黑体-繁" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[作业单号:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="89" y="217" width="135" height="18" />
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "+$F{slipCode2}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="89" y="235" width="135" height="18" />
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "+$F{code}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="158" y="0" width="240" height="80" />
+				<imageExpression><![CDATA["print_img/RalphLauren.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="25" y="268" width="510" height="18" />
+				<textElement textAlignment="Center">
+					<font fontName="黑体-繁" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["诚挚感谢您从"+$F{printshopname2}+"选购商品，"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="25" y="286" width="510" height="18" />
+				<textElement textAlignment="Center">
+					<font fontName="黑体-繁" size="10"/>
+				</textElement>
+				<text><![CDATA[我们一直致力为客户提供最优质的产品和服务。希望您对购买的产品感到满意。]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="485" y="0" width="23" height="20" />
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="黑体-繁" size="9"/>
+				</textElement>
+				<text><![CDATA[页]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="508" y="0" width="15" height="20" />
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="黑体-繁" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="268" splitType="Stretch">
+			<image scaleImage="RetainShape" isUsingCache="true">
+				<reportElement x="454" y="131" width="95" height="95" />
+				<imageExpression><![CDATA[$F{qrCode}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="25" y="236" width="303" height="18" />
+				<textElement verticalAlignment="Bottom">
+					<font fontName="黑体-繁" size="9"/>
+				</textElement>
+				<text><![CDATA[本发货单上的所有货币均为人民币。]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="446" y="222" width="110" height="18" />
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="黑体-繁" size="9"/>
+				</textElement>
+				<text><![CDATA[扫描二维码获取]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="446" y="236" width="110" height="18" />
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="黑体-繁" size="9"/>
+				</textElement>
+				<text><![CDATA[此次交易的具体信息]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="396" y="90" width="73" height="18" />
+				<textElement verticalAlignment="Middle">
+					<font fontName="黑体-繁" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[包装费:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="468" y="54" width="66" height="18" />
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new BigDecimal($F{totalAmount}).setScale(2, BigDecimal.ROUND_HALF_UP)+" "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="396" y="72" width="73" height="18" />
+				<textElement verticalAlignment="Middle">
+					<font fontName="黑体-繁" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[运费:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="468" y="90" width="66" height="18" />
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["0.00"+" "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="396" y="108" width="73" height="18" />
+				<textElement verticalAlignment="Middle">
+					<font fontName="黑体-繁" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[总额:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="468" y="108" width="66" height="18" />
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new BigDecimal($F{transferFee}).add(new BigDecimal($F{totalAmount})).setScale(2, BigDecimal.ROUND_HALF_UP)+" "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="468" y="72" width="66" height="18" />
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new BigDecimal($F{transferFee}).setScale(2, BigDecimal.ROUND_HALF_UP)+" "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="396" y="54" width="73" height="18" />
+				<textElement verticalAlignment="Middle">
+					<font fontName="黑体-繁" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[订单总价:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="25" y="144" width="243" height="14" >
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font fontName="黑体-繁" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["亲爱的顾客，感谢您一直以来的支持。为保障您的权益，"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="25" y="166" width="243" height="14" >
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font fontName="黑体-繁" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["确认收货前请仔细检查商品。若有任何问题请于7日内联"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="25" y="188" width="243" height="28" >
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font fontName="黑体-繁" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["络"+ $F{printshopname2} +"顾客服务专员为您办理。\t\n\t"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

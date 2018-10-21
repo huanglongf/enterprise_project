@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="15" >
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="101"/>
+	<property name="ireport.callouts" value="##Fri Mar 29 18:03:18 CST 2013"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<parameterDescription><![CDATA[SUBREPORT_DIR]]></parameterDescription>
+		<defaultValueExpression><![CDATA["jasperprint/packing_list_burberry_detail.jasper"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logImage" class="java.lang.String">
+		<parameterDescription><![CDATA[logImage]]></parameterDescription>
+		<defaultValueExpression><![CDATA["C:\\Users\\yaowei\\Desktop\\aaaaaa\\aa.png"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="xPath">
+		<![CDATA[/NameList/GoodsDetail]]>
+	</queryString>
+	<field name="orderCode" class="java.lang.String">
+		<fieldDescription><![CDATA[orderCode]]></fieldDescription>
+	</field>
+	<field name="lines" class="java.util.List">
+		<fieldDescription><![CDATA[lines]]></fieldDescription>
+	</field>
+	<field name="orderDate" class="java.lang.String">
+		<fieldDescription><![CDATA[orderDate]]></fieldDescription>
+	</field>
+	<field name="country" class="java.lang.String">
+		<fieldDescription><![CDATA[country]]></fieldDescription>
+	</field>
+	<field name="province" class="java.lang.String">
+		<fieldDescription><![CDATA[province]]></fieldDescription>
+	</field>
+	<field name="city" class="java.lang.String">
+		<fieldDescription><![CDATA[city]]></fieldDescription>
+	</field>
+	<field name="district" class="java.lang.String">
+		<fieldDescription><![CDATA[district]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[address]]></fieldDescription>
+	</field>
+	<field name="totalActual" class="java.lang.String">
+		<fieldDescription><![CDATA[totalActual]]></fieldDescription>
+	</field>
+	<field name="payType" class="java.lang.String">
+		<fieldDescription><![CDATA[payType]]></fieldDescription>
+	</field>
+	<field name="owner" class="java.lang.String"/>
+	<field name="memo" class="java.lang.String"/>
+	<group name="orderCode" isStartNewPage="true" isResetPageNumber="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{orderCode}]]></groupExpression>
+		<groupHeader>
+			<band height="41">
+				<staticText>
+					<reportElement x="451" y="3" width="43" height="20" />
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[数量]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="39" width="556" height="1" />
+				</line>
+				<staticText>
+					<reportElement x="88" y="3" width="93" height="20" />
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[条形码]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="382" y="3" width="70" height="20" />
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[颜色]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="333" y="3" width="50" height="20" />
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[尺码]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="180" y="3" width="155" height="20" />
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[详细信息]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="3" width="89" height="20" />
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[产品编码]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="493" y="3" width="62" height="20" />
+					<textElement textAlignment="Right">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[价格]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="0" width="555" height="1" />
+				</line>
+			</band>
+		</groupHeader>
+	</group>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="302" splitType="Stretch">
+			<staticText>
+				<reportElement x="11" y="133" width="53" height="14" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[顾客服务]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="235" width="100" height="20" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[寄货日期]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="186" width="100" height="18" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[寄货地址]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="93" width="100" height="26" />
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[寄货单]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="179" width="100" height="20" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[订单编号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="145" width="53" height="14" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[电话：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="207" width="100" height="20" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[订单日期]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="157" width="53" height="14" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[电子邮件：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="171" y="179" width="132" height="20" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="171" y="207" width="132" height="20" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="320" y="203" width="100" height="15" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{province}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="320" y="216" width="100" height="15" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{district}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="320" y="229" width="235" height="15" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="320" y="242" width="100" height="15" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{city}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="320" y="266" width="100" height="14" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{country}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="46" y="22" width="184" height="13" />
+				<imageExpression><![CDATA[$P{logImage}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="67" y="145" width="362" height="14" />
+				<textFieldExpression><![CDATA[$F{owner}=="博柏利微信官方商城" ? "4001201154":"4001203097"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="159" width="362" height="14" />
+				<textFieldExpression><![CDATA[$F{owner}=="博柏利微信官方商城" ? "wechat@burberry.com":"Tmall.customerservice@burberry.com"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="11" y="266" width="53" height="14" />
+				<textElement>
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<text><![CDATA[备注信息：]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="68" y="266" width="235" height="36" />
+				<textFieldExpression><![CDATA[$F{memo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="30" />
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement x="235" y="27" width="100" height="14" />
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[支付信息]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="235" y="55" width="100" height="14" />
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[谢谢]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="20" />
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[总价]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="25" width="555" height="1" />
+			</line>
+			<staticText>
+				<reportElement x="5" y="27" width="100" height="14" />
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[付款方式]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="397" y="0" width="157" height="20" isPrintWhenDetailOverflows="true" />
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalActual}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="235" y="40" width="100" height="16" isPrintWhenDetailOverflows="true" />
+				<textElement>
+					<font size="10" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Alipay eWallet"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="457" y="0" width="42" height="20" />
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[( CNY )]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="302" y="0" width="202" height="12" forecolor="#000000" />
+				<textElement textAlignment="Left" rotation="None">
+					<font fontName="宋体" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[博柏利（上海）贸易有限公司]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="12" width="555" height="10" forecolor="#000000" />
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[33/F, Wheelock Square, 1717 Nanjing West Road, Shanghai. (Post Code: 200040)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="22" width="555" height="10" forecolor="#000000" />
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="8" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[中国上海市南京西路     号会德丰国际广场    楼 (邮编:        ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="32" width="555" height="10" forecolor="#000000" />
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[General Line:  (86-21) 6171 8600     General Fax: (86-21) 6171 8611]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="48" y="1" width="246" height="12" forecolor="#000000" />
+				<textElement textAlignment="Right" rotation="None">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Burberry (Shanghai) Trading Co. Ltd.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="23" width="10" height="10" forecolor="#000000" />
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[33]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="23" width="32" height="10" forecolor="#000000" />
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[200040)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="229" y="23" width="20" height="10" forecolor="#000000" />
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[1717]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

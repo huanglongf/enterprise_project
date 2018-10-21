@@ -1,0 +1,34 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	<named-query name="VMIOrder.findByShopANDStatus">
+		<query><![CDATA[select o from VMIOrder o where o.status= :status and o.shopId= :shopId]]></query>
+	</named-query>
+	
+	<named-query name="VMIOrderLine.findByCode">
+		<query><![CDATA[select o from VMIOrderLine o where o.code=:code]]></query>
+	</named-query>
+	
+	<named-query name="VmiOrderOpLog.getOrderLogByOrderCode">
+		<query><![CDATA[select o from VmiOrderOpLog o where o.orderCode= :orderCode and o.msgBatchId.id is null]]></query>
+	</named-query>
+	
+	<named-query name="ESPDelivery.getDeliveryDatasByStaCode">
+		<query><![CDATA[select o from ESPDelivery o where o.staCode= :staCode and (o.status = 2 or o.status = 0)]]></query>
+	</named-query>
+	
+	<named-query name="ESPDelivery.getCloseDeliveryDatasByStaCode">
+		<query><![CDATA[select o from ESPDelivery o where o.staCode= :staCode and (o.status = 3 or o.status = 1)]]></query>
+	</named-query>
+	
+	<named-query name="TransferOwnerSource.getByOwnerSourceAndTargetOwner">
+		<query><![CDATA[select o from TransferOwnerSource o where o.ownerSource= :ownerSource and o.targetOwner = :targetOwner and o.ouId= :ouId]]></query>
+	</named-query>
+	
+	<named-query name="TransferOwnerTarget.getTransferOwnerTarget">
+		<query><![CDATA[select o from TransferOwnerTarget o where o.sourceOwner= :sourceOwner and o.targetOwner = :targetOwner and o.skuId = :skuId and o.ouId = :ouId]]></query>
+	</named-query>
+	
+	<named-query name="StaLf.getStaLfByStaId">
+		<query><![CDATA[select o from StaLf o where o.staId= :staId ]]></query>
+	</named-query>
+</entity-mappings>

@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.common.dao.PosDataFileTempleteMapper">
+	<resultMap type="com.lmis.framework.baseModel.PersistentObject" id="PersistentObjectMap">
+		<!-- 基类字段（必须存在） -->
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+		<result column="is_deleted" property="isDeleted" jdbcType="BOOLEAN" />
+		<result column="is_disabled" property="isDisabled" jdbcType="BOOLEAN" />
+		<result column="version" property="version" jdbcType="INTEGER" />
+		<result column="pwr_org" property="pwrOrg" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap type="com.lmis.pos.common.model.PosDataFileTemplete" id="PosDataFileTempleteMap" extends="PersistentObjectMap">
+		<!-- 子类字段 -->
+		<result column="templete_name" property="templeteName" jdbcType="VARCHAR" />
+		<result column="business_type" property="businessType" jdbcType="VARCHAR" />
+		<result column="business_group" property="businessGroup" jdbcType="VARCHAR" />
+		<result column="templete_type" property="templeteType" jdbcType="VARCHAR" />
+		<result column="templete_title_map" property="templeteTitleMap" jdbcType="VARCHAR" />
+		<result column="templete_mode" property="templeteMode" jdbcType="VARCHAR" />
+		<result column="file_id" property="fileId" jdbcType="VARCHAR" />
+		<result column="templete_mode_url" property="templeteModeUrl" jdbcType="VARCHAR" />
+		<result column="title_length" property="titleLength" jdbcType="INTEGER" />
+		<result column="templete_impl" property="templeteImpl" jdbcType="VARCHAR" />
+		<result column="templete_model" property="templeteModel" jdbcType="VARCHAR" />
+		<result column="upload_url" property="uploadUrl" jdbcType="VARCHAR" />
+		<result column="history_version" property="historyVersion" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,
+		create_time,
+		create_by,
+		update_time,
+		update_by,
+		is_deleted,
+		is_disabled,
+		version,
+		pwr_org,
+		templete_name,
+		business_type,
+		business_group,
+		templete_type,
+		templete_title_map,
+		templete_mode,
+		file_id,
+		templete_mode_url,
+		title_length,
+		templete_impl,
+		templete_model,
+		upload_url,
+		history_version,
+		remark
+	</sql>
+	<sql id="Create_Column_List">
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			id,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			is_deleted,
+			is_disabled,
+			version,
+			pwr_org,
+			templete_name,
+			business_type,
+			business_group,
+			templete_type,
+			templete_title_map,
+			templete_mode,
+			file_id,
+			templete_mode_url,
+			title_length,
+			templete_impl,
+			templete_model,
+			upload_url,
+			history_version,
+			remark
+		</trim>
+	</sql>
+	<insert id="create" parameterType="com.lmis.pos.common.model.PosDataFileTemplete">
+		INSERT INTO pos_data_file_templete
+		<include refid="Create_Column_List"></include>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			UUID(),
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			NOW(),
+			#{createBy, jdbcType=VARCHAR},
+			false,
+			false,
+			1,
+			#{pwrOrg, jdbcType=VARCHAR},
+			#{templeteName, jdbcType=VARCHAR},
+			#{businessType, jdbcType=VARCHAR},
+			#{businessGroup, jdbcType=VARCHAR},
+			#{templeteType, jdbcType=VARCHAR},
+			#{templeteTitleMap, jdbcType=VARCHAR},
+			#{templeteMode, jdbcType=VARCHAR},
+			#{fileId, jdbcType=VARCHAR},
+			#{templeteModeUrl, jdbcType=VARCHAR},
+			#{titleLength, jdbcType=INTEGER},
+			#{templeteImpl, jdbcType=VARCHAR},
+			#{templeteModel, jdbcType=VARCHAR},
+			#{uploadUrl, jdbcType=VARCHAR},
+			#{historyVersion, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR},
+			#{delFlag, jdbcType=VARCHAR},
+		</trim>
+	</insert>
+	<insert id="createBatch" parameterType="java.util.List">
+		INSERT INTO pos_data_file_templete
+		<include refid="Create_Column_List"></include>
+		VALUES
+		<foreach collection="list" item="obj" index="index" separator=",">
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				UUID(),
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				NOW(),
+				#{obj.createBy, jdbcType=VARCHAR},
+				false,
+				false,
+				1,
+				#{obj.pwrOrg, jdbcType=VARCHAR},
+				#{obj.templeteName, jdbcType=VARCHAR},
+				#{obj.businessType, jdbcType=VARCHAR},
+				#{obj.businessGroup, jdbcType=VARCHAR},
+				#{obj.templeteType, jdbcType=VARCHAR},
+				#{obj.templeteTitleMap, jdbcType=VARCHAR},
+				#{obj.templeteMode, jdbcType=VARCHAR},
+				#{obj.fileId, jdbcType=VARCHAR},
+				#{obj.templeteModeUrl, jdbcType=VARCHAR},
+				#{obj.titleLength, jdbcType=INTEGER},
+				#{obj.templeteImpl, jdbcType=VARCHAR},
+				#{obj.templeteModel, jdbcType=VARCHAR},
+				#{obj.uploadUrl, jdbcType=VARCHAR},
+				#{obj.historyVersion, jdbcType=VARCHAR},
+				#{obj.remark, jdbcType=VARCHAR},
+				#{obj.delFlag, jdbcType=VARCHAR},
+			</trim>
+		</foreach>
+	</insert>
+	<select id="retrieve" parameterType="com.lmis.pos.common.model.PosDataFileTemplete" resultMap="PosDataFileTempleteMap">
+		SELECT <include refid="Base_Column_List" /> FROM pos_data_file_templete
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+	        <if test="id!=null and id!=''">
+	            AND id = #{id, jdbcType=VARCHAR}
+	        </if>
+	        <if test="templeteName!=null and templeteName!=''">
+	            AND templete_name = #{templeteName, jdbcType=VARCHAR}
+	        </if>
+	        <if test="businessType!=null and businessType!=''">
+	            AND business_type = #{businessType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="businessGroup!=null and businessGroup!=''">
+	            AND business_group = #{businessGroup, jdbcType=VARCHAR}
+	        </if>
+	        <if test="templeteType!=null and templeteType!=''">
+	            AND templete_type = #{templeteType, jdbcType=VARCHAR}
+	        </if>
+	        <if test="templeteTitleMap!=null and templeteTitleMap!=''">
+	            AND templete_title_map = #{templeteTitleMap, jdbcType=VARCHAR}
+	        </if>
+	        <if test="templeteMode!=null and templeteMode!=''">
+	            AND templete_mode = #{templeteMode, jdbcType=VARCHAR}
+	        </if>
+	        <if test="fileId!=null and fileId!=''">
+	            AND file_id = #{fileId, jdbcType=VARCHAR}
+	        </if>
+	        <if test="templeteModeUrl!=null and templeteModeUrl!=''">
+	            AND templete_mode_url = #{templeteModeUrl, jdbcType=VARCHAR}
+	        </if>
+	        <if test="titleLength!=null">
+	            AND title_length = #{titleLength, jdbcType=INTEGER}
+	        </if>
+	        <if test="uploadUrl!=null and uploadUrl!=''">
+	            AND upload_url = #{uploadUrl, jdbcType=VARCHAR}
+	        </if>
+	        <if test="templeteImpl!=null and templeteImpl!=''">
+	            AND templete_impl = #{templeteImpl, jdbcType=VARCHAR}
+	        </if>
+	        <if test="templeteModel!=null and templeteModel!=''">
+	            AND templete_model = #{templeteModel, jdbcType=VARCHAR}
+	        </if>
+	        <if test="historyVersion!=null and historyVersion!=''">
+	            AND history_version = #{historyVersion, jdbcType=VARCHAR}
+	        </if>
+	        <if test="remark!=null and remark!=''">
+	            AND remark = #{remark, jdbcType=VARCHAR}
+	        </if>
+	        <if test="createTime!=null">
+	            AND create_time = #{createTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="updateTime!=null">
+	            AND update_time = #{updateTime, jdbcType=TIMESTAMP}
+	        </if>
+	        <if test="createBy!=null and createBy!=''">
+	            AND create_by = #{createBy, jdbcType=VARCHAR}
+	        </if>
+	        <if test="updateBy!=null and updateBy!=''">
+	            AND update_by = #{updateBy, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</select>
+	<update id="update" parameterType="com.lmis.pos.common.model.PosDataFileTemplete">
+		UPDATE pos_data_file_templete
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDeleted!=null">
+	            is_deleted = #{isDeleted, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="isDisabled!=null">
+	            is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+	        <if test="templeteName!=null and templeteName!=''">
+	            templete_name = #{templeteName, jdbcType=VARCHAR},
+	        </if>
+	        <if test="businessType!=null and businessType!=''">
+	            business_type = #{businessType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="businessGroup!=null and businessGroup!=''">
+	            business_group = #{businessGroup, jdbcType=VARCHAR},
+	        </if>
+	        <if test="templeteType!=null and templeteType!=''">
+	            templete_type = #{templeteType, jdbcType=VARCHAR},
+	        </if>
+	        <if test="templeteTitleMap!=null and templeteTitleMap!=''">
+	            templete_title_map = #{templeteTitleMap, jdbcType=VARCHAR},
+	        </if>
+	        <if test="templeteMode!=null and templeteMode!=''">
+	            templete_mode = #{templeteMode, jdbcType=VARCHAR},
+	        </if>
+	        <if test="fileId!=null and fileId!=''">
+	            file_id = #{fileId, jdbcType=VARCHAR},
+	        </if>
+	        <if test="templeteModeUrl!=null and templeteModeUrl!=''">
+	            templete_mode_url = #{templeteModeUrl, jdbcType=VARCHAR},
+	        </if>
+	        <if test="titleLength!=null">
+	            title_length = #{titleLength, jdbcType=INTEGER},
+	        </if>
+	        <if test="templeteImpl!=null and templeteImpl!=''">
+	            templete_impl = #{templeteImpl, jdbcType=VARCHAR},
+	        </if>
+	        <if test="templeteModel!=null and templeteModel!=''">
+	            templete_model = #{templeteModel, jdbcType=VARCHAR},
+	        </if>
+	        <if test="uploadUrl!=null and uploadUrl!=''">
+	            upload_url = #{uploadUrl, jdbcType=VARCHAR},
+	        </if>
+	        <if test="historyVersion!=null and historyVersion!=''">
+	            history_version = #{historyVersion, jdbcType=VARCHAR},
+	        </if>
+	        <if test="remark!=null and remark!=''">
+	            remark = #{remark, jdbcType=VARCHAR},
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="businessType!=null and businessType!=''">
+	        	AND business_type = #{businessType, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="updateRecord" parameterType="com.lmis.pos.common.model.PosDataFileTemplete">
+		UPDATE pos_data_file_templete
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="version!=null">
+        		version = version + 1,
+        	</if>
+        	templete_name = #{templeteName, jdbcType=VARCHAR},
+        	business_type = #{businessType, jdbcType=VARCHAR},
+        	business_group = #{businessGroup, jdbcType=VARCHAR},
+        	templete_type = #{templeteType, jdbcType=VARCHAR},
+        	templete_title_map = #{templeteTitleMap, jdbcType=VARCHAR},
+        	templete_mode = #{templeteMode, jdbcType=VARCHAR},
+            file_id = #{fileId, jdbcType=VARCHAR},
+        	templete_mode_url = #{templeteModeUrl, jdbcType=VARCHAR},
+        	title_length = #{titleLength, jdbcType=INTEGER},
+            templete_impl = #{templeteImpl, jdbcType=VARCHAR},
+            templete_model = #{templeteModel, jdbcType=VARCHAR},
+        	upload_url = #{uploadUrl, jdbcType=VARCHAR},
+        	history_version = #{historyVersion, jdbcType=VARCHAR},
+        	remark = #{remark, jdbcType=VARCHAR},
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="businessType!=null and businessType!=''">
+	        	AND business_type = #{businessType, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="logicalDelete" parameterType="com.lmis.pos.common.model.PosDataFileTemplete">
+		UPDATE pos_data_file_templete
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        is_deleted = true,
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+	    		AND version = #{version, jdbcType=INTEGER}
+	    	</if>
+		    <if test="businessType!=null and businessType!=''">
+	        	AND business_type = #{businessType, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<update id="shiftValidity" parameterType="com.lmis.pos.common.model.PosDataFileTemplete">
+		UPDATE pos_data_file_templete
+		<trim prefix="SET" suffixOverrides=",">
+			update_time = NOW(),
+	        update_by = #{updateBy, jdbcType=VARCHAR},
+	        <if test="isDisabled!=null">
+	        	is_disabled = #{isDisabled, jdbcType=BOOLEAN},
+	        </if>
+	        <if test="version!=null">
+	        	version = version + 1,
+	        </if>
+	    </trim>
+	    <trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="version!=null">
+		    	AND version = #{version, jdbcType=INTEGER}
+		    </if>
+		    <if test="businessType!=null and businessType!=''">
+	        	AND business_type = #{businessType, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</update>
+	<delete id="delete" parameterType="com.lmis.pos.common.model.PosDataFileTemplete">
+		DELETE FROM pos_data_file_templete
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+		    <if test="id!=null and id!=''">
+		    	id = #{id, jdbcType=VARCHAR}
+		    </if>
+		    <if test="businessType!=null and businessType!=''">
+	        	AND business_type = #{businessType, jdbcType=VARCHAR}
+	        </if>
+	    </trim>
+	</delete>
+</mapper>

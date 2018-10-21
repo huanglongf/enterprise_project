@@ -1,0 +1,1214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<bean id="productInfoMainTainReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>productInfoMainImport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="nikeProductInfoMaintainReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>nikeProductInfoMainImport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="snnumberMainTainReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>snnumberMainImport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="skunumberMainTainReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>skunumberMainImport</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="staReaderForRepair" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>repairstaexptplforpurchase</value>
+				<value>repairstaexptplforpurchase2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="skuImportForBatchReceiving" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>importforbatchreceivingsheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="importInboundPutaway" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>importInboundPutawaysheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="staReaderForPurchase" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>staimptplforpurchase</value>
+				<value>staimptplforpurchase2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="totalJNJInvWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>exportJNJInv</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="staGIReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>staGIimport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="staWriterForPurchase" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>staexptplforpurchase</value>
+				<value>staexptplforpurchaseSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="staGIWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>staexptplforpurchase</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="pickingListWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>pickingListWriterSheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="staReaderForPredefined" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>predefinedstaimptplforpurchase</value>
+				<value>predefinedstaimptplforpurchase2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="staWriterForPredefined" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>predefinedstaexptplforpurchase</value>
+				<value>predefinedstaexptplforpurchaseSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="trackingNoReaderForHandOverList" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>trackingNoImpForHandOverList</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- box -->
+	<bean id="productForBoxReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>productForBoxSheet</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- export1 -->
+	<bean id="skuProvidePickingMaintainWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>skuProvidePickingsheet</value>
+		</constructor-arg>
+	</bean>
+	<bean id="skuProvidePickingMaintainWriter1" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>skuProvidePickingsheet1</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- export2 -->
+	<bean id="skuProvideUnMaintainWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>skuProvideUnMaintainsheet</value>
+		</constructor-arg>
+	</bean>
+	<bean id="skuProvideUnMaintainWriter1" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>skuProvideUnMaintainsheet1</value>
+		</constructor-arg>
+	</bean>
+	<!-- export3 -->
+	<bean id="unfinishedStaUnMaintainProductWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>unfinishedSkuProvideUnMaintainsheet</value>
+		</constructor-arg>
+	</bean>
+	<bean id="unfinishedStaUnMaintainProductWriter1" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>unfinishedSkuProvideUnMaintainsheet1</value>
+		</constructor-arg>
+	</bean>
+	<bean id="skuProvideMaxCountMaintainReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>skuProvideMaintainSheet</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="refSkuReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>importRefSkuSheet</value>
+		</constructor-arg>
+	</bean>
+	<bean id="vmiOwnerTransferImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>vmiownertransferimportsheet</value>
+		</constructor-arg>
+	</bean>
+	<!-- vmi 退仓 -->
+	<bean id="vmiReturnImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>vmireturnsheet</value>
+		</constructor-arg>
+	</bean>
+	<!-- vmi gucci 退仓 -->
+	<bean id="vmiReturnImportGucciReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>vmiReturnGuccisheet</value>
+		</constructor-arg>
+	</bean>
+	<!-- vmi esprit 退仓 -->
+	<bean id="vmiEspritReturnImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>vmiespritreturnsheet</value>
+		</constructor-arg>
+	</bean>
+	<bean id="zdhPiciImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>zdhpicisheet</value>
+		</constructor-arg>
+	</bean>
+	<!-- 批量 退大仓 -->
+	<bean id="vmicreateStaForVMIReturnPlImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>vmicreatestaforvmireturnplsheet</value>
+		</constructor-arg>
+	</bean>
+	
+
+	<bean id="inventoryCheckByLocationImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>locationsheet</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="deliveryInfoExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>deliveryInfoExport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="pdaLogExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>pdaLogExport</value>
+				<value>pdaLogExportSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="coachInboundInstructionReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>CoachInboundInstructionData</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="locationTypeBindingInstructionReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>LocationTypeBindingInstructionData</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="skuLocTypeCapBindingInstructionReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>skuLocTypeCapBindingInstructionReader</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="qsSkuBindingInstructionReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>qsSkuBindingInstructionReader</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="skuCountryOfOriginInstructionReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>skuCountryOfOriginInstructionReader</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="transProvinceNoReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>WhTransProvinceNo</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="transProvideNoReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>WhTransProvideNo</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="coachInboundSkuReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>CoachInboundSkuData</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="etamSizeRuleReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>etamSizeRuleSheet1</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="etamBar9RuleReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>etamBar9RuleSheet1</value>
+		</constructor-arg>
+	</bean>
+	<bean id="importPrintReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>importPrintSheet</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="deliveryInfoExportForAccountWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>deliveryInfoExportForAccount</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="pdaSortPickingWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>pdaSortPickingExcel</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="soInvoiceExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>soInvoiceExport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="burberryInvoiceExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>burberryInvoiceExport</value>
+		</constructor-arg>
+	</bean>
+	<!-- 物流交接清单导出 -->
+	<bean id="handOverListExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>handOverListExport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="vmiInvoiceExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>vmiInvoiceExport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="handOverLineExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>handOverLineExport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="pdaErrorLogExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>padposterrorlogs</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="vmiAdjustmentInvCheckWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>vmiInvCheckSheet1</value>
+				<value>vmiInvCheckSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="vmiAdjustmentImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>vmiInvCheckImport1</value>
+				<value>vmiInvCheckImport2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="inventoryCheckExportExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>inventoryCheckExport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="checkOverageExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>checkOverageExport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="coachInvoiceExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>coachInvoiceSheet</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="checkOverageImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>checkOverageImport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="locationReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>locationimpexptpl</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="locationWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>locationimpexptpl</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="poConfirmWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>poConfirmExport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="vmiOpcExpWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>vmiOpcExpSheet1</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="recevingMoveSuggestWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>recevingMoveSuggestSheet1</value>
+				<value>recevingMoveSuggestSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="pickingListMode1ExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>pickingListMode1Export</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="externalOutWHWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>externalInWriterSheet1</value>
+				<value>externalInWriterSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="predefinedOutWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>predefinedOutSheet1</value>
+				<value>predefinedOutSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="invWriterForPurchase" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>invWriterForPurchase1</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="transitInnerReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>transitInnerImportSheet1</value>
+				<value>transitInnerImportSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="outSalesOrderReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>outSalesOrderSheet1Import</value>
+				<value>outSalesOrderSheet2Import</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="inventoryStatusChangeReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>inventoryStatusChangeSheet1</value>
+				<value>inventoryStatusChangeSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="inventoryCheckImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>inventoryCheckImport</value>
+				<!-- <value>inventoryCheckSheet2Import</value> -->
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="externalOutWHReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>externalInExportSheet1</value>
+				<value>externalInExportSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="predefinedOutWHReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>predefinedOutSheet3</value>
+				<value>predefinedOutSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="packagingMaterialsReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>packagingMaterialsSheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="outboundSnImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>outboundSnImport</value>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="salesOutSnImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>salesOutSnImport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="pdaPurchaseSnImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>pdaPurchaseSnImport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="predefinedOutReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>predefinedOutImport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="pickingListReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>pickingListImport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="transAreaReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>TransAreaGroupDetial</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="transServiceReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>TransServiceDetial</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="whCoverageAreaReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>whCoverageAreaSheet1</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="transRoleAccordReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>transRoleAccordSheet1</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="whBoxInboundReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>whBoxInboundSheet1</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="pickingListSNReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>pickingListSNImport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="betweenLibaryInitializeReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>betweenLibaryImportSheet</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="odoLineReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>odoLineImportSheet</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="otherStaReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>otherStaImport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="snsReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>snsImport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="predefinedStaReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>predefinedStaImport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="inboundReceiveAmountConfirmReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>receiveAmountConfirmImportSheet1</value>
+				<value>receiveAmountConfirmImportSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="invReaderForPurchase" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>invReaderForPurchaseSheet1</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="snSkuReadForPurchase" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>snSkuReadForPurchaseSheet1</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="warehouseReplenishStockInfoReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>whReplenishStockSheet1</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="skuReplenishmentWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>skuReplenishmentSummarySheet1</value>
+				<value>skuReplenishmentDetailInSheet2</value>
+				<value>skuReplenishmentDetailOutSheet3</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="inventoryInitializeReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>inventortImportSheet</value>
+				<value>inventortImportSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="msSnExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>msSnReporySheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<!-- vmi 调整 -->
+	<bean id="vmiAdjustInventoryReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>outsheet</value>
+				<value>insheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<!-- vmi PO type -->
+	<bean id="vmiPOTypeReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>POTypeSheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<!-- vmi invoice percentage -->
+	<bean id="vmiInvoicePercentageReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>InvoicePercentSheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+
+
+	<!-- 配货失败补货 fanht -->
+	<bean id="exportSkuReplenishWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>exportSkuReplenishSheet1</value>
+				<value>exportSkuReplenishSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="invInfoWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>invInfoSheet1</value>
+				<value>invInfoSheet2</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="salesReportFormWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>salesReportFormWriterSheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="inboundWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>inboundExport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="staReaderInbound" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>inboundimptp</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="staReaderInboundTurn" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>inboundimptpTurn</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="skuSeedSn" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>inskuSeedSn</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="confirmDiversityWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>confirmDiversityExport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="whReplenishWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>whReplenishReportExport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="proInfoMaintainWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>proInfoMaintainExport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="staDeliverWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>staDeliverExport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="staDeliverReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>staDeliverImport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="staReaderConfirmDiversity" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>confirmDiversityImport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="inBoundShelvesWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>inBoundShelvesExport</value>
+				<value>inBoundShelvesSNExport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="inBoundShelvesWriterImperfect" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>inBoundShelvesImperfectExport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="virtualInBoundShelvesWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>virtualInBoundShelvesExport</value>
+				<value>virtualInBoundShelvesSNExport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="cartonListByCRWWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>cartonListByCRWWriterExport</value>
+				<value>cartonReportListByCRWWriterExport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="agvWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>agvWriterExport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="importStaByOwnerWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>importStaByOwnerWriter</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	
+	
+
+	<bean id="staReaderInboundShelves" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>inboundShelvesImport</value>
+				<value>inboundShelvesSNImport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+		<bean id="staReaderInboundShelvesImperfect" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>inboundShelvesImperfectImport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="virtualInBoundShelvesRed" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>virtualInBoundShelvesImport</value>
+				<value>virtualInBoundShelvesSNImport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="nikeCheckReceiveReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>nikeCheckReceiveImport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="nikeVmiinboundReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>nakeVmiinboundImport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="resultRequestInbountReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>resultRequestInbountImport</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="salesSendOutInfoWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>salesSendOutInfoSheet1</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="returnRegisterInfoWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>returnRegisterInfoSheet1</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="inventoryReportkWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>inventoryReportkSheet1</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<bean id="orderLineReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>orderLineImport</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="orderLineCommandReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>returnRegisterInfoSheet1</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- 保质期商品导入 -->
+	<bean id="skuShelfLifeReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>skuShelfLifesheet</value>
+		</constructor-arg>
+	</bean>
+	<!-- 销售报表导出-汇总 -->
+	<bean id="reportExportForSalesSumWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>reportExportSumSheet</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="reportExportForShopCurrentInventoryWiter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>shopCurrentInventory</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="reportExportForSalesDetailWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>reportExportDetailSheet</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="transAreaGDetialWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>TransAreaGroupDetial</value>
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="shopTimeInventoryWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>shopTimeInventory</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="lvsInvnetoryLogWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>lvsInvnetoryLog</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="lvsRaWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>lvsRa</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="afInvComReportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>exportAFInvCom</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<!--配货失败 缺货商品导出  -->
+	<bean id="failureInfoExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>staDistributionFailureExport</value>
+		</constructor-arg>
+	</bean>
+	<!-- SKU批量导入获取库存 -->
+	<bean id="skuInvnetoryWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>skuInvnetory</value>
+		</constructor-arg>
+	</bean>
+	<bean id="procurementrenurninboudputawayWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>procurementrenurninboudputawayExport</value>
+		</constructor-arg>
+	</bean>
+	<!-- 库区导出 -->
+	<bean id="pickZoneExportWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>pickZone</value>
+		</constructor-arg>
+	</bean>
+	<!-- 库区导入 -->
+	<bean id="pickZoneImportReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>pickZoneImport</value>
+		</constructor-arg>
+	</bean>
+	<!-- 用户仓库导入 -->
+	<bean id="userWarehouseReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>userWarehouseImport</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="skuImportShelfLifeForBatchReceiving" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>importShelfLifeforbatchreceivingsheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	<!-- 渠道残次类型导入 -->
+	<bean id="addSkuImperfect" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>addSkuImperfectImport</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 渠道残次原因导入 -->
+	<bean id="addSkuImperfectWhy" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>addSkuImperfectWhyImport</value>
+		</constructor-arg>
+	</bean>
+		<!-- 集货规则明细导入 -->
+	<bean id="shippingRoleReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>shippingRoleImprot</value>
+		</constructor-arg>
+	</bean>
+	<bean id="shippingCollectionReaderImprot" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>shippingCollectionReaderImprot</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="skuTargetOwnerReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>skuTargetOwnerImprot</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 货箱定位规则导入 -->
+	
+	
+	<bean id="inboundRoleReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>inboundRoleImprot</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 商品上架类型导入 -->
+	<bean id="skuTypeReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>skuTypeImprot</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 商品上架类型导入 -->
+	<bean id="skuSpTypeReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>skuSpTypeImprot</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="channelSkuSpTypeReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>channelSkuSpTypeImprot</value>
+		</constructor-arg>
+	</bean>
+	
+	 <!--  特殊商品sku导入--> 
+	<bean id="skuReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+  			<value>skuImport</value> 
+ 		 </constructor-arg>
+    </bean>
+    <!-- SF次晨达配置导入 -->
+	<bean id="sfNextMorningConfigReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>sfNextMorningConfigSheet</value>
+		</constructor-arg>
+	</bean>
+	<!-- SF次晨达配置导出 -->
+	<bean id="sfNextMorningConfigWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>sfNextMorningConfigSheet</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- SF时效导入 -->
+	<bean id="sfConfigReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>sfConfigSheet</value>
+		</constructor-arg>
+	</bean> 
+	
+	<!-- SF时效配置导出 -->
+	<bean id="sfConfigWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>sfConfigSheet</value>
+		</constructor-arg>
+	</bean>
+    <!-- NIKE当日达配置导入 -->
+	<bean id="nikeTodaySendConfigReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>nikeTodaySendConfigSheet</value>
+		</constructor-arg>
+	</bean>
+	<!-- NIKE当日达配置导出 -->
+	<bean id="nikeTodaySendConfigWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>nikeTodaySendConfigSheet</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 库位与弹出口绑定 -->
+	<bean id="locationAndPopUpReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>locationAndPopUpImprot</value>
+		</constructor-arg>
+	</bean>
+	<!-- 批量导入退换货登记 -->
+	<bean id="returnPackageReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>ReturnPackageImport</value>
+		</constructor-arg>
+	</bean>
+	<bean id="claimantInfo" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>claimantInfo</value>
+		</constructor-arg>
+	</bean>
+	<!-- 出入库SN号导入 -->
+	<bean id="outOfStorageSnImport" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>outOfStorageSnCodeImport</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- converse转店退仓导入 -->
+	<bean id="converseShutoutImport" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>converseShutoutImport</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 出库单信息同步 -->
+	<bean id="orderOutBoundReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<array>
+				<value>orderOutBoundImport1</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 补货建议 -->
+	<bean id="exportSkuReplenishSuggestWriter" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<array>
+				<value>exportSkuReplenishSuggestSheet</value>
+			</array>
+		</constructor-arg>
+	</bean>
+	
+	<!-- NIKE收货-导入箱号关系 -->
+	<bean id="nikeRelationImport" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>nikeRelationImoprt</value>
+		</constructor-arg>
+	</bean>
+	
+	<!--分配区域绑定库位导入 -->
+	<bean id="distriButionReader" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>distriButionReaderSheet</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- ad异常包裹导入 -->
+	<bean id="adPackageImport" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>adPackageImport</value>
+		</constructor-arg>
+	</bean>
+	<!-- ad异常包裹导出 -->
+	<bean id="adPackageExport" factory-bean="excelManipulatorFactory" factory-method="createExcelWriter">
+		<constructor-arg>
+			<value>adPackageImport</value>
+		</constructor-arg>
+	</bean>
+	
+	<!--  供应商编码导入--> 
+	<bean id="supplierCodeImport" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+  			<value>supplierCodeRead</value> 
+ 		 </constructor-arg>
+    	</bean>
+
+	<!--  供应商编码导入--> 
+	<bean id="staReaderCartonNUmImport" factory-bean="excelManipulatorFactory" factory-method="createExcelReader">
+		<constructor-arg>
+			<value>staReaderCartonImport</value>
+		</constructor-arg>
+	</bean>
+</beans>

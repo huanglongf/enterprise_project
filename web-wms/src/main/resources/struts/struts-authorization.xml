@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="authorization" extends="root" namespace="/auth">
+		<action name="adduserentry" class="userManageAction" method="addUserEntry">
+			<result>/frame/user-add.jsp</result>
+		</action>
+		<action name="modifyuserentry" class="userManageAction" method="modifyUserEntry">
+			<result>/frame/user-modify.jsp</result>
+		</action>
+		<action name="viewuserentry" class="userManageAction" method="viewUserEntry">
+			<result>/frame/user-view.jsp</result>
+		</action>
+		<action name="viewuserinfoentry" class="userManageAction"
+			method="viewUserInfoEntry">
+			<result>/frame/user-viewinfo.jsp</result>
+		</action>
+		<action name="rolemaintainentry" class="roleManageAction"
+			method="roleMaintainEntry">
+			<result>/frame/role-maintain.jsp</result>
+		</action>
+		<action name="rolemaintaindetailentry" class="roleManageAction"
+			method="roleMaintainDetailEntry">
+			<result>/frame/role-maintain-detail.jsp</result>
+		</action>
+		<action name="queryout" class="roleManageAction" method="queryOperationUnitType">
+			<result>/frame/role-maintain.jsp</result>
+		</action>
+		<action name="queryrole" class="roleManageAction" method="queryRole">
+			<result>/frame/role-maintain.jsp</result>
+		</action>
+
+		<action name="addrole" class="roleManageAction" method="addRole">
+			<result>/frame/role-maintain.jsp</result>
+		</action>
+
+		<action name="modifyrole" class="roleManageAction" method="modifyRole">
+			<result>/frame/role-maintain.jsp</result>
+		</action>
+
+		<action name="viewrole" class="roleManageAction" method="viewRole">
+			<result>/frame/role-maintain.jsp</result>
+		</action>
+		<action name="viewrole" class="roleManageAction" method="viewRole">
+			<result>/frame/role-maintain.jsp</result>
+		</action>
+
+		<action name="groupview" class="operationUnitAction" method="view">
+			<result>/frame/group-view.jsp</result>
+		</action>
+		<action name="groupmaintain" class="operationUnitAction"
+			method="manage">
+			<result>/frame/group-maintain.jsp</result>
+		</action>
+
+		<action name="userbatchmanage" class="userBatchManageAction">
+			<result>/frame/user-batchmanage.jsp</result>
+		</action>
+		<action name="usergroupentry" class="userGroupAction">
+			<result>/frame/user-group.jsp</result>
+		</action>
+
+		<action name="usermodifyentry" class="userManageAction" method="passwordModifyEntry">
+			<result>/frame/user-password-modify.jsp</result>
+		</action>
+		
+		<action name="bichannelmanage" class="biChannelInfoAction" method="manager">
+			<result>/frame/group-bichannel.jsp</result>
+		</action>
+		
+		<action name="bichannelwhrefmanage" class="biChannelInfoAction" method="manager">
+			<result>/frame/group-bichannelwhref.jsp</result>
+		</action>
+
+		<action name="elesinusenummaintain" class="transImportAction" method="findProvideNo">
+			<result>/frame/elesin-usenum-maintain.jsp</result>
+		</action>
+
+		<action name="lpcodemaintain" class="transImportAction" method="findLpCode">
+			<result>/frame/lpcode-maintain.jsp</result>
+		</action>
+		<!-- 新增秒杀订单计数器功能维护 -->
+		<action name="addseckillmaintain" class="addCounterMaintainAction">
+			<result>/frame/add-counter-maintain.jsp</result>
+		</action>
+		<action name="channelexpressmaintain" class="transRoleAction" method="findChannelByType">
+			<result>/frame/channel-express-maintain.jsp</result>
+		</action>
+		<action name="skutagmaintain" class="skuTagAction" method="manager">
+			<result>/frame/sku-tag-maintain.jsp</result>
+		</action>
+		<action name="autoplrolemaintain" class="autoPickingListRoleAction" method="manager">
+			<result>/frame/auto-pickinglist-role-maintain.jsp</result>
+		</action>
+		<!-- 新增秒杀订单计数器功能维护  修改-->
+		<action name="updateOptionValue" class="addCounterMaintainAction" method="updateOptionValue">
+			<result>/frame/add-counter-maintain.jsp</result>
+		</action>
+		<!-- O2O门店信息维护 -->
+		<action name="shopstoremaintain" class="shopStoreInfoAction" method="redirect">
+			<result>/frame/warehouse/shopstore-maintain.jsp</result>
+		</action>
+		<!-- 快递维护 -->
+		<action name="expessManagerMaintain" class="transRoleAction" method="findExpress">
+			<result>/frame/express-maintain.jsp</result>
+		</action>
+		<action name="whBatchInvoiceExpress" class="taxBatchInvoiceAction"
+			method="whBatchInvoiceExpress">
+			<result>/frame/tax-invoice-batch-export.jsp</result>
+		</action>
+		<action name="whFillopenInvoiceSearch" class="taxBatchInvoiceAction"
+			method="whFillopenInvoiceSearch">
+			<result>/frame/tax-invoice-batch-search.jsp</result>
+		</action>
+		<action name="whUserRef" class="userManageAction" method="whUserRef">
+			<result>/frame/user-warehouse.jsp</result>
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,55 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	<named-query name="ChooseOption.findOptionListByCategoryCode">
+		<query><![CDATA[select o from ChooseOption as o where o.categoryCode = :categoryCode and o.isAvailable = true order by o.sortNo]]></query>
+	</named-query>
+	
+	<named-query name="ChooseOption.findByCategoryCodeA">
+		<query><![CDATA[select optionValue from ChooseOption as o where o.categoryCode = :categoryCode and o.isAvailable = true order by o.sortNo]]></query>
+	</named-query>
+	<named-query name="ChooseOption.findAllOptionListByCategoryCode">
+		<query><![CDATA[select o from ChooseOption as o where o.categoryCode = :categoryCode order by o.sortNo]]></query>
+	</named-query>
+	<named-query name="ChooseOption.findByCategoryCodeAndKey">
+		<query><![CDATA[select o from ChooseOption as o where o.categoryCode = :categoryCode and o.optionKey = :key]]></query>
+	</named-query>
+	<named-query name="ChooseOption.findListByCategoryCodeAndKey">
+		<query><![CDATA[select o from ChooseOption as o where o.categoryCode = :categoryCode and o.optionKey = :key]]></query>
+	</named-query>
+	<named-query name="SequenceCounter.findSequenceWithNullCategory">
+		<query><![CDATA[select c from SequenceCounter c where c.name= :name and c.category is null]]></query>
+	</named-query>
+	<named-query name="SequenceCounter.findSequenceWithCategory">
+		<query><![CDATA[select c from SequenceCounter c where c.name= :name and c.category = :category]]></query>
+	</named-query>
+	<named-query name="ChooseOption.findByCategoryCode">
+		<query><![CDATA[select o from ChooseOption as o where o.categoryCode = :categoryCode]]></query>
+	</named-query>
+	<named-query name="ChooseOption.findListByPackageName">
+		<query><![CDATA[select o from ChooseOption as o where o.packageName = :packageName]]></query>
+	</named-query>
+	<named-query name="ChooseOption.findByCategoryCodeAndValue">
+		<query><![CDATA[select o from ChooseOption as o where o.categoryCode = :categoryCode and o.optionValue = :value]]></query>
+	</named-query>
+	<named-query name="SysSchedulerTask.getByLifecycle">
+		<query><![CDATA[select o from SysSchedulerTask as o where o.lifecycle = :lifecycle and o.node =:node]]></query>
+	</named-query>
+	<named-query name="ThreadConfig.getAllBySysKey">
+		<query><![CDATA[select o from ThreadConfig as o where o.sysKey =:sysKey]]></query>
+	</named-query>
+	<named-query name="ThreadConfig.getByCodeAndSysKey">
+		<query><![CDATA[select o from ThreadConfig as o where o.sysKey =:sysKey and o.threadCode = :code]]></query>
+	</named-query>
+	<named-query name="ThreadConfig.getThreadId">
+		<query><![CDATA[select  max(o.id) from ThreadConfig as o  ]]></query>
+	</named-query>
+	<named-query name="ThreadConfig.checkThreadConfig">
+		<query><![CDATA[select o from ThreadConfig as o where o.id =:id]]></query>
+	</named-query>
+	<named-query name="PriorityChannelOms.getPriorityChannelOmsByCode">
+		<query><![CDATA[select o from PriorityChannelOms as o where o.code=:code]]></query>
+	</named-query>
+	<named-query name="PriorityChannelOms.getPriorityChannelOmsById">
+		<query><![CDATA[select o from PriorityChannelOms as o where o.id=:id]]></query>
+	</named-query>
+</entity-mappings>

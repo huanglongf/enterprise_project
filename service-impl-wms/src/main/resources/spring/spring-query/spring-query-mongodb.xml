@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="MongoDBYtoBigWord.findAllYtoBigWord" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+	          <![CDATA[
+				select bw.province as province, bw.district as district, bw.pack_no as packNo, bw.priority as priority 
+				from t_wh_trans_yto_big_word bw where 1=1
+	          ]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 直连过仓初始化库存 优化 S -->
+	<bean id="MongoDBInventory.findAllSkuByOwner" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					 select  line.sku_id skuId from t_wh_so_or_ro_line line,t_wh_so_or_ro r
+            			where line.out_order_id = r.id
+            			and r.begin_flag=1 and r.can_flag is null
+            			and line.owner=:owner
+            			group by line.sku_id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 	RUN -->
+	<bean id="MongoDBInventory.findAllSkuByOwnerPacs" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					       select   l.sku_code,sku.ext_code2 from  t_wh_q_sta s,t_wh_q_sta_line l,t_bi_inv_sku sku  
+				           where s.id=l.q_sta_id 
+				           and l.sku_code=sku.code
+				           and s.begin_flag=1 and s.can_flag is null
+				           and s.main_ou_code=:whCode 
+				           group by  l.sku_code,sku.ext_code2
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="MongoDBInventory.findSkuInventoryByOwnerSkuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select whCode,
+                    sku_id  as skuId,
+                    owner,
+                    nvl(sum(sales_qty) - sum(sales_lock_qty),0) as availQty
+             from (
+                  select u.code as whCode,
+                          inv.sku_id,
+                          case when wh.is_share = 1 then null else inv.inv_owner end as owner,
+                          case when st.is_forsale = 1 then sum(inv.quantity) else 0 end as sales_qty,
+                          case when st.is_forsale = 1 then sum(case when inv.occupation_code is not null then inv.quantity else 0 end) else 0 end as sales_lock_qty
+                  from t_wh_sku_inventory inv,
+                       T_BI_WAREHOUSE wh,
+                       t_wh_inventory_status st,
+                       t_bi_inv_sku sku,
+                       t_au_operation_unit u
+                  where wh.ou_id(+) = inv.ou_id
+                        and st.id(+) = inv.status_id
+                        and inv.sku_id = sku.id
+                        and wh.ou_id = u.id
+                        and sku.id=:skuId
+                        and inv.inv_owner=:owner
+                        and (sku.store_mode != 33 or  inv.expire_date - nvl(sku.warning_date,0) > sysdate)
+                  group by u.code, inv.sku_id, inv.inv_owner,wh.is_share,st.is_forsale) tp
+             group by whCode,sku_id,owner
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+		<!-- 	RUN -->
+	
+	<bean id="MongoDBInventory.findSkuInventoryByOwnerSkuIdPacs" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select whCode,
+                    sku_id,
+                    ext_code1 as extCode,
+                    code as skuCode,
+                    owner,
+                    sum(sales_qty - sales_lock_qty) as availQty
+             from (
+                  select u.code as whCode,
+                          inv.sku_id,
+                          sku.ext_code1,
+                          sku.code,
+                          case when wh.is_share = 1 then null else inv.inv_owner end as owner,
+                          case when st.is_forsale = 1 then sum(inv.quantity) else 0 end as sales_qty,
+                          case when st.is_forsale = 1 then sum(case when inv.occupation_code is not null then inv.quantity else 0 end) else 0 end as sales_lock_qty
+                  from t_wh_sku_inventory inv,
+                       T_BI_WAREHOUSE wh,
+                       t_wh_inventory_status st,
+                       t_bi_inv_sku sku,
+                       t_au_operation_unit u
+                  where wh.ou_id(+) = inv.ou_id
+                        and st.id(+) = inv.status_id
+                        and inv.sku_id = sku.id
+                        and wh.ou_id = u.id
+                        and sku.code=:skuCode
+                        and u.code=:whCode
+                        and (sku.store_mode != 33 or  inv.expire_date - nvl(sku.warning_date,0) > sysdate)
+                  group by u.code, inv.sku_id, inv.inv_owner,wh.is_share,st.is_forsale,sku.ext_code1,sku.code) tp
+             group by whCode,sku_id,owner,ext_code1,code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	
+	
+	
+		<bean id="MongoDBInventory.findStaInventoryByOwnerSkuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+	            select whCode,sku_id as skuId,owner,sum(qty) as availQty
+	          from(
+	            select u.code as whCode, stal.sku_id,nvl(stal.owner,sta.owner) as owner,sum(stal.quantity) as qty
+	            from t_wh_sta sta, t_wh_sta_line stal,T_BI_WAREHOUSE wh,t_wh_inventory_status sts,t_au_operation_unit u
+	            where sta.id = stal.sta_id
+	              and  stal.inv_status_id = sts.id(+)
+	              and (sts.is_forsale = 1 or sts.is_forsale is null)
+	              and wh.ou_id = sta.main_wh_id
+	              and wh.ou_id = u.id
+	              and (sta.status = 1 or sta.status = 20 or sta.status = 25)
+	              and sta.is_need_occupied = 1
+	              and sta.create_time >= sysdate - 90
+	            group by stal.sku_id, u.code, nvl(stal.owner,sta.owner),wh.is_share
+	            union all
+	            select u.code as whCode,line.sku_id,line.owner,sum(line.qty) as qty from t_wh_so_or_ro r,t_wh_so_or_ro_line line,t_bi_warehouse w,t_au_operation_unit u
+	            where r.can_flag =1 and line.out_order_id = r.id
+	            and line.ou_id = w.ou_id
+	            and u.id = w.ou_id
+	            group by u.code,line.sku_id,line.owner,w.is_share
+	            ) tp  where tp.sku_id=:skuId and tp.owner=:owner
+	          group by whCode,sku_id,owner
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- RUN -->
+		<bean id="MongoDBInventory.findStaInventoryByOwnerSkuIdPacs" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+	             select whCode,code as skuCode,ext_code1 as extCode,owner,sum(qty) as qty
+		          from(
+		            select u.code as whCode,sku.code,sku.ext_code1,nvl(stal.owner,sta.owner) as owner,sum(stal.quantity) as qty
+		            from t_wh_sta sta, t_wh_sta_line stal,T_BI_WAREHOUSE wh,t_wh_inventory_status sts,t_au_operation_unit u,t_bi_inv_sku sku
+		            where sta.id = stal.sta_id
+		              and  stal.inv_status_id = sts.id(+)
+		              and (sts.is_forsale = 1 or sts.is_forsale is null)
+		              and wh.ou_id = sta.main_wh_id
+		              and wh.ou_id = u.id
+		              and stal.sku_id=sku.id
+		              and (sta.status = 1 or sta.status = 20 or sta.status = 25)
+		              and sta.is_need_occupied = 1
+		              and sta.create_time >= sysdate - 90
+		              and sku.code=:skuCode
+		            group by  sku.code,sku.ext_code1, u.code, nvl(stal.owner,sta.owner),wh.is_share
+		            union all
+		            select sta.main_ou_code as whCode,sk.code,sk.ext_code1,o.owner,sum(o.qty) as qty from t_wh_q_sta sta,t_wh_q_sta_line li,t_wh_q_sta_line_owner o,t_bi_inv_sku sk
+		            where sta.id=li.q_sta_id 
+		            and li.id=o.q_sta_line_id
+		            and sta.can_flag=1
+		            and o.skucode=sk.code
+		            and sk.code=:skuCode
+		            group by sta.main_ou_code ,sk.code,sk.ext_code1,o.owner
+		            ) tp
+		          group by  whCode,code,ext_code1,owner
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="MongoDBInventory.findSoOrRoInventoryByOwnerSkuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					 select distinct line.owner owner,line.sku_id skuId from t_wh_so_or_ro_line line,t_wh_so_or_ro r
+		           	 where line.out_order_id = r.id
+		          	 and r.begin_flag=1 and r.can_flag is null
+		           	 and line.owner='adidas官方商城'
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 直连过仓初始化库存 优化  END-->
+	
+	<bean id="MongoDBInventory.findInventoryForOnceUseByOwner" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select v.whCode whCode,
+					       v.SKU_ID skuId,
+					       v.OWNER owner,
+					       nvl(v.sales_qty - nvl(vo.qty,0) - v.sales_lock_qty,0) as availQty
+					from
+					  (select whCode,
+					          sku_id,
+					          owner,
+					          sum(sales_qty) as sales_qty,
+					          sum(sales_lock_qty) as sales_lock_qty
+					   from (
+					        select u.code as whCode,
+					                inv.sku_id,
+					                case when wh.is_share = 1 then null else inv.inv_owner end as owner,
+					                case when st.is_forsale = 1 then sum(inv.quantity) else 0 end as sales_qty,
+					                case when st.is_forsale = 1 then sum(case when inv.occupation_code is not null then inv.quantity else 0 end) else 0 end as sales_lock_qty
+					        from t_wh_sku_inventory inv,
+					             T_BI_WAREHOUSE wh,
+					             t_wh_inventory_status st,
+					             t_bi_inv_sku sku,
+					             t_au_operation_unit u
+					        where wh.ou_id(+) = inv.ou_id
+					              and st.id(+) = inv.status_id
+					              and inv.sku_id = sku.id
+					              and wh.ou_id = u.id
+					              and (sku.store_mode != 33 or  inv.expire_date - nvl(sku.warning_date,0) > sysdate)
+					        group by u.code, inv.sku_id, inv.inv_owner,wh.is_share,st.is_forsale) tp
+					   group by whCode,sku_id,owner
+					  ) v, 
+					  (
+					  select whCode,sku_id,owner,sum(qty) as qty
+					from(
+					  select u.code as whCode, stal.sku_id,nvl(stal.owner,sta.owner) as owner,sum(stal.quantity) as qty
+					  from t_wh_sta sta, t_wh_sta_line stal,T_BI_WAREHOUSE wh,t_wh_inventory_status sts,t_au_operation_unit u
+					  where sta.id = stal.sta_id
+					    and  stal.inv_status_id = sts.id(+)
+					    and (sts.is_forsale = 1 or sts.is_forsale is null)
+					    and wh.ou_id = sta.main_wh_id
+					    and wh.ou_id = u.id
+					    and (sta.status = 1 or sta.status = 20 or sta.status = 25)
+					    and sta.is_need_occupied = 1
+					    and sta.create_time >= sysdate - 90
+					  group by stal.sku_id, u.code, nvl(stal.owner,sta.owner),wh.is_share
+					  union all
+					  select u.code as whCode,line.sku_id,line.owner,sum(line.qty) as qty from t_wh_so_or_ro r,t_wh_so_or_ro_line line,t_bi_warehouse w,t_au_operation_unit u
+					  where r.can_flag =1 and line.out_order_id = r.id
+					  and line.ou_id = w.ou_id
+					  and u.id = w.ou_id
+					  group by u.code,line.sku_id,line.owner,w.is_share
+					  ) tp
+					group by whCode,sku_id,owner)vo,
+					(
+					  select distinct line.owner owner,line.sku_id skuId from t_wh_so_or_ro_line line,t_wh_so_or_ro r
+					  where line.out_order_id = r.id
+					  and r.begin_flag=1 and r.can_flag is null
+					  and line.owner=:owner
+					)t
+					where v.whCode = vo.whCode(+)
+					      and v.sku_id = vo.sku_id(+)
+					      and v.owner = vo.owner(+)
+					      and v.owner = t.owner
+					      and v.sku_id = t.skuId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="MongoDBInventory.findInventoryForOnceUseBywhCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				 select v.whCode whCode,v.ext_code1 as extCode,
+                 v.code skuCode,
+                 v.SKU_ID skuId,
+                 v.OWNER owner,
+                 nvl(v.sales_qty - nvl(vo.qty,0) - v.sales_lock_qty,0) as availQty
+          from
+            (select whCode,
+                    sku_id,
+                    ext_code1,
+                    code,
+                    owner,
+                    sum(sales_qty) as sales_qty,
+                    sum(sales_lock_qty) as sales_lock_qty
+             from (
+                  select u.code as whCode,
+                          inv.sku_id,
+                          sku.ext_code1,
+                          sku.code,
+                          case when wh.is_share = 1 then null else inv.inv_owner end as owner,
+                          case when st.is_forsale = 1 then sum(inv.quantity) else 0 end as sales_qty,
+                          case when st.is_forsale = 1 then sum(case when inv.occupation_code is not null then inv.quantity else 0 end) else 0 end as sales_lock_qty
+                  from t_wh_sku_inventory inv,
+                       T_BI_WAREHOUSE wh,
+                       t_wh_inventory_status st,
+                       t_bi_inv_sku sku,
+                       t_au_operation_unit u
+                  where wh.ou_id(+) = inv.ou_id
+                        and st.id(+) = inv.status_id
+                        and inv.sku_id = sku.id
+                        and wh.ou_id = u.id
+                        and (sku.store_mode != 33 or  inv.expire_date - nvl(sku.warning_date,0) > sysdate)
+                  group by u.code, inv.sku_id, inv.inv_owner,wh.is_share,st.is_forsale,sku.ext_code1,sku.code) tp
+             group by whCode,sku_id,owner,ext_code1,code
+            ) v, 
+            (
+            select whCode,sku_id,owner,sum(qty) as qty
+          from(
+            select u.code as whCode, stal.sku_id,nvl(stal.owner,sta.owner) as owner,sum(stal.quantity) as qty
+            from t_wh_sta sta, t_wh_sta_line stal,T_BI_WAREHOUSE wh,t_wh_inventory_status sts,t_au_operation_unit u
+            where sta.id = stal.sta_id
+              and  stal.inv_status_id = sts.id(+)
+              and (sts.is_forsale = 1 or sts.is_forsale is null)
+              and wh.ou_id = sta.main_wh_id
+              and wh.ou_id = u.id
+              and (sta.status = 1 or sta.status = 20 or sta.status = 25)
+              and sta.is_need_occupied = 1
+              and sta.create_time >= sysdate - 90
+            group by stal.sku_id, u.code, nvl(stal.owner,sta.owner),wh.is_share
+            union all
+            select sta.main_ou_code as whCode,sk.id,o.owner,sum(o.qty) as qty from t_wh_q_sta sta,t_wh_q_sta_line li,t_wh_q_sta_line_owner o,t_bi_inv_sku sk
+            where sta.id=li.q_sta_id 
+            and li.id=o.q_sta_line_id
+            and sta.can_flag=1
+            and o.skucode=sk.code
+            group by sta.main_ou_code ,sk.id,o.owner
+            ) tp
+          group by whCode,sku_id,owner)vo,
+          (
+                  select distinct nvl(q.add_ou_code,q.main_ou_code) as whCode,sku.id as skuId from t_wh_q_sta q,t_wh_q_sta_line li,t_bi_inv_sku sku 
+          where q.id=li.q_sta_id and li.sku_code=sku.code and q.Main_Wh_Ou_Id=:ouId and q.type in(21,42) and begin_flag=1 and can_flag is null
+          )t
+          where v.whCode = vo.whCode(+)
+                and v.sku_id = vo.sku_id(+)
+                and v.owner = vo.owner(+)
+                and v.whCode = t.whCode
+                and v.sku_id = t.skuId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="MongoDBInventory.findInventoryForOnceUseBywhCodeAF" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				   select v.whCode whCode,v.ext_code3 as extCode,
+                 v.code skuCode,
+                 v.SKU_ID skuId,
+                 v.OWNER owner,
+                 nvl(v.sales_qty - nvl(vo.qty,0) - v.sales_lock_qty,0) as availQty
+          from
+            (select whCode,
+                    sku_id,
+                    ext_code3,
+                    code,
+                    owner,
+                    sum(sales_qty) as sales_qty,
+                    sum(sales_lock_qty) as sales_lock_qty
+             from (
+                  select u.code as whCode,
+                          inv.sku_id,
+                          sku.ext_code3,
+                          sku.code,
+                          case when wh.is_share = 1 then null else inv.inv_owner end as owner,
+                          case when st.is_forsale = 1 then sum(inv.quantity) else 0 end as sales_qty,
+                          case when st.is_forsale = 1 then sum(case when inv.occupation_code is not null then inv.quantity else 0 end) else 0 end as sales_lock_qty
+                  from t_wh_sku_inventory inv,
+                       T_BI_WAREHOUSE wh,
+                       t_wh_inventory_status st,
+                       t_bi_inv_sku sku,
+                       t_au_operation_unit u
+                  where wh.ou_id(+) = inv.ou_id
+                        and st.id(+) = inv.status_id
+                        and inv.sku_id = sku.id
+                        and u.code=:whCode
+                        and wh.ou_id = u.id
+                        and (sku.store_mode != 33 or  inv.expire_date - nvl(sku.warning_date,0) > sysdate)
+                  group by u.code, inv.sku_id, inv.inv_owner,wh.is_share,st.is_forsale,sku.ext_code3,sku.code) tp
+             group by whCode,sku_id,owner,ext_code3,code
+            ) v, 
+            (
+            select whCode,sku_id,owner,sum(qty) as qty
+          from(
+            select u.code as whCode, stal.sku_id,nvl(stal.owner,sta.owner) as owner,sum(stal.quantity) as qty
+            from t_wh_sta sta, t_wh_sta_line stal,T_BI_WAREHOUSE wh,t_wh_inventory_status sts,t_au_operation_unit u
+            where sta.id = stal.sta_id
+              and  stal.inv_status_id = sts.id(+)
+              and (sts.is_forsale = 1 or sts.is_forsale is null)
+              and wh.ou_id = sta.main_wh_id
+              and wh.ou_id = u.id
+              and (sta.status = 1 or sta.status = 20 or sta.status = 25)
+              and sta.is_need_occupied = 1
+              and sta.create_time >= sysdate - 90
+            group by stal.sku_id, u.code, nvl(stal.owner,sta.owner),wh.is_share
+            union all
+            select sta.main_ou_code as whCode,sk.id,o.owner,sum(o.qty) as qty from t_wh_q_sta sta,t_wh_q_sta_line li,t_wh_q_sta_line_owner o,t_bi_inv_sku sk
+            where sta.id=li.q_sta_id 
+            and li.id=o.q_sta_line_id
+            and sta.can_flag=1
+            and o.skucode=sk.code
+            group by sta.main_ou_code ,sk.id,o.owner
+            ) tp
+          group by whCode,sku_id,owner)vo,
+          (
+          select distinct q.main_ou_code as whCode,sku.ext_code3 as ext_code3 from t_wh_q_sta q,t_wh_q_sta_line li,t_bi_inv_sku sku 
+          where q.id=li.q_sta_id and li.sku_code=sku.code and q.main_ou_code=:whCode and q.type in(21,42) and begin_flag=1 and can_flag is null
+          )t
+          where v.whCode = vo.whCode(+)
+                and v.sku_id = vo.sku_id(+)
+                and v.owner = vo.owner(+)
+                and v.whCode = t.whCode
+                and v.ext_code3=t.ext_code3
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="MongoDBInventory.findInventoryForOcpAreaByAreaCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+		select * from (
+                  select u.id as ouId,
+                   zoon.code  as zoonCode,
+                          inv.sku_id as skuId,
+                          inv.inv_owner  as owner,
+                          sum(inv.quantity) as availQty
+                  from t_wh_sku_inventory inv,
+                       T_BI_WAREHOUSE wh,
+                       t_wh_inventory_status st,
+                       t_bi_inv_sku sku,
+                       t_au_operation_unit u,
+                       t_wh_location n,
+                       T_WH_PICK_ZOON pz,
+                       t_wh_zoon  zoon
+                  where wh.ou_id(+) = inv.ou_id
+                        and st.id(+) = inv.status_id
+                        and n.id =inv.location_id
+                        and pz.id = n.zoon_id
+                        and pz.wh_zoon_id = zoon.id
+                        and inv.sku_id = sku.id
+                        and st.is_forsale=1 
+                        and wh.ou_id = u.id
+                        and nvl(n.is_locked,0)=0 
+                        and (inv.occupation_code is null or inv.occupation_code = '')
+                        and zoon.code =:areaCode
+                        and inv.ou_id =:ouId
+                        and (sku.store_mode != 33 or  inv.expire_date - nvl(sku.warning_date,0) > sysdate)
+                         and exists(
+                    select 1 from t_wh_location_transtype lt, t_wh_transaction_type tt
+                    where lt.location_id = n.id and lt.transtype_id = tt.id
+                          and tt.code = 'SALES_OUTBOUND')
+                  group by u.id,zoon.code, inv.sku_id, inv.inv_owner
+        ) where availqty > 0
+					
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+</beans>

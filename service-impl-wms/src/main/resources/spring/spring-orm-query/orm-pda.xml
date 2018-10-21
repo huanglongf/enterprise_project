@@ -1,0 +1,19 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	
+	<named-query name="StaCartonLineSn.getStaCartonLineSnByClId">
+		<query><![CDATA[select s from StaCartonLineSn as s where s.staCartonLine.id= :clId]]></query>
+	</named-query>
+	
+	<named-query name="StaCartonLine.getCartonLineByCartonId">
+		<query><![CDATA[select s from StaCartonLine as s where s.staCartonId.id= :cartonId]]></query>
+	</named-query>
+	
+	<named-query name="StaCartonLineSn.getStaCartonLineSnByCode">
+		<query><![CDATA[select s from StaCartonLineSn as s where s.dmgCode=:dmgCode]]></query>
+	</named-query>
+	
+	<named-query name="StaCartonLineSn.findSnbysn">
+		<query><![CDATA[select s from StaCartonLineSn as s where s.sn=:sn]]></query>
+	</named-query>
+</entity-mappings>

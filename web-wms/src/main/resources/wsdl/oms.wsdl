@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://scm.webservice.service.erry.com"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	targetNamespace="http://scm.webservice.service.erry.com">
+	<wsdl:documentation>
+		This service is for SCM
+	</wsdl:documentation>
+	<wsdl:types>
+		<xs:schema attributeFormDefault="qualified"
+			elementFormDefault="qualified" targetNamespace="http://scm.webservice.service.erry.com">
+			<xs:element name="approveRAForOuterWMS">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" name="args0" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="approveRAForOuterWMSResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" name="return" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="approveRAForOuterWMSRequest">
+		<wsdl:part name="parameters" element="ns:approveRAForOuterWMS" />
+	</wsdl:message>
+	<wsdl:message name="approveRAForOuterWMSResponse">
+		<wsdl:part name="parameters" element="ns:approveRAForOuterWMSResponse" />
+	</wsdl:message>
+	<wsdl:portType name="ScmWebServicePortType">
+		<wsdl:operation name="approveRAForOuterWMS">
+			<wsdl:input message="ns:approveRAForOuterWMSRequest"
+				wsaw:Action="urn:approveRAForOuterWMS" />
+			<wsdl:output message="ns:approveRAForOuterWMSResponse"
+				wsaw:Action="urn:approveRAForOuterWMSResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ScmWebServiceSoap11Binding" type="ns:ScmWebServicePortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="approveRAForOuterWMS">
+			<soap:operation soapAction="urn:approveRAForOuterWMS"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="ScmWebServiceSoap12Binding" type="ns:ScmWebServicePortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="approveRAForOuterWMS">
+			<soap12:operation soapAction="urn:approveRAForOuterWMS"
+				style="document" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="ScmWebServiceHttpBinding" type="ns:ScmWebServicePortType">
+		<http:binding verb="POST" />
+		<wsdl:operation name="approveRAForOuterWMS">
+			<http:operation location="ScmWebService/approveRAForOuterWMS" />
+			<wsdl:input>
+				<mime:content type="text/xml" part="approveRAForOuterWMS" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" part="approveRAForOuterWMS" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ScmWebService">
+		<wsdl:port name="ScmWebServiceHttpSoap11Endpoint" binding="ns:ScmWebServiceSoap11Binding">
+			<soap:address
+				location="http://10.8.12.132:8080/jumbomart/services/ScmWebService.ScmWebServiceHttpSoap11Endpoint/" />
+		</wsdl:port>
+		<wsdl:port name="ScmWebServiceHttpSoap12Endpoint" binding="ns:ScmWebServiceSoap12Binding">
+			<soap12:address
+				location="http://10.8.12.132:8080/jumbomart/services/ScmWebService.ScmWebServiceHttpSoap12Endpoint/" />
+		</wsdl:port>
+		<wsdl:port name="ScmWebServiceHttpEndpoint" binding="ns:ScmWebServiceHttpBinding">
+			<http:address
+				location="http://10.8.12.132:8080/jumbomart/services/ScmWebService.ScmWebServiceHttpEndpoint/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

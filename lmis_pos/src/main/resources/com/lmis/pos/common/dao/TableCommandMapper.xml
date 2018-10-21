@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lmis.pos.common.dao.TableCommandMapper">
+
+	<resultMap id="linkedHashMap" type="java.util.LinkedHashMap" autoMapping="true" />
+		
+	<select id="createTable">
+		create table `${tableName}` (
+			`id_${suffix}` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+			<foreach collection="columns" index="index" item="item">
+				<if test="item != null and item != ''">
+					`${item}` text DEFAULT NULL,
+				</if>
+			</foreach>
+			PRIMARY KEY (`id_${suffix}`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='bi数据源excel数据导入表';
+	</select>
+	<insert id="insertBatchData">
+		insert into `${tableName}` (
+			<foreach collection="columns" index="index" item="item" separator=",">
+				`${item}`
+			</foreach>
+		)
+		values
+		<foreach collection="dataList" index="index" item="items" separator=",">
+			(
+				<foreach collection="items" index="index" item="item" separator=",">
+					#{item}
+				</foreach>
+			)
+		</foreach>
+	</insert>
+	<insert id="insertBatchDataByType">
+		insert into `${tableName}` (
+			<foreach collection="columns" index="index" item="item" separator=",">
+				`${item}`
+			</foreach>
+		)
+		values
+		<foreach collection="dataList" index="index" item="items" separator=",">
+			(
+				<foreach collection="items" index="index" item="item" separator=",">
+					<if test="(columnTypes[${index}]=='datetime' or columnTypes[${index}]=='decimal(11,2)') or columnTypes[${index}]=='int(11)') and item == ''">
+						null
+					</if>
+					<if test="item != null">
+						#{item}
+					</if>
+				</foreach>
+			)
+		</foreach>
+	</insert>
+	<select id="alterExcelTableColumn">
+		ALTER TABLE `${tableName}` CHANGE `${oldColumnName}` `${newColumnName}` ${columnDataType};
+	</select>
+	<select id="getTablesInfoMap" resultMap="linkedHashMap">
+		SELECT
+			'${dataSourceId}' AS dataSourceId,
+			TABLE_NAME AS id,
+			TABLE_NAME AS tableCode,
+			TABLE_NAME AS tableName
+		FROM
+			information_schema.`TABLES`
+		WHERE
+			TABLE_SCHEMA = #{dbName}
+	</select>
+	<select id="getColumnInfoMap" resultMap="linkedHashMap">
+		SELECT
+			COLUMN_NAME,
+			DATA_TYPE,
+			COLUMN_TYPE,
+			TABLE_SCHEMA,
+			TABLE_NAME
+		FROM
+			information_schema.`COLUMNS`
+		WHERE
+			TABLE_SCHEMA = 'lmis_bis'
+		AND TABLE_NAME = #{tableName}
+		AND COLUMN_NAME = #{oldColumnName}
+	</select>
+	<select id="getColumnListInfoMap" resultMap="linkedHashMap">
+		SELECT
+			'${dataSourceId}' AS dataSourceId,
+			COLUMN_NAME AS fieldCode,
+			COLUMN_NAME AS fieldName
+		FROM
+			information_schema.`COLUMNS`
+		WHERE
+			TABLE_SCHEMA = #{dbName}
+		AND TABLE_NAME = #{tableName}
+	</select>
+	<select id="getExcelTableColumnName" resultMap="linkedHashMap">
+		SELECT
+			*
+		FROM
+			`${tableName}`
+		LIMIT 1
+	</select>
+	<select id="execSql" resultMap="linkedHashMap">
+		<!-- explain format=json --> 
+		${execSql}
+		limit 1
+	</select>
+	<select id="execSqlData" resultMap="linkedHashMap">
+		${execSql}
+	</select>
+	<select id="executeSelectByTableName" resultMap="linkedHashMap">
+		select 
+			* 
+		from `${tableName}`
+	</select>
+	<select id="executeSelectBySql" resultMap="linkedHashMap">
+		${execSql}
+	</select>
+	<update id="alterTableRename">
+		rename table `${oldTableName}` TO `${newTableName}`
+	</update>
+	<update id="alterTableTrancate">
+		truncate table `${tableName}`
+	</update>
+	<update id="alterTableDropTable">
+		drop table `${tableName}`
+	</update>
+</mapper>

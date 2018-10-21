@@ -1,0 +1,1197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="SkuType.findSkuTypeByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT i.id,i.name,i.status
+						FROM T_BI_INV_SKU_type i
+						WHERE 1=1
+						#if($name)
+							  and i.name like '%$name%'
+						#end
+						#if($status==1)
+							  and i.status =$status
+						#elseif($status==0)
+							  and (i.status = 0 OR i.status IS NULL) 
+						#end
+						      
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="SkuType.updateSkuBySkuType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						UPDATE T_BI_INV_SKU sku SET sku.sku_type_id = :skuTypeId WHERE sku.id = :skuId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Zoon.findZoonByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT z.id,z.code,z.name,z.ou_id ouId,ou.name ouName,decode(z.status,1,'已禁用','使用中') statusStr
+						FROM t_wh_zoon z,t_au_operation_unit ou
+						WHERE z.ou_id=ou.id
+						#if($ouId)
+							  and z.ou_id = :ouId
+						#end
+						#if($name)
+							  and z.name like '%$name%'
+						#end
+						#if($code)
+							  and z.code = :code
+						#end
+						#if($valid)
+							  and (z.status is null or z.status=0 )
+						#end
+						order by z.code asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+<bean id="Zoon.findZoonSortByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT z.id,z.code,z.name,z.ou_id ouId,ou.name ouName,decode(z.status,1,'已禁用','使用中') statusStr,z.seq
+						FROM t_wh_zoon z,t_au_operation_unit ou
+						WHERE z.ou_id=ou.id
+							  and z.ou_id = :ouId
+						#if($name)
+							  and z.name like '%$name%'
+						#end
+						#if($code)
+							  and z.code = :code
+						#end
+						order by z.code asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+<bean id="Zoon.findZoonByParams2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT z.id,z.code,z.name,z.ou_id ouId,ou.name ouName,decode(z.status,1,'已禁用','使用中') statusStr
+						FROM t_wh_zoon z,t_au_operation_unit ou
+						WHERE z.ou_id=ou.id and ( z.status = '0' or z.status is null)
+						#if($ouId)
+							  and z.ou_id = :ouId
+						#end
+						order by z.code asc
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="Zoon.findAutoWh" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT ou.id,ou.name
+						FROM t_au_operation_unit ou,t_Au_Operation_Unit_Type t,t_bi_warehouse w
+						WHERE ou.ou_type_id=t.id
+			                  AND ou.id=w.ou_id
+			                  AND t.name='Warehouse'
+			                  AND ou.is_available=1
+			                  AND w.is_auto_wh=1
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="PopUpArea.findPopUpAreaByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT z.id,z.code,z.barcode,z.name,z.wsc_pop_code wscPopCode,z.status,z.sort
+						FROM T_WH_POP_UP_AREA z
+						WHERE 1=1
+						#if($name)
+							  and z.name like '%$name%'
+						#end
+						#if($code)
+							  and z.code like '%$code%'
+						#end
+						#if($barcode)
+							  and z.barcode like '%$barcode%'
+						#end
+						#if($wscPopCode)
+							  and z.wsc_pop_code like '%$wscPopCode%'
+						#end
+						#if($sort)
+							  and z.sort = :sort
+						#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhThreePlAreaInfo.findAreaByPaream" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select area_id,area_name from T_WH_THREEPL_AREA_INFO where type =:type
+						#if($parentId)
+							  and parent_id =:parentId
+						#end
+						order by area_id
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ShippingPointRoleLine.findRoleLineByRoleId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select 
+              				e.id,e.lpcode,t.id as pointId,t.name as pointName,e.province,e.city,e.district,decode(e.time_type,'1','普通','3','及时达','5','当日','6','次日','7','次晨','8','云仓专配次日','9','云仓专配隔日','') as timeTypeStr,
+                     		l.name as owner,decode(e.is_cod,'1','是','0','否','') as isCodStr,e.sta_type as types,e.sta_code,e.sort,e.address
+						from
+							 t_wh_shipping_role_line e left join t_bi_channel l on l.code =e.owner 
+							 left join t_wh_shipping_point t on t.id = e.point_id
+						where
+							 e.ou_id =:ouId
+							 #if($name)
+							  and t.name like :name
+							#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ShippingPointRoleLine.findShippingRoleByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select e.owner,t.wcs_code as pointCode,e.time_type as timeTypes,e.sort,e.lpcode,e.province,e.city,e.district,e.is_cod,
+e.sta_code,e.sta_type,e.address
+ from t_wh_shipping_role_line e left join t_wh_shipping_point t on t.id = e.point_id where e.ou_id =:ouid order by e.sort
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ShippingPoint.findShippingPointList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select e.id,e.code,e.name,e.wcs_code,e.create_time,e.point_type,e.max_assume_number as maxAssumeNumber, e.ref_shippingpoint as refShippingPoint,r.user_name as createName,r2.user_name as lastName from t_wh_shipping_point e 
+						left join t_au_user r on r.id = e.create_id
+						left join t_au_user r2 on r2.id = e.last_modify_id
+						where e.ou_id =:ouId
+						#if($name)
+							  and e.name like :name
+						#end
+						#if($code)
+							  and e.code like :code
+						#end
+						#if($wscCode)
+							  and e.wcs_code like :wscCode
+						#end
+						and e.point_type in('0','1')
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.findShippingPointCollectionList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select t.id,t.collection_code,t.sort,t.pop_up_code,u.user_name as userName,t.modify_date,t.pickinglist_id,
+					decode(t.status,1,'待使用',2,'部分集货',3,'集货完成') as statusName, tt.name as popUpAreaName,p.code plCode,r.cCode container,t.start_time startTime,
+					t.pass_way,t.pick_model
+					from t_wh_goods_collection t 
+					       left join t_au_user u on u.id=t.modifier 
+					       left join T_WH_PHYSICAL_WAREHOUSE tt on tt.id=t.PHYSICAL_ID
+					       left join t_wh_sta_picking_list p on t.pickinglist_id=p.id
+					       left join (select c.p_id pId,stragg(c.code) cCode 
+					       				from t_wh_container c 
+					       				where c.p_id is not null 
+					       				
+										 	and c.is_receive=1
+					       				group by c.p_id) r on t.pickinglist_id=r.pId
+						where t.PHYSICAL_ID=:ouId
+						#if($collectionCode)
+						 and t.collection_code like :collectionCode
+						#end
+						#if($sort)
+						 and t.sort like :sort
+						#end
+						#if($popUpCode)
+						 and t.pop_up_code like :popUpCode
+						#end
+						#if($plCode)
+						 and p.code = :plCode
+						#end
+						#if($container)
+						 	and t.pickinglist_id=(select con.p_id from t_wh_container con where con.code= :container) 
+						#end
+						#if($passWay)
+							and t.pass_way=:passWay
+						#end
+						#if($pickModel)
+							and t.pick_model=:pickModel
+						#end
+						        
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="CheckingSpaceRole.findCheckingSpaceRole" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select e.TRANS_TYPE as transType,e.SKU_CODES as skuCodes,decode(e.TRANS_TYPE,'1','普通','3','及时达','5','当日','6','次日','7','次晨','8','云仓次日','9','云仓隔日','') as transTimeTypeStr,l.name as ownerName,decode(e.is_qs,'1','是','0','否','') as isQsStr,decode(e.special_type,'1','是','0','否','') as 
+					isSpecStr,re.name as toLocationName,decode(e.is_pre_sale,'0','否','1','是') isPreSaleStr,e.is_pre_sale isPreSale,e.* from t_wh_checking_space_role e left join t_bi_channel l on l.code = e.owner 
+          			left join T_BI_SHOP_STORE re on re.code = e.to_location
+						where wh_ou_id =:ouId
+						#if($owner)
+							  and e.owner =:owner
+						#end
+						#if($type)
+							  and e.type =:type
+						#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+
+	<bean id="InboundRole.findInboundRoleByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT ir.id,ou.name ouName,ou.id ouId,c.name channelName,c.id channelId,ir.owner,
+			                   st.name skuTypeName,st.id skuTypeId,sku.name skuName,sku.code skuCode,sku.id skuId,
+			                   ir.lv,l.code locationCode,a.code popUpAraeCode,a.name popUpAraeName
+			            FROM t_wh_inbound_role ir,
+			                 t_au_operation_unit ou,
+			                 t_bi_inv_sku sku,
+			                 t_wh_location l,
+			                 t_bi_inv_sku_type st,
+			                 t_bi_channel c,
+			                 T_WH_POP_UP_AREA a
+			            WHERE ir.ou_id=ou.id
+			                  AND ir.sku_id=sku.id(+)
+                  			  AND ir.sku_type=st.id(+)
+						      AND ir.location_id=l.id(+)
+			                  AND ir.owner=c.code(+)
+			                  AND ir.target_location_id=a.id
+			                  AND (a.status IS NULL OR a.status=0)
+						#if($ouId)
+							  and ou.id= :ouId
+						#end
+						#if($locationCode)
+							  and l.code = :locationCode
+						#end
+						#if($targetLocation)
+							  and a.code = :targetLocation
+						#end
+						#if($channelId)
+							  and c.id = :channelId
+						#end
+						#if($skuTypeId)
+							  and st.id = :skuTypeId
+						#end
+						#if($skuCode)
+							  and sku.code = :skuCode
+						#end
+						#if($lv)
+							  and ir.lv = :lv
+						#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>	
+	
+	<bean id="InboundRole.findChannelByAutoWh" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT distinct c.id,c.code,c.name
+						FROM t_bi_channel c,t_au_operation_unit ou,T_BI_CHANNEL_WH_REF r,t_bi_warehouse w
+						WHERE r.channel_id=c.id
+						      AND r.wh_ou_id=ou.id
+						      AND ou.id=w.ou_id
+						     
+						#if($ouId)
+						      AND ou.id= :ouId
+						#end						      
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="InboundRole.findLocationByZoon" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT l.id,l.barcode
+						FROM t_wh_location l
+						WHERE l.ou_id= :ouId
+						      AND l.pop_up_id= :popId    
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="PopUpArea.findPopByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT z.id,z.code,z.barcode,z.name
+						FROM T_WH_POP_UP_AREA z 
+						where (z.status = 0 OR z.status IS NULL)
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ShippingPoint.findPointByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						select t.id,t.name from t_wh_shipping_point t where t.ou_id =:ouid and t.point_type in ('0','1')
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ShippingPoint.getPointByIds" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						 select point_type,ref_shippingpoint,max_assume_number,id,code,name,wcs_code,ou_id,create_id,last_modify_id,create_time,status 
+						 from t_wh_shipping_point
+						 where id in (
+						    #foreach( $id in $ids )
+	    				     $id
+	    				      ,
+						    #end
+						    -1
+						    ) 
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ShippingPoint.getPointByRefShippingPoint" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						 select t.point_type pointType,
+						        t.ref_shippingpoint refShippingPoint,
+						        t.max_assume_number maxAssumeNumber,
+						        t.id id,
+						        t.code code,
+						        t.name name,
+						        t.wcs_code wcsCode,
+						        t.ou_id ouId,
+						        t.create_id createId,
+						        t.last_modify_id lastModifyId,
+						        t.create_time createTime,
+						        t.status status
+						 from t_wh_shipping_point t
+						 where t.id =:refShippingPoint
+						       or t.ref_shippingpoint=:refShippingPoint
+						       order by t.create_time
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="ShippingPoint.findAssumeShippingPointList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						 select t.point_type ,
+						        t.ref_shippingpoint ,
+						        t.max_assume_number ,
+						        t.id ,
+						        t.code ,
+						        t.name ,
+						        t.wcs_code ,
+						        t.ou_id ,
+						        t.create_id ,
+						        t.last_modify_id ,
+						        t.create_time ,
+						        t.status 
+						 from t_wh_shipping_point t
+						 where t.id =:refShippingPoint
+						       or t.ref_shippingpoint=:refShippingPoint
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickingBatch.savePlzByPickingList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						INSERT INTO T_WH_PICKING_BATCH(ID,PICKING_ID,ZOON_ID,STATUS,CODE,BAR_CODE,SORT,CREATE_TIME) 
+						SELECT S_T_WH_PICKING_BATCH.nextval, a.pid,a.zid,1,a.code,a.code,1,sysdate
+						FROM (SELECT sta.picking_list_id pid,z.id zid,p.code||'#'||z.code code
+				            FROM t_wh_sta_picking_list p,t_wh_sta sta ,t_wh_stv stv,t_wh_stv_line sl,t_wh_location l,t_wh_pick_zoon pz,t_wh_zoon z
+				            WHERE p.id=sta.picking_list_id
+                          				AND p.id= :pId
+					                  AND sta.id=stv.sta_id
+					                  AND stv.id=sl.stv_id
+					                  AND sl.location_id=l.id
+					                  AND l.zoon_id=pz.id
+					                  AND pz.wh_zoon_id=z.id
+				            GROUP BY sta.picking_list_id,z.id,p.code||'#'||z.code) a
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="PickingLine.savePickingLineByPickingList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						
+					INSERT INTO t_wh_picking_line (ID,sku_id,locaton_id,picking_id,pickzoon_id,p_qty,inv_status_id,pro_date,exp_date,qty)
+					SELECT s_t_wh_picking_line.nextval,a.sku_id,a.locId,b.id,a.pickId,a.qty,a.inv_status_id,a.production_date,a.expire_date,0
+					FROM t_wh_picking_batch b,                    
+						(SELECT sta.picking_list_id pid,z.id zid,sl.sku_id,l.id locId,sum(sl.quantity) qty,sl.inv_status_id,sl.production_date,sl.expire_date,pz.id pickId
+						FROM t_wh_sta_picking_list p,t_wh_sta sta ,t_wh_stv stv,t_wh_stv_line sl,t_wh_location l,t_wh_pick_zoon pz,t_wh_zoon z
+						WHERE p.id=sta.picking_list_id
+						            AND p.id= :pId
+									AND sta.id=stv.sta_id
+									AND sta.status != 17
+									AND stv.id=sl.stv_id
+									AND sl.location_id=l.id
+									AND l.zoon_id=pz.id
+									AND pz.wh_zoon_id=z.id
+						GROUP BY sta.picking_list_id,z.id,sl.sku_id,l.id,sl.inv_status_id,sl.production_date,sl.expire_date,pz.id
+						) a
+					WHERE b.picking_id=a.pid
+					      AND b.zoon_id=a.zid
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="PickingLine.savePickingLineByGeneral" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					INSERT INTO t_wh_picking_line (ID,sku_id,locaton_id,picking_id,pickzoon_id,p_qty,inv_status_id,pro_date,exp_date,qty)
+					SELECT s_t_wh_picking_line.nextval,a.sku_id,a.locId,a.pbId,a.pickId,a.qty,a.inv_status_id,a.production_date,a.expire_date,0
+					FROM (
+					SELECT sta.picking_list_id pid,sl.sku_id,l.id locId,sum(sl.quantity) qty,sl.inv_status_id,sl.production_date,sl.expire_date,b.id pbId,pz.id pickId
+					            FROM t_wh_sta_picking_list p,t_wh_picking_batch b,t_wh_sta sta ,t_wh_stv stv,t_wh_stv_line sl,t_wh_location l,t_wh_pick_zoon pz
+					            WHERE p.id=sta.picking_list_id
+					                  AND p.id=b.picking_id
+					                  AND p.id= :pId
+					                  AND sta.id=stv.sta_id
+					                  AND sta.status != 17
+					                  AND stv.id=sl.stv_id
+					                  AND sl.location_id=l.id
+					                  AND l.zoon_id=pz.id
+					            GROUP BY sta.picking_list_id,sl.sku_id,l.id,sl.inv_status_id,sl.production_date,sl.expire_date,b.id,pz.id ) a      
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="PickingLine.savePickingLineBySingle" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					INSERT INTO t_wh_picking_line (ID,sku_id,locaton_id,picking_id,pickzoon_id,p_qty,inv_status_id,pro_date,exp_date,qty)
+					SELECT s_t_wh_picking_line.nextval,a.sku_id,a.locId,a.pbId,a.pickId,a.qty,a.inv_status_id,a.production_date,a.expire_date,0
+					FROM (
+					SELECT sta.picking_list_id pid,sl.sku_id,l.id locId,sum(sl.quantity) qty,sl.inv_status_id,sl.production_date,sl.expire_date,b.id pbId,pz.id pickId
+					            FROM t_wh_sta_picking_list p,t_wh_picking_batch b,t_wh_sta sta ,t_wh_stv stv,t_wh_stv_line sl,t_wh_location l,t_wh_pick_zoon pz
+					            WHERE p.id=sta.picking_list_id
+					                  AND p.id=b.picking_id
+					                  AND b.sort=sta.idx1
+					                  AND p.id= :pId
+					                  AND sta.id=stv.sta_id
+					                  AND sta.status != 17
+					                  AND stv.id=sl.stv_id
+					                  AND sl.location_id=l.id
+					                  AND l.zoon_id=pz.id
+					            GROUP BY sta.picking_list_id,sl.sku_id,l.id,sl.inv_status_id,sl.production_date,sl.expire_date,b.id,pz.id ) a      
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickingBatch.deleteBatchByPickId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						delete FROM  T_WH_PICKING_BATCH p where  p.picking_id= :pId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!--设置pda拣货开始时间与用户  -->
+	<bean id="WhPickingBatch.updateWhPickingBatchStartTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+  update t_wh_picking_batch p set p.user_id=:userId ,p.start_time=sysdate where p.bar_code=:barCode and p.user_id is null and p.start_time is null
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!--设置pda拣货结束时间 -->
+	<bean id="WhPickingBatch.updateWhPickingBatchEndTime" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+    update t_wh_picking_batch p set p.end_time =:endTime where p.bar_code=:barCode  and p.end_time is null
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- pda拣货log查询 -->
+	<bean id="WhPickingBatch.getPickingListLogQueryPage" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+	 select u.login_name  as userName,
+        p.code,
+        b.picking_id  as id,
+        z.name        zoonName,
+        b.start_time  as startTime,
+        b.end_time    as endTime,
+        b.create_time as createTime,
+        sum(l.p_qty) as pQty,
+        sum(l.qty)   as qty
+   from t_wh_picking_batch    b,
+        t_wh_picking_line  l,
+        t_wh_pick_zoon     pz,
+        t_wh_sta_picking_list p,
+        t_wh_zoon             z,
+        t_au_user             u
+  where b.picking_id = p.id
+    and b.id = l.picking_id
+    and l.pickzoon_id = pz.id
+    and b.zoon_id = z.id(+)
+    and b.user_id = u.id(+)
+    and b.user_id is not null 
+    and b.bar_code is not null
+    and  p.wh_id =:ouId 
+    #if($userName)
+                    and u.login_name = :userName
+                   #end
+                    #if($patchCode)
+                    and p.code = :patchCode
+                   #end
+    #if($createTime)
+                    and b.create_time >= :createTime
+                   #end
+                   #if($createTime2)
+                    and b.create_time <= :createTime2
+                  #end
+                  #if($startTime)
+                    and b.start_time >= :startTime
+                  #end
+                  #if($startTime2)
+                    and b.start_time <= :startTime2
+                  #end
+                  #if(!$createTime && !$createTime1 && !$startTime && !$startTime2)
+                    and b.create_time > sysdate - 91
+                  #end
+  group by u.login_name,
+           p.code,
+           b.picking_id,
+           z.name,
+           b.start_time,
+           b.end_time,
+           b.create_time,
+           b.bar_code
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickingBatch.updateBatchByPickId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update T_WH_CONTAINER set p_id = null,p2_id = null,status = 1,is_receive=0,P3_ID=null where p_id = :pId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickingBatch.deleteContainByPkId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						delete from T_WH_CONTAINER  where p_id = :pId
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="WhPickingBatch.findPickingListZoneByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT pz.id,p.code pickingListCode,z.code whZoneCode,pz.status
+						FROM T_WH_PICKING_BATCH pz,t_wh_sta_picking_list p,t_wh_zoon z
+						WHERE pz.PICKING_ID=p.id
+						      AND pz.ZOON_ID=z.id
+						#if($pickingListCode)
+						   	  and p.code = :pickingListCode
+						#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="PopUpArea.recommandLocationBySku" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+		       select ar.code,ar.barcode,ar.name,ar.wsc_pop_code wscPopCode,ar.sort from T_WH_INBOUND_ROLE r,T_WH_POP_UP_AREA ar
+		       where (r.owner is null or r.owner = :owner) 
+		       and (r.sku_id is null or :skuId = r.sku_id) 
+		       and (r.sku_type is null or r.sku_type = :skuTypeId)
+		       and ar.id = r.target_location_id and (ar.status = 0 or ar.status is null)
+       		   order by r.lv
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="PopUpArea.recommandLocationListBySku" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+		       select ar.code,ar.barcode,ar.name,ar.wsc_pop_code wscPopCode,ar.sort from T_WH_INBOUND_ROLE r,T_WH_POP_UP_AREA ar
+		       where (r.owner is null or r.owner = :owner) 
+		       and (r.sku_id is null or :skuId = r.sku_id) 
+		       and (r.sku_type is null or r.sku_type = :skuTypeId)
+		       and ar.id = r.target_location_id and (ar.status = 0 or ar.status is null)
+       		   order by r.lv
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="WhContainer.getAllWhContainer" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						  c.id id,
+						  c.code   code,
+					      pl.code  pickingListCode,
+					      sta.code staCode,
+					      c.status   statusIntValue,
+					      ou.name ouName
+					 from T_WH_CONTAINER c
+					 left join t_wh_sta_picking_list pl on c.p_id = pl.id
+					 left join t_au_operation_unit ou on pl.wh_id=ou.id
+					 left join t_wh_sta sta on c.sta_id = sta.id
+					where c.code is not null 
+						  #if($code)
+					  		and c.code = :code 
+					  	  #end
+					  	  #if($plCode)
+					  		and pl.code = :plCode 
+					  	  #end
+					  	  #if($status)
+					  		and c.status = :status 
+					  	  #end
+					  	  #if($ouId)
+					  		and ou.id = :ouId 
+					  	  #end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="WhContainer.resetWhContainerStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_container c set c.p_id=null,c.p2_id=null,c.sta_id=null,c.status=1,c.is_receive=0,c.P3_ID=null where c.id=:tId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="MsgToWcs.insertMsgToWcs" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				insert into T_WH_MSG_TO_WCS
+				 values (
+				 S_T_WH_MSG_TO_WCS.Nextval, 
+				 :contexts,
+		         sysdate,
+		         0,
+		         :iType,
+		         :staCode,
+		         :pickingListCode,
+		         :containerCode,
+		         :trackingNo,
+		         1,
+		         sysdate
+				 )
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="MsgToWcs.findWcsList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select id,type msgType from T_WH_MSG_TO_WCS s where ((s.error_count <= 5 and  status =0) or (s.error_count <= 5 and sysdate-2/(60*24)>create_time)) and rownum <=5000
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="MsgToWcsLog.insertMsgToWcsLog" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+			insert into T_LG_MSG_TO_WCS(ID,CONTEXT,CREATE_TIME,LOG_TIME,TYPE,STA_CODE,PICKING_LIST_CODE,CONTAINER_CODE,TRACKING_NO,ERROR_MSG)
+        	select ID,context,create_time,sysdate,type,sta_code,picking_list_code,container_code,tracking_no,ERROR_MSG from T_WH_MSG_TO_WCS 
+				where id =:msgId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="MsgToWcsLog.findMsgToWcsByType" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select container_code from T_LG_MSG_TO_WCS s where type =:type and picking_list_code =:plCode group by container_code
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	
+	<bean id="MsgToWms.insertMsgToWms" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				insert into T_WH_MSG_TO_WMS(id,context,Create_Time,type) 
+				 values (
+				 S_T_WH_MSG_TO_WMS.Nextval, 
+				 :contexts,
+		         sysdate,
+		         :iType
+				 )
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="MsgToWms.findMsgBzDate" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select id,pkid from T_WH_MSG_TO_WMS where status in (0,1) and error_count < 6 and type = 15 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="MsgToWms.updateBzStatusById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update T_WH_MSG_TO_WMS set status = 10 where id =:id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="StockTransApplication.getUnCheckStaByWhPB" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select count(1) from t_wh_sta sta where sta.PB_ID=:id and sta.status = 2
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="Sku.findSkuListByStvId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select 
+						distinct sku.id id,sku.code code,sku.bar_code barCode,sku.sku_type_id boxQty
+					from 
+						t_wh_stv_line line,t_bi_inv_sku sku
+					where 
+						line.stv_id = :stvId
+						and line.sku_id = sku.id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="CheckingSpaceRole.findCheckSpaceByCondition" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					  select r.checking_area_code checkingAreaCode from t_wh_checking_space_role r,t_wh_sta sta
+					  where sta.main_wh_id = r.wh_ou_id 
+					  #if($pbId)
+					     and sta.pb_id = :pbId
+					  #end
+					  #if($staId)
+					     and sta.id = :staId
+					  #end
+					  #if($type)
+					     and r.type = :type
+					  #end
+					  and (r.owner is null or sta.owner = r.owner)
+					  and (r.is_qs is null or r.is_qs = nvl(sta.is_special_packaging,0))
+					  and (r.special_type is null or r.special_type = nvl(sta.special_type,0))
+					  and (r.to_location is null or r.to_location = sta.to_location) order by sta.id,r.lv
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="CheckingSpaceRole.findCheckingSpaceList" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					  select * from t_wh_checking_space_role where wh_ou_id =:ouId and type =:type order by lv
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+
+	
+	<bean id="PickingList.findIfExistPbNotBind" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select count(1) from t_wh_picking_batch pb where pb.picking_id = :pId
+					and not exists(select 1 from t_wh_container c where c.p2_id = pb.id)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	<bean id="WhContainer.findContainerPickId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT DISTINCT c.p_id pId 
+					FROM T_WH_CONTAINER c,t_wh_sta_picking_list p,t_bi_warehouse w
+					WHERE c.p_id =p.id
+					      AND p.check_mode=1
+					      AND p.wh_id=w.ou_id
+                		  AND w.is_auto_wh=1
+                		  AND NOT exists (SELECT 1 FROM t_wh_GOODS_COLLECTION gc WHERE gc.pickinglist_id=c.p_id)
+                		  AND p.goods_collection_type=2
+				      #if($autoSeedGroup)
+						  and w.auto_seed_group  = :autoSeedGroup
+					#end
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 查询 errorCount(错误次数)大于1 MsgToWcs实体 -->
+	<bean id="MsgToWcs.findMsgToWcsByParams" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT w.id, w.create_time, w.ERROR_COUNT, w.PICKING_LIST_CODE, w.CONTAINER_CODE, w.ERROR_MSG, 
+						decode(w.type,1,'收货入库货箱流向',2,'货箱流向取消接口',3,'播种接口',4,'出库货箱流向',5,'货箱流向取消',6,'快递集货',7,'播种取消','暂不明确,待定义') statusStr
+					FROM T_WH_MSG_TO_WCS w
+					WHERE 1 = 1
+						#if($pickingListCode)
+							  and w.PICKING_LIST_CODE like '%$pickingListCode%'
+						#end
+						#if($containerCode)
+							  and w.CONTAINER_CODE like '%$containerCode%'
+						#end
+					and w.ERROR_COUNT > 1 
+					ORDER BY  w.create_time DESC
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 重置（修改error_count>1的数据为error_count=0） -->
+	<bean id="MsgToWcs.resetErrorCount" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					UPDATE T_WH_MSG_TO_WCS w SET w.ERROR_COUNT = 0
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhContainer.findOccupyOu" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT distinct ou.id,ou.name
+					FROM t_wh_container c,t_wh_sta_picking_list p,t_au_operation_unit ou 
+					WHERE c.p_id=p.id
+					      AND p.wh_id=ou.id
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.recommendCollectionCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT c.id 
+					FROM T_WH_GOODS_COLLECTION c
+					WHERE c.status= 1
+						  AND c.physical_id IN (SELECT r.phy_wh_id FROM t_wh_phy_warehouse_ref r WHERE r.ou_wh_id = :ouId)
+					#if($isAutoWh)
+						AND c.pop_up_code IS NOT NULL
+					#end
+					ORDER BY c.sort  
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.checkCollectionBox" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT gc.collection_code collectionCode
+					FROM t_wh_GOODS_COLLECTION gc,t_wh_container c 
+					WHERE gc.status !=1
+					      AND gc.pickinglist_id=c.p_id
+					      AND c.code = :code 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.findWaitBox" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT c.p_id 
+					FROM  t_wh_container c,t_wh_picking_batch b
+					WHERE c.p_id=b.picking_id
+					      AND b.status=1
+					      AND c.code =:code     
+					UNION 
+					SELECT wc.id 
+					FROM t_wh_container wc,t_wh_container co
+					WHERE wc.p_id=co.p_id
+					      AND co.code=:code
+					      AND (wc.is_receive =0 OR wc.is_receive IS NULL)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.countCollectionByStatus" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT COUNT(1)
+					FROM t_wh_GOODS_COLLECTION c
+					WHERE c.status = :status
+						  AND c.physical_id IN (SELECT r.phy_wh_id FROM t_wh_phy_warehouse_ref r WHERE r.ou_wh_id = :ouId)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.recommendMoveCollectionCode" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					SELECT c.collection_code
+					FROM t_wh_GOODS_COLLECTION c
+					WHERE c.status=3
+					      AND c.physical_id IN (SELECT r.phy_wh_id FROM t_wh_phy_warehouse_ref r WHERE r.ou_wh_id = :ouId)
+					ORDER BY c.sort ASC 
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.findGoodsCollectionByPlCodeSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select c.id,c.status from t_wh_goods_collection c where c.pickinglist_id=(select id from t_wh_sta_picking_list l where l.code= :pickingCode)  
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.findGoodsCollectionByCodeSql" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select c.id,c.status from t_wh_goods_collection c where c.collection_code = :code and c.physical_id= :ouId  
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.resetGoodsCollectionById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_goods_collection c set c.status=1,c.pickinglist_id=null,c.start_time=null where c.id = :id  
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.resetGoodsCollectionByPickingId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_goods_collection c set c.status=1,c.pickinglist_id=null,c.start_time=null where c.pickinglist_id = :pId  
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickingBatch.findWhPickingBatchByNotLine" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select pb.id from t_wh_picking_batch pb where pb.bar_code= :pbBarCode and not exists (select 1 from t_wh_picking_line l where l.picking_id=pb.id)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickingBatch.findWhPickingBatchByNotLine2" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					select pb.id from t_wh_picking_batch pb where pb.picking_id IN ($pIdS) and not exists (select 1 from t_wh_picking_line l where l.picking_id=pb.id)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhPickingBatch.modifyStaPbId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					update t_wh_sta sta set sta.pb_id =null 
+					where  sta.pb_id in (
+						    #foreach( $id in $pbIds )
+	    				     $id
+	    				      ,
+						    #end
+						    -1
+					)
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="Zoon.findZoonByOuId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+						SELECT z.id,z.code,z.name,z.ou_id ouId,decode(z.status,1,'已禁用','使用中') statusStr
+						FROM t_wh_zoon z
+						WHERE z.ou_id = :ouId
+						and (z.status = 0 or z.status is null)
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollection.findGoodsCollection" class="loxia.dao.support.DynamicQueryHolder">
+	<constructor-arg>
+		<value>
+		<![CDATA[
+		SELECT c.pass_way as passWay,
+          	MIN(c.collection_code) as collectionCode ,
+          	MIN(c.modify_date) as modifyDate,
+		min(c.start_time) as startTime,
+          	min(c.status) as status
+          	FROM t_wh_goods_collection c 
+          	WHERE c.physical_id  = 
+         	(SELECT r.phy_wh_id FROM t_wh_phy_warehouse_ref r WHERE r.ou_wh_id =:ouId)
+          	GROUP BY c.pass_way,c.collection_code 
+		]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollectionLog.resetGoodsCollectionLogById" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					insert into T_WH_GOODS_COLLECTION_LOG
+					select S_GOODS_COLLECTION_LOG.nextval,gc.collection_code,p.code,c.code,'释放',sysdate, :userId
+					from T_WH_GOODS_COLLECTION gc,t_wh_sta_picking_list p,t_wh_container c
+					where gc.pickinglist_id=p.id
+					      and p.id=c.p_id
+					      and c.is_receive=1
+					      and gc.id= :gcId								  
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="GoodsCollectionLog.resetGoodsCollectionLogByPlId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					insert into T_WH_GOODS_COLLECTION_LOG
+					select S_GOODS_COLLECTION_LOG.nextval,gc.collection_code,p.code,c.code,'释放',sysdate, :userId
+					from T_WH_GOODS_COLLECTION gc,t_wh_sta_picking_list p,t_wh_container c
+					where gc.pickinglist_id=p.id
+					      and p.id=c.p_id
+					      and c.is_receive=1
+					      and p.id= :plId								  
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="WhContainer.updateContainerByStaId" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+					UPDATE  T_WH_CONTAINER t SET t.p_id = NULL,t.p3_id = NULL,t.sta_id = NULL,t.status = 1 WHERE t.sta_id = :staId
+				]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="JATC" language="groovy" pageWidth="750" pageHeight="360" whenNoDataType="AllSectionsNoDetail" columnWidth="750" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<parameter name="sender" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["宝尊"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="senderTel" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="senderAddress" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["上海市闸北区万荣路1188号H栋118室"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="sendZipCode" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["200436"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="senderSign" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["宝尊"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="senderUnit" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["上海宝尊电子商务有限公司"]]></defaultValueExpression>
+	</parameter>
+	<field name="country" class="java.lang.String"/>
+	<field name="province" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="district" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="mobile" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="zipcode" class="java.lang.String"/>
+	<field name="lpCode" class="java.lang.String"/>
+	<field name="trackingNo" class="java.lang.String"/>
+	<field name="remark" class="java.lang.String"/>
+	<field name="transferFee" class="java.math.BigDecimal"/>
+	<field name="transferCost" class="java.math.BigDecimal"/>
+	<field name="id" class="java.lang.String"/>
+	<field name="warehouseName" class="java.lang.String"/>
+	<field name="refSlipCode" class="java.lang.String"/>
+	<field name="owner" class="java.lang.String"/>
+	<variable name="sdate" class="java.util.Date"/>
+	<group name="g1">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+		<groupHeader>
+			<band height="360">
+				<textField isBlankWhenNull="true">
+					<reportElement x="184" y="85" width="220" height="36"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{sender}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="183" y="177" width="250" height="36"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$P{senderTel}]]></textFieldExpression>
+				</textField>
+				<textField  isBlankWhenNull="true">
+					<reportElement x="183" y="105" width="250" height="36" isPrintWhenDetailOverflows="true"/>
+					<textElement verticalAlignment="Top">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{warehouseName}]]></textFieldExpression>
+				</textField>
+				<textField  isBlankWhenNull="true">
+					<reportElement x="183" y="132" width="250" height="36" isPrintWhenDetailOverflows="true"/>
+					<textElement verticalAlignment="Top">
+						<font size="12" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{refSlipCode}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="414" y="98" width="263" height="36"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{receiver}]]></textFieldExpression>
+				</textField>
+				<textField  isBlankWhenNull="true">
+					<reportElement x="378" y="197" width="300" height="60" isPrintWhenDetailOverflows="true"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{mobile} == null?"":$F{mobile}]]></textFieldExpression>
+				</textField>
+				<textField  isBlankWhenNull="true">
+					<reportElement x="377" y="171" width="300" height="60" isPrintWhenDetailOverflows="true"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{telephone} == null?"":$F{telephone}]]></textFieldExpression>
+				</textField>
+				<textField  isBlankWhenNull="true">
+					<reportElement x="404" y="130" width="271" height="200" isPrintWhenDetailOverflows="true"/>
+					<textElement verticalAlignment="Top">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{address}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="590" y="176" width="110" height="36"/>
+					<textElement verticalAlignment="Top">
+						<font size="12" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{zipcode}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="416" y="80" width="259" height="36"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{city} == null?"":$F{city}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="122" y="132" width="62" height="36"/>
+					<textElement textAlignment="Right">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[订单：]]></text>
+				</staticText>
+				<textField  isBlankWhenNull="true">
+					<reportElement x="183" y="153" width="250" height="36" isPrintWhenDetailOverflows="true"/>
+					<textElement verticalAlignment="Top">
+						<font size="12" isBold="false"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{owner}]]></textFieldExpression>
+				</textField>
+				<textField  isBlankWhenNull="true">
+					<reportElement x="410" y="227" width="290" height="120" isPrintWhenDetailOverflows="true"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{remark}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

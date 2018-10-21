@@ -1,0 +1,8 @@
+1.bz.keystore   
+	
+	密码  baozun
+	
+2.sign jar
+	
+	jarsigner -keystore bz.keystore jasperreports-3.5.2-applet.jar bz
+

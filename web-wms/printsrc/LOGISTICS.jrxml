@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LOGISTICS" language="groovy" pageWidth="250" pageHeight="380" columnWidth="225" leftMargin="25" rightMargin="0" topMargin="0" bottomMargin="0">
+	<field name="city" class="java.lang.String"/>
+	<field name="refSlipCode" class="java.lang.String"/>
+	<field name="expName" class="java.lang.String"/>
+	<field name="warehouseName" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="owner" class="java.lang.String"/>
+	<field name="quantity" class="java.lang.Integer"/>
+	<field name="staCreateTime" class="java.util.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="380" splitType="Stretch">
+			<staticText>
+				<reportElement x="-16" y="54" width="65" height="22"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[到达地：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="82" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[发货仓库：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="96" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[收货人：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="110" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[收货地址：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="169" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[店铺名称：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="183" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[商品件数：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="155" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[电话：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="365" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[签收人：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="86" y="183" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[商品重量：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="365" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[签收时间：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-25" y="221" width="241" height="23"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[收货前请认真确认包装是否完好]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="197" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[发货日期：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="319" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[收货人：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="333" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[收货地址：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-16" y="305" width="55" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[发货仓库：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="48" y="57" width="72" height="17" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{city}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="82" width="175" height="15" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{warehouseName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5" y="34" width="160" height="17"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{refSlipCode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="96" width="175" height="15" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="110" width="166" height="73" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="155" width="175" height="15" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{telephone}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="169" width="175" height="15" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{owner}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="183" width="48" height="15" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField pattern="yyyy年MM月dd日" isBlankWhenNull="true">
+				<reportElement x="39" y="197" width="174" height="15" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{staCreateTime}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="319" width="175" height="15" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="305" width="175" height="15" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{warehouseName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="5" y="291" width="160" height="17"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{refSlipCode}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement stretchType="RelativeToBandHeight" x="20" y="258" width="135" height="44" isRemoveLineWhenBlank="true"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="0" barHeight="45">
+					<jr:codeExpression><![CDATA[$F{refSlipCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="38" y="333" width="166" height="47" forecolor="#FF00FF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement stretchType="RelativeToBandHeight" x="20" y="1" width="135" height="44" isRemoveLineWhenBlank="true"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false" barWidth="0" barHeight="45">
+					<jr:codeExpression><![CDATA[$F{refSlipCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="119" y="57" width="82" height="17" forecolor="#00CC66"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{expName}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="-25" y="51" width="250" height="1"/>
+			</line>
+			<line>
+				<reportElement x="-25" y="78" width="250" height="1"/>
+			</line>
+			<line>
+				<reportElement x="-25" y="304" width="250" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+</jasperReport>

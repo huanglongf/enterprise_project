@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="15" >
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.callouts" value="##Fri Mar 29 18:03:18 CST 2013"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<parameterDescription><![CDATA[SUBREPORT_DIR]]></parameterDescription>
+		<defaultValueExpression><![CDATA["jasperprint/return_burberry_detail.jasper"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logImage" class="java.lang.String">
+		<parameterDescription><![CDATA[logImage]]></parameterDescription>
+		<defaultValueExpression><![CDATA["C:\\Users\\yaowei\\Desktop\\aaaaaa\\aa.png"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="xPath">
+		<![CDATA[/NameList/GoodsDetail]]>
+	</queryString>
+	<field name="orderCode" class="java.lang.String">
+		<fieldDescription><![CDATA[orderCode]]></fieldDescription>
+	</field>
+	<field name="lines" class="java.util.List">
+		<fieldDescription><![CDATA[lines]]></fieldDescription>
+	</field>
+	<field name="orderDate" class="java.lang.String">
+		<fieldDescription><![CDATA[orderDate]]></fieldDescription>
+	</field>
+	<field name="outboundDate" class="java.lang.String">
+		<fieldDescription><![CDATA[outboundDate]]></fieldDescription>
+	</field>
+	<field name="customer" class="java.lang.String">
+		<fieldDescription><![CDATA[customer]]></fieldDescription>
+	</field>
+	<field name="owner" class="java.lang.String"/>
+	<group name="orderCode" isStartNewPage="true" isResetPageNumber="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{orderCode}]]></groupExpression>
+		<groupHeader>
+			<band height="28">
+				<staticText>
+					<reportElement  x="360" y="0" width="32" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[寄货]]></text>
+				</staticText>
+				<line>
+					<reportElement  x="0" y="27" width="556" height="1"/>
+				</line>
+				<staticText>
+					<reportElement  x="260" y="0" width="59" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[颜色]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="210" y="0" width="50" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[尺码]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="80" y="0" width="130" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[详细信息]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="0" y="0" width="80" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[产品编码]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="309" y="0" width="52" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[价格]]></text>
+				</staticText>
+				<line>
+					<reportElement  x="0" y="0" width="555" height="1"/>
+				</line>
+				<staticText>
+					<reportElement  x="360" y="12" width="32" height="14"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[数量]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="309" y="12" width="52" height="14"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[(CNY)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="392" y="0" width="63" height="14"/>
+					<box>
+						<leftPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[退货]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="455" y="0" width="100" height="15"/>
+					<box>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[退货原因]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="392" y="12" width="63" height="15"/>
+					<box>
+						<leftPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[数量]]></text>
+				</staticText>
+				<staticText>
+					<reportElement  x="455" y="12" width="100" height="14"/>
+					<box>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[请参照下列退货原因]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<pageHeader>
+		<band height="315" splitType="Stretch">
+			<staticText>
+				<reportElement  x="10" y="164" width="53" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[顾客服务]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="253" width="90" height="18"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[定购日期]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="87" width="100" height="31"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[退货表格]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="217" width="90" height="18"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[顾客名字]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="176" width="53" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[电话：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="235" width="90" height="18"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[订单编码]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="188" width="53" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[电子邮件：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  stretchType="RelativeToTallestObject" x="110" y="216" width="132" height="18" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customer}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  stretchType="RelativeToTallestObject" x="110" y="235" width="132" height="18" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderCode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="10" y="118" width="496" height="15"/>
+				<textElement>
+					<font size="10" isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Burberry为您提供方便简捷的免费退货服务。您只需要填写此表格，然后连同产品一并退回即可。请保留寄货]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="271" width="90" height="18"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[寄货日期]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  stretchType="RelativeToTallestObject" x="110" y="253" width="100" height="18" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{orderDate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  stretchType="RelativeToTallestObject" x="110" y="271" width="100" height="18" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{outboundDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  mode="Opaque" x="392" y="281" width="163" height="34" backcolor="#999999"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[供顾客填写]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="130" width="406" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[单据以示凭证。如果您对退货有任何疑问，请联系顾客服务：]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement  x="46" y="22" width="184" height="13"/>
+				<imageExpression><![CDATA[$P{logImage}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement  x="65" y="176" width="374" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{owner}=="博柏利微信官方商城" ? "4001201154":"4001203097"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="66" y="191" width="370" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{owner}=="博柏利微信官方商城" ? "wechat@burberry.com":"Tmall.customerservice@burberry.com"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<subreport>
+				<reportElement  x="0" y="0" width="555" height="30"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{lines})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="152" splitType="Stretch">
+			<staticText>
+				<reportElement  x="235" y="100" width="100" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[支付信息]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="235" y="128" width="100" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[谢谢]]></text>
+			</staticText>
+			<line>
+				<reportElement  x="0" y="98" width="555" height="1"/>
+			</line>
+			<staticText>
+				<reportElement  x="10" y="100" width="100" height="14"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[付款方式]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  stretchType="RelativeToTallestObject" x="235" y="113" width="100" height="16" isPrintWhenDetailOverflows="true"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Alipay eWallet"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="10" y="5" width="100" height="16"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[退货原因：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="20" width="200" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[1  -  收到商品破损]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="180" y="20" width="200" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[2  -  商品错发/漏发]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="350" y="20" width="200" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[3  -  商品需要维修]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="39" width="200" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[4  -  发票问题]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="180" y="39" width="200" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[5  -   收到商品与描述不符]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="350" y="39" width="200" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[6  -  我不想要了]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="10" y="58" width="200" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[7  -  商品质量问题]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="180" y="58" width="200" height="20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[8  -  未按约定时间发货]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement  x="0" y="12" width="555" height="10" forecolor="#000000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[33/F, Wheelock Square, 1717 Nanjing West Road, Shanghai. (Post Code: 200040)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="367" y="23" width="32" height="10" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[200040)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="302" y="0" width="202" height="12" forecolor="#000000"/>
+				<textElement textAlignment="Left" rotation="None">
+					<font fontName="宋体" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[博柏利（上海）贸易有限公司]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="0" y="32" width="555" height="10" forecolor="#000000"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="8" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[General Line:  (86-21) 6171 8600     General Fax: (86-21) 6171 8611]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="48" y="1" width="246" height="12" forecolor="#000000"/>
+				<textElement textAlignment="Right" rotation="None">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Burberry (Shanghai) Trading Co. Ltd.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="229" y="23" width="20" height="10" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[1717]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="318" y="23" width="10" height="10" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[33]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="0" y="22" width="555" height="10" forecolor="#000000"/>
+				<textElement textAlignment="Center">
+					<font fontName="宋体" size="8" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[中国上海市南京西路     号会德丰国际广场    楼 (邮编:        ]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportTest" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5c1e5b15-38b7-4aa4-b29a-28eb70fa8c83">
+	<property name="ireport.zoom" value="1.2100000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select * from lmis.setup_constant]]>
+	</queryString>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[主键]]></fieldDescription>
+	</field>
+	<field name="create_time" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[创建时间]]></fieldDescription>
+	</field>
+	<field name="create_by" class="java.lang.String">
+		<fieldDescription><![CDATA[创建对象]]></fieldDescription>
+	</field>
+	<field name="update_time" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[更新时间]]></fieldDescription>
+	</field>
+	<field name="update_by" class="java.lang.String">
+		<fieldDescription><![CDATA[更新对象]]></fieldDescription>
+	</field>
+	<field name="is_deleted" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[逻辑删除标志 0-未删除 1-已删除]]></fieldDescription>
+	</field>
+	<field name="is_disabled" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[启停标志 1-已禁用 0-未禁用]]></fieldDescription>
+	</field>
+	<field name="version" class="java.lang.Long">
+		<fieldDescription><![CDATA[版本号]]></fieldDescription>
+	</field>
+	<field name="pwr_org" class="java.lang.String">
+		<fieldDescription><![CDATA[权限架构]]></fieldDescription>
+	</field>
+	<field name="constant_code" class="java.lang.String">
+		<fieldDescription><![CDATA[常量编号]]></fieldDescription>
+	</field>
+	<field name="constant_name" class="java.lang.String">
+		<fieldDescription><![CDATA[常量名称]]></fieldDescription>
+	</field>
+	<field name="group_code" class="java.lang.String">
+		<fieldDescription><![CDATA[分组编号]]></fieldDescription>
+	</field>
+	<field name="group_name" class="java.lang.String">
+		<fieldDescription><![CDATA[分组名称]]></fieldDescription>
+	</field>
+	<field name="constant_seq" class="java.lang.Long">
+		<fieldDescription><![CDATA[显示顺序]]></fieldDescription>
+	</field>
+	<field name="constant_name1" class="java.lang.String">
+		<fieldDescription><![CDATA[常量名称1，用于国际化]]></fieldDescription>
+	</field>
+	<field name="constant_name2" class="java.lang.String">
+		<fieldDescription><![CDATA[常量名称2，用于国际化]]></fieldDescription>
+	</field>
+	<field name="remark" class="java.lang.String">
+		<fieldDescription><![CDATA[备注]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="53" splitType="Stretch">
+			<staticText>
+				<reportElement x="233" y="13" width="113" height="20" uuid="1993d86f-911c-4204-b0ea-fb299f0535a9"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REPORT_TEST]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="44" y="1" width="100" height="20" uuid="55cb607a-d162-42ba-a1db-13130ebe5d8b"/>
+				<text><![CDATA[常量编号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="168" y="1" width="100" height="20" uuid="162dbdcd-60c9-405b-835c-6ff90122d9f2"/>
+				<text><![CDATA[常量名称]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="305" y="1" width="100" height="20" uuid="86054328-990b-4e06-9b88-ed37c7d50aca"/>
+				<text><![CDATA[分组编号]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="1" width="100" height="20" uuid="99394084-d9e5-4472-8a11-a5dbc908cf5d"/>
+				<text><![CDATA[分组名称]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement x="44" y="4" width="100" height="20" uuid="f7cd524f-4137-455a-89d5-c04f691ed97b"/>
+				<textFieldExpression><![CDATA[$F{constant_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="168" y="4" width="100" height="20" uuid="06d09389-21da-42d5-9b69-a5315044dbcf"/>
+				<textFieldExpression><![CDATA[$F{constant_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="3" width="100" height="20" uuid="8a396b4b-4bf2-4658-81ca-396dc3ff34ed"/>
+				<textFieldExpression><![CDATA[$F{group_code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="2" width="100" height="20" uuid="1a199128-8bcf-4bcb-9a53-7c333efb26b0"/>
+				<textFieldExpression><![CDATA[$F{group_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,38 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	
+	<named-query name="CommonConfig.findCommonConfigListByParaGroup">
+		<query><![CDATA[select config from CommonConfig as config where config.paraGroup=:pgroup  ]]></query>
+	</named-query>
+	
+	<named-query name="TaskConfig.findAll">
+		<query><![CDATA[select t from TaskConfig as t where t.isAvailable = true]]></query>
+	</named-query>
+	<named-query name="GymboreeReceiveDataLine.findLineListByDataId">
+		<query><![CDATA[select l from GymboreeReceiveDataLine as l where l.data.id = :id]]></query>
+	</named-query>
+	<named-query name="ConverseYxStockin.getOneRecordBySlipCode">
+		<query><![CDATA[select s from ConverseYxStockin s where s.cartonNumber=:slipCode]]></query>
+	</named-query>
+	<named-query name="ConverseYxStockin.getByReferenceNo">
+		<query><![CDATA[select s from ConverseYxStockin s where s.cartonNumber=:slipCode]]></query>
+	</named-query>
+	<named-query name="LevisShoesStockin.getByReferenceNo">
+		<query><![CDATA[select s from LevisShoesStockin s where s.cartonNumber=:slipCode]]></query>
+	</named-query>
+	<named-query name="LevisShoesStockin.getOneRecordBySlipCode">
+		<query><![CDATA[select s from LevisShoesStockin s where s.cartonNumber=:slipCode]]></query>
+	</named-query>
+	<named-query name="IntfcCfm.getIntfcCfmByStatus">
+		<query><![CDATA[select s from IntfcCfm s where s.status=:status]]></query>
+	</named-query>
+	<named-query name="IntfcLineCfm.getIntfcLineCfmByIcId">
+		<query><![CDATA[select s from IntfcLineCfm s where s.intfcId.id= :icId]]></query>
+	</named-query>
+	<named-query name="IntfcInvoiceCfm.getIntfcInvoiceCfmByIcId">
+		<query><![CDATA[select s from IntfcInvoiceCfm s where s.intfcId.id= :icId]]></query>
+	</named-query>
+	<named-query name="IntfcInvoiceLineCfm.getIntfcInvoiceLineCfmByIicId">
+		<query><![CDATA[select s from IntfcInvoiceLineCfm s where s.intfcInvoiceId.id= :iicId]]></query>
+	</named-query>
+</entity-mappings>

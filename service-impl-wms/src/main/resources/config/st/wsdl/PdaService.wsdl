@@ -1,0 +1,1364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:tns="http://webservice.jumbo.com/pda/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	name="CustomerServiceService" targetNamespace="http://webservice.jumbo.com/pda/">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://webservice.jumbo.com/pda/" attributeFormDefault="unqualified"
+			elementFormDefault="unqualified" targetNamespace="http://webservice.jumbo.com/pda/">
+			<!--elements -->
+			<xs:element name="loginRequest" type="tns:loginRequest" />
+			<xs:element name="loginResponse" type="tns:loginResponse" />
+			<xs:element name="getWarehousesRequest" type="tns:getWarehousesRequest" />
+			<xs:element name="getWarehousesResponse" type="tns:getWarehousesResponse" />
+			<xs:element name="getInboundDataRequest" type="tns:getInboundDataRequest" />
+			<xs:element name="getInboundDataResponse" type="tns:getInboundDataResponse" />
+			<xs:element name="uploadInboundReceiveRequest" type="tns:uploadInboundReceiveRequest" />
+			<xs:element name="uploadInboundReceiveResponse" type="tns:uploadInboundReceiveResponse" />
+			<xs:element name="getInboundOnShelvesRequest" type="tns:getInboundOnShelvesRequest" />
+			<xs:element name="getInboundOnShelvesResponse" type="tns:getInboundOnShelvesResponse" />
+			<xs:element name="uploadInboundOnShelvesRequest" type="tns:uploadInboundOnShelvesRequest" />
+			<xs:element name="uploadInboundOnShelvesResponse" type="tns:uploadInboundOnShelvesResponse" />
+			<xs:element name="getInventoryRequest" type="tns:getInventoryRequest" />
+			<xs:element name="getInventoryResponse" type="tns:getInventoryResponse" />
+			<xs:element name="getPickingDataRequest" type="tns:getPickingDataRequest" />
+			<xs:element name="getPickingDataResponse" type="tns:getPickingDataResponse" />
+			<xs:element name="uploadHandOverListRequest" type="tns:uploadHandOverListRequest" />
+			<xs:element name="uploadHandOverListResponse" type="tns:uploadHandOverListResponse" />
+			<xs:element name="getReturnOrderRequest" type="tns:getReturnOrderRequest" />
+			<xs:element name="getReturnOrderResponse" type="tns:getReturnOrderResponse" />
+			<xs:element name="uploadReturnOrderRequest" type="tns:uploadReturnOrderRequest" />
+			<xs:element name="uploadReturnOrderResponse" type="tns:uploadReturnOrderResponse" />
+			<xs:element name="executeOrderRequest" type="tns:executeOrderRequest" />
+			<xs:element name="executeOrderResponse" type="tns:executeOrderResponse" />
+			<xs:element name="uploadPickingOutboundRequest" type="tns:uploadPickingOutboundRequest" />
+			<xs:element name="uploadPickingOutboundResponse" type="tns:uploadPickingOutboundResponse" />
+			<xs:element name="getTransNoRequest" type="tns:getTransNoRequest" />
+			<xs:element name="getTransNoResponse" type="tns:getTransNoResponse" />
+			<xs:element name="getInventoryCheckRequest" type="tns:getInventoryCheckRequest" />
+			<xs:element name="getInventoryCheckResponse" type="tns:getInventoryCheckResponse" />
+			<xs:element name="uploadInventoryCheckRequest" type="tns:uploadInventoryCheckRequest" />
+			<xs:element name="uploadInventoryCheckResponse" type="tns:uploadInventoryCheckResponse" />
+			<xs:element name="getLibraryMovementRequest" type="tns:getLibraryMovementRequest" />
+			<xs:element name="getLibraryMovementResponse" type="tns:getLibraryMovementResponse" />
+			<xs:element name="uploadInitiativeMoveOutboundRequest"
+				type="tns:uploadInitiativeMoveOutboundRequest" />
+			<xs:element name="uploadInitiativeMoveOutboundResponse"
+				type="tns:uploadInitiativeMoveOutboundResponse" />
+			<xs:element name="uploadInitiativeMoveInboundRequest"
+				type="tns:uploadInitiativeMoveInboundRequest" />
+			<xs:element name="uploadInitiativeMoveInboundResponse"
+				type="tns:uploadInitiativeMoveInboundResponse" />
+			<xs:element name="uploadLibraryMovementRequest" type="tns:uploadLibraryMovementRequest" />
+			<xs:element name="uploadLibraryMovementResponse" type="tns:uploadLibraryMovementResponse" />
+			<xs:element name="authenticationFailed" type="tns:authenticationFailed" />
+			<!--authRequestHeader -->
+			<xs:complexType name="authRequestHeader">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="organizationCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="signSalt" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="sign" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="sequenceCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="callTime" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--authResponseHeader -->
+			<xs:complexType name="authResponseHeader">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="signSalt" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="sign" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="sequenceCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="serverSequenceCode"
+						type="xs:string" nillable="false" />
+					<xs:element minOccurs="1" name="callbackTime" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--baseRequestBody -->
+			<xs:complexType name="baseRequestBody" />
+			<!--baseResponseBody -->
+			<xs:complexType name="baseResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="status" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" name="result" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--login -->
+			<xs:complexType name="loginRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="user" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="password" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="loginRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="loginRequestBody" type="tns:loginRequestBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="loginResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getWarehouses -->
+			<xs:complexType name="getWarehousesRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="baseRequestBody" type="tns:baseRequestBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getWarehousesResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="warehouses"
+						type="tns:warehouse" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getWarehousesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getWarehousesResponseBody"
+						type="tns:getWarehousesResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getInboundData -->
+			<xs:complexType name="getInboundDataRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInboundDataRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="getInboundDataRequestBody"
+						type="tns:getInboundDataRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInboundDataResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="status" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="slipCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="skus"
+						type="tns:sku" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInboundDataResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getInboundDataResponseBody"
+						type="tns:getInboundDataResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadInboundReceive -->
+			<xs:complexType name="uploadInboundReceiveRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="inboundReceiveDetails" type="tns:inboundReceiveDetail" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInboundReceiveRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uploadInboundReceiveRequestBody"
+						type="tns:uploadInboundReceiveRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInboundReceiveResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getInboundOnShelves -->
+			<xs:complexType name="getInboundOnShelvesRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInboundOnShelvesRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="getInboundOnShelvesRequestBody"
+						type="tns:getInboundOnShelvesRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInboundOnShelvesResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="status" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="slipCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="inboundOnShelvesDetials" type="tns:shelvesSkuDetial" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="skus"
+						type="tns:sku" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInboundOnShelvesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getInboundOnShelvesResponseBody"
+						type="tns:getInboundOnShelvesResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadInboundOnShelves -->
+			<xs:complexType name="uploadInboundOnShelvesRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="userName" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="inboundOnShelvesDetials" type="tns:shelvesSkuDetial" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInboundOnShelvesRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1"
+						name="uploadInboundOnShelvesRequestBody" type="tns:uploadInboundOnShelvesRequestBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInboundOnShelvesResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getInventory -->
+			<xs:complexType name="getInventoryRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" name="skuBarCode" type="xs:string" />
+					<xs:element minOccurs="0" name="location" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInventoryRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="getInventoryRequestBody"
+						type="tns:getInventoryRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInventoryResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="inventorys"
+						type="tns:inventory" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInventoryResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getInventoryResponseBody"
+						type="tns:getInventoryResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getPickingData -->
+			<xs:complexType name="getPickingDataRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getPickingDataRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="getPickingDataRequestBody"
+						type="tns:getPickingDataRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getPickingDataResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="type" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="pickingDatadetials"
+						type="tns:pickingDatadetial" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="skus"
+						type="tns:sku" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getPickingDataResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getPickingDataResponseBody"
+						type="tns:getPickingDataResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadHandOverList -->
+			<xs:complexType name="uploadHandOverListRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="lpcode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="transNos"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadHandOverListRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uploadHandOverListRequestBody"
+						type="tns:uploadHandOverListRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadHandOverListResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getReturnOrder -->
+			<xs:complexType name="getReturnOrderRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getReturnOrderRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="getReturnOrderRequestBody"
+						type="tns:getReturnOrderRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getReturnOrderResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="slipCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="returnOrderDetails"
+						type="tns:shelvesSkuDetial" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="skus"
+						type="tns:sku" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getReturnOrderResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getReturnOrderResponseBody"
+						type="tns:getReturnOrderResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadReturnOrder -->
+			<xs:complexType name="uploadReturnOrderRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="returnOrderDetails"
+						type="tns:shelvesSkuDetial" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadReturnOrderRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uploadReturnOrderRequestBody"
+						type="tns:uploadReturnOrderRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadReturnOrderResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--executeOrder -->
+			<xs:complexType name="executeOrderRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="executeOrderRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="executeOrderRequestBody"
+						type="tns:executeOrderRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="executeOrderResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadPickingOutbound -->
+			<xs:complexType name="uploadPickingOutboundRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="transNo" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="pickingOutboundDetails" type="tns:pickingOutboundDetail" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadPickingOutboundRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uploadPickingOutboundRequestBody"
+						type="tns:uploadPickingOutboundRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadPickingOutboundResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getTransNo -->
+			<xs:complexType name="getTransNoRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="startTime" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="endTime" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTransNoRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="getTransNoRequestBody"
+						type="tns:getTransNoRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTransNoResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="transNoDetails"
+						type="tns:transNoDetail" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getTransNoResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getTransNoResponseBody"
+						type="tns:getTransNoResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getInventoryCheck -->
+			<xs:complexType name="getInventoryCheckRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInventoryCheckRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="getInventoryCheckRequestBody"
+						type="tns:getInventoryCheckRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInventoryCheckResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="locations"
+						type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getInventoryCheckResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getInventoryCheckResponseBody"
+						type="tns:getInventoryCheckResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadInventoryCheck -->
+			<xs:complexType name="uploadInventoryCheckRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="inventoryCheckDetails" type="tns:inventory" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInventoryCheckRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uploadInventoryCheckRequestBody"
+						type="tns:uploadInventoryCheckRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInventoryCheckResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--getLibraryMovement -->
+			<xs:complexType name="getLibraryMovementRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getLibraryMovementRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="getLibraryMovementRequestBody"
+						type="tns:getLibraryMovementRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getLibraryMovementResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="inbound"
+						type="tns:libraryMovementInOut" nillable="false" />
+					<xs:element minOccurs="1" name="outbound"
+						type="tns:libraryMovementInOut" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="getLibraryMovementResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="getLibraryMovementResponseBody"
+						type="tns:getLibraryMovementResponseBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadInitiativeMoveOutbound -->
+			<xs:complexType name="uploadInitiativeMoveOutboundRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="slipCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="userName" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="outbound"
+						type="tns:libraryMovementInOut" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInitiativeMoveOutboundRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1"
+						name="uploadInitiativeMoveOutboundRequestBody" type="tns:uploadInitiativeMoveOutboundRequestBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInitiativeMoveOutboundResponseBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="slipCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInitiativeMoveOutboundResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1"
+						name="uploadInitiativeMoveOutboundResponseBody" type="tns:uploadInitiativeMoveOutboundResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadInitiativeMoveInbound -->
+			<xs:complexType name="uploadInitiativeMoveInboundRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="slipCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="inbound"
+						type="tns:libraryMovementInOut" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInitiativeMoveInboundRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1"
+						name="uploadInitiativeMoveInboundRequestBody" type="tns:uploadInitiativeMoveInboundRequestBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadInitiativeMoveInboundResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--uploadLibraryMovement -->
+			<xs:complexType name="uploadLibraryMovementRequestBody">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="code" type="xs:string" />
+					<xs:element minOccurs="0" name="slipCode" type="xs:string" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="inbound"
+						type="tns:libraryMovementInOut" nillable="false" />
+					<xs:element minOccurs="1" name="outbound"
+						type="tns:libraryMovementInOut" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadLibraryMovementRequest">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authRequestHeader" type="tns:authRequestHeader"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uploadLibraryMovementRequestBody"
+						type="tns:uploadLibraryMovementRequestBody" nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="uploadLibraryMovementResponse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="authResponseHeader"
+						type="tns:authResponseHeader" nillable="false" />
+					<xs:element minOccurs="1" name="baseResponseBody" type="tns:baseResponseBody"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--complex object -->
+			<!--warehouse -->
+			<xs:complexType name="warehouse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="name" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="logicalWarehouses"
+						type="tns:logicalWarehouse" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="logicalWarehouse">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="name" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--sku -->
+			<xs:complexType name="sku">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="code" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="barCodes"
+						type="xs:string" />
+					<xs:element minOccurs="1" name="skuName" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="supplierCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" name="keyProp" type="xs:string" />
+					<xs:element minOccurs="0" name="color" type="xs:string" />
+					<xs:element minOccurs="0" name="skuSize" type="xs:string" />
+					<xs:element minOccurs="1" name="isSnSku" type="xs:string" />
+					<xs:element minOccurs="0" name="isExpDateSku" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--inventory -->
+			<xs:complexType name="inventory">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="skuBarCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="location" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="qty" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="invStatus" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" name="ocpQty" type="xs:string" />
+					<xs:element minOccurs="0" name="ext1" type="xs:string" />
+					<xs:element minOccurs="0" name="ext2" type="xs:string" />
+					<xs:element minOccurs="0" name="ext3" type="xs:string" />
+					<xs:element minOccurs="0" name="ext4" type="xs:string" />
+					<xs:element minOccurs="0" name="ext5" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--inboundReceiveDetail -->
+			<xs:complexType name="inboundReceiveDetail">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="skuCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="qty" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" name="ext1" type="xs:string" />
+					<xs:element minOccurs="0" name="ext2" type="xs:string" />
+					<xs:element minOccurs="0" name="ext3" type="xs:string" />
+					<xs:element minOccurs="0" name="ext4" type="xs:string" />
+					<xs:element minOccurs="0" name="ext5" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--shelvesSkuDetial -->
+			<xs:complexType name="shelvesSkuDetial">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="skuCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="qty" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="locations"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="mDate" type="xs:string" />
+					<xs:element minOccurs="0" name="invStatus" type="xs:string" />
+					<xs:element minOccurs="0" name="index" type="xs:string" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="sns"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="ext1" type="xs:string" />
+					<xs:element minOccurs="0" name="ext2" type="xs:string" />
+					<xs:element minOccurs="0" name="ext3" type="xs:string" />
+					<xs:element minOccurs="0" name="ext4" type="xs:string" />
+					<xs:element minOccurs="0" name="ext5" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--pickingDatadetial -->
+			<xs:complexType name="pickingDatadetial">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="location" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="skuCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="qty" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="pgindex" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" name="ext1" type="xs:string" />
+					<xs:element minOccurs="0" name="ext2" type="xs:string" />
+					<xs:element minOccurs="0" name="ext3" type="xs:string" />
+					<xs:element minOccurs="0" name="ext4" type="xs:string" />
+					<xs:element minOccurs="0" name="ext5" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--pickingOutboundDetail -->
+			<xs:complexType name="pickingOutboundDetail">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="skuCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="qty" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="sns"
+						type="xs:string" />
+					<xs:element minOccurs="0" name="ext1" type="xs:string" />
+					<xs:element minOccurs="0" name="ext2" type="xs:string" />
+					<xs:element minOccurs="0" name="ext3" type="xs:string" />
+					<xs:element minOccurs="0" name="ext4" type="xs:string" />
+					<xs:element minOccurs="0" name="ext5" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--transNoDetail -->
+			<xs:complexType name="transNoDetail">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="lpcode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="uniqCode" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="0" maxOccurs="unbounded" name="transNoDetailLines"
+						type="tns:transNoDetailLine" />
+				</xs:sequence>
+			</xs:complexType>
+			<!-- transNoDetailLine -->
+			<xs:complexType name="transNoDetailLine">
+				<xs:sequence>
+					<xs:element minOccurs="1" name="transNos" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="receiver" type="xs:string"
+						nillable="false" />
+					<xs:element minOccurs="1" name="weight" type="xs:string"
+						nillable="false" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--libraryMovementInOut -->
+			<xs:complexType name="libraryMovementInOut">
+				<xs:sequence>
+					<xs:element minOccurs="0" maxOccurs="unbounded"
+						name="libraryMovementInOutDetails" type="tns:inventory" />
+				</xs:sequence>
+			</xs:complexType>
+			<!--exception -->
+			<xs:complexType name="authenticationFailed">
+				<xs:sequence>
+					<xs:element name="info" nillable="true" type="xs:string" />
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getTransNoRequest">
+		<wsdl:part name="getTransNoRequest" element="tns:getTransNoRequest" />
+	</wsdl:message>
+	<wsdl:message name="getTransNoResponse">
+		<wsdl:part name="getTransNoResponse" type="tns:getTransNoResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadInitiativeMoveOutboundRequest">
+		<wsdl:part name="uploadInitiativeMoveOutboundRequest"
+			element="tns:uploadInitiativeMoveOutboundRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadInitiativeMoveOutboundResponse">
+		<wsdl:part name="uploadInitiativeMoveOutboundResponse" type="tns:uploadInitiativeMoveOutboundResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadInitiativeMoveInboundRequest">
+		<wsdl:part name="uploadInitiativeMoveInboundRequest"
+			element="tns:uploadInitiativeMoveInboundRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadInitiativeMoveInboundResponse">
+		<wsdl:part name="uploadInitiativeMoveInboundResponse" type="tns:uploadInitiativeMoveInboundResponse" />
+	</wsdl:message>
+	<wsdl:message name="loginRequest">
+		<wsdl:part name="loginRequest" element="tns:loginRequest" />
+	</wsdl:message>
+	<wsdl:message name="loginResponse">
+		<wsdl:part name="loginResponse" type="tns:loginResponse" />
+	</wsdl:message>
+	<wsdl:message name="getWarehousesRequest">
+		<wsdl:part name="getWarehousesRequest" element="tns:getWarehousesRequest" />
+	</wsdl:message>
+	<wsdl:message name="getWarehousesResponse">
+		<wsdl:part name="getWarehousesResponse" type="tns:getWarehousesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getInboundDataRequest">
+		<wsdl:part name="getInboundDataRequest" element="tns:getInboundDataRequest" />
+	</wsdl:message>
+	<wsdl:message name="getInboundDataResponse">
+		<wsdl:part name="getInboundDataResponse" type="tns:getInboundDataResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadInboundReceiveRequest">
+		<wsdl:part name="uploadInboundReceiveRequest" element="tns:uploadInboundReceiveRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadInboundReceiveResponse">
+		<wsdl:part name="uploadInboundReceiveResponse" type="tns:uploadInboundReceiveResponse" />
+	</wsdl:message>
+	<wsdl:message name="getInboundOnShelvesRequest">
+		<wsdl:part name="getInboundOnShelvesRequest" element="tns:getInboundOnShelvesRequest" />
+	</wsdl:message>
+	<wsdl:message name="getInboundOnShelvesResponse">
+		<wsdl:part name="getInboundOnShelvesResponse" type="tns:getInboundOnShelvesResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadInboundOnShelvesRequest">
+		<wsdl:part name="uploadInboundOnShelvesRequest" element="tns:uploadInboundOnShelvesRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadInboundOnShelvesResponse">
+		<wsdl:part name="uploadInboundOnShelvesResponse" type="tns:uploadInboundOnShelvesResponse" />
+	</wsdl:message>
+	<wsdl:message name="getInventoryRequest">
+		<wsdl:part name="getInventoryRequest" element="tns:getInventoryRequest" />
+	</wsdl:message>
+	<wsdl:message name="getInventoryResponse">
+		<wsdl:part name="getInventoryResponse" type="tns:getInventoryResponse" />
+	</wsdl:message>
+	<wsdl:message name="getPickingDataRequest">
+		<wsdl:part name="getPickingDataRequest" element="tns:getPickingDataRequest" />
+	</wsdl:message>
+	<wsdl:message name="getPickingDataResponse">
+		<wsdl:part name="getPickingDataResponse" type="tns:getPickingDataResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadHandOverListRequest">
+		<wsdl:part name="uploadHandOverListRequest" element="tns:uploadHandOverListRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadHandOverListResponse">
+		<wsdl:part name="uploadHandOverListResponse" type="tns:uploadHandOverListResponse" />
+	</wsdl:message>
+	<wsdl:message name="getReturnOrderRequest">
+		<wsdl:part name="getReturnOrderRequest" element="tns:getReturnOrderRequest" />
+	</wsdl:message>
+	<wsdl:message name="getReturnOrderResponse">
+		<wsdl:part name="getReturnOrderResponse" type="tns:getReturnOrderResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadReturnOrderRequest">
+		<wsdl:part name="uploadReturnOrderRequest" element="tns:uploadReturnOrderRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadReturnOrderResponse">
+		<wsdl:part name="uploadReturnOrderResponse" type="tns:uploadReturnOrderResponse" />
+	</wsdl:message>
+	<wsdl:message name="executeOrderRequest">
+		<wsdl:part name="executeOrderRequest" element="tns:executeOrderRequest" />
+	</wsdl:message>
+	<wsdl:message name="executeOrderResponse">
+		<wsdl:part name="executeOrderResponse" type="tns:executeOrderResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadPickingOutboundRequest">
+		<wsdl:part name="uploadPickingOutboundRequest" element="tns:uploadPickingOutboundRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadPickingOutboundResponse">
+		<wsdl:part name="uploadPickingOutboundResponse" type="tns:uploadPickingOutboundResponse" />
+	</wsdl:message>
+	<wsdl:message name="getInventoryCheckRequest">
+		<wsdl:part name="getInventoryCheckRequest" element="tns:getInventoryCheckRequest" />
+	</wsdl:message>
+	<wsdl:message name="getInventoryCheckResponse">
+		<wsdl:part name="getInventoryCheckResponse" type="tns:getInventoryCheckResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadInventoryCheckRequest">
+		<wsdl:part name="uploadInventoryCheckRequest" element="tns:uploadInventoryCheckRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadInventoryCheckResponse">
+		<wsdl:part name="uploadInventoryCheckResponse" type="tns:uploadInventoryCheckResponse" />
+	</wsdl:message>
+	<wsdl:message name="getLibraryMovementRequest">
+		<wsdl:part name="getLibraryMovementRequest" element="tns:getLibraryMovementRequest" />
+	</wsdl:message>
+	<wsdl:message name="getLibraryMovementResponse">
+		<wsdl:part name="getLibraryMovementResponse" type="tns:getLibraryMovementResponse" />
+	</wsdl:message>
+	<wsdl:message name="uploadLibraryMovementRequest">
+		<wsdl:part name="uploadLibraryMovementRequest" element="tns:uploadLibraryMovementRequest" />
+	</wsdl:message>
+	<wsdl:message name="uploadLibraryMovementResponse">
+		<wsdl:part name="uploadLibraryMovementResponse" type="tns:uploadLibraryMovementResponse" />
+	</wsdl:message>
+	<wsdl:message name="authenticationFailedException">
+		<wsdl:part name="authenticationFailedException" element="tns:authenticationFailed" />
+	</wsdl:message>
+	<wsdl:portType name="PdaService">
+		<wsdl:operation name="login">
+			<wsdl:input name="loginRequest" message="tns:loginRequest" />
+			<wsdl:output name="loginResponse" message="tns:loginResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getTransNo">
+			<wsdl:input name="getTransNoRequest" message="tns:getTransNoRequest" />
+			<wsdl:output name="getTransNoResponse" message="tns:getTransNoResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadInitiativeMoveOutbound">
+			<wsdl:input name="uploadInitiativeMoveOutboundRequest"
+				message="tns:uploadInitiativeMoveOutboundRequest" />
+			<wsdl:output name="uploadInitiativeMoveOutboundResponse"
+				message="tns:uploadInitiativeMoveOutboundResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadInitiativeMoveInbound">
+			<wsdl:input name="uploadInitiativeMoveInboundRequest"
+				message="tns:uploadInitiativeMoveInboundRequest" />
+			<wsdl:output name="uploadInitiativeMoveInboundResponse"
+				message="tns:uploadInitiativeMoveInboundResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getWarehouses">
+			<wsdl:input name="getWarehousesRequest" message="tns:getWarehousesRequest" />
+			<wsdl:output name="getWarehousesResponse" message="tns:getWarehousesResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getInboundData">
+			<wsdl:input name="getInboundDataRequest" message="tns:getInboundDataRequest" />
+			<wsdl:output name="getInboundDataResponse" message="tns:getInboundDataResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadInboundReceive">
+			<wsdl:input name="uploadInboundReceiveRequest" message="tns:uploadInboundReceiveRequest" />
+			<wsdl:output name="uploadInboundReceiveResponse" message="tns:uploadInboundReceiveResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getInboundOnShelves">
+			<wsdl:input name="getInboundOnShelvesRequest" message="tns:getInboundOnShelvesRequest" />
+			<wsdl:output name="getInboundOnShelvesResponse" message="tns:getInboundOnShelvesResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadInboundOnShelves">
+			<wsdl:input name="uploadInboundOnShelvesRequest" message="tns:uploadInboundOnShelvesRequest" />
+			<wsdl:output name="uploadInboundOnShelvesResponse"
+				message="tns:uploadInboundOnShelvesResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getInventory">
+			<wsdl:input name="getInventoryRequest" message="tns:getInventoryRequest" />
+			<wsdl:output name="getInventoryResponse" message="tns:getInventoryResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getPickingData">
+			<wsdl:input name="getPickingDataRequest" message="tns:getPickingDataRequest" />
+			<wsdl:output name="getPickingDataResponse" message="tns:getPickingDataResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadHandOverList">
+			<wsdl:input name="uploadHandOverListRequest" message="tns:uploadHandOverListRequest" />
+			<wsdl:output name="uploadHandOverListResponse" message="tns:uploadHandOverListResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getReturnOrder">
+			<wsdl:input name="getReturnOrderRequest" message="tns:getReturnOrderRequest" />
+			<wsdl:output name="getReturnOrderResponse" message="tns:getReturnOrderResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadReturnOrder">
+			<wsdl:input name="uploadReturnOrderRequest" message="tns:uploadReturnOrderRequest" />
+			<wsdl:output name="uploadReturnOrderResponse" message="tns:uploadReturnOrderResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="executeOrder">
+			<wsdl:input name="executeOrderRequest" message="tns:executeOrderRequest" />
+			<wsdl:output name="executeOrderResponse" message="tns:executeOrderResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadPickingOutbound">
+			<wsdl:input name="uploadPickingOutboundRequest" message="tns:uploadPickingOutboundRequest" />
+			<wsdl:output name="uploadPickingOutboundResponse"
+				message="tns:uploadPickingOutboundResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getInventoryCheck">
+			<wsdl:input name="getInventoryCheckRequest" message="tns:getInventoryCheckRequest" />
+			<wsdl:output name="getInventoryCheckResponse" message="tns:getInventoryCheckResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadInventoryCheck">
+			<wsdl:input name="uploadInventoryCheckRequest" message="tns:uploadInventoryCheckRequest" />
+			<wsdl:output name="uploadInventoryCheckResponse" message="tns:uploadInventoryCheckResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="getLibraryMovement">
+			<wsdl:input name="getLibraryMovementRequest" message="tns:getLibraryMovementRequest" />
+			<wsdl:output name="getLibraryMovementResponse" message="tns:getLibraryMovementResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+		<wsdl:operation name="uploadLibraryMovement">
+			<wsdl:input name="uploadLibraryMovementRequest" message="tns:uploadLibraryMovementRequest" />
+			<wsdl:output name="uploadLibraryMovementResponse"
+				message="tns:uploadLibraryMovementResponse" />
+			<wsdl:fault name="authenticationFailedException" message="tns:authenticationFailedException" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PdaServiceSoapBinding" type="tns:PdaService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="login">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="loginRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="loginResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getTransNo">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getTransNoRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getTransNoResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadInitiativeMoveOutbound">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadInitiativeMoveOutboundRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadInitiativeMoveOutboundResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadInitiativeMoveInbound">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadInitiativeMoveInboundRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadInitiativeMoveInboundResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getWarehouses">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getWarehousesRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getWarehousesResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getInboundData">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getInboundDataRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getInboundDataResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadInboundReceive">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadInboundReceiveRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadInboundReceiveResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getInboundOnShelves">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getInboundOnShelvesRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getInboundOnShelvesResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadInboundOnShelves">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadInboundOnShelvesRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadInboundOnShelvesResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getInventory">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getInventoryRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getInventoryResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getPickingData">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getPickingDataRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getPickingDataResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadHandOverList">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadHandOverListRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadHandOverListResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getReturnOrder">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getReturnOrderRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getReturnOrderResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadReturnOrder">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadReturnOrderRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadReturnOrderResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="executeOrder">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="executeOrderRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="executeOrderResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadPickingOutbound">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadPickingOutboundRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadPickingOutboundResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getInventoryCheck">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getInventoryCheckRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getInventoryCheckResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadInventoryCheck">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadInventoryCheckRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadInventoryCheckResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getLibraryMovement">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="getLibraryMovementRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="getLibraryMovementResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="uploadLibraryMovement">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="uploadLibraryMovementRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="uploadLibraryMovementResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFailedException">
+				<soap:fault name="authenticationFailedException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PdaServiceService">
+		<wsdl:port name="PdaServicePort" binding="tns:PdaServiceSoapBinding">
+			<soap:address location="http://localhost/webservice/pda" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

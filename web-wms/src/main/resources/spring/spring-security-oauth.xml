@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	
+	
+	<http pattern="/libs/**" security="none" />
+	
+	<http pattern="/favicon.ico" security="none" />
+	<http pattern="/errors/**" security="none" />
+	<http pattern="/oauth/sync/user**" security="none" />
+
+		<http pattern="/webservice/**" security="none"/>
+		<http pattern="/*.htm" security="none"/>
+		<http pattern="/login.jsp" security="none"/>
+		<http pattern="/redirect.jsp" security="none"/>
+		<http pattern="/accessdenied.jsp" security="none"/>
+		<http pattern="/sessiontimeout.jsp" security="none"/>
+		<http pattern="/scripts/**" security="none"/>
+		<http pattern="/css/**" security="none"/>
+		<http pattern="/images/**" security="none"/>
+		<http pattern="/rest/**" security="none"/>
+		<http pattern="/pda/**" security="none"/>
+		<http pattern="/sf/**" security="none"/>
+		<http pattern="/sftw/**" security="none"/>
+		<http pattern="/sto/**" security="none"/>
+		<http pattern="/manage/**" security="none"/>
+		<http pattern="/json/accountsetlist.do" security="none"/>
+		<http pattern="/checkWeb.jsp" security="none" />
+		<http pattern="/checkService.jsp" security="none" />
+<!-- 		<http pattern="/warehouse/checkService.do" security="none"/>
+ -->		<http pattern="/rest/monitorWmsWeb.json" security="none"/>
+		<http pattern="/warehouse/checkService.do" security="none"/>
+		<http pattern="/checkWebVersion.jsp" security="none" />
+		<http pattern="/rest/webCheckVersion.json" security="none" />
+		
+
+	<http access-decision-manager-ref="urlAccessDecisionManager" entry-point-ref="oauthEntryPoint">
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+		<!-- 登出设置 -->
+		<logout logout-success-url="${oauth.web.domain}/oauth/entry/${web.appkey}" invalidate-session="true" delete-cookies="JSESSIONID" />
+		<!-- session控制 -->
+		<session-management>
+			<concurrency-control session-registry-alias="sessionRegistry" />
+		</session-management>
+		<custom-filter before="LOGOUT_FILTER" ref="requestSingleLogoutFilter" />
+		<custom-filter position="CAS_FILTER" ref="oauthFilter" />
+	</http>
+
+
+	<!-- 认证管理 -->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="oauthAuthenticationProvider" />
+	</authentication-manager>
+
+	<beans:bean id="sdkConstants" class="com.baozun.scm.baseservice.account.SdkConstants">
+		<beans:property name="appKey" value="${web.appkey}"></beans:property>
+		<beans:property name="secret" value="${web.secret}"></beans:property>
+		<beans:property name="domain" value="${oauth.domain}"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id="userDetailsService" class="com.jumbo.manager.security.UserDetailsServiceImpl"></beans:bean>
+	
+<!-- 	<beans:bean id="loginSuccessHandler" class="com.baozun.bizhub.web.manager.auth.LoginSuccessHandler"></beans:bean> 
+ -->	
+	<beans:bean id="loginSuccessHandler" 
+		class="com.jumbo.manager.security.AuthenticationLoginSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/index.jsp" />
+	</beans:bean> 
+	
+	
+	<beans:bean id="urlAccessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+		<beans:constructor-arg>
+			<beans:list>
+				<beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
+				<beans:bean class="com.jumbo.web.manager.oauth.UrlAccessDecisionVoter" />
+			</beans:list>
+		</beans:constructor-arg>
+	</beans:bean>
+	
+	
+	<beans:bean id="oauthFilter" class="com.baozun.scm.baseservice.account.oauth.OauthAuthenticationFilter">
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="authenticationSuccessHandler" ref="loginSuccessHandler" />
+	</beans:bean>
+
+	<beans:bean id="oauthEntryPoint" class="com.baozun.scm.baseservice.account.oauth.OauthAuthenticationEntryPoint">
+		<beans:property name="loginUrl" value="${oauth.web.domain}/oauth/entry/${web.appkey}" />
+		<beans:property name="serviceUrl" value="${web.url}/j_spring_oauth_security_check"/>
+	</beans:bean>
+
+	<beans:bean id="oauthAuthenticationProvider" class="com.baozun.scm.baseservice.account.oauth.OauthAuthenticationProvider">
+		<beans:property name="authenticationUserDetailsService">
+			<beans:bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
+				<beans:constructor-arg ref="userDetailsService" />
+			</beans:bean>
+		</beans:property>
+		<beans:property name="key" value="an_id_for_this_auth_provider_only" />
+		<beans:property name="oauthSyncUserInfo" ref="oauthSyncUserInfo"/>
+	</beans:bean>
+	
+ 	<beans:bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
+		<beans:constructor-arg value="${oauth.web.domain}/person/logout?appkey=${web.appkey}" /> 
+		<beans:constructor-arg>
+			<beans:bean class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
+		</beans:constructor-arg>
+		<beans:property name="filterProcessesUrl" value="/lout" />
+	</beans:bean>
+	
+	<beans:bean id="oauthSyncUserInfo" class="com.jumbo.web.manager.oauth.OauthSyncUserInfoImpl"></beans:bean>
+
+</beans:beans>

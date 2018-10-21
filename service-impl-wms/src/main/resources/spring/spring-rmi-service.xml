@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	
+<!-- 	<bean id="wmsToOmsRmiServer" class="com.jumbo.rmiservice.RmiServiceImpl" scope="prototype" />
+ -->
+	<bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+		<!-- 服务类 -->
+		<property name="service" ref="wmsToOmsRmiServer" />
+		<!-- 服务名 -->
+		<property name="serviceName" value="wmsToOmsRmiServer" />
+		<!-- 服务接口 -->
+		<property name="serviceInterface" value="com.jumbo.rmiservice.RmiService" />
+		<!-- 服务端口 -->
+		<property name="registryPort" value="${wms.rmi.registryport}" />
+		<property name="servicePort" value="${wms.rmi.serviceport}" />
+	</bean>
+</beans>
+
+
+
+

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<bean id="vmiHubRmiServer" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+		<property name="serviceUrl" value="${rmi.url.vmiHubRmiServer}" />
+		<property name="serviceInterface" value="com.jumbo.service.HubService" />
+		<property name="lookupStubOnStartup" value="false" />
+		<property name="refreshStubOnConnectFailure" value="true" />
+	</bean> 
+	
+	<!--调用HUB接口 WLB -->
+	<bean id="topRmiService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+		<property name="serviceUrl" value="${rmi.url.threePlRmiServer}" />
+		<property name="serviceInterface" value="cn.baozun.rmi.top.TopRmiService" />
+		<property name="lookupStubOnStartup" value="false" />
+		<property name="refreshStubOnConnectFailure" value="true" />
+	</bean>
+	 <!-- 调用OMS接口 rmi 注释，切换为dubbo服务 -->
+<!-- 	<bean id="rmi4Wms" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+		<property name="serviceUrl" value="${rmi.url.rmi4Wms}" />
+		<property name="serviceInterface" value="com.jumbo.pac.manager.extsys.wms.rmi.Rmi4Wms" />
+		<property name="lookupStubOnStartup" value="false" />
+		<property name="refreshStubOnConnectFailure" value="true" />
+	</bean> -->
+	<!--调用HUB接口  -->
+	<bean id="sfRmiService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+	    <property name="serviceUrl" value="rmi://10.11.21.11:1024/rmiServer" />
+		<property name="serviceInterface" value="cn.baozun.bh.connector.sf.rmi.RmiService" />
+		<property name="lookupStubOnStartup" value="false" />
+		<property name="refreshStubOnConnectFailure" value="true" />
+	</bean>
+	
+	<!-- 星巴克激活接口 -->
+	<bean id="starbucksServer" class="org.springframework.remoting.rmi.RmiProxyFactoryBean"> 
+        <property name="serviceUrl" value="${rmi.url.starbucksServer}"/> 
+        <property name="serviceInterface" value="com.baozun.bizhub.manager.starbucks.StarbucksManager"/>
+        <property name="lookupStubOnStartup" value="false" />
+		<property name="refreshStubOnConnectFailure" value="true" />
+  </bean>
+  
+  
+  <!-- nike 接口 -->
+ <!--  <bean id="nikeActivate" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+		<property name="serviceUrl" value="${rmi.url.vmiHubRmiServer}" />
+		<property name="serviceInterface" value="com.baozun.bizhub.manager.nike.NikeActivateManager" />
+		<property name="lookupStubOnStartup" value="false" />
+		<property name="refreshStubOnConnectFailure" value="true" />
+	</bean>  -->
+  
+  
+</beans>

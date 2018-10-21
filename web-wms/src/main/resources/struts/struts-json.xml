@@ -1,0 +1,1893 @@
+<?xml version="1.0"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+<package name="json" extends="default" namespace="/json">	
+	   <action name="warehousesetcustomer" class="warehouseBaseinfoAction" method="warehouseSetCustomer"/>		
+	   <action name="skuWeightCount" class="warehouseBaseinfoAction" method="skuWeightCount"/>
+	   <action name="adduseranduserrolelist" class="userManageAction" method="addUserAndUserRoleList"/>		
+	   <action name="inventorystatus" class="dropdownListAction" method="inventoryStatus"/>		
+	   <action name="loadcitybyprovince" class="dropdownListAction" method="loadCityByProvince"/>		
+	   <action name="loaddistrictsbycity" class="dropdownListAction" method="loadDistrictsByCity"/>		
+	   <action name="getcheckinfo" class="orderOutboundAction" method="getCheckInfo"/>
+	   <action name="findSkuOriginByPlId" class="orderOutboundAction" method="findSkuOriginByPlId"/>
+	   <action name="gettransweightinfo" class="orderOutboundAction" method="getTransWeightInfo"/>
+	   <!-- bichannel info -->
+	   <action name="getbichannelinfo" class="biChannelInfoAction" method="getBiChannelInfo"/>
+	   <action name="getbichannelinfobyic" class="biChannelInfoAction" method="getBiChannelInfoByIc"/>				
+	   <action name="findallshoplist" class="biChannelInfoAction" method="findAllShopListByCustomer" />
+	   <action name="findallshoplists" class="biChannelInfoAction" method="findAllShopListByCustomers" />
+	   <action name="findshoplistbycompanyid" class="biChannelInfoAction" method="findShopInfo" />
+	   <action name="findShopInfoByDefaultOuId" class="biChannelInfoAction" method="findShopInfoByDefaultOuId" />
+	   <action name="getBiChannelInfoOfCartonSta" class="biChannelInfoAction" method="getBiChannelInfoOfCartonSta" />
+	   <action name="getbichannelinfoall" class="biChannelInfoAction" method="findShopInfoAll"/>
+	   <action name="getbichannelinfoallpage" class="biChannelInfoAction" method="findShopInfoAllPage"/>
+	   
+	    <!-- ChooseOptionAction -->
+	    <action name="formateroptions" class="chooseOptionAction" method="formaterOptions"/>
+	    <action name="optionlist" class="chooseOptionAction" />	
+		<action name="optionvalue" class="chooseOptionAction" method="value"/>	
+		<action name="optionvaluelist" class="chooseOptionAction" method="valueList"/>	
+		<action name="getTransportator" class="chooseOptionAction" method="getTransportator"/>
+		<action name="getTransportatorAfter" class="chooseOptionAction" method="getTransportatorAfter"/>
+		<action name="getVMIWarehouse" class="chooseOptionAction" method="getVMIWarehouse"/>
+		<action name="getOtoLocation" class="chooseOptionAction" method="getOtoLocation"/>
+		<action name="getPickingDistrict" class="salesDispatchListAction" method="getPickingDistrict"/>
+		<action name="getPickingDistrictList" class="salesDispatchListAction" method="getPickingDistrictList"/>
+		<action name="omsChooseOptionUpdate" class="chooseOptionAction" method="omsChooseOptionUpdate"/>	
+		<action name="pacChooseOptionUpdate" class="chooseOptionAction" method="pacChooseOptionUpdate"/>	
+		<action name="getAllChooseOption" class="chooseOptionAction" method="getAllChooseOption"/>
+		<action name="updateChooseOptionValueLF" class="chooseOptionAction" method="updateChooseOptionValue"/>
+		<action name="getAllChooseOptionOcp" class="chooseOptionAction" method="getAllChooseOptionOcp"/>
+		<action name="updateChooseOptionValueOcp" class="chooseOptionAction" method="updateChooseOptionValueOcp"/>
+		<action name="buildOmsChooseOptionUpdate" class="chooseOptionAction" method="buildOmsChooseOptionUpdate"/>	
+		<action name="buildPacChooseOptionUpdate" class="chooseOptionAction" method="buildPacChooseOptionUpdate"/>	
+		
+		<!-- 获取用户所在公司的库存商品状态  -->
+		<action name="findInventoryStatus" class="chooseOptionAction" method="findInventoryStatus" />
+		<!--获取快递商编号、名称、平台编码 fanht -->
+		<action name="getTrasport" class="chooseOptionAction" method="getTrasport"/>
+		<!--根据组织编号，获取行业列表 fanht -->
+		<action name="findIndustryByOuid" class="chooseOptionAction" method="findIndustryByOuid"/>
+		<!--获取快递供应商平台编码、名称 fanht -->
+		<action name="findPlatformList" class="chooseOptionAction" method="findPlatformList"/>
+		<action name="findAdOrderType" class="chooseOptionAction" method="findAdOrderType"/>
+		<action name="findWmsResult" class="chooseOptionAction" method="findWmsResult"/>
+		<!--staId 获取快递单列表 fanht -->
+		<action name="getTransportNos" class="chooseOptionAction" method="getTransportNos"/>
+		<action name="getChooseOptionByCode" class="chooseOptionAction" method="getChooseOptionByCode"/>
+		<!-- 查询wms工单类型 -->
+		<action name="findAdPackageByOuIdByAdName" class="chooseOptionAction" method="findAdPackageByOuIdByAdName"/>
+		
+		
+		<action name="getChooseOptionByCodeEsprit" class="chooseOptionAction" method="getChooseOptionByCodeEsprit"/>
+		
+		<action name="initPumaToOrderCode" class="chooseOptionAction" method="initPumaToOrderCode"/>
+		<action name="getChooseOptionByCodePage" class="chooseOptionAction" method="getChooseOptionByCodePage"/>
+		
+		<action name="getTrasportName" class="chooseOptionAction" method="getTrasportName"/>
+		<action name="findCategories" class="chooseOptionAction" method="findCategories"/>
+		<action name="getSkuTypeByBarCode" class="skuCategoryMainAction" method="getSkuTypeByBarCode"/>
+		<!--<action name="accountsetlist" class="loginAction" method="getAccountSets"/>-->
+		<!--	  
+			MenuAction
+		-->
+		<action name="menulist" class="menuAction" method="getMenuList"/>
+		<action name="selectuserrole" class="menuAction" method="updateUserRole"/>
+		<action name="userrolelist" class="menuAction" method="userRoleList"/>
+		<action name="grouptree" class="operationUnitAction" method="operationUnitTree"/>
+		<action name="groupupdate" class="operationUnitAction" method="updateOperationUnit"/>
+		<action name="groupadd" class="operationUnitAction" method="addOperationUnit"/>
+		<action name="findChildOUT" class="operationUnitAction" method="getOUTByNode"/>
+		<action name="getDivision" class="operationUnitAction" method="getDivision"/>
+		
+		<action name="finduserlist" class="userManageAction" method="findUserList"/>
+		<action name="findrolelistbyid" class="userManageAction" method="findRoleListById"/>
+		
+		<action name="passwordmodify" class="userManageAction" method="passwordModify"/>
+		
+		<action name="findrolelist" class="roleManageAction" method="findRoleList"/>
+		<action name="findprivilegelist" class="roleManageAction" method="findPrivilegeList"/>
+		<action name="findrolebyid" class="roleManageAction" method="findRoleById"/>
+		<action name="findroleprivilegelist" class="roleManageAction" method="findRolePrivilegeList"/>		
+		<action name="modifyuseranduserrolelist" class="userManageAction" method="modifyUserAndUserRoleList"/>
+		<action name="findoperationunitbyoutypeid" class="userManageAction" method="findOperationUnitByOuTypeID"/>
+		<action name="finduserbyid" class="userManageAction" method="findUserByID"/>		
+		<action name="deleleuserlist" class="userManageAction" method="deleleUserList"/>
+		<action name="delelerolelist" class="roleManageAction" method="deleteRoleList"/>		
+		<action name="modifyrole" class="roleManageAction" method="modifyRole"/>
+		<action name="role" class="roleManagerAction" method="loadRole"/>
+		<action name="adduserandrole" class="userManageAction" method="addUserAndRole"/>
+		<action name="sysloginlog" class="systemAction" method="sysLoginLog"/>		
+		<action name="userloginlist" class="systemAction" method="sysLoginLog"/>
+        <action name="changeuserisenabled" class="userBatchManageAction" method="changeUserisEnabled"/>
+		<action name="grantroles" class="userBatchManageAction" method="grantRoles"/>
+		<action name="deleteroles" class="userBatchManageAction" method="deleteRoles"/>
+		<action name="skuImperfect" class="purchaseInboundImperfectAction" method="skuImperfect"/>
+		
+		<action name="queryByReport" class="salesReportAction" method="queryByReport"/>
+		
+		<action name="inventoryImperfect" class="supplementImperfectAction" method="inventoryImperfect"/>
+		
+		<action name="addSkuImperfect" class="supplementImperfectAction" method="addSkuImperfect"/>
+		
+		<action name="updateSkuImperfect" class="supplementImperfectAction" method="updateSkuImperfect"/>
+		
+		
+		
+		<action name="printSkuImperfect" class="supplementImperfectAction" method="printSkuImperfect"/>
+		<action name="printSkuImperfects" class="supplementImperfectAction" method="printSkuImperfects"/>
+		
+		<!--##InventoryStatusAction Action##-->
+		<action name="invstatussyslist" class="inventoryStatusAction" method="inventorySysList"/>
+		<action name="invstatusnosyslist" class="inventoryStatusAction" method="inventoryNotSysList"/>
+		<action name="createinvstatus" class="inventoryStatusAction" method="create"/>
+		<action name="updateinvstatus" class="inventoryStatusAction" method="update"/>				
+		<action name="warehouselist" class="inventoryShareMaintainAction" method="warehouseDetailList"/>
+		<action name="addinventoryshare" class="inventoryShareMaintainAction" method="addInventoryShare"/>
+		<action name="deleteinventoryshare" class="inventoryShareMaintainAction" method="deleteInventoryShare"/>
+		<action name="ouwarehouselist" class="inventoryShareMaintainAction" method="findOuWarehouseList"/>
+		<action name="checkfordisableinvstatus" class="inventoryStatusAction" method="checkForDisableInvstatus"/>
+		
+		<!--##UserGroup Action##-->
+		<action name="checkusergroupdelable" class="userGroupAction" method="checkUsergroupDelable"/>
+		<action name="adduserstogroup" class="userGroupAction" method="addUsers"/>
+		<action name="removeusersfromgroup" class="userGroupAction" method="removeUsers"/>
+		<action name="userlist" class="userGroupAction" method="userList"/>
+		<action name="updateusergroup" class="userGroupAction" method="save"/>
+		<action name="updatewarehouseinfo" class="warehouseBaseinfoAction" method="updateWarehouseInfo"/>
+		<action name="findwarehousebaseinfo" class="warehouseBaseinfoAction" method="findWarehouseBaseInfo"/>
+		<!-- 库存数据恢复 -->
+		<action name="zdhReStoreData" class="warehouseBaseinfoAction" method="zdhReStoreData"/>
+		<!-- 单据状态恢复 -->
+		<action name="zdhReStoreStatus" class="warehouseBaseinfoAction" method="zdhReStoreStatus"/>
+		
+		<action name="findCoverageAreaByOuId" class="warehouseBaseinfoAction" method="findCoverageAreaByOuId"/>
+		<action name="findsfnextmorningconfigbyouid" class="warehouseBaseinfoAction" method="findSfNextMorningConfigByOuId"/>
+		<action name="findNIKETodaySendConfigByOuId" class="warehouseBaseinfoAction" method="findNIKETodaySendConfigByOuId"/>
+		<action name="findAdPackageByOuIdPage" class="warehouseBaseinfoAction" method="findAdPackageByOuIdPage"/>
+		<action name="deleteCoverageArea" class="warehouseBaseinfoAction" method="deleteCoverageArea"/>
+		<action name="findwarehousebaseinfoopc" class="operationCenterAction" method="findWarehouseBaseInfo"/>
+		<action name="addinchannel" class="channelAction" method="addInChannel"/>
+		<action name="addoutchannel" class="channelAction" method="addOutChannel"/>		
+		<!-- 库区库位创建/编辑 -->	
+		<action name="districtlist" class="locationMaintainAction" method="districtList"/>
+		<action name="createdistrict" class="locationMaintainAction" method="createDistrict"/>
+		<action name="checkfordisablelocation" class="locationMaintainAction" method="checkForDisableLocation"/>
+		<action name="checkfordisabledistrict" class="locationMaintainAction" method="checkForDisableDistrict"/>
+		<action name="updatedistrict" class="locationMaintainAction" method="updateDistrict"/>
+		<action name="locationsofdistrictjson" class="locationMaintainAction" method="getLocationsOfDistrictJson"/>
+		<action name="disablelocations" class="locationMaintainAction" method="disableLocations"/>
+		<action name="getlocationbyloccode" class="locationMaintainAction" method="getLocationByLocCode"/>
+		<!-- 库区库位容积管理 -->
+		<action name="updatecapacity" class="locationCapacityAction" method="updateCapacityOfLocations"/>
+		<!--<action name="locationlist" class="locationCapacityAction" method="getLocationsOfDistrictJson"/>
+		--><!-- 库位作业类型设定 -->
+		<action name="locationtranslist" class="locationTranTypeAction" method="locationTransList"/>
+		<action name="locationtransdetail" class="locationTranTypeAction" method="locationTransDetail"/>
+		<action name="translist" class="locationTranTypeAction" method="transList"/>
+		<action name="bindtrans" class="locationTranTypeAction" method="bindTrans"/>
+		<action name="unbindtrans" class="locationTranTypeAction" method="unbindTrans"/>
+		<action name="binddistrict" class="locationTranTypeAction" method="bindDistrict"/>
+		<action name="unbinddistrict" class="locationTranTypeAction" method="unbindDistrict"/>
+		<!-- 库位拣货模式设定 -->
+		<action name="modifywarehouselocationlistpickupmode" class="warehouselocationPickupAction" method="modifyWarehouseLocationListPickupMode"/>	
+		<!--自定义作业类型编辑-->
+		<action name="addorModifytransactiontype" class="transactionTypeAction" method="addorModifyTransactionType"/>
+		<action name="findtranstypelist" class="transactionTypeAction" method="findTranstypelist"/>
+		<!-- 库存查询 -->
+		<action name="findCurrentInventory" class="inventoryQueryAction" method="findCurrentInventory"/>
+		<action name="findInventoryDetial" class="inventoryQueryAction" method="findInventoryDetial"/>
+		<action name="inventorydetailsquery" class="inventoryQueryAction" method="inventoryDetailsQuery"/>
+		<action name="inventorydetailsquery1" class="inventoryQueryAction" method="inventoryDetailsQuery1"/>
+		<action name="findShopInventoryDetial" class="shopInventoryQueryAction" method="findShopInventoryDetial"/>
+		<action name="findExtCode1" class="inventoryQueryAction" method="findExtCode1" />
+		
+		<!-- 入库作业 -->
+		<action name="findIsJordonByVmiCode" class="purchaseInboundAction" method="findIsJordonByVmiCode"/>
+		<action name="suggestlocation" class="purchaseInboundAction" method="suggestInboundLocation"/>
+		<action name="stalist" class="purchaseInboundAction" method="staListJson"/>
+		<action name="nikeRFIDByCode" class="purchaseInboundAction" method="nikeRFIDByCode"/>
+		
+		
+		<!-- new退货入库 cheng.su -->
+		<action name="newStalist" class="purchaseInboundAction" method="newStaListJson"/>
+		<!-- 批量导入查询 -->
+		<action name="shelvesStaListJson" class="purchaseInboundImperfectAction" method="shelvesStaListJson"/>
+		<action name="stalistjsonnopagination" class="purchaseInboundAction" method="staListJsonNoPagination"/>
+		<action name="stalinelist" class="purchaseInboundAction" method="staLineListJson"/>
+		<action name="imperfectStvLine" class="purchaseInboundImperfectAction" method="imperfectStvLine"/>
+		<action name="stvlinelistthreepl" class="purchaseInboundAction" method="stvLineListThreePl"/>
+		<action name="purchasereceivestep1" class="purchaseInboundAction" method="purchaseReceiveStep1"/>
+		<action name="purchaseReceiveStepImperfect" class="purchaseInboundImperfectAction" method="purchaseReceiveStepImperfect"/>
+		<action name="stvinfo" class="purchaseInboundAction" method="stvInfo"/>
+		<action name="stvinfogroupbatchcode" class="purchaseInboundAction" method="stvInfoGroupBatchCode"/>
+		<action name="executeinventory" class="purchaseInboundAction" method="executeInventory"/>
+		<!-- <action name="checksku" class="purchaseInboundAction" method="findSkuByBarCodeOrProductCode"/> -->  
+		<action name="cancelsta" class="purchaseInboundAction" method="cancelSta"/>
+		<action name="cancelstv" class="purchaseInboundAction" method="cancelStv"/>
+		<action name="cancelCard" class="purchaseInboundAction" method="cancelCard"/>
+		
+		<action name="findOutBoundSn" class="purchaseInboundAction" method="findOutBoundSn"/>
+		<action name="printpurchaseinfo" class="purchaseInboundAction" method="printPurchaseInfo"/>
+		
+		<action name="listUnlockedStaJson" class="purchaseInboundAction" method="listUnlockedStaJson"></action>
+		<action name="updateStaUnlocked" class="purchaseInboundAction" method="updateStaUnlocked"></action>
+		<!-- 退换货入库指令商品明细 -->
+		<action name="returnInboundGoodsDetail" class="purchaseInboundAction" method="returnInboundGoodsDetail"></action>
+		<!-- SF时效类型 -->
+		<action name="findSfTimeList" class="biChannelInfoAction" method="findSfTimeList" />
+		
+		<!-- 销售出库作业  -->
+		<action name="salesdispatchlist" class="salesDispatchListAction" method="list"/>
+		<action name="updateStaOuId" class="salesDispatchListAction" method="updateStaOuId"/>
+		<action name="findEmsTrandInfo" class="salesDispatchListAction" method="findEmsTrandInfo"/>
+		<action name="updateStaTransNo" class="salesDispatchListAction" method="updateStaTransNo"/>
+		<action name="getTransByPlId" class="salesDispatchListAction" method="getTransByPlId"/>
+		<action name="cancelPickingList" class="salesDispatchListAction" method="cancelPickingList"/>
+		<action name="confirmPickingList" class="salesDispatchListAction" method="confirmPickingList"/>
+		<action name="reOccupiedInv" class="salesDispatchListAction" method="reOccupiedInv"/>
+		<action name="removeFailedSta" class="salesDispatchListAction" method="removeFailedSta"/>
+		<action name="removeTransFailedSta" class="salesDispatchListAction" method="removeTransFailedSta"/>
+		<action name="chgLpcodeRemoveFailedSta" class="salesDispatchListAction" method="chgLpcodeRemoveFailedSta"/>
+		<action name="deletePickingList" class="salesDispatchListAction" method="deletePickingList"/>
+		<action name="detialList" class="salesDispatchListAction" method="detialList"/>
+		<action name="detialListopc" class="operationCenterAction" method="detialList"/>
+		<action name="operatorPlList" class="salesDispatchListAction" method="operatorPlList"/>
+		<action name="printpickinglistmode1" class="salesDispatchListAction" method="printPickingListMode1"/>
+		<!-- 批量 打印拣货单模式1 数据校验-->
+		<action name="batchcheckforstastatus" class="salesDispatchListAction" method="batchCheckForStaStatus"/>
+		<!-- cheng.su配货清单-团购 -->
+		<action name="printPickingListModeBulk1" class="printPickingListBulkAction" method="printPickingListModeBulk1"/>
+		<action name="printPickingListModeBulkNew2" class="printPickingListBulkAction" method="printPickingListModeBulkNew2"/>
+		<!-- cheng.su物流面单打印-团购 -->
+		<action name="printdeliveryinfomode1Bulk" class="printPickingListBulkAction" method="printDeliveryInfoMode1Bulk"/>
+		<!-- cheng.su配货清单查询-团购 -->
+		<action name="getallpickingliststatusBulk" class="printPickingListBulkAction" method="getAllPickingListStatusBulk"/>
+		<!-- cheng.su打印完成-团购 -->
+		<action name="updatesicklistwhstatusBulk" class="printPickingListBulkAction" method="updatePickListWhStatus" />
+		<!-- VMI退仓拣货单打印 -->
+		<action name="vmiBackPrint" class="printPickingListBulkAction" method="vmiBackPrint"></action>
+		
+		<action name="printpickinglistmode1opc" class="operationCenterAction" method="printPickingListMode1"/>
+		
+		<action name="printpickinglistnewmode1" class="salesDispatchListAction" method="printPickingListNewMode1"/>
+		<action name="printpickinglistnewmode1opc" class="operationCenterAction" method="printPickingListNewMode1"/>
+		
+		<action name="querystaspecialexecute" class="salesDispatchListAction" method="queryStaSpecialExecute" />
+		
+		<action name="printPoConfirmReport" class="historicalOrderInquiryAction" method="printPoConfirmReportMode1"/>
+		
+		<action name="insertToIMById" class="historicalOrderInquiryAction" method="insertToIMById"/>
+		
+		<action name="createInvTxt" class="historicalOrderInquiryAction" method="createInvTxt"/>
+		
+		<action name="backUpInv" class="historicalOrderInquiryAction" method="backUpInv"/>
+		
+		<action name="backUpSta" class="historicalOrderInquiryAction" method="backUpSta"/>
+		
+		<action name="cleanInvByCode" class="historicalOrderInquiryAction" method="cleanInvByCode"/>
+		
+		<action name="checkStatusById" class="historicalOrderInquiryAction" method="checkStatusById"/>
+		
+		<action name="importStaByOwner" class="historicalOrderInquiryAction" method="importStaByOwner">
+		    <result name="success" type="stream">
+				<param name="contentType">application/octet-stream;charset=ISO8859-1</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="bufferSize">4096</param>
+			</result>
+		
+		</action>
+		
+		<action name="backUpStaStatus" class="historicalOrderInquiryAction" method="backUpStaStatus"/>
+		
+		<action name="printInboundDetail" class="staInBoundAction" method="printInboundDetail"/>
+		<action name="printtrunkpackinglistmode1" class="salesDispatchListAction" method="printTrunkPackingListMode1"/>
+		
+		<action name="queryDispatchListOutputCount" class="salesDispatchListAction" method="queryDispatchListOutputCount"/>
+		<!-- 批量 查询导出次数 -->
+		<action name="batchqueryofoutputcount" class="salesDispatchListAction" method="batchQueryOfOutputCount"/>
+		
+		<action name="printPdaBarCode" class="salesDispatchListAction" method="printPdaBarCode"/>
+		<action name="printPdaBarCodeS" class="salesDispatchListAction" method="printPdaBarCodeS"/>
+		<action name="printPdaBarCodeRtw" class="salesDispatchListAction" method="printPdaBarCodeRtw"/>
+		
+		<action name="printdeliveryinfomode1" class="salesDispatchListAction" method="printDeliveryInfoMode1"/>
+		<action name="printdeliveryinfomode1opc" class="operationCenterAction" method="printDeliveryInfoMode1"/>
+		<action name="printImportEntryList" class="operationCenterAction" method="printImportEntryList"/>
+		<action name="printImportMacaoEntryList" class="operationCenterAction" method="printImportMacaoEntryList"/>
+		<action name="printImportMacaoHGDEntryList" class="operationCenterAction" method="printImportMacaoHGDEntryList"/>
+		<action name="checkIsAllowPrintMacaoHGD" class="operationCenterAction" method="checkIsAllowPrintMacaoHGD"/>
+		<action name="printsingledeliverymode1" class="salesDispatchListAction" method="printSingleDeliveryMode1"/>
+		<action name="printTrankAndDelivery" class="salesDispatchListAction" method="printTrankAndDelivery"/>
+		
+		<action name="findocpstalbypl" class="salesPickingCheckAction" method="getOcpStalByPl"/>
+		
+		<action name="findSalesStaLine" class="salesGenerationDispatchListAction" method="findSalesStaLine"/>
+		
+		<action name="staPendingList" class="salesGenerationDispatchListAction" method="staPendingList"/>
+		<action name="generationPendingList" class="salesGenerationDispatchListAction" method="generationPendingList"/>
+		
+		<action name="generationPendingListByList" class="salesGenerationDispatchListAction" method="generationPendingListByList"/>
+		
+		<action name="warehosueisrelateshopforprint" class="salesGenerationDispatchListAction" method="warehosueIsRelateShopForPrint"/>
+		<action name="warehosueisrelateshopforprintopc" class="operationCenterAction" method="warehosueIsRelateShopForPrint"/>
+		<action name="warehosueShopForPrintIsSame" class="salesGenerationDispatchListAction" method="warehosueShopForPrintIsSame"/>
+		<action name="warehosueisrelatemulitshop" class="salesGenerationDispatchListAction" method="warehosueIsRelateMulitShop"/>
+		<action name="customiztationtemplshop" class="salesGenerationDispatchListAction" method="customiztationTemplShop"/>
+		<action name="customiztationtemplshopopc" class="operationCenterAction" method="customiztationTemplShop"/>
+						
+		<action name="pllistforverify" class="salesDispatchListAction" method="plListForVerify"/>
+		
+		<action name="findskupackagepickinglist" class="salesCheckSkuPackageAction" method="findSkuPackagePickingList"/>
+		<action name="getpackagemainsku" class="salesCheckSkuPackageAction" method="getPackageMainSku"/>
+		<action name="getocpstalforpgskubypl" class="salesCheckSkuPackageAction" method="getOcpStalForPgSkuByPl"/>
+		
+		<action name="staoccupiedlist" class="salesDispatchListAction" method="staOccupiedList"/>
+		<action name="stacheckedlist" class="salesDispatchListAction" method="staCheckedList"/>
+		<action name="stabyrefslipcode" class="salesDispatchListAction" method="staByRefSlipCode"/>
+		<action name="stalinebystaid" class="salesDispatchListAction" method="staLineByStaId"/>
+		<action name="getPickingList" class="salesDispatchListAction" method="getPickingList"/>
+		<action name="findskuBarcodeList" class="salesDispatchListAction" method="findskuBarcodeList"/>
+		<action name="findstagiftlist" class="salesDispatchListAction" method="findStaGiftList"/>
+		<action name="findstagiftlistline" class="salesDispatchListAction" method="findStaGiftListLine"/>
+		<action name="printgift" class="salesDispatchListAction" method="printGift"/>
+		<action name="findgiftlinelist" class="salesDispatchListAction" method="findGiftLineList"/>
+		<action name="staNoFinishList" class="salesCancelStaAction" method="staNoFinishList"/>
+		<action name="cancelSta" class="salesCancelStaAction" method="cancelSta"/>
+		<action name="staNoCancelledList" class="cancelledStaDisposeAction" method="staNoCancelledList"/>
+		<action name="suggestion" class="cancelledStaDisposeAction" method="suggestion" />
+		<action name="releaseInventory" class="cancelledStaDisposeAction" method="releaseInventory" />
+		<action name="findStaLineInfo" class="salesCancelStaAction" method="findStaLineInfo"/>
+		<action name="getStaLineByTrackingNo" class="salesOutboundAction" method="getStaLineByTrackingNo"/>
+		<action name="findStaByTrackingNo" class="salesOutboundAction" method="findStaByTrackingNo"/>
+		<action name="operationUnitQuery" class="salesChecksingleAction" method="operationUnitQuery"/>
+		<action name="findstabytrackingno" class="salesOutboundAction" method="findStaByTrackingNo1"/>
+		<action name="findstabytrackingnos" class="salesOutboundAction" method="findStaByTrackingNos"/>
+		<action name="findpickinglistpackagebytrackingno" class="salesOutboundAction" method="findPickingListPackageByTrackingNo"/>
+		<action name="o2oqsoutbound" class="salesOutboundAction" method="o2oQsoutBound"/>
+		<action name="checkdistributionlist" class="salesDispatchListAction" method="checkDistributionList"/>
+		<action name="checktrackingno" class="salesDispatchListAction" method="checkTrackingNo"/>
+		<action name="checkSalesSum" class="salesDispatchListAction" method="checkSalesSum"/>
+		<action name="checkPickingisOver" class="salesDispatchListAction" method="checkPickingisOver"/>
+		<action name="plchecktrackingno" class="salesDispatchListAction" method="plCheckTrackingNo"/>
+		<action name="checkIsNeedBarcode" class="salesDispatchListAction" method="checkIsNeedBarcode"/>
+		<action name="getSnCountForStvSku" class="salesDispatchListAction" method="getSnCountForStvSku"/>
+		<action name="outBound" class="salesOutboundAction" method="outBound"/>
+		<action name="checkPickingSkuByStaId" class="salesDispatchListAction" method="checkPickingSkuByStaId"/>
+		<action name="matchListForModelOne" class="salesDispatchListAction" method="matchListForModelOne"/>
+		<action name="queryinvoiceforpickinglist" class="salesDispatchListAction" method="queryInvoiceForPickinglist"/>
+
+		<action name="findPackinglistByCode" class="salesDispatchListAction" method="findPackinglistByCode"/>
+		<action name="findpackinglistbyid" class="salesDispatchListAction" method="findPackinglistById"/>
+		<action name="updatepickinglisttofinish" class="salesDispatchListAction" method="updatePickinglistToFinish"/>
+		<action name="getWarehouseInfo" class="salesDispatchListAction" method="getWarehouseInfo"/>
+		
+		<action name="findPackingByBatchCode" class="salesDispatchListAction" method="findPackingByBatchCode"/>
+		<action name="matchListForModelTwo" class="salesDispatchListAction" method="matchListForModelTwo"/>
+		<action name="expressOrderQuery" class="salesDispatchListAction" method="expressOrderQuery"/>
+		<action name="findPackageInfoList" class="salesDispatchListAction" method="findPackageInfoList"/>
+		<action name="editTrackingNos" class="salesDispatchListAction" method="editTrackingNos"/>
+		
+		<action name="checkIsWeigh" class="salesChecksingleAction" method="checkIsWeigh"/>
+		<!-- 库存快照查询 -->
+		<action name="findInventorySnapshot" class="inventorySnapshotAction" method="findInventorySnapshot" />
+		<action name="findStTxLogPageBySku" class="inventorySnapshotAction" method="findStTxLogPageBySku" />
+		<action name="historicalInventoryQurey" class="inventoryHistoricalQueryAction" method="historicalInventoryQurey" />
+		<action name="getWarehouseDatabyOrganise" class="inventorySnapshotAction" method="getWarehouseData" />
+		
+		<action name="checkstalist" class="salesPickingCheckAction" method="checkStaList" />
+		<!-- 交货清单 -->
+		<action name="currenthandoverlisttotal" class="handOverListQueryAction" method="currentHandOverListTotal" />
+		<action name="findlinebyholistid" class="handOverListQueryAction" method="findLineByHoListId" />
+		<action name="handoverlist" class="handOverListQueryAction" method="QueryHandOverList" />		
+		<action name="findhandoverlistbyid" class="handOverListQueryAction" method="findHandOverListById" />
+		<action name="getHandOverList" class="handOverListQueryAction" method="getHandOverListById" />
+		<action name="createHandOverList" class="handOverListCreateAction" method="createHandOverList" />
+		<action name="autoHandOverList" class="handOverListCreateAction" method="autoHandOverList" />
+		
+		<action name="generatehandoverlistbyhand" class="handOverListCreateAction" method="generateHandoverListByHand" />
+		
+		
+		<action name="savehandoverlistinfo" class="handOverListQueryAction" method="saveHandOverListInfo" />
+		<action name="printhandoverlist" class="handOverListQueryAction" method="printHandOverList" />
+		<action name="printhandoverlist2" class="handOverListQueryAction" method="printHandOverList2" />
+		<action name="printAutoWhHandOverList" class="handOverListQueryAction" method="printAutoWhHandOverList" />
+		<action name="handOver" class="handOverListQueryAction" method="handOver" />
+		<action name="cancelhoListLine" class="handOverListQueryAction" method="cancelhoListLine" />
+		<action name="checktrackingnoforholist" class="handOverListQueryAction" method="checkTrackingNoForHoList"/>
+		<!-- 根据运单号来获取包裹信息判断物流商 -->
+		<action name="checktrackingno2" class="handOverListQueryAction" method="checkTrackingNo"/>
+		
+		
+		<action name="cancelhandoverlist" class="handOverListQueryAction" method="cancelHandOverList" />
+		<!-- 销售出库转物流 -->
+		<action name="modifyTransportator" class="modifyTransportatorAtion" method="modifyTransportatorEntry" />
+		<action name="getTransportatorsName" class="modifyTransportatorAction" method="getTransportator" />
+		<action name="getStaListByTrackingNo" class="modifyTransportatorAction" method="getStaListByTrackingNo" />
+		<action name="findRelevanceTrackingno" class="modifyTransportatorAction" method="findRelevanceTrackingno" />
+		<action name="findStaLineListByStaId" class="modifyTransportatorAction" method="findStaLineListByStaId" />
+		<action name="toTurnLogistics" class="modifyTransportatorAction" method="toTurnLogistics" />
+		<action name="createOthersSta" class="warehouseOperationOthersAction" method="createOthersSta" />
+		<action name="getInvStatusByInventory" class="warehouseOperationOthersAction" method="getInvStatusByInventory" />
+		<action name="inventorylogdetail" class="inventoryLogQueryAction" method="inventoryLogDetail" />
+		<!--  店铺信息 -->
+		<action name="findcompanyshoplist" class="inventoryLogQueryAction" method="findcompanyShopList" />
+		<action name="findtransactiontypelist" class="inventoryLogQueryAction" method="findTransactionTypeList" />
+		
+		<!-- 仓库其它出入库操作 -->
+		<action name="getTransactionType" class="warehouseOperationOthersAction" method="getTransactionType" />
+		<action name="findlocationbycode" class="warehouseOperationOthersAction" method="findLocationByCode" />
+		<action name="findCountSkuByParameter" class="warehouseOperationOthersAction" method="findCountSkuByParameter" />
+		<action name="findSkuByParameter" class="warehouseOperationOthersAction" method="findSkuByParameter" />
+		<action name="operationOthersOperateQuery" class="warehouseOperationOthersAction" method="operationOthersOperateQuery" />
+		<action name="findLocationTranstype" class="warehouseOperationOthersAction" method="findLocationTranstype" />
+		
+		<action name="findAvailLocationForOther" class="warehouseOperationOthersAction" method="findAvailLocationForOther" />
+		<action name="findAvailLocationByOwner" class="warehouseOperationOthersAction" method="findAvailLocationByOwner" />
+
+		<action name="operationOthersOperateQueryDetails" class="warehouseOperationOthersAction" method="operationOthersOperateQueryDetails" />
+		<action name="operateExecution" class="warehouseOperationOthersAction" method="operateExecution" />
+		<action name="operateCanceled" class="warehouseOperationOthersAction" method="operateCanceled" />
+		<action name="findsnskuqtybystaid" class="warehouseOperationOthersAction" method="findSnSkuQtyByStaId" />
+		
+		<action name="operationOthersOperateQueryDetails2" class="warehouseOperationOthersAction" method="operationOthersOperateQueryDetails2" />
+		<action name="operationOthersOperateQueryDetails" class="warehouseOperationOthersAction" method="operationOthersOperateQueryDetails" />
+		
+		<!-- 预定义入库 -->
+		<action name="findSkuInfoByParameter" class="warehousePredefinedAction" method="findSkuInfoByParameter" />
+		<action name="createPredefinedSta" class="warehousePredefinedAction" method="createPredefinedSta" />
+		<!-- <action name="findCountSkuByParameter" class="warehousePredefinedAction" method="findCountSkuByParameter" /> -->
+		<action name="findPredefinedSta" class="warehousePredefinedAction" method="findPredefinedSta" />
+		<action name="findpredefinedstabypagination" class="warehousePredefinedAction" method="findPredefinedStaByPagination" />
+		<action name="findpredecancelstabypagination" class="warehousePredefinedAction" method="findPredeCancelStaByPagination" />
+		<action name="findpredefinedstabypaginationRoot" class="warehousePredefinedAction" method="findPredefinedStaByPaginationRoot" />
+		<action name="cancelstaEasy" class="warehousePredefinedAction" method="cancelStaEasy" />
+		<action name="findstastatusbystaid" class="warehousePredefinedAction" method="findStaStatusBystaid" />
+		<action name="findtypesbystaid" class="warehousePredefinedAction" method="findTypesByStaid" />
+		<action name="modifyroleStatus" class="warehousePredefinedAction" method="modifyroleStatus" />
+		<action name="findBatchStaByPagination" class="warehousePredefinedAction" method="findBatchStaByPagination"/>
+		<!-- 按箱收货 -->
+		<action name="findCartonStaByPagination" class="warehouseBoxInboundAction" method="findCartonStaByPagination"/>
+		<action name="findCartonStaStatusByStaid" class="warehouseBoxInboundAction" method="findCartonStaStatusByStaid" />
+		<action name="findCartonStaByGroupStaId" class="warehouseBoxInboundAction" method="findCartonStaByGroupStaId"/>
+		<action name="cancelCartonSta" class="warehouseBoxInboundAction" method="cancelCartonSta" />
+		<action name="checkingRootStaCompleteQty" class="warehouseBoxInboundAction" method="checkingRootStaCompleteQty" />
+		
+		
+		<!-- 外包仓品牌仓库关联 -->
+		<action name="findSkuWarehouseRefListAll" class="warehousePredefinedAction" method="findSkuWarehouseRefListAll" />
+		<action name="findSkuWarehouseRefList" class="warehousePredefinedAction" method="findSkuWarehouseRefList" />
+		<!--获取下拉框数据 品牌 -->
+		<action name="findByBrandName" class="warehousePredefinedAction" method="findByBrandName" />
+		<action name="findByChannelName" class="warehousePredefinedAction" method="findByChannelName" />
+		<!-- 删除 外包仓品牌仓库关联 -->
+		<action name="deleteSkuWarehouseRef" class="warehousePredefinedAction" method="deleteSkuWarehouseRef" />
+		<!--加载下拉框数据 品牌 -->
+		<action name="findBrandNameAll" class="warehousePredefinedAction" method="findBrandNameAll" />
+		<!--加载下拉框数据 店铺 -->
+		<action name="findChannelNameAll" class="warehousePredefinedAction" method="findChannelNameAll" />
+		<!--插入 外包仓品牌仓库关联数据 -->
+		<action name="insertSkuWarehouseRef" class="warehousePredefinedAction" method="insertSkuWarehouseRef" />
+		<!-- 历史作业单查询 -->
+		<action name="getTransactionTypeName" class="historicalOrderInquiryAction" method="getTransactionType" />
+
+		<action name="pdaQueryOrderList" class="historicalOrderInquiryAction" method="pdaQueryOrderList" />
+
+
+		
+		<action name="getPdaDetail" class="historicalOrderInquiryAction" method="getPdaDetail" />
+		<action name="getPdaSnDetail" class="historicalOrderInquiryAction" method="getPdaSnDetail" />
+		<action name="showShelvesDetail" class="historicalOrderInquiryAction" method="showShelvesDetail" />
+		<action name="showShelvesSNDetail" class="historicalOrderInquiryAction" method="showShelvesSNDetail" />
+		
+		<action name="findTrackingNo" class="historicalOrderInquiryAction" method="findTrackingNo" />
+		<action name="findTrackingNoPre" class="historicalOrderInquiryAction" method="findTrackingNoPre" />
+		
+		<action name="gethistoricalOrderList" class="historicalOrderInquiryAction" method="gethistoricalOrderList" />
+		<!-- 不查询历史作业单 -->
+		<action name="gethistoricalOrderList2" class="historicalOrderInquiryAction" method="gethistoricalOrderList2" />
+		
+		
+		<action name="getHistoricalCodeList" class="historicalOrderInquiryAction" method="getHistoricalCodeList" />
+		<action name="getHistoricalCodeListLine" class="historicalOrderInquiryAction" method="getHistoricalCodeListLine" />
+		
+		
+		
+		<action name="findstabycode" class="historicalOrderInquiryAction" method="findStaByCode" />
+		<action name="gethistoricalOrderDetailList" class="historicalOrderInquiryAction" method="gethistoricalOrderDetailList" />
+		
+		<action name="queryCountByOuId" class="historicalOrderInquiryAction" method="queryCountByOuId" />
+		<action name="clearStaByOuId" class="historicalOrderInquiryAction" method="clearStaByOuId" />
+		
+		
+		<action name="showsndetail" class="historicalOrderInquiryAction" method="showSnDetail" />
+		<action name="gethistoricalOrderDetailOperateList" class="historicalOrderInquiryAction" method="gethistoricalOrderDetailOperateList" />
+		<action name="selectOperateLog" class="historicalOrderInquiryAction" method="selectOperateLog" />
+		<!-- 行特殊处理 -->
+		<action name="selectSpecialLog" class="historicalOrderInquiryAction" method="selectSpecialLog" />
+		<!-- 历史作业单查询-打印物流面单 -->
+		<action name="findAllInventory" class="inventoryInitializeAction" method="findAllInventory" />
+		<action name="printSingleOrderDetail" class="historicalOrderInquiryAction" method="printSingleOrderDetailOutMode1" />
+		<action name="printSingleOrderDetail1" class="historicalOrderInquiryAction" method="printSingleOrderDetail1" />
+		<action name="printSingleOrderDetail2" class="historicalOrderInquiryAction" method="printSingleOrderDetail2" />
+		
+		<action name="printContainerCode" class="staInBoundAction" method="printContainerCode" />
+		<action name="printAutoSlipCode" class="staInBoundAction" method="printAutoSlipCode" />
+
+		<!-- 库内移动 -->
+		<action name="querySku" class="transitInnerAction" method="querySku" />
+		<action name="querySkuQty" class="transitInnerAction" method="querySkuQty" />
+		<action name="queryStaById" class="transitInnerAction" method="queryStaById" />
+		<action name="findAvailSku" class="transitInnerAction" method="findAvailSku" />
+		<action name="queryLocation" class="transitInnerAction" method="queryLocation" />
+		<action name="querySkuStatus" class="transitInnerAction" method="querySkuStatus" />
+		<action name="queryStaInfoByid" class="transitInnerAction" method="queryStaInfoByid" />
+		<action name="findAvailLocation" class="transitInnerAction" method="findAvailLocation" />
+		<action name="cancelTransitInner" class="transitInnerAction" method="cancelTransitInner" />
+		<action name="findImportStvLineIn" class="transitInnerAction" method="findImportStvLineIn" />
+		<action name="findImportStvLineOut" class="transitInnerAction" method="findImportStvLineOut" />
+		<action name="executionTransitInner" class="transitInnerAction" method="executionTransitInner" />
+		<action name="createTransitInnerSta" class="transitInnerAction" method="createTransitInnerSta" />
+		<action name="executionExpTransitInner" class="transitInnerAction" method="executionExpTransitInner" />
+		<action name="findExecuteTransitInnerSta" class="transitInnerAction" method="findExecuteTransitInnerSta" />
+		<action name="queryLocationBylocationCode" class="transitInnerAction" method="queryLocationBylocationCode" />
+		<action name="findExecuteExpTransitInnerSta" class="transitInnerAction" method="findExecuteExpTransitInnerSta" />
+		<!-- 库存锁定/解锁 -->
+		<action name="inventoryLock" class="inventoryOccupyAction" method="inventoryLock" />
+		<action name="findInventoryLockSta" class="inventoryOccupyAction" method="findInventoryLockSta" />
+		<action name="findOccupiedStaLineByStaId" class="inventoryOccupyAction" method="findOccupiedStaLineByStaId" />
+		<action name="inventoryUnlock" class="inventoryOccupyAction" method="inventoryUnlock" />
+		<action name="findInventoryBatchLockList" class="transitInnerAction" method="findInventoryBatchLockList" />
+		<action name="findInventoryBatchLockListByInvIds" class="transitInnerAction" method="findInventoryBatchLockListByInvIds" />
+		
+		<!-- 库存状态修改 -->
+		<action name="findExecuteInvStatusChangeSta" class="inventoryStatusChangeAction" method="findExecuteInvStatusChangeSta" />
+		<action name="invStatusChangeQuerySku" class="inventoryStatusChangeAction" method="querySku" />
+		<action name="invStatusChangeFindAvailLocation" class="inventoryStatusChangeAction" method="findAvailLocation" />
+		<action name="invStatusChangeFindAvailSku" class="inventoryStatusChangeAction" method="findAvailSku" />
+		<action name="invStatusChangeQueryLocationBylocationCode" class="inventoryStatusChangeAction" method="queryLocationBylocationCode" />
+		<action name="invStatusChangeQueryStaById" class="inventoryStatusChangeAction" method="queryStaById" />
+		<action name="cancelInvStatusChange" class="inventoryStatusChangeAction" method="cancelInvStatusChange" />
+		<action name="invStatusChangeQuerySkuQty" class="inventoryStatusChangeAction" method="querySkuQty" />
+		<action name="invStatusChangeQueryLocation" class="inventoryStatusChangeAction" method="queryLocation" />
+		<action name="invStatusChangeQuerySkuStatus" class="inventoryStatusChangeAction" method="querySkuStatus" />
+		<action name="createInvStatusChangeSta" class="inventoryStatusChangeAction" method="createInvStatusChangeSta" />
+		<action name="executionInvStatusChange" class="inventoryStatusChangeAction" method="executionInvStatusChange" />
+		<action name="invStatusChangeFindInboundStvLine" class="inventoryStatusChangeAction" method="findInboundStvLine" />
+		<action name="invStatusChangeFindOutboundStvLine" class="inventoryStatusChangeAction" method="findOutboundStvLine" />
+		<action name="findImportExecuteInvStatusChangeSta" class="inventoryStatusChangeAction" method="findImportExecuteInvStatusChangeSta" />
+		<action name="executeImportInvStatusChange" class="inventoryStatusChangeAction" method="executeImportInvStatusChange" />
+		<action name="findAllInvStatus" class="inventoryStatusChangeAction" method="findAllInvStatus" />
+		
+		<!-- 盘点 -->
+		<action name="findDistrictList" class="inventoryCheckCreateAction" method="findDistrictList" />
+		<action name="findlocationlist" class="inventoryCheckCreateAction" method="findLocationList" />
+		<action name="findOwnerListByInv" class="inventoryCheckCreateAction" method="findOwnerListByInv" />
+		<action name="findBrandListByInv" class="inventoryCheckCreateAction" method="findBrandListByInv" />
+		
+		<action name="createInventoryCheckMode2" class="inventoryCheckCreateAction" method="createInventoryCheckMode2" />
+		<action name="createinventorycheck" class="inventoryCheckCreateAction" method="createInventoryCheck" />
+		<action name="findinvchecklinedetial" class="inventoryCheckCreateAction" method="findinvCheckLineDetial" />
+		<action name="findVMIinvCheckLineDetial" class="inventoryCheckCreateAction" method="findVMIinvCheckLineDetial" />
+		<action name="findinvcheckinfobyid" class="inventoryCheckCreateAction" method="findinvCheckInfoById" />
+		<action name="findVMIinvCheckInfoById" class="inventoryCheckCreateAction" method="findVMIinvCheckInfoById" />
+		
+		<action name="findinvcheckdiffline" class="inventoryCheckHandelAction" method="findInvCheckDiffLine" />
+		<action name="findinvcheckcount" class="inventoryCheckHandelAction" method="findInvCheckCountNoLocation" />
+		<action name="findinvcheckmoveLine" class="inventoryCheckHandelAction" method="findInvCheckMoveLine" />
+		<action name="cancelinventorycheck" class="inventoryCheckHandelAction" method="cancelInventoryCheck" />
+		<action name="cancelInventoryCheckManager" class="inventoryCheckHandelAction" method="cancelInventoryCheckManager" />
+		<action name="confirminventorycheck" class="inventoryCheckHandelAction" method="confirmInventoryCheck" />
+		<action name="changestatus" class="inventoryCheckHandelAction" method="changeStatus" />
+		<action name="managercheck" class="inventoryCheckHandelAction" method="managerCheck" />
+		
+
+		<action name="findallinventorychecklist" class="inventoryCheckQueryAction" method="findAllInventoryCheckList" />
+		<action name="findSnDiffLineByIc" class="inventoryCheckQueryAction" method="findSnDiffLineByIc" />
+		<action name="findSnDiffLineSkuChangeByIc" class="inventoryCheckQueryAction" method="findSnDiffLineSkuChangeByIc" />
+		
+		<!-- 库间移动 -->
+		<action name="transCrossInboundReceive" class="betweenLibraryMoveEditAction" method="transCrossInboundReceive" />
+		<action name="statransitcrossquery" class="betweenLibraryMoveEditAction" method="staTransitCrossQuery" />
+		<action name="findinventorychecklist" class="inventoryCheckHandelAction" method="findInventoryCheckList" />
+		<action name="findinventorychecklistmanager" class="inventoryCheckHandelAction" method="findInventoryCheckListManager" />
+		<action name="createBetweenLibaryMoveSta" class="betweenLibraryMoveEditAction" method="createBetweenLibaryMoveSta" />
+		<action name="canceltransitcrosssta" class="betweenLibraryMoveEditAction" method="cancelTransitCrossSta" />
+		<action name="staOutOfListJson" class="betweenLibraryMoveEditAction" method="staOutOfListJson" />
+		<action name="transitCrossStaOccupaid" class="betweenLibraryMoveEditAction" method="transitCrossStaOccupaid" />
+		<action name="transitCrossStaOutBound" class="betweenLibraryMoveEditAction" method="transitCrossStaOutBound" />
+		<action name="betweenMovestvLineListJson" class="betweenLibraryMoveEditAction" method="betweenMovestvLineListJson" />		
+		<action name="printinventoryoccupay" class="betweenLibraryMoveEditAction" method="PrintInventoryOccupay" />
+		
+		<action name="printoutboundsendinfo" class="betweenLibraryMoveEditAction" method="printOutBoundSendInfo" />
+				
+		<action name="releaseBetweenLibaryInventory" class="betweenLibraryMoveEditAction" method="releaseBetweenLibaryInventory" />
+		<action name="findIsImportSn" class="betweenLibraryMoveEditAction" method="findIsImportSn" />
+		
+		<!-- VMI调拨 -->
+		<action name="createVMIFlittingSta" class="vmiFlittingAction" method="createVMIFlittingSta" />
+		<action name="queryVMIFlittingSta" class="vmiFlittingAction" method="queryVMIFlittingSta" />
+		<action name="cancelVMIFlittingSta" class="vmiFlittingAction" method="cancelVMIFlittingSta" />
+		<action name="queryVMIFlittingOut" class="vmiFlittingAction" method="queryVMIFlittingOut" />
+		<action name="occupiedVMIFlitting" class="vmiFlittingAction" method="occupiedVMIFlitting" />
+		<action name="queryVMIFlittingStvLine" class="vmiFlittingAction" method="queryVMIFlittingStvLine" />
+		<action name="outBoundVMIFlitting" class="vmiFlittingAction" method="outBoundVMIFlitting" />
+		<action name="releaseVMIFlittingInventory" class="vmiFlittingAction" method="releaseVMIFlittingInventory" />
+		<action name="printVMIFlittingInventory" class="vmiFlittingAction" method="printVMIFlittingInventory" />
+		<action name="queryVMIFlittingEnterLine" class="vmiFlittingAction" method="queryVMIFlittingEnterLine" />
+		
+		<action name="findvmiflittingstas" class="vmiFlittingAction" method="findVMIFlittingStas" />
+		<action name="findvmiunfreezedetails" class="vmiFlittingAction" method="findVmiUnfreezeDetails" />
+		<action name="unfreezebystaid" class="vmiFlittingAction" method="unfreezeByStaid" />
+		
+		
+		
+		<!-- 税控发票导出 -->
+		<action name="queryStaExport" class="taxInvoiceAction" method="queryStaExport" />
+		<action name="queryInvoiceOrderExport" class="taxBatchInvoiceAction" method="queryInvoiceOrderExport" />
+		<action name="queryStaDetail" class="taxInvoiceAction" method="queryStaDetail" />
+		<action name="querySyaIsExport" class="taxInvoiceAction" method="querySyaIsExport" />
+		<action name="queryExcStaExport" class="excTaxInvoiceAction" method="queryExcStaExport" />
+		<action name="queryExcStaDetail" class="excTaxInvoiceAction" method="queryExcStaDetail" />
+		<action name="queryExcSyaIsExport" class="excTaxInvoiceAction" method="queryExcSyaIsExport" />
+		<action name="openPrintAndExportPage" class="taxBatchInvoiceAction" method="openPrintAndExportPage" />
+		<action name="printSelectedWmsInvoiceOrderTrans" class="taxBatchInvoiceAction" method="printSelectedWmsInvoiceOrderTrans" />
+		<action name="printSingleInvoiceOrderDeliveryOut" class="taxBatchInvoiceAction" method="printSingleInvoiceOrderDeliveryOut" />
+		<action name="updateWmsInvoiceOrderStatus" class="taxBatchInvoiceAction" method="updateWmsInvoiceOrderStatus" />
+		
+		
+		<!-- 物流维护 -->
+		<action name="getAllTransportator" class="transImportAction" method="getAllTrans" />
+		<action name="staSupportTransPendingList" class="salesTransSupportAction" method="staSupportTransPendingList" />
+		<action name="supportSelectTrans" class="salesTransSupportAction" method="supportSelectTrans" />
+		
+		<!-- 商品查询 -->
+		<action name="findSku" class="commodityAction" method="findSku" />
+		<action name="updateBarCode" class="commodityAction" method="updateBarCode" />
+		<action name="printskubarcode" class="commodityAction" method="printSkuBarcode" />
+		<action name="updateSkuBarCode" class="commodityAction" method="updateSkuBarCode" />
+		<action name="findSkuAndSkuBarcodeById" class="commodityAction" method="findSkuAndSkuBarcodeById" />
+		
+		
+		<!-- 物流发货控制 -->
+		<action name="queryTransportatorCfg" class="transDeliveryCfgAction" method="queryTransportatorCfg" />
+		<action name="saveCfg" class="transDeliveryCfgAction" method="saveCfg" />
+		
+		<action name="findPoSoLog" class="snQueryAction" method="findPoSoLog"/>
+		<action name="querySnLog" class="snQueryAction" method="querySnLog"/>
+		
+		<!-- 公司-店铺信息 -->
+		<action name="findWarehouse" class="warehouseShopMaintainAction" method="findWarehouse" />
+
+		<action name="findallavaillocations" class="warehouseLocationCascadeAction" method="findAllAvailLocations" />
+ 		<action name="findlocationtranstypebycode" class="warehouseLocationCascadeAction" method="findLocationTranstypeBycode" />
+ 		
+ 		<action name="findpdapostlogbysta" class="pdaPostLogAction" method="findPdaPostLogBySta" />
+ 		<action name="deletepdalog" class="pdaPostLogAction" method="deletePdaLog" />
+ 		<action name="deleteallpdalog" class="pdaPostLogAction" method="deleteAllPdaLog" />
+ 		<action name="pdaexeinbound" class="pdaPostLogAction" method="pdaExecuteInbound" />
+ 		
+ 		<action name="exepdapostlog" class="pdaPostLogAction" method="exePostPdaLog" />
+ 		<action name="exportpdaerrorlog" class="pdaPostLogAction" method="exportPdaErrorLog" />
+ 		<action name="delposterrorlog" class="pdaPostLogAction" method="delPostPdaErrorLog" />
+
+	     
+	     <action name="findLogistics2" class="companyShopAction" method="findLogistics" />
+		 <action name="findWarehouse2" class="companyShopAction" method="findWarehouse" />
+		 
+		 
+
+		 <!-- 配货清单 -->
+		 <action name="queryPickingList" class="pickingListAction" method="queryPickingList" />
+		 <action name="queryPickingListDetail" class="pickingListAction" method="queryPickingListDetail" />
+		 <action name="printPickinglist" class="pickingListAction" method="printPickinglist" />
+		 
+		  <action name="printPickinglistReturn" class="pickingListAction" method="printPickinglistReturn" />
+		 
+		 
+		 <!-- VMI -->
+		 <action name="findVmiRtoLineList" class="vmiRtoAction" method="findVmiRtoLineList" />
+		 <action name="findVmiRtoList" class="vmiRtoAction" method="findVmiRtoList" />
+		 <action name="getShopInfoBy" class="inventoryVMIAdjustmentHandelAction" method="getShopInfoBy" />
+		 <action name="findvmiinventorychecklist" class="inventoryVMIAdjustmentHandelAction" method="findVMIInventoryCheckList" />
+		 <action name="findallvmiinventorychecklist" class="inventoryVMIAdjustmentQueryAction" method="findVMIAllInventoryCheckList" />
+		 <action name="confirmVMIInvCKAdjustment" class="inventoryVMIAdjustmentHandelAction" method="confirmVMIInvCKAdjustment" />
+		 <action name="generateSKU" class="inventoryVMIAdjustmentHandelAction" method="generateSKU" />
+		 <action name="cancelInvCheck" class="inventoryVMIAdjustmentHandelAction" method="cancelInvCheck" />
+		 
+		 <!--对账信息设置 -->
+		 <action name="queryPadcodeOperate" class="padcodeOperateAction" method="queryPadcodeOperate" />
+		 <action name="deletePadcodeOperate" class="padcodeOperateAction" method="deletePadcodeOperate" />
+		 <action name="savePadcodeOperate" class="padcodeOperateAction" method="savePadcodeOperate" />
+		 
+		 <action name="findlvsqueryselect" class="reportTimInventoryExportAction" method="findLvsQuerySelect" />
+		 <action name="findinvstatusbyshop" class="reportLvsInventoryLogAction" method="findInvStatus" />
+		 <action name="findtranstypebyshop" class="reportLvsInventoryLogAction" method="findTransType" />
+		 
+		 <action name="updatestainvoice" class="taxInvoiceSumAction" method="updateStaInvoice" />
+		 
+		 <action name="vmitransferstaquery" class="vMIOwnerTransferQueryAction" method="vmiTransferStaQuery" />
+		 <action name="findvmitransdetails" class="vMIOwnerTransferQueryAction" method="findVmiTransDetails" />
+		 <action name="executevmitransfer" class="vMIOwnerTransferQueryAction" method="executeVmiTransfer" />
+		 <action name="cancelvmitransfer" class="vMIOwnerTransferQueryAction" method="cancelVmiTransfer" />
+		 <!-- PDA收货 -->
+		 <action name="findpdapurchasestas" class="pdaPurchaseAction" method="findPdaPurchaseStas" />
+		 <action name="findpdapurchasedetail" class="pdaPurchaseAction" method="findPdaPurchaseDetail" />
+		 <action name="executepdapurchase" class="pdaPurchaseAction" method="executePdaPurchase" />
+		 <action name="pdaInboundPurchase" class="pdaPurchaseAction" method="pdaInboundPurchase" />
+		 <action name="findisneedsnbystaid" class="pdaPurchaseAction" method="findIsNeedSnByStaId" />
+		 <action name="pdaCancelStv" class="pdaPurchaseAction" method="pdaCancelStv" />
+		 <action name="pdaCodeQuery" class="pdaPurchaseAction" method="pdaCodeQuery" />
+
+		 <!-- 预定义出库 -->
+		 <action name="queryPredefinedOutStaList" class="predefinedOutAction" method="queryPredefinedOutStaList" />
+		 <action name="predefinedOutOccupation" class="predefinedOutAction" method="predefinedOutOccupation" />
+		 <action name="predefinedOutExecution" class="predefinedOutAction" method="predefinedOutExecution" />
+		 <action name="predefinedOutCanceled" class="predefinedOutAction" method="predefinedOutCanceled" />
+		 
+		 <!-- 根据OuId 获取 仓库信息 -->
+		<action name="getWHByOuId" class="operationUnitAction" method="getWHByOuId"/>
+
+		 <!-- vmi 退仓  -->
+		 <action name="vmireturnstaquery" class="vmiReturnAction" method="vmiReturnStaQuery" />
+		 <action name="vmireturndetails" class="vmiReturnAction" method="vmiReturnDetails" />
+		 <action name="executevmireturn" class="vmiReturnAction" method="executeVmiReturn" />
+		 <action name="cancelvmireturn" class="vmiReturnAction" method="cancelVmiReturn" />
+		 <action name="vmireturnpacking" class="vmiReturnAction" method="vmiReturnPacking" />
+		 <action name="cancelReturnPacking" class="vmiReturnAction" method="cancelReturnPacking" />
+		 <action name="getChannelVmiCode" class="vmiReturnAction" method="getChannelVmiCode" />
+		 <action name="getChannelVmiCodeById" class="vmiReturnAction" method="getChannelVmiCodeById" />
+		 <action name="getVmiReturnAddress" class="vmiReturnAction" method="getVmiReturnAddress" />
+		 <action name="judgeCarton" class="vmiReturnAction" method="judgeCarton" />
+		 <action name="editVmiReturnAddress" class="vmiReturnAction" method="editVmiReturnAddress" />
+		 <action name="checkCartonstatus" class="vmiReturnAction" method="checkCartonstatus" />
+		 <action name="vmireturnOrderbindingConfirm" class="vmiReturnAction" method="vmireturnOrderbindingConfirm" /> 
+		 <action name="vmireturnRemorebinding" class="vmiReturnAction" method="vmireturnRemorebinding" />
+		 
+		 <action name="findGucciRtnList" class="vmiReturnAction" method="findGucciRtnList" />
+		 <action name="findGucciRtoLineList" class="vmiReturnAction" method="findGucciRtoLineList" />
+		 <!--  VMI ESPRIT PO TYPE -->
+		 <action name="findPotypeList" class="vmiEspritPOTypeAction" method="findPotypeList" />
+		 <action name="findPoTypeByPo" class="vmiEspritPOTypeAction" method="findPoTypeByPo" />
+		 <action name="findInvoicePertentage" class="vmiEspritInvoicePercentageAction" method="findInvoicePertentage" />
+		 <action name="findInvoiceNum" class="vmiEspritInvoicePercentageAction" method="findInvoiceNum" />
+		 <action name="espPoAndInvoiceBD" class="vmiEspritInvoicePercentageAction" method="espPoAndInvoiceBD" />
+		  <action name="findESPPoInvoiceBD" class="vmiEspritInvoicePercentageAction" method="findESPPoInvoiceBD" />
+		 
+		 
+		 <action name="findCurrentMsgOutboundOrder" class="msgOutboundOrderAction" method="findCurrentMsgOutboundOrder"/>
+		 <action name="findCurrentMsgOutboundOrderRoot" class="msgOutboundOrderAction" method="findCurrentMsgOutboundOrderRoot"/>
+		 <action name="findCurrentMsgRtnOutbound" class="msgOutboundOrderAction" method="findCurrentMsgRtnOutbound"/>
+		 <action name="findCurrentMsgRtnOutboundRoot" class="msgOutboundOrderAction" method="findCurrentMsgRtnOutboundRoot"/>
+		 <action name="findOutboundOrderCancelList" class="msgOutboundOrderCancelAction" method="findOutboundOrderCancelList" />
+		 <action name="findOutboundOrderCancelListRoot" class="msgOutboundOrderCancelAction" method="findOutboundOrderCancelListRoot" />
+		 
+		 <action name="findcartonlist" class="outBoundPackageExeAction" method="findCartonList"/>
+		 <action name="exeoutboundpackage" class="outBoundPackageExeAction" method="exePackage"/>
+		 <action name="updatecartonpacking" class="outBoundPackageExeAction" method="updateCartonPacking"/>
+		 <action name="updatecartoncreate" class="outBoundPackageExeAction" method="updateCartonCreate"/>
+		 <action name="validateisplanornot" class="outBoundPackageExeAction" method="validateIsPlanOrNot"/>
+		 <action name="stalineStauts" class="outBoundPackageExeAction" method="stalineStauts"/>
+		 <action name="stalineStauts" class="outBoundPackageExeAction" method="stalineStauts"/>
+		 <action name="validatedefectCode" class="outBoundPackageExeAction" method="validatedefectCode"/>
+		 <action name="validatedeImperfectCarton" class="outBoundPackageExeAction" method="validatedeImperfectCarton"/>
+		 
+		 
+		 <action name="findCurrentMsgInboundOrder" class="msgInboundOrderAction" method="findCurrentMsgInboundOrder"/>
+		 <action name="findCurrentMsgInboundOrderRoot" class="msgInboundOrderAction" method="findCurrentMsgInboundOrderRoot"/>
+		 <action name="findCurrentMsgRtnInbound" class="msgInboundOrderAction" method="findCurrentMsgRtnInbound"/>
+		 <action name="findCurrentMsgRtnInboundRoot" class="msgInboundOrderAction" method="findCurrentMsgRtnInboundRoot"/>
+		 <action name="findRtnInboundDetailById" class="msgInboundOrderAction" method="findRtnInboundDetailById"/>
+		 <action name="findMsgRtnInboundLineById" class="msgInboundOrderAction" method="findMsgRtnInboundLineById"/>
+		 <action name="findLocationsJson" class="warehouseReplenishStockAction" method="findLocationsJson"></action>
+		 <action name="getoutboundpackagestalist" class="outboundPackageAction" method="getOutboundPackageStaList"></action>
+		 <action name="getoutboundpackageByStalist" class="outboundPackageAction" method="getoutboundpackageByStalist"></action>
+		 <action name="findTransportatorListByWeight" class="outboundPackageAction" method="findTransportatorListByWeight"></action>
+		 <action name="updateTransportatorWeigth" class="outboundPackageAction" method="updateTransportatorWeigth"></action>
+		 <action name="saveTransportatorWeigth" class="outboundPackageAction" method="saveTransportatorWeigth"></action>
+		 <action name="checkexpCode" class="outboundPackageAction" method="checkexpCode"></action>
+		 
+		 <action name="queryStaByCode" class="outboundPackageAction" method="queryStaByCode"></action>
+		 <action name="trunkdetailinfo" class="outboundPackageAction" method="trunkDetailInfo"></action>
+		 <action name="planexecutedetailinfo" class="outboundPackageAction" method="planExecuteDetailInfo"></action>
+		 <action name="completedetailinfo" class="outboundPackageAction" method="completeDetailInfo"></action>
+		 <action name="canceldetailinfo" class="outboundPackageAction" method="cancelDetailInfo"></action>
+		 <action name="generatecartonbystaid" class="outboundPackageAction" method="generateCartonByStaId"></action>
+		 <action name="printoutboundpackageinfo" class="outboundPackageAction" method="printOutBoundPackageInfo"></action>
+		 <action name="printoutboundpackagemain" class="outboundPackageAction" method="printOutBoundPackageMain"></action>
+		 <action name="executepartlyoutbound" class="outboundPackageAction" method="executePartlyOutbound"></action>
+		 <action name="printSingleVmiDeliveryMode1Out" class="outboundPackageAction" method="printSingleVmiDeliveryMode1Out"></action>
+		 <action name="printSingleVmiDeliveryMode1OutByCarton" class="outboundPackageAction" method="printSingleVmiDeliveryMode1OutByCarton"></action>
+		 <action name="printNikeCrwLabel" class="outboundPackageAction" method="printNikeCrwLabel"></action>
+		 <action name="printNikeCrwPod" class="outboundPackageAction" method="printNikeCrwPod"></action>
+		 
+		 <action name="getRtwDiekingList" class="rtwDieKingLineAction" method="getRtwDiekingList"></action>
+		 
+		 
+		 
+		 <action name="findskucodebyskucode" class="skuGroupCreateAction" method="findSkuCost"></action>
+		 <action name="createSkuGroup" class="skuGroupCreateAction" method="createSkuGroup"></action>
+		 
+		 <action name="printoutboundpackingintegrity" class="outboundPackageAction" method="printOutBoundPackingIntegrity"></action>
+		 
+		 <action name="findvalidlocations" class="districtLocationPrintAction" method="findValidLocations"></action>
+		 <action name="findvaliddistricts" class="districtLocationPrintAction" method="findValidDistricts"></action>
+		 <action name="printlocationbarcode" class="districtLocationPrintAction" method="printLocationBarCode"></action>
+		 <action name="printdistrictcode" class="districtLocationPrintAction" method="printDistrictCode"></action>
+		 <action name="printdistrictrelativelocations" class="districtLocationPrintAction" method="printDistrictRelativeLocations"></action>
+		 
+		 <action name="getskugroupichecklist" class="skuGroupQueryAction" method="getSkuGroupICheckList"></action>
+		 <action name="findskucollectinfo" class="skuGroupQueryAction" method="findSkuCollectInfo"></action>
+		 <action name="findskuadjustdetailinfo" class="skuGroupQueryAction" method="findSkuAdjustDetailInfo"></action>
+		 <action name="skugroupexecution" class="skuGroupQueryAction" method="skuGroupExecution"></action>
+		 <action name="skugroupcancel" class="skuGroupQueryAction" method="skuGroupCancel"></action>
+		 <action name="findproductinfo" class="productBoxMaintainAction" method="findProductInfo"></action>
+		 
+		 <!-- 查询三维数据 start-->
+		 <action name="findthreedimensionaldata" class="productThreeDimensionalCollectAction" method="findThreeDimensionalData"></action>
+		 <action name="findtablebydata" class="productThreeDimensionalCollectAction" method="findTableByData"></action>
+		 <action name="refreshdata" class="productThreeDimensionalCollectAction" method="refreshData"></action>
+		 <!-- 查询三维数据 end-->
+		 
+		 <action name="districtPickingList" class="skuMoveSuggestAction" method="districtPickingList"/>
+		 <action name="findpickinglistforpickout" class="pickingSuggestAction" method="findPickingListForPickOut"/>
+		 <action name="findstalineforpickinginfo" class="pickingSuggestAction" method="findStalineForPickingInfo"/>
+		 
+		 <action name="batchQuery" class="batchInfoAction" method="batchQuery"/>
+		 
+		 <action name="nikeOrderQuery" class="nikeOrderQueryAction" method="nikeOrderQuery"/>
+		 <action name="forUpdateStatus" class="nikeOrderQueryAction" method="forUpdateStatus"/>
+		 
+		 <action name="staLpcodeQuery" class="staLpcodeUpdateAction" method="staLpcodeQuery"/>
+		 <action name="updateStaLpcode" class="staLpcodeUpdateAction" method="updateStaLpcode"/>
+		 
+		 <action name="queryCheckHandOverList" class="handOverListCheckAction" method="queryCheckHandOverList"/>
+		 <action name="queryHandOverListLine" class="handOverListCheckAction" method="queryHandOverListLine"/>
+		 <action name="checkHandOverList" class="handOverListCheckAction" method="checkHandOverList"/>
+		 
+		 <action name="queryWorkLineNo" class="workLineNoAction" method="queryWorkLineNo"/>
+		 
+		 <action name="updateLineNo" class="workLineNoAction" method="updateLineNo"/>
+
+		 <action name="querycoachsta" class="cacheTicketPrintAction" method="queryCoachSta"/>
+		 
+		 <action name="bysptypeprint" class="specialPackagingPrintAction" method="bySPTypePrint" />
+		 
+		 <action name="queryGILocation" class="GISkuOperatesAction" method="queryGILocation"/>
+		 <action name="queryGILocSku" class="GISkuOperatesAction" method="queryGILocSku"/>
+		 <action name="createGIInboundByLoc" class="GISkuOperatesAction" method="createGIInboundByLoc" />
+		 
+		 <!-- 入库单入库单管理到货箱数-->
+		 <action name="findInBoundCartonSta" class="staInBoundAction" method="findInBoundCartonSta" />
+		 <action name="findInboundSta" class="staInBoundAction" method="findInboundSta" />
+		 <action name="findInboundStaByType" class="staInBoundAction" method="findInboundStaByType" />
+		 <action name="findlocationbycodesta" class="staInBoundAction" method="findLocationByCode" />
+		 <action name="findStaLineBySta" class="staInBoundAction" method="findStaLineBySta" />
+		 <action name="findStaLineByStaHand" class="staInBoundAction" method="findStaLineByStaHand"></action>
+		 <action name="noChoseinBoundAffirm" class="staInBoundAction" method="noChoseinBoundAffirm" />
+		 <action name="inBoundAffirm" class="staInBoundAction" method="inBoundAffirm" />
+		 <action name="inBoundAffirmHand" class="staInBoundAction" method="inBoundAffirmHand"/>
+		 <action name="findInboundConfirmSta" class="staInBoundAction" method="findInboundConfirmSta" />
+		 <action name="findInboundStvLine" class="staInBoundAction" method="findInboundStvLine" />
+		 <action name="findInboundStvLineHand" class="staInBoundAction" method="findInboundStvLineHand" />
+		 <action name="confirmInBoundSta" class="staInBoundAction" method="confirmInBoundSta" />
+		 <action name="cancelInBoundConfirm" class="staInBoundAction" method="cancelInBoundConfirm" />
+		 <action name="findInboundShelvesSta" class="staInBoundAction" method="findInboundShelvesSta"/>
+		 <action name="editCartonNumSta" class="staInBoundAction" method="editCartonNumSta" />
+		 <!-- pda上架审核查询 -->
+		 <action name="findPdaShelvesSta" class="staInBoundAction" method="findPdaShelvesSta"/>
+		 <action name="checkPdaShelvesStaLine" class="staInBoundAction" method="checkPdaShelvesStaLine"/>
+		 <action name="checkShelves" class="staInBoundAction" method="checkShelves"/>
+
+		 
+		 <action name="inboundShelvesGI" class="staInBoundAction" method="inboundShelvesGI"/>
+		 <action name="inboundShelvesHand" class="staInBoundAction" method="inboundShelvesHand"></action>
+		 <action name="findMergeInboundStvLine" class="staInBoundAction" method="findMergeInboundStvLine"/>
+		 <action name="findInBoundStaQuery" class="staInBoundAction" method="findInBoundStaQuery"/>
+		 <action name="findInBoundLine" class="staInBoundAction" method="findInBoundLine"/>
+		 <action name="findpdainboundshelves" class="staInBoundAction" method="findPdaInboundShelves"/>
+		 <action name="findInBoundSN" class="staInBoundAction" method="findInBoundSN"/>
+		 <action name="findpdanotdifline" class="staInBoundAction" method="findPdaNotDifLine"/>
+		 <action name="findpdadifline" class="staInBoundAction" method="findPdaDifLine"/>
+		 <action name="findpdaline" class="staInBoundAction" method="findPdaLine"/>
+		 <action name="selectpdausername" class="staInBoundAction" method="selectPdaUserName"/>
+		 <action name="executenotdifpdaline" class="staInBoundAction" method="executeNotDifPdaLine"/>
+		 <action name="executepda" class="staInBoundAction" method="executePda"/>
+		 <action name="savepdaaddedqty" class="staInBoundAction" method="savePdaAddedQty"/>
+		 <action name="findInboundStaFinish" class="staInBoundAction" method="findInboundStaFinish" />
+		 <action name="closeInBoundFinish" class="staInBoundAction" method="closeInBoundFinish" />
+		 <action name="findStaLineByStaFinish" class="staInBoundAction" method="findStaLineByStaFinish" />
+		 <action name="checkSkuSn" class="staInBoundAction" method="checkSkuSn"/>
+		 <action name="findPdaLineSnList" class="staInBoundAction" method="findPdaLineSnList"/>
+		 <action name="editPdaOrderSkuSn" class="staInBoundAction" method="editPdaOrderSkuSn"/>
+		 <action name="deletePdaOrderSkuSn" class="staInBoundAction" method="deletePdaOrderSkuSn"/>
+		 <action name="addPdaOrderSkuSn" class="staInBoundAction" method="addPdaOrderSkuSn"/>
+		 <action name="findStaBySlipCode" class="staInBoundAction" method="findStaBySlipCode"/>
+		 
+		 <action name="nikeCheckQuery" class="nikeCheckQueryAction" method="nikeCheckQuery"/>
+		 <!-- 入库单明细类别 （星巴克） -->
+ 		 <action name="findHandStaLineStarbucksBySta" class="staInBoundAction" method="findHandStaLineStarbucksBySta"></action>
+ 		  <action name="validationStarbucksInfo" class="staInBoundAction" method="validationStarbucksInfo"></action>
+ 		 
+		 <action name="findAllCompany" class="wareHouseToVirtualAction" method="findAllCompany"/>
+		 <action name="findCenterByCompany" class="wareHouseToVirtualAction" method="findCenterByCompany"/>
+		 <action name="findWarehouseByCenter" class="wareHouseToVirtualAction" method="findWarehouseByCenter"/>
+		 <action name="newPhWareHouse" class="wareHouseToVirtualAction" method="newPhWareHouse"/>
+		 <action name="selectAllPhyWarehouse" class="wareHouseToVirtualAction" method="selectAllPhyWarehouse"/>
+		 <action name="findOuidByPhyware" class="wareHouseToVirtualAction" method="findOuidByPhyware"/>
+		 <action name="selectAllWarehouseByPhyId" class="wareHouseToVirtualAction" method="selectAllWarehouseByPhyId"/>
+		 <action name="saveRelationShip" class="wareHouseToVirtualAction" method="saveRelationShip"/>
+		 <action name="findProduct" class="productInfoMainAction" method="findProduct"/>
+		 <!-- adidas查询商品 -->
+		 <action name="findProduct2" class="productInfoMainAction" method="findProduct2"/>
+		 <action name="getCustomerIsAdidas" class="productInfoMainAction" method="getCustomerIsAdidas"/>
+		 <action name="judgeSkuBarCode" class="productInfoMainAction" method="judgeSkuBarCode"/>
+		 <action name="judgeSkuCodeOrCustomerSkuCode" class="productInfoMainAction" method="judgeSkuCodeOrCustomerSkuCode"/>
+		 
+		 
+		 <action name="findAllBrand" class="productInfoMainAction" method="findAllBrand"/>
+		 <action name="findAllCategories" class="productInfoMainAction" method="findAllCategories"/>
+		 <action name="findBrandByPage" class="productInfoMainAction" method="findBrandByPage"/>
+		 <!-- 出库&初始化&插入中间表 fanht -->
+		<action name="initOutBoundPackCheck" class="salesOutboundAction" method="initOutBoundPackCheck"/>
+		<action name="initOutBoundPack" class="salesOutboundAction" method="initOutBoundPack"/>
+		<action name="outBoundHand" class="salesOutboundAction" method="outBoundHand"/>
+		<!--  创建交货清单，删除中间表数据 fanht -->
+		<action name="createHandOverListDelete" class="handOverListCreateAction" method="createHandOverListDelete" />
+		<!--一键创建交接清单 -->
+		<action name="createOneHandOverList" class="handOverListCreateAction" method="createOneHandOverList" />
+		<action name="getNull" class="salesOutboundAction" method="getNull"/>
+		<action name="findCountPackageByOutbound" class="handOverListCreateAction" method="findCountPackageByOutbound"/>
+		
+		<!-- 新出库逻辑 kjl -->
+		<action name="findStaForPickingByModel" class="createPickingListAction" method="findStaForPickingByModel"/>
+		<action name="findStaForPickingCount" class="createPickingListAction" method="findStaForPickingCount"/>
+		<action name="findPickingStaLine" class="createPickingListAction" method="findPickingStaLine"/>
+		
+		<action name="addRultName" class="createPickingListAction" method="addRultName"/>
+		<action name="deleteRultName" class="createPickingListAction" method="deleteRultName"/>
+		<action name="findRulaNameById" class="createPickingListAction" method="findRulaNameById"/>
+		
+		
+		<action name="generpickinglistbysta" class="createPickingListAction" method="generPickingListBySta"/>
+		<action name="autoGenerDispatchListByNoPT" class="createPickingListAction" method="autoGenerDispatchListByNoPT"/>
+		<action name="autogenerdispatchList" class="createPickingListAction" method="autoGenerDispatchList"/>
+		<action name="autogenerdispatchListopc" class="operationCenterAction" method="autoGenerDispatchListopc"/>
+		<action name="queryGroupBuyingSku" class="createPickingListAction" method="queryGroupBuyingSku"/>
+		<action name="outboundprintpickinglist" class="createPickingListAction" method="outBoundPrintPickingList"/>
+		<action name="outboundprintpickinglistmodel2" class="createPickingListAction" method="outBoundPrintPickingListModel2"/>
+		<action name="removeFailedStaOut" class="createPickingListAction" method="removeFailedStaOut"/>
+		<action name="reOccupiedInvOut" class="createPickingListAction" method="reOccupiedInvOut"/>
+		<action name="deletePickingListOut" class="createPickingListAction" method="deletePickingListOut"/>
+		<action name="removeTransFailedStaOut" class="createPickingListAction" method="removeTransFailedStaOut"/>
+		<action name="chgLpcodeRemoveFailedStaOut" class="createPickingListAction" method="chgLpcodeRemoveFailedStaOut"/>
+		<action name="queryDispatchListOutputCountOut" class="createPickingListAction" method="queryDispatchListOutputCountOut"/>
+		<!-- cheng.su团购打印 -->
+		<action name="printTrunkPackingListMode1OutBulk" class="printPickingListBulkAction" method="printTrunkPackingListMode1OutBulk"/>
+		
+		<action name="printtrunkpackinglistmode1Out" class="createPickingListAction" method="printTrunkPackingListMode1Out"/>
+		<action name="printo2oqspackinglistmode1Out" class="createPickingListAction" method="printO2OQSPackingListMode1Out"/>
+		<action name="printSingleDeliveryMode2Out" class="createPickingListAction" method="printSingleDeliveryMode2Out"/>
+		<action name="printtrunkpackinglistmode1Outopc" class="operationCenterAction" method="printTrunkPackingListMode1Out"/>
+		<action name="printsingledeliverymode1Out" class="createPickingListAction" method="printSingleDeliveryMode1Out"/>
+		<action name="printsingledeliverymode1Outopc" class="operationCenterAction" method="printSingleDeliveryMode1Out"/>
+		<action name="findskusize" class="createPickingListAction" method="findSkuSize"/>
+		<action name="generpickinglistgroup" class="createPickingListAction" method="generPickinglistGroup"/>
+		<action name="generpickinglistgroupopc" class="operationCenterAction" method="generPickinglistGroup"/>
+		<action name="autogenerpickinglistgroup" class="createPickingListAction" method="autoGenerPickinglistGroup"/>
+		<action name="autogenerpickinglistgroupopc" class="operationCenterAction" method="autoGenerPickinglistGroup"/>
+		<!-- 单件核对、分拣核对、二次分拣意见 fanht S -->
+		<action name="searchCheckList" class="salesChecksingleAction" method="searchCheckList"/>
+		<!-- O2O单件核对、分拣核对、二次分拣意见 fanht S -->
+		<action name="searchCheckListOtwoo" class="salesChecksingleAction" method="searchCheckListOtwoo"/>
+		<!-- 多件核对后置打印 -->
+		<action name="searchPickingList" class="salesChecksingleAction" method="searchPickingList"/>
+		<action name="searchPickingList2" class="salesChecksingleAction" method="searchPickingList2"/>
+		<action name="searchPickingListByBig" class="salesChecksingleAction" method="searchPickingListByBig"/>
+		<action name="searchO2OQSPickingList" class="salesChecksingleAction" method="searchO2OQSPickingList"/>
+		<action name="findPickingDetail" class="salesChecksingleAction" method="findPickingDetail"/>
+		<action name="findStarbucksIcePackage" class="salesChecksingleAction" method="findStarbucksIcePackage"/>
+		<action name="findStarbucksDetail" class="salesChecksingleAction" method="findStarbucksDetail"/>
+		<action name="findAllPostCheckInfo" class="salesChecksingleAction" method="findAllPostCheckInfo"/>
+		<action name="findPickingListForVerifyByCodeId" class="salesChecksingleAction" method="findPickingListForVerifyByCodeId"/>
+		
+		<!-- <action name="findStaByPinkId" class="salesChecksingleAction" method="findStaByPinkId"/>
+		<action name="findStaLineByStaId" class="salesChecksingleAction" method="findStaLineByStaId"/>
+		<action name="findTrankNoByStaId" class="salesChecksingleAction" method="findTrankNoByStaId"/> -->
+		<!-- 
+		<action name="searchCheckGiftList" class="salesChecksingleAction" method="searchCheckGiftList"/> -->
+		<action name="searchCheckListopc" class="operationCenterAction" method="searchCheckList"/>
+		<action name="searchCheckListBycenid" class="operationCenterAction" method="searchCheckListBycenid"/>
+		<action name="checkSingleGetOcpStalByPl" class="salesChecksingleAction" method="getOcpStalByPl"/>
+		<action name="checkSingleCheckStaList" class="salesChecksingleAction" method="checkStaList" />
+		<action name="checkSingleCheckStaListOtwoo" class="salesChecksingleAction" method="checkStaListOtwoo" />
+		<!-- 相关单据号打印 -->
+		<action name="printSlipCode" class="salesChecksingleAction" method="printSlipCode" />
+		<action name="checkSnStatus" class="salesChecksingleAction" method="checkSnStatus" />
+		<action name="getStaIdBySnStv" class="salesChecksingleAction" method="getStaIdBySnStv" />
+		<action name="cardBindingStv" class="salesChecksingleAction" method="cardBindingStv" />
+		<action name="getPickCheckList" class="salesChecksingleAction" method="getPickCheckList" />
+		<action name="checkStvBinding" class="salesChecksingleAction" method="checkStvBinding" />
+		<action name="activateCardStatus" class="salesChecksingleAction" method="activateCardStatus" />
+		<action name="formatCardToSn" class="salesChecksingleAction" method="formatCardToSn" />
+		<action name="getO2OQSPickCheckList" class="salesChecksingleAction" method="getO2OQSPickCheckList" />
+		<action name="getO2OQSPackCheckList" class="salesChecksingleAction" method="getO2OQSPackCheckList" />
+		<action name="getPickingListPackageByPlId" class="salesChecksingleAction" method="getPickingListPackageByPlId" />
+		<action name="getPickCheckListopc" class="operationCenterAction" method="getPickCheckList" />
+		<action name="staSlipCodeCheck" class="salesChecksingleAction" method="staSlipCodeCheck" />
+		<action name="staSlipCodeCheckBig" class="salesChecksingleAction" method="staSlipCodeCheckBig" />
+		<action name="staTrackingNoCheck" class="salesChecksingleAction" method="staTrackingNoCheck" />
+		<action name="plCodeCheck" class="salesChecksingleAction" method="plCodeCheck" />
+		<action name="staSortingCheck" class="salesChecksingleAction" method="staSortingCheck" />
+		<!-- 大件核对出库 -->
+		<action name="staSortingCheckAndsalesStaOutBoundHand" class="salesChecksingleAction" method="staSortingCheckAndsalesStaOutBoundHand" />
+        
+		<action name="o2oqsSortingCheck" class="salesChecksingleAction" method="o2oqsSortingCheck" />
+		<action name="updateisCheckQty" class="salesChecksingleAction" method="updateisCheckQty" />
+		<action name="checkisCheckQty" class="salesChecksingleAction" method="checkisCheckQty" />
+		<action name="staAddTrankNo" class="salesChecksingleAction" method="staAddTrankNo" />
+		<action name="staLineInfoByStaId" class="salesChecksingleAction" method="staLineInfoByStaId" />
+		<action name="pickingListForPickOut" class="salesChecksingleAction" method="findPickingListForPickOut" />
+		<action name="pickingListForPickOutopc" class="operationCenterAction" method="findPickingListForPickOut" />
+		<action name="pickingListForPickOutbywid" class="operationCenterAction" method="findPickingListForPickOutbywid" />
+		<action name="pickingListForPickOutbycode" class="operationCenterAction" method="findPickingListForPickOutbycode" />
+		<action name="findStaLineByPickingId" class="salesChecksingleAction" method="findStaLineByPickingId" />
+		<action name="findStaLineByPickingId2" class="salesChecksingleAction" method="findStaLineByPickingId2" />
+		
+		<action name="findStaLineBySuggestion" class="salesChecksingleAction" method="findStaLineBySuggestion" />
+		
+		<action name="findRuleCodeByPickingListId" class="salesChecksingleAction" method="findRuleCodeByPickingListId" />
+		<action name="twicePickingByBarcode" class="salesChecksingleAction" method="twicePickingByBarcode" />
+		<action name="findTwicePickingInfoByPickingId" class="salesChecksingleAction" method="findTwicePickingInfoByPickingId" />
+		<action name="resetBoxAndCollection" class="salesChecksingleAction" method="resetBoxAndCollection" />
+		
+		<action name="findStaLineByPickingIdDiek" class="salesChecksingleAction" method="findStaLineByPickingIdDiek" />
+		<action name="findStaLineByPickingIdopc" class="operationCenterAction" method="findStaLineByPickingId" />
+		<action name="findStaLineByPickingIdFast" class="operationCenterAction" method="findStaLineByPickingIdFast" />
+		<action name="checkPinkingListByCode" class="salesChecksingleAction" method="checkPinkingListByCode" />
+		<action name="checkPinkingListByCodeopc" class="operationCenterAction" method="checkPinkingListByCode" />
+		<action name="creatStvCheckImg" class="salesChecksingleAction" method="creatStvCheckImg" />
+		<!-- 单件核对、分拣核对、二次分拣意见 fanht E -->
+		<action name="skuCategoryTree" class="skuCategoryMainAction" method="skuCategoryTree"/>
+		<!-- 大件复核称重 /单件 -->
+		<action name="checkSingleStaAndSalesStaOutbound" class="salesChecksingleAction" method="checkSingleStaAndSalesStaOutbound" />
+		<action name="saveNewSkuCategory" class="skuCategoryMainAction" method="saveNewSkuCategory"/>
+		<action name="updateSkuCategory" class="skuCategoryMainAction" method="updateSkuCategory"/>
+		<action name="removeCategoryById" class="skuCategoryMainAction" method="removeCategoryById"/>
+		<action name="queryStaStatusByCode" class="pickingListAction" method="queryStaStatusByCode"></action>
+		<!-- 秒杀商品维护 -->
+		<action name="getskuinfobybarcode" class="secKillSkuMaintainAction" method="getSkuInfoByBarCode"/>
+		<action name="addseckillsku" class="secKillSkuMaintainAction" method="addSeckillSku"/>
+		<action name="selectallseckillsku" class="secKillSkuMaintainAction" method="selectAllSecKillSkuByOuId"/>
+		<action name="deleteseckillskubyid" class="secKillSkuMaintainAction" method="deleteSecKillSkuById"/>
+		<!-- 配货清单打印 -->
+		<action name="getallpickinglist" class="printPickingListAction" method="getAllPickingList"/>
+		<action name="getAllPickingQuery" class="printPickingListAction" method="getAllPickingQuery"/>
+		<action name="findAllPickingList" class="printPickingListAction" method="findAllPickingList"/>
+		<action name="getallpickingliststatus" class="printPickingListAction" method="getAllPickingListStatus"/>
+		<action name="getpickinglistbycode" class="printPickingListAction" method="getPickingListByCode"/>
+		<action name="detailstalist" class="printPickingListAction" method="detailStaList"/>
+		<action name="findstabyslipcodeandpid" class="printPickingListAction" method="findStaBySlipCodeAndPid"/>
+		<action name="updatetransnobyslipcode" class="printPickingListAction" method="updateTransNoBySlipCode"/>
+		<action name="updatesicklistwhstatus" class="printPickingListAction" method="updatePickListWhStatus" />
+		<!-- 批量 更新配货单状态 -->
+		<action name="batchupdatepicklistwhstatus" class="printPickingListAction" method="batchUpdatePickListWhStatus" />
+		
+		<action name="startPrintPicklist" class="printPickingListAction" method="startPrintPicklist" />
+		<action name="updateStaStatusToCreate" class="printPickingListAction" method="updateStaStatusToCreate" />
+		<action name="shouPick" class="printPickingListAction" method="shouPick" />
+		
+		<!-- 作业单备份还原 -->
+		<action name="updateStaRestore" class="printPickingListAction" method="updateStaRestore" />
+		<!-- 秒杀订单核对出库交接   -->
+		<action name="getallseckillpickinglistbystatus" class="checkOutboundAction" method="getAllSecKillPickingListByStatus"/>
+		<action name="getstapickinglistpgindex" class="checkOutboundAction" method="getStaPickingListPgIndex"/>
+		<action name="getcancelstalistpgindex" class="checkOutboundAction" method="getCancelStaListPgIndex"/>
+		<action name="deletestabyid" class="checkOutboundAction" method="deleteStaById"/>
+		<action name="seckillgenerhandoverlist" class="checkOutboundAction" method="secKillGenerHandOverList"/>
+		<action name="generhandoverlist" class="checkOutboundAction" method="generHandoverlist"/>
+		<action name="gethandoveridbypickinglistid" class="checkOutboundAction" method="getHandoverIdByPickinglistId"/>
+		<action name="findcheckoutpickingbycode" class="checkOutboundAction" method="findCheckoutPickingByCode"/>
+		<action name="findnikevmiinbound" class="nikeVMIInboundAction" method="findNikeVMIInbound"/>
+		<action name="getwarehousebycenter" class="createPickingListAction" method="getWarehouseByCenter"/>
+		<action name="newwhreplenish" class="warehouseReplenishStockAction" method="newWhReplenish"/>
+		<action name="findallwhreplenish" class="warehouseReplenishStockAction" method="findAllWhReplenish"/>
+		<action name="cancelreplenishorder" class="warehouseReplenishStockAction" method="cancelReplenishOrder"/>
+		
+		<action name="createpicklistbyallsta" class="staInfoInputExportAction" method="createPickListByAllSta"/>
+		
+		<!-- 特殊处理订单重新处理 查询   -->
+		<action name="getStaOrderList" class="speHanOrderAgainHanAcion" method="getStaOrderList" />
+		
+        <!-- SN新建json   -->
+		<action name="createSn" class="snlistbycodeaction" method="createSn"/>
+		<action name="getSkuBycode" class="snlistbycodeaction" method="getSkuBycode"/>
+		<action name="snsimportHand" class="snlistbycodeaction" method="snsimportHand"/>
+		<action name="queryEntryIsOpc" class="handOverListQueryAction" method="queryEntryIsOpc"></action>
+		<!-- PDA操作日志 -->
+		<action name="getPdaLogList" class="pdaLogAction" method="getPdaLogList"/>
+		<action name="findPdaLogLine" class="pdaLogAction" method="findPdaLogLine"/>
+		<action name="findpdahandoverlogline" class="pdaLogAction" method="findPdaHandOverLogLine"/>
+		<action name="geterrorpdaloglist" class="pdaLogAction" method="getErrorPdaLogList"/>
+		<action name="updatepdaorderstatus" class="pdaLogAction" method="updatePdaOrderStatus"/>
+		<!-- 运营中心OPC -->
+	    <action name="getScanRecordBatchCode" class="scanSkuRecordAction" method="getScanRecordBatchCode"/>
+	    <action name="findScanRecords" class="scanSkuRecordAction" method="findScanRecords"/>
+	    <action name="saveScanRecords" class="scanSkuRecordAction" method="saveScanRecords"/>
+	    <action name="selectallseckillskuopc" class="operationCenterAction" method="selectAllSecKillSkuByOuId"/>
+	    <action name="selectallpackageskuopc" class="operationCenterAction" method="selectAllPackageSkuByOuId"/>
+	    <action name="getallpickinglistbywid" class="operationCenterAction" method="getAllPickingListBywid"/>
+	    <action name="getallseckillpickinglistbystatusopc" class="operationCenterAction" method="getAllSecKillPickingListByStatus"/>
+	    <action name="findwarehousebypickid" class="operationCenterAction"  method="findwarehousebypickid"/>
+		<action name="updateopercenterinfo" class="operationCenterAction" method="updateOperCenterInfo"/>
+		<action name="findstaforpickingbymodelopc" class="operationCenterAction" method="findStaForPickingByModelopc"/>
+		<action name="generpickinglistbystaopc" class="operationCenterAction" method="generPickingListByStaOpc"/>
+		<action name="selectbyopc"  class="operationCenterAction"  method="selectByopc"/>
+		<action name="updateopercenterinfo" class="operationCenterAction" method="updateOperCenterInfo"/>
+		<action name="checkoperationunit" class="operationCenterAction" method="checkoperationunit"/>
+		<action name="geterrorpdalogdetaillist" class="pdaLogAction" method="getErrorPdaLogDetailList"/>
+		<action name="updateerrorpdalinelocation" class="pdaLogAction" method="updateErrorPdaLineLocation"/>
+		<action name="addpackagesku" class="packageSkuMaintainAction" method="addPackageSku"/>
+		<action name="deletepackageskubyid" class="packageSkuMaintainAction" method="deletePackageSkuById"/>
+		<action name="selectallpackagesku" class="packageSkuMaintainAction" method="selectAllPackageSku"/>
+		<action name="getpackageskuinfobybarcode" class="packageSkuMaintainAction" method="getPackageSkuInfoByBarCode"/>
+		<action name="getsinglecheckorder" class="salesChecksingleAction" method="getSingleCheckOrder"/>
+		<action name="invcheckexecute" class="inventoryCheckHandelAction" method="invCheckExecute"/>
+		<action name="findBarcodeBySn" class="salesChecksingleAction" method="findBarcodeBySn"/>
+		<action name="findpaperSkuByBarCode" class="salesChecksingleAction" method="findpaperSkuByBarCode"/>
+		
+		<action name="findsnbyskuid" class="salesChecksingleAction" method="findSnBySkuId"/>
+		<action name="findCancelCountByPickId" class="salesChecksingleAction" method="findCancelCountByPickId"/>
+		
+		<!-- 配货清单流程 bin.hu -->
+		<action name="getWarehousestatus" class="warehouseBaseinfoAction" method="getWarehouseStatus"/>
+		
+		
+		<action name="getBiWarehouseStatus" class="warehouseBaseinfoAction" method="getBiWarehouseStatus"/>
+		<action name="findPickingListDieking" class="salesChecksingleAction" method="findPickingListDieking" />
+		<action name="findPickingListSeparation" class="salesChecksingleAction" method="findPickingListSeparation" />
+		<action name="addWhPlDiffLine" class="printPickingListAction" method="addWhPlDiffLine" />
+		<action name="findWhPlDillLineByPid" class="printPickingListAction" method="findWhPlDillLineByPid" />
+		<!-- NIKE礼品卡打印 -->
+		<action name="getPrintGift" class="printGiftAction" method="getPrintGift" />
+		<action name="getPrintGiftLine" class="printGiftAction" method="getPrintGiftLine" />
+		<action name="checkWhPlDillLineByPid" class="printPickingListAction" method="checkWhPlDillLineByPid" />
+		<action name="selectallspecialsku" class="specialSkuMainTainAction" method="selectAllSpecialSku" />
+		<action name="addspecialskubysuppliercode" class="specialSkuMainTainAction" method="addSpecialSkuBySupplierCode" />
+		<action name="deletespecialskubyid" class="specialSkuMainTainAction" method="deleteSpecialSkuById"/>
+		<action name="deleteWhPlDillLineByPid" class="printPickingListAction" method="deleteWhPlDillLineByPid" />
+		<action name="donePickListWhDieking" class="printPickingListAction" method="donePickListWhDieking" />
+		<action name="findWhPlDillLineByPidS" class="printPickingListAction" method="findWhPlDillLineByPidS" />
+		<action name="findWhPlDillLineByPidSD" class="printPickingListAction" method="findWhPlDillLineByPidSD" />
+		<!-- 残次退仓维护cheng.su -->
+		<action name="findWarehouseImperfectl" class="warehouseBaseinfoAction" method="findWarehouseImperfectl"/>
+		<action name="findWarehouseImperfectlList" class="warehouseBaseinfoAction" method="findWarehouseImperfectlList"/>
+		<action name="findWarehouseImperfectlLineList" class="warehouseBaseinfoAction" method="findWarehouseImperfectlLineList" />
+		<action name="findBiChanneImperfectlList" class="biChannelInfoAction" method="findBiChanneImperfectlList" />
+		<action name="findBiChanneImperfectlLineList" class="biChannelInfoAction" method="findBiChanneImperfectlLineList" />
+		<!-- 库位相关设置 -->
+		<action name="savePdaLocationType" class="warehouseBaseinfoAction" method="savePdaLocationType"/>
+	    <action name="queryLocationType" class="warehouseBaseinfoAction" method="queryLocationType"/>
+	    <action name="updatePdaLocationType" class="warehouseBaseinfoAction" method="updatePdaLocationType"/>
+	    <action name="delPdaLocationType" class="warehouseBaseinfoAction" method="delPdaLocationType"/>
+	    <action name="queryLocationTypeList" class="warehouseBaseinfoAction" method="queryLocationTypeList"/>
+	    <action name="queryLocationTypeBinding" class="warehouseBaseinfoAction" method="queryLocationTypeBinding"/>
+	    <action name="queryZoonSort" class="warehouseBaseinfoAction" method="queryZoonSort"/>
+	    <action name="commitZoon" class="warehouseBaseinfoAction" method="commitZoon"/>
+	    <action name="queryLocationTypeByNameCodeOuId" class="warehouseBaseinfoAction" method="queryLocationTypeByNameCodeOuId"/>
+	    <action name="savePdaLocationTypeBinding" class="warehouseBaseinfoAction" method="savePdaLocationTypeBinding"/>
+	    <action name="delPdaLocationTypeBinding" class="warehouseBaseinfoAction" method="delPdaLocationTypeBinding"/>
+	    <action name="savePdaLocationTypeBindingImport" class="warehouseBaseinfoAction" method="savePdaLocationTypeBindingImport">
+	    			<!-- <result>/frame/vmi-inbound-sta-import-result.jsp</result> -->
+	    			<result>/frame/binding-import-result.jsp</result>
+	    </action>
+	    
+	     <action name="saveQsSkuBindingImport" class="warehouseBaseinfoAction" method="saveQsSkuBindingImport">
+	    			<result>/frame/binding-qssku-import-result.jsp</result>
+	    </action>
+	    
+	    <action name="saveSkuCountryOfOriginImport" class="warehouseBaseinfoAction" method="saveSkuCountryOfOriginImport">
+	    			<result>/frame/sku-country-origin-import-result.jsp</result>
+	    </action>
+	    
+	    <action name="queryLocationVolumeTypeList" class="warehouseBaseinfoAction" method="queryLocationVolumeTypeList"/>
+	     <action name="queryLocationTypeNameList" class="warehouseBaseinfoAction" method="queryLocationTypeNameList"/>
+	    <action name="querySkuList" class="warehouseBaseinfoAction" method="querySkuList"/>
+	     <action name="savePdaSkuLocTypeCapeBindingImport" class="warehouseBaseinfoAction" method="savePdaSkuLocTypeCapeBindingImport">
+	    			<result>/frame/vmi-inbound-sta-import-result.jsp</result>
+	    </action>
+		<action name="delPdaSkuLocTypeCapBinding" class="warehouseBaseinfoAction" method="delPdaSkuLocTypeCapBinding"/>
+		<action name="savePdaSkuLocTypeCapBinding" class="warehouseBaseinfoAction" method="savePdaSkuLocTypeCapBinding"/>
+		
+		
+		<!-- 渠道信息管理bin,hu -->
+		<action name="findisspecial" class="biChannelInfoAction" method="findIsSpecial" />
+		
+		
+		<action name="findIsSpecialBySku" class="biChannelInfoAction" method="findIsSpecialBySku" />
+		<action name="findBiCustomer" class="biChannelInfoAction" method="findBiCustomer" />
+		<action name="findBiChannelList" class="biChannelInfoAction" method="findBiChannelList" />
+		
+		<action name="findBiChannelListByType" class="biChannelInfoAction" method="findBiChannelListByType" />
+		<action name="findBiChannelListByTypeAndExpT" class="biChannelInfoAction" method="findBiChannelListByTypeAndExpT" />
+		<action name="getBiChannelById" class="biChannelInfoAction" method="getBiChannelById" />
+		
+		<action name="getByName" class="purchaseInboundImperfectAction" method="getByName" />
+		<action name="getByImperfect" class="purchaseInboundImperfectAction" method="getByImperfect" />
+		<action name="getByImperfectLine" class="purchaseInboundImperfectAction" method="getByImperfectLine" />
+		<action name="getBiChannelByCode" class="biChannelInfoAction" method="getBiChannelByCode" />
+		<action name="getBiChannelSpecialActionByCidTypePackingPage" class="biChannelInfoAction" method="getBiChannelSpecialActionByCidTypePackingPage" />
+		<action name="getBiChannelSpecialActionByCidTypeExpressBill" class="biChannelInfoAction" method="getBiChannelSpecialActionByCidTypeExpressBill" />
+		<action name="updateBiChannel" class="biChannelInfoAction" method="updateBiChannel" />
+		<action name="addBiChannel" class="biChannelInfoAction" method="addBiChannel" />
+		<action name="addImperfect" class="biChannelInfoAction" method="addImperfect" />
+		<action name="addImperfectStv" class="purchaseInboundImperfectAction" method="addImperfectStv" />
+		
+		<action name="printSkuImperfectStv" class="purchaseInboundImperfectAction" method="printSkuImperfectStv" />
+		
+		<action name="addImperfectLine" class="biChannelInfoAction" method="addImperfectLine" />
+		
+		<action name="checkBiChannelByCodeOrName" class="biChannelInfoAction" method="checkBiChannelByCodeOrName" />
+		<action name="findBiChannelWhRefList" class="biChannelInfoAction" method="findBiChannelWhRefList" />
+		<action name="findChannelWhRefListByChannelId" class="biChannelInfoAction" method="findChannelWhRefListByChannelId" />
+		<action name="updateChannelWhRef" class="biChannelInfoAction" method="updateChannelWhRef" />
+		
+		<action name="saveSingelChannelsMaintain" class="biChannelCombineRefAction" method="saveSingelChannelsMaintain" />
+		<action name="saveMoreChannelsMaintain" class="biChannelCombineRefAction" method="saveMoreChannelsMaintain" />
+		<action name="updateSingelChannelsMaintain" class="biChannelCombineRefAction" method="updateSingelChannelsMaintain" />
+		<action name="updateMoreChannelsMaintain" class="biChannelCombineRefAction" method="updateMoreChannelsMaintain" />
+		<!-- 电子面单可用运单号维护xiaolong.fei -->
+		<action name="findProvide" class="transImportAction" method="findProvide" />
+		<!-- 物流省份编码维护xiaolong.fei -->
+		<action name="findProvince" class="transImportAction" method="findProvince" />
+		<action name="deleteProvince" class="transImportAction" method="deleteProvince" />
+		<!-- 合并发货渠道信息维护xiaolong.fei -->
+		<action name="findChannelRef" class="biChannelCombineRefAction" method="findChannelRef" />
+		<action name="findChildChannelRef" class="biChannelCombineRefAction" method="findChildChannelRef" />
+		<!-- 配货规则维护 -->
+		<action name="findAllDistributionRule" class="distributionRuleAction" method="findAllDistributionRule" />
+		<action name="deleteDistributionRuleById" class="distributionRuleAction" method="deleteDistributionRuleById" />
+		<action name="getDistributionRuleCondition" class="distributionRuleAction" method="getDistributionRuleCondition" />
+		<action name="getDistributionRuleConditionDetail" class="distributionRuleAction" method="getDistributionRuleConditionDetail" />
+		<action name="checkRuleNameIsExist" class="distributionRuleAction" method="checkRuleNameIsExist" />
+		<action name="newDistributionRuleAndDetail" class="distributionRuleAction" method="newDistributionRuleAndDetail" />
+		<action name="getDistributionRuleConditionCurrentDetail" class="distributionRuleAction" method="getDistributionRuleConditionCurrentDetail" />
+		<action name="updateDistributionRuleAndDetail" class="distributionRuleAction" method="updateDistributionRuleAndDetail" />
+		<action name="getDistributionRuleConditionCurrentDetailPagination" class="distributionRuleAction" method="getDistributionRuleConditionCurrentDetailPagination" />
+		
+		<!-- 渠道快递维护  查询物流服务xiaolong.fei -->
+		<action name="findTransService" class="transportServiceAction" method="findTransService" />
+		<action name="findTransServiceById" class="transportServiceAction" method="findTransServiceById" />
+		<action name="findTransServiceByCode" class="transportServiceAction" method="findTransServiceByCode" />
+		<action name="findTransServiceAreaById" class="transportServiceAction" method="findTransServiceAreaById" />
+		<action name="findTransArea" class="transAreaGroupAction" method="findTransArea" />
+		<action name="updateFindTransArea" class="transAreaGroupAction" method="updateFindTransArea" />
+		<action name="updateAreaGroup" class="transAreaGroupAction" method="updateAreaGroup" />
+		<action name="saveMaTransport" class="transAreaGroupAction" method="saveMaTransport" />
+		<action name="findSkuTag" class="skuTagAction" method="findSkuTag" />
+		<action name="saveTransRole" class="transRoleAction" method="saveTransRole" />
+		<action name="findTransRole" class="transRoleAction" method="findTransRole" />
+		<action name="findSkuRef" class="transRoleAction" method="findSkuRef" />
+		<action name="findSkuCateRef" class="transRoleAction" method="findSkuCateRef" />
+		<action name="findSkuTagRef" class="transRoleAction" method="findSkuTagRef" />
+		<action name="findTransRoleWH" class="transRoleAction" method="findTransRoleWH" />
+		<action name="saveDefaultTransRole" class="transRoleAction" method="saveDefaultTransRole" />
+		<action name="afterimportprint" class="importPrintAction" method="afterImportPrint"/>
+		<action name="findTransRoleAccord" class="transRoleAccordAction" method="findTransRoleAccord"/>
+		<action name="saveTransRoleAccord" class="transRoleAccordAction" method="saveTransRoleAccord" />
+		
+		<!-- EMS关键字维护 -->
+		<action name="saveKeyWord" class="transRoleAction" method="saveKeyWord" />
+		<action name="queryKeyWord" class="transRoleAction" method="queryKeyWord" />
+		<action name="queryKeyWordForChannlId" class="transRoleAction" method="queryKeyWordForChannlId" />
+		<!-- 商品标签维护 -->
+		<action name="findSkuTagByPagination" class="skuTagAction" method="findSkuTagByPagination" />
+		<action name="findSkuTagExistByCode" class="skuTagAction" method="findSkuTagExistByCode"/> 
+		<action name="saveSkuTag" class="skuTagAction" method="saveSkuTag"/>
+		<action name="findAllSkuByTagId" class="skuTagAction" method="findAllSkuByTagId"/>
+		<action name="findAllSkuRef" class="skuTagAction" method="findAllSkuRef"/>
+		<action name="findSkuTagByCode" class="skuTagAction" method="findSkuTagByCode"/>
+		<!-- 仓库可用快递维护 -->
+		<action name="findAllTransRef" class="warehouseBaseinfoAction" method="findAllTransRef"/>
+		<!-- 后置打印 -->
+		<action name="findAllChannelRefByOuId" class="channelPostPrintConfAction" method="findAllChannelRefByOuId"/>
+		<action name="updatePostPrintConf" class="channelPostPrintConfAction" method="updatePostPrintConf"/>
+		<action name="findAllPostPrintConf" class="channelPostPrintConfAction" method="findAllPostPrintConf"/>
+		<!-- 自动配货 -->
+		<action name="findAutoPLRoleByPagination" class="autoPickingListRoleAction" method="findAutoPLRoleByPagination"/>
+		<action name="findAutoPLRoleExistByCode" class="autoPickingListRoleAction" method="findAutoPLRoleExistByCode"/> 
+		<action name="saveAutoPLRole" class="autoPickingListRoleAction" method="saveAutoPLRole"/> 
+		<action name="findAutoPLRoleByCode" class="autoPickingListRoleAction" method="findAutoPLRoleByCode"/> 
+		<action name="findAllPLRoleDetailByRoleId" class="autoPickingListRoleAction" method="findAllPLRoleDetailByRoleId"/> 
+		<action name="saveAutoPLRoleDetail" class="autoPickingListRoleAction" method="saveAutoPLRoleDetail"/> 
+		<action name="findAllChannelGroupByOuId" class="channelGroupAction" method="findAllChannelGroupByOuId"/> 
+		<action name="findChannelGroupByOuId" class="channelGroupAction" method="findChannelGroupByOuId"/> 
+		<action name="findChannelGroupExistByCode" class="channelGroupAction" method="findChannelGroupExistByCode"/> 
+		<action name="findChannelGroupExistByName" class="channelGroupAction" method="findChannelGroupExistByName"/> 
+		<action name="saveChannelGroup" class="channelGroupAction" method="saveChannelGroup"/> 
+		<action name="deleteChannelGroup" class="channelGroupAction" method="deleteChannelGroup"/> 
+		<action name="findChannelGroupByCode" class="channelGroupAction" method="findChannelGroupByCode"/> 
+		<action name="saveChannelRef" class="channelGroupAction" method="saveChannelRef"/> 
+		<action name="findAllChannelRefByGroupId" class="channelGroupAction" method="findAllChannelRefByGroupId"/> 
+		<action name="findAllChannelGroupByCIdAndOuId" class="channelGroupAction" method="findAllChannelGroupByCIdAndOuId"/>  
+		<action name="findTransportatorList" class="autoPickingListRoleAction" method="findTransportatorList"/>
+		<action name="findTransportatorListAll" class="autoPickingListRoleAction" method="findTransportatorListAll"/>
+		<action name="findTransportatorListByAll" class="autoPickingListRoleAction" method="findTransportatorListByAll"/>
+		
+		<!-- 配货清单自动创建配置 -->
+		<action name="getAotoPlConfig" class="warehouseBaseinfoAction" method="getAotoPlConfig"/>
+		<action name="findAutoPickingListRoleList" class="warehouseBaseinfoAction" method="findAutoPickingListRoleList"/>
+		<action name="checkBiChannelRefByBiChannel" class="biChannelInfoAction" method="checkBiChannelRefByBiChannel" />
+		<!-- 预包装商品 -->
+		<action name="getallprepackagedsku" class="prePackagedRefMaintainAction" method="getAllPrePackagedSku" />
+		<action name="addPrepackagedSkuByBarCode" class="prePackagedRefMaintainAction" method="addPrepackagedSkuByBarCode" />
+		<action name="deletePrepackagedSkuByMainSkuId" class="prePackagedRefMaintainAction" method="deletePrepackagedSkuByMainSkuId" />
+		<action name="insertPrepackagedSkuBySkuIdAndSubBarCode" class="prePackagedRefMaintainAction" method="insertPrepackagedSkuBySkuIdAndSubBarCode" />
+		<action name="deletePrepackagedSkuByMainSkuIdAndSubSkuId" class="prePackagedRefMaintainAction" method="deletePrepackagedSkuByMainSkuIdAndSubSkuId" />
+		<action name="getSkuByBarCode" class="prePackagedRefMaintainAction" method="getSkuByBarCode" />
+		<action name="deleteEmptyPrepackagedSkuByMainSkuId" class="prePackagedRefMaintainAction" method="deleteEmptyPrepackagedSkuByMainSkuId" />
+		<action name="findsubskubyidandou" class="prePackagedRefMaintainAction" method="findSubSkuByIdAndOu" />
+		<action name="findprepackagedskubybarcode" class="prePackagedRefMaintainAction" method="findPrePackagedSkuByBarCode" />
+		<!-- slipCode -->
+		<action name="getByslipCode" class="salesDispatchListAction" method="getByslipCode" />
+		<action name="savePickNode" class="createPickingListAction" method="savePickNode" />
+		<!-- 退货原因查询 -->
+		<action name="findAllReturnGoods" class="returnReasonTypeAction" method="findAllReturnGoods" />
+		<action name="findSlipCodeAndPickingListCodeByStaCode" class="salesChecksingleAction" method="findSlipCodeAndPickingListCodeByStaCode" />
+		<action name="findWareHouseById" class="salesChecksingleAction" method="findWareHouseById" />
+		<action name="findSkuRfidByBarCode" class="salesChecksingleAction" method="findSkuRfidByBarCode" />
+		<action name="findRfidResult" class="salesChecksingleAction" method="findRfidResult" />
+		<!-- 根据stacode 获取相关单据号和配货清单编码 -->
+		<action name="findSlipCodeByid" class="salesChecksingleAction" method="findSlipCodeByid" />
+		 <!--预定义入库关闭/取消  根据作业单Id修改状态和完成时间  -->
+		 <action name="updateTypeAndFinishTimeByid" class="warehousePredefinedAction" method="updateTypeAndFinishTimeByid" />
+		 <!--新增秒杀订单计数器功能维护  查询-->
+		 <action name="findSecKillMaintain" class="addCounterMaintainAction" method="findSecKillMaintain" />
+		 <!--新增秒杀订单计数器功能维护  修改 -->
+		 <action name="updateOptionValue" class="addCounterMaintainAction" method="updateOptionValue" />
+		  <!-- 获取物流对账信息导出的统计总数量 -->
+		  <action name="findDeliveryInfoCount" class="deliveryInfoExportAction" method="findDeliveryInfoCount" />
+	     <!--配货批次分配 分页查询  -->
+	     <action name="findBatchAllocation" class="printPickingListAction" method="findBatchAllocation" />
+	     <!-- 退货申请 -->
+  		 <action name="returnApplicationList" class="returnApplication" method="findReturnAppList" />
+  		 <action name="adPackageList" class="adPackageReturnAction" method="adPackageList" />
+  		 <action name="adPackageDetail" class="adPackageReturnAction" method="adPackageDetail" />
+  		 <action name="adPackageLog" class="adPackageReturnAction" method="adPackageLog" />
+  		 <action name="adPackageCommit" class="adPackageReturnAction" method="adPackageCommit" />
+  		 
+  		 <action name="getSkuByBarCodeAndReturnInfo" class="returnApplication" method="getSkuByBarCodeAndReturnInfo" />
+  		 <action name="getSkuByBarCodeAndReturnInfo1" class="returnApplication" method="getSkuByBarCodeAndReturnInfo1" />
+  		 
+  		 <action name="addReturnApplication" class="returnApplication" method="addReturnApplication" />
+  		 <action name="fingReturnSkuByRaId" class="returnApplication" method="fingReturnSkuByRaId" />
+  		 <action name="findReturnListByParam" class="returnApplication" method="findReturnListByParam" />
+  		 <action name="returnApplicationUpdate" class="returnApplication" method="returnApplicationUpdate" />
+  		  
+	  	<!-- 获取商品修改日志列表 -->
+		<action name="findModifyLogList" class="skuModifyLogAction" method="findModifyLogList" />
+		<action name="getallshopstore" class="shopStoreInfoAction" method="getAllShopStore" />
+		<action name="deleteshopstorebyid" class="shopStoreInfoAction" method="deleteShopStoreById" />
+		<action name="editshopstorebycode" class="shopStoreInfoAction" method="editShopStoreByCode" />
+		<action name="addnewshopstore" class="shopStoreInfoAction" method="addNewShopStore" />
+		<action name="getallshopstoreforoption" class="shopStoreInfoAction" method="getAllShopStoreForOption" />
+		
+		<action name="getAllRuleName" class="shopStoreInfoAction" method="getAllRuleName" />
+		
+		<!--快递雷达 汇总信息查询  -->
+		<action name="findExpressInfoCount" class="expressOocRadarAction" method="findExpressInfoCount" />
+		<!--统计汇总信息  -->
+		<action name="getExpreessTotal" class="expressOocRadarAction" method="getExpreessTotal" />
+		<!--初始化省  -->
+		<action name="getExpressProvince" class="expressOocRadarAction" method="getExpressProvince" />
+		<!--动态加载列名  getExpreessDetailTotal-->
+		<action name="findExpressStatusInfo" class="expressOocRadarAction" method="findExpressStatusInfo" />
+		<!--统计省列表-->
+		<action name="findAllExpressExceptionInfo" class="expressOocRadarAction" method="findAllExpressExceptionInfo" />
+		<!-- 初始化仓库 -->
+		<action name="getexpressWarehouse" class="expressOocRadarAction" method="getexpressWarehouse" />
+		<!--初始化店铺 -->
+		<action name="getExpressOwner" class="expressOocRadarAction" method="getExpressOwner" />
+		<!--快递雷达 汇总详细信息查询  -->
+		<action name="findExpressDetailList" class="expressOocRadarAction" method="findExpressDetailList" />
+		<!-- 快递雷达 start -->
+		<action name="findStatusCodeList" class="expressStatusCodeAction" method="findStatusCodeList" />
+		<action name="findSysRouteStatusCodeList" class="sysRouteStatusCodeAction" method="findSysRouteStatusCodeList" />
+		
+		<action name="returnpackagehand" class="returnPackageAction" method="returnPackageHand" />
+		<action name="queryreturnpackagehand" class="returnPackageAction" method="queryReturnPackageHand" />
+		<action name="queryWarehouse" class="returnPackageAction" method="queryWarehouse" />
+		<action name="printReturnPackage" class="returnPackageAction" method="printReturnPackage" />
+		
+		<action name="findAreaList" class="radarAreaAction" method="findAreaList" />
+		<action name="addRadarArea" class="radarAreaAction" method="addRadarArea" />
+		<action name="delRadarArea" class="radarAreaAction" method="delRadarArea" />
+		<action name="findPhyWarehouseByLpcode" class="expressOocRadarAction" method="findPhyWarehouseByLpcode" />
+		<action name="findRadarAreaProvince" class="expressOocRadarAction" method="findRadarAreaProvince" />
+		<action name="findRadarAreaCity" class="expressOocRadarAction" method="findRadarAreaCity" />
+		<action name="findRadarAreaCity" class="expressOocRadarAction" method="findRadarAreaCity" />
+		<!-- <action name="findWarningType" class="expressOrderQueryAction" method="findWarningType" /> -->
+		<action name="findAllExpressInfoList" class="expressOrderQueryAction" method="findAllExpressInfoList" />
+		
+		<action name="saveRadarTimeRule" class="expressOocRadarAction" method="saveRadarTimeRule" />
+		<action name="findRadarTimeRule" class="expressOocRadarAction" method="findRadarTimeRule" />
+		<action name="deleteRadarTimeRule" class="expressOocRadarAction" method="deleteRadarTimeRule" />
+		<action name="getRadarTimeRuleById" class="expressOocRadarAction" method="getRadarTimeRuleById" />
+		<action name="updateRadarTimeRule" class="expressOocRadarAction" method="updateRadarTimeRule" />
+		<action name="findRdErrorCode" class="expressOocRadarAction" method="findRdErrorCode" />
+		<action name="findRdWarningLv" class="expressOocRadarAction" method="findRdWarningLv" />
+		<action name="checkRadarTimeRule" class="expressOocRadarAction" method="checkRadarTimeRule" />
+		<action name="saveRadarWarningReason" class="expressOocRadarAction" method="saveRadarWarningReason" />
+		<action name="findRadarWarningReason" class="expressOocRadarAction" method="findRadarWarningReason" />
+		<action name="findRdWarningLvByLv" class="expressOocRadarAction" method="findRdWarningLvByLv" />
+		<action name="deleteRadarWarningReason" class="expressOocRadarAction" method="deleteRadarWarningReason" />
+		<action name="saveRadarWarningReasonLine" class="expressOocRadarAction" method="saveRadarWarningReasonLine" />
+		<action name="findRadarWarningReasonLine" class="expressOocRadarAction" method="findRadarWarningReasonLine" />
+		<action name="deleteRadarWarningReasonLine" class="expressOocRadarAction" method="deleteRadarWarningReasonLine" />
+		<action name="findExpressDetailInfo" class="expressOrderQueryAction" method="findExpressDetailInfo" />
+		<action name="findExpressDetail" class="expressOrderQueryAction" method="findExpressDetail" />
+		<action name="findOrderDetail" class="expressOrderQueryAction" method="findOrderDetail" />
+		<action name="findLogisticsDetail" class="expressOrderQueryAction" method="findLogisticsDetail" />
+		<action name="updateWarningType" class="expressOrderQueryAction" method="updateWarningType" />
+		<action name="findOrderErrorCode" class="expressOrderQueryAction" method="findOrderErrorCode" />
+		<action name="findOrderWarningLv" class="expressOrderQueryAction" method="findOrderWarningLv" />
+		
+		<!-- 快递雷达 end -->
+		<action name="findallcmuserlist" class="consumptiveMaterialUseQueryAction" method="findAllCMUserList" />
+		<action name="editskubycode" class="productInfoMainAction" method="editSkuByCode" />
+		<!-- 修改商品所有属性 -->
+		<action name="editallskubycode" class="productInfoMainAction" method="editAllSkuByCode" />
+		
+		
+		<action name="findInvoiceCompanyList" class="biChannelInfoAction" method="findInvoiceCompanyList" />
+		
+		<action name="searchSnCardCheckList" class="salesSnCardCheckAction" method="searchSnCardCheckList" />
+		<action name="findSnCardErrorList" class="salesSnCardCheckAction" method="findSnCardErrorList" />
+		<action name="findSnCardErrorByStaCode" class="salesSnCardCheckAction" method="findSnCardErrorByStaCode" />
+		<action name="getSnCardErrorPl" class="salesSnCardCheckAction" method="getSnCardErrorPl" />
+		<action name="shiftCardBindingStv" class="salesSnCardCheckAction" method="shiftCardBindingStv" />
+		<action name="findSnCardCheckSta" class="salesSnCardCheckAction" method="findSnCardCheckSta" />
+		<action name="findPackAgeInfoForSta" class="salesSnCardCheckAction" method="findPackAgeInfoForSta" />
+		<action name="findSnCardGiftStaLineListByStaId" class="salesSnCardCheckAction" method="findSnCardGiftStaLineListByStaId" />
+		<action name="checkSnCardErrorList" class="salesSnCardCheckAction" method="checkSnCardErrorList" />
+		<action name="printSnCardErrorList" class="salesSnCardCheckAction" method="printSnCardErrorList" />
+		<action name="getBiChannelLimitAmount" class="salesSnCardCheckAction" method="getBiChannelLimitAmount" />
+		<!-- report -->
+		<action name="findOrderStatusReporyByOu" class="orderStatusReportAction" method="findOrderStatusReporyByOu"></action>
+		<action name="findTransOrderStatusReporyByOu" class="orderStatusReportAction" method="findTransOrderStatusReporyByOu"></action>
+		
+		<!-- 分区拣货 start -->
+		<action name="findPickZoneList" class="pickZoneEditAction" method="findPickZoneList"></action>
+		<action name="addPickZone" class="pickZoneEditAction" method="addPickZone"></action>
+		<action name="deletePickZone" class="pickZoneEditAction" method="deletePickZone"></action>
+		<action name="editPickZoneName" class="pickZoneEditAction" method="editPickZoneName"></action>
+		<action name="findDistrictList" class="pickZoneEditAction" method="findDistrictList"></action>
+		<action name="findPickZoneInfo" class="pickZoneEditAction" method="findPickZoneInfo"></action>
+		<action name="findPickZoneInfoList" class="pickZoneEditAction" method="findPickZoneInfoList"></action>
+		<action name="findPickZoneInPickingList" class="pickZoneEditAction" method="findPickZoneInPickingList"></action>
+		<!-- 分区拣货 end -->
+		<action name="findPickFailedByWhId" class="createPickingListAction" method="findPickFailedByWhId"/>
+		<action name="failedReusltAgainPick" class="createPickingListAction" method="failedReusltAgainPick"/>
+		<action name="createPickinglistBySingOrder" class="createPickingListAction" method="createPickinglistBySingOrder"/>
+		
+		<!-- 升单 -->
+		<action name="findStaLsingle" class="deliveryTimeAction" method="findStaLsingle"/>
+		<action name="generstaLsingle" class="deliveryTimeAction" method="generStaLsingle"/>
+		<action name="outGenerstaLsingle" class="deliveryTimeAction" method="outGenerStaLsingle"/>
+		<action name="findPickZoneByOuId" class="pickZoneEditAction" method="findPickZoneByOuId"></action>
+		
+		<!-- 索赔 start-->
+		<action name="findCompensationList" class="compensationAction" method="findCompensationList"></action>
+		<action name="findCompensateType" class="compensationAction" method="findCompensateType"></action>
+		<action name="findCompensationDetailsList" class="compensationAction" method="findCompensationDetailsList"></action>
+		<action name="findCompensateCause" class="compensationAction" method="findCompensateCause"></action>
+		<action name="disposeCompensate" class="compensationAction" method="disposeCompensate"></action>
+		<action name="checkCompensate" class="compensationAction" method="checkCompensate"></action>
+		<action name="compensateSuccess" class="compensationAction" method="compensateSuccess"></action>
+		<action name="compensateFail" class="compensationAction" method="compensateFail"></action>
+		<action name="compensateDownFile" class="compensationAction" method="downFile"></action>
+		<action name="findCompensationCheckList" class="compensationAction" method="findCompensationCheckList"></action>
+		<action name="getSendWarehouse" class="compensationAction"  method="getSendWarehouse"></action>
+		<action name="getSendWarehouseforPage" class="compensationAction"  method="getSendWarehouseforPage"></action>
+		<!-- 导出索赔信息 -->
+		<action name="exportClaimantInfo"  class="compensationAction" method="exportClaimantInfo"></action>
+		<!-- 索赔附件下载校验文件大小 -->
+		<action name="confirmFileSize"  class="compensationAction" method="confirmFileSize"></action>
+		<!-- 索赔 end-->
+		
+		<action name="exportThreeDimensionalSkuInfo"  class="autoOutboundTurnoverBoxAction" method="exportThreeDimensionalSkuInfo"></action>
+		<action name="exportNoThreeDimensional"  class="autoOutboundTurnoverBoxAction" method="exportNoThreeDimensional"></action>
+		
+		<action name="findAllChannel" class="biChannelInfoAction" method="findAllChannel"></action>
+		<action name="findAllWhByType"  class="operationUnitAction"  method="findAllWhByType"/>
+		<action name="findAllWhByChoose" class="operationUnitAction" method="findAllWhByChoose"/>
+		<action name="saveUserWhRef" class="userManageAction" method="saveUserWhRef"/>
+		<!-- 退货入解锁 根据运单号返回物流商 -->
+		<action name="findlpCodeByTrackNo" class="returnApplication" method="findlpCodeByTrackNo" />
+	    <!--查询采购退货入库未执行单据  -->
+		<action name="findStaProcurementReturnInboundList" class="returnApplication" method="findStaProcurementReturnInboundList" />
+		<!-- 查询采购退货入库确认 -->
+		<action name="findStalinelist" class="returnApplication" method="findStalinelist" />
+		<!-- 采购退货入库确认 -->
+		<action name="procurementReturnInboundReceipt" class="returnApplication" method="procurementReturnInboundReceipt" />
+		<!--采购退货入库待上架  -->
+		<action name="findStaProcurementReturnInboundputawayList" class="returnApplication" method="findStaProcurementReturnInboundputawayList" />
+		<!--执行负向采购退货入库上架  -->
+		<action name="executeProcurementReturnPutaway" class="returnApplication" method="executeProcurementReturnPutaway" />
+		<!-- 线程维护 -->
+		<action name="getAllThreadPools" class="threadAction" method="getAllThreadPools" />
+		<action name="addUpdateThreadConfig" class="threadAction" method="addUpdateThreadConfig" />
+		<!-- 店铺维护 -->
+		<action name="getAllPriorityChannelOms" class="priorityChangelOmsAction" method="getAllPriorityChannelOms" />
+		<action name="addPriorityChannelOms" class="priorityChangelOmsAction" method="addPriorityChannelOms" />
+		<action name="updateChooseOption" class="priorityChangelOmsAction" method="updateChooseOption" />
+		<action name="buildChooseOption" class="priorityChangelOmsAction" method="buildChooseOption" />
+		<!-- 自动化设备 start -->
+		<action name="findSkuTypeByParams" class="skuTypeAction" method="findSkuTypeByParams" />
+		<action name="findZoonByParams" class="zoonAction" method="findZoonByParams" />
+		<action name="findZoonByParams2" class="zoonAction" method="findZoonByParams2" />
+		<action name="findAllDistrictByOuId" class="zoonAction" method="findAllDistrictByOuId" />
+		
+		<action name="findPopUpAreaByParams" class="popUpAreaAction" method="findPopUpAreaByParams" />
+		<action name="findInboundRoleByParams" class="inboundRoleAction" method="findInboundRoleByParams" />
+		<!-- wcs 数据维护 -->
+		<action name="findmsgtowcsbyparams" class="wcsMaintainAction" method="findMsgToWcsByParams" />
+		<!-- wcs 一键重置 -->
+		<action name="resetall" class="wcsMaintainAction" method="resetAll" />
+		<!-- wcs 删除 -->
+		<action name="deletedatabyid" class="wcsMaintainAction" method="deleteDataById" />
+		<!-- 自动化设备 end -->
+		<action name="findSortPicking" class="popUpAreaAction" method="findSortPicking" />
+		
+		<action name="findGoodsCollectionLog" class="popUpAreaAction" method="findGoodsCollectionLog" />
+		
+		<!-- pda拣货短拣导出 -->
+		<action name="padSortPickingExcel" class="popUpAreaAction" method="padSortPickingExcel" />
+		<!-- 集货管理 -->
+		<action name="findAreaByPaream" class="warehouseShippingAction" method="findAreaByPaream"/>
+		<action name="saveOrUpdateRoleLine" class="warehouseShippingAction" method="saveOrUpdateRoleLine" />
+		<action name="findRoleLineByRoleId" class="warehouseShippingAction" method="findRoleLineByRoleId" />
+		<action name="deleteRoleLineById" class="warehouseShippingAction" method="deleteRoleLineById" />
+		<action name="shippingPointQuery" class="warehouseShippingAction" method="shippingPointQuery" />
+		<action name="assumeShippingPointQuery" class="warehouseShippingAction" method="assumeShippingPointQuery" />
+		<action name="shippingPointCollectionQuery" class="warehouseShippingAction" method="shippingPointCollectionQuery" />
+		<action name="saveshippingpointcollection" class="warehouseShippingAction" method="saveShippingPointCollection" />
+		<action name="updateShippingPointCollection" class="warehouseShippingAction" method="updateShippingPointCollection" />
+		<action name="checkPopupArea" class="warehouseShippingAction" method="checkPopupArea" />
+		<action name="deleteShippingPointCollection" class="warehouseShippingAction" method="deleteShippingPointCollection" />
+		<action name="findshippingpointStatus" class="warehouseShippingAction" method="findshippingpointStatus" />
+		<action name="findOdOAllQuery" class="warehouseShippingAction" method="findOdOAllQuery" />
+		<action name="odoOutBoundDetail" class="warehouseShippingAction" method="odoOutBoundDetail" />
+        <action name="odoOutBoundDetailList" class="warehouseShippingAction" method="odoOutBoundDetailList" />
+        <action name="odoOuIdList" class="warehouseShippingAction" method="odoOuIdList" />
+        <action name="findOdoLineByOdoId" class="warehouseShippingAction" method="findOdoLineByOdoId" />
+
+
+        <action name="findPhysicalWarehouse" class="warehouseShippingAction" method="findPhysicalWarehouse" />
+		<action name="saveOrUpdatePoint" class="warehouseShippingAction" method="saveOrUpdatePoint" />
+		<action name="saveOrUpdateAssumePoint" class="warehouseShippingAction" method="saveOrUpdateAssumePoint" />
+		<action name="deleteShippingPoint" class="warehouseShippingAction" method="deleteShippingPoint" />
+		<action name="checkbindpickinglist" class="autoOutboundTurnoverBoxAction" method="checkBindPickingList"/>
+		<action name="bindbatchandturnbox" class="autoOutboundTurnoverBoxAction" method="bindBatchAndTurnbox" />
+		<action name="releaseturnboxbypc" class="autoOutboundTurnoverBoxAction" method="releaseTurnBoxByPc" />
+		<action name="createnewturnbox" class="autoOutboundTurnoverBoxAction" method="createNewTurnbox" />
+		<action name="getallturnoverbox" class="autoOutboundTurnoverBoxAction" method="getAllTurnoverBox" />
+		<action name="printturnoverboxbarcode" class="autoOutboundTurnoverBoxAction" method="printTurnoverBoxBarCode" />
+		<action name="resetturnoverboxstatus" class="autoOutboundTurnoverBoxAction" method="resetTurnoverBoxStatus" />
+		<action name="findThreeDimensional" class="autoOutboundTurnoverBoxAction" method="findThreeDimensional" />
+		<action name="findNoThreeDimensional" class="autoOutboundTurnoverBoxAction" method="findNoThreeDimensional" />
+		<action name="findThreeDimensionalSkuInfo" class="autoOutboundTurnoverBoxAction" method="findThreeDimensionalSkuInfo" />
+		<action name="findNoThreeDimensionalSkuInfo" class="autoOutboundTurnoverBoxAction" method="findNoThreeDimensionalSkuInfo" />
+		<action name="saveContainPop" class="warehouseShippingAction" method="saveContainPop" />
+		<action name="findpopAreaList" class="warehouseShippingAction" method="findpopAreaList"/>
+		<action name="findPointList" class="warehouseShippingAction" method="findPointList"/>
+		<action name="findlAllCheckSpace" class="warehouseShippingAction" method="findlAllCheckSpace" />
+		<action name="saveOrUpdateCheckRoleLine" class="warehouseShippingAction" method="saveOrUpdateCheckRoleLine" />
+		<action name="deleteCheckLineById" class="warehouseShippingAction" method="deleteCheckLineById" />
+		<!-- esprit转店 -->
+		<action name="findEspritStoreByParams" class="espritStoreAction" method="findEspritStoreByParams" />
+		<action name="saveEspritStore" class="espritStoreAction" method="saveEspritStore" />
+		<action name="delEspritStore" class="espritStoreAction" method="delEspritStore" />
+		<action name="vmiReturnEspritImport" class="espritStoreAction" method="vmiReturnEspritImport">
+					<result>/frame/vmi-inbound-sta-import-result.jsp</result>
+		</action>
+		<action name="getStaDel" class="espritStoreAction" method="getStaDel" />
+		<!-- 線下包裹 -->
+		<action name="checkSta" class="offLinePackageAction" method="checkSta"/>
+		<action name="getWarehouse" class="offLinePackageAction" method="getWarehouse"/>
+		<action name="getPriceRange" class="offLinePackageAction" method="getPriceRange"/>
+		<action name="insertTransOrder" class="offLinePackageAction" method="insertTransOrder"/>
+		<action name="insertTransPackage" class="offLinePackageAction" method="insertTransPackage"/>
+		<action name="getTransPackagePage" class="offLinePackageAction" method="getTransPackagePage"/>
+		<action name="queryStas" class="offLinePackageAction" method="queryStas"/>
+		<action name="getOneTransPackage" class="offLinePackageAction" method="getOneTransPackage"/>
+		<action name="getOneTransPackage2" class="offLinePackageAction" method="getOneTransPackage2"/>
+		<action name="updateTransPackage" class="offLinePackageAction" method="updateTransPackage"/>
+		<action name="printSingleOrderDetailOutMode12" class="offLinePackageAction" method="printSingleOrderDetailOutMode1"/>
+		<action name="getVolumnByBarCode" class="offLinePackageAction" method="getVolumnByBarCode"/>
+		<action name="getChannelByCode" class="offLinePackageAction" method="getChannelByCode"/>
+		<!-- QS商品 分页查询 -->
+		<action name="queryqssku" class="qsSkuMaintainAction" method="getQsSkuPage"></action>
+		<!-- 商品产地 分页查询 -->
+		<action name="queryskucountyoforigin" class="skuCountryOfOriginMaintainAction" method="getSkuCountryOfOriginPage"></action>
+	    <action name="delQsSkuBinding" class="qsSkuMaintainAction" method="delQsSkuBinding"></action>
+	    <action name="delSkuCountryOfOrigin" class="skuCountryOfOriginMaintainAction" method="delSkuCountryOfOrigin"></action>
+		<!-- 系统维护  start-->
+			<action name="queryWmsOrder" class="systemMaintainAction" method="queryWmsOrder" />
+			<action name="queryWmsConfirmOrderQueue" class="systemMaintainAction" method="queryWmsConfirmOrderQueue" />
+			
+			<action name="findStaByStaCode" class="systemMaintainAction" method="findStaByStaCode" />
+			<action name="sendNewDateAndModity" class="systemMaintainAction" method="sendNewDateAndModity" />
+			<action name="updateWmsConfirmOrderQueue" class="systemMaintainAction" method="updateWmsConfirmOrderQueue" />
+			<action name="updateWmsOutBound" class="systemMaintainAction" method="updateWmsOutBound" />
+			<!-- 过仓失败次数重置	start-->
+				<!-- 分页查询(或根据参数) -->
+				<action name="findqueuestaparams" class="whFailCountReset" method="findQueueStaParams"/>
+				<!-- 重置为0 -->
+				<action name="resetToZeroByWh" class="whFailCountReset" method="resetToZero"/>
+				<!-- 重置为99 -->
+				<action name="resetTo99" class="whFailCountReset" method="resetTo99"/>
+			<!-- 过仓失败次数重置	end-->
+			
+			<!-- 出库反馈PACS start-->
+				<!-- 分页查询(或根据参数) -->
+				<action name="findpacsparams" class="outBoundFeedBackPacs" method="findPacsParams"/>
+				<!-- 重置为0 -->
+				<action name="resetToZero" class="outBoundFeedBackPacs" method="resetToZero"/>
+				<!-- 重置为99 -->
+				<action name="resetToHundred" class="outBoundFeedBackPacs" method="resetHundred"/>
+			<!-- 出库反馈PACS end-->
+		<!-- 系统维护  end-->
+		
+		
+		
+		
+		
+		
+		
+		<!-- Nike当日达 -->
+		<action name="saveNikeConfig" class="nikeTodaySendConfigAction" method="saveNikeConfig"/>
+		<action name="boxreceivestaline" class="warehouseBoxInboundAction" method="boxReceiveStaLine"/>
+		<!-- 获得未交接运单数与交接上限 -->
+		<action name="getNum" class="offLinePackageAction" method="getNum"/>
+		<action name="saveadd" class="productThreeDimensionalCollectAction" method="testSave"/>
+		<action name="checkordercode" class="orderOutboundAction" method="checkOrderCode"/>
+		<action name="checksnstatus" class="orderOutboundAction" method="checkSnStatus"/>
+		<action name="docheckbysta" class="orderOutboundAction" method="doCheckBySta"/>
+		<action name="getneedhandoverordersummary" class="orderOutboundAction" method="getNeedHandOverOrderSummary"/>
+		<!-- 批量导入退换货快递信息 -->
+		<action name="returnPackageImport"  class="returnPackageAction" method="importReturnPackage"/>
+		<action name="recordweightfortrackingno" class="orderOutboundAction" method="recordweightfortrackingno"/>
+		
+	   <action name="whetherNeedInvoice" class="purchaseInboundAction" method="whetherNeedInvoice"/>
+		<action name="returnPackageInfo"  class="returnPackageAction" method="returnPackageInfo"/>
+	    <action name="whetherNeedInvoice" class="purchaseInboundAction" method="whetherNeedInvoice"/>
+		<action name="recordweightfortrackingno" class="orderOutboundAction" method="recordWeightForTrackingNo"/>
+		<action name="finduserprivilegeinfo" class="orderOutboundAction" method="findUserPrivilegeInfo"/>
+		<action name="partlysalesoutbound" class="orderOutboundAction" method="partlySalesOutbound"/>
+		<action name="reportmissingwhencheck" class="orderOutboundAction" method="reportMissingWhenCheck"/>
+		<!-- 批量导入退换货快递信息 -->
+		<action name="returnPackageImport"  class="returnPackageAction" method="importReturnPackage"/>
+			
+		<!-- 校验批量导入 货快递信息 -->
+		<action name="checkImportPackage"  class="returnPackageAction" method="checkImportPackage"/>		
+		<!-- 优先发货城市配置 start-->
+			<!-- 分页查询(或根据参数) -->
+			<action name="queryEntityParams" class="priorityShippedCityConfigAction" method="queryEntityParams"/>
+			<!-- 保存 -->
+			<action name="saveentity" class="priorityShippedCityConfigAction" method="saveEntity"/>
+			<!-- 删除 -->
+			<action name="delentity" class="priorityShippedCityConfigAction" method="delEntity"/>
+			<!-- 控件查询 -->
+			<action name="findprioritycitylist" class="priorityShippedCityConfigAction" method="findPriorityCityList"/>
+		<!-- 优先发货城市配置 end-->
+		
+		<!-- 优先发货省配置 start-->
+			<!-- 分页查询(或根据参数) -->
+			<action name="queryHightProvinceConfig" class="priorityShippedCityConfigAction" method="queryHightProvinceConfig"/>
+			<!-- 保存 -->
+			<action name="saveHightProvinceConfig" class="priorityShippedCityConfigAction" method="saveHightProvinceConfig"/>
+			<!-- 删除 -->
+			<action name="deleteHightProvinceConfig" class="priorityShippedCityConfigAction" method="deleteHightProvinceConfig"/>
+			
+			<action name="findPriorityList" class="priorityShippedCityConfigAction" method="findPriorityList"/>
+			
+			<!-- 控件查询 -->
+		<!-- 优先发货省配置 end-->
+		
+		<!-- 校验指定库位编码 -->
+		<action name="verifylocationcode" class="cancelledStaDisposeAction" method="verifyLocationCode" />
+		
+		<action name="getalloccupiedstalist" class="occupiedFailureAction" method="getAllOccupiedStaList"/>
+		<action name="reoccupationbyidlist" class="occupiedFailureAction" method="reOccupationByIdList"/>
+		<action name="canceladorderbyid" class="occupiedFailureAction" method="cancelAdOrderById"/>
+		<action name="partysendadorderbyid" class="occupiedFailureAction" method="partySendAdOrderById"/>
+		<action name="showoccdetail" class="occupiedFailureAction" method="showOccDetail"/> 
+		<!-- 增加物流商配置信息 -->
+		<action name="increaseDeliverChConfig" class="modifyTransportatorAction" method="increaseDeliverChConfig"/>
+		<!-- 返回物流配置信息列表 -->
+		<action name="getDeliverChConfigList" class="modifyTransportatorAction" method="getDeliverChConfigList"></action>
+		<!-- 根据删除物流变更配置-->
+		<action name="deleteDeliverChConfig" class="modifyTransportatorAction" method="deleteDeliverChConfig"></action>
+		<!-- 查询原始物流信息 -->
+		<action name="getDeliveryByTNo" class="modifyTransportatorAction" method="getDeliveryByTNo"></action>
+		<!-- 查询变更后的物信息 -->
+		<action name="getDeliveryChangeLogByTNo" class="modifyTransportatorAction" method="getDeliveryChangeLogByTNo"></action>
+		<!--  手动扫入新面单号完物流变更-->
+		<action name="modifyDeliveryByTrackingNo" class="modifyTransportatorAction" method="modifyDeliveryByTrackingNo"></action>
+		<!-- 打印电子面单 -->
+		<action name="printDeliveryInfoByStaId" class="modifyTransportatorAction" method="printDeliveryInfoByStaId"/>
+		<!-- 返回定时任务配置列表 -->
+		<action name="getSchedulerTaskList" class="schedulerTaskAction" method="getSchedulerTaskList"/>
+		<!-- 修改定时任务执行时间 -->
+		<action name="updateSchedulerTask" class="schedulerTaskAction" method="updateSchedulerTask"/>
+		
+		<action name="deleteSkuType2" class="schedulerTaskAction" method="deleteSkuType"/>
+		
+		<action name="updateSkuCode" class="schedulerTaskAction" method="updateSkuCode"/>
+		
+		<!-- 在库商品效期调整 start -->
+			<!-- 分页查询(或根据参数) -->
+			<action name="validityadjustquery" class="inventoryAdjustAction" method="validityAdjustQuery"/>
+			<!-- 修改 -->
+			<action name="validityadjustmodify" class="inventoryAdjustAction" method="validityAdjustModify"/>
+		<!-- 在库商品效期调整 end -->
+		
+		<!-- 集货口创建功能支持批量删除 start -->
+			<!-- 查询级联关系的集货口(通过负载均衡的关联字段) -->
+			<action name="findshippingpointforcascadebyrefid" class="warehouseShippingAction" method="findShippingPointForCascadeByRefId" />
+			<!-- 批量删除 -->
+			<action name="batchremove" class="warehouseShippingAction" method="batchRemove" />
+		<!-- 集货口创建功能支持批量删除 end -->
+		
+		<!-- 集货规则支持批量删除 start -->
+			<!-- 批量删除 -->
+			<action name="batchremovebyrule" class="warehouseShippingAction" method="batchRemoveByRule" />
+		<!-- 集货规则支持批量删除 end -->
+	        <!--  -->
+		<action name="pickingListLogQueryDo" class="createPickingListAction" method="pickingListLogQueryDo" />
+		
+		<!-- wms3.0数据导出 -->
+		<action name="snAndValidDateSkuFlowCreate" class="wmsDataImportAction" method="snAndValidDateSkuFlowCreate" />
+		<action name="getFileCreateStatus" class="wmsDataImportAction" method="getFileCreateStatus" />
+		<action name="brandUnFinishedInstructions" class="wmsDataImportAction" method="brandUnFinishedInstructions" />
+		
+		<action name="findSkubySkuCode" class="schedulerTaskAction" method="findSkubySkuCode"/>
+		<action name="findAllSourceOwner" class="skuInvAllocationAction" method="findAllSourceOwner" />
+		<action name="findAllTargetOwner" class="skuInvAllocationAction" method="findAllTargetOwner" />
+		<action name="findTransferOwnerSource" class="skuInvAllocationAction" method="findTransferOwnerSource" />
+		<action name="saveTransferOwnerSource" class="skuInvAllocationAction" method="saveTransferOwnerSource" />
+		<action name="deleteTransferOwnerSource" class="skuInvAllocationAction" method="deleteTransferOwnerSource" />
+		<action name="findTransferOwnerTarget" class="skuInvAllocationAction" method="findTransferOwnerTarget" />
+		<action name="deleteTransferOwnerTarget" class="skuInvAllocationAction" method="deleteTransferOwnerTarget" />
+		<action name="findTransferOwnerTargetByUpdate" class="skuInvAllocationAction" method="findTransferOwnerTargetByUpdate" />
+		<action name="updateTransferOwnerTarget" class="skuInvAllocationAction" method="updateTransferOwnerTarget" />
+		
+		<!-- mq切换开关 -->
+		<action name="getMessageConfigList" class="messageConfigAction" method="getMessageConfigList" />
+		<action name="switchMessageConfig" class="messageConfigAction" method="switchMessageConfig" />
+		<action name="updateChooseOptionValue" class="messageConfigAction" method="updateChooseOptionValue" />
+		<action name="getChooseOptionValue" class="messageConfigAction" method="getChooseOptionValue" />
+		
+		<!-- 获取星巴克星享卡aes加密key -->
+		<action name="getStarbucksAESKey" class="staInBoundAction" method="getStarbucksAESKey" />
+		
+		<action name="findshippingCollectionBoard" class="warehouseShippingAction" method="findshippingCollectionBoard"/>
+		
+		<action name="findzoonOcpSortList" class="zoonOcpSortAction" method="findzoonOcpSortList"/>
+		<action name="getZoonList" class="zoonOcpSortAction" method="getZoonList"/>
+		<action name="saveOrUpdateZoonOcpSort" class="zoonOcpSortAction" method="saveOrUpdateZoonOcpSort"/>
+		<action name="deleteZoonOcpSortById" class="zoonOcpSortAction" method="deleteZoonOcpSortById"/>
+		
+		<!-- 阿迪整批出库 -->
+		<action name="isSkuMaterial" class="salesOutboundAction" method="isSkuMaterial"/>
+		<action name="isPistListByOneKey" class="salesOutboundAction" method="isPistListByOneKey"/>
+		<action name="findPistListStatus" class="salesOutboundAction" method="findPistListStatus"/>
+		<action name="outBoundByPistList" class="salesOutboundAction" method="outBoundByPistList"/>
+		<action name="getCancelStaByBatCheCode" class="salesOutboundAction" method="getCancelStaByBatCheCode"/>
+		
+	    <action name="getoutboundPickingTasklist" class="outBoundPickingTaskAction" method="getoutboundPickingTasklist"/>
+	    <action name="getOutboundDetailList" class="outBoundPickingTaskAction" method="getOutboundDetailList"/>
+	    <action name="findOutBound" class="outBoundPickingTaskAction" method="findOutBound"/>
+	    <action name="findCrwStaByStaId" class="outBoundPickingTaskAction" method="findCrwStaByStaId"/>
+	    <action name="saveCrwStaByStaId" class="outBoundPickingTaskAction" method="saveCrwStaByStaId"/>
+	    
+		<action name="savePickingTask" class="outBoundPickingTaskAction" method="savePickingTask"/>
+		<action name="getOutboundDetailListCollection" class="outBoundPickingTaskAction" method="getOutboundDetailListCollection"/>
+		<action name="getOutboundDickingTaskDetailList" class="outBoundPickingTaskAction" method="getOutboundDickingTaskDetailList"/>
+		<action name="getOutboundDickingZzxDetailList" class="outBoundPickingTaskAction" method="getOutboundDickingZzxDetailList"/>
+		<!-- 拣货单打印 -->
+		<action name="diekingLinePrint" class="printPickingListBulkAction" method="diekingLinePrint"/>
+		
+		<!-- 获取转物流变更列表 -->
+		<action name="findDeliveryChangeLogList" class="staDeliveryChangeLogAction" method="findDeliveryChangeLogList"/>
+		<!-- 推仓箱标签打印 -->
+		<action name="printPackingBoxLabel" class="outboundPackageAction" method="printPackingBoxLabel"/>
+		<action name="checkWebPing" class="checkPingAction" method="checkWebPing"/>
+		<action name="checkServicePing" class="checkPingAction" method="checkServicePing"/>
+		<action name="getPrintCustomizeList" class="printTempletUploadAction" method="getPrintCustomizeList"></action>
+		<!-- 打印模板下载 -->
+		<action name="downLoadFile" class="printTempletUploadAction" method="downLoadFile"></action>
+		<action name="getPrintCode" class="biChannelInfoAction"  method="getPrintCode"></action>
+		
+
+		<!-- NIKE收货-导入箱号关系展示 -->
+		<action name="queryNikeRelation" class="staNikeImportAction" method="queryNikeRelation"/>
+
+		<action name="findWarehouseOuListByOuId" class="odoAction"  method="findWarehouseOuListByOuId"></action>
+		<action name="findInvStatusListByCompany" class="odoAction"  method="findInvStatusListByCompany"></action>
+		
+		<!-- po按箱收货 -->
+		<action name="getPoStaList" class="historicalOrderInquiryAction" method="getPoStaList" />
+		<action name="getPoLineStaList" class="historicalOrderInquiryAction" method="getPoLineStaList" />
+		
+		
+		
+		<!-- 区域绑定作业类型 -->
+		<action name="getDistriButionAreaList" class="distriButionAreaAction" method="getDistriButionAreaList"/>
+		<action name="findDistriButionAreaList" class="distriButionAreaAction" method="findDistriButionAreaList"/>
+		<action name="deleteDistriButionArea" class="distriButionAreaAction" method="deleteDistriButionArea"/>
+		<action name="updateDistriButionArea" class="distriButionAreaAction" method="updateDistriButionArea"/>
+		<action name="insertDistriButionArea" class="distriButionAreaAction" method="insertDistriButionArea"/>
+		<action name="judgeDistriButionArea" class="distriButionAreaAction" method="judgeDistriButionArea"/>
+		
+		<!-- 区域绑定库位 -->
+		<action name="getDistriButionAreaLoc" class="distriButionAreaAction" method="getDistriButionAreaLoc"/>
+        <action name="findDistriButionAreaLoc" class="distriButionAreaAction" method="findDistriButionAreaLoc"/>
+        <action name="deleteDistriButionAreaLoc" class="distriButionAreaAction" method="deleteDistriButionAreaLoc"/>	
+		<action name="loadDistriBution" class="distriButionAreaAction" method="loadDistriBution"></action>		
+		
+		<!-- 区域绑定作业类型 -->
+		<action name="getDistriButionAreaType" class="distriButionAreaAction" method="getDistriButionAreaType"/>
+		<action name="findDistriButionAreaType" class="distriButionAreaAction" method="findDistriButionAreaType"/>
+	    
+	    <!-- 作业类型查询 -->
+		<action name="getTransActionType" class="distriButionAreaAction" method="getTransActionType"/>
+        <action name="bindingTransAction" class="distriButionAreaAction" method="bindingTransAction"/>
+	    <action name="cancelBinding" class="distriButionAreaAction" method="cancelBinding"/>
+
+		<action name="bindingTransAction" class="distriButionAreaAction" method="bindingTransAction"/>
+	    <action name="cancelBinding" class="distriButionAreaAction" method="cancelBinding"/>
+		<action name="exportDistriBution" class="distriButionAreaAction" method="exportDistriBution"></action>
+		
+
+		
+		<!-- 查看已绑定明细列表 -->
+		<action name="findBingdingDetai" class="distriButionAreaAction" method="findBingdingDetai"></action>
+		<!-- 车辆信息维护 -->
+		<action name="findVehicleStandardList" class="carServiceAction" method="findVehicleStandardList"/>
+		<action name="findLicensePlateList" class="carServiceAction" method="findLicensePlateList"/>
+		<action name="saveOrUpdateVehicleVolume" class="carServiceAction" method="saveOrUpdateVehicleVolume"/>
+		<action name="saveOrUpdateLicensePlate" class="carServiceAction" method="saveOrUpdateLicensePlate"/>
+		<action name="deleteVehicleVolumeById" class="carServiceAction" method="deleteVehicleVolumeById"/>
+		<action name="deleteLicensePlateById" class="carServiceAction" method="deleteLicensePlateById"/>
+		<action name="optionrulelist" class="chooseOptionAction" method="optionrulelist"/>
+		<!-- 报税仓 -->
+		<action name="queryBaoShuiOutStaList" class="baoshuiAction" method="queryBaoShuiOutStaList"/>
+		<action name="queryBaoShuiOutStaLineList" class="baoshuiAction" method="queryBaoShuiOutStaLineList"/>
+		<action name="updateBaoShuiOutStaLineById" class="baoshuiAction" method="updateBaoShuiOutStaLineById"/>
+		<action name="updateBaoShuiOutSta" class="baoshuiAction" method="updateBaoShuiOutSta"/>
+		<action name="countWeight" class="baoshuiAction" method="countWeight"/>
+		
+		
+		
+		<!-- 保税仓功能 -->
+		<action name="findGoodsList" class="warehouseGoodsImportAction" method="findGoodsList"/>
+		<action name="deletefindGoodsListById" class="warehouseGoodsImportAction" method="deletefindGoodsListById"/>
+		<action name="pushGoods" class="warehouseGoodsImportAction" method="pushGoods"/>
+		
+		
+		<!-- 库内取消 -->
+		<action name="getDeliveryFailureSta" class="historicalOrderInquiryAction" method="getDeliveryFailureSta" />
+		<action name="getDeliveryFailureStaLine" class="historicalOrderInquiryAction" method="getDeliveryFailureStaLine" />
+		<action name="saveDeliveryFailureStaInfo" class="historicalOrderInquiryAction" method="saveDeliveryFailureStaInfo" />
+		</package>
+		
+		
+		
+		
+</struts>

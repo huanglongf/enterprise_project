@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<bean id="ScanSkuRecord.findScanRecordsByPage" class="loxia.dao.support.DynamicQueryHolder">
+		<constructor-arg>
+			<value>
+				<![CDATA[
+				select u.user_name as operatorName,sku.bar_code as skuBarcode,sku.code as skuCode,
+				sku.name as skuName,ssr.* 
+				from t_wh_scan_sku_record ssr,t_bi_inv_sku sku,t_au_user u
+				where ssr.sku_id=sku.id
+					and ssr.operator_id = u.id
+					#if($createTime)
+						and ssr.create_time >= :createTime
+					#end
+					#if($finishTime)
+						and ssr.create_time <= :finishTime
+					#end
+					#if($batchCode)
+						and ssr.batch_code like '$batchCode%'
+					#end
+					#if($locationCode)
+						and ssr.location_code like '$locationCode%'
+					#end
+					#if($skuBarcode)
+						and sku.bar_code = :skuBarcode
+					#end 
+					#if($skuCode)
+						and sku.code = :skuCode
+					#end
+					#if($skuName)
+						and sku.name like '%$skuName%'
+					#end
+					#if($operator)
+						and u.user_name like '%$operator%'
+					#end
+						]]>
+			</value>
+		</constructor-arg>
+	</bean>
+</beans>

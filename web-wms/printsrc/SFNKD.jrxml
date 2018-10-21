@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SFNKD" language="groovy" pageWidth="310" pageHeight="440" columnWidth="300" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" >
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="trackingNo" class="java.lang.String"/>
+	<field name="district" class="java.lang.String"/>
+	<field name="sender" class="java.lang.String"/>
+	<field name="senderTel" class="java.lang.String"/>
+	<field name="senderAddress" class="java.lang.String"/>
+	<field name="receiver" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="telephone" class="java.lang.String"/>
+	<field name="refSlipCode" class="java.lang.String"/>
+	<field name="remark" class="java.lang.String"/>
+	<field name="owner" class="java.lang.String"/>
+	<field name="quantity" class="java.lang.String"/>
+	<field name="pgindex" class="java.lang.String"/>
+	<field name="amount" class="java.lang.String"/>
+	<field name="strAmount" class="java.lang.String"/>
+	<field name="isSupportCod" class="java.lang.String"/>
+	<field name="insuranceAmount" class="java.lang.String"/>
+	<field name="receverTel" class="java.lang.String"/>
+	<field name="transTypeB" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="transCityCode" class="java.lang.String"/>
+	<field name="jcustid" class="java.lang.String"/>
+	<field name="transTimeTypeB" class="java.lang.String"/>
+	<field name="skuList" class="java.lang.String"/>
+	<field name="isRailway" class="java.lang.Boolean"/>
+	<field name="transmemo" class="java.lang.String"/>
+	<field name="isTransCodPos" class="java.lang.String"/>
+	<field name="sfTrackingNo" class="java.lang.String"/>
+	<field name="payMethod" class="java.lang.String"/>
+	<field name="lpCode" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="430" splitType="Stretch">
+			<line>
+				<reportElement  x="14" y="3" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="13" y="3" width="1" height="412"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="414" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="292" y="3" width="1" height="412"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="59" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="149" y="4" width="1" height="56"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="102" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="180" y="60" width="1" height="43"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="187" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="144" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="238" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="255" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="120" y="145" width="1" height="42"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="297" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="351" width="279" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="133" y="297" width="1" height="54"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="14" y="394" width="215" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="229" y="352" width="1" height="62"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement  x="14" y="396" width="234" height="16"/>
+				<textElement>
+					<font fontName="黑体" size="11"/>
+				</textElement>
+				<text><![CDATA[ www.sf-express.com   95338 ]]></text>
+			</staticText>
+			<image>
+				<reportElement  x="181" y="257" width="108" height="38"/>
+				<imageExpression><![CDATA["print_img/top.jpg"]]></imageExpression>
+			</image>
+			<componentElement>
+				<reportElement  x="151" y="9" width="137" height="35"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128A" drawText="false" checksumRequired="false" barWidth="2" barHeight="75">
+					<jr:codeExpression><![CDATA[$F{trackingNo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="186" y="41" width="106" height="17"/>
+				<textElement>
+					<font fontName="黑体"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement  x="15" y="260" width="164" height="15"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128A" drawText="false" checksumRequired="false" barWidth="3" barHeight="50">
+					<jr:codeExpression><![CDATA[$F{trackingNo}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="46" y="276" width="100" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="207" y="62" width="85" height="41"/>
+				<textElement>
+					<font fontName="黑体" size="28" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{transCityCode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="15" y="61" width="30" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[寄件：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="35" y="61" width="143" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sender}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="35" y="71" width="143" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{senderTel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="35" y="82" width="143" height="20"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{senderAddress}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="36" y="309" width="95" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{senderTel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="36" y="320" width="93" height="31"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{senderAddress}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="36" y="299" width="95" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sender}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="15" y="299" width="30" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[寄件：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="35" y="116" width="257" height="28"/>
+				<textElement>
+					<font fontName="黑体" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="35" y="103" width="112" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="15" y="103" width="30" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[收件：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="135" y="299" width="30" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[收件：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="157" y="310" width="135" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receverTel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="157" y="320" width="126" height="31"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="157" y="299" width="135" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receiver}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="15" y="188" width="45" height="12"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[订单号：]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement  x="44" y="190" width="155" height="12"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false" barWidth="4" barHeight="50">
+					<jr:codeExpression><![CDATA[$F{refSlipCode}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="88" y="200" width="100" height="10"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{refSlipCode}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="15" y="352" width="25" height="14"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[备注：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="36" y="352" width="188" height="42"/>
+				<textElement>
+					<font fontName="黑体" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{transTimeTypeB} == "6" ? "次日加急":(null == $F{transmemo} ? "" : $F{transmemo}))+ " 节假日请正常派件"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="15" y="145" width="46" height="12"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[付款方式：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="15" y="155" width="67" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[月结账号：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="15" y="166" width="55" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[保价声明值：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="15" y="210" width="44" height="12"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[配货信息：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="53" y="210" width="195" height="28"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{skuList}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="201" y="188" width="25" height="12"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[件数：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="222" y="188" width="68" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="259" y="211" width="33" height="27"/>
+				<textElement>
+					<font fontName="黑体" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["# "+$F{pgindex}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="61" y="166" width="59" height="12"/>
+				<textElement>
+					<font fontName="黑体" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{insuranceAmount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="53" y="156" width="66" height="11"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jcustid}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="109" y="8" width="44" height="27"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="黑体" size="23" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{transTimeTypeB}=="5"?"":($F{transTimeTypeB}=="7"?"":($F{lpCode}=="SF"&&$F{isRailway}==false?"":"E"))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="182" y="61" width="30" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[目的地]]></text>
+			</staticText>
+			<line>
+				<reportElement  x="180" y="144" width="1" height="43"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="181" y="158" width="112" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement  x="181" y="173" width="112" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement  x="183" y="146" width="30" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[收件员]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="183" y="161" width="37" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[寄件日期]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="183" y="175" width="37" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[派件人]]></text>
+			</staticText>
+			<staticText>
+				<reportElement  x="15" y="176" width="67" height="12"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[代收贷款金额：]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="70" y="176" width="50" height="12"/>
+				<textElement>
+					<font fontName="黑体" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="122" y="146" width="57" height="21"/>
+				<textElement textAlignment="Center">
+					<font fontName="黑体" size="9"/>
+				</textElement>
+				<text><![CDATA[集团转寄协议客户]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="15" y="39" width="94" height="17"/>
+				<textElement>
+					<font fontName="黑体" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{transTimeTypeB}=="5"?"顺丰即日":($F{transTimeTypeB}=="7"?"顺丰次晨":($F{lpCode}=="SF"&&$F{isRailway}==false?"顺丰次日":"顺丰隔日"))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="122" y="176" width="57" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="黑体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{isSupportCod} == "是" ? "COD" : ""]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="147" y="103" width="145" height="13"/>
+				<textElement>
+					<font fontName="黑体" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{receverTel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement  x="122" y="166" width="57" height="10"/>
+				<textElement textAlignment="Center">
+					<font fontName="黑体" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{isTransCodPos} == "是" ? "POS机刷卡" : ""]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement  x="17" y="8" width="76" height="29"/>
+				<imageExpression><![CDATA["print_img/top.jpg"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="46" y="286" width="100" height="10">
+					<printWhenExpression><![CDATA[!$F{sfTrackingNo}.equals($F{trackingNo})]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sfTrackingNo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="52" y="145" width="80" height="11"/>
+				<textElement>
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{payMethod}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement  x="199" y="199" width="51" height="12"/>
+				<textElement textAlignment="Right">
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<text><![CDATA[第三方地区：E021B ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement  x="248" y="199" width="45" height="12"/>
+				<textElement textAlignment="Left">
+					<font fontName="黑体" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{payMethod} == "转第三方付" ? "E021B" : ""]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

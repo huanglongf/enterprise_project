@@ -1,0 +1,74 @@
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+	<named-query name="BiChannel.getAllRefShopByWhOuId">
+		<query><![CDATA[select ref.shop from ChannelWhRef ref where ref.wh.id = :whouid]]></query>
+	</named-query>
+	<named-query name="BiChannel.getAllRefShopByDefaultWhOuId">
+		<query><![CDATA[select ref.shop from ChannelWhRef ref where ref.wh.id = :whouid and ref.isDefaultInboundWh = true]]></query>
+	</named-query>
+	<named-query name="BiChannel.getBySpecial">
+		<query><![CDATA[select c from BiChannel c where c.specialExpressPadar = :specialExpressPadar]]></query>
+	</named-query>
+	<named-query name="BiChannel.getByCode">
+		<query><![CDATA[select c from BiChannel c where c.code = :code]]></query>
+	</named-query>
+	<named-query name="BiChannel.getByCodeAndCustomerId">
+		<query><![CDATA[select c from BiChannel c where c.code = :code and c.customer.id= :customerId]]></query>
+	</named-query>
+	<named-query name="BiChannel.getByVmiCode">
+		<query><![CDATA[select c from BiChannel c where c.vmiCode = :vmicode]]></query>
+	</named-query>
+	<named-query name="ChannelWhRef.getChannelRef">
+		<query><![CDATA[select r from ChannelWhRef r where r.wh.id = :ouid and r.shop.id = :channelid]]></query>
+	</named-query>
+	<named-query name="ChannelWhRef.getChannelRefByOuid">
+		<query><![CDATA[select r from ChannelWhRef r where r.wh.id = :ouid and r.receivePrefix is not null]]></query>
+	</named-query>
+	<named-query name="OperationUnit.getDefaultInboundWhByShopId">
+		<query><![CDATA[select ref.wh from ChannelWhRef ref where ref.shop.id = :shopid and ref.isDefaultInboundWh = true]]></query>
+	</named-query>
+	<named-query name="OperationUnit.getAllWhByShopId">
+		<query><![CDATA[select ref.wh from ChannelWhRef ref where ref.shop.id = :shopid]]></query>
+	</named-query>
+	<named-query name="BiChannel.getByName">
+		<query><![CDATA[select c from BiChannel c where c.name = :name]]></query>
+	</named-query>
+	<named-query name="BiChannel.getAllBiChannel">
+		<query><![CDATA[select c from BiChannel c ]]></query>
+	</named-query>
+	<named-query name="BiChannelCombineRef.getByWhIdAndChId"> 
+		<query><![CDATA[select f from BiChannelCombineRef f where f.whOuId.id = :whId and f.childChannelId.id = :chId and to_char(f.expTime,'yyyy-MM-dd') > to_char(sysdate,'yyyy-MM-dd')]]></query>
+	</named-query>
+	<!-- 渠道快递维护 FXL -->
+	<named-query name="TransAreaGroup.findTransAreaByCode">
+		<query><![CDATA[select p from TransAreaGroup p where p.code = :code]]></query>
+	</named-query>
+	<named-query name="TransRole.findTransRoleByCode">
+		<query><![CDATA[select p from TransRole p where p.code = :code]]></query>
+	</named-query>
+	<named-query name="TransRoleDetial.findRoleDetialByRoleId">
+		<query><![CDATA[select p from TransRoleDetial p where p.transRole.id = :roleId]]></query>
+	</named-query>
+	<named-query name="BiChannelGroup.getBiChannelGroupByBiChannelID">
+		<query><![CDATA[select c from BiChannelRef c where c.biChannelId.id = :id]]></query>
+	</named-query>
+	<named-query name="AutoPlConfig.getAotoPlConfig">
+		<query><![CDATA[select p from AutoPlConfig p where p.ouId.id = :whOuId]]></query>
+	</named-query>
+		<named-query name="BiChannel.getByVmiWHSource">
+		<query><![CDATA[select c from BiChannel c where c.vmiWHSource = :vmiWHSource]]></query>
+	</named-query>
+	<!-- cheng.su -->
+	<named-query name="BiChannelImperfect.findImperfectCode">
+		<query><![CDATA[select ref from BiChannelImperfect ref where ref.channelId.id = :channelId and ref.code=:code]]></query>
+	</named-query>
+	<named-query name="BiChannelImperfect.findImperfectCodeOuId">
+		<query><![CDATA[select ref from BiChannelImperfect ref where ref.ouId.id = :ouId and ref.code=:code]]></query>
+	</named-query>
+	<named-query name="BiChannelImperfectLine.findImperfectCode">
+		<query><![CDATA[select ref from BiChannelImperfectLine ref where ref.imperfectId.id = :channelId and ref.code=:code]]></query>
+	</named-query>
+	<named-query name="LogisticsInfo.findBySystemKeyDefault">
+		<query><![CDATA[select ref from LogisticsInfo ref where ref.systemKey = :systemKey and ref.isDefault=:isDefault]]></query>
+	</named-query>
+</entity-mappings>

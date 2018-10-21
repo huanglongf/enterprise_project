@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+
+	<!-- <bean id="checkListManager" class="com.jumbo.wms.manager.checklist.CheckListManagerImpl" />
+	<bean id="scanSkuRecordManager" class="com.jumbo.wms.manager.operationcenter.ScanSkuRecordManagerImpl" />
+	<bean id="optimizeManager" class="com.jumbo.wms.manager.warehouse.OptimizeManagerImpl" />
+	<bean id="omsService" class="com.jumbo.wms.manager.omsService.OmsServiceImpl" />
+	<bean id="secKillTaskManager" class="com.jumbo.wms.manager.task.seckill.SecKillTaskManagerImpl" />
+	<bean id="excelReadManager" class="com.jumbo.wms.manager.warehouse.excel.ExcelReadManagerImpl" /> -->
+	<!-- <bean id="excelValidateManager" class="com.jumbo.wms.manager.warehouse.excel.ExcelValidateManagerImpl" />
+	<bean id="excelWriterManager" class="com.jumbo.wms.manager.warehouse.excel.ExcelWriterManagerImpl" />
+	<bean id="skuCategoryManager" class="com.jumbo.wms.manager.warehouse.SkuCategoryManagerImpl" />
+	<bean id="secKillSkuManager" class="com.jumbo.wms.manager.warehouse.SecKillSkuManagerImpl" /> -->
+	<!-- <bean id="cancelOrderTaskManager" class="com.jumbo.wms.manager.task.cancelorder.CancelOrderTaskManagerImpl" />
+	<bean id="skuSizeConfigManager" class="com.jumbo.wms.manager.warehouse.SkuSizeConfigManagerImpl" />
+	<bean id="pickingListPrintManager" class="com.jumbo.wms.manager.warehouse.PickingListPrintManagerImpl" />
+	<bean id="masterDataManager" class="com.jumbo.wms.manager.boc.MasterDataManagerImpl" /> -->
+	<!-- <bean id="bocInterfaceManager" class="com.jumbo.wms.manager.boc.BocInterfaceManagerProxyImpl" />
+	<bean id="checkOutBoundManager" class="com.jumbo.wms.manager.warehouse.CheckOutBoundManagerImpl" />
+	<bean id="staPrintManager" class="com.jumbo.wms.manager.print.StaPrintManagerImpl" />
+	<bean id="warehousePrintManager" class="com.jumbo.wms.manager.print.WarehousePrintManagerImpl" /> -->
+	<!-- <bean id="vmiStaCreateManager" class="com.jumbo.wms.manager.warehouse.vmi.VmiStaCreateManagerImpl" />
+	<bean id="vmiStaCreateManagerProxy" class="com.jumbo.wms.manager.warehouse.vmi.VmiStaCreateManagerProxyImpl" /> -->
+	<!-- <bean id="whReplenishManager" class="com.jumbo.wms.manager.warehouse.WhReplenishManagerImpl" />
+	<bean id="staUpdateManager" class="com.jumbo.wms.manager.warehouse.StaUpdateManagerImpl" /> -->
+	<!-- <bean id="packageSkuManager" class="com.jumbo.wms.manager.warehouse.PackageSkuManagerImpl" />
+	<bean id="sfOrderTaskManager" class="com.jumbo.wms.manager.task.sforder.SfOrderTaskManagerImpl" /> -->
+	<!-- <bean id="ytoOrderTaskManager" class="com.jumbo.wms.manager.task.ytoorder.YtoOrderTaskManagerImpl" />
+	<bean id="createPickingListManager" class="com.jumbo.wms.manager.warehouse.CreatePickingListManagerProxyImpl" /> -->
+	<!-- <bean id="godivaManagerProxy" class="com.jumbo.wms.manager.vmi.godivaData.GodivaManagerProxyImpl" />
+	<bean id="rmiManager" class="com.jumbo.rmiservice.RmiManagerImpl" /> -->
+	<!-- <bean id="stvListenerManager" class="com.jumbo.wms.manager.listener.StvListenerManagerImpl" />
+	<bean id="inventoryCheckListenerManager" class="com.jumbo.wms.manager.listener.InventoryCheckListenerManagerImpl" />
+	<bean id="rmiService" class="com.jumbo.rmiservice.RmiServiceImpl" />
+	<bean id="starbucksManagerProxy" class="com.jumbo.wms.manager.warehouse.StarbucksManagerProxyImpl" /> -->
+	<!-- <bean id="warehouseReturnManager" class="com.jumbo.wms.manager.warehouse.WarehouseReturnManagerImpl" />
+	<bean id="queueStaManagerProxy" class="com.jumbo.wms.manager.warehouse.QueueStaManagerProxyImpl" />
+	<bean id="createStaManager" class="com.jumbo.wms.manager.warehouse.CreateStaManagerImpl" /> -->
+	<!-- <bean id="queueStaManagerExecute" class="com.jumbo.wms.manager.warehouse.QueueStaManagerExecuteImpl" />
+	<bean id="idsManagerProxy" class="com.jumbo.webservice.ids.manager.IdsManagerProxyImpl" />
+	<bean id="guessManagerProxy" class="com.jumbo.wms.manager.vmi.guess.GuessManagerProxyImpl" />
+	<bean id="taskSfManager" class="com.jumbo.wms.manager.task.TaskSfManagerImpl" /> -->
+	<!-- <bean id="taskSfTwManager" class="com.jumbo.wms.manager.task.sf.tw.TaskSfTwManagerImpl" />
+	<bean id="stoOrderTaskManager" class="com.jumbo.wms.manager.task.stoorder.StoOrderTaskManagerImpl" /> -->
+	<!-- <bean id="specialSkuManager" class="com.jumbo.wms.manager.warehouse.SpecialSkuManagerImpl" />
+	<bean id="gymboreeTaskManager" class="com.jumbo.wms.manager.vmi.gymboreeData.GymboreeTaskManagerImpl" />
+	<bean id="shelfLifeTaskManager" class="com.jumbo.wms.manager.task.shelfLife.ShelfLifeManagerImpl" />
+	<bean id="jdOrderManager" class="com.jumbo.wms.manager.task.jd.JdOrderManagerImpl" /> -->
+<!-- 	<bean id="afManagerImpl" class="com.jumbo.wms.manager.af.AFManagerImpl" />
+ -->	<!-- <bean id="mergeStaManager" class="com.jumbo.wms.manager.task.mergeSta.MergeStaManagerImpl" />
+	<bean id="transSuggestManager" class="com.jumbo.wms.manager.trans.TransSuggestManagerImpl" />
+	<bean id="transSuggestManagerProxy" class="com.jumbo.wms.manager.trans.TransSuggestManagerProxyImpl" /> -->
+	<!-- <bean id="taskEbsManager" class="com.jumbo.wms.manager.task.inv.TaskEbsManagerImpl" />
+	<bean id="totalInvToPACManager" class="com.jumbo.wms.manager.task.inv.TotalInvToPACManagerImpl" /> -->
+	<!-- <bean id="createStaManagerExecu" class="com.jumbo.wms.manager.warehouse.CreateStaManagerExecuImpl" />
+	<bean id="transportServiceManager" class="com.jumbo.wms.manager.warehouse.TransportServiceManagerImpl" /> -->
+	<!-- <bean id="skuTagManager" class="com.jumbo.wms.manager.warehouse.SkuTagManagerImpl" />
+	<bean id="qstaManager" class="com.jumbo.wms.manager.warehouse.QstaManagerImpl" />
+	<bean id="qstaManagerExecute" class="com.jumbo.wms.manager.warehouse.QstaManagerExecuteImpl" /> -->
+	<!-- <bean id="transAreaGroupManager" class="com.jumbo.wms.manager.warehouse.TransAreaGroupManagerImpl" />
+	<bean id="transRoleManager" class="com.jumbo.wms.manager.warehouse.TransRoleManagerImpl" />
+	<bean id="channelPostPrintConfManager" class="com.jumbo.wms.manager.warehouse.ChannelPostPrintConfManagerImpl" /> -->
+	<!-- <bean id="autoPickingListRoleManager" class="com.jumbo.wms.manager.warehouse.AutoPickingListRoleManagerImpl" />
+	<bean id="channelGroupManager" class="com.jumbo.wms.manager.warehouse.ChannelGroupManagerImpl" />
+	<bean id="autoPickingManagerProxy" class="com.jumbo.wms.manager.task.autoPicking.AutoPickingManagerProxyImpl" />
+	<bean id="autoPickingManager" class="com.jumbo.wms.manager.task.autoPicking.AutoPickingManagerImpl" /> -->
+	<!-- <bean id="prePackagedSkuRefManager" class="com.jumbo.wms.manager.warehouse.PrePackagedSkuRefManagerImpl" />
+	<bean id="reasonTypeManager" class="com.jumbo.wms.manager.warehouse.ReturnReasonTypeManagerImpl" />
+	<bean id="addCounterMaintainManager" class="com.jumbo.wms.manager.warehouse.AddCounterMaintainManagerImpl" />
+	<bean id="converseYxManager" class="com.jumbo.wms.manager.vmi.converseYxData.ConverseYxManagerImpl" /> -->
+	<!-- <bean id="vmiFileManager" class="com.jumbo.wms.manager.vmi.VmiFileManagerImpl" />
+	<bean id="totalInvManager" class="com.jumbo.wms.manager.task.inv.TotalInvManagerImpl" />
+	<bean id="threePLManager" class="com.jumbo.wms.manager.task.inv.ThreePLManagerImpl" /> -->
+	<!-- <bean id="pdaManager" class="com.jumbo.webservice.pda.manager.PdaManagerImpl" />
+	<bean id="pdaOperationManager" class="com.jumbo.webservice.pda.manager.PdaOperationManagerImpl" /> -->
+	<!-- <bean id="warehouseOutBoundManager" class="com.jumbo.wms.manager.warehouse.WareHouseOutBoundManagerImpl" />
+	<bean id="taskOmsOutManager" class="com.jumbo.wms.manager.task.TaskOmsOutManagerImpl" />
+	<bean id="emsTaskManager" class="com.jumbo.wms.manager.task.ems.EmsTaskManagerImpl" />
+	<bean id="authorizationManager" class="com.jumbo.wms.manager.authorization.AuthorizationManagerImpl" /> -->
+	<!-- <bean id="dropDownListManager" class="com.jumbo.wms.manager.DropDownListManagerImpl" />
+	<bean id="menuManager" class="com.jumbo.wms.manager.baseinfo.MenuManagerImpl" />
+	<bean id="systemManager" class="com.jumbo.wms.manager.system.SystemManagerImpl" /> -->
+	<!-- <bean id="baseinfoManager" class="com.jumbo.wms.manager.baseinfo.BaseinfoManagerImpl" />
+	<bean id="archiveManager" class="com.jumbo.wms.manager.archive.ArchiveManagerImpl" /> -->
+	<!-- <bean id="chooseOptionManager" class="com.jumbo.wms.manager.system.ChooseOptionManagerImpl" />
+	<bean id="transactionTypeManager" class="com.jumbo.wms.manager.warehouse.TransactionTypeManagerImpl" />
+	<bean id="omsManager" class="com.jumbo.wms.manager.oms.OmsManagerImpl" />
+	<bean id="cKParseDataManagerProxy" class="com.jumbo.wms.manager.vmi.ckData.CKParseDataManagerProxyImpl" />
+	<bean id="wareHouseManagerExe" class="com.jumbo.wms.manager.warehouse.WareHouseManagerExeImpl" /> -->
+	<!-- <bean id="wareHouseManagerExecute" class="com.jumbo.wms.manager.warehouse.WareHouseManagerExecuteImpl" />
+	<bean id="wareHouseManagerQuery" class="com.jumbo.wms.manager.warehouse.WareHouseManagerQueryImpl" />
+	<bean id="biaoGanManager" class="com.jumbo.wms.manager.outwh.biaogan.BiaoGanManagerImpl" /> -->
+	<!-- <bean id="biaoGanManagerProxy" class="com.jumbo.wms.manager.outwh.biaogan.BiaoGanManagerProxyImpl" />
+	<bean id="wareHouseManager" class="com.jumbo.wms.manager.warehouse.WareHouseManagerImpl" />
+	<bean id="wareHouseManagerCancel" class="com.jumbo.wms.manager.warehouse.WareHouseManagerCancelImpl" /> -->
+	<!-- <bean id="vmiRtoManager" class="com.jumbo.wms.manager.warehouse.VMIRtoManagerImpl" />
+	<bean id="inventoryOccupyManager" class="com.jumbo.wms.manager.warehouse.InventoryOccupyManagerImpl" />
+	<bean id="operationUnitManager" class="com.jumbo.wms.manager.warehouse.OperationUnitManagerImpl" /> -->
+	<!-- <bean id="pickingListManager" class="com.jumbo.wms.manager.warehouse.PickingListManagerImpl" />
+	<bean id="pickingListPackageManager" class="com.jumbo.wms.manager.warehouse.PickingListPackageManagerImpl" />
+	<bean id="transEmsInfoManager" class="com.jumbo.wms.manager.warehouse.TransEmsInfoManagerImpl" />
+	<bean id="skuSnManager" class="com.jumbo.wms.manager.warehouse.SkuSnManagerImpl" /> -->
+	<!-- <bean id="wareHouseManagerProxy" class="com.jumbo.wms.manager.warehouse.WareHouseManagerProxyImpl" />
+	<bean id="whChannelManager" class="com.jumbo.wms.manager.warehouse.ChannelManagerImpl" />
+	<bean id="channelRefManager" class=" com.jumbo.wms.manager.channel.ChannelCombineRefManagerImpl" /> -->
+	<!-- <bean id="reportManager" class="com.jumbo.wms.manager.report.ReportManagerImpl" />
+	<bean id="wareHouseLocationManager" class="com.jumbo.wms.manager.warehouse.WareHouseLocationManagerImpl" /> -->
+	<!-- <bean id="espOrderManager" class="com.jumbo.wms.manager.vmi.espData.ESPOrderManagerImpl" />
+	<bean id="espReceiveDeliveryManager" class="com.jumbo.wms.manager.vmi.espData.ESPReceiveDeliveryManagerImpl" />
+	<bean id="cathKidstonManager" class="com.jumbo.wms.manager.vmi.CathKidstonData.CathKidstonManagerImpl" /> -->
+	<!-- <bean id="bachBatchReceivingManagerProxy" class="com.jumbo.wms.manager.warehouse.BatchReceivingManagerProxyImpl" />
+	<bean id="commonConfigManager" class="com.jumbo.wms.manager.task.CommonConfigManagerImpl" />
+	<bean id="iTVMIInstructionManager" class="com.jumbo.wms.manager.vmi.itData.ITVMIInstructionManagerImpl" />
+	<bean id="iTVMIReceiveInfoManager" class="com.jumbo.wms.manager.vmi.itData.ITVMIReceiveInfoManagerImpl" /> -->
+	<!-- <bean id="inOutBoundManager" class="com.jumbo.webservice.biaogan.manager.InOutBoundManagerImpl" />
+	<bean id="nikeOrderManager" class="com.jumbo.webservice.nike.manager.NikeOrderManagerImpl" />
+	<bean id="whmanagerNotTransactional" class="com.jumbo.wms.manager.warehouse.WhmanagerNotTransactionalImpl" />
+	<bean id="levisManager" class="com.jumbo.wms.manager.vmi.levisData.LevisManagerImpl" /> -->
+	<!-- <bean id="converseVmiReceiveManager" class=" com.jumbo.wms.manager.vmi.converseData.ConverseVmiReceiveManagerImpl" />
+	<bean id="converseVmiStockInManager" class=" com.jumbo.wms.manager.vmi.converseData.ConverseVmiStockInManagerImpl" />
+	<bean id="idsManager" class="com.jumbo.webservice.ids.manager.IdsManagerImpl" />
+	<bean id="iTVMIParseDataManager" class="com.jumbo.wms.manager.vmi.itData.ITVMIParseDataManagerImpl" /> -->
+	<!-- <bean id="k3Executor" class="com.jumbo.wms.manager.task.TaskManagerImpl" />
+	<bean id="outsourcingWHManager" class="com.jumbo.webservice.outsourcingWH.manager.OutsourcingWHManagerImpl" />
+	<bean id="baseOutWarehouseManager" class="com.jumbo.wms.manager.outwh.BaseOutWarehouseManagerImpl" />
+	<bean id="staCancelManager" class="com.jumbo.wms.manager.warehouse.StaCancelManagerImpl" />
+	<bean id="taskManagerProxy" class="com.jumbo.wms.manager.task.TaskManagerProxyImpl" /> -->
+<!-- 	<bean id="bocInterfaceManagerProxy" class="com.jumbo.wms.manager.boc.BocInterfaceManagerProxyImpl" />
+ -->	<!-- <bean id="pdaTaskManager" class="com.jumbo.wms.manager.task.pda.PdaTaskManagerImpl" />
+	<bean id="nikeManager" class="com.jumbo.webservice.nike.manager.NikeManagerImpl" />
+	<bean id="etamManager" class="com.jumbo.wms.manager.vmi.etamData.EtamManagerImpl" />
+	<bean id="itochuManager" class="com.jumbo.wms.manager.vmi.itochuData.ItochuManagerImpl" /> -->
+	<!-- <bean id="itochuUAManager" class="com.jumbo.wms.manager.vmi.itochuData.ItochuUAManagerImpl" />
+	<bean id="lfManager" class="com.jumbo.wms.manager.lf.LFManagerImpl"/>
+	<bean id="itochuUAManagerProxy" class="com.jumbo.wms.manager.vmi.itochuData.ItochuUAManagerImplProxy" />
+	<bean id="mqManager" class="com.jumbo.wms.manager.mq.MqManagerImpl" />
+	<bean id="mqManagerProxy" class="com.jumbo.wms.manager.mq.MqManagerProxyImpl" /> -->
+	<!-- <bean id="ckParseDataManager" class="com.jumbo.wms.manager.vmi.ckData.CKParseDataManagerImpl" />
+	<bean id="coachParseDataManager" class="com.jumbo.wms.manager.vmi.coachData.CoachParseDataManagerImpl" />
+	<bean id="carrierParseDataManager" class="com.jumbo.wms.manager.vmi.kerryData.CarrierParseDataManagerImpl" /> -->
+	<!-- <bean id="philipsParseDataManager" class="com.jumbo.wms.manager.vmi.philipsData.PhilipsParseDataManagerImpl" /> -->
+	<!-- <bean id="gdvParseDataManager" class="com.jumbo.wms.manager.vmi.godivaData.GodivaManagerImpl" />
+	<bean id="guessManager" class="com.jumbo.wms.manager.vmi.guess.GuessManagerImpl" />
+	<bean id="coachParseDataManagerProxy" class="com.jumbo.wms.manager.vmi.coachData.CoachParseDataManagerProxyImpl" />
+	<bean id="skuModifyLogManager" class="com.jumbo.wms.manager.baseinfo.SkuModifyLogManagerImpl" /> -->
+	<!-- <bean id="channelManager" class="com.jumbo.wms.manager.channel.ChannelManagerImpl" />
+	<bean id="channelInsuranceManager" class="com.jumbo.wms.manager.expressDelivery.ChannelInsuranceManagerImpl" /> -->
+	<!-- sfOrderWebserviceClient -->
+	<!-- <bean id="sfOrderWebserviceClient" class="com.jumbo.webservice.sfNew.SfOrderWebserviceClient" /> -->
+	<!-- sf冷链接 -->
+	<!-- <bean id="sfOrderClient" class="com.jumbo.webservice.sf.SfOrderClient" /> -->
+	
+	<!-- <bean id="transManager" class="com.jumbo.wms.manager.expressDelivery.TransManagerImpl" />
+	<bean id="transOlManager" class="com.jumbo.wms.manager.expressDelivery.TransOlManagerImpl" />
+	<bean id="transOlManagerProxy" class="com.jumbo.wms.manager.expressDelivery.TransOlManagerProxyImpl" />
+	<bean id="skuManager" class="com.jumbo.wms.manager.sku.SkuManagerImpl" /> -->
+	<!-- <bean id="warehousePrintData" class="com.jumbo.wms.manager.print.data.WarehousePrintDataImpl" />
+	<bean id="levisTask" class="com.jumbo.wms.manager.task.vmi.LevisTaskImpl" />
+	<bean id="itTask" class="com.jumbo.wms.manager.task.vmi.ItTaskImpl" />
+	<bean id="espTask" class="com.jumbo.wms.manager.task.vmi.EspritTaskImpl" />
+	<bean id="archiveTask" class="com.jumbo.wms.manager.task.archive.ArchiveTaskImpl" /> -->
+	<!-- <bean id="nikeTask" class="com.jumbo.wms.manager.task.vmi.NikeTaskImpl" />
+	<bean id="checkStaRepetitiveTask" class="com.jumbo.wms.manager.check.CheckStaRepetitiveTaskImpl" />
+	<bean id="transRoleAccordTask" class="com.jumbo.wms.manager.task.transRoleAccord.TransRoleAccordTaskImpl" />
+	<bean id="converseTask" class="com.jumbo.wms.manager.task.vmi.ConverseTaskImpl" /> -->
+	<!-- <bean id="arriveTimeTask" class="com.jumbo.wms.manager.task.arrive.ArriveTimeTaskImpl" />
+	<bean id="cchTask" class="com.jumbo.wms.manager.task.vmi.CCHTaskImpl" />
+	<bean id="emsTask" class="com.jumbo.wms.manager.task.ems.EmsTaskImpl" />
+	<bean id="ckTask" class="com.jumbo.wms.manager.task.vmi.CKTaskImpl" /> -->
+	<!-- <bean id="edwTaskManager" class="com.jumbo.wms.manager.task.edw.EdwTaskManagerImpl" />
+	<bean id="edwTaskManagerProxy" class="com.jumbo.wms.manager.task.edw.EdwTaskManagerProxyImpl" /> -->
+	<!-- <bean id="vmiDefaultManager" class="com.jumbo.wms.manager.vmi.Default.VmiDefaultManagerImpl" />
+	<bean id="vmiInventoryManager" class="com.jumbo.wms.manager.vmi.vmiInventory.VmiInventoryManagerImpl" />
+	<bean id="ttkOrderTaskManager" class="com.jumbo.wms.manager.task.ttk.TtkOrderTaskManagerImpl" />
+	<bean id="kerryOrderTaskManager" class="com.jumbo.wms.manager.task.kerry.KerryOrderTaskManagerImpl" /> -->
+	<!-- <bean id="rfdOrderTaskManager" class="com.jumbo.wms.manager.task.rfd.RfdOrderTaskManagerImpl" />
+	<bean id="transInfoManager" class="com.jumbo.wms.manager.task.express.TransInfoManagerImpl" />
+	<bean id="shopStoreInfoManager" class="com.jumbo.wms.manager.warehouse.ShopStoreInfoManagerImpl" />
+	<bean id="radarAreaManager" class="com.jumbo.wms.manager.expressRadar.RadarAreaManagerImpl" />
+	<bean id="expressOocRadarManager" class="com.jumbo.wms.manager.expressRadar.ExpressOocRadarManagerImpl" /> -->
+	<!-- <bean id="transRoleAccordManager" class="com.jumbo.wms.manager.warehouse.TransRoleAccordManagerImpl" />
+	<bean id="whBoxInboundManager" class="com.jumbo.wms.manager.warehouse.WhBoxInboundManagerImpl" /> -->
+<!-- 	<bean id="edwUpLoadTask" class="com.jumbo.wms.manager.task.edw.EdwUpLoadTaskImpl" /> -->
+	<!-- CXC -->
+	<!-- <bean id="cxcOrderTask" class="com.jumbo.wms.manager.task.cxc.CxcOrderTaskImpl" />
+
+	<bean id="expressRadarManager" class="com.jumbo.wms.manager.expressRadar.ExpressRadarManagerImpl" />
+	<bean id="transRouteManager" class="com.jumbo.wms.manager.expressRadar.TransRouteManagerImpl" /> -->
+<!-- 	<bean id="expressStatusCodeManager" class="com.jumbo.wms.manager.expressRadar.ExpressStatusCodeManagerImpl" />
+	<bean id="sysRouteStatusCodeManager" class="com.jumbo.wms.manager.expressRadar.SysRouteStatusCodeManagerImpl" />
+	<bean id="transRouteStatusManager" class="com.jumbo.wms.manager.expressRadar.TransRouteStatusManagerImpl" />
+	<bean id="consumptiveMaterialUseQueryCommandManager" class="com.jumbo.wms.manager.warehouse.ConsumptiveMaterialUseQueryCommandManagerImpl" />
+	<bean id="expressOrderQueryManager" class="com.jumbo.wms.manager.expressRadar.ExpressOrderQueryManagerImpl" /> -->
+	
+	<!-- <bean id="whTransOlConfigManager" class="com.jumbo.wms.manager.warehouse.WhTransOlConfigManagerImpl" />
+	
+	<bean id="snManager" class="com.jumbo.wms.manager.sn.SnManagerImpl" />
+	<bean id="outboundInfoManager" class="com.jumbo.wms.manager.outbound.OutboundInfoManagerImpl" /> -->
+	
+	
+	<!-- 分区拣货  start-->
+	<!-- <bean id="newInventoryOccupyManager" class="com.jumbo.wms.manager.pickZone.NewInventoryOccupyManagerImpl" />
+	<bean id="pickZoneEditManager" class="com.jumbo.wms.manager.pickZone.PickZoneEditManagerImpl" /> -->
+	<!-- 分区拣货 end -->
+	<!-- <bean id="mongoDBInventoryManager" class="com.jumbo.wms.manager.MongoDBInventoryManagerImpl"/>
+	<bean id="hubWmsService" class="com.jumbo.wms.manager.hub2wms.HubWmsServiceImpl"/>
+	<bean id="hubWmsManager" class="com.jumbo.wms.manager.hub2wms.HubWmsManagerImpl"/>
+	<bean id="rtnOrderTask" class="com.jumbo.wms.manager.task.hub2wms.RtnOrderImpl"/>
+	<bean id="rtnOrderManager" class="com.jumbo.wms.manager.hub2wms.RtnOrderManagerImpl"/> -->
+	
+	<!-- <bean id="schedulerTaskManager" class="com.jumbo.wms.manager.system.SchedulerTaskManagerImpl"/> -->
+	
+	<!-- PMS  BEGIN-->
+	<!-- <bean id="appParcelManager" class="com.jumbo.pms.manager.app.AppParcelManagerImpl" />
+	<bean id="apiShipmentManager" class="com.jumbo.pms.manager.api.ApiShipmentManagerImpl" />
+	<bean id="apiPackageManager" class="com.jumbo.pms.manager.api.ApiPackageManagerImpl" /> -->
+	<!-- PMS  END-->
+	
+	<!-- <bean id="apiWarehouseManager" class="com.jumbo.wms.manager.warehouse.api.ApiWarehouseManagerImpl" />
+	
+	
+	<bean id="fillInInvoiceManager" class="com.jumbo.wms.manager.warehouse.FillInInvoiceManagerImpl"/>
+	<bean id="fillInInvoiceManagerProxy" class="com.jumbo.wms.manager.warehouse.FillInInvoiceManagerProxyImpl"/> -->
+	
+	<!-- 索赔 -->
+	<!-- <bean id="compensationManager" class="com.jumbo.wms.manager.compensation.CompensationManagerImpl" /> -->
+	
+	<!-- <bean id="mongoDBSfLogisticsManager" class="com.jumbo.wms.manager.MongoDBSfLogisticsManagerImpl" /> -->
+	<!-- 通用mongoDB处理 -->
+	<!-- <bean id="mongoDBManager" class="com.jumbo.wms.manager.mongodb.MongoDBManagerImpl" /> -->
+
+	<!-- <bean id="inventoryTransactionToOmsTaskManager" class="com.jumbo.wms.manager.task.inventoryTransactionToOms.InventoryTransactionToOmsTaskManagerImpl"/>  -->
+	
+	<!-- ************************* 设备自动化 start ******************** -->
+	<!-- <bean id="autoBaseInfoManager" class="com.jumbo.wms.manager.automaticEquipment.AutoBaseInfoManagerImpl"/> 
+	<bean id="autoOutboundTurnboxManager" class="com.jumbo.wms.manager.warehouse.AutoOutboundTurnboxManagerImpl"/>
+	<bean id="msgToWcsManager" class="com.jumbo.wms.manager.automaticEquipment.MsgToWcsManagerImpl"/> -->
+	
+	
+	<!--************************* 设备自动化 end ***********************  -->
+	<!-- <bean id="sfNextMorningConfigManager" class="com.jumbo.wms.manager.warehouse.SfNextMorningConfigManagerImpl"/>
+	<bean id="monitorService" class="com.jumbo.sysMonitor.MonitorServiceImpl" /> -->
+	
+	<!-- <bean id="transOnLineFactory" class="com.jumbo.wms.manager.expressDelivery.logistics.TransOnLineFactoryImpl" /> -->
+	
+	<!-- **************** 云栈 start***************** -->
+	<!-- <bean id="transAliWaybill" class="com.jumbo.wms.manager.expressDelivery.logistics.impl.TransAliWaybillImpl" /> -->
+	<!-- **************** 云栈 end  ***************** --> 
+	
+	<!-- **************** PDA start***************** -->
+	<!-- <bean id="pdaPickingManager" class="com.jumbo.wms.manager.pda.PdaPickingManagerImpl" />
+	<bean id="pdaReceiveManager" class="com.jumbo.wms.manager.pda.PdaReceiveManagerImpl" />
+	<bean id="pdaShelvesManager" class="com.jumbo.wms.manager.pda.PdaShelvesManagerImpl" /> -->
+	
+	<!-- **************** PDA end  ***************** --> 
+	<!-- <bean id="adCheckManager" class="com.jumbo.wms.manager.outbound.AdCheckManagerImpl"/> -->
+	
+	<!-- 优先发货城市配置 -->
+	<!-- <bean id="priorityShippedCityConfigManager" class="com.jumbo.wms.manager.warehouse.PriorityShippedCityConfigManagerImpl" /> -->
+	
+	<!-- 菜鸟仓SN taobao.wlb.wms.sn.info.query (查询单据序列号信息) -->
+	<!-- <bean id="caiNiaoConsignmentSnTask" class="com.jumbo.wms.manager.task.cainiaowh.CaiNiaoConsignmentSnTaskImpl" /> -->
+	
+	<!-- limis -->
+	<!-- <bean id="lmisManager"  class="com.jumbo.wms.manager.lmis.LmisManagerImpl"/> -->
+	
+	<!-- RMI 切换 dubbo -->
+ 	<bean id="wmsToOmsRmiServer" class="com.jumbo.rmiservice.RmiServiceImpl"/>
+ 	<!-- <bean id="commonLogRecordManager" class="com.jumbo.wms.manager.CommonLogRecordManagerImpl"/> -->
+	
+	<!-- WMS外包仓接口 -->
+	<!-- <bean id="wmsThreePLManager" class="com.jumbo.wms.manager.hub2wms.WmsThreePLManagerImpl"/> -->
+	<!-- <bean id="cnInterfaceTask" class="com.jumbo.wms.manager.task.hub2wms.CnInterfaceImpl"/>
+	<bean id="cnInterfaceProxyTask" class="com.jumbo.wms.manager.task.hub2wms.CnInterfaceProxyImpl"/> -->
+	
+	<!-- CJ -->
+<!-- 	<bean id="cnjhTask" class="com.jumbo.wms.manager.task.cnjh.CnjhTaskImpl"/> -->
+	<!-- yamato物流信息推hub -->
+	<!-- <bean id="yamatoTransToHubManager" class="com.jumbo.wms.manager.ymt2hub.YamatoTransToHubManagerImpl"/> -->
+	
+	<!-- Gucci -->
+	<!-- <bean id="gucciTask" class="com.jumbo.wms.manager.task.vmi.GucciTaskImpl"/>
+	<bean id="gucciManager" class="com.jumbo.wms.manager.vmi.gucciData.GucciManagerImpl"/> -->
+	
+	<!-- wms数据导出 -->
+	<!-- <bean id="wmsDataImportManager" class="com.jumbo.wms.manager.wmsdataimport.WMSDataImportManagerImpl"/> -->
+	
+	
+	
+	<bean id="levisChildrenManager" class="	com.jumbo.wms.manager.vmi.levisData.LevisChildrenManagerImpl"/>
+</beans>
